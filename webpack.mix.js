@@ -1,4 +1,4 @@
-const mix = require('laravel-mix');
+const mix  = require('laravel-mix');
 const exec = require('child_process').exec;
 require('dotenv').config();
 
@@ -23,10 +23,10 @@ const path = require('path')
  */
 
 function mixAssetsDir(query, cb) {
-  (glob.sync('resources/' + query) || []).forEach(f => {
-    f = f.replace(/[\\\/]+/g, '/');
-    cb(f, f.replace('resources', 'public'));
-  });
+    (glob.sync('resources/' + query) || []).forEach(f => {
+        f = f.replace(/[\\\/]+/g, '/');
+        cb(f, f.replace('resources', 'public'));
+    });
 }
 
 
@@ -66,45 +66,44 @@ mix.copyDirectory('resources/fonts', 'public/fonts');
 mix.copyDirectory('resources/data', 'public/data');
 
 
-
 mix.sass('resources/sass/bootstrap-extended.scss', 'public/css')
-  .sass('resources/sass/bootstrap.scss', 'public/css')
-  .sass('resources/sass/colors.scss', 'public/css')
-  .sass('resources/sass/components.scss', 'public/css')
-  .sass('resources/sass/custom-rtl.scss', 'public/css')
+    .sass('resources/sass/bootstrap.scss', 'public/css')
+    .sass('resources/sass/colors.scss', 'public/css')
+    .sass('resources/sass/components.scss', 'public/css')
+    .sass('resources/sass/custom-rtl.scss', 'public/css')
 
 mix.then(() => {
-  if (process.env.MIX_CONTENT_DIRECTION === "rtl") {
-    let command = `node ${path.resolve('node_modules/rtlcss/bin/rtlcss.js')} -d -e ".css" ./public/css/ ./public/css/`;
-    exec(command, function (err, stdout, stderr) {
-      if (err !== null) {
-        console.log(err);
-      }
-    });
-    // exec('./node_modules/rtlcss/bin/rtlcss.js -d -e ".css" ./public/css/ ./public/css/');
-  }
+    if (process.env.MIX_CONTENT_DIRECTION === "rtl") {
+        let command = `node ${path.resolve('node_modules/rtlcss/bin/rtlcss.js')} -d -e ".css" ./public/css/ ./public/css/`;
+        exec(command, function (err, stdout, stderr) {
+            if (err !== null) {
+                console.log(err);
+            }
+        });
+        // exec('./node_modules/rtlcss/bin/rtlcss.js -d -e ".css" ./public/css/ ./public/css/');
+    }
 });
 
 mix.webpackConfig({
-  module: {
-    rules: [
-      {
-        test: /\.s[ac]ss$/i,
-        use: [
-          {
-            loader: 'sass-loader',
-            options: {
-              sassOptions: {
-                includePaths: ['node_modules', 'resources/assets']
-              }
+    module: {
+        rules: [
+            {
+                test: /\.s[ac]ss$/i,
+                use: [
+                    {
+                        loader: 'sass-loader',
+                        options: {
+                            sassOptions: {
+                                includePaths: ['node_modules', 'resources/assets']
+                            }
+                        }
+                    }
+                ]
+                //   test: /\.s[ac]ss$/,
+                //   use: 'css-loader!sass-loader?{"includePaths":["frontend/node_modules"]}'
             }
-          }
         ]
-        //   test: /\.s[ac]ss$/,
-        //   use: 'css-loader!sass-loader?{"includePaths":["frontend/node_modules"]}'
-      }
-    ]
-  }
+    }
 })
 
 // if (mix.inProduction()) {
