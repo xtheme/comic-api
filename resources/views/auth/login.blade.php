@@ -1,97 +1,105 @@
 @extends('layouts.fullLayoutMaster')
-{{-- title --}}
 
-@section('title','Login')
+{{-- page title --}}
+@section('title','登录')
 
 {{-- page scripts --}}
-
 @section('page-styles')
-<link rel="stylesheet" type="text/css" href="{{asset('css/pages/authentication.css')}}">
+    <link rel="stylesheet" type="text/css" href="{{ asset('css/pages/authentication.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ asset('css/plugins/forms/validation/form-validation.css') }}">
 @endsection
 
 @section('content')
-<!-- login page start -->
-<section id="auth-login" class="row flexbox-container">
-  <div class="col-xl-8 col-11">
-    <div class="card bg-authentication mb-0">
-      <div class="row m-0">
-        <!-- left section-login -->
-        <div class="col-md-6 col-12 px-0">
-          <div class="card disable-rounded-right mb-0 p-2 h-100 d-flex justify-content-center">
-            <div class="card-header pb-1">
-              <div class="card-title">
-                <h4 class="text-center mb-2">Welcome Back</h4>
-              </div>
-            </div>
-            <div class="card-body">
-              <div class="d-flex flex-md-row flex-column justify-content-around">
-                <a href="#" class="btn btn-social btn-google btn-block font-small-3 mr-md-1 mb-md-0 mb-1">
-                  <i class="bx bxl-google font-medium-3"></i>
-                  <span class="pl-50 d-block text-center">Google</span>
-                </a>
-                <a href="#" class="btn btn-social btn-block mt-0 btn-facebook font-small-3">
-                  <i class="bx bxl-facebook-square font-medium-3"></i>
-                  <span class="pl-50 d-block text-center">Facebook</span>
-                </a>
-              </div>
-              <div class="divider">
-                <div class="divider-text text-uppercase text-muted">
-                  <small>or login with email</small>
-                </div>
-              </div>
-              {{-- form  --}}
-              <form method="POST" action="{{ route('login') }}">
-                @csrf
-                <div class="form-group mb-50">
-                  <label class="text-bold-600" for="email">Email address</label>
-                  <input id="email" type="email" class="form-control @error('email') is-invalid @enderror" name="email" value="{{ old('email') }}"  autocomplete="email" autofocus placeholder="Email address">
-                  @error('email')
-                    <span class="invalid-feedback" role="alert">
-                      <strong>{{ $message }}</strong>
-                    </span>
-                  @enderror
-                </div>
-                <div class="form-group">
-                  <label class="text-bold-600" for="password">Password</label>
-                  <input id="password" type="password" class="form-control @error('password') is-invalid @enderror" name="password"  autocomplete="current-password" placeholder="Password">
-                  @error('password')
-                    <span class="invalid-feedback" role="alert">
-                      <strong>{{ $message }}</strong>
-                    </span>
-                    @enderror
-                </div>
-                <div class="form-group d-flex flex-md-row flex-column justify-content-between align-items-center">
-                  <div class="text-left">
-                    <div class="checkbox checkbox-sm">
-                      <input class="form-check-input" type="checkbox" name="remember" id="remember" {{ old('remember') ? 'checked' : '' }}>
-                      <label class="form-check-label" for="remember">
-                        <small>Keep me logged in</small>
-                      </label>
+    <!-- login page start -->
+    <section class="row flexbox-container">
+        <div class="col-xl-4 col-md-6 col-11">
+            <div class="card bg-authentication mb-0">
+                <div class="row m-0">
+                    <!-- left section-login -->
+                    <div class="col-md-6 col-12 px-0">
+                        <div class="card disable-rounded-right mb-0 p-0 h-100 d-flex justify-content-center">
+                            <div class="card-content">
+                                <div class="card-body">
+                                    <form id="login-form" class="form form-vertical" action="{{ route('login') }}" novalidate>
+                                        <div class="form-group mb-2">
+                                            <div class="controls">
+                                                <input type="text" class="form-control" name="username" placeholder="请输入账号"
+                                                       required
+                                                       data-validation-required-message="请填写关键字">
+                                            </div>
+                                        </div>
+                                        <div class="form-group mb-2">
+                                            <div class="controls">
+                                                <input type="password" class="form-control" name="password" placeholder="请输入密码">
+                                            </div>
+                                        </div>
+                                        <button type="submit" class="btn btn-primary glow w-100 position-relative">登录
+                                            <i id="icon-arrow" class="bx bx-right-arrow-alt"></i>
+                                        </button>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
                     </div>
-                  </div>
-                  <div class="text-right">
-                    <a href="{{ route('password.request') }}" class="card-link"><small>Forgot Password?</small></a>
-                  </div>
+                    <!-- right section image -->
+                    <div class="col-md-6 d-md-block d-none text-center align-self-center p-3">
+                        <div class="card-content">
+                            <img class="img-fluid" src="{{ asset('images/pages/login.png') }}" alt="branding logo">
+                        </div>
+                    </div>
                 </div>
-                <button type="submit" class="btn btn-primary glow w-100 position-relative">Login
-                  <i id="icon-arrow" class="bx bx-right-arrow-alt"></i>
-                </button>
-              </form>
-              <hr>
-              <div class="text-center">
-                <small class="mr-25">Don't have an account?</small>
-                <a href="{{route('register')}}"><small>Sign up</small></a>
-              </div>
             </div>
-          </div>
         </div>
-        <!-- right section image -->
-        <div class="col-md-6 d-md-block d-none text-center align-self-center p-3">
-          <img class="img-fluid" src="{{asset('images/pages/login.png')}}" alt="branding logo">
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
-<!-- login page ends -->
+    </section>
+    <!-- login page ends -->
+@endsection
+
+{{-- vendor scripts --}}
+@section('vendor-scripts')
+    <script src="{{ asset('vendors/js/forms/validation/jqBootstrapValidation.js') }}"></script>
+@endsection
+
+{{-- page scripts --}}
+@section('page-scripts')
+    <script src="{{ asset('js/scripts/forms/validation/form-validation.js') }}"></script>
+    <script>
+        $(document).ready(function () {
+            let $form = $('#login-form');
+
+            document.onkeydown = keyListener;
+
+            function keyListener(e) {
+                if (e.keyCode == 13) {
+                    $form.submit();
+                }
+            }
+
+            $form.submit(function (e) {
+                e.preventDefault();
+                $.request({
+                    url     : '/login',
+                    type    : 'post',
+                    data    : $(this).serialize(),
+                    callback: function (res) {
+                        console.log(res);
+                        if (res.code == 200) {
+                            $.toast({
+                                title  : '登录成功',
+                                message: '正在转跳控制台'
+                            });
+
+                            setTimeout(function () {
+                                parent.location.href = '/';
+                            }, 1500);
+                        } else {
+                            $.toast({
+                                title  : '登录失败',
+                                message: res.msg
+                            });
+                        }
+                    }
+                });
+            });
+        });
+    </script>
 @endsection

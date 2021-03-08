@@ -2,24 +2,25 @@
 
 namespace App\Models;
 
-use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 
 /**
- * App\Models\User
+ * App\Models\Admin
  *
  * @property-read \Illuminate\Notifications\DatabaseNotificationCollection|\Illuminate\Notifications\DatabaseNotification[] $notifications
  * @property-read int|null $notifications_count
- * @method static \Illuminate\Database\Eloquent\Builder|User newModelQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|User newQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|User query()
+ * @method static \Illuminate\Database\Eloquent\Builder|Admin newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|Admin newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|Admin query()
  * @mixin \Eloquent
  */
-class User extends Authenticatable
+class Admin extends Authenticatable
 {
     use HasFactory, Notifiable;
+
+    protected $table = 'tp_admin';
 
     /**
      * The attributes that are mass assignable.
@@ -27,7 +28,7 @@ class User extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'name',
+        'username',
         'email',
         'password',
     ];
@@ -40,14 +41,5 @@ class User extends Authenticatable
     protected $hidden = [
         'password',
         'remember_token',
-    ];
-
-    /**
-     * The attributes that should be cast to native types.
-     *
-     * @var array
-     */
-    protected $casts = [
-        'email_verified_at' => 'datetime',
     ];
 }

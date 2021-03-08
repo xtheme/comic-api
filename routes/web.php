@@ -1,8 +1,10 @@
 <?php
 
-use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\StarterKitController;
+use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\LanguageController;
+use App\Http\Controllers\Backend\DashboardController;
+use Illuminate\Support\Facades\Route;
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -14,15 +16,19 @@ use App\Http\Controllers\LanguageController;
 |
 */
 
-// dashboard Routes
-Route::get('/', [StarterKitController::class, 'index'])->name('dashboard');
-Route::get('/sk-layout-1-column', [StarterKitController::class, 'column_1Sk'])->name('1-column');
-Route::get('/sk-layout-2-columns', [StarterKitController::class, 'columns_2Sk'])->name('2-columns');
-Route::get('/fixed-navbar', [StarterKitController::class, 'fix_navbar'])->name('fixed-navbar');
-Route::get('/sk-layout-fixed', [StarterKitController::class, 'fix_layout'])->name('fixed-layout');
-Route::get('/sk-layout-static', [StarterKitController::class, 'static_layout'])->name('static-layout');
-
 // locale Route
 Route::get('lang/{locale}', [LanguageController::class, 'swap'])->name('language');
 
+// Login / Logout
 Auth::routes(['verify' => true]);
+Route::get('logout', [LoginController::class, 'logout'])->name('logout');
+
+// Backend iframe layout
+Route::middleware(['auth'])->group(function () {
+    Route::get('/', [DashboardController::class, 'index']);
+});
+
+// Backend iframe pages
+Route::middleware(['auth'])->prefix('backend')->as('backend.')->group(function () {
+    Route::get('/dashboard', [DashboardController::class, 'dashboard'])->name('dashboard');
+});
