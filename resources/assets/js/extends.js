@@ -13,15 +13,7 @@ $.extend({
 			console.log(settings);
 		}
 
-		/*
-			let toast = $('#global-toast .toast');
-			console.log(toast);
-			toast.attr('data-delay', settings.delay);
-			toast.find('.toast-title').html(settings.title);
-			toast.find('.toast-body').html(settings.message);
-			toast.removeClass('hide').toast('show');
-		*/
-		parent.toastr[settings.type](settings.message, settings.title, {'timeOut': settings.delay, 'debug': settings.debug});
+		toastr[settings.type](settings.message, settings.title, {'timeOut': settings.delay, 'debug': settings.debug});
 	},
     openImage: function (options) {
         let settings = $.extend({
@@ -263,7 +255,7 @@ $.extend({
 				}
 
 				setTimeout(function () {
-					parent.$.toast({
+					$.toast({
 						title: settings.title,
 						message: '数据已刷新'
 					});

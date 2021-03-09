@@ -89,7 +89,7 @@
                             });
 
                             setTimeout(function () {
-                                parent.location.href = '/';
+                                location.href = '/';
                             }, 1500);
                         } else {
                             $.toast({

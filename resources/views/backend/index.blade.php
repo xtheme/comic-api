@@ -1,4 +1,4 @@
 @extends('layouts.iframeLayout')
 
 {{-- page Title --}}
-@section('title','One')
+@section('title', 'Aubergine')

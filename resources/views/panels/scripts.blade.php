@@ -24,9 +24,9 @@
     <script src="{{asset('js/scripts/components.js')}}"></script>
     <script src="{{asset('js/scripts/footer.js')}}"></script>
     <script src="{{asset('js/scripts/customizer.js')}}"></script>
-    <script src="{{asset('vendors/js/extensions/sweetalert2.all.min.js')}}"></script>
+{{--    <script src="{{asset('vendors/js/extensions/sweetalert2.all.min.js')}}"></script>--}}
+    {{--    <script src="{{asset('vendors/js/blockui/blockui.min.js')}}"></script>--}}
     <script src="{{asset('vendors/js/extensions/toastr.min.js')}}"></script>
-    <script src="{{asset('vendors/js/blockui/blockui.min.js')}}"></script>
     <script src="{{asset('assets/js/extends.js')}}"></script>
     <script src="{{asset('assets/js/scripts.js')}}"></script>
     <!-- END: Theme JS-->

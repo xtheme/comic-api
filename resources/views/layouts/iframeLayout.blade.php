@@ -1,15 +1,14 @@
 <!DOCTYPE html>
 {{-- pageConfigs variable pass to Helper's updatePageConfig function to update page configuration  --}}
 @isset($pageConfigs)
-    {!! \App\Helpers\Helper::updatePageConfig($pageConfigs) !!}
+    {!! Helper::updatePageConfig($pageConfigs) !!}
 @endisset
 @php
     // configData variable layoutClasses array in Helper.php file.
-      $configData = \App\Helpers\Helper::applClasses();
+      $configData = Helper::applClasses();
 @endphp
 
-<html class="loading" lang="@if(session()->has('locale')){{session()->get('locale') }}@else{{$configData['defaultLanguage']}}@endif"
-      data-textdirection="{{$configData['direction'] == 'rtl' ? 'rtl' : 'ltr' }}">
+<html class="loading" lang="en" data-textdirection="ltr">
 <!-- BEGIN: Head-->
 
 <head>
@@ -20,7 +19,6 @@
     <title>@yield('title')</title>
     <link rel="apple-touch-icon" href="{{ asset('images/ico/apple-icon-120.png') }}">
     <link rel="shortcut icon" type="image/x-icon" href="{{ asset('images/ico/favicon.ico') }}">
-
     {{-- Include core + vendor Styles --}}
     @include('panels.styles')
 </head>
@@ -28,15 +26,16 @@
 
 <!-- BEGIN: Body-->
 <body class="vertical-layout vertical-menu-modern 2-columns
-@if($configData['isMenuCollapsed'] == true){{'menu-collapsed'}}@endif
-@if($configData['theme'] === 'dark'){{'dark-layout'}} @elseif($configData['theme'] === 'semi-dark'){{'semi-dark-layout'}} @else {{'light-layout'}} @endif
-@if($configData['isContentSidebar'] === true) {{'content-left-sidebar'}} @endif @if(isset($configData['navbarType'])){{$configData['navbarType']}}@endif
+@if($configData['isMenuCollapsed'] == true) {{'menu-collapsed'}} @endif
+@if($configData['theme'] === 'dark') {{'dark-layout'}} @elseif($configData['theme'] === 'semi-dark') {{'semi-dark-layout'}} @else {{'light-layout'}} @endif
+@if($configData['isContentSidebar'] === true) {{'content-left-sidebar'}} @endif
+@if(isset($configData['navbarType'])) {{$configData['navbarType']}} @endif
 @if(isset($configData['footerType'])) {{$configData['footerType']}} @endif
 {{$configData['bodyCustomClass']}}
-@if($configData['mainLayoutType'] === 'vertical-menu-boxicons'){{'boxicon-layout'}}@endif
-@if($configData['isCardShadow'] === false){{'no-card-shadow'}}@endif"
-      data-open="click" data-menu="vertical-menu-modern" data-col="2-columns"
-      style="overflow-x: hidden; padding-right: 0 !important;">
+@if($configData['mainLayoutType'] === 'vertical-menu-boxicons') {{'boxicon-layout'}} @endif
+@if($configData['isCardShadow'] === false) {{'no-card-shadow'}} @endif"
+data-open="click" data-menu="vertical-menu-modern" data-col="2-columns" data-framework="laravel"
+style="overflow-x: hidden; padding-right: 0 !important;">
 
 <!-- BEGIN: Header-->
 @include('panels.navbar')
@@ -48,15 +47,16 @@
 
 <!-- BEGIN: Content-->
 <div id="main-content" class="content" style="height: 100%;">
-    <iframe id="content-frame" name="content-frame" scrolling="auto" src="{{ route('backend.dashboard') }}" frameborder="0" style="border: 0; width: 100%; height: 100%;"></iframe>
+    <iframe id="content-frame" name="content-frame" src="{{ route('backend.dashboard') }}" style="border: 0; width: 100%; height: 100%;"></iframe>
 </div>
 <!-- END: Content-->
 
 <div class="sidenav-overlay"></div>
 <div class="drag-target"></div>
 
-@include('panels.toast')
-@include('panels.modal')
+<!-- BEGIN: Footer -->
+@include('panels.footer')
+<!-- END: Footer -->
 
 @include('panels.scripts')
 
