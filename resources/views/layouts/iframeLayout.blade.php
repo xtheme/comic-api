@@ -47,18 +47,15 @@ style="overflow-x: hidden; padding-right: 0 !important;">
 
 <!-- BEGIN: Content-->
 <div id="main-content" class="content" style="height: 100%;">
-    <iframe id="content-frame" name="content-frame" src="{{ route('backend.dashboard') }}" style="border: 0; width: 100%; height: 100%;"></iframe>
+    <iframe id="content-frame" name="content-frame" src="{{ route('backend.dashboard') }}" style="border: 0; width: 100%; height: 100%"></iframe>
 </div>
 <!-- END: Content-->
 
 <div class="sidenav-overlay"></div>
 <div class="drag-target"></div>
 
-<!-- BEGIN: Footer -->
-@include('panels.footer')
-<!-- END: Footer -->
-
+{{-- scripts --}}
 @include('panels.scripts')
-
 </body>
+<!-- END: Body -->
 </html>

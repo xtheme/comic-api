@@ -59,7 +59,7 @@
                             <li class="navigation-header text-truncate"><span>{{$menu->navheader}}</span></li>
                         @else
                             <li class="nav-item {{ request()->is($menu->url . '*') ? 'active' : '' }}">
-                                <a href="@if(isset($menu->url)){{asset($menu->url)}} @endif" @if(isset($menu->newTab)){{"target=_blank"}}@endif>
+                                <a href="@if(isset($menu->url)){{asset($menu->url)}} @endif" @if(isset($menu->newTab)){{'target=_blank'}}@else{{'target=content-frame'}}@endif>
                                     @if(isset($menu->icon))
                                         <i class="menu-livicon" data-icon="{{$menu->icon}}"></i>
                                     @endif

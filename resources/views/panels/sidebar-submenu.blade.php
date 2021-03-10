@@ -4,7 +4,7 @@
         @if (isset($menu))
             @foreach ($menu as $submenu)
                 <li {{ request()->is($submenu->url . '*') ? 'class=active' : '' }}>
-                    <a href="@isset($submenu->url) {{asset($submenu->url)}} @endisset" class="d-flex align-items-center" @if(isset($submenu->newTab)){{"target=_blank"}}@endif>
+                    <a href="@isset($submenu->url) {{asset($submenu->url)}} @endisset" class="d-flex align-items-center" @if(isset($submenu->newTab)){{'target=_blank'}}@else{{'target=content-frame'}}@endif>
                         <i class="bx bx-right-arrow-alt"></i>
                         <span class="menu-item text-truncate">{{ __('locale.'.$submenu->name)}}</span>
                     </a>
