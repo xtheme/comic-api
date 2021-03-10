@@ -1,14 +1,18 @@
 @if ($paginator->hasPages())
     <nav>
-        <ul class="pagination">
+        <ul class="pagination justify-content-end">
             {{-- Previous Page Link --}}
             @if ($paginator->onFirstPage())
-                <li class="page-item disabled" aria-disabled="true" aria-label="@lang('pagination.previous')">
-                    <span class="page-link" aria-hidden="true">&lsaquo;</span>
+                <li class="page-item previous disabled" aria-disabled="true" aria-label="@lang('pagination.previous')">
+                    <a class="page-link" href="#">
+                        <i class="bx bx-chevron-left"></i>
+                    </a
                 </li>
             @else
-                <li class="page-item">
-                    <a class="page-link" href="{{ $paginator->previousPageUrl() }}" rel="prev" aria-label="@lang('pagination.previous')">&lsaquo;</a>
+                <li class="page-item previous">
+                    <a class="page-link" href="{{ $paginator->previousPageUrl() }}" rel="prev" aria-label="@lang('pagination.previous')">
+                        <i class="bx bx-chevron-left"></i>
+                    </a>
                 </li>
             @endif
 
@@ -33,12 +37,16 @@
 
             {{-- Next Page Link --}}
             @if ($paginator->hasMorePages())
-                <li class="page-item">
-                    <a class="page-link" href="{{ $paginator->nextPageUrl() }}" rel="next" aria-label="@lang('pagination.next')">&rsaquo;</a>
+                <li class="page-item next">
+                    <a class="page-link" href="{{ $paginator->nextPageUrl() }}" rel="next" aria-label="@lang('pagination.next')">
+                        <i class="bx bx-chevron-right"></i>
+                    </a>
                 </li>
             @else
-                <li class="page-item disabled" aria-disabled="true" aria-label="@lang('pagination.next')">
-                    <span class="page-link" aria-hidden="true">&rsaquo;</span>
+                <li class="page-item next disabled" aria-disabled="true" aria-label="@lang('pagination.next')">
+                    <a class="page-link" href="#">
+                        <i class="bx bx-chevron-right"></i>
+                    </a>
                 </li>
             @endif
         </ul>
