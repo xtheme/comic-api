@@ -32,4 +32,17 @@ return [
         'direction' => env('MIX_CONTENT_DIRECTION', 'ltr'),
         // Page direction
     ],
+    'upload'  => [
+        'image' => [
+            'size'      => env('FILE_SIZE_LIMIT', 12000000), // 12MB
+            'mime_type' => ['image/jpeg', 'image/png', 'image/gif'],
+        ],
+        'excel' => [
+            'size'      => env('FILE_SIZE_LIMIT', 4194304), // 4MB
+            'mime_type' => ['application/vnd.ms-excel', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'],
+        ],
+    ],
+    'token'   => [
+        'life_time' => 5184000,
+    ],
 ];
