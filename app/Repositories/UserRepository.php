@@ -2,7 +2,7 @@
 
 namespace App\Repositories;
 
-use App\Models\ClientUser;
+use App\Models\User;
 use App\Repositories\Contracts\UserRepositoryInterface;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
@@ -16,7 +16,7 @@ class UserRepository extends Repository implements UserRepositoryInterface
      */
     public function model(): string
     {
-        return ClientUser::class;
+        return User::class;
     }
 
     /**
@@ -38,7 +38,7 @@ class UserRepository extends Repository implements UserRepositoryInterface
         $order = $request->get('order') ?? 'created_at';
         $sort = $request->get('sort') ?? 'DESC';
 
-        return $this->model::withTrashed()->with(['likes', 'visitor_likes', 'collects', 'active', 'comments'])->withCount([
+        return $this->model::with(['likes', 'visitor_likes', 'collects', 'active', 'comments'])->withCount([
             'likes',
             'visitor_likes',
             'collects',
