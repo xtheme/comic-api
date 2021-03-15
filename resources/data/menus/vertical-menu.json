@@ -1,7 +1,7 @@
 {
     "menu": [
         {
-            "url": "/",
+            "url": "/backend/dashboard",
             "name": "Dashboard",
             "slug": "dashboard",
             "icon": "desktop"
@@ -24,11 +24,11 @@
                 },
                 {
                     "url": "/backend/feedback/list",
-                    "name": "Feedback"
+                    "name": "Pricing List"
                 },
                 {
                     "url": "/backend/search/list",
-                    "name": "Search"
+                    "name": "Order List"
                 }
             ]
         }
