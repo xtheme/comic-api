@@ -9,7 +9,6 @@
                 </button>
             </div>
             <div class="modal-body">
-{{--                <iframe name="modal-frame" frameborder="0" style="border: 0; width: 100%; height: 0;"></iframe>--}}
             </div>
         </div>
     </div>

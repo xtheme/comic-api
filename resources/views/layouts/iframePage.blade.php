@@ -85,6 +85,8 @@ data-open="click" data-menu="vertical-menu-modern" data-col="1-column" data-fram
 @endif
 <!-- End: Customizer-->
 
+@include('panels.modal')
+
 <!-- BEGIN: Footer -->
 @include('panels.footer')
 <!-- END: Footer -->
