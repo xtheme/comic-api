@@ -2,8 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use App\Services\ImageService;
+use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Response;
 
 /**
@@ -13,14 +14,84 @@ use Illuminate\Support\Facades\Response;
  */
 class UploadController extends Controller
 {
-    private $imageService;
+    /**
+     * 检查上传文件
+     *
+     * @param  UploadedFile  $file
+     *
+     * @return string
+     */
+    private function checkFile(UploadedFile $file)
+    {
+        if ($file->isValid()) {
+            // 检查文件大小
+            $size = $file->getSize();
+            if ($size > config('custom.upload.image.size')) {
+                $limit_size = ceil(config('custom.upload.image.size') / 1024);
+
+                return sprintf('文件不能大于 %s kb！', $limit_size);
+            }
+
+            // 检查 mime type
+            $mimeType = $file->getMimeType();
+            $allowMimeType = config('custom.upload.image.mime_type');
+            if (!in_array($mimeType, $allowMimeType)) {
+                return '文件类型不支持！';
+            }
+
+            // 16进制文件检查，防止图片恶意代码
+            if (!checkHex($file)) {
+                return '你所上传的图片可能藏有恶意代码，请通报资安人员处理！';
+            }
+
+            return '';
+        }
+
+        return $file->getErrorMessage();
+    }
 
     /**
-     * @param  ImageService  $imageService
+     * 获取存储路径
+     *
+     * @param string|null $dir
+     * @param string|null $id
+     * @return string
      */
-    public function __construct(ImageService $imageService)
+    private function getFilePath(string $dir = null, string $id = null)
     {
-        $this->imageService = $imageService;
+        $path = !is_null($dir) ? trim($dir) : date('Ymd');
+
+        if (!$id) {
+            // 新增时尚无 id, 找出最后一笔 id +1
+            switch ($dir) {
+                case 'avatar':
+                    $id = User::latest()->first()->id + 1;
+                    break;
+            }
+        }
+
+        $path .= '/' . $id;
+
+        return $path;
+    }
+
+    /**
+     * 存储文件
+     *
+     * @param $file
+     * @param $path
+     *
+     * @return
+     */
+    private function storeFile(UploadedFile $file, $path)
+    {
+        // 获取后缀名
+        $extension = $file->extension();
+
+        // 生成文件路径
+        $filename = uniqid() . '.' . $extension;
+
+        return '/storage/' . $file->storeAs($path, $filename);
     }
 
     /**
@@ -36,21 +107,19 @@ class UploadController extends Controller
     {
         $file = $request->file('image');
 
-        $result = $this->imageService->uploadFile($file, $dir, $id);
+        $message = $this->checkFile($file);
 
-        $result = explode('|', $result);
-
-        $status = ($result[0] == 'error') ? 500 : 200;
-
-        $message = $result[1];
-
-        if ($status === 200) {
-            return Response::jsonSuccess('上传成功', [
-                'filename' => $message
-            ]);
+        if ($message) {
+            return Response::jsonError($message, 500);
         }
 
-        return Response::jsonError($message, $status);
+        $path = $this->getFilePath($dir, $id);
+
+        $absolute_path = $this->storeFile($file, $path);
+
+        return Response::jsonSuccess('上传成功', [
+            'filename' => $absolute_path
+        ]);
     }
 
     /**
@@ -66,21 +135,24 @@ class UploadController extends Controller
     {
         $file = $request->file('upload');
 
-        $result = $this->imageService->uploadFile($file, $dir, $id);
+        $message = $this->checkFile($file);
 
-        $arr = explode('|', $result);
-
-        if ($arr[0] === 'success') {
-            $result = [
-                'url' => $arr[1]
-            ];
-        } else {
+        if ($message) {
             $result = [
                 'error' => [
-                    'message' => $arr[1]
+                    'message' => $message
                 ]
             ];
+            return json_encode($result);
         }
+
+        $path = $this->getFilePath($dir, $id);
+
+        $absolute_path = $this->storeFile($file, $path);
+
+        $result = [
+            'url' => $absolute_path
+        ];
 
         return json_encode($result);
     }

@@ -37,17 +37,23 @@
                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
             },
             success: function (res) {
+                console.log(res);
                 if (res.code == 200) {
                     $this.parents('.form-group').find('.upload-image-callback').empty().append('<img src="' + res.data.filename + '">').show();
                     $this.parents('.form-group').find('.image-path').val(res.data.filename);
                 } else {
-                    parent.$.toast({
+                    $.toast({
                         type: 'error',
                         message: res.msg
                     });
                 }
-            }, error: function () {
-
+            },
+            error: function (xhr) {
+                var res = JSON.parse(xhr.responseText);
+                parent.$.toast({
+                    type: 'error',
+                    message: res.msg
+                });
             }
         });
     });

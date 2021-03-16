@@ -24,7 +24,7 @@
 <!-- END: Head -->
 
 <!-- BEGIN: Body -->
-<body id="model-iframe">
+<body id="model-iframe" data-col="1-column" data-framework="laravel">
 
 <!-- BEGIN: Content-->
 <div class="content">
@@ -33,9 +33,6 @@
     </div>
 </div>
 <!-- END: Content -->
-
-@include('panels.toast')
-@include('panels.modal')
 
 {{-- scripts --}}
 @include('panels.scripts')

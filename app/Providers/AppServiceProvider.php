@@ -2,7 +2,6 @@
 
 namespace App\Providers;
 
-use App\Services\ImageService;
 use Barryvdh\LaravelIdeHelper\IdeHelperServiceProvider;
 use Illuminate\Pagination\Paginator;
 use Illuminate\Support\Facades\Schema;
@@ -16,9 +15,8 @@ class AppServiceProvider extends ServiceProvider
      *
      * @var array
      */
-    public $singletons = [
-        'ImageService' => ImageService::class,
-    ];
+    public $singletons = [];
+
     /**
      * Register any application services.
      *
