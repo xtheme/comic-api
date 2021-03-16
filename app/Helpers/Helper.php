@@ -61,7 +61,7 @@ class Helper
             'isCustomizer' => [true, false],
             'isCardShadow' => [true, false],
             'isScrollTop' => [true, false],
-            'defaultLanguage' => ['en' => 'en', 'pt' => 'pt', 'fr' => 'fr', 'de' => 'de', 'zh_CN' => 'zh_CN'],
+            'defaultLanguage' => ['en' => 'en', 'pt' => 'pt', 'fr' => 'fr', 'de' => 'de', 'zh-CN' => 'zh-CN'],
             'direction' => ['ltr' => 'ltr', 'rtl' => 'rtl'],
         ];
         // navbar body class array

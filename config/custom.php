@@ -27,7 +27,7 @@ return [
         // Option: true(default) and false ( remove card shadow)
         'isScrollTop' => false,
         // Option: true and false (Hide Scroll To Top)
-        'defaultLanguage' => 'zh_CN',
+        'defaultLanguage' => 'zh-CN',
         //set your default language Options: en(default),pt,fr,de
         'direction' => env('MIX_CONTENT_DIRECTION', 'ltr'),
         // Page direction
