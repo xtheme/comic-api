@@ -7,4 +7,6 @@ return [
     "Customer List" => "会员列表",
     "Pricing List" => "会员套餐",
     "Order List" => "订单列表",
+    "Systems" => "系统设定",
+    "Log Viewer" => "系统日志",
 ];

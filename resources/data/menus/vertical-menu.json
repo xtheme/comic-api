@@ -19,7 +19,7 @@
             "icon": "users",
             "submenu": [
                 {
-                    "url": "/backend/user/list",
+                    "url": "/backend/user",
                     "name": "Customer List"
                 },
                 {
@@ -29,6 +29,18 @@
                 {
                     "url": "/backend/search/list",
                     "name": "Order List"
+                }
+            ]
+        },
+        {
+            "url": "#",
+            "name": "Systems",
+            "slug": "systems",
+            "icon": "wrench",
+            "submenu": [
+                {
+                    "url": "/log-viewer/logs",
+                    "name": "Log Viewer"
                 }
             ]
         }
