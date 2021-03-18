@@ -8,5 +8,6 @@ return [
     "Pricing List" => "会员套餐",
     "Order List" => "订单列表",
     "Systems" => "系统设定",
+    "Terminal" => "命令模式",
     "Log Viewer" => "系统日志",
 ];

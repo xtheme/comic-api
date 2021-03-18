@@ -39,6 +39,10 @@
             "icon": "wrench",
             "submenu": [
                 {
+                    "url": "/terminal",
+                    "name": "Terminal"
+                },
+                {
                     "url": "/log-viewer/logs",
                     "name": "Log Viewer"
                 }
