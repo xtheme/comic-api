@@ -9,14 +9,15 @@
     "license": "MIT",
     "require": {
         "php": "^7.3.0|^8.0",
+        "ext-json": "*",
+        "arcanedev/log-viewer": "~8.0",
         "fideloper/proxy": "^4.4",
         "fruitcake/laravel-cors": "^2.0",
         "guzzlehttp/guzzle": "^7.0.1",
         "laravel/framework": "^8.26.1",
         "laravel/tinker": "^2.5",
         "laravel/ui": "^3.0",
-        "predis/predis": "^1.1",
-        "ext-json": "*"
+        "predis/predis": "^1.1"
     },
     "require-dev": {
         "barryvdh/laravel-debugbar": "^3.5",
