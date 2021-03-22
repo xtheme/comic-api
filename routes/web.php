@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Auth\LoginController;
+use App\Http\Controllers\Backend\ConfigController;
 use App\Http\Controllers\Backend\UserController;
 use App\Http\Controllers\LanguageController;
 use App\Http\Controllers\Backend\DashboardController;
@@ -35,6 +36,9 @@ Route::middleware(['auth'])->group(function () {
 // Backend iframe pages
 Route::middleware(['auth'])->prefix('backend')->as('backend.')->group(function () {
     Route::get('dashboard', [DashboardController::class, 'dashboard'])->name('dashboard');
+
+    // 系统配置
+    Route::resource('config', ConfigController::class);
 
     // 用户管理
     Route::resource('user', UserController::class);
