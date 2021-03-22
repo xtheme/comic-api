@@ -42,7 +42,7 @@
                                 <th class="text-center">金币</th>
                                 <th>手机号</th>
                                 <th>VIP</th>
-                                <th>VIP到期时间</th>
+                                <th class="text-center">VIP到期时间</th>
                                 <th>状态</th>
                                 <th>注册时间</th>
                                 <th>最后登陆时间</th>
@@ -68,10 +68,10 @@
                                     <td class="text-right">{{ $item->score }}</td>
                                     <td>{{ $item->phone }}</td>
                                     <td>@if($item->subscribed_status)<span class="text-success">VIP</span>@else<span class="text-muted">普通</span>@endif</td>
-                                    <td>{{ $item->subscribed_at }}</td>
+                                    <td class="text-center">@if($item->subscribed_at){{ $item->subscribed_at->diffForHumans() }}@else<span class="text-light">N/A</span>@endif</td>
                                     <td>@if($item->status)<span class="text-success">正常</span>@else<span class="text-danger">禁用</span>@endif</td>
-                                    <td>{{ $item->created_at }}</td>
-                                    <td>{{ $item->last_login_at }}</td>
+                                    <td>{{ $item->created_at->diffForHumans() }}</td>
+                                    <td>@if($item->last_login_at){{ $item->last_login_at->diffForHumans() }}@else<span class="text-light">N/A</span>@endif</td>
                                     <td @if($loop->count == 1)style="position: fixed;"@endif>
                                         <div class="@if(($loop->count - $loop->iteration) < 3){{'dropup'}}@else{{'dropdown'}}@endif">
                                             <span class="bx bx-dots-vertical-rounded font-medium-3 dropdown-toggle nav-hide-arrow cursor-pointer"
@@ -110,11 +110,11 @@
     </section>
 @endsection
 
-@section('customizer-content')
+@section('search-form')
     <h4 class="text-uppercase mb-0">查询</h4>
     <small></small>
     <hr>
-    <form id="search-form" class="form form-vertical" method="get" action="{{ route('backend.user.list') }}" novalidate>
+    <form id="search-form" class="form form-vertical" method="get" action="{{ url()->current() }}" novalidate>
         <div class="form-body">
             <div class="row">
                 <div class="col-12">
@@ -193,9 +193,9 @@
 
 {{-- vendor scripts --}}
 @section('vendor-scripts')
-    <script src="{{ asset('vendors/js/pickers/daterange/moment.min.js') }}"></script>
+    <script src="{{ asset('vendors/js/extensions/moment.min.js') }}"></script>
+    <script src="{{ asset('vendors/js/extensions/locale-all.js') }}"></script>
     <script src="{{ asset('vendors/js/pickers/daterange/daterangepicker.js') }}"></script>
-    <script src="{{ asset('vendors/js/pickers/daterange/locale.js') }}"></script>
 @endsection
 
 {{-- page scripts --}}

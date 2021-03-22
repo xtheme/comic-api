@@ -37,11 +37,6 @@ Route::middleware(['auth'])->prefix('backend')->as('backend.')->group(function (
     Route::get('dashboard', [DashboardController::class, 'dashboard'])->name('dashboard');
 
     // 用户管理
-    Route::prefix('user')->as('user.')->group(function () {
-        Route::get('list', [UserController::class, 'list'])->name('list');
-        Route::get('edit/{id}', [UserController::class, 'edit'])->name('edit');
-        Route::post('update/{id}', [UserController::class, 'update'])->name('update');
-        Route::post('destroy/{id}', [UserController::class, 'destroy'])->name('destroy');
-    });
+    Route::resource('user', UserController::class);
 
 });

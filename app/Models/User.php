@@ -78,9 +78,13 @@ class User extends Model
      * @var array
      */
     protected $fillable = [
-        'name',
-        'email',
-        'password',
+        'username',
+        'avatar',
+        'sex',
+        'score',
+        'status',
+        'sign',
+        'subscribed_at',
     ];
 
     /**
@@ -89,7 +93,6 @@ class User extends Model
      * @var array
      */
     protected $hidden = [
-        'password',
     ];
 
     /**
@@ -98,8 +101,20 @@ class User extends Model
      * @var array
      */
     protected $appends = [
+        // 旧版字段相容
+        'email_bind',
+        'userface',
+        'create_time',
+        // 关联统计字段
         'subscribed_status',
         'orders_count',
+    ];
+
+    protected $dates = [
+        'created_at',
+        'updated_at',
+        'subscribed_at',
+        'last_login_at',
     ];
 
     /**
@@ -188,5 +203,24 @@ class User extends Model
     public function getAccountTypeAttribute()
     {
         return $this->mobile ? '电话' : '设备';
+    }
+
+    /**
+     * 旧版字段相容 email_bind
+     *
+     * @return int
+     */
+    public function getEmailBindAttribute()
+    {
+        return $this->mobile ? 1 : 0;
+    }
+    /**
+     * 旧版字段相容 userface
+     *
+     * @return string
+     */
+    public function getUserfaceAttribute()
+    {
+        return $this->avatar;
     }
 }

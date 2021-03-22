@@ -51,7 +51,6 @@ class Users extends Command
             $table->dropIndex('tgid');
             $table->dropIndex('did');
             $table->dropIndex('sxid');
-            $this->line('弃用索引已移除');
 
             // 移除欄位
             $columns = [
@@ -100,16 +99,13 @@ class Users extends Command
                 'version_type',
             ];
             $table->dropColumn($columns);
-            $this->line('弃用字段已移除');
 
             // 加上時間戳
             $table->timestamps();
-            $this->line('添加 Laravel 时间戳');
 
             $table->timestamp('last_login_at')->after('last_login_time')->nullable();
-            $this->line('添加 last_login_at 字段');
         });
-        $this->line('数据表结构异动完成');
+        $this->line('数据表结构已重构');
 
         DB::statement(sprintf('ALTER TABLE %s CHANGE `subscribed_at` `subscribed_at` TIMESTAMP NULL DEFAULT NULL', DB::getTablePrefix() . $this->table));
         $this->line('subscribed_at 属性已变更为 timestamp');
@@ -132,6 +128,8 @@ class Users extends Command
             ];
             $table->dropColumn($columns);
             $this->line('重复字段已排除');
+
+            // rename
         });
 
         $this->line('数据表结构已重构');

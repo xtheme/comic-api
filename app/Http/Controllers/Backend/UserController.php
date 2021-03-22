@@ -26,106 +26,92 @@ class UserController extends Controller
     /**
      * 用户列表
      *
-     * @param  Request  $request
-     *
      * @return \Illuminate\Contracts\View\View|\Illuminate\Contracts\View\Factory
      */
-    public function list(Request $request)
+    public function index()
     {
         $users = User::paginate();
 
-        return view('backend.user.list', [
-                'list'           => $users,
-                'pageConfigs'    => ['hasSearchForm' => false],
-            ]);
+        return view('backend.user.index', [
+            'list' => $users,
+            'pageConfigs' => ['hasSearchForm' => true],
+        ]);
     }
 
     /**
-     * 封封禁户
+     * Show the form for creating a new resource.
      *
-     * @param $id
-     *
-     * @return Response
+     * @return \Illuminate\Contracts\View\View|\Illuminate\Contracts\View\Factory
      */
-    // public function block($id)
-    // {
-    //     if (empty($id)) {
-    //         return Response::jsonError('缺少核心参数！');
-    //     }
-    //     $user = User::findOrFail($id);
-    //     if ($user->status == 1) {
-    //         $user->status = 2;
-    //     } else {
-    //         $user->status = 1;
-    //     }
-    //     $user->save();
-    //
-    //     return Response::jsonSuccess('操作成功！');
-    // }
+    public function create()
+    {
+        $username = '茄子漫画' . substr(str_shuffle('abcdefghijklmnopqrstuvwxyz'), 0, 5);
+
+        return view('backend.user.create', [
+            'username' => $username,
+        ]);
+    }
 
     /**
-     * 删除用户 - 软删除
+     * Store a newly created resource in storage.
      *
-     * @param $id
-     *
-     * @return Response
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
      */
-    // public function destroy($id)
-    // {
-    //     if (empty($id)) {
-    //         return Response::jsonError('缺少核心参数！');
-    //     }
-    //     // 变更为软删除
-    //     // User::where('id', $id)->update(['status' => 3]);
-    //     $user = User::findOrFail($id);
-    //     $user->delete();
-    //
-    //     return Response::jsonSuccess('操作成功！');
-    // }
+    public function store(Request $request)
+    {
+        $post = $request->post();
+
+        $isUsernameExist = User::where('username', $post['username'])->count();
+        if ($isUsernameExist) {
+            return Response::jsonError('用户名已存在！');
+        }
+
+        $isMobileExist = User::where('mobile', $post['mobile'])->count();
+        if ($isMobileExist) {
+            return Response::jsonError('相同手机号的用户已存在！');
+        }
+
+        User::create($post);
+
+        return Response::jsonSuccess('新增用户成功！');
+    }
 
     /**
-     * 恢復軟删除用户
+     * Display the specified resource.
      *
-     * @param $id
-     *
-     * @return Response
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
      */
-    // public function restore($id)
-    // {
-    //     if (empty($id)) {
-    //         return Response::jsonError('缺少核心参数！');
-    //     }
-    //
-    //     // 恢復軟删除
-    //     User::withTrashed()->findOrFail($id)->restore();
-    //
-    //     return Response::jsonSuccess('操作成功！');
-    // }
+    public function show($id)
+    {
+        //
+    }
 
     /**
-     * 更新用户资料
+     * Show the form for editing the specified resource.
      *
-     * @param $id
-     *
+     * @param  int  $id
      * @return \Illuminate\Contracts\View\View|\Illuminate\Contracts\View\Factory
      */
     public function edit($id)
     {
+        $user = User::findOrFail($id);
+
         return view('backend.user.edit', [
-                'user'        => User::find($id),
-                // 'user_status' => Options::USER_STATUS,
-            ]);
+            'user' => $user,
+            'pageConfigs' => ['hasSearchForm' => false],
+        ]);
     }
 
     /**
-     * 更新用户资料
+     * Update the specified resource in storage.
      *
-     * @param  UserRequest  $request
-     * @param $id
-     *
-     * @return Response
+     * @param  \Illuminate\Http\Request  $request
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
      */
-    public function update(UserRequest $request, $id)
+    public function update(Request $request, $id)
     {
         $post = $request->post();
 
@@ -137,93 +123,13 @@ class UserController extends Controller
     }
 
     /**
-     * 新增用户
+     * Remove the specified resource from storage.
      *
-     * @return View
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
      */
-    // public function create()
-    // {
-    //     return view('pages.user.create');
-    // }
-
-    /**
-     * 新增用户
-     *
-     * @param  UserRequest  $request
-     *
-     * @return Response
-     */
-    // public function store(UserRequest $request)
-    // {
-    //     $post = $request->post();
-    //
-    //     unset($post['password_verify']);
-    //
-    //     $username = generateRandomString(12);
-    //
-    //     if (User::isUsernameExist($username)) {
-    //         return Response::jsonError('用户名已存在！');
-    //     }
-    //
-    //     if (User::isMobileExist($post['mobile'])) {
-    //         return Response::jsonError('相同手机号的用户已存在！');
-    //     }
-    //
-    //     $user = new User();
-    //
-    //     $user->username = $username;
-    //     $user->code = generateRandomString();
-    //     $user->integral = 5;
-    //
-    //     $user->fill($post)->save();
-    //
-    //     return Response::jsonSuccess('新增用户成功！');
-    // }
-
-    /**
-     * 批量审核
-     *
-     * @param $flag
-     * @param $ids
-     *
-     * @return Response
-     */
-    // public function updateStatus($flag, $ids)
-    // {
-    //     if (empty($ids)) {
-    //         return Response::jsonError('请选择要操作项！');
-    //     }
-    //
-    //     if (empty($flag)) {
-    //         return Response::jsonError('缺少核心参数！');
-    //     }
-    //
-    //     $ids = explode(',', $ids);
-    //
-    //     $result = User::whereIn('id', $ids)->update(['status' => $flag]);
-    //
-    //     if ($result) {
-    //         return Response::jsonSuccess('批量操作成功！');
-    //     }
-    //
-    //     return Response::jsonError('操作失败！');
-    // }
-
-    /**
-     * 设备列表
-     *
-     * @param $user_id
-     *
-     * @return View
-     */
-    // public function devices($user_id)
-    // {
-    //     // 由登入紀錄中獲取該用戶曾經使用過的設備
-    //     $relation_devices = UserDevice::with('detail')->groupBy('device_id')->where('user_id', $user_id)->paginate(config('custom.perpage'));
-    //
-    //     return view('pages.user.devices', [
-    //             'devices' => $relation_devices,
-    //             'user'    => User::FindOrFail($user_id),
-    //         ]);
-    // }
+    public function destroy($id)
+    {
+        //
+    }
 }
