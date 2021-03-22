@@ -130,6 +130,28 @@ class UserController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $user = User::findOrFail($id);
+
+        $user->delete();
+
+        return Response::jsonSuccess('操作成功！');
+    }
+
+    /**
+     * 封封禁户
+     *
+     * @param $id
+     *
+     * @return Response
+     */
+    public function block($id)
+    {
+        $user = User::findOrFail($id);
+
+        $user->status = $user->status != 1 ? 1 : 2;
+
+        $user->save();
+
+        return Response::jsonSuccess('操作成功！');
     }
 }

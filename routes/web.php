@@ -38,5 +38,6 @@ Route::middleware(['auth'])->prefix('backend')->as('backend.')->group(function (
 
     // 用户管理
     Route::resource('user', UserController::class);
+    Route::put('user/{id}/block', [UserController::class,'block'])->name('user.block'); // 切换用户状态
 
 });

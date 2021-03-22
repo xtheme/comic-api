@@ -96,7 +96,7 @@
                 console.log(params);
                 $.request({
                     url: url,
-                    type: 'post',
+                    type: 'put',
                     data: (Object.keys(params).length === 0) ? null : params,
                     debug: false,
                     callback: function (res) {

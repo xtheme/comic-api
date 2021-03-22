@@ -136,6 +136,18 @@ class User extends Model
         }
     }
 
+    public function getIdentityAttribute()
+    {
+        switch ($this->status) {
+            case 1:
+                return '<span class="text-success">正常</span>';
+            case 2:
+                return '<span class="text-danger">禁用</span>';
+            default:
+                return '<span class="text-muted">未知</span>';
+        }
+    }
+
     /**
      * 電話號碼
      *

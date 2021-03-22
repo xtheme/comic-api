@@ -69,7 +69,7 @@
                                     <td>{{ $item->phone }}</td>
                                     <td>@if($item->subscribed_status)<span class="text-success">VIP</span>@else<span class="text-muted">普通</span>@endif</td>
                                     <td class="text-center">@if($item->subscribed_at){{ $item->subscribed_at->diffForHumans() }}@else<span class="text-light">N/A</span>@endif</td>
-                                    <td>@if($item->status)<span class="text-success">正常</span>@else<span class="text-danger">禁用</span>@endif</td>
+                                    <td>{!! $item->identity !!}</td>
                                     <td>{{ $item->created_at->diffForHumans() }}</td>
                                     <td>@if($item->last_login_at){{ $item->last_login_at->diffForHumans() }}@else<span class="text-light">N/A</span>@endif</td>
                                     <td @if($loop->count == 1)style="position: fixed;"@endif>
@@ -78,6 +78,11 @@
                                                   id="dropdownMenuButton{{ $item->id }}" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></span>
                                             <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuButton{{ $item->id }}">
                                                 <a class="dropdown-item" data-modal href="{{ route('backend.user.edit', $item->id) }}" title="修改用户信息"><i class="bx bx-edit-alt mr-1"></i>修改</a>
+                                                @if ($item->status == '1')
+                                                    <a class="dropdown-item" data-confirm href="{{ route('backend.user.block', $item->id) }}" title="封禁该账号"><i class="bx bx-lock mr-1"></i>封禁</a>
+                                                @else
+                                                    <a class="dropdown-item" data-confirm href="{{ route('backend.user.block', $item->id) }}" title="启用该账号"><i class="bx bx-lock-open mr-1"></i>启用</a>
+                                                @endif
 {{--                                                @if (!$item->deleted_at)--}}
 {{--                                                    @if ($item->status == '1')--}}
 {{--                                                        <a class="dropdown-item" data-confirm href="{{ route('rbac.user.block', $item->id) }}" title="封禁该账号"><i class="bx bx-lock mr-1"></i>封禁</a>--}}

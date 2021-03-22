@@ -210,6 +210,7 @@
 
             // 日期時間選擇
             moment.locale('zh-cn');
+
             let $created = $('input[name="subscribed_at"]');
 
             $created.daterangepicker({
