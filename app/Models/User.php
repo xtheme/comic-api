@@ -13,12 +13,11 @@ use Illuminate\Notifications\Notifiable;
  * @property string $username 用户名
  * @property int $area 區碼
  * @property string $mobile 手机号码
- * @property int $mobile_bind 是否绑定手机号码
- * @property string $userface app用户头像
+ * @property string $avatar app用户头像
  * @property int $score 积分/金币
  * @property string|null $sign 个性签名
  * @property string|null $signup_ip 注册ip
- * @property string|null $last_login_at
+ * @property \Illuminate\Support\Carbon|null $last_login_at
  * @property string|null $last_login_ip 登录ip
  * @property int|null $status 状态：0禁用，1启用
  * @property int|null $sex 性别，男1女2未知0
@@ -28,21 +27,25 @@ use Illuminate\Notifications\Notifiable;
  * @property string $version 版本号
  * @property int|null $del_comment 被删除评论数量
  * @property int|null $total_comment 总评论
- * @property string|null $subscribed_at
+ * @property \Illuminate\Support\Carbon|null $subscribed_at
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property-read mixed $account_type
+ * @property-read int $email_bind
  * @property-read mixed $gender
+ * @property-read mixed $identity
  * @property-read mixed $orders_count
  * @property-read mixed $os
  * @property-read string $phone
  * @property-read bool $subscribed_status
+ * @property-read string $userface
  * @property-read \Illuminate\Notifications\DatabaseNotificationCollection|\Illuminate\Notifications\DatabaseNotification[] $notifications
  * @property-read int|null $notifications_count
  * @method static \Illuminate\Database\Eloquent\Builder|User newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|User newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|User query()
  * @method static \Illuminate\Database\Eloquent\Builder|User whereArea($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|User whereAvatar($value)
  * @method static \Illuminate\Database\Eloquent\Builder|User whereCreatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|User whereDelComment($value)
  * @method static \Illuminate\Database\Eloquent\Builder|User whereDeviceId($value)
@@ -50,7 +53,6 @@ use Illuminate\Notifications\Notifiable;
  * @method static \Illuminate\Database\Eloquent\Builder|User whereLastLoginAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|User whereLastLoginIp($value)
  * @method static \Illuminate\Database\Eloquent\Builder|User whereMobile($value)
- * @method static \Illuminate\Database\Eloquent\Builder|User whereMobileBind($value)
  * @method static \Illuminate\Database\Eloquent\Builder|User wherePlatform($value)
  * @method static \Illuminate\Database\Eloquent\Builder|User whereScore($value)
  * @method static \Illuminate\Database\Eloquent\Builder|User whereSex($value)
@@ -61,7 +63,6 @@ use Illuminate\Notifications\Notifiable;
  * @method static \Illuminate\Database\Eloquent\Builder|User whereToken($value)
  * @method static \Illuminate\Database\Eloquent\Builder|User whereTotalComment($value)
  * @method static \Illuminate\Database\Eloquent\Builder|User whereUpdatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|User whereUserface($value)
  * @method static \Illuminate\Database\Eloquent\Builder|User whereUsername($value)
  * @method static \Illuminate\Database\Eloquent\Builder|User whereVersion($value)
  * @mixin \Eloquent

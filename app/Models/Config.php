@@ -19,6 +19,7 @@ use Spatie\Activitylog\Traits\LogsActivity;
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property-read \Illuminate\Database\Eloquent\Collection|\Spatie\Activitylog\Models\Activity[] $activities
  * @property-read int|null $activities_count
+ * @method static Builder|Config group(?string $group= null)
  * @method static Builder|Config keyword(?string $keyword = null)
  * @method static Builder|Config newModelQuery()
  * @method static Builder|Config newQuery()
@@ -38,15 +39,41 @@ class Config extends Model
     use LogsActivity;
 
     /**
+     * The attributes that are mass assignable.
+     *
+     * @var array
+     */
+    protected $fillable = [
+        'group',
+        'name',
+        'type',
+        'code',
+        'content',
+    ];
+
+    /**
+     * @param  Builder  $query
+     * @param  string|null  $group
+     *
+     * @return mixed
+     */
+    public function scopeGroup(Builder $query, string $group = null)
+    {
+        return $query->when($group, function (Builder $query, $group) {
+            return $query->where('group', $group);
+        });
+    }
+
+    /**
      * @param $query
      * @param  string|null  $keyword
+     *
      * @return mixed
      */
     public function scopeKeyword(Builder $query, string $keyword = null)
     {
         return $query->when($keyword, function (Builder $query, $keyword) {
-            return $query->where('code', 'like', '%' . $keyword . '%')
-                ->orWhere('name', 'like', '%' . $keyword . '%');
+            return $query->where('code', 'like', '%' . $keyword . '%')->orWhere('name', 'like', '%' . $keyword . '%');
         });
     }
 }

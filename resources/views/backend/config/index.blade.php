@@ -5,7 +5,6 @@
 
 {{-- page style --}}
 @section('page-styles')
-    <link rel="stylesheet" type="text/css" href="{{ asset('css/pages/config.css') }}">
 @endsection
 
 @section('content')
@@ -30,6 +29,7 @@
                                     </div>
                                 </div>
                                 <div class="form-group">
+                                    <input type="hidden" name="group" value="{{ request()->get('group') }}">
                                     <button type="submit" class="btn btn-primary">搜索</button>
                                 </div>
                             </div>
@@ -39,6 +39,20 @@
             </div>
             <div class="card-content">
                 <div class="card-body">
+                    <!-- Nav tabs -->
+                    <ul class="nav nav-tabs" role="tablist">
+                        @foreach($tags as $tag => $name)
+                            @if($tag == request()->input('group'))
+                                <li class="nav-item current">
+                                    <a class="nav-link active" href="javascript:void(0)">{{$name}}</a>
+                                </li>
+                            @else
+                                <li class="nav-item">
+                                    <a class="nav-link" href="{{route('backend.config.index', ['group' => $tag])}}">{{$name}}</a>
+                                </li>
+                            @endif
+                        @endforeach
+                    </ul>
                     <!-- Table with outer spacing -->
                     <div class="table-responsive">
                         <table class="table table-striped table-hover">
@@ -47,7 +61,7 @@
                                 <th>配置描述</th>
                                 <th>配置类型</th>
                                 <th>代码</th>
-                                <th>配置项</th>
+                                <th>配置值</th>
                                 <th>创建时间</th>
                                 <th>更新时间</th>
                                 <th>操作</th>
@@ -78,29 +92,38 @@
                                     </td>
                                     <td>{{ $item->code }}</td>
                                     <td>
-                                        @if ($item->type == 'image')
+                                        @switch($item->type)
+                                            @case('image')
                                             <div>
                                                 <img src="{{ $item->content }}" class="config-img" alt="">
                                             </div>
-                                        @elseif ($item->type == 'switch')
+                                            @break
+
+                                            @case('switch')
                                             @if ($item->code)
                                                 开启
                                             @else
                                                 关闭
                                             @endif
-                                        @else
+                                            @break
+
+{{--                                            @case('text')--}}
+{{--                                            {!! nl2br(e($item->content )) !!}--}}
+{{--                                            @break--}}
+
+                                            @default
                                             {{ Str::limit($item->content, 50, '...') }}
-                                        @endif
+                                        @endswitch
                                     </td>
-                                    <td>{{ $item->created_at }}</td>
-                                    <td>{{ $item->updated_at }}</td>
+                                    <td>@if($item->created_at){{ $item->created_at->diffForHumans()  }}@endif</td>
+                                    <td>@if($item->updated_at){{ $item->updated_at->diffForHumans()  }}@endif</td>
                                     <td @if($loop->count == 1)style="position: fixed;"@endif>
                                         <div class="@if(($loop->count - $loop->iteration) < 3){{'dropup'}}@else{{'dropdown'}}@endif">
                                             <span class="bx bx-dots-vertical-rounded font-medium-3 dropdown-toggle nav-hide-arrow cursor-pointer"
                                                   id="dropdownMenuButton{{ $item->id }}" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></span>
                                             <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuButton{{ $item->id }}">
                                                 <a class="dropdown-item" data-modal href="{{ route('backend.config.edit', $item->id) }}" title="修改配置"><i class="bx bx-edit-alt mr-1"></i> 修改</a>
-                                                <a class="dropdown-item" data-confirm href="{{ route('backend.config.destroy', $item->id) }}" title="刪除配置"><i class="bx bx-trash mr-1"></i> 删除</a>
+                                                <a class="dropdown-item" data-destroy href="{{ route('backend.config.destroy', $item->id) }}" title="刪除配置"><i class="bx bx-trash mr-1"></i> 删除</a>
                                             </div>
                                         </div>
                                     </td>

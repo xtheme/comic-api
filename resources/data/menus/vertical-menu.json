@@ -7,7 +7,7 @@
             "icon": "desktop"
         },
         {
-            "url": "/backend/config",
+            "url": "/backend/config?group=base",
             "name": "Configs",
             "slug": "configs",
             "icon": "gear"

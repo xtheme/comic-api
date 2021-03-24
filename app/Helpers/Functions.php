@@ -1,5 +1,23 @@
 <?php
 
+use App\Models\Config;
+
+if (!function_exists('getConfig')) {
+    /**
+     * @param $key
+     *
+     * @return string|array
+     */
+    function getConfig($key)
+    {
+        $config = Config::keyword($key)->get();
+
+        // if ($config->type == 'array')
+
+        return $config->content;
+    }
+}
+
 if (!function_exists('starMask')) {
     /**
      * 字串星号加密

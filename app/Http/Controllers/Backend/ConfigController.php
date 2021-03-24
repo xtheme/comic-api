@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Backend;
 use App\Http\Controllers\Controller;
 use App\Models\Config;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Response;
 
 class ConfigController extends Controller
 {
@@ -15,11 +16,19 @@ class ConfigController extends Controller
      */
     public function index(Request $request)
     {
+        $group = $request->input('group');
         $keyword = $request->input('keyword');
 
-        $configs = Config::keyword($keyword)->paginate();
+        $tags = [
+            'base' => '基础设置',
+            'service' => '客服配置',
+            'payment' => '支付配置',
+        ];
+
+        $configs = Config::group($group)->keyword($keyword)->paginate();
 
         return view('backend.config.index', [
+            'tags' => $tags,
             'list' => $configs,
             'pageConfigs' => ['hasSearchForm' => true],
         ]);
@@ -28,11 +37,11 @@ class ConfigController extends Controller
     /**
      * Show the form for creating a new resource.
      *
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Contracts\View\View|\Illuminate\Contracts\View\Factory
      */
     public function create()
     {
-        //
+        return view('backend.config.create');
     }
 
     /**
@@ -61,11 +70,16 @@ class ConfigController extends Controller
      * Show the form for editing the specified resource.
      *
      * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Contracts\View\View|\Illuminate\Contracts\View\Factory
      */
     public function edit($id)
     {
-        //
+        $config = Config::findOrFail($id);
+
+        return view('backend.config.edit', [
+            'config' => $config,
+            'pageConfigs' => ['hasSearchForm' => false],
+        ]);
     }
 
     /**
@@ -77,7 +91,13 @@ class ConfigController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $post = $request->post();
+
+        $config = Config::findOrFail($id);
+
+        $config->fill($post)->save();
+
+        return Response::jsonSuccess('更新资料成功！');
     }
 
     /**
@@ -88,6 +108,10 @@ class ConfigController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $config = Config::findOrFail($id);
+
+        $config->delete();
+
+        return Response::jsonSuccess('操作成功！');
     }
 }
