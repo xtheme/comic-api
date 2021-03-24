@@ -71,40 +71,42 @@
         });
     });
 
-    // 確認彈窗
-    // <a class="dropdown-item" data-confirm href="{{ url('/admin/config/destroy/' . $item->id) }}" title="刪除配置"><i class="bx bx-trash mr-1"></i> 删除</a>
-    $('[data-confirm]').on('click', function (e) {
-        e.preventDefault();
-        let $this = $(this);
-        Swal.fire({
-            // title: 'Are you sure?',
-            // type: 'warning',
-            text: `请确认是否要执行${$this.attr('title')}?`,
-            showCancelButton: true,
-            confirmButtonColor: '#719DF0',
-            cancelButtonColor: '#FF5B5C',
-            confirmButtonText: '确认',
-            confirmButtonClass: 'btn btn-primary',
-            cancelButtonText: '取消',
-            cancelButtonClass: 'btn btn-danger ml-1',
-            buttonsStyling: false,
-        }).then(function (result) {
-            console.log(result);
-            if (result.value) {
-                let url    = $this.attr('href');
-                let params = new URLSearchParams(url);
-                console.log(params);
+    function confirmThenUpdate($this, $action) {
+        let url    = $this.attr('href');
+        let params = new URLSearchParams(url);
+
+        $.confirm({
+            text : `请确认是否要${$this.attr('title')}?`,
+            callback: function () {
                 $.request({
                     url: url,
-                    type: 'put',
+                    type: $action,
                     data: (Object.keys(params).length === 0) ? null : params,
-                    debug: false,
+                    // debug: true,
                     callback: function (res) {
                         parent.$.reloadIFrame({title: res.msg});
                     }
                 });
             }
         });
+    }
+
+    // 更新確認彈窗
+    // <a data-confirm href="{{ route('backend.user.block', $item->id) }}" title="封禁该账号">封禁该账号</a>
+    $('[data-confirm]').on('click', function (e) {
+        e.preventDefault();
+
+        let $this = $(this);
+        confirmThenUpdate($this, 'put');
+    });
+
+    // 删除確認彈窗
+    // <a data-destroy href="{{ route('backend.user.block', $item->id) }}" title="封禁该账号">封禁该账号</a>
+    $('[data-destroy]').on('click', function (e) {
+        e.preventDefault();
+
+        let $this = $(this);
+        confirmThenUpdate($this, 'delete');
     });
 
     // 列表 checkbox 全选
@@ -145,32 +147,26 @@
             }
         });
 
-        Swal.fire({
-            // title: '',
-            // type: 'warning',
-            text: `请确认是否要继续批量操作?`,
-            showCancelButton: true,
-            confirmButtonColor: '#719DF0',
-            cancelButtonColor: '#FF5B5C',
-            confirmButtonText: '确认',
-            confirmButtonClass: 'btn btn-primary',
-            cancelButtonText: '取消',
-            cancelButtonClass: 'btn btn-danger ml-1',
-            buttonsStyling: false,
-        }).then(function (result) {
-            console.log(result);
-            if (result.value) {
-                let url    = $this.attr('href') + '/' + ids;
-                let params = new URLSearchParams(url);
-                console.log(params);
+        $.confirm({
+            text : `请确认是否要继续批量操作?`,
+            callback: function () {
                 $.request({
                     url: url,
-                    type: 'post',
+                    type: $action,
                     data: (Object.keys(params).length === 0) ? null : params,
-                    // debug   : true,
-                    callback: function (res) {
-                        console.log(res);
-                        parent.$.reloadIFrame();
+                    // debug: true,
+                    callback: function () {
+                        let url    = $this.attr('href') + '/' + ids;
+                        let params = new URLSearchParams(url);
+                        $.request({
+                            url: url,
+                            type: 'post',
+                            data: (Object.keys(params).length === 0) ? null : params,
+                            // debug   : true,
+                            callback: function (res) {
+                                parent.$.reloadIFrame();
+                            }
+                        });
                     }
                 });
             }
