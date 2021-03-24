@@ -89,7 +89,7 @@
                             });
 
                             setTimeout(function () {
-                                location.href = '/';
+                                location.href = '/backend';
                             }, 1500);
                         } else {
                             $.toast({
