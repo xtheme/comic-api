@@ -3,7 +3,6 @@
 namespace App\Http\Requests\Backend;
 
 use App\Http\Requests\BaseRequest;
-use Illuminate\Support\Facades\Log;
 
 final class UserRequest extends BaseRequest
 {
@@ -14,8 +13,6 @@ final class UserRequest extends BaseRequest
      */
     public function rules()
     {
-        // $validationData = $this->validationData();
-
         return [
             'username' => 'required|max:11',
             'mobile'   => 'required',

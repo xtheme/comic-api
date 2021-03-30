@@ -125,6 +125,11 @@ class User extends Model
      */
     protected $casts = [];
 
+    public function orders()
+    {
+        $this->hasMany('App\Models\Order');
+    }
+
     public function getGenderAttribute()
     {
         switch ($this->sex) {

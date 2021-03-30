@@ -7,7 +7,6 @@ use App\Models\User;
 use App\Repositories\Contracts\UserRepositoryInterface;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Response;
-use Illuminate\View\View;
 
 /**
  * Class UserController
@@ -30,12 +29,12 @@ class UserController extends Controller
      */
     public function index()
     {
-        $users = User::paginate();
-
-        return view('backend.user.index', [
-            'list' => $users,
+        $data = [
+            'list' => User::paginate(),
             'pageConfigs' => ['hasSearchForm' => true],
-        ]);
+        ];
+
+        return view('backend.user.index')->with($data);
     }
 
     /**
@@ -60,19 +59,19 @@ class UserController extends Controller
      */
     public function store(Request $request)
     {
-        $post = $request->post();
+        $validated = $request->validated();
 
-        $isUsernameExist = User::where('username', $post['username'])->count();
+        $isUsernameExist = User::where('username', $validated['username'])->count();
         if ($isUsernameExist) {
             return Response::jsonError('用户名已存在！');
         }
 
-        $isMobileExist = User::where('mobile', $post['mobile'])->count();
+        $isMobileExist = User::where('mobile', $validated['mobile'])->count();
         if ($isMobileExist) {
             return Response::jsonError('相同手机号的用户已存在！');
         }
 
-        User::create($post);
+        User::create($validated);
 
         return Response::jsonSuccess('新增用户成功！');
     }
@@ -96,12 +95,11 @@ class UserController extends Controller
      */
     public function edit($id)
     {
-        $user = User::findOrFail($id);
+        $data = [
+            'user' => User::findOrFail($id)
+        ];
 
-        return view('backend.user.edit', [
-            'user' => $user,
-            'pageConfigs' => ['hasSearchForm' => false],
-        ]);
+        return view('backend.user.edit')->with($data);
     }
 
     /**
@@ -113,13 +111,13 @@ class UserController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $post = $request->post();
+        $validated = $request->validated();
 
-        $user = User::findOrFail($id);
+        $model = User::findOrFail($id);
 
-        $user->fill($post)->save();
+        $model->fill($validated)->save();
 
-        return Response::jsonSuccess('更新资料成功！');
+        return Response::jsonSuccess('資料已更新！');
     }
 
     /**
@@ -130,11 +128,11 @@ class UserController extends Controller
      */
     public function destroy($id)
     {
-        $user = User::findOrFail($id);
+        $model = User::findOrFail($id);
 
-        $user->delete();
+        $model->delete();
 
-        return Response::jsonSuccess('操作成功！');
+        return Response::jsonSuccess('資料已刪除！');
     }
 
     /**
@@ -146,12 +144,12 @@ class UserController extends Controller
      */
     public function block($id)
     {
-        $user = User::findOrFail($id);
+        $model = User::findOrFail($id);
 
-        $user->status = $user->status != 1 ? 1 : 2;
+        $model->status = $model->status != 1 ? 1 : 2;
 
-        $user->save();
+        $model->save();
 
-        return Response::jsonSuccess('操作成功！');
+        return Response::jsonSuccess('資料已更新！');
     }
 }

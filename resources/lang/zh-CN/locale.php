@@ -10,4 +10,7 @@ return [
     "Systems" => "系统设定",
     "Terminal" => "命令模式",
     "Log Viewer" => "系统日志",
+    "Requisitions" => "託運單",
+    "Locations" => "地點管理",
+    "Shipments" => "運輸方式",
 ];

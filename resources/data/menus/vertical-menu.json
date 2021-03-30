@@ -33,6 +33,24 @@
             ]
         },
         {
+            "url": "/backend/requisition",
+            "name": "Requisitions",
+            "slug": "requisitions",
+            "icon": "briefcase"
+        },
+        {
+            "url": "/backend/location",
+            "name": "Locations",
+            "slug": "locations",
+            "icon": "map"
+        },
+        {
+            "url": "/backend/shipment",
+            "name": "Shipments",
+            "slug": "shipments",
+            "icon": "truck"
+        },
+        {
             "url": "#",
             "name": "Systems",
             "slug": "systems",

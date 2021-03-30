@@ -29,7 +29,7 @@
 // show content for active slide
 .faq {
     .wrapper-content {
-        display: none;
+        //display: none;
         &.active {
             display: block;
         }
@@ -59,6 +59,6 @@
 // Media query for image sizing for large screen
 @media only screen and (min-width: 1024px) {
     .faq-bg {
-        padding: 5rem 0 !important;
+        padding: 2rem 0 0 !important;
     }
 }
