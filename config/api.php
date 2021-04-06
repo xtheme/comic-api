@@ -1,7 +1,6 @@
 <?php
 
 return [
-
     /*
      * 數據加密
      */
@@ -25,6 +24,17 @@ return [
         'key' => env('JWT_KEY', ''),
         'ttl' => env('JWT_TTL', 7776000),
         'leeway' => env('JWT_LEEWAY', 60),
+    ],
+
+    /*
+     * SMS
+     */
+    'sms' => [
+        'check' => env('SMS_CHECK', false),
+        'url' => env('SMS_URL'),
+        'token' => env('SMS_TOKEN'),
+        'product' => env('SMS_PRODUCT'),
+        'message' => env('SMS_CONTENT'),
     ],
 
     /*
