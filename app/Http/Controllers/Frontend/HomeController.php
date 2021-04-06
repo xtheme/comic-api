@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Frontend;
 
 use App\Http\Controllers\Controller;
-use App\Models\Locations;
+use App\Models\Location;
 use App\Models\Shipment;
 
 class HomeController extends Controller
@@ -12,7 +12,7 @@ class HomeController extends Controller
     public function index()
     {
         $data = [
-            'locations' => Locations::all(),
+            'locations' => Location::all(),
             'shipments' => Shipment::all(),
         ];
 
