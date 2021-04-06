@@ -105,7 +105,7 @@ class User extends Model
         // 旧版字段相容
         'email_bind',
         'userface',
-        'create_time',
+        // 'create_time',
         // 关联统计字段
         'subscribed_status',
         'orders_count',

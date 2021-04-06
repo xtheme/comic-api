@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Api\UserController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 /*
@@ -16,3 +17,13 @@ use Illuminate\Support\Facades\Route;
 Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
+
+Route::prefix('v5')->middleware(['api.header', 'api.sign', 'jwt.token'])->group(function () {
+
+    Route::prefix('user')->as('user.')->group(function () {
+        Route::any('/device', [UserController::class, 'device'])->name('device');
+    });
+
+});
+
+
