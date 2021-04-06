@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use App\Services\AesService;
 use Illuminate\Support\Facades\Response;
 use Illuminate\Support\ServiceProvider;
 
@@ -15,18 +16,38 @@ class ResponseMacroServiceProvider extends ServiceProvider
     public function boot()
     {
         Response::macro('jsonSuccess', function ($message = '', $data = [], $status = 200) {
-            return Response::json([
+            $response = [
                 'code' => $status,
-                'msg'  => $message,
+                'msg' => $message,
                 'data' => $data,
-            ]);
+            ];
+
+            // 数据加密
+            if (true == config('api.encrypt')) {
+                $response = json_encode($response);
+                $aes = new AesService();
+                $response = $aes->encrypt($response);
+                return response($response, $status);
+            }
+
+            return Response::json($response, $status);
         });
 
         Response::macro('jsonError', function ($message = '', $status = 400) {
-            return Response::json([
+            $response = [
                 'code' => $status,
-                'msg'  => $message,
-            ], $status);
+                'msg' => $message,
+            ];
+
+            // 数据加密
+            if (true == config('api.encrypt')) {
+                $response = json_encode($response);
+                $aes = new AesService();
+                $response = $aes->encrypt($response);
+                return response($response, $status);
+            }
+
+            return Response::json($response, $status);
         });
     }
 }
