@@ -14,9 +14,9 @@
                         <label for="input-name"><span class="danger">*</span> 配置分類</label>
                         <div class="controls">
                             <select id="select-type" class="form-control" name="group">
-                                <option value="base" selected>基础设置</option>
-                                <option value="service">客服配置</option>
-                                <option value="payment">支付配置</option>
+                                @foreach($tags as $tag => $name)
+                                    <option value="{{$tag}}">{{$name}}</option>
+                                @endforeach
                             </select>
                         </div>
                     </div>

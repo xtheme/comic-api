@@ -15,9 +15,9 @@
                         <label for="input-name"><span class="danger">*</span> 配置分類</label>
                         <div class="controls">
                             <select id="select-type" class="form-control" name="group">
-                                <option value="base" @if($config->group == 'base'){{'selected'}}@endif>基础设置</option>
-                                <option value="service" @if($config->group == 'service'){{'selected'}}@endif>客服配置</option>
-                                <option value="payment" @if($config->group == 'payment'){{'selected'}}@endif>支付配置</option>
+                                @foreach($tags as $tag => $name)
+                                    <option value="{{$tag}}"  @if($tag == $config->group){{'selected'}}@endif>{{$name}}</option>
+                                @endforeach
                             </select>
                         </div>
                     </div>
