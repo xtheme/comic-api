@@ -85,6 +85,8 @@ class User extends Model
         'score',
         'status',
         'sign',
+        'device_id',
+        'token',
         'subscribed_at',
     ];
 

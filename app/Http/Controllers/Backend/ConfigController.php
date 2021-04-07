@@ -52,7 +52,13 @@ class ConfigController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $post = $request->post();
+
+        $config = new Config;
+
+        $config->fill($post)->save();
+
+        return Response::jsonSuccess('添加资料成功！');
     }
 
     /**

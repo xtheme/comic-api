@@ -6,9 +6,21 @@
 @endsection
 
 @section('content')
-    <form id="form" class="form" method="put" action="{{ route('backend.config.store') }}" novalidate>
+    <form id="form" class="form" method="post" action="{{ route('backend.config.store') }}" novalidate>
         <div class="form-body">
             <div class="row">
+                <div class="col-12">
+                    <div class="form-group">
+                        <label for="input-name"><span class="danger">*</span> 配置分類</label>
+                        <div class="controls">
+                            <select id="select-type" class="form-control" name="group">
+                                <option value="base" selected>基础设置</option>
+                                <option value="service">客服配置</option>
+                                <option value="payment">支付配置</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
                 <div class="col-12">
                     <div class="form-group">
                         <label for="input-name"><span class="danger">*</span> 配置描述</label>
