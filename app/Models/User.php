@@ -85,6 +85,7 @@ class User extends Model
         'score',
         'status',
         'sign',
+        'password',
         'subscribed_at',
     ];
 

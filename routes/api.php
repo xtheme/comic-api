@@ -24,6 +24,9 @@ Route::prefix('v5')->middleware(['api.header', 'api.sign', 'jwt.token'])->group(
     Route::prefix('user')->as('user.')->group(function () {
         Route::post('/device', [UserController::class, 'device'])->name('device');
         Route::post('/mobile', [UserController::class, 'mobile'])->name('mobile')->middleware('sso');
+        Route::post('/logout', [UserController::class, 'logout'])->name('logout');
+        Route::post('/modify', [UserController::class, 'modify'])->name('modify');
+        Route::post('/avatar', [UserController::class, 'avatar'])->name('avatar');
     });
 
     Route::prefix('sms')->as('sms.')->group(function () {

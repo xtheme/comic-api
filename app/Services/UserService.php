@@ -5,18 +5,25 @@ namespace App\Services;
 use App\Models\BindLog;
 use App\Models\Order;
 use App\Models\User;
+use App\Traits\CacheTrait;
 use Cache;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Response;
 
 class UserService
 {
+    use CacheTrait;
+
     /**
+     * @param  Request  $request
+     *
      * @return User
      */
-    public function getUserByDevice()
+    public function getUserByDevice(Request $request)
     {
-        $uuid = request()->header('uuid');
+        $uuid = $request->header('uuid');
 
         return User::whereDeviceId($uuid)->first();
     }
@@ -66,6 +73,26 @@ class UserService
 
             return $user->toArray();
         });
+    }
+
+    /**
+     * 更新用户缓存
+     *
+     * @param  User  $user
+     */
+    public function updateUserCache(User $user)
+    {
+        if (!empty($user->area) && !empty($user->mobile)) {
+            $cache_key = $this->getCacheKeyPrefix($user->version) . sprintf('user:mobile:%s-%s', $user->area, $user->mobile);
+        } else {
+            $cache_key = $this->getCacheKeyPrefix($user->version) . sprintf('user:device:%s', $user->device_id);
+        }
+
+        Cache::forget($cache_key);
+
+        $issue_token = false;
+
+        $this->addDeviceCache($cache_key, $user, $issue_token);
     }
 
     /**
@@ -208,9 +235,128 @@ class UserService
      * action 操作行為，1:綁定，2:解綁，3:後台解綁
      *
      * @param  array  $data
+     *
+     * @return BindLog
      */
     public function addBindLog(array $data)
     {
         return BindLog::create($data);
+    }
+
+    /**
+     * 清除用戶緩存
+     *
+     * @param  Request  $request
+     *
+     * @return void
+     */
+    public function unsetUserCache(Request $request)
+    {
+        $uuid = $request->user->device_id;
+        $area = $request->user->area;
+        $mobile = $request->user->mobile;
+
+        // 登出清除緩存
+        $uuid_key = $this->getCacheKeyPrefix() . sprintf('user:device:%s', $uuid);
+        Cache::forget($uuid_key);
+
+        if ($mobile) {
+            $mobile_key = $this->getCacheKeyPrefix() . sprintf('user:mobile:%s-%s', $area, $mobile);
+            Cache::forget($mobile_key);
+
+            // SSO 单点登入
+            $sso_key = sprintf('sso:%s-%s', $area, $mobile);
+            Cache::forget($sso_key);
+        }
+    }
+
+    /**
+     * 用户账号应该只有手机号或只有设备号的情况, 两者不应同时存在
+     * 同時存在手機號以及设备号的例外用户, 退出登入时需將 device_id 設置為空
+     * 并以 device_id 重新生成一个新的用户账号
+     *
+     * @param  Request  $request
+     *
+     * @return bool
+     */
+    public function isUnusualUser(Request $request)
+    {
+        $uuid = $request->user->device_id;
+        $mobile = $request->user->mobile;
+
+        if ($uuid && $mobile) {
+            $where = [
+                'device_id' => $uuid,
+                'mobile' => $mobile,
+            ];
+
+            $exist = User::where($where)->count();
+
+            if ($exist) {
+                User::where($where)->update([
+                    'device_id' => null,
+                ]);
+
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    /**
+     * 昵称是否被使用
+     *
+     * @param $username
+     *
+     * @return bool
+     */
+    public function isNameUsed($username)
+    {
+        return User::where('username', $username)->exists();
+    }
+
+    /**
+     * 更新用戶欄位
+     *
+     * @param  Request  $request
+     *
+     * @return User
+     */
+    public function update(Request $request)
+    {
+        $data = [
+            'username' => $request->input('username') ?? null,
+            'sex' => $request->input('sex') ?? null,
+            'sign' => $request->input('sign') ?? null,
+            'password' => $request->input('password') ?? null,
+        ];
+
+        $user = $request->user;
+
+        foreach ($data as $key => $value) {
+            if (!$value) continue;
+
+            // 特殊處理
+            switch ($key) {
+                case 'password':
+                    $value = Hash::make($value);
+                    break;
+                case 'username':
+                    $used = $this->isNameUsed($value);
+                    if ($used) {
+                        return Response::jsonError('很抱歉，当前昵称已被使用！', 500);
+                    }
+                    break;
+            }
+
+            $user->{$key} = $value;
+        }
+        $user->save();
+
+        // 刷新缓存
+        $this->updateUserCache($user);
+
+        return $user;
     }
 }
