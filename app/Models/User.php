@@ -133,6 +133,11 @@ class User extends Model
         $this->hasMany('App\Models\Order');
     }
 
+    public function signin()
+    {
+        return $this->hasOne('App\Models\Sign', 'uid', 'id');
+    }
+
     public function getGenderAttribute()
     {
         switch ($this->sex) {
