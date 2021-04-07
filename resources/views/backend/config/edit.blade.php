@@ -6,9 +6,22 @@
 @endsection
 
 @section('content')
-    <form id="form" class="form" method="put" action="{{ route('backend.config.update', $config->id) }}" novalidate>
+    <form id="form" class="form" method="post" action="{{ route('backend.config.update', $config->id) }}" novalidate>
+        @method('PUT')
         <div class="form-body">
             <div class="row">
+                <div class="col-12">
+                    <div class="form-group">
+                        <label for="input-name"><span class="danger">*</span> 配置分類</label>
+                        <div class="controls">
+                            <select id="select-type" class="form-control" name="group">
+                                @foreach($tags as $tag => $name)
+                                    <option value="{{$tag}}"  @if($tag == $config->group){{'selected'}}@endif>{{$name}}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                    </div>
+                </div>
                 <div class="col-12">
                     <div class="form-group">
                         <label for="input-name"><span class="danger">*</span> 配置描述</label>

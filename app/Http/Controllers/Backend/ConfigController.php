@@ -9,6 +9,18 @@ use Illuminate\Support\Facades\Response;
 
 class ConfigController extends Controller
 {
+
+    private $tags;
+
+    public function __construct()
+    {
+        $this->tags = [
+            'base' => '基础设置',
+            'service' => '客服配置',
+            'payment' => '支付配置',
+        ];
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -19,16 +31,10 @@ class ConfigController extends Controller
         $group = $request->input('group');
         $keyword = $request->input('keyword');
 
-        $tags = [
-            'base' => '基础设置',
-            'service' => '客服配置',
-            'payment' => '支付配置',
-        ];
-
         $configs = Config::group($group)->keyword($keyword)->paginate();
 
         return view('backend.config.index', [
-            'tags' => $tags,
+            'tags' => $this->tags,
             'list' => $configs,
             'pageConfigs' => ['hasSearchForm' => true],
         ]);
@@ -41,7 +47,10 @@ class ConfigController extends Controller
      */
     public function create()
     {
-        return view('backend.config.create');
+
+        return view('backend.config.create', [
+            'tags' => $this->tags
+        ]);
     }
 
     /**
@@ -52,7 +61,13 @@ class ConfigController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $post = $request->post();
+
+        $config = new Config;
+
+        $config->fill($post)->save();
+
+        return Response::jsonSuccess('添加资料成功！');
     }
 
     /**
@@ -78,6 +93,7 @@ class ConfigController extends Controller
 
         return view('backend.config.edit', [
             'config' => $config,
+            'tags'   => $this->tags,
             'pageConfigs' => ['hasSearchForm' => false],
         ]);
     }

@@ -86,6 +86,8 @@ class User extends Model
         'status',
         'sign',
         'password',
+        'device_id',
+        'token',
         'subscribed_at',
     ];
 
