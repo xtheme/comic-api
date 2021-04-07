@@ -2,19 +2,23 @@
 
 namespace App\Services;
 
+use App\Models\BindLog;
+use App\Models\Order;
 use App\Models\User;
 use Cache;
 use Carbon\Carbon;
+use Illuminate\Http\Request;
 
 class UserService
 {
     /**
-     * @return \Illuminate\Database\Eloquent\Collection|\Illuminate\Database\Eloquent\Model
+     * @return User
      */
     public function getUserByDevice()
     {
         $uuid = request()->header('uuid');
-        return User::where('device_id', $uuid)->first();
+
+        return User::whereDeviceId($uuid)->first();
     }
 
     /**
@@ -23,11 +27,11 @@ class UserService
      * @param $area
      * @param $mobile
      *
-     * @return \Illuminate\Database\Eloquent\Collection|\Illuminate\Database\Eloquent\Model
+     * @return User
      */
-    public function getUserByMobile($area , $mobile)
+    public function getUserByMobile($area, $mobile)
     {
-        return User::where('area', $area)->where('mobile', $mobile)->first();
+        return User::whereArea($area)->whereMobile($mobile)->first();
     }
 
     /**
@@ -35,14 +39,15 @@ class UserService
      *
      * @param $cache_key
      * @param $user
-     * @param  bool  $issue_token 重新签发 JWT
+     * @param  bool  $issue_token  重新签发 JWT
+     *
+     * @return mixed
      */
-    public function addDeviceCache($cache_key , $user, $issue_token = true)
+    public function addDeviceCache($cache_key, $user, bool $issue_token = true)
     {
         $cache_ttl = config('api.jwt.ttl');
 
-        // return Cache::remember($cache_key, $cache_ttl, function () use ($user, $issue_token) {
-
+        return Cache::remember($cache_key, $cache_ttl, function () use ($user, $issue_token) {
             if (request()->header('app-version')) {
                 // 签发 JWT
                 if ($issue_token) {
@@ -60,7 +65,7 @@ class UserService
             }
 
             return $user->toArray();
-        // });
+        });
     }
 
     /**
@@ -75,7 +80,7 @@ class UserService
         $data = [
             'iss' => request()->header('uuid'), //该JWT的签发者
             'uid' => $uid,
-            'ip'  => request()->ip(),
+            'ip' => request()->ip(),
             'iat' => time(), // 签发时间
             'exp' => time() + config('api.jwt.ttl'), // 过期时间
             'nbf' => time() + 1, // 该时间之前不接收处理该Token
@@ -100,28 +105,112 @@ class UserService
 
     /**
      * 注册设备
+     *
+     * @param  Request  $request
+     *
+     * @return User
      */
-    public function registerDevice()
+    public function registerDevice(Request $request)
     {
         $data = [
-            'username'      => $this->getUserNiceName(),
-            'userface'      => '',
-            'signup_ip'     => request()->header('ip'),
-            'create_time'   => time(),
-            'status'        => 1,
-            'role'          => 3,
-            'sex'           => 0,
-            'device_id'     => request()->header('uuid'),
-            'platform'      => request()->header('platform'),
-            'version'       => request()->header('app-version'),
+            'username' => $this->getUserNiceName(),
+            'userface' => '',
+            'signup_ip' => $request->header('ip'),
+            'create_time' => time(),
+            'status' => 1,
+            'role' => 3,
+            'sex' => 0,
+            'device_id' => $request->header('uuid'),
+            'platform' => $request->header('platform'),
+            'version' => $request->header('app-version'),
             'subscribed_at' => null,
-            'mobile_bind'   => 0,
+            'mobile_bind' => 0,
         ];
 
-        $user = new User($data);
+        return User::create($data);
+    }
 
-        $user->save();
+    /**
+     * 注册手機號用戶
+     *
+     * @param  Request  $request
+     *
+     * @return User
+     */
+    public function registerMobile(Request $request)
+    {
+        $data = [
+            'username' => $this->getUserNiceName(),
+            'userface' => '',
+            'signup_ip' => $request->header('ip'),
+            'create_time' => time(),
+            'status' => 1,
+            'role' => 3,
+            'sex' => 0,
+            'mobile_bind' => 1,
+            'area' => $request->input('area'),
+            'mobile' => $request->input('mobile'),
+            'platform' => $request->header('platform'),
+            'version' => $request->header('app-version'),
+            'subscribed_at' => null,
+        ];
 
-        return $this->getUserByDevice();
+        return User::create($data);
+    }
+
+    /**
+     * 關聯訂單到手機帳號
+     *
+     * @param  User  $mobile_user
+     * @param  User  $device_user
+     */
+    public function relationOrder(User $mobile_user, User $device_user)
+    {
+        $where = [
+            'user_id' => $device_user->id,
+            'mobile' => '',
+        ];
+
+        $update = [
+            'mobile' => sprintf('%s-%s', $mobile_user->area, $mobile_user->mobile),
+        ];
+
+        Order::where($where)->update($update);
+    }
+
+    /**
+     * 轉讓 VIP 訂閱
+     *
+     * @param  User  $mobile_user
+     * @param  User  $device_user
+     */
+    public function transferSubscribed(User $mobile_user, User $device_user)
+    {
+        // 比對 VIP 時效
+        $prev_subscribed_at = $device_user->subscribed_at ? strtotime($device_user->subscribed_at) : null;
+
+        if ($prev_subscribed_at) {
+            $current_subscribed_at = $mobile_user->subscribed_at ? strtotime($mobile_user->subscribed_at) : time();
+            $keep_subscribed_at = ($prev_subscribed_at > $current_subscribed_at) ? $prev_subscribed_at : $current_subscribed_at;
+
+            // 更新電話帳號 VIP 時效
+            $mobile_user->subscribed_at = date('Y-m-d H:i:s', $keep_subscribed_at);
+            $mobile_user->save();
+
+            // 清空裝置帳號 VIP 時效
+            $device_user->subscribed_at = null;
+            $device_user->save();
+        }
+    }
+
+    /**
+     * 新增綁定紀錄
+     * action 操作行為，1:綁定，2:解綁，3:後台解綁
+     *
+     * @param  array  $data
+     */
+    public function addBindLog(array $data)
+    {
+        return BindLog::create($data);
     }
 }

@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Api\SmsController;
 use App\Http\Controllers\Api\UserController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -21,7 +22,12 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 Route::prefix('v5')->middleware(['api.header', 'api.sign', 'jwt.token'])->group(function () {
 
     Route::prefix('user')->as('user.')->group(function () {
-        Route::any('/device', [UserController::class, 'device'])->name('device');
+        Route::post('/device', [UserController::class, 'device'])->name('device');
+        Route::post('/mobile', [UserController::class, 'mobile'])->name('mobile')->middleware('sso');
+    });
+
+    Route::prefix('sms')->as('sms.')->group(function () {
+        Route::post('/send', [SmsController::class, 'send'])->name('send');
     });
 
 });

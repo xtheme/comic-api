@@ -2,6 +2,7 @@
 
 namespace App\Http;
 
+use App\Http\Middleware\SingleSignOn;
 use App\Http\Middleware\VerifyApiHeader;
 use App\Http\Middleware\VerifyApiSign;
 use App\Http\Middleware\VerifyJwtToken;
@@ -69,5 +70,6 @@ class Kernel extends HttpKernel
     'api.header' => VerifyApiHeader::class,
     'api.sign' => VerifyApiSign::class,
     'jwt.token' => VerifyJwtToken::class,
+    'sso' => SingleSignOn::class,
   ];
 }

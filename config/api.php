@@ -34,7 +34,7 @@ return [
         'url' => env('SMS_URL'),
         'token' => env('SMS_TOKEN'),
         'product' => env('SMS_PRODUCT'),
-        'message' => env('SMS_CONTENT'),
+        'message' => env('SMS_MESSAGE'),
     ],
 
     /*
