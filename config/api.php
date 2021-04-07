@@ -36,11 +36,4 @@ return [
         'product' => env('SMS_PRODUCT'),
         'message' => env('SMS_MESSAGE'),
     ],
-
-    /*
-     * Account
-     */
-    'account' => [
-        'prefix' => env('ACCOUNT_PREFIX', ''),
-    ],
 ];
