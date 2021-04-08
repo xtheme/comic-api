@@ -23,8 +23,8 @@
                     "name": "Customer List"
                 },
                 {
-                    "url": "/backend/feedback/list",
-                    "name": "Pricing List"
+                    "url": "/backend/pricingpackage",
+                    "name": "Pricingpackage List"
                 },
                 {
                     "url": "/backend/search/list",
