@@ -7,6 +7,7 @@ return [
     "Customer List" => "会员列表",
     "Pricing List" => "会员套餐",
     "Order List" => "订单列表",
+    "Feedback" => "意見反饋",
     "Systems" => "系统设定",
     "Terminal" => "命令模式",
     "Log Viewer" => "系统日志",

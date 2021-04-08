@@ -29,7 +29,12 @@
                 {
                     "url": "/backend/search/list",
                     "name": "Order List"
+                },{
+                    "url": "/backend/feedback",
+                    "name": "Feedback"
                 }
+
+
             ]
         },
         {
