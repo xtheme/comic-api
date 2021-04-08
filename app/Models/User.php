@@ -111,7 +111,7 @@ class User extends Model
         // 'create_time',
         // 关联统计字段
         'subscribed_status',
-        'orders_count',
+        // 'orders_count',
     ];
 
     protected $dates = [
@@ -130,7 +130,17 @@ class User extends Model
 
     public function orders()
     {
-        $this->hasMany('App\Models\Order');
+        return $this->hasMany('App\Models\Order');
+    }
+
+    public function orders_count()
+    {
+        return $this->hasOne('App\Models\ViewsOrdersCount');
+    }
+
+    public function orders_success_count()
+    {
+        return $this->hasOne('App\Models\ViewsOrdersSuccessCount');
     }
 
     public function getGenderAttribute()
@@ -189,20 +199,10 @@ class User extends Model
         return false;
     }
 
-    public function getOrdersCountAttribute()
-    {
-        if ($this->mobile != '') {
-            $where = [
-                'mobile' => sprintf('%s-%s', $this->area, $this->mobile),
-            ];
-        } else {
-            $where = [
-                'user_id' => $this->id,
-            ];
-        }
-
-        return Order::where($where)->count();
-    }
+    // public function getOrdersCountAttribute()
+    // {
+    //     return $this->orders_count()->first()->count ?? 0;
+    // }
 
     public function getOsAttribute()
     {

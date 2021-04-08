@@ -3,6 +3,8 @@
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Backend\ConfigController;
 use App\Http\Controllers\Backend\LocationController;
+use App\Http\Controllers\Backend\OrderController;
+use App\Http\Controllers\Backend\PricingController;
 use App\Http\Controllers\Backend\ShipmentController;
 use App\Http\Controllers\Backend\UserController;
 use App\Http\Controllers\Frontend\HomeController;
@@ -53,12 +55,18 @@ Route::middleware(['auth'])->prefix('backend')->as('backend.')->group(function (
     Route::resource('config', ConfigController::class);
 
     // 用户管理
+    Route::put('user/{id}/block', [UserController::class, 'block'])->name('user.block'); // 切换用户状态
     Route::resource('user', UserController::class);
-    Route::put('user/{id}/block', [UserController::class,'block'])->name('user.block'); // 切换用户状态
+
+    Route::get('order', [OrderController::class, 'index'])->name('order'); // 订单列表
+    Route::get('order/export', [OrderController::class, 'export'])->name('order.export'); // 汇出订单
+    // Route::resource('order', OrderController::class);
+
+    Route::resource('pricing', PricingController::class);
 
     // 物流
-    Route::resource('location', LocationController::class);
-    Route::resource('shipment', ShipmentController::class);
-    Route::resource('requisition', RequisitionController::class);
+    // Route::resource('location', LocationController::class);
+    // Route::resource('shipment', ShipmentController::class);
+    // Route::resource('requisition', RequisitionController::class);
 
 });

@@ -129,3 +129,21 @@
     return zhCn;
 
 })));
+
+
+$.fn.daterangepicker.defaultOptions = {
+    opens: 'center',
+    drops: 'auto',
+    locale: {
+        direction       : 'ltr',
+        format          : moment.localeData().longDateFormat('L'),
+        separator       : ' - ',
+        applyLabel      : '确定',
+        cancelLabel     : '取消',
+        weekLabel       : 'W',
+        customRangeLabel: 'Custom Range',
+        daysOfWeek      : moment.weekdaysMin(),
+        monthNames      : moment.monthsShort(),
+        firstDay        : moment.localeData().firstDayOfWeek()
+    }
+};

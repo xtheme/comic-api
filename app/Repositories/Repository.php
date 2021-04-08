@@ -10,8 +10,6 @@ use Illuminate\Support\Facades\Cache;
 
 abstract class Repository implements RepositoryInterface
 {
-    protected $cache_ttl;
-
     /**
      * @var Model
      */
@@ -40,31 +38,5 @@ abstract class Repository implements RepositoryInterface
     public function find(int $id): ?Model
     {
         return $this->model->findOrFail($id);
-    }
-
-    /**
-     * Redis key
-     *
-     * @return string
-     */
-    public function cacheKey($str)
-    {
-        return sprintf('%s:%s', $this->model->getTable(), $str);
-    }
-
-    /**
-     * 查询缓存
-     *
-     * @param  Request  $request
-     *
-     * @return LengthAwarePaginator
-     */
-    public function cacheFilter(Request $request): LengthAwarePaginator
-    {
-        $cache_key = $this->cacheKey(md5($request->getQueryString()));
-
-        return Cache::remember($cache_key, $this->cache_ttl, function () use ($request){
-            return $this->filter($request)->paginate(config('custom.perpage'));
-        });
     }
 }

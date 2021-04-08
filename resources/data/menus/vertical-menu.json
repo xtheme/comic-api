@@ -23,11 +23,11 @@
                     "name": "Customer List"
                 },
                 {
-                    "url": "/backend/feedback/list",
+                    "url": "/backend/pricing",
                     "name": "Pricing List"
                 },
                 {
-                    "url": "/backend/search/list",
+                    "url": "/backend/order",
                     "name": "Order List"
                 }
             ]
