@@ -143,6 +143,11 @@ class User extends Model
         return $this->hasOne('App\Models\ViewsOrdersSuccessCount');
     }
 
+    public function signin()
+    {
+        return $this->hasOne('App\Models\Sign', 'uid', 'id');
+    }
+
     public function getGenderAttribute()
     {
         switch ($this->sex) {

@@ -2,7 +2,9 @@
 
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Backend\ConfigController;
+use App\Http\Controllers\Backend\FeedbackController;
 use App\Http\Controllers\Backend\LocationController;
+use App\Http\Controllers\Backend\PricingpackageController;
 use App\Http\Controllers\Backend\OrderController;
 use App\Http\Controllers\Backend\PricingController;
 use App\Http\Controllers\Backend\ShipmentController;
@@ -68,5 +70,13 @@ Route::middleware(['auth'])->prefix('backend')->as('backend.')->group(function (
     // Route::resource('location', LocationController::class);
     // Route::resource('shipment', ShipmentController::class);
     // Route::resource('requisition', RequisitionController::class);
+
+    // 意見反饋
+    Route::resource('feedback', FeedbackController::class);
+    Route::post('feedback/batch/destroy', [FeedbackController::class, 'batchDestroy'])->name('feedback.batch.destroy');
+
+    // 會員套餐
+    Route::resource('pricingpackage', PricingpackageController::class);
+
 
 });

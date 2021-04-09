@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Api\SignController;
 use App\Http\Controllers\Api\SmsController;
 use App\Http\Controllers\Api\UserController;
 use Illuminate\Http\Request;
@@ -32,6 +33,12 @@ Route::prefix('v5')->middleware(['api.header', 'api.sign', 'jwt.token'])->group(
     Route::prefix('sms')->as('sms.')->group(function () {
         Route::post('/send', [SmsController::class, 'send'])->name('send');
     });
+
+    Route::prefix('sign')->as('sign.')->group(function () {
+        Route::post('/signDetail', [SignController::class, 'signDetail'])->name('signDetail');
+        Route::post('/signin', [SignController::class, 'signin'])->name('signin');
+    });
+
 
 });
 
