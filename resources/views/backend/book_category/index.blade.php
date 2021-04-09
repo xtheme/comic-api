@@ -12,7 +12,25 @@
     <section>
         <div class="card">
             <div class="card-header">
-                <h4 class="card-title">@yield('title')</h4>
+                <div class="float-left">
+                    <h4 class="card-title">@yield('title')</h4>
+                </div>
+                <div class="float-right d-flex flex-wrap">
+                    <form class="form form-vertical form-search" method="get" action="{{ url()->current() }}" novalidate>
+                        <div class="form-body">
+                            <div class="d-flex align-items-center">
+                                <div class="form-group mr-1">
+                                    <div class="controls">
+                                        <input type="text" class="form-control" name="keyword" placeholder="搜索词" value="{{ request()->get('keyword') }}">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <button type="submit" class="btn btn-primary">搜索</button>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
             </div>
             <div class="card-content">
                 <div class="card-body">
@@ -44,7 +62,16 @@
                                     <th>
                                         <span data-type="text" data-pk="{{ $category->id }}" data-title="修改描述" class="editable editable-click" data-url="{{ route('backend.book_category.editable', 'desc') }}">{{ $category->desc }}</span>
                                     </th>
-                                    <th>{{ $category->status }}</th>
+                                    <th>
+                                        @switch($category->status)
+                                            @case(0)
+                                            <label class="badge badge-danger badge-pill">隐藏</label>
+                                            @break
+                                            @case(1)
+                                            <label class="badge badge-success badge-pill">显示</label>
+                                            @break
+                                        @endswitch
+                                    </th>
                                     <th></th>
                                 </tr>
                             @endforeach
@@ -62,67 +89,6 @@
 @endsection
 
 @section('search-form')
-    <h4 class="text-uppercase mb-0">查询</h4>
-    <small></small>
-    <hr>
-    <form id="search-form" class="form form-vertical" method="get" action="{{ url()->current() }}" novalidate>
-        <div class="form-body">
-            <div class="row">
-                <div class="col-12">
-                    <div class="form-group">
-                        <label>订单ID</label>
-                        <div class="controls">
-                            <input type="text" class="form-control"
-                                   name="id" value="{{ request()->get('id') }}"
-                                   placeholder="">
-                        </div>
-                    </div>
-                </div>
-                <div class="col-12">
-                    <div class="form-group">
-                        <label>用户ID</label>
-                        <div class="controls">
-                            <input type="text" class="form-control"
-                                   name="user_id" value="{{ request()->get('user_id') }}"
-                                   placeholder="">
-                        </div>
-                    </div>
-                </div>
-                <div class="col-12">
-                    <div class="form-group">
-                        <label for="input-created">建立时间</label>
-                        <div class="controls">
-                            <fieldset class="form-group position-relative has-icon-left">
-                                <input type="text" class="form-control" id="input-created" placeholder="请选择建立时间" name="created_at" autocomplete="off" value="{{ request()->get('created_at') }}">
-                                <div class="form-control-position">
-                                    <i class='bx bx-calendar-check'></i>
-                                </div>
-                            </fieldset>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-12">
-                    <div class="form-group">
-                        <label for="select-status">订单状态</label>
-                        <select class="form-control" id="select-status" name="status">
-                            <option value="">全部</option>
-                            @foreach ($status_options as $key => $val)
-                                @if (request()->get('status') == $key)
-                                    <option value="{{ $key }}" selected>{{ $val }}</option>
-                                @else
-                                    <option value="{{ $key }}">{{ $val }}</option>
-                                @endif
-                            @endforeach
-                        </select>
-                    </div>
-                </div>
-                <div class="col-12 d-flex justify-content-end">
-                    <button type="submit" class="btn btn-primary mr-1 mb-1">搜索</button>
-                    <button type="reset" class="btn btn-light-secondary mr-1 mb-1">重置</button>
-                </div>
-            </div>
-        </div>
-    </form>
 @endsection
 
 {{-- vendor scripts --}}

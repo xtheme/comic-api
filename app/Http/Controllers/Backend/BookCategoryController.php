@@ -27,8 +27,6 @@ class BookCategoryController extends Controller
     {
         $data = [
             'list' => $this->repository->filter($request)->paginate(),
-            'status_options' => ['1' => '未付款', '2' => '已付款'],
-            'pageConfigs' => ['hasSearchForm' => true],
         ];
 
         return view('backend.book_category.index')->with($data);
@@ -98,67 +96,6 @@ class BookCategoryController extends Controller
     public function destroy(BookCategory $bookCategory)
     {
         //
-    }
-
-    /**
-     * 批量排序
-     *
-     * @param  Request  $request
-     *
-     * @return Response
-     */
-    /*public function sorting(Request $request)
-    {
-        $data = [
-            'ids' => $request->post('ids'),
-            'sorts' => $request->post('sorts'),
-        ];
-
-        $validator = Validator::make($data, [
-            'ids' => 'required',
-            'sorts' => 'required',
-        ]);
-
-        if ($validator->fails()) {
-            return Response::jsonError($validator->errors()->first(), 500);
-        }
-
-        $ids   = explode(',', $data['ids']);
-        $sorts = explode(',', $data['sorts']);
-
-        foreach ($ids as $k => $id) {
-            $this->repository->updateSort($id, $sorts[$k]);
-        }
-
-        return Response::jsonSuccess('批量更新成功！');
-    }*/
-
-    /**
-     * 排序
-     *
-     * @param  Request  $request
-     *
-     * @return Response
-     */
-    public function editableSort(Request $request)
-    {
-        $data = [
-            'pk' => $request->post('pk'),
-            'value' => $request->post('value'),
-        ];
-
-        $validator = Validator::make($data, [
-            'pk' => 'required',
-            'value' => 'required',
-        ]);
-
-        if ($validator->fails()) {
-            return Response::jsonError($validator->errors()->first(), 500);
-        }
-
-        $this->repository->updateSort($request->post('pk'), $request->post('value'));
-
-        return Response::jsonSuccess('排序更新成功');
     }
 
     public function editable(Request $request, $field)
