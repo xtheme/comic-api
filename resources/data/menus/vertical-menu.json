@@ -24,36 +24,37 @@
                 },
                 {
                     "url": "/backend/pricingpackage",
-                    "name": "Pricingpackage List"
+                    "name": "Pricing List"
                 },
                 {
                     "url": "/backend/order",
                     "name": "Order List"
-                },{
+                },
+                {
                     "url": "/backend/feedback",
                     "name": "Feedback"
                 }
-
-
             ]
         },
         {
-            "url": "/backend/requisition",
-            "name": "Requisitions",
-            "slug": "requisitions",
-            "icon": "briefcase"
-        },
-        {
-            "url": "/backend/location",
-            "name": "Locations",
-            "slug": "locations",
-            "icon": "map"
-        },
-        {
-            "url": "/backend/shipment",
-            "name": "Shipments",
-            "slug": "shipments",
-            "icon": "truck"
+            "url": "#",
+            "name": "Books",
+            "slug": "books",
+            "icon": "notebook",
+            "submenu": [
+                {
+                    "url": "/backend/book_category",
+                    "name": "Book Categories"
+                },
+                {
+                    "url": "/backend/book",
+                    "name": "Books List"
+                },
+                {
+                    "url": "/backend/order",
+                    "name": "Recommended Books"
+                }
+            ]
         },
         {
             "url": "#",

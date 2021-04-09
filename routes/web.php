@@ -1,6 +1,9 @@
 <?php
 
 use App\Http\Controllers\Auth\LoginController;
+use App\Http\Controllers\Backend\BookCategoryController;
+use App\Http\Controllers\Backend\BookChapterController;
+use App\Http\Controllers\Backend\BookController;
 use App\Http\Controllers\Backend\ConfigController;
 use App\Http\Controllers\Backend\FeedbackController;
 use App\Http\Controllers\Backend\LocationController;
@@ -60,9 +63,16 @@ Route::middleware(['auth'])->prefix('backend')->as('backend.')->group(function (
     Route::put('user/{id}/block', [UserController::class, 'block'])->name('user.block'); // 切换用户状态
     Route::resource('user', UserController::class);
 
-    Route::get('order', [OrderController::class, 'index'])->name('order'); // 订单列表
-    Route::get('order/export', [OrderController::class, 'export'])->name('order.export'); // 汇出订单
-    // Route::resource('order', OrderController::class);
+    // 订单
+    Route::prefix('order')->as('order.')->group(function () {
+        Route::get('/', [OrderController::class, 'index'])->name('index');        // 订单列表
+        Route::get('export', [OrderController::class, 'export'])->name('export'); // 汇出订单
+    });
+
+    // 漫画
+    Route::resource('book', BookController::class);
+    Route::resource('book_category', BookCategoryController::class);
+    Route::resource('book_chapter', BookChapterController::class);
 
     Route::resource('pricing', PricingController::class);
 
