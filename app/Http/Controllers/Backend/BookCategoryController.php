@@ -6,6 +6,8 @@ use App\Http\Controllers\Controller;
 use App\Models\BookCategory;
 use App\Repositories\Contracts\BookCategoryRepositoryInterface;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Response;
+use Illuminate\Support\Facades\Validator;
 
 class BookCategoryController extends Controller
 {
@@ -96,5 +98,87 @@ class BookCategoryController extends Controller
     public function destroy(BookCategory $bookCategory)
     {
         //
+    }
+
+    /**
+     * 批量排序
+     *
+     * @param  Request  $request
+     *
+     * @return Response
+     */
+    /*public function sorting(Request $request)
+    {
+        $data = [
+            'ids' => $request->post('ids'),
+            'sorts' => $request->post('sorts'),
+        ];
+
+        $validator = Validator::make($data, [
+            'ids' => 'required',
+            'sorts' => 'required',
+        ]);
+
+        if ($validator->fails()) {
+            return Response::jsonError($validator->errors()->first(), 500);
+        }
+
+        $ids   = explode(',', $data['ids']);
+        $sorts = explode(',', $data['sorts']);
+
+        foreach ($ids as $k => $id) {
+            $this->repository->updateSort($id, $sorts[$k]);
+        }
+
+        return Response::jsonSuccess('批量更新成功！');
+    }*/
+
+    /**
+     * 排序
+     *
+     * @param  Request  $request
+     *
+     * @return Response
+     */
+    public function editableSort(Request $request)
+    {
+        $data = [
+            'pk' => $request->post('pk'),
+            'value' => $request->post('value'),
+        ];
+
+        $validator = Validator::make($data, [
+            'pk' => 'required',
+            'value' => 'required',
+        ]);
+
+        if ($validator->fails()) {
+            return Response::jsonError($validator->errors()->first(), 500);
+        }
+
+        $this->repository->updateSort($request->post('pk'), $request->post('value'));
+
+        return Response::jsonSuccess('排序更新成功');
+    }
+
+    public function editable(Request $request, $field)
+    {
+        $data = [
+            'pk' => $request->post('pk'),
+            'value' => $request->post('value'),
+        ];
+
+        $validator = Validator::make($data, [
+            'pk' => 'required',
+            'value' => 'required',
+        ]);
+
+        if ($validator->fails()) {
+            return Response::jsonError($validator->errors()->first(), 500);
+        }
+
+        $this->repository->editable($request->post('pk'), $field, $request->post('value'));
+
+        return Response::jsonSuccess('数据已更新成功');
     }
 }

@@ -6,16 +6,13 @@ use App\Http\Controllers\Backend\BookChapterController;
 use App\Http\Controllers\Backend\BookController;
 use App\Http\Controllers\Backend\ConfigController;
 use App\Http\Controllers\Backend\FeedbackController;
-use App\Http\Controllers\Backend\LocationController;
 use App\Http\Controllers\Backend\PricingpackageController;
 use App\Http\Controllers\Backend\OrderController;
 use App\Http\Controllers\Backend\PricingController;
-use App\Http\Controllers\Backend\ShipmentController;
 use App\Http\Controllers\Backend\UserController;
 use App\Http\Controllers\Frontend\HomeController;
 use App\Http\Controllers\LanguageController;
 use App\Http\Controllers\Backend\DashboardController;
-use App\Http\Controllers\Backend\RequisitionController;
 use App\Http\Controllers\UploadController;
 use Illuminate\Support\Facades\Route;
 
@@ -71,7 +68,12 @@ Route::middleware(['auth'])->prefix('backend')->as('backend.')->group(function (
 
     // 漫画
     Route::resource('book', BookController::class);
+
+    Route::prefix('book_category')->as('book_category.')->group(function () {
+        Route::put('editable/{field}', [BookCategoryController::class, 'editable'])->name('editable');
+    });
     Route::resource('book_category', BookCategoryController::class);
+
     Route::resource('book_chapter', BookChapterController::class);
 
     Route::resource('pricing', PricingController::class);

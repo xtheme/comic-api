@@ -350,12 +350,12 @@ $form-feedback-tooltip-font-size: $font-size-sm !default;
 // Popovers
 
 $popover-font-size: $font-size-base !default;
-$popover-border-color: $border-color !default;
+$popover-border-color: #ebebeb !default;
 $popover-border-radius: .267rem !default;
 $popover-box-shadow: 0 0 10px 0 rgba(58, 70, 93, 0.25) !default;
 
-$popover-header-bg: $white !default;
-$popover-header-color: #304156 !default;
+$popover-header-bg: #f7f7f7 !default;
+$popover-header-color: #333333!default;
 
 
 
