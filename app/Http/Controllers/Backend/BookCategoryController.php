@@ -4,18 +4,32 @@ namespace App\Http\Controllers\Backend;
 
 use App\Http\Controllers\Controller;
 use App\Models\BookCategory;
+use App\Repositories\Contracts\BookCategoryRepositoryInterface;
 use Illuminate\Http\Request;
 
 class BookCategoryController extends Controller
 {
+    private $repository;
+
+    public function __construct(BookCategoryRepositoryInterface $repository)
+    {
+        $this->repository = $repository;
+    }
+
     /**
      * Display a listing of the resource.
      *
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Contracts\View\View|\Illuminate\Contracts\View\Factory
      */
-    public function index()
+    public function index(Request $request)
     {
-        return response('backend/book_category');
+        $data = [
+            'list' => $this->repository->filter($request)->paginate(),
+            'status_options' => ['1' => '未付款', '2' => '已付款'],
+            'pageConfigs' => ['hasSearchForm' => true],
+        ];
+
+        return view('backend.book_category.index')->with($data);
     }
 
     /**
