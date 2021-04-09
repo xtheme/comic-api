@@ -2,8 +2,14 @@
 
 namespace App\Providers;
 
+use App\Repositories\BookCategoryRepository;
+use App\Repositories\BookChapterRepository;
+use App\Repositories\BookRepository;
 use App\Repositories\CommentRepository;
 use App\Repositories\ContentRepository;
+use App\Repositories\Contracts\BookCategoryRepositoryInterface;
+use App\Repositories\Contracts\BookChapterRepositoryInterface;
+use App\Repositories\Contracts\BookRepositoryInterface;
 use App\Repositories\Contracts\OrderRepositoryInterface;
 use App\Repositories\OrderRepository;
 use App\Repositories\UserRepository;
@@ -25,6 +31,9 @@ class RepositoryServiceProvider extends ServiceProvider
         $this->app->bind(ContentRepositoryInterface::class, ContentRepository::class);
         $this->app->bind(CommentRepositoryInterface::class, CommentRepository::class);
         $this->app->bind(OrderRepositoryInterface::class, OrderRepository::class);
+        $this->app->bind(BookRepositoryInterface::class, BookRepository::class);
+        $this->app->bind(BookChapterRepositoryInterface::class, BookChapterRepository::class);
+        $this->app->bind(BookCategoryRepositoryInterface::class, BookCategoryRepository::class);
     }
 
     /**
