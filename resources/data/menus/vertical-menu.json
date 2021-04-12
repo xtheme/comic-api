@@ -58,6 +58,18 @@
         },
         {
             "url": "#",
+            "name": "Comments",
+            "slug": "comments",
+            "icon": "comment",
+            "submenu": [
+                {
+                    "url": "/backend/comment",
+                    "name": "Comment List"
+                }
+            ]
+        },
+        {
+            "url": "#",
             "name": "Systems",
             "slug": "systems",
             "icon": "wrench",
