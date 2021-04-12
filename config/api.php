@@ -1,10 +1,15 @@
 <?php
 
 return [
+    'version' => env('API_VERSION', 'v5'),
+
     /*
      * 數據加密
      */
-    'encrypt' => env('OUTPUT_ENCRYPT', true),
+    'encrypt' => [
+        'response' => env('ENCRYPT_RESPONSE', true),
+        'image' => env('ENCRYPT_IMAGE', true),
+    ],
 
     /*
      * AES
