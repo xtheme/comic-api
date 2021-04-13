@@ -47,7 +47,6 @@ class ConfigController extends Controller
      */
     public function create()
     {
-
         return view('backend.config.create', [
             'tags' => $this->tags
         ]);
@@ -62,6 +61,12 @@ class ConfigController extends Controller
     public function store(Request $request)
     {
         $post = $request->post();
+
+        $code_exist = Config::where('code', $post['code'])->count();
+
+        if ($code_exist) {
+            return Response::jsonError('配置代码冲突，请变更配置代码！');
+        }
 
         $config = new Config;
 
@@ -108,6 +113,12 @@ class ConfigController extends Controller
     public function update(Request $request, $id)
     {
         $post = $request->post();
+
+        $code_exist = Config::where('id', '!=', $id)->where('code', $post['code'])->count();
+
+        if ($code_exist) {
+            return Response::jsonError('配置代码冲突，请变更配置代码！');
+        }
 
         $config = Config::findOrFail($id);
 
