@@ -22,6 +22,7 @@
         "laravel/ui": "^3.0",
         "maatwebsite/excel": "^3.1",
         "predis/predis": "^1.1",
+        "rtconner/laravel-tagging": "^4.1",
         "spatie/laravel-activitylog": "^3.17",
         "staudenmeir/laravel-migration-views": "^1.0",
         "vinkla/hashids": "^9.1"
