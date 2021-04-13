@@ -5,8 +5,6 @@
 
 {{-- page scripts --}}
 @section('page-styles')
-    <link rel="stylesheet" type="text/css" href="{{ asset('css/pages/authentication.css') }}">
-    <link rel="stylesheet" type="text/css" href="{{ asset('css/plugins/forms/validation/form-validation.css') }}">
 @endsection
 
 @section('content')
@@ -56,12 +54,10 @@
 
 {{-- vendor scripts --}}
 @section('vendor-scripts')
-    <script src="{{ asset('vendors/js/forms/validation/jqBootstrapValidation.js') }}"></script>
 @endsection
 
 {{-- page scripts --}}
 @section('page-scripts')
-    <script src="{{ asset('js/scripts/forms/validation/form-validation.js') }}"></script>
     <script>
         $(document).ready(function () {
             let $form = $('#login-form');
@@ -77,7 +73,7 @@
             $form.submit(function (e) {
                 e.preventDefault();
                 $.request({
-                    url     : '/login',
+                    url     : '{{ route('login') }}',
                     type    : 'post',
                     data    : $(this).serialize(),
                     callback: function (res) {
