@@ -10,11 +10,53 @@ if (!function_exists('getConfig')) {
      */
     function getConfig($key)
     {
-        $config = Config::keyword($key)->get();
+        $cache_key = 'config:' . $key;
 
-        // if ($config->type == 'array')
+        return Cache::rememberForever($cache_key, function () use ($key) {
+            $config = Config::keyword($key)->firstOrFail();
+            return $config->content;
+        });
+    }
+}
 
-        return $config->content;
+if (!function_exists('webp')) {
+    /**
+     * webp 图片规格
+     *
+     * @param $file_path
+     * @param  string  $pic_width
+     * @param  string  $versionName
+     *
+     * @return string
+     */
+    function webp($file_path, $pic_width = '0', $versionName = '0')
+    {
+        if ($pic_width != '0' && $versionName > '1.1.6') {
+            $str = strrchr($file_path, '.');
+            $arr = explode($str, $file_path);
+            $fileName = $arr[0] . $pic_width . $str;
+        } else {
+            $fileName = $file_path;
+        }
+
+        return $fileName;
+    }
+}
+
+if (!function_exists('numberToWords')) {
+    /**
+     * 数字转换单位万：非四舍五入保留
+     */
+    function numberToWords($number)
+    {
+        if ($number < 10000) {
+            $str = $number;
+        } else {
+            $num = $number / 10000;
+            $str = substr(sprintf("%.2f", $num), 0, -1) . '万';
+        }
+
+        return $str;
     }
 }
 
