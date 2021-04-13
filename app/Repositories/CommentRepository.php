@@ -37,14 +37,14 @@ class CommentRepository extends Repository implements CommentRepositoryInterface
         $status = $request->get('status') ?? '';
         $date_register = $request->get('date_register') ?? '';
 
-        return $this->model::with(['user' , 'bookchapter'])
+        return $this->model::with(['user' , 'bookchapter' , 'bookchapter.book'])
             ->when($username, function (Builder $query, $username) {
                 $query->whereHas('user', function (Builder $query) use ($username) {
                     return $query->where('username', 'like', '%' . $username . '%');
                 });
             })->when($id, function (Builder $query, $id) {
-                $query->whereHas('user', function (Builder $query) use ($id) {
-                    return $query->where('id', '=', $id);
+                $query->whereHas('bookchapter.book', function (Builder $query) use ($id) {
+                    return $query->where('id', '=', $id)->orWhere('book_name' , 'like' , '%' . $id . '%');
                 });
             })->when($status, function (Builder $query, $status) {
                 return $query->where('status', $status);
