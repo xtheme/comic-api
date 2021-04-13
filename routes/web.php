@@ -4,6 +4,7 @@ use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Backend\BookCategoryController;
 use App\Http\Controllers\Backend\BookChapterController;
 use App\Http\Controllers\Backend\BookController;
+use App\Http\Controllers\Backend\CommentController;
 use App\Http\Controllers\Backend\ConfigController;
 use App\Http\Controllers\Backend\FeedbackController;
 use App\Http\Controllers\Backend\PricingpackageController;
@@ -84,11 +85,27 @@ Route::middleware(['auth'])->prefix('backend')->as('backend.')->group(function (
     // Route::resource('requisition', RequisitionController::class);
 
     // 意見反饋
-    Route::resource('feedback', FeedbackController::class);
-    Route::post('feedback/batch/destroy', [FeedbackController::class, 'batchDestroy'])->name('feedback.batch.destroy');
+    Route::prefix('feedback')->as('feedback.')->group(function () {
+        Route::get('/', [FeedbackController::class , 'index'])->name('index');
+        Route::delete('destroy/{id}', [FeedbackController::class , 'destroy'])->name('destroy');
+        Route::post('batch/destroy', [FeedbackController::class, 'batchDestroy'])->name('batch.destroy');
+    });
 
     // 會員套餐
-    Route::resource('pricingpackage', PricingpackageController::class);
+    Route::prefix('pricingpackage')->as('pricingpackage.')->group(function () {
+        Route::get('/', [PricingpackageController::class , 'index'])->name('index');
+        Route::get('create', [PricingpackageController::class , 'create'])->name('create');
+        Route::post('store', [PricingpackageController::class , 'store'])->name('store');
+        Route::get('edit/{id}', [PricingpackageController::class , 'edit'])->name('edit');
+        Route::put('update/{id}', [PricingpackageController::class , 'update'])->name('update');
+        Route::delete('destroy/{id}', [PricingpackageController::class , 'destroy'])->name('destroy');
+    });
+
+    Route::prefix('comment')->as('comment.')->group(function () {
+        Route::get('/', [CommentController::class , 'index'])->name('index');
+        Route::delete('destroy/{id}', [CommentController::class , 'destroy'])->name('destroy');
+        Route::post('batch/destroy', [CommentController::class, 'batchDestroy'])->name('batch.destroy');
+    });
 
 
 });

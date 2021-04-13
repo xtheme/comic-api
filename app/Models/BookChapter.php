@@ -10,4 +10,11 @@ class BookChapter extends Model
     use HasFactory;
 
     protected $table = 'chapterlist';
+
+    public function book()
+    {
+        return $this->hasOne('App\Models\Book', 'id', 'book_id');
+    }
+
+
 }

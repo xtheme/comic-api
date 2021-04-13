@@ -18,4 +18,6 @@ return [
     // "Requisitions" => "託運單",
     // "Locations" => "地點管理",
     // "Shipments" => "運輸方式",
+    "Comments" => "評論管理",
+    "Comment List" => "漫画评论",
 ];

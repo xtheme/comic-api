@@ -32,58 +32,30 @@ class CommentRepository extends Repository implements CommentRepositoryInterface
         $today = Carbon::now()->toDateTimeString();
         $time_period = sprintf('%s - %s', $few_days_ago, $today);
 
-        $title = $request->get('title') ?? '';
-        $model_id = $request->get('type') ?? '';
-        $nickname = $request->get('nickname') ?? '';
+        $username = $request->get('username') ?? '';
+        $id = $request->get('id') ?? '';
         $status = $request->get('status') ?? '';
-        $audit_status = $request->get('audit_status') ?? '';
-        $created_at = $request->get('created_at') ?? '';
+        $date_register = $request->get('date_register') ?? '';
 
-        $order = $request->get('order') ?? 'created_at';
-        $sort = $request->get('sort') ?? 'DESC';
-
-        // 替換 created_at
-        if (!$request->has('created_at') && !$request->has('page')) {
-            $created_at = $time_period;
-            $request->merge([
-                'created_at' => $created_at,
-            ]);
-        }
-
-        return $this->model::with(['article', 'user', 'fakeUser', 'auditRecord'])
-            ->whereHas('article', function (Builder $query) use ($title, $model_id) {
-                $query->when($title, function (Builder $query, $title) {
-                    return $query->where('title', 'like', '%' . $title . '%');
+        return $this->model::with(['user' , 'bookchapter' , 'bookchapter.book'])
+            ->when($username, function (Builder $query, $username) {
+                $query->whereHas('user', function (Builder $query) use ($username) {
+                    return $query->where('username', 'like', '%' . $username . '%');
                 });
-                $query->when($model_id, function (Builder $query, $model_id) {
-                    return $query->where('model_id', $model_id);
-                });
-            })->when($nickname, function (Builder $query, $nickname) {
-                $query->whereHas('user', function (Builder $query) use ($nickname) {
-                    return $query->where('nickname', 'like', '%' . $nickname . '%');
-                })->orWhereHas('fakeUser', function (Builder $query) use ($nickname) {
-                    return $query->where('nickname', 'like', '%' . $nickname . '%');
-                });
-            })->when($audit_status, function (Builder $query, $audit_status) {
-                $query->whereHas('auditRecord', function (Builder $query) use ($audit_status) {
-                    return $query->where('action', $audit_status - 1);
+            })->when($id, function (Builder $query, $id) {
+                $query->whereHas('bookchapter.book', function (Builder $query) use ($id) {
+                    return $query->where('id', '=', $id)->orWhere('book_name' , 'like' , '%' . $id . '%');
                 });
             })->when($status, function (Builder $query, $status) {
                 return $query->where('status', $status);
-            })->when($created_at, function (Builder $query, $created_at) {
-                $date = explode(' - ', $created_at);
-                $start_date = $date[0];
-                $end_date = $date[1];
-                return $query->whereBetween('created_at', [
+            })->when($date_register, function (Builder $query, $date_register) {
+                $date = explode(' - ', $date_register);
+                $start_date = strtotime($date[0] . ' 00:00:00');
+                $end_date = strtotime($date[1] . ' 23:59:59');
+                return $query->whereBetween('createtime', [
                     $start_date,
                     $end_date,
                 ]);
-            })->when($sort, function (Builder $query, $sort) use ($order) {
-                if ($sort == 'DESC') {
-                    return $query->orderByDesc($order);
-                } else {
-                    return $query->orderBy($order);
-                }
-            })->orderByDesc('id');
+            })->orderByDesc('createtime');
     }
 }
