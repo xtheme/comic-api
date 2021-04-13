@@ -7,6 +7,7 @@ use App\Http\Controllers\Backend\BookController;
 use App\Http\Controllers\Backend\CommentController;
 use App\Http\Controllers\Backend\ConfigController;
 use App\Http\Controllers\Backend\FeedbackController;
+use App\Http\Controllers\Backend\NoticeController;
 use App\Http\Controllers\Backend\PricingpackageController;
 use App\Http\Controllers\Backend\OrderController;
 use App\Http\Controllers\Backend\PricingController;
@@ -107,5 +108,13 @@ Route::middleware(['auth'])->prefix('backend')->as('backend.')->group(function (
         Route::post('batch/destroy', [CommentController::class, 'batchDestroy'])->name('batch.destroy');
     });
 
-
+    //公告
+    Route::prefix('notice')->as('notice.')->group(function () {
+        Route::get('/', [NoticeController::class , 'index'])->name('index');
+        Route::get('create', [NoticeController::class , 'create'])->name('create');
+        Route::post('store', [NoticeController::class , 'store'])->name('store');
+        Route::get('edit/{id}', [NoticeController::class , 'edit'])->name('edit');
+        Route::put('update/{id}', [NoticeController::class , 'update'])->name('update');
+        Route::delete('destroy/{id}', [NoticeController::class , 'destroy'])->name('destroy');
+    });
 });
