@@ -323,8 +323,8 @@ $nav-pills-border-radius: $border-radius !default;
 
 // Navbar
 $navbar-brand-font-size: 1.46rem !default;
-// Cards
 
+// Cards
 $card-spacer-y: 1.4rem !default;
 $card-spacer-x: 1.7rem !default;
 $card-border-width: 0px !default;
@@ -332,13 +332,13 @@ $card-cap-bg: transparent !default;
 $card-group-margin: 0.75rem !default;
 $card-columns-gap: 1.6rem !default;
 $card-border-color:#dfe3e7 !default;
-// Tooltips
 
+// Tooltips
 $tooltip-bg: #475F7B !default;
 $tooltip-border-radius: .267rem !default;
 $tooltip-padding-y: .267rem !default;
 $tooltip-padding-x: .867rem !default;
-$tooltip-font-size: $font-size-base !default;
+$tooltip-font-size: $font-size-sm !default;
 $tooltip-opacity: 1 !default;
 
 $tooltip-arrow-width: 1.07rem !default;
@@ -348,7 +348,6 @@ $form-feedback-tooltip-opacity: 0.2 !default;
 $form-feedback-tooltip-font-size: $font-size-sm !default;
 
 // Popovers
-
 $popover-font-size: $font-size-base !default;
 $popover-border-color: #ebebeb !default;
 $popover-border-radius: .267rem !default;
@@ -357,10 +356,7 @@ $popover-box-shadow: 0 0 10px 0 rgba(58, 70, 93, 0.25) !default;
 $popover-header-bg: #f7f7f7 !default;
 $popover-header-color: #333333!default;
 
-
-
 // Toasts
-
 $toast-max-width: 25.33rem !default;
 $toast-padding-x: 1.4rem !default;
 $toast-padding-y: .86rem !default;
@@ -376,7 +372,6 @@ $toast-header-background-color: $primary !default;
 $toast-header-border-color: $border-color !default;
 
 // Badges
-
 $badge-font-size: $font-size-sm !default;
 $badge-font-weight: 400 !default;
 $badge-padding-y: .34rem !default;
