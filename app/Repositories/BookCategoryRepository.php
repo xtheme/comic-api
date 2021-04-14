@@ -4,6 +4,7 @@ namespace App\Repositories;
 
 use App\Models\BookCategory;
 use App\Repositories\Contracts\BookCategoryRepositoryInterface;
+use Conner\Tagging\Model\Tag;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
@@ -17,7 +18,7 @@ class BookCategoryRepository extends Repository implements BookCategoryRepositor
      */
     public function model(): string
     {
-        return BookCategory::class;
+        return Tag::class;
     }
 
     /**
@@ -30,8 +31,8 @@ class BookCategoryRepository extends Repository implements BookCategoryRepositor
         $keyword = $request->get('keyword') ?? '';
 
         return $this->model::when($keyword, function (Builder $query, $keyword) {
-            return $query->where('name', 'like', '%' . $keyword . '%')->orWhere('keywords', 'like', '%' . $keyword . '%')->orWhere('desc', 'like', '%' . $keyword . '%');
-        })->orderByDesc('orders');
+            return $query->where('name', 'like', '%' . $keyword . '%')->orWhere('slug', 'like', '%' . $keyword . '%')->orWhere('description', 'like', '%' . $keyword . '%');
+        })->orderByDesc('priority');
     }
 
     public function editable($id, $field, $value)

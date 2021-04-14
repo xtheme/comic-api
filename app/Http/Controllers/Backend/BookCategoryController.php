@@ -8,6 +8,7 @@ use App\Repositories\Contracts\BookCategoryRepositoryInterface;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\View;
 
 class BookCategoryController extends Controller
 {
@@ -21,7 +22,9 @@ class BookCategoryController extends Controller
     /**
      * Display a listing of the resource.
      *
-     * @return \Illuminate\Contracts\View\View|\Illuminate\Contracts\View\Factory
+     * @param  Request  $request
+     *
+     * @return \Illuminate\Contracts\View\View
      */
     public function index(Request $request)
     {
