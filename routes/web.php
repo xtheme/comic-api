@@ -68,14 +68,24 @@ Route::middleware(['auth'])->prefix('backend')->as('backend.')->group(function (
     });
 
     // 漫画
-    Route::resource('book', BookController::class);
+    Route::prefix('book')->as('book.')->group(function () {
+        Route::get('/', [BookController::class, 'index'])->name('index');
+        // Route::put('editable/{field}', [BookCategoryController::class, 'editable'])->name('editable');
+    });
+    // Route::resource('book', BookController::class);
 
+    // 漫画分类
     Route::prefix('book_category')->as('book_category.')->group(function () {
+        Route::get('/', [BookCategoryController::class, 'index'])->name('index');
         Route::put('editable/{field}', [BookCategoryController::class, 'editable'])->name('editable');
     });
-    Route::resource('book_category', BookCategoryController::class);
+    // Route::resource('book_category', BookCategoryController::class);
 
-    Route::resource('book_chapter', BookChapterController::class);
+    // 漫画章节
+    Route::prefix('book_chapter')->as('book_chapter.')->group(function () {
+        Route::get('/', [BookChapterController::class, 'index'])->name('index');
+    });
+    // Route::resource('book_chapter', BookChapterController::class);
 
     Route::resource('pricing', PricingController::class);
 

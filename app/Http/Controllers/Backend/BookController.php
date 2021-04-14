@@ -4,18 +4,34 @@ namespace App\Http\Controllers\Backend;
 
 use App\Http\Controllers\Controller;
 use App\Models\Book;
+use App\Repositories\Contracts\BookRepositoryInterface;
 use Illuminate\Http\Request;
 
 class BookController extends Controller
 {
+    private $repository;
+
+    public function __construct(BookRepositoryInterface $repository)
+    {
+        $this->repository = $repository;
+    }
+
     /**
      * Display a listing of the resource.
      *
-     * @return \Illuminate\Http\Response
+     * @param  Request  $request
+     *
+     * @return \Illuminate\Contracts\View\View
      */
-    public function index()
+    public function index(Request $request)
     {
-        return response('backend/book');
+        // $article =Book::with(['tagged', 'chapters'])->first();
+        // dd($article->tagged);
+        $data = [
+            'list' => $this->repository->filter($request)->paginate(),
+        ];
+
+        return view('backend.book.index')->with($data);
     }
 
     /**

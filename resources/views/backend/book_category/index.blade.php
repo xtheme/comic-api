@@ -41,7 +41,7 @@
                             <tr>
                                 <th>排序</th>
                                 <th>分类名称</th>
-                                <th>关键字</th>
+{{--                                <th>关键字</th>--}}
                                 <th>描述</th>
                                 <th>状态</th>
                                 <th>操作</th>
@@ -50,20 +50,20 @@
                             <tbody>
                             @foreach ($list as $category)
                                 <tr>
-                                    <th>
-                                        <span data-type="text" data-pk="{{ $category->id }}" data-title="修改排序" class="editable editable-click" data-url="{{ route('backend.book_category.editable', 'orders') }}">{{ $category->orders }}</span>
-                                    </th>
-                                    <th>
+                                    <td>
+                                        <span data-type="text" data-pk="{{ $category->id }}" data-title="修改排序" class="editable editable-click" data-url="{{ route('backend.book_category.editable', 'priority') }}">{{ $category->priority }}</span>
+                                    </td>
+                                    <td>
                                         <span data-type="text" data-pk="{{ $category->id }}" data-title="修改名称" class="editable editable-click" data-url="{{ route('backend.book_category.editable', 'name') }}">{{ $category->name }}</span>
-                                    </th>
-                                    <th>
-                                        <span data-type="text" data-pk="{{ $category->id }}" data-title="修改关键字" class="editable editable-click" data-url="{{ route('backend.book_category.editable', 'keywords') }}">{{ $category->keywords }}</span>
-                                    </th>
-                                    <th>
-                                        <span data-type="text" data-pk="{{ $category->id }}" data-title="修改描述" class="editable editable-click" data-url="{{ route('backend.book_category.editable', 'desc') }}">{{ $category->desc }}</span>
-                                    </th>
-                                    <th>
-                                        @switch($category->status)
+                                    </td>
+{{--                                    <td>--}}
+{{--                                        <span data-type="text" data-pk="{{ $category->id }}" data-title="修改关键字" class="editable editable-click" data-url="{{ route('backend.book_category.editable', 'keywords') }}">{{ $category->slug }}</span>--}}
+{{--                                    </td>--}}
+                                    <td>
+                                        <span data-type="text" data-pk="{{ $category->id }}" data-title="修改描述" class="editable editable-click" data-url="{{ route('backend.book_category.editable', 'description') }}">{{ $category->description }}</span>
+                                    </td>
+                                    <td>
+                                        @switch($category->suggest)
                                             @case(0)
                                             <label class="badge badge-danger badge-pill">隐藏</label>
                                             @break
@@ -71,8 +71,8 @@
                                             <label class="badge badge-success badge-pill">显示</label>
                                             @break
                                         @endswitch
-                                    </th>
-                                    <th></th>
+                                    </td>
+                                    <td></td>
                                 </tr>
                             @endforeach
                             </tbody>
