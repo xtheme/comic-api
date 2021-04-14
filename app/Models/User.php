@@ -66,6 +66,9 @@ use Illuminate\Notifications\Notifiable;
  * @method static \Illuminate\Database\Eloquent\Builder|User whereUsername($value)
  * @method static \Illuminate\Database\Eloquent\Builder|User whereVersion($value)
  * @mixin \Eloquent
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Order[] $orders
+ * @property-read \App\Models\ViewsOrdersSuccessCount|null $orders_success_count
+ * @property-read \App\Models\Sign|null $signin
  */
 class User extends Model
 {

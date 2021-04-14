@@ -75,6 +75,10 @@
             "icon": "wrench",
             "submenu": [
                 {
+                    "url": "/backend/notice",
+                    "name": "Notice List"
+                },
+                {
                     "url": "/terminal",
                     "name": "Terminal"
                 },

@@ -32,6 +32,8 @@ use Spatie\Activitylog\Traits\LogsActivity;
  * @method static Builder|Config whereType($value)
  * @method static Builder|Config whereUpdatedAt($value)
  * @mixin \Eloquent
+ * @property string|null $group
+ * @method static Builder|Config whereGroup($value)
  */
 class Config extends Model
 {

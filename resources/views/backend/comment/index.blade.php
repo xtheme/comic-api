@@ -69,7 +69,7 @@
                                             <span class="bx bx-dots-vertical-rounded font-medium-3 dropdown-toggle nav-hide-arrow cursor-pointer"
                                                   id="dropdownMenuButton{{ $item->id }}" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></span>
                                             <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuButton{{ $item->id }}">
-                                                <a class="dropdown-item" data-confirm type="delete" href="{{ route('backend.comment.destroy', $item->id) }}" title="刪除"><i class="bx bx-edit-alt mr-1"></i>刪除</a>
+                                                <a class="dropdown-item" data-confirm type="delete" href="{{ route('backend.comment.destroy', $item->id) }}" title="刪除"><i class="bx bx-trash mr-1"></i>刪除</a>
                                             </div>
                                         </div>
                                     </td>

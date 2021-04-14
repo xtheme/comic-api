@@ -7,6 +7,78 @@ use Conner\Tagging\Taggable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
+/**
+ * App\Models\Book
+ *
+ * @property int $id 小说ID
+ * @property string $cate_id 小数所属分类ID
+ * @property int $author_id 作者id
+ * @property string $book_name 小说名称
+ * @property string $pen_name 作者
+ * @property string $book_desc 小说简介
+ * @property int $book_vip 1表示VIP,2表示免费,3表示付费
+ * @property int $book_isend 1表示已经完结,2表示连载,3表示暂停
+ * @property string $book_thumb 竖向封面
+ * @property string $book_thumb2 横向封面
+ * @property int $book_addtime 添加时间
+ * @property int $book_updatetime 更新时间
+ * @property int $app_show app：1显示：0屏蔽
+ * @property int $fx_show 分销：1显示：0屏蔽
+ * @property int $xcx_show 小程序：1显示：0屏蔽
+ * @property int $book_chaptertime 章节更新时间
+ * @property int $check_status 0=待审核,1=审核成功,2=审核失败,3=屏蔽,4=未审核
+ * @property int $check_time 第一次上架时间
+ * @property int $view 漫画热度
+ * @property int $real_view 真实漫画阅读量
+ * @property int $book_status 1正常,0已删除
+ * @property string $del_time 删除时间
+ * @property int $gzzj 关注章节
+ * @property string|null $zhuishu 追书人数
+ * @property int $ismanhua 是否漫画默认1
+ * @property int $zhishu 派单指数
+ * @property int $collect 收藏数量
+ * @property int $daytj 今日推荐
+ * @property int $operating 1手动,2自动
+ * @property string $book_thumb_banner 竖向封面banner
+ * @property string $book_thumb2_banner 横向封面banner
+ * @property int $cartoon_type 类型：1日漫,2韩漫
+ * @method static \Illuminate\Database\Eloquent\Builder|Book newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|Book newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|Book query()
+ * @method static \Illuminate\Database\Eloquent\Builder|Book whereAppShow($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Book whereAuthorId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Book whereBookAddtime($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Book whereBookChaptertime($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Book whereBookDesc($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Book whereBookIsend($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Book whereBookName($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Book whereBookStatus($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Book whereBookThumb($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Book whereBookThumb2($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Book whereBookThumb2Banner($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Book whereBookThumbBanner($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Book whereBookUpdatetime($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Book whereBookVip($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Book whereCartoonType($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Book whereCateId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Book whereCheckStatus($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Book whereCheckTime($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Book whereCollect($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Book whereDaytj($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Book whereDelTime($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Book whereFxShow($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Book whereGzzj($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Book whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Book whereIsmanhua($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Book whereOperating($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Book wherePenName($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Book whereRealView($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Book whereView($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Book whereXcxShow($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Book whereZhishu($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Book whereZhuishu($value)
+ * @mixin \Eloquent
+ */
 class Book extends Model
 {
     use HasFactory, CacheTrait, Taggable;

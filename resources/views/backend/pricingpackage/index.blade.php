@@ -54,7 +54,7 @@
                                                   id="dropdownMenuButton{{ $item->id }}" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></span>
                                             <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuButton{{ $item->id }}">
                                                 <a class="dropdown-item" data-modal href="{{ route('backend.pricingpackage.edit', $item->id) }}" title="修改套餐"><i class="bx bx-edit-alt mr-1"></i> 修改</a>
-                                                <a class="dropdown-item" data-confirm type="delete" href="{{ route('backend.pricingpackage.destroy', $item->id) }}" title="刪除套餐"><i class="bx bx-edit-alt mr-1"></i>刪除</a>
+                                                <a class="dropdown-item" data-confirm type="delete" href="{{ route('backend.pricingpackage.destroy', $item->id) }}" title="刪除套餐"><i class="bx bx-trash mr-1"></i>刪除</a>
                                             </div>
                                         </div>
                                     </td>
