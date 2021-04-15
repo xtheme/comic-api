@@ -40,20 +40,20 @@ $.extend({
             settings.height = '80vh';
         }
         $modal.find('.modal-title').html(settings.title);
-        // $modal.on('show.bs.modal', function () {
-        //     if (settings.image) {
-        //         let $html = `<div class="loading-area" style="height: ${settings.height};">
-        //             <div class="loading">
-        //                 <div class="dot"></div>
-        //                 <div class="dot"></div>
-        //                 <div class="dot"></div>
-        //                 <div class="dot"></div>
-        //                 <div class="dot"></div>
-        //             </div>
-        //         </div>`;
-        //         $modal.find('.modal-body').html($html);
-        //     }
-        // });
+        $modal.on('show.bs.modal', function () {
+            if (settings.image) {
+                let $html = `<div class="loading-area" style="height: ${settings.height};">
+                    <div class="loading">
+                        <div class="dot"></div>
+                        <div class="dot"></div>
+                        <div class="dot"></div>
+                        <div class="dot"></div>
+                        <div class="dot"></div>
+                    </div>
+                </div>`;
+                $modal.find('.modal-body').html($html);
+            }
+        });
         $modal.on('shown.bs.modal', function () {
             if (settings.image) {
                 setTimeout(function () {
@@ -88,20 +88,20 @@ $.extend({
             settings.height = '80vh';
         }
 		$modal.find('.modal-title').html(settings.title);
-		// $modal.on('show.bs.modal', function () {
-		// 	if (settings.url) {
-		// 		let $html = `<div class="loading-area" style="height: ${settings.height};">
-        //             <div class="loading">
-        //                 <div class="dot"></div>
-        //                 <div class="dot"></div>
-        //                 <div class="dot"></div>
-        //                 <div class="dot"></div>
-        //                 <div class="dot"></div>
-        //             </div>
-        //         </div>`;
-		// 		$modal.find('.modal-body').html($html);
-		// 	}
-		// });
+		$modal.on('show.bs.modal', function () {
+			if (settings.url) {
+				let $html = `<div class="loading-area" style="height: ${settings.height};">
+                    <div class="loading">
+                        <div class="dot"></div>
+                        <div class="dot"></div>
+                        <div class="dot"></div>
+                        <div class="dot"></div>
+                        <div class="dot"></div>
+                    </div>
+                </div>`;
+				$modal.find('.modal-body').html($html);
+			}
+		});
 		$modal.on('shown.bs.modal', function () {
 			if (settings.url) {
 				setTimeout(function () {

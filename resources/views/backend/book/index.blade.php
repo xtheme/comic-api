@@ -96,7 +96,8 @@
                                     <td>{{ $book->view }}</td>
                                     <td>{{ $book->real_view }}</td>
                                     <td>{{ $book->collect }}</td>
-                                    <td>{{ $book->chapters->last()->title ?? '暂无' }}</td>
+{{--                                    <td>{{ $book->chapters->last()->title ?? '暂无' }}</td>--}}
+                                    <td>{{ $book->chapters_count }}</td>
                                     <td>
                                         @if($book->isfree == 0)
                                             <span class="badge badge-pill badge-light-primary">免费</span>
@@ -113,7 +114,7 @@
                                                   id="dropdownMenuButton{{ $book->id }}" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></span>
                                             <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuButton{{ $book->id }}">
                                                 <a class="dropdown-item" data-modal href="" title="推荐设置"><i class="bx bxs-bookmark-star mr-1"></i>推荐设置</a>
-                                                <a class="dropdown-item" data-modal href="" title="章节列表"><i class="bx bx-list-ol mr-1"></i>章节列表</a>
+                                                <a class="dropdown-item" data-modal data-size="full" href="{{ route('backend.book_chapter.index', $book->id) }}" title="章节列表"><i class="bx bx-list-ol mr-1"></i>章节列表</a>
                                                 <a class="dropdown-item" data-modal href="" title="编辑漫画"><i class="bx bx-edit-alt mr-1"></i>编辑漫画</a>
                                                 <a class="dropdown-item" data-confirm href="" title="删除漫画"><i class="bx bx-trash mr-1"></i>删除漫画</a>
                                                 <a class="dropdown-item" data-confirm href="" title="漫画审核"><i class="bx bxs-check-shield mr-1"></i>漫画审核</a>

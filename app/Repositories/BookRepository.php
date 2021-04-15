@@ -27,6 +27,6 @@ class BookRepository extends Repository implements BookRepositoryInterface
      */
     public function filter(Request $request): Builder
     {
-        return $this->model::with(['tagged', 'chapters'])->withCount('chapters')->orderByDesc('id');
+        return $this->model::with(['tagged'])->withCount('chapters')->orderByDesc('id');
     }
 }
