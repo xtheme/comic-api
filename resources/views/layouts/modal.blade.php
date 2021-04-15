@@ -34,6 +34,8 @@
 </div>
 <!-- END: Content -->
 
+@include('panels.modal')
+
 {{-- scripts --}}
 @include('panels.scripts')
 

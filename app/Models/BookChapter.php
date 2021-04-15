@@ -60,10 +60,13 @@ class BookChapter extends Model
 
     protected $table = 'chapterlist';
 
+    protected $perPage = 10;
+
+    const CREATED_AT = 'addtime';
+    const UPDATED_AT = 'updatetime';
+
     public function book()
     {
-        return $this->hasOne('App\Models\Book', 'id', 'book_id');
+        return $this->belongsTo('App\Models\Book');
     }
-
-
 }

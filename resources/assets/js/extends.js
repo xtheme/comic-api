@@ -36,21 +36,24 @@ $.extend({
         if (settings.size != '') {
             $modal.find('.modal-dialog').addClass('modal-' + settings.size);
         }
+        if (settings.size == 'full') {
+            settings.height = '80vh';
+        }
         $modal.find('.modal-title').html(settings.title);
-        $modal.on('show.bs.modal', function () {
-            if (settings.image) {
-                let $html = `<div class="loading-area" style="height: ${settings.height};">
-                    <div class="loading">
-                        <div class="dot"></div>
-                        <div class="dot"></div>
-                        <div class="dot"></div>
-                        <div class="dot"></div>
-                        <div class="dot"></div>
-                    </div>
-                </div>`;
-                $modal.find('.modal-body').html($html);
-            }
-        });
+        // $modal.on('show.bs.modal', function () {
+        //     if (settings.image) {
+        //         let $html = `<div class="loading-area" style="height: ${settings.height};">
+        //             <div class="loading">
+        //                 <div class="dot"></div>
+        //                 <div class="dot"></div>
+        //                 <div class="dot"></div>
+        //                 <div class="dot"></div>
+        //                 <div class="dot"></div>
+        //             </div>
+        //         </div>`;
+        //         $modal.find('.modal-body').html($html);
+        //     }
+        // });
         $modal.on('shown.bs.modal', function () {
             if (settings.image) {
                 setTimeout(function () {
@@ -81,25 +84,28 @@ $.extend({
 		if (settings.size != '') {
 			$modal.find('.modal-dialog').addClass('modal-' + settings.size);
 		}
+        if (settings.size == 'full') {
+            settings.height = '80vh';
+        }
 		$modal.find('.modal-title').html(settings.title);
-		$modal.on('show.bs.modal', function () {
-			if (settings.url) {
-				let $html = `<div class="loading-area" style="height: ${settings.height};">
-                    <div class="loading">
-                        <div class="dot"></div>
-                        <div class="dot"></div>
-                        <div class="dot"></div>
-                        <div class="dot"></div>
-                        <div class="dot"></div>
-                    </div>
-                </div>`;
-				$modal.find('.modal-body').html($html);
-			}
-		});
+		// $modal.on('show.bs.modal', function () {
+		// 	if (settings.url) {
+		// 		let $html = `<div class="loading-area" style="height: ${settings.height};">
+        //             <div class="loading">
+        //                 <div class="dot"></div>
+        //                 <div class="dot"></div>
+        //                 <div class="dot"></div>
+        //                 <div class="dot"></div>
+        //                 <div class="dot"></div>
+        //             </div>
+        //         </div>`;
+		// 		$modal.find('.modal-body').html($html);
+		// 	}
+		// });
 		$modal.on('shown.bs.modal', function () {
 			if (settings.url) {
 				setTimeout(function () {
-					$modal.find('.modal-body').html(`<iframe src="${settings.url}" name="modal-frame" frameborder="0" style="border: 0; width: 100%; height: ${settings.height};"></iframe>`);
+					$modal.find('.modal-body').html(`<iframe src="${settings.url}" name="modal-frame" style="border: 0; width: 100%; height: ${settings.height};"></iframe>`);
 				}, 500);
 			}
 		})
