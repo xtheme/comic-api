@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
+use App\Services\ImageService;
+use CURLFile;
 use Illuminate\Http\Request;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Response;
@@ -14,6 +16,16 @@ use Illuminate\Support\Facades\Response;
  */
 class UploadController extends Controller
 {
+    private $imageService;
+
+    /**
+     * @param  ImageService  $imageService
+     */
+    public function __construct(ImageService $imageService)
+    {
+        $this->imageService = $imageService;
+    }
+
     /**
      * 检查上传文件
      *
@@ -107,19 +119,22 @@ class UploadController extends Controller
     {
         $file = $request->file('image');
 
-        $message = $this->checkFile($file);
+        $result = $this->imageService->uploadFile($file, $dir, $id);
 
-        if ($message) {
-            return Response::jsonError($message, 500);
+        $result = explode('|', $result);
+
+        $status = ($result[0] == 'error') ? 500 : 200;
+
+        $message = $result[1];
+
+        if ($status === 200) {
+            return Response::jsonSuccess('上传成功', [
+                'filename' => $message ,
+                'filename_thumb' => getConfig('api_url') . $message
+            ]);
         }
 
-        $path = $this->getFilePath($dir, $id);
-
-        $absolute_path = $this->storeFile($file, $path);
-
-        return Response::jsonSuccess('上传成功', [
-            'filename' => $absolute_path
-        ]);
+        return Response::jsonError($message, $status);
     }
 
     /**

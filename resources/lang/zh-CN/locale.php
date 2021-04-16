@@ -20,5 +20,6 @@ return [
     // "Shipments" => "運輸方式",
     "Comments" => "評論管理",
     "Comment List" => "漫画评论",
-    "Notice List" => "公告列表"
+    "Notice List" => "公告列表",
+    "Recomclass List" => "漫画推荐分类列表"
 ];

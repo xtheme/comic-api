@@ -50,7 +50,7 @@
                                                   id="dropdownMenuButton{{ $item->id }}" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></span>
                                             <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuButton{{ $item->id }}">
                                                 <a class="dropdown-item" data-modal href="{{ route('backend.notice.edit', $item->id) }}" title="修改公告"><i class="bx bx-edit-alt mr-1"></i> 修改</a>
-                                                <a class="dropdown-item" data-confirm type="delete" href="{{ route('backend.notice.destroy', $item->id) }}" title="刪除公告"><i class="bx bx-trash mr-1"></i>刪除</a>
+                                                <a class="dropdown-item" data-destroy type="delete" href="{{ route('backend.notice.destroy', $item->id) }}" title="刪除公告"><i class="bx bx-trash mr-1"></i>刪除</a>
                                             </div>
                                         </div>
                                     </td>

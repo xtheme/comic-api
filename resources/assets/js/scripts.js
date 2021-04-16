@@ -39,7 +39,7 @@
             success: function (res) {
                 console.log(res);
                 if (res.code == 200) {
-                    $this.parents('.form-group').find('.upload-image-callback').empty().append('<img src="' + res.data.filename + '">').show();
+                    $this.parents('.form-group').find('.upload-image-callback').empty().append('<img width="80" src="' + res.data.filename_thumb + '">').show();
                     $this.parents('.form-group').find('.image-path').val(res.data.filename);
                 } else {
                     $.toast({
@@ -150,9 +150,11 @@
         $.confirm({
             text : `请确认是否要继续批量操作?`,
             callback: function () {
+                let url = $this.attr('href') + '/' + ids;
+                let params = new URLSearchParams(url);
                 $.request({
                     url: url,
-                    type: $action,
+                    type: 'post',
                     data: (Object.keys(params).length === 0) ? null : params,
                     // debug: true,
                     callback: function () {
