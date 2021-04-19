@@ -39,4 +39,14 @@ abstract class Repository implements RepositoryInterface
     {
         return $this->model->findOrFail($id);
     }
+
+    /**
+     * @param $id
+     * @param $field
+     * @param $value
+     */
+    public function editable($id, $field, $value)
+    {
+        $this->model::where('id', $id)->update([$field => $value]);
+    }
 }
