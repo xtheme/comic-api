@@ -58,7 +58,22 @@
                     "url": "/backend/recomclass",
                     "name": "Recomclass List"
                 }
-
+            ]
+        },
+        {
+            "url": "#",
+            "name": "Report List",
+            "slug": "books",
+            "icon": "question-alt",
+            "submenu": [
+                {
+                    "url": "/backend/bookreporttype",
+                    "name": "BookReportType List"
+                },
+                {
+                    "url": "/backend/bookreport",
+                    "name": "BookRepor List"
+                }
             ]
         },
         {
