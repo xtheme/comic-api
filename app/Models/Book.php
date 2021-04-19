@@ -85,11 +85,32 @@ class Book extends Model
 
     protected $table = 'book';
 
+    const CREATED_AT = 'book_addtime';
+    const UPDATED_AT = 'book_updatetime';
+
     /**
-     * The attributes that should be hidden for arrays.
-     *
-     * @var array
+     * @todo 可刪除字段
+     * 关注章节 gzzj
+     * 今日推荐 daytj
+     * 派单指数 zhishu
+     * book_thumb_banner
+     * book_thumb2_banner
+     * cate_id
      */
+
+    protected $fillable = [
+        'book_name',
+        'cartoon_type',
+        'book_desc',
+        'pen_name',
+        'view',
+        'collect',
+        'book_thumb',
+        'book_thumb2',
+        'book_isend',
+        'operating',
+    ];
+
     protected $hidden = [
         'cate_id',  // getCategoriesAttr
         'operating', // 決定圖片路徑
@@ -97,28 +118,17 @@ class Book extends Model
         'book_thumb2', // getHorizontalThumbAttr
     ];
 
-    /**
-     * The accessors to append to the model's array form.
-     *
-     * @var array
-     */
-    protected $appends = [
-        // 'latest_chapter_title',
-        // 'categories',
-        // 'vertical_thumb', // 竖向封面
-        // 'horizontal_thumb', // 横向封面
-    ];
-
-    // protected $dates = [
-    //     'created_at',
-    //     'updated_at',
-    //     'subscribed_at',
-    //     'last_login_at',
-    // ];
-
     public function chapters()
     {
-        return $this->hasMany('App\Models\BookChapter');
+        return $this->hasMany('App\Models\BookChapter')->where('chapter_status', 1);
+    }
+
+    /**
+     * 查询收费章节数量, 用来判定漫画是否收费
+     */
+    public function charge_chapters()
+    {
+        return $this->hasMany('App\Models\BookChapter')->where('chapter_status', 1)->where('isvip', 2);
     }
 
     /**
