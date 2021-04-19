@@ -3,7 +3,14 @@
 return [
     'version' => env('API_VERSION', 'v5'),
 
-    /*
+    /**
+     * 第三方接口
+     */
+    'api' => [
+        'upload_url' => env('API_UPLOAD_URL', true),
+    ],
+
+    /**
      * 數據加密
      */
     'encrypt' => [
@@ -11,7 +18,7 @@ return [
         'image' => env('ENCRYPT_IMAGE', true),
     ],
 
-    /*
+    /**
      * AES
      */
     'aes' => [
@@ -21,7 +28,7 @@ return [
         'iv' => env('AES_IV', ''),
     ],
 
-    /*
+    /**
      * JWT
      */
     'jwt' => [
@@ -31,7 +38,7 @@ return [
         'leeway' => env('JWT_LEEWAY', 60),
     ],
 
-    /*
+    /**
      * SMS
      */
     'sms' => [
