@@ -128,45 +128,22 @@
 
     $('a[data-batch]').on('click', function (e) {
         e.preventDefault();
-        let $this    = $(this);
-        let $checked = $('input.check-opt:checked');
-        let ids      = '';
+        let $this = $(this);
 
-        if ($checked.length == 0) {
-            parent.$.toast({
-                message: '请先选择要操作的数据'
-            });
-            return false;
-        }
-
-        $checked.each(function (index) {
-            if (index == 0) {
-                ids += $(this).val();
-            } else {
-                ids += ',' + $(this).val();
-            }
-        });
+        let ids = $.checkedIds();
 
         $.confirm({
             text : `请确认是否要继续批量操作?`,
             callback: function () {
+                let url    = $this.attr('href') + '/' + ids;
+                let params = new URLSearchParams(url);
                 $.request({
                     url: url,
-                    type: $action,
+                    type: 'post',
                     data: (Object.keys(params).length === 0) ? null : params,
-                    // debug: true,
-                    callback: function () {
-                        let url    = $this.attr('href') + '/' + ids;
-                        let params = new URLSearchParams(url);
-                        $.request({
-                            url: url,
-                            type: 'post',
-                            data: (Object.keys(params).length === 0) ? null : params,
-                            // debug   : true,
-                            callback: function (res) {
-                                parent.$.reloadIFrame();
-                            }
-                        });
+                    // debug   : true,
+                    callback: function (res) {
+                        parent.$.reloadIFrame();
                     }
                 });
             }

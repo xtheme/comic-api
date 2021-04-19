@@ -227,7 +227,7 @@ $.extend({
 			icon     : '<i class="bx bx-loader icon-spin"></i>',
 			title    : '',
 			message  : '数据加载中...',
-			timeout  : 2000,
+			timeout  : 3000,
 			reloadUrl: null,
 			callback : null
 		}, options);
@@ -263,7 +263,7 @@ $.extend({
 				setTimeout(function () {
 					$.toast({
 						title: settings.title,
-						message: '数据已刷新'
+						message: '请稍后数据刷新'
 					});
 				}, settings.timeout);
 			}
@@ -305,7 +305,28 @@ $.extend({
 				}
 			}
 		});
-	}
+	},
+    checkedIds: function () {
+        let $checked = $('input.check-opt:checked');
+        let ids      = '';
+
+        // if ($checked.length == 0) {
+        //     parent.$.toast({
+        //         message: '请先选择要操作的数据'
+        //     });
+        //     return false;
+        // }
+
+        $checked.each(function (index) {
+            if (index == 0) {
+                ids += $(this).val();
+            } else {
+                ids += ',' + $(this).val();
+            }
+        });
+
+        return ids;
+    }
 });
 
 $.fn.serializeObject = function () {
@@ -317,4 +338,3 @@ $.fn.serializeObject = function () {
     });
     return obj;
 };
-
