@@ -11,6 +11,7 @@ use App\Http\Controllers\Backend\NoticeController;
 use App\Http\Controllers\Backend\PricingpackageController;
 use App\Http\Controllers\Backend\OrderController;
 use App\Http\Controllers\Backend\PricingController;
+use App\Http\Controllers\Backend\RecomClassController;
 use App\Http\Controllers\Backend\UserController;
 use App\Http\Controllers\Frontend\HomeController;
 use App\Http\Controllers\LanguageController;
@@ -137,5 +138,17 @@ Route::middleware(['auth'])->prefix('backend')->as('backend.')->group(function (
         Route::get('edit/{id}', [NoticeController::class , 'edit'])->name('edit');
         Route::put('update/{id}', [NoticeController::class , 'update'])->name('update');
         Route::delete('destroy/{id}', [NoticeController::class , 'destroy'])->name('destroy');
+    });
+
+    //推荐分类
+    Route::prefix('recomclass')->as('recomclass.')->group(function () {
+        Route::get('/', [RecomClassController::class , 'index'])->name('index');
+        Route::get('create', [RecomClassController::class , 'create'])->name('create');
+        Route::post('store', [RecomClassController::class , 'store'])->name('store');
+        Route::get('edit/{id}', [RecomClassController::class , 'edit'])->name('edit');
+        Route::put('update/{id}', [RecomClassController::class , 'update'])->name('update');
+        Route::delete('destroy/{id}', [RecomClassController::class , 'destroy'])->name('destroy');
+        Route::put('sort', [RecomClassController::class , 'sort'])->name('sort');
+        Route::post('batch/destroy/{ids?}', [RecomClassController::class, 'batchDestroy'])->name('batch.destroy');
     });
 });
