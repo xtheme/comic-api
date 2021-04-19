@@ -4,6 +4,8 @@ use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Backend\BookCategoryController;
 use App\Http\Controllers\Backend\BookChapterController;
 use App\Http\Controllers\Backend\BookController;
+use App\Http\Controllers\Backend\ComicReportController;
+use App\Http\Controllers\Backend\ComicReportTypeController;
 use App\Http\Controllers\Backend\CommentController;
 use App\Http\Controllers\Backend\ConfigController;
 use App\Http\Controllers\Backend\FeedbackController;
@@ -151,4 +153,21 @@ Route::middleware(['auth'])->prefix('backend')->as('backend.')->group(function (
         Route::put('sort', [RecomClassController::class , 'sort'])->name('sort');
         Route::post('batch/destroy/{ids?}', [RecomClassController::class, 'batchDestroy'])->name('batch.destroy');
     });
+
+    //举报类型
+    Route::prefix('bookreporttype')->as('bookreporttype.')->group(function () {
+        Route::get('/', [ComicReportTypeController::class , 'index'])->name('index');
+        Route::get('create', [ComicReportTypeController::class , 'create'])->name('create');
+        Route::post('store', [ComicReportTypeController::class , 'store'])->name('store');
+        Route::get('edit/{id}', [ComicReportTypeController::class , 'edit'])->name('edit');
+        Route::put('update/{id}', [ComicReportTypeController::class , 'update'])->name('update');
+        Route::delete('destroy/{id}', [ComicReportTypeController::class , 'destroy'])->name('destroy');
+        Route::put('sort', [ComicReportTypeController::class , 'sort'])->name('sort');
+    });
+
+    //用户举报
+    Route::prefix('bookreport')->as('bookreport.')->group(function () {
+        Route::get('/', [ComicReportController::class , 'index'])->name('index');
+    });
+
 });
