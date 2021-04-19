@@ -12,9 +12,9 @@ class ImageService
 {
 
     /**
-     * 构造函数
+     * 圖片上傳url
      */
-    private $url;
+    private $img_upload_url;
 
 
     /**
@@ -27,7 +27,7 @@ class ImageService
      */
     public function __construct()
     {
-        $this->url = env('URL_IMG_UPLOAD');
+        $this->img_upload_url = env('URL_IMG_UPLOAD');
         $this->storage = base_path('storage/app/public') ;
     }
 
@@ -156,7 +156,7 @@ class ImageService
 
     function curlImageUpload($file)
     {
-        $url = $this->url . "/upload";
+        $url = $this->img_upload_url . "/upload";
 
         $post_data = [
             "image" => new CURLFile($file),
