@@ -31,8 +31,8 @@
                                     </div>
                                 </th>
                                 <th>编号</th>
+                                <th>用戶id</th>
                                 <th>昵称</th>
-                                <th class="text-center">头像</th>
                                 <th>漫画名字</th>
                                 <th>章节名</th>
                                 <th width="20%">评论内容</th>
@@ -51,14 +51,8 @@
                                         </div>
                                     </td>
                                     <td>{{ $item->id }}</td>
+                                    <td>{{$item->user->id}}</td>
                                     <td>{{ $item->user->username }}</td>
-                                    <td class="text-center">
-                                        @if($item->user->avatar)
-                                        <img src="{{$api_url . $item->user->avatar}}" alt="" width="50" height="50">
-                                        @else
-                                        <i class="bx bx-user-circle"></i>
-                                        @endif
-                                    </td>
                                     <td>{{ $item->bookchapter->book->book_name }}</td>
                                     <td>{{ $item->bookchapter->title }}</td>
                                     <td>{{ $item->content }}</td>
