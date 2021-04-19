@@ -33,12 +33,10 @@ class ImageService
 
     /**
      * @param UploadedFile $file
-     * @param string|null  $dir
-     * @param string|null  $id
      *
      * @return string
      */
-    public function uploadFile(UploadedFile $file, string $dir = null, string $id = null)
+    public function uploadFile(UploadedFile $file)
     {
         if ($file->isValid()) {
 
@@ -92,66 +90,6 @@ class ImageService
         }
 
         return 'error|' . $file->getErrorMessage();
-    }
-
-
-    /**
-     * @param string|null $dir
-     * @param string|null $id
-     * @return string
-     */
-    private function getFilePath(string $dir = null, string $id = null)
-    {
-        $path = !is_null($dir) ? trim($dir) : date('Ymd');
-
-        if (!$id) {
-            // 新增时尚无 id, 找出最后一笔 id +1
-            switch ($dir) {
-                case 'avatar':
-                    $id = User::latest()->first()->id + 1;
-                    break;
-            }
-        }
-
-        $path .= '/' . $id;
-
-        return $path;
-    }
-
-    /**
-     * 检查上传文件
-     *
-     * @param  UploadedFile  $file
-     *
-     * @return string
-     */
-    private function checkFile(UploadedFile $file)
-    {
-        if ($file->isValid()) {
-            // 检查文件大小
-            $size = $file->getSize();
-            if ($size > config('custom.upload.image.size')) {
-                $limit_size = ceil(config('custom.upload.image.size') / 1024);
-
-                return sprintf('文件不能大于 %s kb！', $limit_size);
-            }
-
-            // 检查 mime type
-            $mimeType = $file->getMimeType();
-            $allowMimeType = config('custom.upload.image.mime_type');
-            if (!in_array($mimeType, $allowMimeType)) {
-                return '文件类型不支持！';
-            }
-
-            // 16进制文件检查，防止图片恶意代码
-            if (!checkHex($file)) {
-                return '你所上传的图片可能藏有恶意代码，请通报资安人员处理！';
-            }
-
-            return '';
-        }
-
-        return $file->getErrorMessage();
     }
 
     function curlImageUpload($file)
