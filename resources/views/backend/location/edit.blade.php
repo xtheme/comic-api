@@ -105,7 +105,7 @@
                             // iframeLayoutMaster.blade.php
                             parent.parent.$.reloadIFrame({
                                 title: '提交成功',
-                                message: '数据已刷新'
+                                message: '请稍后数据刷新'
                             });
                         } else {
                             parent.$.toast({

@@ -21,22 +21,12 @@ class BookChapterRepository extends Repository implements BookChapterRepositoryI
     }
 
     /**
-     * @param  Request  $request
+     * @param $book_id
      *
      * @return Builder
      */
-    public function filter(Request $request): Builder
+    public function filter($book_id): Builder
     {
-        $title = $request->get('title') ?? '';
-        $model_id = $request->get('type') ?? '';
-        $nickname = $request->get('nickname') ?? '';
-        $status = $request->get('status') ?? '';
-        $audit_status = $request->get('audit_status') ?? '';
-        $created_at = $request->get('created_at') ?? '';
-
-        $order = $request->get('order') ?? 'created_at';
-        $sort = $request->get('sort') ?? 'DESC';
-
-        return $this->model::latest();
+        return $this->model::where('book_id', $book_id)->latest('id');
     }
 }

@@ -120,7 +120,6 @@
                     });
                 }
             });
-
         });
 
 	    $('#search-form').submit(function(e) {

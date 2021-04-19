@@ -564,7 +564,7 @@ select.form-control {
     background-image:
       url("../images/pages/arrow-down.png");
     background-position:
-      calc(100% - 12px) 13px,
+      calc(100% - 7px) 13px,
       calc(100% - 20px) 13px,
       100% 0;
     background-size:
@@ -575,10 +575,10 @@ select.form-control {
     -moz-appearance: none;
     padding-right: 1.5rem;
     &.form-control-lg {
-      background-position: calc(100% - 12px) 19px, calc(100% - 20px) 13px, 100% 0;
+      background-position: calc(100% - 7px) 19px, calc(100% - 20px) 13px, 100% 0;
     }
     &.form-control-sm {
-      background-position: calc(100% - 12px) 6px, calc(100% - 20px) 13px, 100% 0;
+      background-position: calc(100% - 7px) 6px, calc(100% - 20px) 13px, 100% 0;
     }
   }
 }

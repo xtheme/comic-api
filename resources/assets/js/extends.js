@@ -36,6 +36,9 @@ $.extend({
         if (settings.size != '') {
             $modal.find('.modal-dialog').addClass('modal-' + settings.size);
         }
+        if (settings.size == 'full') {
+            settings.height = '80vh';
+        }
         $modal.find('.modal-title').html(settings.title);
         $modal.on('show.bs.modal', function () {
             if (settings.image) {
@@ -81,6 +84,9 @@ $.extend({
 		if (settings.size != '') {
 			$modal.find('.modal-dialog').addClass('modal-' + settings.size);
 		}
+        if (settings.size == 'full') {
+            settings.height = '80vh';
+        }
 		$modal.find('.modal-title').html(settings.title);
 		$modal.on('show.bs.modal', function () {
 			if (settings.url) {
@@ -99,7 +105,7 @@ $.extend({
 		$modal.on('shown.bs.modal', function () {
 			if (settings.url) {
 				setTimeout(function () {
-					$modal.find('.modal-body').html(`<iframe src="${settings.url}" name="modal-frame" frameborder="0" style="border: 0; width: 100%; height: ${settings.height};"></iframe>`);
+					$modal.find('.modal-body').html(`<iframe src="${settings.url}" name="modal-frame" style="border: 0; width: 100%; height: ${settings.height};"></iframe>`);
 				}, 500);
 			}
 		})
@@ -221,7 +227,7 @@ $.extend({
 			icon     : '<i class="bx bx-loader icon-spin"></i>',
 			title    : '',
 			message  : '数据加载中...',
-			timeout  : 2000,
+			timeout  : 3000,
 			reloadUrl: null,
 			callback : null
 		}, options);
@@ -257,7 +263,7 @@ $.extend({
 				setTimeout(function () {
 					$.toast({
 						title: settings.title,
-						message: '数据已刷新'
+						message: '请稍后数据刷新'
 					});
 				}, settings.timeout);
 			}
@@ -299,7 +305,28 @@ $.extend({
 				}
 			}
 		});
-	}
+	},
+    checkedIds: function () {
+        let $checked = $('input.check-opt:checked');
+        let ids      = '';
+
+        // if ($checked.length == 0) {
+        //     parent.$.toast({
+        //         message: '请先选择要操作的数据'
+        //     });
+        //     return false;
+        // }
+
+        $checked.each(function (index) {
+            if (index == 0) {
+                ids += $(this).val();
+            } else {
+                ids += ',' + $(this).val();
+            }
+        });
+
+        return ids;
+    }
 });
 
 $.fn.serializeObject = function () {
@@ -311,4 +338,3 @@ $.fn.serializeObject = function () {
     });
     return obj;
 };
-

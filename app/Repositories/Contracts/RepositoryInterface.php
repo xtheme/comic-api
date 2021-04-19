@@ -9,4 +9,6 @@ use Illuminate\Http\Request;
 interface RepositoryInterface
 {
     public function find(int $id): ?Model;
+
+    public function editable($id, $field, $value);
 }

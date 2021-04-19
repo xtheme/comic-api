@@ -11,7 +11,7 @@
 @section('content')
     <!-- Dashboard Ecommerce Starts -->
     <section id="dashboard-ecommerce">
-123456
+    后台重构中
     </section>
     <!-- Dashboard Ecommerce ends -->
 @endsection
@@ -20,14 +20,5 @@
 @endsection
 
 @section('page-scripts')
-    <script>
-        $(document).ready(function () {
-            $.toast({
-                type  : 'success',
-                message: '请填写要添加的标签',
-                debug: true
-            });
-        });
-    </script>
 @endsection
 
