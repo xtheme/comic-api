@@ -71,22 +71,33 @@ Route::middleware(['auth'])->prefix('backend')->as('backend.')->group(function (
     // 漫画
     Route::prefix('book')->as('book.')->group(function () {
         Route::get('/', [BookController::class, 'index'])->name('index');
-        // Route::put('editable/{field}', [BookCategoryController::class, 'editable'])->name('editable');
+        Route::get('create', [BookController::class , 'create'])->name('create');
+        Route::post('store', [BookController::class , 'store'])->name('store');
+        Route::get('edit/{id}', [BookController::class , 'edit'])->name('edit');
+        Route::put('update/{id}', [BookController::class , 'update'])->name('update');
+        Route::put('batch/{action?}', [BookController::class, 'batch'])->name('batch');
+        Route::put('editable/{field}', [BookController::class, 'editable'])->name('editable');
     });
-    // Route::resource('book', BookController::class);
 
     // 漫画分类
     Route::prefix('book_category')->as('book_category.')->group(function () {
         Route::get('/', [BookCategoryController::class, 'index'])->name('index');
         Route::put('editable/{field}', [BookCategoryController::class, 'editable'])->name('editable');
     });
-    // Route::resource('book_category', BookCategoryController::class);
+
 
     // 漫画章节
     Route::prefix('book_chapter')->as('book_chapter.')->group(function () {
-        Route::get('/', [BookChapterController::class, 'index'])->name('index');
+        Route::get('/{book_id}', [BookChapterController::class, 'index'])->name('index'); // 章節列表
+        Route::get('preview/{id}', [BookChapterController::class, 'preview'])->name('preview'); // 章節預覽
+        Route::get('create/{book_id}', [BookChapterController::class , 'create'])->name('create'); // 添加章節
+        Route::post('store/{book_id}', [BookChapterController::class , 'store'])->name('store');
+        Route::get('edit/{chapter_id}', [BookChapterController::class , 'edit'])->name('edit');
+        Route::put('update/{chapter_id}', [BookChapterController::class , 'update'])->name('update');
+        Route::put('batch/{action?}', [BookChapterController::class, 'batch'])->name('batch'); // 批量操作
+        Route::put('editable/{field}', [BookCategoryController::class, 'editable'])->name('editable');
+
     });
-    // Route::resource('book_chapter', BookChapterController::class);
 
     Route::resource('pricing', PricingController::class);
 
