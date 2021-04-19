@@ -11,4 +11,6 @@ interface BookCategoryRepositoryInterface
     public function find(int $id): ?Model;
 
     public function filter(Request $request): Builder;
+
+    public function editable($id, $field, $value);
 }

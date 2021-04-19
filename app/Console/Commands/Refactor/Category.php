@@ -76,7 +76,8 @@ class Category extends Command
             //
             // $this->line('category 數據已轉移到 tagging_tags');
 
-            $books = Book::all();
+            // $books = Book::all();
+            $books = Book::where('id', '>', 17183)->get();
 
             $books->each(function ($book) {
                 $ids = explode(',', $book->cate_id);

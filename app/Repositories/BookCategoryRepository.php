@@ -34,9 +34,4 @@ class BookCategoryRepository extends Repository implements BookCategoryRepositor
             return $query->where('name', 'like', '%' . $keyword . '%')->orWhere('slug', 'like', '%' . $keyword . '%')->orWhere('description', 'like', '%' . $keyword . '%');
         })->orderByDesc('priority');
     }
-
-    public function editable($id, $field, $value)
-    {
-        $this->model::where('id', $id)->update([$field => $value]);
-    }
 }
