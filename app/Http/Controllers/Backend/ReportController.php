@@ -6,7 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\BookReport;
 use Illuminate\Http\Request;
 
-class ComicReportController extends Controller
+class ReportController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -15,9 +15,9 @@ class ComicReportController extends Controller
      */
     public function index()
     {
-        $list = BookReport::with('user' , 'book' , 'report_type')->orderByDesc('id')->paginate();
+        $list = BookReport::with('user', 'book', 'report_type')->orderByDesc('id')->paginate();
 
-        return view('backend.bookreport.index', [
+        return view('backend.report.index', [
             'list' => $list
         ]);
     }

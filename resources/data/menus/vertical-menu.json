@@ -23,7 +23,7 @@
                     "name": "Customer List"
                 },
                 {
-                    "url": "/backend/pricingpackage",
+                    "url": "/backend/pricing",
                     "name": "Pricing List"
                 },
                 {
@@ -55,24 +55,24 @@
                     "name": "Recommended Books"
                 },
                 {
-                    "url": "/backend/recomclass",
-                    "name": "Recomclass List"
+                    "url": "/backend/block",
+                    "name": "Block List"
                 }
             ]
         },
         {
             "url": "#",
-            "name": "Report List",
+            "name": "Book Report",
             "slug": "books",
             "icon": "question-alt",
             "submenu": [
                 {
-                    "url": "/backend/bookreporttype",
-                    "name": "BookReportType List"
+                    "url": "/backend/report_type",
+                    "name": "ReportType List"
                 },
                 {
-                    "url": "/backend/bookreport",
-                    "name": "BookRepor List"
+                    "url": "/backend/report",
+                    "name": "Report List"
                 }
             ]
         },

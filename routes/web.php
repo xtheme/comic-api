@@ -1,19 +1,18 @@
 <?php
 
 use App\Http\Controllers\Auth\LoginController;
+use App\Http\Controllers\Backend\BlockController;
 use App\Http\Controllers\Backend\BookCategoryController;
 use App\Http\Controllers\Backend\BookChapterController;
 use App\Http\Controllers\Backend\BookController;
-use App\Http\Controllers\Backend\ComicReportController;
-use App\Http\Controllers\Backend\ComicReportTypeController;
+use App\Http\Controllers\Backend\ReportController;
+use App\Http\Controllers\Backend\ReportTypeController;
 use App\Http\Controllers\Backend\CommentController;
 use App\Http\Controllers\Backend\ConfigController;
 use App\Http\Controllers\Backend\FeedbackController;
 use App\Http\Controllers\Backend\NoticeController;
-use App\Http\Controllers\Backend\PricingpackageController;
 use App\Http\Controllers\Backend\OrderController;
 use App\Http\Controllers\Backend\PricingController;
-use App\Http\Controllers\Backend\RecomClassController;
 use App\Http\Controllers\Backend\UserController;
 use App\Http\Controllers\Frontend\HomeController;
 use App\Http\Controllers\LanguageController;
@@ -102,8 +101,6 @@ Route::middleware(['auth'])->prefix('backend')->as('backend.')->group(function (
 
     });
 
-    Route::resource('pricing', PricingController::class);
-
     // 物流
     // Route::resource('location', LocationController::class);
     // Route::resource('shipment', ShipmentController::class);
@@ -117,13 +114,13 @@ Route::middleware(['auth'])->prefix('backend')->as('backend.')->group(function (
     });
 
     // 會員套餐
-    Route::prefix('pricingpackage')->as('pricingpackage.')->group(function () {
-        Route::get('/', [PricingpackageController::class , 'index'])->name('index');
-        Route::get('create', [PricingpackageController::class , 'create'])->name('create');
-        Route::post('store', [PricingpackageController::class , 'store'])->name('store');
-        Route::get('edit/{id}', [PricingpackageController::class , 'edit'])->name('edit');
-        Route::put('update/{id}', [PricingpackageController::class , 'update'])->name('update');
-        Route::delete('destroy/{id}', [PricingpackageController::class , 'destroy'])->name('destroy');
+    Route::prefix('pricing')->as('pricing.')->group(function () {
+        Route::get('/', [PricingController::class , 'index'])->name('index');
+        Route::get('create', [PricingController::class , 'create'])->name('create');
+        Route::post('store', [PricingController::class , 'store'])->name('store');
+        Route::get('edit/{id}', [PricingController::class , 'edit'])->name('edit');
+        Route::put('update/{id}', [PricingController::class , 'update'])->name('update');
+        Route::delete('destroy/{id}', [PricingController::class , 'destroy'])->name('destroy');
     });
 
     Route::prefix('comment')->as('comment.')->group(function () {
@@ -142,32 +139,32 @@ Route::middleware(['auth'])->prefix('backend')->as('backend.')->group(function (
         Route::delete('destroy/{id}', [NoticeController::class , 'destroy'])->name('destroy');
     });
 
-    //推荐分类
-    Route::prefix('recomclass')->as('recomclass.')->group(function () {
-        Route::get('/', [RecomClassController::class , 'index'])->name('index');
-        Route::get('create', [RecomClassController::class , 'create'])->name('create');
-        Route::post('store', [RecomClassController::class , 'store'])->name('store');
-        Route::get('edit/{id}', [RecomClassController::class , 'edit'])->name('edit');
-        Route::put('update/{id}', [RecomClassController::class , 'update'])->name('update');
-        Route::delete('destroy/{id}', [RecomClassController::class , 'destroy'])->name('destroy');
-        Route::put('sort', [RecomClassController::class , 'sort'])->name('sort');
-        Route::post('batch/destroy/{ids?}', [RecomClassController::class, 'batchDestroy'])->name('batch.destroy');
+    //首頁模塊
+    Route::prefix('block')->as('block.')->group(function () {
+        Route::get('/', [BlockController::class , 'index'])->name('index');
+        Route::get('create', [BlockController::class , 'create'])->name('create');
+        Route::post('store', [BlockController::class , 'store'])->name('store');
+        Route::get('edit/{id}', [BlockController::class , 'edit'])->name('edit');
+        Route::put('update/{id}', [BlockController::class , 'update'])->name('update');
+        Route::delete('destroy/{id}', [BlockController::class , 'destroy'])->name('destroy');
+        Route::put('sort', [BlockController::class , 'sort'])->name('sort');
+        Route::post('batch/destroy/{ids?}', [BlockController::class, 'batchDestroy'])->name('batch.destroy');
     });
 
     //举报类型
-    Route::prefix('bookreporttype')->as('bookreporttype.')->group(function () {
-        Route::get('/', [ComicReportTypeController::class , 'index'])->name('index');
-        Route::get('create', [ComicReportTypeController::class , 'create'])->name('create');
-        Route::post('store', [ComicReportTypeController::class , 'store'])->name('store');
-        Route::get('edit/{id}', [ComicReportTypeController::class , 'edit'])->name('edit');
-        Route::put('update/{id}', [ComicReportTypeController::class , 'update'])->name('update');
-        Route::delete('destroy/{id}', [ComicReportTypeController::class , 'destroy'])->name('destroy');
-        Route::put('sort', [ComicReportTypeController::class , 'sort'])->name('sort');
+    Route::prefix('report_type')->as('report_type.')->group(function () {
+        Route::get('/', [ReportTypeController::class , 'index'])->name('index');
+        Route::get('create', [ReportTypeController::class , 'create'])->name('create');
+        Route::post('store', [ReportTypeController::class , 'store'])->name('store');
+        Route::get('edit/{id}', [ReportTypeController::class , 'edit'])->name('edit');
+        Route::put('update/{id}', [ReportTypeController::class , 'update'])->name('update');
+        Route::delete('destroy/{id}', [ReportTypeController::class , 'destroy'])->name('destroy');
+        Route::put('sort', [ReportTypeController::class , 'sort'])->name('sort');
     });
 
     //用户举报
-    Route::prefix('bookreport')->as('bookreport.')->group(function () {
-        Route::get('/', [ComicReportController::class , 'index'])->name('index');
+    Route::prefix('report')->as('report.')->group(function () {
+        Route::get('/', [ReportController::class , 'index'])->name('index');
     });
 
 });

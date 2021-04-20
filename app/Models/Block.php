@@ -5,7 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class RecomClass extends Model
+class Block extends Model
 {
     use HasFactory;
 
@@ -44,16 +44,20 @@ class RecomClass extends Model
         'display_style',
     ];
 
-
+    /**
+     * style_status
+     *
+     * @return string
+     */
     public function getStyleStatusAttribute ()
     {
-        $styleArray = [1 => '一排显示1个', 2 => '一排显示2个' , 3 => '一排显示3个', 4 => '广告图', 5 => '动漫一大二小'];
+        $styleArray = [1 => '一排显示1个', 2 => '一排显示2个' , 3 => '一排显示3个', 4 => '广告图'];
 
         return $styleArray[$this->style];
     }
 
     /**
-     * icon
+     * icon_thumb
      *
      * @return string
      */
@@ -64,7 +68,7 @@ class RecomClass extends Model
 
 
     /**
-     * display_style
+     * display_status
      *
      * @return string
      */
@@ -72,7 +76,7 @@ class RecomClass extends Model
     {
         $displayArray = [0 => '<span class="text-danger">隐藏</span>', 1 => '<span class="text-success">显示</span>' ];
 
-        //特殊诡异判断
+        //特殊判断
         if ($this->id == 33 || $this->title == '兴趣推荐'){
             return '<span class="text-danger">（特殊类型）启动页使用</span>';
         }

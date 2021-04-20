@@ -9,7 +9,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Response;
 
-class ComicReportTypeController extends Controller
+class ReportTypeController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -20,7 +20,7 @@ class ComicReportTypeController extends Controller
     {
         $list = BookReportType::with('admin')->orderByDesc('id')->paginate();
 
-        return view('backend.bookreporttype.index', [
+        return view('backend.report_type.index', [
             'list' => $list
         ]);
     }
@@ -32,13 +32,13 @@ class ComicReportTypeController extends Controller
      */
     public function create()
     {
-        return view('backend.bookreporttype.create');
+        return view('backend.report_type.create');
     }
 
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
      */
     public function store(ComicreporttypeRequest $request)
@@ -46,11 +46,11 @@ class ComicReportTypeController extends Controller
 
         $post = $request->post();
 
-        $bookreporttype = new BookReportType;
+        $bookReportType = new BookReportType;
 
         $post['operator_id'] = Auth::user()->id;
 
-        $bookreporttype->fill($post)->save();
+        $bookReportType->fill($post)->save();
 
         return Response::jsonSuccess('新增资料成功！');
     }
@@ -58,14 +58,14 @@ class ComicReportTypeController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  int  $id
+     * @param int $id
      * @return \Illuminate\Http\Response
      */
     public function edit($id)
     {
         $data = BookReportType::findOrFail($id);
 
-        return view('backend.bookreporttype.edit', [
+        return view('backend.report_type.edit', [
             'data' => $data
         ]);
 
@@ -74,8 +74,8 @@ class ComicReportTypeController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
+     * @param \Illuminate\Http\Request $request
+     * @param int $id
      * @return \Illuminate\Http\Response
      */
     public function update(ComicreporttypeRequest $request, $id)
@@ -83,11 +83,11 @@ class ComicReportTypeController extends Controller
 
         $post = $request->post();
 
-        $bookreportType = BookReportType::findOrFail($id);
+        $bookReportType = BookReportType::findOrFail($id);
 
         $post['operator_id'] = Auth::user()->id;
 
-        $bookreportType->fill($post)->save();
+        $bookReportType->fill($post)->save();
 
         return Response::jsonSuccess('更新资料成功！');
     }
@@ -95,14 +95,14 @@ class ComicReportTypeController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
+     * @param int $id
      * @return \Illuminate\Http\Response
      */
     public function destroy($id)
     {
-        $bookreportType = BookReportType::findOrFail($id);
+        $bookReportType = BookReportType::findOrFail($id);
 
-        $bookreportType->delete();
+        $bookReportType->delete();
 
         return Response::jsonSuccess('删除资料成功！');
     }
@@ -110,14 +110,14 @@ class ComicReportTypeController extends Controller
     /**
      * 修改順序
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
      */
     public function sort(Request $request)
     {
         $post = $request->post();
 
-        BookReportType::where('id' , $post['pk'])->update(['sort' => $post['value']]);
+        BookReportType::where('id', $post['pk'])->update(['sort' => $post['value']]);
 
         return Response::jsonSuccess('更新资料成功！');
     }

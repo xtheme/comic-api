@@ -1,7 +1,7 @@
 @extends('layouts.iframePage')
 
 {{-- page Title --}}
-@section('title','漫画推荐分类列表')
+@section('title','首页模块')
 
 {{-- vendor style --}}
 @section('vendor-styles')
@@ -11,8 +11,8 @@
 @section('content')
     <section id="config-list">
         <div class="mb-1">
-            <a href="{{ route('backend.recomclass.batch.destroy') }}" data-batch data-type="post"  title="刪除推荐分类" class="btn btn-danger glow" role="button" aria-pressed="true">批量刪除</a>
-            <a href="{{ route('backend.recomclass.create') }}" class="btn btn-primary glow" data-modal title="添加推荐分类" role="button" aria-pressed="true">添加推荐分类</a>
+            <a href="{{ route('backend.block.batch.destroy') }}" data-batch data-type="post"  title="刪除首页模块" class="btn btn-danger glow" role="button" aria-pressed="true">批量刪除</a>
+            <a href="{{ route('backend.block.create') }}" class="btn btn-primary glow" data-modal title="添加首页模块" role="button" aria-pressed="true">添加首页模块</a>
         </div>
         <div class="card">
             <div class="card-header">
@@ -64,8 +64,8 @@
                                             <span class="bx bx-dots-vertical-rounded font-medium-3 dropdown-toggle nav-hide-arrow cursor-pointer"
                                                   id="dropdownMenuButton{{ $item->id }}" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></span>
                                             <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuButton{{ $item->id }}">
-                                                <a class="dropdown-item" data-modal href="{{ route('backend.recomclass.edit', $item->id) }}" title="修改推荐分类"><i class="bx bx-edit-alt mr-1"></i> 修改</a>
-                                                <a class="dropdown-item" data-destroy href="{{ route('backend.recomclass.destroy', $item->id) }}" title="刪除推荐分类"><i class="bx bx-trash mr-1"></i>刪除</a>
+                                                <a class="dropdown-item" data-modal href="{{ route('backend.block.edit', $item->id) }}" title="修改首页模块"><i class="bx bx-edit-alt mr-1"></i> 修改</a>
+                                                <a class="dropdown-item" data-destroy href="{{ route('backend.block.destroy', $item->id) }}" title="刪除首页模块"><i class="bx bx-trash mr-1"></i>刪除</a>
                                             </div>
                                         </div>
                                     </td>
@@ -107,7 +107,7 @@
                 emptyclass: 'text-light',
                 emptytext: 'N/A',
                 placeholder: '数字需大于0',
-                url: '{{ route('backend.recomclass.sort') }}',
+                url: '{{ route('backend.block.sort') }}',
                 success: function (res, newValue) {
                     console.log(res);
                     parent.$.toast({

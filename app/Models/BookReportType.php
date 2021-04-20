@@ -29,8 +29,12 @@ class BookReportType extends Model
         return $this->hasOne('App\Models\Admin', 'id', 'operator_id');
     }
 
-
-    public function getstatusTypeAttribute ()
+    /**
+     * status_type
+     *
+     * @return string
+     */
+    public function getStatusTypeAttribute ()
     {
         switch ($this->status) {
             case 0:
