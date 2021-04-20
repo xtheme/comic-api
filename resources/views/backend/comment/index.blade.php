@@ -53,8 +53,8 @@
                                     <td>{{ $item->id }}</td>
                                     <td>{{$item->user->id}}</td>
                                     <td>{{ $item->user->username }}</td>
-                                    <td>{{ $item->bookchapter->book->book_name }}</td>
-                                    <td>{{ $item->bookchapter->title }}</td>
+                                    <td>{{ $item->book_chapter->book->book_name }}</td>
+                                    <td>{{ $item->book_chapter->title }}</td>
                                     <td>{{ $item->content }}</td>
                                     <td>{{ date('Y-m-d H:i:s',$item->createtime) }}</td>
                                     <td>{!! $item->status_text !!}</td>

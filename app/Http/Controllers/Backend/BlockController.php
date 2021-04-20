@@ -4,7 +4,6 @@ namespace App\Http\Controllers\Backend;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Backend\RecomclassRequest;
-use App\Models\Config;
 use App\Models\Block;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Response;

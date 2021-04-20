@@ -49,7 +49,7 @@ class Comment extends Model
         return $this->hasOne('App\Models\User', 'id', 'uid');
     }
 
-    public function bookchapter()
+    public function book_chapter()
     {
         return $this->hasOne('App\Models\BookChapter', 'id', 'post_id');
     }
