@@ -151,7 +151,7 @@
 				$.request({
 					url     : $(this).attr('action'),
 					type    : $(this).attr('method'),
-					params    : $('#form').serialize(),
+					data    : $('#form').serialize(),
 					// debug: true,
 					callback: function (res) {
                         if (res.code == 200) {

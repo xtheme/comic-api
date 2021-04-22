@@ -5,16 +5,16 @@
 @endsection
 
 @section('content')
-    <form id="form" class="form" method="post" action="{{ route('backend.book.store') }}" novalidate>
+    <form id="form" class="form" method="post" enctype="multipart/form-data" action="{{ route('backend.book.store') }}">
         <div class="form-body">
             <div class="row">
                 <div class="col-12">
                     <div class="form-group">
-                        <label for="input-username">分类</label>
+                        <label><span class="danger">*</span> 漫画分类</label>
                         <ul class="list-unstyled mb-0">
                             @foreach($tags as $tag)
                                 <li class="d-inline-block mr-2 mb-1 checkbox">
-                                    <input type="checkbox" class="checkbox-input" id="tag-{{ $tag->id }}" name="tag[]">
+                                    <input type="checkbox" class="checkbox-input" id="tag-{{ $tag->id }}" name="tag[]" value="{{ $tag->name }}">
                                     <label for="tag-{{ $tag->id }}">{{ $tag->name }}</label>
                                 </li>
                             @endforeach
@@ -25,7 +25,7 @@
                     <div class="form-group">
                         <label><span class="danger">*</span> 漫画名称</label>
                         <div class="controls">
-                            <input type="text" class="form-control" name="book_name" value="">
+                            <input type="text" class="form-control" name="book_name">
                         </div>
                     </div>
                 </div>
@@ -93,7 +93,6 @@
                                 <label class="custom-file-label" for="vertical-thumb">请选择文件</label>
                             </div>
                         </div>
-                        <div class="upload-image-callback"></div>
                     </div>
                 </div>
                 <div class="col-12">
@@ -124,20 +123,26 @@
 		$(document).ready(function () {
 			$('#form').submit(function (e) {
 				e.preventDefault();
+                $.ajax({
+                    url: $(this).attr('action'),
+                    type: $(this).attr('method'),
+                    data: new FormData(this),
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    },
+                    contentType: false,
+                    processData: false,
+                    dataType: 'json',
+                    success: function (res) {
+                        console.log(res);
 
-				$.request({
-					url     : $(this).attr('action'),
-					type    : $(this).attr('method'),
-					params    : $('#form').serialize(),
-					// debug: true,
-					callback: function (res) {
                         if (res.code == 200) {
                             // iframe.blade.php
                             parent.$.hideModal();
 
                             // iframeLayoutMaster.blade.php
                             parent.parent.$.reloadIFrame({
-                                title  : '提交成功',
+                                title: '提交成功',
                                 message: '请稍后数据刷新'
                             });
                         } else {
@@ -147,8 +152,15 @@
                                 message: res.msg
                             });
                         }
-					}
-				});
+                    },
+                    error: function (xhr, textStatus, errorThrown) {
+                        if (settings.debug == true) {
+                            console.log(xhr);
+                            console.log(textStatus);
+                            console.log(errorThrown)
+                        }
+                    }
+                });
 			});
 		});
     </script>

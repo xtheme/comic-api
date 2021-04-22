@@ -10,6 +10,7 @@ use Conner\Tagging\Model\Tag;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\Validator;
+use Upload;
 
 class BookController extends Controller
 {
@@ -33,6 +34,7 @@ class BookController extends Controller
 
     public function create()
     {
+
         $data = [
             'tags' => Tag::inGroup('category')->where('suggest', 1)->orderByDesc('priority')->get(),
         ];
@@ -42,17 +44,29 @@ class BookController extends Controller
 
     public function store(BookRequest $request)
     {
-        $validated = $request->validated();
+        // $validated = $request->validated();
 
-        Book::create($validated);
+        // Book::create($validated);
 
-        return Response::jsonSuccess('新增用户成功！');
+        // dd($validated);
+        // return Response::jsonSuccess('OK', Upload::Ok());
+
+        // Book::create($validated);
+
+        $response = Upload::unsync()->to('book', 12345)->store($request->file('book_thumb'));
+
+        if (!$response['success']) {
+            return Response::jsonError($response['message']);
+        }
+
+        return Response::jsonSuccess($response['message'], $response['path']);
     }
 
 
-    public function edit(Book $book)
+    public function edit($id)
     {
         $data = [
+            'book' => Book::findOrFail($id),
             'tags' => Tag::inGroup('category')->where('suggest', 1)->orderByDesc('priority')->get(),
         ];
 
