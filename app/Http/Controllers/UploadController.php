@@ -2,12 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\User;
 use App\Services\ImageService;
-use CURLFile;
 use Illuminate\Http\Request;
-use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Response;
+use Upload;
 
 /**
  * Class UploadController
@@ -16,6 +14,7 @@ use Illuminate\Support\Facades\Response;
  */
 class UploadController extends Controller
 {
+
     private $imageService;
 
     /**
@@ -39,22 +38,49 @@ class UploadController extends Controller
     {
         $file = $request->file('image');
 
-        $result = $this->imageService->uploadFile($file);
+        $response = Upload::to($dir, $id)->store($file);
 
-        $result = explode('|', $result);
-
-        $status = ($result[0] == 'error') ? 500 : 200;
-
-        $message = $result[1];
-
-        if ($status === 200) {
-            return Response::jsonSuccess('上传成功', [
-                'filename' => $message ,
-                'filename_thumb' => getConfig('api_url') . $message
-            ]);
+        if (!$response['success']) {
+            return Response::jsonError($response['message'], 500);
         }
 
-        return Response::jsonError($message, $status);
+        return Response::jsonSuccess('上传成功', [
+            'filename' => $response['path']
+        ]);
     }
 
+    /**
+     * 富文本上传图片
+     *
+     * @param Request $request
+     * @param string|null $dir
+     * @param string|null $id
+     *
+     * @return string
+     */
+    /*public function editorUpload(Request $request, string $dir = null, string $id = null)
+    {
+        $file = $request->file('upload');
+
+        $message = $this->imageService->checkFile($file);
+
+        if ($message) {
+            $result = [
+                'error' => [
+                    'message' => $message
+                ]
+            ];
+            return json_encode($result);
+        }
+
+        $path = $this->imageService->buildPath($dir, $id);
+
+        $absolute_path = $this->imageService->storeFile($file, $path);
+
+        $result = [
+            'url' => '/storage/' . $absolute_path
+        ];
+
+        return json_encode($result);
+    }*/
 }

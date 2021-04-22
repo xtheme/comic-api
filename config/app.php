@@ -174,8 +174,12 @@ return [
         // App\Providers\BroadcastServiceProvider::class,
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
-        App\Providers\MenuServiceProvider::class,
+
+        /*
+         * Custom Provider...
+         */
         App\Providers\ResponseMacroServiceProvider::class,
+        App\Providers\MenuServiceProvider::class,
         App\Providers\RepositoryServiceProvider::class,
     ],
 
@@ -229,6 +233,11 @@ return [
         'Validator' => Illuminate\Support\Facades\Validator::class,
         'View' => Illuminate\Support\Facades\View::class,
         'Helper' => App\Helpers\Helper::class,
+
+        /*
+         * Custom Facades...
+         */
+        'Upload' => App\Facades\UploadFacade::class,
     ],
 
 ];

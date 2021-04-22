@@ -6,7 +6,7 @@ return [
     /**
      * 第三方接口
      */
-    'api' => [
+    'third' => [
         'upload_url' => env('API_UPLOAD_URL', true),
     ],
 

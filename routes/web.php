@@ -49,7 +49,7 @@ Route::get('/', [HomeController::class, 'index']);
 Route::middleware(['auth'])->group(function () {
     Route::get('backend', [DashboardController::class, 'index']);
     Route::post('upload/{dir?}/{id?}', [UploadController::class, 'upload'])->name('upload'); // 單檔案上傳
-    Route::post('editor/upload/{dir?}/{id?}', [UploadController::class, 'editorUpload'])->name('editor.upload'); // CKEditor
+    // Route::post('editor/upload/{dir?}/{id?}', [UploadController::class, 'editorUpload'])->name('editor.upload'); // CKEditor
 });
 
 // Backend iframe pages
@@ -73,7 +73,7 @@ Route::middleware(['auth'])->prefix('backend')->as('backend.')->group(function (
     Route::prefix('book')->as('book.')->group(function () {
         Route::get('/', [BookController::class, 'index'])->name('index');
         Route::get('create', [BookController::class , 'create'])->name('create');
-        Route::post('store', [BookController::class , 'store'])->name('store');
+        Route::any('store', [BookController::class , 'store'])->name('store');
         Route::get('edit/{id}', [BookController::class , 'edit'])->name('edit');
         Route::put('update/{id}', [BookController::class , 'update'])->name('update');
         Route::put('batch/{action?}', [BookController::class, 'batch'])->name('batch');

@@ -11,12 +11,13 @@ class HomeController extends Controller
     // index
     public function index()
     {
-        $data = [
-            'locations' => Location::all(),
-            'shipments' => Shipment::all(),
-        ];
-
-        return view('frontend.home')->with($data);
+        return redirect('login');
+        // $data = [
+        //     'locations' => Location::all(),
+        //     'shipments' => Shipment::all(),
+        // ];
+        //
+        // return view('frontend.home')->with($data);
     }
 
     // 試算運費

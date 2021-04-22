@@ -15,7 +15,9 @@ class AppServiceProvider extends ServiceProvider
      *
      * @var array
      */
-    public $singletons = [];
+    public $singletons = [
+        'UploadService' => \App\Services\UploadService::class
+    ];
 
     /**
      * Register any application services.
