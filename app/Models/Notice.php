@@ -61,7 +61,11 @@ class Notice extends Model
     ];
 
 
-
+    /**
+     * type
+     *
+     * @return string
+     */
     public function getTypeAttribute ()
     {
 

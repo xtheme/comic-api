@@ -6,7 +6,7 @@
 @endsection
 
 @section('content')
-    <form id="form" class="form" method="post" action="{{ route('backend.recomclass.store') }}" novalidate>
+    <form id="form" class="form" method="post" action="{{ route('backend.block.store') }}" novalidate>
         <div class="form-body">
             <div class="row">
                 <div class="col-6">

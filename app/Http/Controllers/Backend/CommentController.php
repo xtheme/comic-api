@@ -26,12 +26,10 @@ class CommentController extends Controller
      */
     public function index(Request $request)
     {
-        $api_url = Config::where('code', 'api_url')->first();
         $list = $this->repository->filter($request)->paginate();
 
         return view('backend.comment.index', [
             'list' => $list,
-            'api_url' => $api_url->content,
             'pageConfigs' => ['hasSearchForm' => true],
         ]);
 

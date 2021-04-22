@@ -10,8 +10,6 @@ use Illuminate\Support\Carbon;
 
 class CommentRepository extends Repository implements CommentRepositoryInterface
 {
-    protected $cache_ttl = 60; // 缓存秒数
-
     /**
      * @return string
      */
@@ -27,23 +25,19 @@ class CommentRepository extends Repository implements CommentRepositoryInterface
      */
     public function filter(Request $request): Builder
     {
-        // 预设查询30天内的数据, 减少查询时间
-        $few_days_ago = Carbon::parse('-30 days')->setTimeFromTimeString('00:00:00')->toDateTimeString();
-        $today = Carbon::now()->toDateTimeString();
-        $time_period = sprintf('%s - %s', $few_days_ago, $today);
 
         $username = $request->get('username') ?? '';
         $id = $request->get('id') ?? '';
         $status = $request->get('status') ?? '';
         $date_register = $request->get('date_register') ?? '';
 
-        return $this->model::with(['user' , 'bookchapter' , 'bookchapter.book'])
+        return $this->model::with(['user' , 'book_chapter' , 'book_chapter.book'])
             ->when($username, function (Builder $query, $username) {
                 $query->whereHas('user', function (Builder $query) use ($username) {
                     return $query->where('username', 'like', '%' . $username . '%');
                 });
             })->when($id, function (Builder $query, $id) {
-                $query->whereHas('bookchapter.book', function (Builder $query) use ($id) {
+                $query->whereHas('book_chapter.book', function (Builder $query) use ($id) {
                     return $query->where('id', '=', $id)->orWhere('book_name' , 'like' , '%' . $id . '%');
                 });
             })->when($status, function (Builder $query, $status) {
