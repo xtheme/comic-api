@@ -188,6 +188,7 @@ $.extend({
 		let settings = $.extend({
 			type  : 'post',
 			data  : '',
+            multipart  : false,
 			debug  : false,
 			callback  : null
 		}, options);
@@ -199,6 +200,8 @@ $.extend({
 			headers: {
 				'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
 			},
+            contentType: settings.multipart ? 'multipart/form-data' : 'application/x-www-form-urlencoded',
+            processData: !settings.multipart,
 			dataType: 'json',
 			success: function (res) {
 				if (settings.debug == true) {
