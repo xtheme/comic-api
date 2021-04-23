@@ -14,6 +14,9 @@ use App\Http\Controllers\Backend\NoticeController;
 use App\Http\Controllers\Backend\OrderController;
 use App\Http\Controllers\Backend\PricingController;
 use App\Http\Controllers\Backend\UserController;
+use App\Http\Controllers\Backend\VideoController;
+use App\Http\Controllers\Backend\VideoDomainController;
+use App\Http\Controllers\Backend\VideoSeriesController;
 use App\Http\Controllers\Frontend\HomeController;
 use App\Http\Controllers\LanguageController;
 use App\Http\Controllers\Backend\DashboardController;
@@ -98,7 +101,6 @@ Route::middleware(['auth'])->prefix('backend')->as('backend.')->group(function (
         Route::put('update/{chapter_id}', [BookChapterController::class , 'update'])->name('update');
         Route::put('batch/{action?}', [BookChapterController::class, 'batch'])->name('batch'); // 批量操作
         Route::put('editable/{field}', [BookCategoryController::class, 'editable'])->name('editable');
-
     });
 
     // 物流
@@ -129,7 +131,7 @@ Route::middleware(['auth'])->prefix('backend')->as('backend.')->group(function (
         Route::post('batch/destroy', [CommentController::class, 'batchDestroy'])->name('batch.destroy');
     });
 
-    //公告
+    // 公告
     Route::prefix('notice')->as('notice.')->group(function () {
         Route::get('/', [NoticeController::class , 'index'])->name('index');
         Route::get('create', [NoticeController::class , 'create'])->name('create');
@@ -139,7 +141,7 @@ Route::middleware(['auth'])->prefix('backend')->as('backend.')->group(function (
         Route::delete('destroy/{id}', [NoticeController::class , 'destroy'])->name('destroy');
     });
 
-    //首頁模塊
+    // 首頁模塊
     Route::prefix('block')->as('block.')->group(function () {
         Route::get('/', [BlockController::class , 'index'])->name('index');
         Route::get('create', [BlockController::class , 'create'])->name('create');
@@ -151,7 +153,7 @@ Route::middleware(['auth'])->prefix('backend')->as('backend.')->group(function (
         Route::post('batch/destroy/{ids?}', [BlockController::class, 'batchDestroy'])->name('batch.destroy');
     });
 
-    //举报类型
+    // 举报类型
     Route::prefix('report_type')->as('report_type.')->group(function () {
         Route::get('/', [ReportTypeController::class , 'index'])->name('index');
         Route::get('create', [ReportTypeController::class , 'create'])->name('create');
@@ -162,9 +164,23 @@ Route::middleware(['auth'])->prefix('backend')->as('backend.')->group(function (
         Route::put('sort', [ReportTypeController::class , 'sort'])->name('sort');
     });
 
-    //用户举报
+    // 用户举报
     Route::prefix('report')->as('report.')->group(function () {
         Route::get('/', [ReportController::class , 'index'])->name('index');
     });
 
+    // 视频
+    Route::prefix('video')->as('video.')->group(function () {
+        Route::get('/', [VideoController::class , 'index'])->name('index');
+    });
+
+    Route::prefix('video_series')->as('video_series.')->group(function () {
+        Route::get('/', [VideoSeriesController::class , 'index'])->name('index');
+    });
+
+    Route::prefix('video_domain')->as('video_domain.')->group(function () {
+        Route::get('/', [VideoDomainController::class , 'index'])->name('index');
+        Route::put('batch/{action?}', [BookChapterController::class, 'batch'])->name('batch');
+        Route::put('editable/{field}', [BookCategoryController::class, 'editable'])->name('editable');
+    });
 });

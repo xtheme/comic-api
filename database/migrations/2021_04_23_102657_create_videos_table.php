@@ -1,0 +1,37 @@
+<?php
+
+use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
+
+class CreateVideosTable extends Migration
+{
+    /**
+     * Run the migrations.
+     *
+     * @return void
+     */
+    public function up()
+    {
+        Schema::create('videos', function (Blueprint $table) {
+            $table->id();
+            $table->string('title')->comment('名称');
+            $table->string('author')->nullable()->comment('作者');
+            $table->text('description')->nullable()->comment('简介');
+            $table->string('cover')->nullable()->comment('封面图');
+            $table->tinyInteger('icon')->unsigned()->default(0)->comment('角标: 0=N/A, 1=限时免费, 2=会员抢先');
+            $table->tinyInteger('status')->unsigned()->default(0)->comment('状态');
+            $table->timestamps();
+        });
+    }
+
+    /**
+     * Reverse the migrations.
+     *
+     * @return void
+     */
+    public function down()
+    {
+        Schema::dropIfExists('videos');
+    }
+}
