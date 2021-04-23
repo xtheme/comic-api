@@ -15,9 +15,12 @@ return [
     "Systems" => "系统设定",
     "Terminal" => "命令模式",
     "Log Viewer" => "系统日志",
-    // "Requisitions" => "託運單",
-    // "Locations" => "地點管理",
-    // "Shipments" => "運輸方式",
+
+    "Videos" => "视频管理",
+    "Video List" => "视频列表",
+    "Video Domain" => "视频域名配置",
+    "Play Statistics" => "播放统计",
+
     "Comments" => "評論管理",
     "Comment List" => "漫画评论",
     "Notice List" => "公告列表",
