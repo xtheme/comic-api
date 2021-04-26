@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Backend;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Backend\VideoDomainRequest;
 use App\Models\VideoDomain;
 use App\Repositories\Contracts\VideoDomainRepositoryInterface;
 use Illuminate\Http\Request;
@@ -13,6 +14,8 @@ class VideoDomainController extends Controller
 {
     private $repository;
 
+    const STATUS = [1 => '启用', -1 => '禁用'];
+
     public function __construct(VideoDomainRepositoryInterface $repository)
     {
         $this->repository = $repository;
@@ -21,11 +24,49 @@ class VideoDomainController extends Controller
     public function index(Request $request)
     {
         $data = [
+            'status_options' => self::STATUS,
             'domains' => $this->repository->filter($request)->paginate(),
             'pageConfigs' => ['hasSearchForm' => true],
         ];
 
         return view('backend.video_domain.index')->with($data);
+    }
+
+    public function create()
+    {
+        $data = [
+            'status_options' => self::STATUS,
+        ];
+
+        return view('backend.video_domain.create')->with($data);
+    }
+
+    public function store(VideoDomainRequest $request)
+    {
+        $validated = $request->post();
+
+        $this->repository->create($validated);
+
+        return Response::jsonSuccess('添加成功');
+    }
+
+    public function edit($id)
+    {
+        $data = [
+            'status_options' => self::STATUS,
+            'domain' => $this->repository->find($id),
+        ];
+
+        return view('backend.video_domain.edit')->with($data);
+    }
+
+    public function update(VideoDomainRequest $request, $id)
+    {
+        $validated = $request->post();
+
+        $this->repository->update($id, $validated);
+
+        return Response::jsonSuccess('修改成功');
     }
 
     /**

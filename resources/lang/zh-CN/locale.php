@@ -16,9 +16,9 @@ return [
     "Terminal" => "命令模式",
     "Log Viewer" => "系统日志",
 
-    "Videos" => "视频管理",
-    "Video List" => "视频列表",
-    "Video Domain" => "视频域名配置",
+    "Videos" => "动画管理",
+    "Video List" => "动画列表",
+    "Video Domain" => "动画域名配置",
     "Play Statistics" => "播放统计",
 
     "Comments" => "評論管理",

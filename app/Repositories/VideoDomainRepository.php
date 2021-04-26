@@ -29,8 +29,8 @@ class VideoDomainRepository extends Repository implements VideoDomainRepositoryI
         $domain = $request->get('domain') ?? '';
         $status = $request->get('status') ?? '';
 
-        $order = $request->get('order') ?? 'created_at';
-        $sort = $request->get('sort') ?? 'DESC';
+        $order = $request->get('order') ?? 'sort';
+        $sort = $request->get('sort') ?? 'desc';
 
         return $this->model::when($domain, function (Builder $query, $domain) {
             return $query->where('domain', 'like', '%'.$domain.'%')

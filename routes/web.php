@@ -172,15 +172,23 @@ Route::middleware(['auth'])->prefix('backend')->as('backend.')->group(function (
     // 视频
     Route::prefix('video')->as('video.')->group(function () {
         Route::get('/', [VideoController::class , 'index'])->name('index');
+        Route::put('batch/{action?}', [VideoController::class, 'batch'])->name('batch');
+        Route::put('editable/{field}', [VideoController::class, 'editable'])->name('editable');
     });
 
     Route::prefix('video_series')->as('video_series.')->group(function () {
         Route::get('/', [VideoSeriesController::class , 'index'])->name('index');
+        Route::put('batch/{action?}', [VideoController::class, 'batch'])->name('batch');
+        Route::put('editable/{field}', [VideoController::class, 'editable'])->name('editable');
     });
 
     Route::prefix('video_domain')->as('video_domain.')->group(function () {
         Route::get('/', [VideoDomainController::class , 'index'])->name('index');
-        Route::put('batch/{action?}', [BookChapterController::class, 'batch'])->name('batch');
-        Route::put('editable/{field}', [BookCategoryController::class, 'editable'])->name('editable');
+        Route::get('create', [VideoDomainController::class , 'create'])->name('create');
+        Route::post('store', [VideoDomainController::class , 'store'])->name('store');
+        Route::get('edit/{id}', [VideoDomainController::class , 'edit'])->name('edit');
+        Route::post('update/{id}', [VideoDomainController::class , 'update'])->name('update');
+        Route::put('batch/{action?}', [VideoDomainController::class, 'batch'])->name('batch');
+        Route::put('editable/{field}', [VideoDomainController::class, 'editable'])->name('editable');
     });
 });

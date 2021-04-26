@@ -17,10 +17,10 @@ class CreateVideoDomainsTable extends Migration
             $table->id();
             $table->string('title')->comment('CDN 名称');
             $table->string('domain')->comment('CDN 域名');
-            $table->string('encrypt_domain')->comment('加密 CDN 域名');
+            $table->string('encrypt_domain')->comment('CDN 加密域名');
             $table->text('remark')->nullable()->comment('备注');
             $table->tinyInteger('sort')->unsigned()->default(0)->comment('排序');
-            $table->boolean('status')->comment('状态');
+            $table->tinyInteger('status')->comment('状态');
             $table->timestamps();
         });
     }

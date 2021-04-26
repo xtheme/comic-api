@@ -11,6 +11,7 @@ use App\Repositories\Contracts\BookCategoryRepositoryInterface;
 use App\Repositories\Contracts\BookChapterRepositoryInterface;
 use App\Repositories\Contracts\BookRepositoryInterface;
 use App\Repositories\Contracts\OrderRepositoryInterface;
+use App\Repositories\Contracts\VideoDomainRepositoryInterface;
 use App\Repositories\Contracts\VideoRepositoryInterface;
 use App\Repositories\Contracts\VideoSeriesRepositoryInterface;
 use App\Repositories\OrderRepository;
@@ -18,6 +19,7 @@ use App\Repositories\UserRepository;
 use App\Repositories\Contracts\CommentRepositoryInterface;
 use App\Repositories\Contracts\ContentRepositoryInterface;
 use App\Repositories\Contracts\UserRepositoryInterface;
+use App\Repositories\VideoDomainRepository;
 use App\Repositories\VideoRepository;
 use App\Repositories\VideoSeriesRepository;
 use Illuminate\Support\ServiceProvider;
@@ -39,7 +41,7 @@ class RepositoryServiceProvider extends ServiceProvider
         $this->app->bind(BookChapterRepositoryInterface::class, BookChapterRepository::class);
         $this->app->bind(BookCategoryRepositoryInterface::class, BookCategoryRepository::class);
         $this->app->bind(VideoRepositoryInterface::class, VideoRepository::class);
-        $this->app->bind(VideoDomainRepositoryInterface::class, VideoDoaminRepository::class);
+        $this->app->bind(VideoDomainRepositoryInterface::class, VideoDomainRepository::class);
         $this->app->bind(VideoSeriesRepositoryInterface::class, VideoSeriesRepository::class);
     }
 
