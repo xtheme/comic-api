@@ -19,7 +19,7 @@ class CreateVideoSeriesTable extends Migration
             $table->integer('episode')->unsigned()->comment('第几集');
             $table->string('title')->comment('名称');
             $table->tinyInteger('free')->unsigned()->default(0)->comment('0=收费, 1=免费');
-            $table->tinyInteger('status')->unsigned()->default(0)->comment('状态');
+            $table->boolean('status')->default(0)->comment('状态');
             $table->string('video_domain_id')->comment('视频域名');
             $table->string('link')->comment('视频域名');
             $table->string('length')->comment('视频长度');

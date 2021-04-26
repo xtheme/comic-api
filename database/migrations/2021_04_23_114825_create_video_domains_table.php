@@ -20,7 +20,7 @@ class CreateVideoDomainsTable extends Migration
             $table->string('encrypt_domain')->comment('CDN 加密域名');
             $table->text('remark')->nullable()->comment('备注');
             $table->tinyInteger('sort')->unsigned()->default(0)->comment('排序');
-            $table->tinyInteger('status')->comment('状态');
+            $table->boolean('status')->default(0)->comment('状态');
             $table->timestamps();
         });
     }

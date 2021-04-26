@@ -19,8 +19,8 @@ class CreateVideosTable extends Migration
             $table->string('author')->nullable()->comment('作者');
             $table->text('description')->nullable()->comment('简介');
             $table->string('cover')->nullable()->comment('封面图');
-            $table->tinyInteger('icon')->unsigned()->default(0)->comment('角标: 0=N/A, 1=限时免费, 2=会员抢先');
-            $table->tinyInteger('status')->unsigned()->default(0)->comment('状态');
+            $table->tinyInteger('ribbon')->unsigned()->default(0)->comment('角标: 0=N/A, 1=限时免费, 2=会员抢先');
+            $table->boolean('status')->default(0)->comment('状态');
             $table->timestamps();
         });
     }
