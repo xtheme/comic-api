@@ -4,9 +4,6 @@ namespace App\Repositories;
 
 use App\Repositories\Contracts\RepositoryInterface;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Http\Request;
-use Illuminate\Pagination\LengthAwarePaginator;
-use Illuminate\Support\Facades\Cache;
 
 abstract class Repository implements RepositoryInterface
 {
@@ -31,13 +28,36 @@ abstract class Repository implements RepositoryInterface
     }
 
     /**
-     * @param  int  $id
+     * @param  $id
      *
      * @return Model
      */
-    public function find(int $id): ?Model
+    public function find($id): ?Model
     {
         return $this->model->findOrFail($id);
+    }
+
+    /**
+     * @param array $input
+     *
+     * @return Model
+     */
+    public function create(array $input = []): ?Model
+    {
+        return $this->model::create($input);
+    }
+
+    /**
+     * @param $id
+     * @param array $input
+     *
+     * @return bool
+     */
+    public function update($id, array $input = []): bool
+    {
+        $model = $this->find($id);
+        $model->fill($input);
+        return $model->save();
     }
 
     /**
