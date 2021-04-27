@@ -78,26 +78,6 @@
         },
         {
             "url": "#",
-            "name": "Videos",
-            "slug": "videos",
-            "icon": "question-alt",
-            "submenu": [
-                {
-                    "url": "/backend/video",
-                    "name": "Video List"
-                },
-                {
-                    "url": "/backend/video_domain",
-                    "name": "Video Domain"
-                },
-                {
-                    "url": "/backend/video_statistics",
-                    "name": "Play Statistics"
-                }
-            ]
-        },
-        {
-            "url": "#",
             "name": "Comments",
             "slug": "comments",
             "icon": "comment",
