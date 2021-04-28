@@ -178,6 +178,7 @@ return [
         /*
          * Custom Provider...
          */
+        App\Providers\BuilderMacroServiceProvider::class,
         App\Providers\ResponseMacroServiceProvider::class,
         App\Providers\MenuServiceProvider::class,
         App\Providers\RepositoryServiceProvider::class,
