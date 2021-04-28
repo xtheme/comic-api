@@ -19,6 +19,25 @@ if (!function_exists('getConfig')) {
     }
 }
 
+if (!function_exists('getOldConfig')) {
+    /**
+     * @param $type
+     * @param $key
+     *
+     * @return string|array
+     */
+    function getOldConfig($type, $key)
+    {
+        $cache_key = 'old_config:' . $type;
+
+        return Cache::remember($cache_key, 300, function () use ($type, $key) {
+            $config = DB::table('config')->where('config_type', $type)->first();
+            $configs = json_decode($config->config_content);
+            return $configs->$key;
+        });
+    }
+}
+
 if (!function_exists('webp')) {
     /**
      * webp 图片规格
