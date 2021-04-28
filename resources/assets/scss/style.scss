@@ -181,6 +181,14 @@ select.form-control {
     }
 }
 
+label.custom-file-label {
+    font-size: 1rem;
+
+    &:after {
+        line-height: 1;
+    }
+}
+
 .dropdown-menu a {
     cursor: pointer;
 }
@@ -208,10 +216,25 @@ table.table {
     background-color: #fcf8e3;
 }
 
-.swal2-content, .swal2-confirm , .swal2-cancel {
+.swal2-content, .swal2-confirm, .swal2-cancel {
     font-size: 1rem !important;
 }
 
 .editable-click, a.editable-click, a.editable-click:hover {
     border-bottom: dashed 1px #5A8DEE;
+}
+
+
+.dropdown-menu {
+    min-width: 800px;
+
+    .dropdown-item {
+        display: inline-block;
+        width: 150px;
+
+        label {
+            font-size: 1rem;
+            margin-left: .1rem;
+        }
+    }
 }

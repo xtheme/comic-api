@@ -921,19 +921,19 @@
 
         /**
          * Create a checkbox container with input and label based on given values
-         * @param {JQuery} $item 
-         * @param {String} label 
-         * @param {String} name 
-         * @param {String} value 
-         * @param {String} inputType 
+         * @param {JQuery} $item
+         * @param {String} label
+         * @param {String} name
+         * @param {String} value
+         * @param {String} inputType
          * @returns {JQuery}
          */
         createCheckbox: function ($item, label, name, value, title, inputType) {
             var $wrapper = $('<span />');
-            $wrapper.addClass("form-check");
+            $wrapper.addClass("form-check checkbox checkbox-sm");
 
             if (this.options.enableHTML && $(label).length > 0) {
-                var $checkboxLabel = $('<label class="form-check-label" />'); 
+                var $checkboxLabel = $('<label class="form-check-label" />');
                 $checkboxLabel.html(label);
                 $wrapper.append($checkboxLabel);
             }
@@ -1150,7 +1150,7 @@
                     this.$filter = $(this.options.templates.filter);
                     $('input', this.$filter).attr('placeholder', this.options.filterPlaceholder);
 
-                    // Handles optional filter clear button                        
+                    // Handles optional filter clear button
                     if (!this.options.includeFilterClearBtn) {
                         this.$filter.find(".multiselect-search").attr("type", "text");
 
