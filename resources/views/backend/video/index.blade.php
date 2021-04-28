@@ -16,7 +16,26 @@
         </div>
         <div class="card">
             <div class="card-header">
-                <h4 class="card-title">@yield('title')</h4>
+                <div class="float-left">
+                    <h4 class="card-title">@yield('title')</h4>
+                </div>
+                <div class="float-right">
+                    <form id="batch-action" class="form form-vertical" method="get" action="{{ route('backend.video.batch') }}" novalidate>
+                        <div class="form-body">
+                            <div class="d-flex align-items-center">
+                                <div class="form-group mr-1">
+                                    <select class="form-control" name="action">
+                                        <option value="enable">上架</option>
+                                        <option value="disable">下架</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <button type="submit" class="btn btn-primary">批量操作</button>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
             </div>
             <div class="card-content">
                 <div class="card-body">
@@ -62,7 +81,7 @@
                                                 @endforeach
                                             </div>
                                         @endif
-                                    </td>ㄊ
+                                    </td>
                                     <td>
                                         <img src="{{ $video->cover }}" alt="" class="cursor-pointer" width="50px" data-lightbox title="点击查看大图">
                                     </td>
