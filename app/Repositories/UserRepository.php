@@ -36,7 +36,7 @@ class UserRepository extends Repository implements UserRepositoryInterface
         $date_register = $request->get('date_register') ?? '';
         $date_login = $request->get('date_login') ?? '';
         $order = $request->get('order') ?? 'created_at';
-        $sort = $request->get('sort') ?? 'DESC';
+        $sort = $request->get('sort') ?? 'desc';
 
         return $this->model::with(['likes', 'visitor_likes', 'collects', 'active', 'comments'])->withCount([
             'likes',

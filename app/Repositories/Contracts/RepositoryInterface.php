@@ -8,9 +8,9 @@ use Illuminate\Http\Request;
 
 interface RepositoryInterface
 {
-    public function find($id): ?Model;
+    public function find($id);
 
-    public function create(array $input): ?Model;
+    public function create(array $input);
 
     public function update($id, array $input): bool;
 

@@ -3,9 +3,13 @@
 namespace App\Repositories;
 
 use App\Models\Video;
+use App\Models\VideoDomain;
 use App\Repositories\Contracts\VideoRepositoryInterface;
+use Conner\Tagging\Model\Tag;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
+use Illuminate\Support\Collection;
+use Illuminate\Database\Eloquent\Model;
 
 class VideoRepository extends Repository implements VideoRepositoryInterface
 {
@@ -28,48 +32,26 @@ class VideoRepository extends Repository implements VideoRepositoryInterface
      */
     public function filter(Request $request): Builder
     {
-        $id = $request->get('id') ?? '';
-        $username = $request->get('username') ?? '';
-        $nickname = $request->get('nickname') ?? '';
-        $mobile = $request->get('mobile') ?? '';
+        $title = $request->get('title') ?? '';
+        $author = $request->get('author') ?? '';
+        $ribbon = $request->get('ribbon') ?? '';
         $status = $request->get('status') ?? '';
-        $date_register = $request->get('date_register') ?? '';
-        $date_login = $request->get('date_login') ?? '';
+        $tag = $request->get('tag') ?? '';
+
         $order = $request->get('order') ?? 'created_at';
-        $sort = $request->get('sort') ?? 'DESC';
+        $sort = $request->get('sort') ?? 'desc';
 
-        return $this->model::with(['likes', 'visitor_likes', 'collects', 'active', 'comments'])->withCount([
-            'likes',
-            'visitor_likes',
-            'collects',
-            'active',
-            'comments',
-        ])->when($id, function (Builder $query, $id) {
-            return $query->where('id', $id);
-        })->when($username, function (Builder $query, $username) {
-            return $query->where('username', 'like', '%' . $username . '%');
-        })->when($nickname, function (Builder $query, $nickname) {
-            return $query->where('nickname', 'like', '%' . $nickname . '%');
-        })->when($mobile, function (Builder $query, $mobile) {
-            return $query->where('mobile', 'like', '%' . $mobile . '%');
+        return $this->model::withCount(['series'])->when($title, function (Builder $query, $title) {
+            return $query->whereLike('title', $title);
+        })->when($author, function (Builder $query, $author) {
+            return $query->whereLike('author', $author);
+        })->when($ribbon, function (Builder $query, $ribbon) {
+            return $query->where('ribbon', $ribbon);
         })->when($status, function (Builder $query, $status) {
-            if ($status == 3) {
-                return $query->whereNotNull('deleted_at');
-            }
-
-            return $query->where('status', '=', $status);
-        })->when($date_register, function (Builder $query, $date_register) {
-            $date = explode(' - ', $date_register);
-            $start_date = $date[0] . ' 00:00:00';
-            $end_date = $date[1] . ' 23:59:59';
-
-            return $query->whereBetween('created_at', [$start_date, $end_date]);
-        })->when($date_login, function (Builder $query, $date_login) {
-            $date = explode(' - ', $date_login);
-            $start_date = strtotime($date[0] . ' 00:00:00');
-            $end_date = strtotime($date[1] . ' 23:59:59');
-
-            return $query->whereBetween('logged_at', [$start_date, $end_date]);
+            return $query->where('status', $status);
+        })->when($tag, function (Builder $query, $tag) {
+            /** @noinspection PhpUndefinedMethodInspection */
+            return $query->withAllTags($tag);
         })->when($sort, function (Builder $query, $sort) use ($order) {
             if ($sort == 'desc') {
                 return $query->orderByDesc($order);
@@ -77,5 +59,38 @@ class VideoRepository extends Repository implements VideoRepositoryInterface
                 return $query->orderBy($order);
             }
         });
+    }
+
+    public function create(array $input = []): ?Model
+    {
+        $model = Video::create($input);
+
+        $model->tag($input['tag']);
+
+        return $model;
+    }
+
+    /**
+     * @param $id
+     * @param array $input
+     *
+     * @return bool
+     */
+    public function update($id, array $input = []): bool
+    {
+        $model = Video::findOrFail($id);
+        $model->fill($input);
+        $model->retag($input['tag']);
+        return $model->save();
+    }
+
+    public function getTags(): ?Collection
+    {
+        return Tag::where('tag_group_id', 1)->where('suggest', 1)->orderByDesc('priority')->get();
+    }
+
+    public function getDomains(): ?Collection
+    {
+        return VideoDomain::where('status', 1)->orderByDesc('sort')->get();
     }
 }

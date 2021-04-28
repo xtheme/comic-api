@@ -172,14 +172,22 @@ Route::middleware(['auth'])->prefix('backend')->as('backend.')->group(function (
     // 视频
     Route::prefix('video')->as('video.')->group(function () {
         Route::get('/', [VideoController::class , 'index'])->name('index');
+        Route::get('create', [VideoController::class , 'create'])->name('create');
+        Route::post('store', [VideoController::class , 'store'])->name('store');
+        Route::get('edit/{id}', [VideoController::class , 'edit'])->name('edit');
+        Route::post('update/{id}', [VideoController::class , 'update'])->name('update');
         Route::put('batch/{action?}', [VideoController::class, 'batch'])->name('batch');
         Route::put('editable/{field}', [VideoController::class, 'editable'])->name('editable');
     });
 
     Route::prefix('video_series')->as('video_series.')->group(function () {
-        Route::get('/', [VideoSeriesController::class , 'index'])->name('index');
-        Route::put('batch/{action?}', [VideoController::class, 'batch'])->name('batch');
-        Route::put('editable/{field}', [VideoController::class, 'editable'])->name('editable');
+        Route::get('/{video_id}', [VideoSeriesController::class , 'index'])->name('index');
+        Route::get('create/{video_id}', [VideoSeriesController::class , 'create'])->name('create');
+        Route::post('store/{video_id}', [VideoSeriesController::class , 'store'])->name('store');
+        Route::get('edit/{video_id}/{id}', [VideoSeriesController::class , 'edit'])->name('edit');
+        Route::post('update/{video_id}/{id}', [VideoSeriesController::class , 'update'])->name('update');
+        Route::put('batch/{action?}', [VideoSeriesController::class, 'batch'])->name('batch');
+        Route::put('editable/{field}', [VideoSeriesController::class, 'editable'])->name('editable');
     });
 
     Route::prefix('video_domain')->as('video_domain.')->group(function () {
