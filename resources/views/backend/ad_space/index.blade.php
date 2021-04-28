@@ -20,6 +20,15 @@
                             <div class="d-flex align-items-center">
                                 <div class="form-group mr-1">
                                     <div class="controls">
+                                        <select id="class-type" class="form-control" name="class">
+                                            <option value="" >全部</option>
+                                            <option value="video" @if(request()->get('class') == 'video') selected @endif >动画</option>
+                                            <option value="comic" @if(request()->get('class') == 'comic') selected @endif >漫画</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="form-group mr-1">
+                                    <div class="controls">
                                         <input type="text" class="form-control" name="name"
                                                placeholder="请输入广告位名称"
                                                value="{{ request()->get('name') }}">
@@ -42,6 +51,7 @@
                             <tr>
                                 <th>ID</th>
                                 <th>广告位名称</th>
+                                <th>广告位类型</th>
                                 <th>备注</th>
                                 <th>状态</th>
                                 <th>接入广告SDK</th>
@@ -54,6 +64,13 @@
                                 <tr>
                                     <td>{{ $item->id }}</td>
                                     <td>{{ $item->name }}</td>
+                                    <td>
+                                        @if($item->class == 'video')
+                                            <span class="badge badge-pill badge-glow badge-primary">动画</span>
+                                        @else
+                                            <span class="badge badge-pill badge-glow badge-success">漫画</span>
+                                        @endif
+                                    </td>
                                     <td>{{ $item->remark }}</td>
                                     <td>
                                         @if($item->status == 1)
@@ -63,7 +80,7 @@
                                         @endif
                                     </td>
                                     <td>
-                                        @if($item->if_sdk_ads == 1)
+                                        @if($item->sdk == 1)
                                             <span class="badge badge-pill badge-light-primary">开启</span>
                                         @else
                                             <span class="badge badge-pill badge-light-danger">关闭</span>
@@ -75,7 +92,7 @@
                                             <span class="bx bx-dots-vertical-rounded font-medium-3 dropdown-toggle nav-hide-arrow cursor-pointer"
                                                   id="dropdownMenuButton{{ $item->id }}" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></span>
                                             <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuButton{{ $item->id }}">
-                                                <a class="dropdown-item" data-modal href="{{ route('backend.video_ad_space.edit', $item->id) }}" title="修改广告位 - {{$item->name}}"><i class="bx bx-edit-alt mr-1"></i> 修改</a>
+                                                <a class="dropdown-item" data-modal href="{{ route('backend.ad_space.edit', $item->id) }}" title="修改广告位 - {{$item->name}}"><i class="bx bx-edit-alt mr-1"></i> 修改</a>
                                             </div>
                                         </div>
                                     </td>

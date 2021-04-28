@@ -5,7 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class VideoAd extends Model
+class Ad extends Model
 {
     use HasFactory;
 
@@ -21,14 +21,14 @@ class VideoAd extends Model
         'platform',
         'jump_type',
         'url',
-        'times',
+        'show_time',
         'image',
         'status'
     ];
 
-    public function video_ad_space()
+    public function ad_space()
     {
-        return $this->hasOne('App\Models\VideoAdSpace', 'id', 'space_id');
+        return $this->hasOne('App\Models\AdSpace', 'id', 'space_id');
     }
 
     /**
@@ -39,8 +39,8 @@ class VideoAd extends Model
     public function getImageThumbAttribute()
     {
 
-        return getConfig('api_url') . $this->image;
-        //return 'http://uatoriginalmanhuapic.ngxs9.app' . $this->image;
+        //return getConfig('api_url') . $this->image;
+        return 'http://uatoriginalmanhuapic.ngxs9.app' . $this->image;
     }
 
 

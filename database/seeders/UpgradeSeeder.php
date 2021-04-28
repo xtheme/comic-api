@@ -16,7 +16,6 @@ class UpgradeSeeder extends BaseSeeder
     public function run()
     {
         // 升级添加广告位
-        $this->addAdType('动画详情页广告');
-
+        $this->addAdSpace('动画详情页广告' , 'video');
     }
 }

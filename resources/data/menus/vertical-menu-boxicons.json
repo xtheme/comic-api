@@ -31,16 +31,16 @@
         },
         {
             "url": "#",
-            "name": "Video Ad",
+            "name": "Ad",
             "slug": "books",
             "icon": "bx bxs-slideshow",
             "submenu": [
                 {
-                    "url": "/backend/video_ad_space",
+                    "url": "/backend/ad_space",
                     "name": "AdPlace List"
                 },
                 {
-                    "url": "/backend/video_ad",
+                    "url": "/backend/ad",
                     "name": "Ad List"
                 }
             ]

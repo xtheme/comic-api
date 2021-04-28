@@ -17,8 +17,8 @@ use App\Http\Controllers\Backend\UserController;
 use App\Http\Controllers\Backend\VideoController;
 use App\Http\Controllers\Backend\VideoDomainController;
 use App\Http\Controllers\Backend\VideoSeriesController;
-use App\Http\Controllers\Backend\VideoAdController;
-use App\Http\Controllers\Backend\VideoAdSpaceController;
+use App\Http\Controllers\Backend\AdController;
+use App\Http\Controllers\Backend\AdSpaceController;
 use App\Http\Controllers\Frontend\HomeController;
 use App\Http\Controllers\LanguageController;
 use App\Http\Controllers\Backend\DashboardController;
@@ -203,23 +203,23 @@ Route::middleware(['auth'])->prefix('backend')->as('backend.')->group(function (
     });
 
     //广告位
-    Route::prefix('video_ad_space')->as('video_ad_space.')->group(function () {
-        Route::get('/', [VideoAdSpaceController::class , 'index'])->name('index');
-        Route::get('edit/{id}', [VideoAdSpaceController::class , 'edit'])->name('edit');
-        Route::put('update/{id}', [VideoAdSpaceController::class , 'update'])->name('update');
+    Route::prefix('ad_space')->as('ad_space.')->group(function () {
+        Route::get('/', [AdSpaceController::class , 'index'])->name('index');
+        Route::get('edit/{id}', [AdSpaceController::class , 'edit'])->name('edit');
+        Route::put('update/{id}', [AdSpaceController::class , 'update'])->name('update');
     });
 
     //广告
-    Route::prefix('video_ad')->as('video_ad.')->group(function () {
-        Route::get('/', [VideoAdController::class , 'index'])->name('index');
-        Route::get('create', [VideoAdController::class , 'create'])->name('create');
-        Route::post('store', [VideoAdController::class , 'store'])->name('store');
-        Route::get('edit/{id}', [VideoAdController::class , 'edit'])->name('edit');
-        Route::put('update/{id}', [VideoAdController::class , 'update'])->name('update');
-        Route::delete('destroy/{id}', [VideoAdController::class , 'destroy'])->name('destroy');
-        Route::put('sort', [VideoAdController::class , 'sort'])->name('sort');
-        Route::put('batch/{action?}', [VideoAdController::class, 'batch'])->name('batch'); // 批量操作
-        Route::post('batch/destroy/{ids?}', [VideoAdController::class, 'batchDestroy'])->name('batch.destroy');
+    Route::prefix('ad')->as('ad.')->group(function () {
+        Route::get('/', [AdController::class , 'index'])->name('index');
+        Route::get('create', [AdController::class , 'create'])->name('create');
+        Route::post('store', [AdController::class , 'store'])->name('store');
+        Route::get('edit/{id}', [AdController::class , 'edit'])->name('edit');
+        Route::put('update/{id}', [AdController::class , 'update'])->name('update');
+        Route::delete('destroy/{id}', [AdController::class , 'destroy'])->name('destroy');
+        Route::put('sort', [AdController::class , 'sort'])->name('sort');
+        Route::put('batch/{action?}', [AdController::class, 'batch'])->name('batch'); // 批量操作
+        Route::post('batch/destroy/{ids?}', [AdController::class, 'batchDestroy'])->name('batch.destroy');
     });
 
 });
