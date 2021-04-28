@@ -35,7 +35,7 @@
                                 <th>作品名称</th>
                                 <th>封面图</th>
                                 <th>作者</th>
-{{--                                <th>简介</th>--}}
+                                <th>集数</th>
                                 <th>角标</th>
                                 <th>状态</th>
                                 <th>更新时间</th>
@@ -67,7 +67,7 @@
                                         <img src="{{ $video->cover }}" alt="" class="cursor-pointer" width="50px" data-lightbox title="点击查看大图">
                                     </td>
                                     <td>{{ $video->author }}</td>
-{{--                                    <td>{{ $video->description }}</td>--}}
+                                    <td>{{ $video->series_count }}</td>
                                     <td>@if($video->ribbon)<span class="badge badge-pill badge-light-primary">{{ $ribbon_options[$video->ribbon] ?? '' }}</span>@endif</td>
                                     <td>
                                         @if($video->status ==1)
