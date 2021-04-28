@@ -71,6 +71,17 @@
         });
     });
 
+    $('[data-lightbox]').on('click', function (e) {
+        e.preventDefault();
+        let $this = $(this);
+        $.openImage({
+            size: $this.data('size') || '',
+            height: $this.data('height') || '30vh',
+            title: '检视图片',
+            image: $this.attr('src')
+        });
+    });
+
     function confirmThenUpdate($this, $action) {
         let url    = $this.attr('href');
         let params = new URLSearchParams(url);
