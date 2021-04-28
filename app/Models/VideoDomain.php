@@ -19,9 +19,4 @@ class VideoDomain extends Model
         'sort',
         'status',
     ];
-
-    public function series()
-    {
-        return $this->hasMany('App\Models\VideoSeries');
-    }
 }
