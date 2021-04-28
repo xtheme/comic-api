@@ -14,7 +14,6 @@ class BaseSeeder extends Seeder
      */
     protected function addAdType($name)
     {
-        DB::table('video_ad_spaces')->truncate();
         $exists = DB::table('video_ad_spaces')->where('name', $name)->exists();
 
         if (!$exists) {
