@@ -6,6 +6,7 @@ use App\Models\Book;
 use App\Models\User;
 use CURLFile;
 use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
@@ -25,6 +26,13 @@ class UploadService
     protected $sync = true; // 同步到第三方服務器
     protected $rule = 'image'; // checkFile() 使用的規則
 
+    public function __construct()
+    {
+        if (App::environment('local')) {
+            $this->sync = false;
+        }
+    }
+
     /**
      * 检查上传文件
      *
@@ -39,20 +47,20 @@ class UploadService
             $size = $file->getSize();
             if ($size > config('custom.upload.image.size')) {
                 $limit_size = ceil(config('custom.upload.image.size') / 1024);
-
-                return sprintf('文件不能大于 %s kb！', $limit_size);
+                return __('response.upload.fail.too_big', ['size' => $limit_size]);
             }
 
             // 检查 mime type
             $mimeType = $file->getMimeType();
             $allowMimeType = config('custom.upload.image.mime_type');
             if (!in_array($mimeType, $allowMimeType)) {
-                return '文件类型不支持！';
+                return __('response.upload.fail.mime_type');
             }
 
             // 16进制文件检查，防止图片恶意代码
             if (!checkHex($file)) {
-                return '你所上传的图片可能藏有恶意代码，请通报资安人员处理！';
+                return __('response.upload.fail.script_find');
+
             }
 
             return '';
@@ -75,7 +83,8 @@ class UploadService
                     $id = Book::latest()->first()->id + 1;
                     break;
                 default:
-                    $id = DB::table(Str::plural($dir))->latest()->first()->id + 1;
+                    $latest_id = DB::table(Str::plural($dir))->latest()->first()->id ?? 0;
+                    $id = $latest_id + 1;
                     break;
             }
         }
@@ -176,8 +185,9 @@ class UploadService
             // 不同步
             $result = [
                 'success' => true,
-                'message' => '文件上传成功',
+                'message' => __('response.upload.success'),
                 'path' => '/storage/' . $path,
+                'domain' => '',
             ];
             return $result;
         }
@@ -191,7 +201,7 @@ class UploadService
         if (!$response) {
             $result = [
                 'success' => false,
-                'message' => '同步文件服务器失败',
+                'message' => __('response.upload.fail.sync'),
             ];
             return $result;
         }
@@ -200,10 +210,17 @@ class UploadService
         // Storage::delete($path);
         Storage::deleteDirectory($this->path);
 
+        $api_url = getOldConfig('web_config', 'api_url');
+
+        if (Str::endsWith($api_url, '/')) {
+            $api_url = substr($api_url, 0, -1);
+        }
+
         $result = [
             'success' => true,
-            'message' => '文件上传成功',
+            'message' => __('response.upload.success'),
             'path' => $response['image_path'],
+            'domain' => $api_url, // @todo 切换配置, CDN 域名 https://uatoriginalmanhuapic.ngxs9.app/
         ];
         return $result;
     }
