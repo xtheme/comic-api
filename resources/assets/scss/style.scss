@@ -183,6 +183,7 @@ select.form-control {
 
 label.custom-file-label {
     font-size: 1rem;
+    line-height: 1;
 
     &:after {
         line-height: 1;
@@ -225,12 +226,12 @@ table.table {
 }
 
 
-.dropdown-menu {
-    min-width: 800px;
+.multiselect-container.dropdown-menu {
+    //min-width: 800px;
 
     .dropdown-item {
         display: inline-block;
-        width: 150px;
+        width: 10rem;
 
         label {
             font-size: 1rem;
