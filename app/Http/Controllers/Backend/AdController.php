@@ -4,14 +4,14 @@ namespace App\Http\Controllers\Backend;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Backend\VideoAdRequest;
-use App\Models\VideoAd;
-use App\Models\VideoAdSpace;
-use App\Repositories\Contracts\VideoAdRepositoryInterface;
+use App\Models\Ad;
+use App\Models\AdSpace;
+use App\Repositories\Contracts\AdRepositoryInterface;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Response;
 use Upload;
 
-class VideoAdController extends Controller
+class AdController extends Controller
 {
 
     private $repository;
@@ -25,7 +25,7 @@ class VideoAdController extends Controller
 
     ];
 
-    public function __construct(VideoAdRepositoryInterface $repository)
+    public function __construct(AdRepositoryInterface $repository)
     {
         $this->repository = $repository;
     }
@@ -40,11 +40,11 @@ class VideoAdController extends Controller
         $data = [
             'list' => $this->repository->filter($request)->paginate(),
             'pageConfigs' => ['hasSearchForm' => true],
-            'ad_spaces' => VideoAdSpace::orderBy('id')->get(),
+            'ad_spaces' => AdSpace::orderBy('id')->get(),
             'jump_type' => self::JUMPTYPE,
         ];
 
-        return view('backend.video_ad.index')->with($data);
+        return view('backend.ad.index')->with($data);
     }
 
     /**
@@ -55,11 +55,11 @@ class VideoAdController extends Controller
     public function create()
     {
         $data = [
-            'ad_spaces' => VideoAdSpace::orderBy('id')->get(),
+            'ad_spaces' => AdSpace::orderBy('id')->get(),
             'jump_type' => self::JUMPTYPE,
         ];
 
-        return view('backend.video_ad.create')->with($data);
+        return view('backend.ad.create')->with($data);
     }
 
     /**
@@ -73,7 +73,7 @@ class VideoAdController extends Controller
 
         $post = $request->post();
 
-        $video_ad = new VideoAd;
+        $video_ad = new Ad;
 
         $response = Upload::to('video_ads' , 1)->store($request->file('image'));
 
@@ -95,13 +95,13 @@ class VideoAdController extends Controller
     {
 
         $data = [
-            'data' => VideoAd::findOrFail($id),
+            'data' => Ad::findOrFail($id),
             'pageConfigs' => ['hasSearchForm' => true],
-            'ad_spaces' => VideoAdSpace::orderBy('id')->get(),
+            'ad_spaces' => AdSpace::orderBy('id')->get(),
             'jump_type' => self::JUMPTYPE,
         ];
 
-        return view('backend.video_ad.edit')->with($data);;
+        return view('backend.ad.edit')->with($data);;
 
     }
 
@@ -117,7 +117,7 @@ class VideoAdController extends Controller
 
         $post = $request->post();
 
-        $video_ad = VideoAd::findOrFail($id);
+        $video_ad = Ad::findOrFail($id);
 
         if ($request->file('image')){
             $response = Upload::to('video_ads' , 1)->store($request->file('image'));
@@ -142,7 +142,7 @@ class VideoAdController extends Controller
      */
     public function destroy($id)
     {
-        $bookReportType = VideoAd::findOrFail($id);
+        $bookReportType = Ad::findOrFail($id);
 
         $bookReportType->delete();
 
@@ -159,7 +159,7 @@ class VideoAdController extends Controller
     {
         $post = $request->post();
 
-        VideoAd::where('id', $post['pk'])->update(['sort' => $post['value']]);
+        Ad::where('id', $post['pk'])->update(['sort' => $post['value']]);
 
         return Response::jsonSuccess('更新资料成功！');
     }
@@ -184,7 +184,7 @@ class VideoAdController extends Controller
             default:
         }
 
-        VideoAd::whereIn('id', $ids)->update($data);
+        Ad::whereIn('id', $ids)->update($data);
 
         return Response::jsonSuccess($text . '成功！');
     }
@@ -199,7 +199,7 @@ class VideoAdController extends Controller
     public function batchDestroy(Request $request, $ids)
     {
         $data = explode(',', $ids);
-        VideoAd::destroy($data);
+        Ad::destroy($data);
         return Response::jsonSuccess('删除成功！');
     }
 }

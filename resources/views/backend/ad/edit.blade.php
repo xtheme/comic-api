@@ -6,7 +6,8 @@
 @endsection
 
 @section('content')
-    <form id="form" class="form" method="post"  enctype="multipart/form-data" action="{{ route('backend.video_ad.store') }}">
+    <form id="form" class="form" method="post" action="{{ route('backend.ad.update', $data->id) }}" novalidate>
+        @method('PUT')
         <div class="form-body">
             <div class="row">
                 <div class="col-6">
@@ -15,7 +16,7 @@
                         <div class="controls">
                             <select id="select-type" class="form-control" name="space_id">
                                 @foreach($ad_spaces as $key => $item)
-                                    <option value="{{$item->id}}" >{{$item->name}}</option>
+                                    <option value="{{$item->id}}" @if($item->id == $data->space_id)  selected @endif>{{$item->name}}</option>
                                 @endforeach
                             </select>
                         </div>
@@ -28,7 +29,9 @@
                             <input type="text" id="input-name" class="form-control" name="name"
                                    placeholder="请输入广告名称"
                                    required
-                                   data-validation-required-message="广告名称">
+                                   data-validation-required-message="广告名称"
+                                   value="{{$data->name}}"
+                            >
                         </div>
                     </div>
                 </div>
@@ -39,7 +42,9 @@
                             <input type="text" id="input-name" class="form-control" name="sort"
                                    placeholder="请输入排序顺序"
                                    required
-                                   data-validation-required-message="排序顺序">
+                                   data-validation-required-message="排序顺序"
+                                   value="{{$data->sort}}"
+                            >
                         </div>
                     </div>
                 </div>
@@ -48,8 +53,8 @@
                         <label for="select-platform"><span class="danger">*</span>所属平台</label>
                         <div class="controls">
                             <select id="select-platform" class="form-control" name="platform">
-                                <option value="1">安卓</option>
-                                <option value="2">IOS</option>
+                                <option value="1" @if($data->platform == 1) selected @endif>安卓</option>
+                                <option value="2" @if($data->platform == 2) selected @endif>IOS</option>
                             </select>
                         </div>
                     </div>
@@ -61,19 +66,21 @@
                             <select id="jump-type" class="form-control" name="jump_type">
                                 <option value="">请选择跳转类型</option>
                                 @foreach ($jump_type as $key => $val)
-                                    <option value="{{ $key }}">{{ $val }}</option>
+                                    <option value="{{ $key }}" @if($data->jump_type == $key) selected @endif>{{ $val }}</option>
                                 @endforeach
                             </select>
                         </div>
                     </div>
                 </div>
-                <div class="url col-6">
+                <div class="url col-6 @if($data->jump_type == 5) hidden @endif">
                     <div class="form-group">
                         <label for="input-url">广告地址</label>
                         <div class="controls">
                             <input type="text" id="input-url" class="form-control" name="url"
                                    placeholder="请输入网站地址"
-                                   data-validation-required-message="请输入网站地址">
+                                   data-validation-required-message="请输入网站地址"
+                                   value="{{$data->url}}"
+                            >
                         </div>
                     </div>
                 </div>
@@ -81,10 +88,10 @@
                     <div class="form-group">
                         <label for="input-times">显示时间</label>
                         <div class="controls">
-                            <input type="text" id="input-times" class="form-control" name="times"
+                            <input type="text" id="input-times" class="form-control" name="show_time"
                                    placeholder="秒"
                                    data-validation-required-message="秒"
-                                   value="0"
+                                   value="{{$data->show_time}}"
                             >
                         </div>
                     </div>
@@ -97,7 +104,7 @@
                                 <li class="d-inline-block mr-2 mb-1">
                                     <fieldset>
                                         <div class="radio">
-                                            <input type="radio" name="status" id="status_active_1" value="1" checked>
+                                            <input type="radio" name="status" id="status_active_1" value="1" @if($data->status == 1) checked @endif >
                                             <label for="status_active_1">上架</label>
                                         </div>
                                     </fieldset>
@@ -105,7 +112,7 @@
                                 <li class="d-inline-block mr-2 mb-1">
                                     <fieldset>
                                         <div class="radio">
-                                            <input type="radio" name="status" id="status_active_2" value="-1">
+                                            <input type="radio" name="status" id="status_active_2" value="-1" @if($data->status == -1) checked @endif >
                                             <label for="status_active_2">下架</label>
                                         </div>
                                     </fieldset>
@@ -119,10 +126,14 @@
                         <label for="input-username"><span class="danger">*</span>广告图</label>
                         <div class="input-group">
                             <div class="custom-file">
-                                <input type="file" class="custom-file-input" id="vertical-thumb" name="image">
+                                <input type="hidden" name="image" value="{{$data->image}}">
+                                <input type="file" class="custom-file-input" id="vertical-thumb" name="image" >
                                 <label class="custom-file-label" for="vertical-thumb">请选择文件</label>
                             </div>
                         </div>
+                    </div>
+                    <div class="input-group mb-1">
+                        <img src="{{ $data->image_thumb }}" width="160px">
                     </div>
                 </div>
                 <div class="col-12 justify-content-end">
@@ -134,12 +145,10 @@
     </form>
 @endsection
 
-{{-- vendor scripts --}}
-@section('vendor-scripts')
-@endsection
 
 {{-- page scripts --}}
 @section('page-scripts')
+    <script src="{{ asset('js/scripts/forms/validation/form-validation.js') }}"></script>
     <script>
 		$(document).ready(function () {
 
@@ -153,7 +162,7 @@
             });
 
 
-			$('#form').submit(function (e) {
+            $('#form').submit(function (e) {
                 e.preventDefault();
                 $.ajax({
                     url: $(this).attr('action'),
@@ -192,8 +201,9 @@
                             console.log(errorThrown)
                         }
                     }
-				});
-			});
+                });
+            });
 		});
     </script>
 @endsection
+

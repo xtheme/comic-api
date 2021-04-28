@@ -3,12 +3,21 @@
 namespace App\Http\Controllers\Backend;
 
 use App\Http\Controllers\Controller;
-use App\Models\VideoAdSpace;
+use App\Models\AdSpace;
+use App\Repositories\Contracts\AdSpaceRepositoryInterface;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Response;
 
-class VideoAdSpaceController extends Controller
+class AdSpaceController extends Controller
 {
+
+    private $repository;
+
+    public function __construct(AdSpaceRepositoryInterface $repository)
+    {
+        $this->repository = $repository;
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -17,11 +26,9 @@ class VideoAdSpaceController extends Controller
     public function index(Request $request)
     {
 
-        $name = $request->input('name');
+        $list = $this->repository->filter($request)->paginate();
 
-        $list = VideoAdSpace::where('name', 'like', '%' . $name . '%')->orderByDesc('id')->paginate();
-
-        return view('backend.video_ad_space.index', [
+        return view('backend.ad_space.index', [
             'list' => $list
         ]);
     }
@@ -34,9 +41,9 @@ class VideoAdSpaceController extends Controller
      */
     public function edit($id)
     {
-        $data = VideoAdSpace::findOrFail($id);
+        $data = AdSpace::findOrFail($id);
 
-        return view('backend.video_ad_space.edit', [
+        return view('backend.ad_space.edit', [
             'data' => $data
         ]);
     }
@@ -52,7 +59,7 @@ class VideoAdSpaceController extends Controller
     {
         $post = $request->post();
 
-        $data = VideoAdSpace::findOrFail($id);
+        $data = AdSpace::findOrFail($id);
 
         $data->fill($post)->save();
 

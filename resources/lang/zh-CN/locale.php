@@ -20,7 +20,7 @@ return [
     "Video List" => "动画列表",
     "Video Domain" => "动画域名配置",
     "Play Statistics" => "播放统计",
-    "Video Ad" => "动画广告",
+    "Ad" => "广告管理",
     "AdPlace List" => "广告位列表",
     "Ad List" => "广告列表",
 

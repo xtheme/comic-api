@@ -2,12 +2,13 @@
 
 namespace App\Repositories;
 
-use App\Models\VideoAd;
-use App\Repositories\Contracts\VideoAdRepositoryInterface;
+use App\Models\Ad;
+use App\Models\AdSpace;
+use App\Repositories\Contracts\AdRepositoryInterface;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 
-class VideoAdRepository extends Repository implements VideoAdRepositoryInterface
+class AdRepository extends Repository implements AdRepositoryInterface
 {
     protected $cache_ttl = 60; // 缓存秒数
 
@@ -16,7 +17,7 @@ class VideoAdRepository extends Repository implements VideoAdRepositoryInterface
      */
     public function model(): string
     {
-        return VideoAd::class;
+        return Ad::class;
     }
 
     /**
@@ -36,7 +37,7 @@ class VideoAdRepository extends Repository implements VideoAdRepositoryInterface
         $order = $request->get('order') ?? 'sort';
         $sort = $request->get('sort') ?? 'ASC';
 
-        return $this->model::with(['video_ad_space'])->when($name, function (Builder $query, $name) {
+        return $this->model::with(['ad_space'])->when($name, function (Builder $query, $name) {
             return $query->where('name', 'like', '%' . $name . '%');
         })->when($space_id, function (Builder $query, $space_id) {
             return $query->where('space_id', $space_id);
@@ -54,4 +55,5 @@ class VideoAdRepository extends Repository implements VideoAdRepositoryInterface
             }
         });
     }
+
 }

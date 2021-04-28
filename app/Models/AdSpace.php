@@ -5,7 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class VideoAdSpace extends Model
+class AdSpace extends Model
 {
     use HasFactory;
 
@@ -16,9 +16,14 @@ class VideoAdSpace extends Model
      */
     protected $fillable = [
         'remark',
+        'class',
         'status',
-        'if_sdk_ads'
+        'sdk'
     ];
 
+    public function video_ads()
+    {
+        return $this->hasMany('App\Models\Ad', 'space_id', 'id');
+    }
 
 }

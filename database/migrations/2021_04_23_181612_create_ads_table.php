@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateVideoAdsTable extends Migration
+class CreateAdsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,7 +13,7 @@ class CreateVideoAdsTable extends Migration
      */
     public function up()
     {
-        Schema::create('video_ads', function (Blueprint $table) {
+        Schema::create('ads', function (Blueprint $table) {
             $table->id();
             $table->integer('space_id')->comment('廣告位id');
             $table->string('name' , 100)->comment('广告名称 ');
@@ -21,7 +21,7 @@ class CreateVideoAdsTable extends Migration
             $table->tinyInteger('platform')->comment('所屬平台 [1:安卓,2:IOS]');
             $table->tinyInteger('jump_type')->comment('跳转类型 [1:内置浏览器,2:App下载,3:外部浏览器,4:站内充值页,5:不跳转]');
             $table->string('url' , 200)->nullable()->comment('鏈結地址');
-            $table->integer('times')->default(0)->comment('顯示時間，0為不設置');
+            $table->integer('show_time')->default(0)->comment('顯示時間，0為不設置');
             $table->string('image' , 200)->comment('廣告圖');
             $table->tinyInteger('status')->comment('狀態 [-1:下架,1:上架]');
             $table->timestamps();
@@ -35,6 +35,6 @@ class CreateVideoAdsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('video_ads');
+        Schema::dropIfExists('ads');
     }
 }

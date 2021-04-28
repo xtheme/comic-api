@@ -12,10 +12,10 @@
     <section id="config-list">
 
         <div class="mb-1">
-            <a href="{{ route('backend.video_ad.batch') }}" data-action="enable" title="上架" class="btn btn-success glow batch-action" role="button" aria-pressed="true">批量上架</a>
-            <a href="{{ route('backend.video_ad.batch') }}" data-action="disable" title="下架" class="btn btn-light glow batch-action" role="button" aria-pressed="true">批量下架</a>
-            <a href="{{ route('backend.video_ad.batch.destroy') }}" data-batch data-type="post"  title="刪除" class="btn btn-danger glow" role="button" aria-pressed="true">批量刪除</a>
-            <a href=" {{ route('backend.video_ad.create') }}" data-modal data-size="lg" title="添加广告" class="btn btn-primary glow">添加广告</a>
+            <a href="{{ route('backend.ad.batch') }}" data-action="enable" title="上架" class="btn btn-success glow batch-action" role="button" aria-pressed="true">批量上架</a>
+            <a href="{{ route('backend.ad.batch') }}" data-action="disable" title="下架" class="btn btn-light glow batch-action" role="button" aria-pressed="true">批量下架</a>
+            <a href="{{ route('backend.ad.batch.destroy') }}" data-batch data-type="post"  title="刪除" class="btn btn-danger glow" role="button" aria-pressed="true">批量刪除</a>
+            <a href=" {{ route('backend.ad.create') }}" data-modal data-size="lg" title="添加广告" class="btn btn-primary glow">添加广告</a>
         </div>
         <div class="card">
             <div class="card-header">
@@ -59,7 +59,7 @@
                                         </div>
                                     </td>
                                     <td>{{ $item->id }}</td>
-                                    <td>{{ $item->video_ad_space->name }}</td>
+                                    <td>{{ $item->ad_space->name }}</td>
                                     <td><span class="jeditable" data-pk="{{ $item->id }}" data-value="" > {{ $item->sort }}</td>
                                     <td>{{ $item->name }}</td>
                                     <td>
@@ -71,7 +71,7 @@
                                     </td>
                                     <td><img src="{{ $item->image_thumb }}" class="cursor-pointer" width="50px" data-lightbox title="点击查看大图"></td>
                                     <td>{{ $item->url }}</td>
-                                    <td>{{ $item->times }}</td>
+                                    <td>{{ $item->show_time }}</td>
                                     <td>@if($item->updated_at){{ $item->updated_at->diffForHumans()  }}@endif</td>
                                     <td>
                                         @if($item->status == 1)
@@ -85,8 +85,8 @@
                                             <span class="bx bx-dots-vertical-rounded font-medium-3 dropdown-toggle nav-hide-arrow cursor-pointer"
                                                   id="dropdownMenuButton{{ $item->id }}" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></span>
                                             <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuButton{{ $item->id }}">
-                                                <a class="dropdown-item" data-modal href="{{ route('backend.video_ad.edit', $item->id) }}" title="修改广告"><i class="bx bx-edit-alt mr-1"></i> 修改</a>
-                                                <a class="dropdown-item" data-destroy href="{{ route('backend.video_ad.destroy', $item->id) }}" title="刪除广告"><i class="bx bx-trash mr-1"></i> 删除</a>
+                                                <a class="dropdown-item" data-modal href="{{ route('backend.ad.edit', $item->id) }}" title="修改广告"><i class="bx bx-edit-alt mr-1"></i> 修改</a>
+                                                <a class="dropdown-item" data-destroy href="{{ route('backend.ad.destroy', $item->id) }}" title="刪除广告"><i class="bx bx-trash mr-1"></i> 删除</a>
                                             </div>
                                         </div>
                                     </td>
@@ -127,6 +127,7 @@
                         <label for="input-nickname">广告位</label>
                         <div class="controls">
                             <select id="select-type" class="form-control" name="space_id">
+                                <option value="" >全部</option>
                                 @foreach($ad_spaces as $key => $item)
                                     <option value="{{$item->id}}" @if(request()->get('space_id') == $item->id) selected @endif >{{$item->name}}</option>
                                 @endforeach
@@ -203,7 +204,7 @@
                 emptyclass: 'text-light',
                 emptytext: 'N/A',
                 placeholder: '数字需大于0',
-                url: '{{ route('backend.video_ad.sort') }}',
+                url: '{{ route('backend.ad.sort') }}',
                 success: function (res, newValue) {
                     console.log(res);
                     parent.$.toast({
