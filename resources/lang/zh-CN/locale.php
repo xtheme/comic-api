@@ -20,6 +20,9 @@ return [
     "Video List" => "动画列表",
     "Video Domain" => "动画域名配置",
     "Play Statistics" => "播放统计",
+    "Video Ad" => "动画广告",
+    "AdPlace List" => "广告位列表",
+    "Ad List" => "广告列表",
 
     "Comments" => "評論管理",
     "Comment List" => "漫画评论",
@@ -27,5 +30,6 @@ return [
     "Block List" => "首页模块",
     "Book Report" => "漫画举报管理",
     "ReportType List" => "举报类型设置",
-    "Report List" => "用户举报列表"
+    "Report List" => "用户举报列表",
+
 ];

@@ -14,6 +14,7 @@ use App\Repositories\Contracts\OrderRepositoryInterface;
 use App\Repositories\Contracts\VideoDomainRepositoryInterface;
 use App\Repositories\Contracts\VideoRepositoryInterface;
 use App\Repositories\Contracts\VideoSeriesRepositoryInterface;
+use App\Repositories\Contracts\VideoAdRepositoryInterface;
 use App\Repositories\OrderRepository;
 use App\Repositories\UserRepository;
 use App\Repositories\Contracts\CommentRepositoryInterface;
@@ -22,6 +23,7 @@ use App\Repositories\Contracts\UserRepositoryInterface;
 use App\Repositories\VideoDomainRepository;
 use App\Repositories\VideoRepository;
 use App\Repositories\VideoSeriesRepository;
+use App\Repositories\VideoAdRepository;
 use Illuminate\Support\ServiceProvider;
 
 class RepositoryServiceProvider extends ServiceProvider
@@ -43,6 +45,7 @@ class RepositoryServiceProvider extends ServiceProvider
         $this->app->bind(VideoRepositoryInterface::class, VideoRepository::class);
         $this->app->bind(VideoDomainRepositoryInterface::class, VideoDomainRepository::class);
         $this->app->bind(VideoSeriesRepositoryInterface::class, VideoSeriesRepository::class);
+        $this->app->bind(VideoAdRepositoryInterface::class, VideoAdRepository::class);
     }
 
     /**

@@ -31,6 +31,22 @@
         },
         {
             "url": "#",
+            "name": "Video Ad",
+            "slug": "books",
+            "icon": "bx bxs-slideshow",
+            "submenu": [
+                {
+                    "url": "/backend/video_ad_space",
+                    "name": "AdPlace List"
+                },
+                {
+                    "url": "/backend/video_ad",
+                    "name": "Ad List"
+                }
+            ]
+        },
+        {
+            "url": "#",
             "name": "Systems",
             "slug": "systems",
             "icon": "bx bxs-cog",
