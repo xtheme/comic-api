@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Backend;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Backend\VideoRequest;
+use App\Models\Video;
 use App\Repositories\Contracts\VideoRepositoryInterface;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Response;
@@ -72,4 +73,25 @@ class VideoController extends Controller
         return Response::jsonSuccess(__('response.update.success'));
     }
 
+    public function batch(Request $request, $action)
+    {
+        $ids = explode(',', $request->input('ids'));
+
+        switch ($action) {
+            case 'enable':
+                $text = '上架';
+                $data = ['status' => 1];
+                break;
+            case 'disable':
+                $text = '下架';
+                $data = ['status' => -1];
+                break;
+            default:
+                return Response::jsonError(__('response.error.unknown'));
+        }
+
+        Video::whereIn('id', $ids)->update($data);
+
+        return Response::jsonSuccess(__('response.success.complete', ['action' => $text]));
+    }
 }
