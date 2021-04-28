@@ -200,7 +200,7 @@ $.extend({
 			headers: {
 				'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
 			},
-            contentType: settings.multipart ? 'multipart/form-data' : 'application/x-www-form-urlencoded',
+            contentType: settings.multipart ? false : 'application/x-www-form-urlencoded',
             processData: !settings.multipart,
 			dataType: 'json',
 			success: function (res) {
