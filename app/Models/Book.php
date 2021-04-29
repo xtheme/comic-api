@@ -197,7 +197,7 @@ class Book extends Model
 
     public function getViewAttribute($value)
     {
-        return numberToWords($value);
+        return shortenNumber($value);
     }
 
     public function getBookChaptertimeAttribute($value)

@@ -62,20 +62,22 @@ if (!function_exists('webp')) {
     }
 }
 
-if (!function_exists('numberToWords')) {
+if (!function_exists('shortenNumber')) {
     /**
      * 数字转换单位万：非四舍五入保留
      */
-    function numberToWords($number)
+    function shortenNumber($number)
     {
         if ($number < 10000) {
             $str = $number;
+            $suffix = '';
         } else {
             $num = $number / 10000;
-            $str = substr(sprintf("%.2f", $num), 0, -1) . '万';
+            $str = number_format($number / 10000, 1);
+            $suffix = '万';
         }
 
-        return $str;
+        return $str . $suffix;
     }
 }
 
