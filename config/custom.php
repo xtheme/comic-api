@@ -21,7 +21,7 @@ return [
         // options:true or false(default)  Warning:this option is not applicable for horizontal-menu template
         'footerType' => 'static',
         //options:fixed,static,hidden
-        'templateTitle' => '茄子漫画社',
+        'templateTitle' => '',
         //template Title can be changed, default(Frest)
         'isCardShadow' => true,
         // Option: true(default) and false ( remove card shadow)

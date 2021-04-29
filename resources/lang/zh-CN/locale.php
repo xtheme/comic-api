@@ -1,6 +1,8 @@
 <?php
 
 return [
+    "Site Title" => "茄子漫画",
+
     "Dashboard" => "控制台",
     "Configs" => "配置项",
     "Customers" => "会员管理",
