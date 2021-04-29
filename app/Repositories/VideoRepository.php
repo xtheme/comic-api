@@ -88,9 +88,4 @@ class VideoRepository extends Repository implements VideoRepositoryInterface
     {
         return Tag::where('tag_group_id', 1)->where('suggest', 1)->orderByDesc('priority')->get();
     }
-
-    public function getDomains(): ?Collection
-    {
-        return VideoDomain::where('status', 1)->orderByDesc('sort')->get();
-    }
 }

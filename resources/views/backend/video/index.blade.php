@@ -83,13 +83,13 @@
                                         @endif
                                     </td>
                                     <td>
-                                        <img src="{{ $video->cover }}" alt="" class="cursor-pointer" width="50px" data-lightbox title="点击查看大图">
+                                        <img src="{{ $video->cover }}" alt="" class="cursor-pointer" height="60px" data-lightbox title="点击查看大图">
                                     </td>
                                     <td>{{ $video->author }}</td>
                                     <td>{{ $video->series_count }}</td>
                                     <td>@if($video->ribbon)<span class="badge badge-pill badge-light-primary">{{ $ribbon_options[$video->ribbon] ?? '' }}</span>@endif</td>
                                     <td>
-                                        @if($video->status ==1)
+                                        @if($video->status == 1)
                                             <a class="badge badge-pill badge-light-success" data-confirm href="{{ route('backend.video.batch', ['action'=>'disable', 'ids' => $video->id]) }}" title="下架该作品">上架</a>
                                         @else
                                             <a class="badge badge-pill badge-light-danger" data-confirm href="{{ route('backend.video.batch', ['action'=>'enable', 'ids' => $video->id]) }}" title="上架该作品">下架</a>

@@ -1,7 +1,7 @@
 @extends('layouts.iframePage')
 
 {{-- page Title --}}
-@section('title','动漫域名配置')
+@section('title','动画域名配置')
 
 {{-- vendor style --}}
 @section('vendor-styles')

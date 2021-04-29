@@ -40,7 +40,6 @@ class VideoController extends Controller
             'status_options' => self::STATUS_OPTIONS,
             'ribbon_options' => self::RIBBON_OPTIONS,
             'tags' => $this->repository->getTags(),
-            'domains' => $this->repository->getDomains(),
         ];
 
         return view('backend.video.create')->with($data);
@@ -59,7 +58,6 @@ class VideoController extends Controller
             'status_options' => self::STATUS_OPTIONS,
             'ribbon_options' => self::RIBBON_OPTIONS,
             'tags' => $this->repository->getTags(),
-            'domains' => $this->repository->getDomains(),
             'video' => $this->repository->find($id),
         ];
 
