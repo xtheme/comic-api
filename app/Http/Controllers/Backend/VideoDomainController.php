@@ -62,9 +62,13 @@ class VideoDomainController extends Controller
 
     public function update(VideoDomainRequest $request, $id)
     {
-        $validated = $request->post();
+        // 域名不該有 "/" 結尾
+        $request->merge([
+            'domain' => rtrim($request->post('domain'), '/'),
+            'encrypt_domain' => rtrim($request->post('encrypt_domain'), '/'),
+        ]);
 
-        $this->repository->update($id, $validated);
+        $this->repository->update($id, $request->post());
 
         return Response::jsonSuccess('修改成功');
     }
