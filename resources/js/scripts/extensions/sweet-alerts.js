@@ -59,7 +59,7 @@ $(document).ready(function () {
       cancelButtonAriaLabel: 'Thumbs down',
       confirmButtonClass: 'btn btn-primary',
       buttonsStyling: false,
-      cancelButtonClass: 'btn btn-danger ml-1',
+      cancelButtonClass: 'btn btn-danger ml-1'
     })
   });
 

@@ -120,6 +120,40 @@
         confirmThenUpdate($this, 'delete');
     });
 
+    function modalConfirmThenUpdate($this, $action) {
+        let url    = $this.attr('href');
+        let params = new URLSearchParams(url);
+
+        $.confirm({
+            text : `请确认是否要${$this.attr('title')}?`,
+            callback: function () {
+                $.request({
+                    url: url,
+                    type: $action,
+                    data: (Object.keys(params).length === 0) ? null : params,
+                    // debug: true,
+                    callback: function (res) {
+                        let $iframe = parent.$('#global-modal .modal-body iframe');
+                        // console.log($iframe.attr('src'));
+                        $iframe.attr('src', $iframe.attr('src'));
+
+                        parent.$.toast({
+                            title: res.msg,
+                            message: '请稍后数据刷新'
+                        });
+                    }
+                });
+            }
+        });
+    }
+
+    $('[data-modal-confirm]').on('click', function (e) {
+        e.preventDefault();
+
+        let $this = $(this);
+        modalConfirmThenUpdate($this, 'put');
+    });
+
     // 列表 checkbox 全选
     $('input.check-all').on('click', function () {
         if (this.checked) {
