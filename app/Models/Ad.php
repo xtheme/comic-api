@@ -26,6 +26,15 @@ class Ad extends Model
         'status'
     ];
 
+    /**
+     * The accessors to append to the model's array form.
+     *
+     * @var array
+     */
+    protected $appends = [
+        'image_thumb'
+    ];
+
     public function ad_space()
     {
         return $this->hasOne('App\Models\AdSpace', 'id', 'space_id');
@@ -39,8 +48,7 @@ class Ad extends Model
     public function getImageThumbAttribute()
     {
 
-        //return getConfig('api_url') . $this->image;
-        return 'http://uatoriginalmanhuapic.ngxs9.app' . $this->image;
+        return getConfig('api_url') . $this->image;
     }
 
 

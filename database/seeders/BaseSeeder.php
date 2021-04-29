@@ -16,7 +16,6 @@ class BaseSeeder extends Seeder
     protected function addAdSpace($name , $class)
     {
 
-        DB::table('ad_spaces')->truncate();
         $exists = DB::table('ad_spaces')->where('name', $name)->exists();
 
         if (!$exists) {

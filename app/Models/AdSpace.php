@@ -21,9 +21,9 @@ class AdSpace extends Model
         'sdk'
     ];
 
-    public function video_ads()
+    public function ads()
     {
-        return $this->hasMany('App\Models\Ad', 'space_id', 'id');
+        return $this->hasMany('App\Models\Ad', 'space_id', 'id')->where('status' , 1);
     }
 
 }
