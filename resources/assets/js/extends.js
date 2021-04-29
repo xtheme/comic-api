@@ -225,12 +225,11 @@ $.extend({
 		});
 	},
 	reloadIFrame: function (options) {
-		// console.log('reloadIFrame');
 		let settings = $.extend({
 			icon     : '<i class="bx bx-loader icon-spin"></i>',
 			title    : '',
 			message  : '数据加载中...',
-			timeout  : 3000,
+			timeout  : 500,
 			reloadUrl: null,
 			callback : null
 		}, options);
@@ -263,12 +262,53 @@ $.extend({
 					document.getElementById('content-frame').src = settings.reloadUrl;
 				}
 
-				setTimeout(function () {
-					$.toast({
-						title: settings.title,
-						message: '请稍后数据刷新'
-					});
-				}, settings.timeout);
+                $.toast({
+                    title: settings.title,
+                    message: '请稍后数据刷新'
+                });
+			}
+		});
+	},
+	reloadModal: function (options) {
+		let settings = $.extend({
+			icon     : '<i class="bx bx-loader icon-spin"></i>',
+			title    : '',
+			message  : '数据加载中...',
+			timeout  : 500,
+			reloadUrl: null,
+			callback : null
+		}, options);
+
+		let element = parent.$('#global-modal .modal-content');
+
+		$(element).block({
+			message: `<span class="semibold">${settings.icon} ${settings.message}</span>`,
+			timeout: settings.timeout, //unblock after 2 seconds
+			overlayCSS: {
+				backgroundColor: '#5A8DEE',
+				opacity: 0.8,
+				cursor: 'wait'
+			},
+			css: {
+				width: 200,
+				height: 50,
+				lineHeight: 1,
+				border: 0,
+				borderRadius: 30,
+				padding: 15,
+				color: '#5A8DEE',
+				backgroundColor: '#F2F4F4'
+			},
+			onBlock: function () {
+				console.log(settings.reloadUrl);
+                let $iframe = element.find('iframe');
+
+                $iframe.attr('src', settings.reloadUrl);
+
+                parent.$.toast({
+                    title: settings.title,
+                    message: '请稍后数据刷新'
+                });
 			}
 		});
 	},
