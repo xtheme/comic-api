@@ -263,7 +263,7 @@ bxs-videos mr-1"></i>影集列表</a>
                             data: {'ids': ids},
                             debug: true,
                             callback: function (res) {
-                                parent.parent.$.reloadIFrame({
+                                parent.$.reloadIFrame({
                                     title: '提交成功',
                                     message: '请稍后数据刷新'
                                 });

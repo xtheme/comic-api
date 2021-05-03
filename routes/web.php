@@ -89,9 +89,9 @@ Route::middleware(['auth'])->prefix('backend')->as('backend.')->group(function (
     // 漫画分类
     Route::prefix('tag')->as('tag.')->group(function () {
         Route::get('/', [TagController::class, 'index'])->name('index');
+        Route::put('batch/{action?}', [TagController::class, 'batch'])->name('batch');
         Route::put('editable/{field}', [TagController::class, 'editable'])->name('editable');
     });
-
 
     // 漫画章节
     Route::prefix('book_chapter')->as('book_chapter.')->group(function () {
@@ -102,7 +102,7 @@ Route::middleware(['auth'])->prefix('backend')->as('backend.')->group(function (
         Route::get('edit/{chapter_id}', [BookChapterController::class , 'edit'])->name('edit');
         Route::put('update/{chapter_id}', [BookChapterController::class , 'update'])->name('update');
         Route::put('batch/{action?}', [BookChapterController::class, 'batch'])->name('batch'); // 批量操作
-        Route::put('editable/{field}', [BookCategoryController::class, 'editable'])->name('editable');
+        Route::put('editable/{field}', [BookChapterController::class, 'editable'])->name('editable');
     });
 
     // 物流
