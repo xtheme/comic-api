@@ -51,16 +51,16 @@
                             @foreach ($list as $category)
                                 <tr>
                                     <td>
-                                        <span data-type="text" data-pk="{{ $category->id }}" data-title="修改排序" class="editable editable-click" data-url="{{ route('backend.book_category.editable', 'priority') }}">{{ $category->priority }}</span>
+                                        <span data-type="text" data-pk="{{ $category->id }}" data-title="修改排序" class="editable editable-click" data-url="{{ route('backend.tag.editable', 'priority') }}">{{ $category->priority }}</span>
                                     </td>
                                     <td>
-                                        <span data-type="text" data-pk="{{ $category->id }}" data-title="修改名称" class="editable editable-click" data-url="{{ route('backend.book_category.editable', 'name') }}">{{ $category->name }}</span>
+                                        <span data-type="text" data-pk="{{ $category->id }}" data-title="修改名称" class="editable editable-click" data-url="{{ route('backend.tag.editable', 'name') }}">{{ $category->name }}</span>
                                     </td>
 {{--                                    <td>--}}
-{{--                                        <span data-type="text" data-pk="{{ $category->id }}" data-title="修改关键字" class="editable editable-click" data-url="{{ route('backend.book_category.editable', 'keywords') }}">{{ $category->slug }}</span>--}}
+{{--                                        <span data-type="text" data-pk="{{ $category->id }}" data-title="修改关键字" class="editable editable-click" data-url="{{ route('backend.tag.editable', 'keywords') }}">{{ $category->slug }}</span>--}}
 {{--                                    </td>--}}
                                     <td>
-                                        <span data-type="text" data-pk="{{ $category->id }}" data-title="修改描述" class="editable editable-click" data-url="{{ route('backend.book_category.editable', 'description') }}">{{ $category->description }}</span>
+                                        <span data-type="text" data-pk="{{ $category->id }}" data-title="修改描述" class="editable editable-click" data-url="{{ route('backend.tag.editable', 'description') }}">{{ $category->description }}</span>
                                     </td>
                                     <td>
                                         @switch($category->suggest)

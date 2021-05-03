@@ -3,13 +3,13 @@
 namespace App\Repositories;
 
 use App\Models\BookCategory;
-use App\Repositories\Contracts\BookCategoryRepositoryInterface;
+use App\Repositories\Contracts\TagRepositoryInterface;
 use Conner\Tagging\Model\Tag;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 
-class BookCategoryRepository extends Repository implements BookCategoryRepositoryInterface
+class TagRepository extends Repository implements TagRepositoryInterface
 {
     protected $cache_ttl = 60; // 缓存秒数
 

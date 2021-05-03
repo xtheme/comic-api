@@ -10,13 +10,15 @@ return [
     "Pricing List" => "会员套餐",
     "Order List" => "订单列表",
     "Books" => "漫画管理",
-    "Book Categories" => "漫画分类",
+
     "Books List" => "漫画列表",
     "Recommended Books" => "推荐漫画",
     "Feedback" => "意見反饋",
     "Systems" => "系统设定",
     "Terminal" => "命令模式",
     "Log Viewer" => "系统日志",
+
+    "Tags" => "标签分类",
 
     "Videos" => "动画管理",
     "Video List" => "动画列表",

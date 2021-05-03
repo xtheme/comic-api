@@ -7,6 +7,12 @@
             "icon": "bx bxs-home"
         },
         {
+            "url": "/backend/tag",
+            "name": "Tags",
+            "slug": "tags",
+            "icon": "bx bxs-purchase-tag"
+        },
+        {
             "url": "#",
             "name": "Videos",
             "slug": "videos",

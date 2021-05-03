@@ -116,7 +116,7 @@
                     @foreach ($menuData[1]->menu as $menu)
                         <li class="@if(isset($menu->submenu)){{'dropdown'}} @endif nav-item {{ $menu->slug === Route::currentRouteName() ? 'active' : '' }}" @if(isset($menu->submenu)){{'data-menu=dropdown'}}@endif>
                             <a class="@if(isset($menu->submenu)){{'dropdown-toggle'}} @endif nav-link" href="{{asset($menu->url)}}"
-                            @if(isset($menu->submenu)){{'data-toggle=dropdown'}} @endif @if(isset($menu->newTab)){{"target=_blank"}}@endif>
+                            @if(isset($menu->submenu)){{'data-toggle=dropdown'}} @endif @if(isset($menu->newTab)){{'target=_blank'}}@else{{'target=content-frame'}}@endif>
                                 <i class="menu-livicon" data-icon="{{$menu->icon}}"></i>
                                 <span>{{ __('locale.'.$menu->name)}}</span>
                             </a>
@@ -165,7 +165,7 @@
                             <li class="navigation-header text-truncate"><span>{{$menu->navheader}}</span></li>
                         @else
                             <li class="nav-item {{ Route::currentRouteName() === $menu->slug ? 'active' : '' }}">
-                                <a href="@if(isset($menu->url)){{asset($menu->url)}} @endif" @if(isset($menu->newTab)){{"target=_blank"}}@endif>
+                                <a href="@if(isset($menu->url)){{asset($menu->url)}} @endif" @if(isset($menu->newTab)){{'target=_blank'}}@else{{'target=content-frame'}}@endif>
                                     @if(isset($menu->icon))
                                         <i class="{{$menu->icon}}"></i>
                                     @endif

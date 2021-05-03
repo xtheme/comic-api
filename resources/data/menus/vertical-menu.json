@@ -43,8 +43,8 @@
             "icon": "notebook",
             "submenu": [
                 {
-                    "url": "/backend/book_category",
-                    "name": "Book Categories"
+                    "url": "/backend/tag",
+                    "name": "Tags"
                 },
                 {
                     "url": "/backend/book",

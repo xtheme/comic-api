@@ -2,7 +2,6 @@
 
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Backend\BlockController;
-use App\Http\Controllers\Backend\BookCategoryController;
 use App\Http\Controllers\Backend\BookChapterController;
 use App\Http\Controllers\Backend\BookController;
 use App\Http\Controllers\Backend\ReportController;
@@ -13,6 +12,7 @@ use App\Http\Controllers\Backend\FeedbackController;
 use App\Http\Controllers\Backend\NoticeController;
 use App\Http\Controllers\Backend\OrderController;
 use App\Http\Controllers\Backend\PricingController;
+use App\Http\Controllers\Backend\TagController;
 use App\Http\Controllers\Backend\UserController;
 use App\Http\Controllers\Backend\VideoController;
 use App\Http\Controllers\Backend\VideoDomainController;
@@ -87,9 +87,9 @@ Route::middleware(['auth'])->prefix('backend')->as('backend.')->group(function (
     });
 
     // 漫画分类
-    Route::prefix('book_category')->as('book_category.')->group(function () {
-        Route::get('/', [BookCategoryController::class, 'index'])->name('index');
-        Route::put('editable/{field}', [BookCategoryController::class, 'editable'])->name('editable');
+    Route::prefix('tag')->as('tag.')->group(function () {
+        Route::get('/', [TagController::class, 'index'])->name('index');
+        Route::put('editable/{field}', [TagController::class, 'editable'])->name('editable');
     });
 
 

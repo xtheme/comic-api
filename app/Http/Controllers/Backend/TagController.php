@@ -4,17 +4,17 @@ namespace App\Http\Controllers\Backend;
 
 use App\Http\Controllers\Controller;
 use App\Models\BookCategory;
-use App\Repositories\Contracts\BookCategoryRepositoryInterface;
+use App\Repositories\Contracts\TagRepositoryInterface;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\View;
 
-class BookCategoryController extends Controller
+class TagController extends Controller
 {
     private $repository;
 
-    public function __construct(BookCategoryRepositoryInterface $repository)
+    public function __construct(TagRepositoryInterface $repository)
     {
         $this->repository = $repository;
     }
@@ -32,7 +32,7 @@ class BookCategoryController extends Controller
             'list' => $this->repository->filter($request)->paginate(),
         ];
 
-        return view('backend.book_category.index')->with($data);
+        return view('backend.tag.index')->with($data);
     }
 
     /**
