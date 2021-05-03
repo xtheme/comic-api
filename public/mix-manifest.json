@@ -10,7 +10,7 @@
     "/css/colors.css": "/css/colors.css?id=07372989ac93975e41f1",
     "/css/bootstrap.css": "/css/bootstrap.css?id=bd8301196cee58e2e267",
     "/css/bootstrap-extended.css": "/css/bootstrap-extended.css?id=46496fa36b0978312c5b",
-    "/assets/css/style.css": "/assets/css/style.css?id=4d61039e5ce614dfd0df",
+    "/assets/css/style.css": "/assets/css/style.css?id=1e53d16ef65a32b3fbd3",
     "/assets/css/style-rtl.css": "/assets/css/style-rtl.css?id=31b51911471e97673fb2",
     "/css/themes/semi-dark-layout.css": "/css/themes/semi-dark-layout.css?id=53ee82e81ed30f0632a1",
     "/css/themes/dark-layout.css": "/css/themes/dark-layout.css?id=ce6e502b0bcd0df34a43",
@@ -72,7 +72,7 @@
     "/js/scripts/extensions/ext-component-treeview.js": "/js/scripts/extensions/ext-component-treeview.js?id=abe4cc878ae6befcd66e",
     "/js/scripts/extensions/i18n.js": "/js/scripts/extensions/i18n.js?id=d26d5fc1b467a4d0e702",
     "/js/scripts/extensions/noui-slider.js": "/js/scripts/extensions/noui-slider.js?id=ecd7d6fc18d1a9e2dd5e",
-    "/js/scripts/extensions/sweet-alerts.js": "/js/scripts/extensions/sweet-alerts.js?id=938dba649a9fadc822e2",
+    "/js/scripts/extensions/sweet-alerts.js": "/js/scripts/extensions/sweet-alerts.js?id=980d09823814ce5bfb82",
     "/js/scripts/extensions/sweet-alerts.min.js": "/js/scripts/extensions/sweet-alerts.min.js?id=cf23a078a5afa4407731",
     "/js/scripts/extensions/swiper.js": "/js/scripts/extensions/swiper.js?id=1bd4c0cd9671222158db",
     "/js/scripts/extensions/toastr.js": "/js/scripts/extensions/toastr.js?id=9e8375a0ab0f41c2009a",
@@ -111,8 +111,8 @@
     "/js/scripts/pickers/dateTime/pick-a-datetime.js": "/js/scripts/pickers/dateTime/pick-a-datetime.js?id=1309e2dc372a6daa12dd",
     "/js/scripts/popover/popover.js": "/js/scripts/popover/popover.js?id=8b6cac731a1a63a73564",
     "/js/scripts/tooltip/tooltip.js": "/js/scripts/tooltip/tooltip.js?id=c88dd5ec5af559878525",
-    "/assets/js/extends.js": "/assets/js/extends.js?id=97e52e1c2edcd853d781",
-    "/assets/js/scripts.js": "/assets/js/scripts.js?id=bc7d17a3059003b05e3f",
+    "/assets/js/extends.js": "/assets/js/extends.js?id=4d70847efb5e4d1cf283",
+    "/assets/js/scripts.js": "/assets/js/scripts.js?id=4d71b801b259a6181a03",
     "/data/starter-list.json": "/data/starter-list.json?id=60793ee2be88c12c955d",
     "/data/template-list.json": "/data/template-list.json?id=699a9e1a7de490bc5c3c"
 }

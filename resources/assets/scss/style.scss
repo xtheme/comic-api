@@ -240,3 +240,19 @@ table.table {
         }
     }
 }
+
+// VideoJS centered play button
+.video-js {
+    .vjs-big-play-button {
+        left: 40% !important;
+        top: 40% !important;
+        width: 20%;
+        height: 20%;
+
+        .vjs-icon-placeholder:before {
+            top: 20% !important;
+            content: '\f101';
+            font-size: 48px;
+        }
+    }
+}

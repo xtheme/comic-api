@@ -190,6 +190,7 @@ Route::middleware(['auth'])->prefix('backend')->as('backend.')->group(function (
         Route::post('update/{video_id}/{id}', [VideoSeriesController::class , 'update'])->name('update');
         Route::put('batch/{action?}', [VideoSeriesController::class, 'batch'])->name('batch');
         Route::put('editable/{field}', [VideoSeriesController::class, 'editable'])->name('editable');
+        Route::any('preview/{id}', [VideoSeriesController::class, 'preview'])->name('preview');
     });
 
     Route::prefix('video_domain')->as('video_domain.')->group(function () {
