@@ -15,29 +15,31 @@
             <form id="search-form" class="form form-vertical" method="get" action="{{ url()->current() }}" novalidate>
                 <div class="form-body">
                     <div class="d-flex align-items-center">
-{{--                        <div class="form-group mr-1">--}}
-{{--                            <label>观看资格</label>--}}
-{{--                        </div>--}}
                         <div class="form-group mr-1">
                             <select class="form-control" name="vip">
                                 <option value="">观看资格</option>
-                                <option value="1">VIP</option>
-                                <option value="-1">免费</option>
+                                @foreach ($charge_options as $key => $val)
+                                    <option value="{{ $key }}" @if(request()->get('vip') == $key){{'selected'}}@endif>{{ $val }}</option>
+                                @endforeach
                             </select>
                         </div>
                         <div class="form-group mr-1">
                             <select class="form-control" name="status">
                                 <option value="">上架状态</option>
-                                <option value="1">上架</option>
-                                <option value="-1">下架</option>
+                                @foreach ($status_options as $key => $val)
+                                    <option value="{{ $key }}" @if(request()->get('status') == $key){{'selected'}}@endif>{{ $val }}</option>
+                                @endforeach
                             </select>
                         </div>
-                        <div class="form-group mr-1 position-relative has-icon-left">
-                            <input type="text" class="form-control" id="input-created" placeholder="请选择建立时间" name="created_at" autocomplete="off" value="{{ request()->get('created_at') }}">
-                            <div class="form-control-position">
-                                <i class='bx bx-calendar-check'></i>
-                            </div>
+                        <div class="form-group mr-1">
+                            <input type="text" class="form-control" name="title" value="{{ request()->get('title') }}" placeholder="影集标题">
                         </div>
+{{--                        <div class="form-group mr-1 position-relative has-icon-left">--}}
+{{--                            <input type="text" class="form-control" id="input-created" placeholder="请选择上架时间" name="created_between" autocomplete="off" value="{{ request()->get('created_between') }}">--}}
+{{--                            <div class="form-control-position">--}}
+{{--                                <i class='bx bx-calendar-check'></i>--}}
+{{--                            </div>--}}
+{{--                        </div>--}}
                         <div class="form-group">
                             <button type="submit" class="btn btn-primary">搜索</button>
                         </div>
@@ -49,7 +51,7 @@
             <a href="{{ route('backend.video_series.create', $video_id) }}" data-modal data-height="55vh" title="添加影集" class="btn btn-success">添加影集</a>
         </div>
         <div class="ml-auto">
-            <form id="batch-action" class="form form-vertical" method="get" action="{{ route('backend.video_series.batch', $video_id) }}" novalidate>
+            <form id="batch-action" class="form form-vertical" method="get" action="{{ route('backend.video_series.batch') }}" novalidate>
                 <div class="form-body">
                     <div class="d-flex align-items-center">
                         <div class="form-group mr-1">
@@ -82,8 +84,8 @@
                 <th>ID</th>
                 <th>影集标题</th>
                 <th>集数</th>
-                <th>视频域名</th>
-                <th>视频链结</th>
+{{--                <th>视频域名</th>--}}
+{{--                <th>视频链结</th>--}}
                 <th>视频长度</th>
                 <th>观看资格</th>
                 <th>状态</th>
@@ -101,14 +103,18 @@
                         </div>
                     </td>
                     <td>{{ $series->id }}</td>
-                    <td>{{ $series->title }}</td>
+                    <td>{{ $series->title }}
+                        <div style="margin-top: .5em;">
+                            <a data-modal data-size="lg" data-height="420px" title="视频预览" href="{{ route('backend.video_series.preview', $series->id) }}">{{ $series->url }}</a>
+                        </div>
+                    </td>
                     <td>{{ $series->episode }}</td>
-                    <td>{{ $series->cdn->domain }}</td>
-                    <td>{{ $series->link }}</td>
-                    <td>{{ $series->length }}</td>
+{{--                    <td>{{ $series->cdn->title }}</td>--}}
+{{--                    <td>{{ $series->cdn->domain . $series->link }}</td>--}}
+                    <td>{{ clearLength($series->length) }}</td>
                     <td>
                         @if($series->vip == 1)
-                            <a class="badge badge-pill badge-light-warning" data-modal-confirm href="{{ route('backend.video_series.batch', ['action'=>'free', 'ids' => $series->id]) }}" title="观看资格调整为免费">VIP</a>
+                            <a class="badge badge-pill badge-light-primary" data-modal-confirm href="{{ route('backend.video_series.batch', ['action'=>'free', 'ids' => $series->id]) }}" title="观看资格调整为免费">VIP</a>
                         @else
                             <a class="badge badge-pill badge-light-secondary" data-modal-confirm href="{{ route('backend.video_series.batch', ['action'=>'charge', 'ids' => $series->id]) }}" title="观看资格调整为 VIP">免费</a>
                         @endif
@@ -126,7 +132,7 @@
                             <span class="bx bx-dots-vertical-rounded font-medium-3 dropdown-toggle nav-hide-arrow cursor-pointer"
                                   id="dropdownMenuButton{{ $series->id }}" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></span>
                             <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuButton{{ $series->id }}">
-                                <a class="dropdown-item" data-modal href="{{ route('backend.video.edit', $series->id) }}" title="编辑影集"><i class="bx bx-edit-alt mr-1"></i>编辑影集</a>
+                                <a class="dropdown-item" data-modal href="{{ route('backend.video_series.edit', [$video_id, $series->id]) }}" title="编辑影集"><i class="bx bx-edit-alt mr-1"></i>编辑影集</a>
                             </div>
                         </div>
                     </td>
@@ -140,8 +146,6 @@
         <div class="col-md-6">{!! $list->appends(request()->input())->links() !!}</div>
     </div>
 @endsection
-
-
 
 {{-- vendor scripts --}}
 @section('vendor-scripts')
@@ -163,7 +167,7 @@
                 timePicker: true,
                 timePicker24Hour: true,
                 timePickerSeconds: true,
-                drops: 'up',
+                drops: 'down',
                 buttonClasses: 'btn',
                 applyClass: 'btn-success',
                 cancelClass: 'btn-danger',
@@ -241,9 +245,9 @@
                             data: {'ids' : ids},
                             debug   : true,
                             callback: function (res) {
-                                parent.parent.$.reloadIFrame({
-                                    title  : '提交成功',
-                                    message: '请稍后数据刷新'
+                                $.reloadModal({
+                                    reloadUrl: '{{ route('backend.video_series.index', $video_id) }}',
+                                    title: res.msg
                                 });
                             }
                         });

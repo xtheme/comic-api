@@ -2,15 +2,15 @@
 
 namespace App\Repositories;
 
+use App\Models\VideoDomain;
 use App\Models\VideoSeries;
 use App\Repositories\Contracts\VideoSeriesRepositoryInterface;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
+use Illuminate\Support\Collection;
 
 class VideoSeriesRepository extends Repository implements VideoSeriesRepositoryInterface
 {
-    protected $cache_ttl = 60; // 缓存秒数
-
     /**
      * @return string
      */
@@ -28,48 +28,32 @@ class VideoSeriesRepository extends Repository implements VideoSeriesRepositoryI
      */
     public function filter(Request $request): Builder
     {
+        $video_id = $request->get('video_id') ?? '';
         $id = $request->get('id') ?? '';
-        $username = $request->get('username') ?? '';
-        $nickname = $request->get('nickname') ?? '';
-        $mobile = $request->get('mobile') ?? '';
+        $vip = $request->get('vip') ?? '';
         $status = $request->get('status') ?? '';
-        $date_register = $request->get('date_register') ?? '';
-        $date_login = $request->get('date_login') ?? '';
+        $title = $request->get('title') ?? '';
+        $created_between = $request->get('created_between') ?? '';
+
         $order = $request->get('order') ?? 'created_at';
-        $sort = $request->get('sort') ?? 'DESC';
+        $sort = $request->get('sort') ?? 'desc';
 
-        return $this->model::with(['likes', 'visitor_likes', 'collects', 'active', 'comments'])->withCount([
-            'likes',
-            'visitor_likes',
-            'collects',
-            'active',
-            'comments',
-        ])->when($id, function (Builder $query, $id) {
+        return $this->model::with(['cdn'])->when($video_id, function (Builder $query, $video_id) {
+            return $query->where('video_id', $video_id);
+        })->when($id, function (Builder $query, $id) {
             return $query->where('id', $id);
-        })->when($username, function (Builder $query, $username) {
-            return $query->where('username', 'like', '%' . $username . '%');
-        })->when($nickname, function (Builder $query, $nickname) {
-            return $query->where('nickname', 'like', '%' . $nickname . '%');
-        })->when($mobile, function (Builder $query, $mobile) {
-            return $query->where('mobile', 'like', '%' . $mobile . '%');
+        })->when($vip, function (Builder $query, $vip) {
+            return $query->where('vip', $vip);
         })->when($status, function (Builder $query, $status) {
-            if ($status == 3) {
-                return $query->whereNotNull('deleted_at');
-            }
-
-            return $query->where('status', '=', $status);
-        })->when($date_register, function (Builder $query, $date_register) {
-            $date = explode(' - ', $date_register);
-            $start_date = $date[0] . ' 00:00:00';
-            $end_date = $date[1] . ' 23:59:59';
+            return $query->where('status', $status);
+        })->when($title, function (Builder $query, $title) {
+            return $query->whereLike(['title', 'link'], $title);
+        })->when($created_between, function (Builder $query, $created_between) {
+            $date = explode(' - ', $created_between);
+            $start_date = $date[0];
+            $end_date = $date[1];
 
             return $query->whereBetween('created_at', [$start_date, $end_date]);
-        })->when($date_login, function (Builder $query, $date_login) {
-            $date = explode(' - ', $date_login);
-            $start_date = strtotime($date[0] . ' 00:00:00');
-            $end_date = strtotime($date[1] . ' 23:59:59');
-
-            return $query->whereBetween('logged_at', [$start_date, $end_date]);
         })->when($sort, function (Builder $query, $sort) use ($order) {
             if ($sort == 'desc') {
                 return $query->orderByDesc($order);
@@ -77,5 +61,10 @@ class VideoSeriesRepository extends Repository implements VideoSeriesRepositoryI
                 return $query->orderBy($order);
             }
         });
+    }
+
+    public function getDomains(): ?Collection
+    {
+        return VideoDomain::where('status', 1)->orderByDesc('sort')->get();
     }
 }

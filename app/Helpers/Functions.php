@@ -64,7 +64,7 @@ if (!function_exists('webp')) {
 
 if (!function_exists('shortenNumber')) {
     /**
-     * 数字转换单位万：非四舍五入保留
+     * 数字大於4位數, 以万為单位重新格式化, 取小數點一位, 無條件進位
      */
     function shortenNumber($number)
     {
@@ -72,12 +72,21 @@ if (!function_exists('shortenNumber')) {
             $str = $number;
             $suffix = '';
         } else {
-            $num = $number / 10000;
             $str = number_format($number / 10000, 1);
             $suffix = '万';
         }
 
         return $str . $suffix;
+    }
+}
+
+if (!function_exists('clearLength')) {
+    /**
+     * 將視頻秒數轉換為易懂的片長
+     */
+    function clearLength($seconds)
+    {
+        return gmdate('H:i:s', $seconds);
     }
 }
 
