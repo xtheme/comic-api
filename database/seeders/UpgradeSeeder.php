@@ -41,11 +41,9 @@ class UpgradeSeeder
      */
     protected function addAdSpace(string $name, string $class)
     {
-        DB::table('ad_spaces')->truncate();
+        $exists = DB::table('ad_spaces')->where('name', $name)->exists();
 
-        // $exists = DB::table('ad_spaces')->where('name', $name)->exists();
-
-        // if (!$exists) {
+        if (!$exists) {
             $data = [
                 'name' => $name,
                 'remark' => '',
@@ -56,6 +54,6 @@ class UpgradeSeeder
             ];
 
             DB::table('ad_spaces')->insert($data);
-        // }
+        }
     }
 }
