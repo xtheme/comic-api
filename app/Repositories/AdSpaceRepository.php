@@ -57,14 +57,14 @@ class AdSpaceRepository extends Repository implements AdSpaceRepositoryInterface
     {
         $platform = request()->header('platform');
 
-        return $this->model::with(['video_ads' => function ($query) use ($platform){
+        return $this->model::with(['ads' => function ($query) use ($platform){
             return $query->where('platform',$platform);
         }])->where([
             ['name', $name],
             ['status', 1]
-        ]);
+        ])->select();
 
-//        return AdSpace::with(['video_ads'])
+//        return AdSpace::with(['ads'])
 //            ->whereHas('video_ads', function (Builder $query) use ($platform) {
 //                return $query->where('platform',$platform);
 //            })->where([

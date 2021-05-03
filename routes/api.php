@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Api\AdController;
 use App\Http\Controllers\Api\SignController;
 use App\Http\Controllers\Api\SmsController;
 use App\Http\Controllers\Api\UserController;
@@ -37,6 +38,10 @@ Route::prefix(config('api.version'))->middleware(['api.header', 'api.sign', 'jwt
     Route::prefix('sign')->as('sign.')->group(function () {
         Route::post('/signDetail', [SignController::class, 'signDetail'])->name('signDetail');
         Route::post('/signin', [SignController::class, 'signin'])->name('signin');
+    });
+
+    Route::prefix('ad')->as('ad.')->group(function () {
+        Route::post('/getAdList', [AdController::class, 'getAdList'])->name('getAdList');
     });
 
 
