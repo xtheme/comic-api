@@ -8,7 +8,7 @@
 @endsection
 
 @section('content')
-    <video id="example-video" width="640" height="360" class="video-js vjs-default-skin" controls>
+    <video id="example-video" width="640" height="360" class="video-js vjs-default-skin" controls style="margin: auto;">
         <source src="{{ $series->url }}" type="application/x-mpegURL">
     </video>
 @endsection
@@ -34,8 +34,7 @@
                     'playToggle': false,
                     'fullscreenToggle': false,
                     'pictureInPictureToggle': false
-                },
-                fluid: true
+                }
             };
             videojs('example-video', options, function() {
                 console.log('播放器初始化完成');    //回调函数

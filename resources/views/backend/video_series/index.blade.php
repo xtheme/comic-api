@@ -105,7 +105,7 @@
                     <td>{{ $series->id }}</td>
                     <td>{{ $series->title }}
                         <div style="margin-top: .5em;">
-                            <a data-modal data-size="lg" data-height="420px" title="视频预览" href="{{ route('backend.video_series.preview', $series->id) }}">{{ $series->url }}</a>
+                            <a data-modal data-size="lg" data-height="400px" title="视频预览" href="{{ route('backend.video_series.preview', $series->id) }}">{{ $series->url }}</a>
                         </div>
                     </td>
                     <td>{{ $series->episode }}</td>
