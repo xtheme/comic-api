@@ -14,7 +14,7 @@ class Block extends BaseModel
     protected $fillable = [
         'title',
         'sort',
-        'focus',
+        'spotlight',
         'row',
         'causer',
         'properties',
@@ -51,8 +51,8 @@ class Block extends BaseModel
     public function setPropertiesAttribute($properties)
     {
         //tags特性額外處理空值
-        if (!isset($properties[3]['value'])){
-            $properties[3]['value'] = [];
+        if (!isset($properties['tag']['value'])){
+            $properties['tag']['value'] = [];
         }
 
         $this->attributes['properties'] = json_encode($properties);
@@ -77,7 +77,7 @@ class Block extends BaseModel
      */
     public function getCreatedSplitAttribute()
     {
-        return explode('-' , $this->properties[2]['value']);
+        return explode('-' , $this->properties['date_between']['value']);
     }
 
     /**
@@ -87,7 +87,7 @@ class Block extends BaseModel
      */
     public function getTagsSplitAttribute()
     {
-        return explode('-' , $this->properties[3]['value']);
+        return explode('-' , $this->properties['tag']['value']);
     }
 
 }

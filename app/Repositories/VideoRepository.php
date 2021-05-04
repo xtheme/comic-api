@@ -36,7 +36,7 @@ class VideoRepository extends Repository implements VideoRepositoryInterface
         $ribbon = $request->input('ribbon') ?? '';
         $status = $request->input('status') ?? '';
         $tag = $request->input('tag') ?? '';
-        $date_register = $request->input('date_register') ?? '';
+        $date_between = $request->input('date_between') ?? '';
 
         $order = $request->input('order') ?? 'created_at';
         $sort = $request->input('sort') ?? 'desc';
@@ -55,8 +55,8 @@ class VideoRepository extends Repository implements VideoRepositoryInterface
         })->when($tag, function (Builder $query, $tag) {
             /** @noinspection PhpUndefinedMethodInspection */
             return $query->withAllTags($tag);
-        })->when($date_register, function (Builder $query, $date_register) {
-            $date = explode(' - ', $date_register);
+        })->when($date_between, function (Builder $query, $date_between) {
+            $date = explode(' - ', $date_between);
             $start_date = $date[0] . ' 00:00:00';
             $end_date = $date[1] . ' 23:59:59';
             return $query->whereBetween('created_at', [

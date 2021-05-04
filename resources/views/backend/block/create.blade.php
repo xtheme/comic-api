@@ -12,7 +12,7 @@
             <div class="row">
                 <div class="col-6">
                     <div class="form-group">
-                        <label for="input-username"><span class="danger">*</span>模块名称</label>
+                        <label for="input-username"><span class="danger">*</span> 模块名称</label>
                         <div class="controls">
                             <input type="text" id="input-username" class="form-control" name="title"
                                    placeholder="请输入模块名称"
@@ -23,21 +23,21 @@
                 </div>
                 <div class="col-6">
                     <div class="form-group">
-                        <label for="input-username"><span class="danger">*</span>模块排序</label>
+                        <label for="input-username"><span class="danger">*</span> 模块排序<span class="danger">(由0到999排序)</span></label>
                         <div class="controls">
                             <input type="text" id="input-username" class="form-control" name="sort"
                                    placeholder="请输入排序"
                                    required
                                    data-validation-required-message="请输入排序"
-                                   value="999">
+                                   value="0">
                         </div>
                     </div>
                 </div>
                 <div class="col-6">
                     <div class="form-group">
-                        <label for="input-username"><span class="danger">*</span>聚焦数</label>
+                        <label for="input-username">聚焦的数量<span class="danger">(例如：动漫1大2小 则填入1)</span></label>
                         <div class="controls">
-                            <input type="text" id="input-username" class="form-control" name="focus"
+                            <input type="text" id="input-username" class="form-control" name="spotlight"
                                    placeholder="请输入聚焦数"
                                    required
                                    data-validation-required-message="请输入聚焦数"
@@ -47,7 +47,7 @@
                 </div>
                 <div class="col-6">
                     <div class="form-group">
-                        <label for="input-username"><span class="danger">*</span>行数</label>
+                        <label for="input-username">每行几个内容<span class="danger">(例如：动漫1大2小 则填入2))</span></label>
                         <div class="controls">
                             <input type="text" id="input-username" class="form-control" name="row"
                                    placeholder="请输入行数"
@@ -59,7 +59,7 @@
                 </div>
 {{--                <div class="col-12">--}}
 {{--                    <div class="form-group">--}}
-{{--                        <label for="input-username"><span class="danger">*</span>模块展示</label>--}}
+{{--                        <label for="input-username"><span class="danger">*</span> 模块展示</label>--}}
 {{--                        <div class="controls">--}}
 {{--                            <select class="form-control" name="style" >--}}
 {{--                                <option value="">请选择风格</option>--}}
@@ -72,63 +72,31 @@
 {{--                </div>--}}
                 <div class="col-6">
                     <div class="form-group">
-                        <label for="input-username"><span class="danger">*</span>模块模型</label>
+                        <label for="input-username"><span class="danger">*</span> 模块模型</label>
                         <div class="controls">
-                            <ul class="list-unstyled mb-0">
-                                <li class="d-inline-block mr-2 mb-1">
-                                    <fieldset>
-                                        <div class="radio radio-shadow">
-                                            <input type="radio" id="radioscauser1"  name="causer" value="video" checked>
-                                            <label for="radioscauser1">动画</label>
-                                        </div>
-                                    </fieldset>
-                                </li>
-                                <li class="d-inline-block mr-2 mb-1">
-                                    <fieldset>
-                                        <div class="radio radio-shadow">
-                                            <input type="radio" id="radioscauser2" name="causer" value="comic" >
-                                            <label for="radioscauser2">漫画</label>
-                                        </div>
-                                    </fieldset>
-                                </li>
-                            </ul>
+                            <select class="form-control" name="causer" >
+                                <option value="video" >动画</option>
+                                <option value="comic" >漫画</option>
+                            </select>
                         </div>
                     </div>
                 </div>
                 <div class="col-6">
                     <div class="form-group">
-                        <label for="input-username"><span class="danger">*</span>状态</label>
+                        <label for="input-username"><span class="danger">*</span> 状态</label>
                         <div class="controls">
-                            <ul class="list-unstyled mb-0">
-                                <li class="d-inline-block mr-2 mb-1">
-                                    <fieldset>
-                                        <div class="radio radio-shadow">
-                                            <input type="radio" id="radiostatus1"  name="status" value="1" checked>
-                                            <label for="radiostatus1">上架</label>
-                                        </div>
-                                    </fieldset>
-                                </li>
-                                <li class="d-inline-block mr-2 mb-1">
-                                    <fieldset>
-                                        <div class="radio radio-shadow">
-                                            <input type="radio" id="radiostatus2" name="status" value="-1" >
-                                            <label for="radiostatus2">下架</label>
-                                        </div>
-                                    </fieldset>
-                                </li>
-                            </ul>
+                            <select class="form-control" name="status" >
+                                <option value="1" >开启</option>
+                                <option value="-1" >关闭</option>
+                            </select>
                         </div>
                     </div>
                 </div>
-                <div class="card-header col-12 text-center">
-                    <h4 class="card-title">特性条件</h4>
-                </div>
                 <div class="col-6">
                     <div class="form-group">
-                        <label for="input-username"><span class="danger">*</span>挑选笔数</label>
+                        <label for="input-username">挑选笔数</label>
                         <div class="controls">
-                            <input type="hidden" name="properties[0][field]" value="limit">
-                            <input type="text" id="input-username" class="form-control" name="properties[0][value]"
+                            <input type="text" id="input-username" class="form-control" name="properties[limit][value]"
                                    placeholder="请输入挑选笔数，留空不设置挑选条件"
                                    required
                                    data-validation-required-message="请输入挑选笔数"
@@ -138,18 +106,30 @@
                 </div>
                 <div class="col-6">
                     <div class="form-group">
-                        <label for="input-username"><span class="danger">*</span>挑选排序</label>
+                        <label for="input-username">挑选作者</label>
                         <div class="controls">
-                            <input type="hidden" name="properties[1][field]" value="order">
-                            <ul class="list-unstyled mb-0">
-                                <li class="d-inline-block mr-2 mb-1">
-                                    <fieldset>
-                                        <div class="radio radio-shadow">
-                                            <input type="radio" id="radio_condition_1"  name="properties[1][value]" value="created_at" checked>
-                                            <label for="radio_condition_1">时间</label>
-                                        </div>
-                                    </fieldset>
-                                </li>
+                            <input type="text" id="input-username" class="form-control" name="properties[author][value]"
+                                   placeholder="请输入作者，留空不设置挑选条件"
+                                   data-validation-required-message="请输入作者"
+                            >
+                        </div>
+                    </div>
+                </div>
+                <input type="hidden" name="properties[order][value]" value="created_at">
+{{--                <div class="col-6">--}}
+{{--                    <div class="form-group">--}}
+{{--                        <label for="input-username"><span class="danger">*</span> 挑选排序</label>--}}
+{{--                        <div class="controls">--}}
+{{--                            <input type="hidden" name="properties[1][value]" value="created_at">--}}
+{{--                            <ul class="list-unstyled mb-0">--}}
+{{--                                <li class="d-inline-block mr-2 mb-1">--}}
+{{--                                    <fieldset>--}}
+{{--                                        <div class="radio radio-shadow">--}}
+{{--                                            <input type="radio" id="radio_condition_1"  name="properties[1][value]" value="created_at" checked>--}}
+{{--                                            <label for="radio_condition_1">时间</label>--}}
+{{--                                        </div>--}}
+{{--                                    </fieldset>--}}
+{{--                                </li>--}}
 {{--                                <li class="d-inline-block mr-2 mb-1">--}}
 {{--                                    <fieldset>--}}
 {{--                                        <div class="radio radio-shadow">--}}
@@ -166,18 +146,17 @@
 {{--                                        </div>--}}
 {{--                                    </fieldset>--}}
 {{--                                </li>--}}
-                            </ul>
-                        </div>
-                    </div>
-                </div>
+{{--                            </ul>--}}
+{{--                        </div>--}}
+{{--                    </div>--}}
+{{--                </div>--}}
                 <div class="col-12">
                     <div class="form-group">
-                        <label for="input-username"><span class="danger">*</span>挑选作品时间区间</label>
+                        <label for="input-username">挑选作品时间区间</label>
                         <div class="controls">
-                            <input type="hidden" name="properties[2][field]" value="date_register">
                             <fieldset class="form-group position-relative has-icon-left">
                                 <input type="text" id="input-date-register" class="form-control date-picker"
-                                       name="properties[2][value]"
+                                       name="properties[date_between][value]"
                                        autocomplete="off"
                                        placeholder="请输入时间区间，留空不设置挑选条件">
                                 <div class="form-control-position">
@@ -189,26 +168,13 @@
                 </div>
                 <div class="col-12">
                     <div class="form-group">
-                        <label for="input-username"><span class="danger">*</span>挑选标签</label>
+                        <label for="input-username">挑选标签</label>
                         <div class="controls">
-                            <input type="hidden" name="properties[3][field]" value="tag[]">
-                            <select id="tags-selector" class="form-control" name="properties[3][value][]" multiple="multiple">
+                            <select id="tags-selector" class="form-control" name="properties[tag][value][]" multiple="multiple">
                                 @foreach($tags as $tag)
                                     <option value="{{ $tag->name }}" >{{ $tag->name }}</option>
                                 @endforeach
                             </select>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-6">
-                    <div class="form-group">
-                        <label for="input-username"><span class="danger">*</span>挑选作者</label>
-                        <div class="controls">
-                            <input type="hidden" name="properties[4][field]" value="author">
-                            <input type="text" id="input-username" class="form-control" name="properties[4][value]"
-                                   placeholder="请输入作者，留空不设置挑选条件"
-                                   data-validation-required-message="请输入作者"
-                                   >
                         </div>
                     </div>
                 </div>
