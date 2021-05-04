@@ -3,6 +3,7 @@
 use App\Http\Controllers\Api\AdController;
 use App\Http\Controllers\Api\SignController;
 use App\Http\Controllers\Api\SmsController;
+use App\Http\Controllers\Api\TopicController;
 use App\Http\Controllers\Api\UserController;
 use App\Http\Controllers\Api\VideoController;
 use Illuminate\Http\Request;
@@ -47,6 +48,11 @@ Route::prefix(config('api.version'))->middleware(['api.header', 'api.sign', 'jwt
 
     Route::prefix('video')->as('video.')->group(function () {
         Route::post('/list', [VideoController::class, 'list'])->name('list');
+    });
+
+    Route::prefix('topic')->as('topic.')->group(function () {
+        Route::post('/video', [TopicController::class, 'video'])->name('video');
+        // Route::post('/book', [TopicController::class, 'book'])->name('book');
     });
 });
 
