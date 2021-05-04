@@ -64,7 +64,7 @@ class VerifyJwtToken
             }
         } catch (\Exception $e) {
             // @todo jwt 过期自动签发?
-            return Response::jsonError($e->getMessage());
+            return Response::jsonError(__('jwt.' . $e->getMessage()));
         }
 
         return $next($request);
