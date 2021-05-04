@@ -32,14 +32,17 @@ class VideoRepository extends Repository implements VideoRepositoryInterface
      */
     public function filter(Request $request): Builder
     {
-        $title = $request->get('title') ?? '';
-        $author = $request->get('author') ?? '';
-        $ribbon = $request->get('ribbon') ?? '';
-        $status = $request->get('status') ?? '';
-        $tag = $request->get('tag') ?? '';
+        $title = $request->input('title') ?? '';
+        $author = $request->input('author') ?? '';
+        $ribbon = $request->input('ribbon') ?? '';
+        $status = $request->input('status') ?? '';
+        $tag = $request->input('tag') ?? '';
 
-        $order = $request->get('order') ?? 'created_at';
-        $sort = $request->get('sort') ?? 'desc';
+        $order = $request->input('order') ?? 'created_at';
+        $sort = $request->input('sort') ?? 'desc';
+
+        $page = $request->input('page') ?? 1;
+        $perPage = $request->input('perPage') ?? 10;
 
         return $this->model::withCount(['series'])->when($title, function (Builder $query, $title) {
             return $query->whereLike('title', $title);
@@ -58,6 +61,8 @@ class VideoRepository extends Repository implements VideoRepositoryInterface
             } else {
                 return $query->orderBy($order);
             }
+        })->when($page, function (Builder $query, $page) use ($perPage) {
+            return $query->forPage($page, $perPage);
         });
     }
 
