@@ -4,6 +4,7 @@ use App\Http\Controllers\Api\AdController;
 use App\Http\Controllers\Api\SignController;
 use App\Http\Controllers\Api\SmsController;
 use App\Http\Controllers\Api\UserController;
+use App\Http\Controllers\Api\VideoController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 /*
@@ -44,7 +45,9 @@ Route::prefix(config('api.version'))->middleware(['api.header', 'api.sign', 'jwt
         Route::post('/getAdList', [AdController::class, 'getAdList'])->name('getAdList');
     });
 
-
+    Route::prefix('video')->as('video.')->group(function () {
+        Route::post('/list', [VideoController::class, 'list'])->name('list');
+    });
 });
 
 
