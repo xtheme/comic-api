@@ -42,7 +42,7 @@ Route::prefix(config('api.version'))->middleware(['api.header', 'api.sign', 'jwt
     });
 
     Route::prefix('ad')->as('ad.')->group(function () {
-        Route::post('/getAdList', [AdController::class, 'getAdList'])->name('getAdList');
+        Route::get('/space', [AdController::class, 'space'])->name('space');
     });
 
     Route::prefix('video')->as('video.')->group(function () {
