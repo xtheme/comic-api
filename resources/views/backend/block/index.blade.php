@@ -23,15 +23,15 @@
                     <form id="search-form" class="form form-horizontal" method="get" action="{{ url()->current() }}" novalidate>
                         <div class="form-body">
                             <div class="d-flex align-items-center">
-                                <div class="form-group mr-1">
-                                    <div class="controls">
-                                        <select id="class-type" class="form-control" name="causer">
-                                            <option value="" >全部</option>
-                                            <option value="video" @if(request()->get('causer') == 'video') selected @endif >动画</option>
-                                            <option value="comic" @if(request()->get('causer') == 'comic') selected @endif >漫画</option>
-                                        </select>
-                                    </div>
-                                </div>
+{{--                                <div class="form-group mr-1">--}}
+{{--                                    <div class="controls">--}}
+{{--                                        <select id="class-type" class="form-control" name="causer">--}}
+{{--                                            <option value="" >全部</option>--}}
+{{--                                            <option value="video" @if(request()->get('causer') == 'video') selected @endif >动画</option>--}}
+{{--                                            <option value="comic" @if(request()->get('causer') == 'comic') selected @endif >漫画</option>--}}
+{{--                                        </select>--}}
+{{--                                    </div>--}}
+{{--                                </div>--}}
                                 <div class="form-group mr-1">
                                     <div class="controls">
                                         <input type="text" class="form-control" name="title"
