@@ -24,7 +24,7 @@ class AdController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function getAdList(Request $request)
+    public function space(Request $request)
     {
 
         $name = $request->post('name');
