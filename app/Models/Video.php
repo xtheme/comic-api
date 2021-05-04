@@ -3,14 +3,9 @@
 namespace App\Models;
 
 use Conner\Tagging\Taggable;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
-use Spatie\Activitylog\Traits\LogsActivity;
 
-class Video extends Model
+class Video extends BaseModel
 {
-    use HasFactory;
-    use LogsActivity;
     use Taggable;
 
     protected $fillable = [
@@ -22,12 +17,20 @@ class Video extends Model
         'status',
     ];
 
+    protected $appends = [
+        'tagged_tags'
+    ];
+
+    protected $hidden = [
+        'tagged'
+    ];
+
     public function series()
     {
         return $this->hasMany('App\Models\VideoSeries');
     }
 
-    public function getTaggedArrAttribute()
+    public function getTaggedTagsAttribute()
     {
         return $this->tagged->pluck('tag_name')->toArray();
     }

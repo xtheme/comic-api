@@ -2,15 +2,8 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
-use Spatie\Activitylog\Traits\LogsActivity;
-
-class VideoSeries extends Model
+class VideoSeries extends BaseModel
 {
-    use HasFactory;
-    use LogsActivity;
-
     protected $fillable = [
         'video_id',
         'episode',
@@ -21,7 +14,6 @@ class VideoSeries extends Model
         'link',
         'length',
     ];
-
 
     public function video()
     {
