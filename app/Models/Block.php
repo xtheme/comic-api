@@ -2,13 +2,10 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Str;
 
-class Block extends Model
+class Block extends BaseModel
 {
-    use HasFactory;
-
     /**
      * The attributes that are mass assignable.
      *
@@ -31,7 +28,7 @@ class Block extends Model
      * @var array
      */
     protected $appends = [
-        'created_split'
+        // 'created_split'
     ];
 
     protected $casts = [
@@ -40,17 +37,10 @@ class Block extends Model
 
     /**
      * 写入动画跟漫画的种类别
-     *
-     * @return string
      */
     public function setCauserAttribute($value)
     {
-
-        $types = [
-            'video' => 'App\Models\Video',
-            'comic' => 'App\Models\Book',
-        ];
-        $this->attributes['causer'] = $types[$value];
+        $this->attributes['causer'] = sprintf('App\Models\%s', Str::ucfirst($value));
     }
 
     /**
