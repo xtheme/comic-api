@@ -32,11 +32,13 @@ class VideoRepository extends Repository implements VideoRepositoryInterface
      */
     public function filter(Request $request): Builder
     {
+        $date_register = $request->input('date_register') ?? '';
         $title = $request->input('title') ?? '';
         $author = $request->input('author') ?? '';
         $ribbon = $request->input('ribbon') ?? '';
         $status = $request->input('status') ?? '';
         $tag = $request->input('tag') ?? '';
+        $date_register = $request->input('date_register') ?? '';
 
         $order = $request->input('order') ?? 'created_at';
         $sort = $request->input('sort') ?? 'desc';
@@ -55,6 +57,14 @@ class VideoRepository extends Repository implements VideoRepositoryInterface
         })->when($tag, function (Builder $query, $tag) {
             /** @noinspection PhpUndefinedMethodInspection */
             return $query->withAllTags($tag);
+        })->when($date_register, function (Builder $query, $date_register) {
+            $date = explode(' - ', $date_register);
+            $start_date = $date[0] . ' 00:00:00';
+            $end_date = $date[1] . ' 23:59:59';
+            return $query->whereBetween('created_at', [
+                $start_date,
+                $end_date,
+            ]);
         })->when($sort, function (Builder $query, $sort) use ($order) {
             if ($sort == 'desc') {
                 return $query->orderByDesc($order);

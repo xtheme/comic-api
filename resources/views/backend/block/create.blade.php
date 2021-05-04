@@ -2,7 +2,8 @@
 
 {{-- page style --}}
 @section('page-styles')
-    <link rel="stylesheet" type="text/css" href="{{ asset('css/plugins/forms/validation/form-validation.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ asset('vendors/css/bootstrap-multiselect/bootstrap-multiselect.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ asset('vendors/css/pickers/daterange/daterangepicker.css') }}">
 @endsection
 
 @section('content')
@@ -11,9 +12,20 @@
             <div class="row">
                 <div class="col-6">
                     <div class="form-group">
-                        <label for="input-username"><span class="danger">*</span>排序</label>
+                        <label for="input-username"><span class="danger">*</span>模块名称</label>
                         <div class="controls">
-                            <input type="text" id="input-username" class="form-control" name="listorder"
+                            <input type="text" id="input-username" class="form-control" name="title"
+                                   placeholder="请输入模块名称"
+                                   required
+                                   data-validation-required-message="请输入模块名称">
+                        </div>
+                    </div>
+                </div>
+                <div class="col-6">
+                    <div class="form-group">
+                        <label for="input-username"><span class="danger">*</span>模块排序</label>
+                        <div class="controls">
+                            <input type="text" id="input-username" class="form-control" name="sort"
                                    placeholder="请输入排序"
                                    required
                                    data-validation-required-message="请输入排序"
@@ -23,40 +35,63 @@
                 </div>
                 <div class="col-6">
                     <div class="form-group">
-                        <label for="input-username"><span class="danger">*</span>推荐名称</label>
+                        <label for="input-username"><span class="danger">*</span>聚焦数</label>
                         <div class="controls">
-                            <input type="text" id="input-username" class="form-control" name="title"
-                                   placeholder="请输入推荐名称"
+                            <input type="text" id="input-username" class="form-control" name="focus"
+                                   placeholder="请输入聚焦数"
                                    required
-                                   data-validation-required-message="请输入推荐名称">
-                        </div>
-                    </div>
-                </div>
-                <div class="col-12">
-                    <div class="form-group">
-                        <label for="input-username"><span class="danger">*</span>图标</label>
-                        <div class="controls">
-                            <div class="input-group">
-                                <input type="text" class="form-control image-path" name="icon" autocomplete="off" aria-describedby="input-file-addon">
-                                <input type="file" class="hidden-file-upload" data-path="icon">
-                                <div class="input-group-append" id="input-file-addon">
-                                    <button class="btn btn-primary upload-image" type="button">上传</button>
-                                </div>
-                            </div>
-                            <div class="upload-image-callback"></div>
-                            <div class="text-muted"></div>
+                                   data-validation-required-message="请输入聚焦数"
+                                   value="0">
                         </div>
                     </div>
                 </div>
                 <div class="col-6">
                     <div class="form-group">
-                        <label for="input-username"><span class="danger">*</span>展示风格</label>
+                        <label for="input-username"><span class="danger">*</span>行数</label>
                         <div class="controls">
-                            <select class="form-control" name="style" >
-                                @foreach ($style as $key => $item)
-                                    <option value="{{ $key }}">{{ $item }}</option>
-                                @endforeach
-                            </select>
+                            <input type="text" id="input-username" class="form-control" name="row"
+                                   placeholder="请输入行数"
+                                   required
+                                   data-validation-required-message="请输入行数"
+                                   value="0">
+                        </div>
+                    </div>
+                </div>
+{{--                <div class="col-12">--}}
+{{--                    <div class="form-group">--}}
+{{--                        <label for="input-username"><span class="danger">*</span>模块展示</label>--}}
+{{--                        <div class="controls">--}}
+{{--                            <select class="form-control" name="style" >--}}
+{{--                                <option value="">请选择风格</option>--}}
+{{--                                @foreach ($style as $key => $item)--}}
+{{--                                    <option value="{{ $key }}">{{ $item }}</option>--}}
+{{--                                @endforeach--}}
+{{--                            </select>--}}
+{{--                        </div>--}}
+{{--                    </div>--}}
+{{--                </div>--}}
+                <div class="col-6">
+                    <div class="form-group">
+                        <label for="input-username"><span class="danger">*</span>模块模型</label>
+                        <div class="controls">
+                            <ul class="list-unstyled mb-0">
+                                <li class="d-inline-block mr-2 mb-1">
+                                    <fieldset>
+                                        <div class="radio radio-shadow">
+                                            <input type="radio" id="radioscauser1"  name="causer" value="video" checked>
+                                            <label for="radioscauser1">动画</label>
+                                        </div>
+                                    </fieldset>
+                                </li>
+                                <li class="d-inline-block mr-2 mb-1">
+                                    <fieldset>
+                                        <div class="radio radio-shadow">
+                                            <input type="radio" id="radioscauser2" name="causer" value="comic" >
+                                            <label for="radioscauser2">漫画</label>
+                                        </div>
+                                    </fieldset>
+                                </li>
+                            </ul>
                         </div>
                     </div>
                 </div>
@@ -68,20 +103,112 @@
                                 <li class="d-inline-block mr-2 mb-1">
                                     <fieldset>
                                         <div class="radio radio-shadow">
-                                            <input type="radio" id="radioshadow2"  name="display" value="1" checked>
-                                            <label for="radioshadow2">显示</label>
+                                            <input type="radio" id="radiostatus1"  name="status" value="1" checked>
+                                            <label for="radiostatus1">上架</label>
                                         </div>
                                     </fieldset>
                                 </li>
                                 <li class="d-inline-block mr-2 mb-1">
                                     <fieldset>
                                         <div class="radio radio-shadow">
-                                            <input type="radio" id="radioshadow1" name="display" value="0" >
-                                            <label for="radioshadow1">隐藏</label>
+                                            <input type="radio" id="radiostatus2" name="status" value="-1" >
+                                            <label for="radiostatus2">下架</label>
                                         </div>
                                     </fieldset>
                                 </li>
                             </ul>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-header col-12 text-center">
+                    <h4 class="card-title">特性条件</h4>
+                </div>
+                <div class="col-6">
+                    <div class="form-group">
+                        <label for="input-username"><span class="danger">*</span>挑选笔数</label>
+                        <div class="controls">
+                            <input type="hidden" name="properties[0][field]" value="limit">
+                            <input type="text" id="input-username" class="form-control" name="properties[0][value]"
+                                   placeholder="请输入挑选笔数，留空不设置挑选条件"
+                                   required
+                                   data-validation-required-message="请输入挑选笔数"
+                                   value="6">
+                        </div>
+                    </div>
+                </div>
+                <div class="col-6">
+                    <div class="form-group">
+                        <label for="input-username"><span class="danger">*</span>挑选排序</label>
+                        <div class="controls">
+                            <input type="hidden" name="properties[1][field]" value="order">
+                            <ul class="list-unstyled mb-0">
+                                <li class="d-inline-block mr-2 mb-1">
+                                    <fieldset>
+                                        <div class="radio radio-shadow">
+                                            <input type="radio" id="radio_condition_1"  name="properties[1][value]" value="created_at" checked>
+                                            <label for="radio_condition_1">时间</label>
+                                        </div>
+                                    </fieldset>
+                                </li>
+{{--                                <li class="d-inline-block mr-2 mb-1">--}}
+{{--                                    <fieldset>--}}
+{{--                                        <div class="radio radio-shadow">--}}
+{{--                                            <input type="radio" id="radio_condition_2" name="properties[1][value]" value="hot" >--}}
+{{--                                            <label for="radio_condition_2">热度</label>--}}
+{{--                                        </div>--}}
+{{--                                    </fieldset>--}}
+{{--                                </li>--}}
+{{--                                <li class="d-inline-block mr-2 mb-1">--}}
+{{--                                    <fieldset>--}}
+{{--                                        <div class="radio radio-shadow">--}}
+{{--                                            <input type="radio" id="radio_condition_3" name="properties[1][value]" value="collect" >--}}
+{{--                                            <label for="radio_condition_3">收藏量</label>--}}
+{{--                                        </div>--}}
+{{--                                    </fieldset>--}}
+{{--                                </li>--}}
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-12">
+                    <div class="form-group">
+                        <label for="input-username"><span class="danger">*</span>挑选作品时间区间</label>
+                        <div class="controls">
+                            <input type="hidden" name="properties[2][field]" value="date_register">
+                            <fieldset class="form-group position-relative has-icon-left">
+                                <input type="text" id="input-date-register" class="form-control date-picker"
+                                       name="properties[2][value]"
+                                       autocomplete="off"
+                                       placeholder="请输入时间区间，留空不设置挑选条件">
+                                <div class="form-control-position">
+                                    <i class='bx bx-calendar-check'></i>
+                                </div>
+                            </fieldset>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-12">
+                    <div class="form-group">
+                        <label for="input-username"><span class="danger">*</span>挑选标签</label>
+                        <div class="controls">
+                            <input type="hidden" name="properties[3][field]" value="tag[]">
+                            <select id="tags-selector" class="form-control" name="properties[3][value][]" multiple="multiple">
+                                @foreach($tags as $tag)
+                                    <option value="{{ $tag->name }}" >{{ $tag->name }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-6">
+                    <div class="form-group">
+                        <label for="input-username"><span class="danger">*</span>挑选作者</label>
+                        <div class="controls">
+                            <input type="hidden" name="properties[4][field]" value="author">
+                            <input type="text" id="input-username" class="form-control" name="properties[4][value]"
+                                   placeholder="请输入作者，留空不设置挑选条件"
+                                   data-validation-required-message="请输入作者"
+                                   >
                         </div>
                     </div>
                 </div>
@@ -96,14 +223,57 @@
 
 {{-- vendor scripts --}}
 @section('vendor-scripts')
-    <script src="{{ asset('vendors/js/forms/validation/jqBootstrapValidation.js') }}"></script>
+    <script src="{{ asset('vendors/js/extensions/moment.min.js') }}"></script>
+    <script src="{{ asset('vendors/js/extensions/locale-all.js') }}"></script>
+    <script src="{{ asset('vendors/js/pickers/daterange/daterangepicker.js') }}"></script>
+    <script src="{{ asset('vendors/js/bootstrap-multiselect/bootstrap-multiselect.js') }}"></script>
 @endsection
+
 
 {{-- page scripts --}}
 @section('page-scripts')
     <script src="{{ asset('js/scripts/forms/validation/form-validation.js') }}"></script>
     <script>
+        let $datePicker = $('.date-picker');
+
+        $datePicker.daterangepicker({
+            autoUpdateInput: false,
+            startDate: moment().subtract(7, 'days').calendar(),
+        });
+
+        $datePicker.on('apply.daterangepicker', function(ev, picker) {
+            $(this).val(picker.startDate.format('YYYY-MM-DD') + ' - ' + picker.endDate.format('YYYY-MM-DD'));
+        });
+
+        $datePicker.on('cancel.daterangepicker', function(ev, picker) {
+            $(this).val('');
+        });
+
+
+
 		$(document).ready(function () {
+            $('#tags-selector').multiselect({
+                buttonWidth: '100%',
+                buttonTextAlignment: 'left',
+                buttonText: function(options, select) {
+                    if (options.length === 0) {
+                        return '请选择标签';
+                    }
+                    else {
+                        var labels = [];
+                        options.each(function() {
+                            if ($(this).attr('label') !== undefined) {
+                                labels.push($(this).attr('label'));
+                            }
+                            else {
+                                labels.push($(this).html());
+                            }
+                        });
+                        return labels.join(', ') + '';
+                    }
+                }
+            });
+
 			$('#form').submit(function (e) {
 				e.preventDefault();
 
