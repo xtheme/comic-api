@@ -26,7 +26,7 @@ class VideoController extends Controller
         $data = [
             'status_options' => self::STATUS_OPTIONS,
             'ribbon_options' => self::RIBBON_OPTIONS,
-            'videos' => $this->repository->filter($request)->paginate(),
+            'videos' => $this->repository->filter($request)->paginate($request->get('limit')),
             'tags' => $this->repository->getTags(),
             'pageConfigs' => ['hasSearchForm' => true],
         ];

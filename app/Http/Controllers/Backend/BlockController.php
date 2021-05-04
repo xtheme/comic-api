@@ -3,25 +3,30 @@
 namespace App\Http\Controllers\Backend;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\Backend\RecomclassRequest;
+use App\Http\Requests\Backend\BlockRequest;
 use App\Models\Block;
+use App\Repositories\Contracts\BlockRepositoryInterface;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Response;
 
 class BlockController extends Controller
 {
 
-
+    private $repository;
     private $style;
+    private $causer;
 
-    public function __construct()
+    public function __construct(BlockRepositoryInterface $repository)
     {
+
+        $this->repository = $repository;
         $this->style = [
-            1 => '一排显示1个',
-            2 => '一排显示2个',
-            3 => '一排显示3个',
-            4 => '广告图',
-            5 => '动漫一大二小'
+            '1_2' => '动漫一大二小'
+        ];
+
+        $this->causer = [
+            'App\Models\Video' => 'video' ,
+            'App\Models\Book'  => 'comic' ,
         ];
     }
 
@@ -31,13 +36,17 @@ class BlockController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        $list = Block::orderBy('listorder')->paginate();
 
-        return view('backend.block.index', [
-            'list' => $list
-        ]);
+        $data = [
+            'tags' => $this->repository->getTags(),
+            'style'=> $this->style,
+            'causer'=> $this->causer,
+            'list' => $this->repository->filter($request)->paginate(),
+        ];
+
+        return view('backend.block.index')->with($data);
     }
 
     /**
@@ -47,9 +56,13 @@ class BlockController extends Controller
      */
     public function create()
     {
-        return view('backend.block.create', [
-            'style' => $this->style
-        ]);
+
+        $data = [
+            'style' => $this->style,
+            'tags' => $this->repository->getTags()
+        ];
+
+        return view('backend.block.create')->with($data);
     }
 
     /**
@@ -58,18 +71,14 @@ class BlockController extends Controller
      * @param \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
      */
-    public function store(RecomclassRequest $request)
+    public function store(BlockRequest $request)
     {
 
         $post = $request->post();
 
-        $block = new Block;
+        $this->repository->create($post);
 
-        $post['addtime'] = time();
-
-        $block->fill($post)->save();
-
-        return Response::jsonSuccess('添加推荐分类成功！');
+        return Response::jsonSuccess('添加模块成功！');
     }
 
     /**
@@ -80,13 +89,15 @@ class BlockController extends Controller
      */
     public function edit($id)
     {
-        $data = Block::findOrFail($id);
 
+        $data = [
+            'data'  => $this->repository->find($id),
+            'style' => $this->style,
+            'causer'=> $this->causer,
+            'tags' => $this->repository->getTags()
+        ];
 
-        return view('backend.block.edit', [
-            'data' => $data,
-            'style' => $this->style
-        ]);
+        return view('backend.block.edit')->with($data);
     }
 
     /**
@@ -96,13 +107,12 @@ class BlockController extends Controller
      * @param int $id
      * @return \Illuminate\Http\Response
      */
-    public function update(RecomclassRequest $request, $id)
+    public function update(BlockRequest $request, $id)
     {
-        $block = Block::findOrFail($id);
 
-        $block->fill($request->post())->save();
+        $this->repository->update($id , $request->post());
 
-        return Response::jsonSuccess('推荐分类修改成功！');
+        return Response::jsonSuccess('模块修改成功！');
     }
 
     /**
@@ -130,7 +140,7 @@ class BlockController extends Controller
     {
         $post = $request->post();
 
-        Block::where('id', $post['pk'])->update(['listorder' => $post['value']]);
+        Block::where('id', $post['pk'])->update(['sort' => $post['value']]);
 
         return Response::jsonSuccess('更新资料成功！');
     }
@@ -147,6 +157,34 @@ class BlockController extends Controller
         $data = explode(',', $ids);
         Block::destroy($data);
         return Response::jsonSuccess('删除成功！');
+    }
+
+    /**
+     * 上下架
+     *
+     * @param \Illuminate\Http\Request $request
+     * @return \Illuminate\Http\Response
+     */
+    public function batch(Request $request, $action)
+    {
+        $ids = explode(',', $request->input('ids'));
+
+        switch ($action) {
+            case 'enable':
+                $text = '上架';
+                $data = ['status' => 1];
+                break;
+            case 'disable':
+                $text = '下架';
+                $data = ['status' => -1];
+                break;
+            default:
+                return Response::jsonError(__('response.error.unknown'));
+        }
+
+        Block::whereIn('id', $ids)->update($data);
+
+        return Response::jsonSuccess(__('response.success.complete', ['action' => $text]));
     }
 
 }
