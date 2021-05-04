@@ -25,7 +25,7 @@
                 </div>
                 <div class="col-6">
                     <div class="form-group">
-                        <label for="input-username"><span class="danger">*</span>模块排序</label>
+                        <label for="input-username"><span class="danger">*</span>模块排序<span class="danger">(由小到大排序)</span></label>
                         <div class="controls">
                             <input type="text" id="input-username" class="form-control" name="sort"
                                    placeholder="请输入排序"
@@ -37,19 +37,19 @@
                 </div>
                 <div class="col-6">
                     <div class="form-group">
-                        <label for="input-username"><span class="danger">*</span>聚焦数</label>
+                        <label for="input-username">聚焦的数量<span class="danger">(例如：动漫1大2小 则填入1)</span></label>
                         <div class="controls">
-                            <input type="text" id="input-username" class="form-control" name="focus"
+                            <input type="text" id="input-username" class="form-control" name="spotlight"
                                    placeholder="请输入聚焦数"
                                    required
                                    data-validation-required-message="请输入聚焦数"
-                                   value="{{ $data->focus }}">
+                                   value="{{ $data->spotlight }}">
                         </div>
                     </div>
                 </div>
                 <div class="col-6">
                     <div class="form-group">
-                        <label for="input-username"><span class="danger">*</span>行数</label>
+                        <label for="input-username">每行几个内容<span class="danger">(例如：动漫1大2小 则填入2))</span></label>
                         <div class="controls">
                             <input type="text" id="input-username" class="form-control" name="row"
                                    placeholder="请输入行数"
@@ -74,84 +74,64 @@
 {{--                </div>--}}
                 <div class="col-6">
                     <div class="form-group">
-                        <label for="input-username"><span class="danger">*</span>模块模型</label>
+                        <label for="input-username"><span class="danger">*</span> 模块模型</label>
                         <div class="controls">
-                            <ul class="list-unstyled mb-0">
-                                <li class="d-inline-block mr-2 mb-1">
-                                    <fieldset>
-                                        <div class="radio radio-shadow">
-                                            <input type="radio" id="radioscauser1"  name="causer" value="video"  @if($causer[$data->causer] == 'video') checked @endif>
-                                            <label for="radioscauser1">动画</label>
-                                        </div>
-                                    </fieldset>
-                                </li>
-                                <li class="d-inline-block mr-2 mb-1">
-                                    <fieldset>
-                                        <div class="radio radio-shadow">
-                                            <input type="radio" id="radioscauser2" name="causer" value="comic"  @if($causer[$data->causer] == 'comic') checked @endif>
-                                            <label for="radioscauser2">漫画</label>
-                                        </div>
-                                    </fieldset>
-                                </li>
-                            </ul>
+                            <select class="form-control" name="causer" >
+                                <option value="video" @if($causer[$data->causer] == 'video') selected @endif>动画</option>
+                                <option value="comic" @if($causer[$data->causer] == 'comic') selected @endif>漫画</option>
+                            </select>
                         </div>
                     </div>
                 </div>
                 <div class="col-6">
                     <div class="form-group">
-                        <label for="input-username"><span class="danger">*</span>状态</label>
+                        <label for="input-username"><span class="danger">*</span> 状态</label>
                         <div class="controls">
-                            <ul class="list-unstyled mb-0">
-                                <li class="d-inline-block mr-2 mb-1">
-                                    <fieldset>
-                                        <div class="radio radio-shadow">
-                                            <input type="radio" id="radiostatus1"  name="status" value="1" @if($data->status == 1) checked @endif>
-                                            <label for="radiostatus1">上架</label>
-                                        </div>
-                                    </fieldset>
-                                </li>
-                                <li class="d-inline-block mr-2 mb-1">
-                                    <fieldset>
-                                        <div class="radio radio-shadow">
-                                            <input type="radio" id="radiostatus2" name="status" value="-1" @if($data->status == -1) checked @endif>
-                                            <label for="radiostatus2">下架</label>
-                                        </div>
-                                    </fieldset>
-                                </li>
-                            </ul>
+                            <select class="form-control" name="status" >
+                                <option value="1" @if($data->status == 1) selected @endif>开启</option>
+                                <option value="-1" @if($data->status == -1) selected @endif>关闭</option>
+                            </select>
                         </div>
                     </div>
                 </div>
-                <div class="card-header col-12 text-center">
-                    <h4 class="card-title">特性条件</h4>
-                </div>
                 <div class="col-6">
                     <div class="form-group">
-                        <label for="input-username"><span class="danger">*</span>挑选笔数</label>
+                        <label for="input-username">挑选笔数</label>
                         <div class="controls">
-                            <input type="hidden" name="properties[0][field]" value="limit">
-                            <input type="text" id="input-username" class="form-control" name="properties[0][value]"
+                            <input type="text" id="input-username" class="form-control" name="properties[limit][value]"
                                    placeholder="请输入挑选笔数，留空不设置挑选条件"
                                    required
                                    data-validation-required-message="请输入挑选笔数"
-                                   value="{{$data->properties[0]['value']}}">
+                                   value="{{$data->properties['limit']['value']}}">
                         </div>
                     </div>
                 </div>
                 <div class="col-6">
                     <div class="form-group">
-                        <label for="input-username"><span class="danger">*</span>挑选排序</label>
+                        <label for="input-username">挑选作者</label>
                         <div class="controls">
-                            <input type="hidden" name="properties[1][field]" value="order">
-                            <ul class="list-unstyled mb-0">
-                                <li class="d-inline-block mr-2 mb-1">
-                                    <fieldset>
-                                        <div class="radio radio-shadow">
-                                            <input type="radio" id="radio_condition_1"  name="properties[1][value]" value="created_at" @if($data->properties[1]['value'] == 'created_at') checked @endif >
-                                            <label for="radio_condition_1">时间</label>
-                                        </div>
-                                    </fieldset>
-                                </li>
+                            <input type="text" id="input-username" class="form-control" name="properties[author][value]"
+                                   placeholder="请输入作者，留空不设置挑选条件"
+                                   data-validation-required-message="请输入作者"
+                                   value="{{$data->properties['author']['value']}}"
+                            >
+                        </div>
+                    </div>
+                </div>
+                <input type="hidden" name="properties[order][value]" value="created_at">
+{{--                <div class="col-6">--}}
+{{--                    <div class="form-group">--}}
+{{--                        <label for="input-username">挑选排序</label>--}}
+{{--                        <div class="controls">--}}
+{{--                            <ul class="list-unstyled mb-0">--}}
+{{--                                <li class="d-inline-block mr-2 mb-1">--}}
+{{--                                    <fieldset>--}}
+{{--                                        <div class="radio radio-shadow">--}}
+{{--                                            <input type="radio" id="radio_condition_1"  name="properties[1][value]" value="created_at" @if($data->properties[1]['value'] == 'created_at') checked @endif >--}}
+{{--                                            <label for="radio_condition_1">时间</label>--}}
+{{--                                        </div>--}}
+{{--                                    </fieldset>--}}
+{{--                                </li>--}}
 {{--                                <li class="d-inline-block mr-2 mb-1">--}}
 {{--                                    <fieldset>--}}
 {{--                                        <div class="radio radio-shadow">--}}
@@ -168,21 +148,20 @@
 {{--                                        </div>--}}
 {{--                                    </fieldset>--}}
 {{--                                </li>--}}
-                            </ul>
-                        </div>
-                    </div>
-                </div>
+{{--                            </ul>--}}
+{{--                        </div>--}}
+{{--                    </div>--}}
+{{--                </div>--}}
                 <div class="col-12">
                     <div class="form-group">
-                        <label for="input-username"><span class="danger">*</span>挑选作品时间区间 </label>
+                        <label for="input-username">挑选作品时间区间</label>
                         <div class="controls">
-                            <input type="hidden" name="properties[2][field]" value="date_register">
                             <fieldset class="form-group position-relative has-icon-left">
                                 <input type="text" id="input-date-register" class="form-control date-picker"
-                                       name="properties[2][value]"
+                                       name="properties[date_between][value]"
                                        autocomplete="off"
                                        placeholder="请输入时间区间，留空不设置挑选条件"
-                                       value="{{$data->properties[2]['value']}}"
+                                       value="{{$data->properties['date_between']['value']}}"
                                 >
                                 <div class="form-control-position">
                                     <i class='bx bx-calendar-check'></i>
@@ -193,27 +172,13 @@
                 </div>
                 <div class="col-12">
                     <div class="form-group">
-                        <label for="input-username"><span class="danger">*</span>挑选标签</label>
+                        <label for="input-username">挑选标签</label>
                         <div class="controls">
-                            <input type="hidden" name="properties[3][field]" value="tag[]">
-                            <select id="tags-selector" class="form-control" name="properties[3][value][]" multiple="multiple">
+                            <select id="tags-selector" class="form-control" name="properties[tag][value][]" multiple="multiple">
                                 @foreach($tags as $tag)
-                                    <option value="{{ $tag->name }}" @if(in_array($tag->name, $data->properties[3]['value'])){{'selected'}}@endif>{{ $tag->name }}</option>
+                                    <option value="{{ $tag->name }}" @if(in_array($tag->name, $data->properties['tag']['value'])){{'selected'}}@endif>{{ $tag->name }}</option>
                                 @endforeach
                             </select>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-6">
-                    <div class="form-group">
-                        <label for="input-username"><span class="danger">*</span>挑选作者</label>
-                        <div class="controls">
-                            <input type="hidden" name="properties[4][field]" value="author">
-                            <input type="text" id="input-username" class="form-control" name="properties[4][value]"
-                                   placeholder="请输入作者，留空不设置挑选条件"
-                                   data-validation-required-message="请输入作者"
-                                   value="{{$data->properties[4]['value']}}"
-                            >
                         </div>
                     </div>
                 </div>

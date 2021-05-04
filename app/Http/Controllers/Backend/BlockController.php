@@ -124,11 +124,11 @@ class BlockController extends Controller
 
         switch ($action) {
             case 'enable':
-                $text = '上架';
+                $text = '开启';
                 $data = ['status' => 1];
                 break;
             case 'disable':
-                $text = '下架';
+                $text = '关闭';
                 $data = ['status' => -1];
                 break;
             default:

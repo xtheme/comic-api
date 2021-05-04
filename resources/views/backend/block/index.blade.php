@@ -91,7 +91,7 @@
                                         {{ $item->title }}
                                         @if(!empty($item->properties))
                                             <div class="d-flex align-content-center flex-wrap" style="margin-top: 5px;">
-                                                @foreach($item->properties[3]['value'] as $tagged)
+                                                @foreach($item->properties['tag']['value'] as $tagged)
                                                     <span class="badge badge-pill badge-light-primary" style="margin-right: 3px; margin-bottom: 3px;">{{ $tagged }}</span>
                                                 @endforeach
                                             </div>
@@ -99,14 +99,14 @@
                                     </td>
                                     <td><span class="jeditable" data-pk="{{ $item->id }}" data-value="" > {{ $item->sort }}</td>
                                     <td>{{ $item->id }}</td>
-                                    <td>{{ $item->focus }}</td>
+                                    <td>{{ $item->spotlight }}</td>
                                     <td>{{ $item->row }}</td>
                                     <td>{{ $item->created_at->diffForHumans()  }}</td>
                                     <td>
                                         @if($item->status == 1)
-                                            <a class="badge badge-pill badge-light-success" data-confirm href="{{ route('backend.block.batch', ['action'=>'disable', 'ids' => $item->id]) }}" title="下架该模块">上架</a>
+                                            <a class="badge badge-pill badge-light-success" data-confirm href="{{ route('backend.block.batch', ['action'=>'disable', 'ids' => $item->id]) }}" title="关闭该模块">开启</a>
                                         @else
-                                            <a class="badge badge-pill badge-light-danger" data-confirm href="{{ route('backend.block.batch', ['action'=>'enable', 'ids' => $item->id]) }}" title="上架该模块">下架</a>
+                                            <a class="badge badge-pill badge-light-danger" data-confirm href="{{ route('backend.block.batch', ['action'=>'enable', 'ids' => $item->id]) }}" title="开启该模块">关闭</a>
                                         @endif
 
                                     </td>
@@ -177,7 +177,7 @@
 
                 let parms_url = '';
 
-                $.each(properties, function (idx, item) {
+                $.each(properties, function (key, item) {
 
                     //没数值不搜寻
                     if (!item.value){
@@ -185,13 +185,13 @@
                     }
 
                     //tag 額外處理
-                    if (item.field == "tag[]"){
+                    if (key == "tag"){
                         $.each(item.value, function (index, tag) {
-                            parms_url += item.field + '=' + tag + '&';
+                            parms_url += key + '[]=' + tag + '&';
                         });
                         return;
                     }
-                    parms_url += item.field + '=' + item.value + '&';
+                    parms_url += key + '=' + item.value + '&';
                 });
 
                 let url = $(this).attr('href') + '?' + parms_url;

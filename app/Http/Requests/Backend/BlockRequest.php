@@ -16,8 +16,8 @@ class BlockRequest extends BaseRequest
     {
         return [
             'title' => 'required',
-            'focus' => 'numeric',
-            'row'   => 'numeric',
+            'spotlight' => 'numeric',
+            'row' => 'numeric',
             'sort' => 'required|numeric',
         ];
     }
@@ -31,7 +31,7 @@ class BlockRequest extends BaseRequest
     {
         return [
             'title.required' => '模块名称不能为空',
-            'focus.numeric' => '聚焦数必須為數字',
+            'spotlight.numeric' => '聚焦数必須為數字',
             'row.numeric' => '行数必須為數字',
             'sort.required' => '排序不能为空',
             'sort.numeric' => '排序必須為數字',
