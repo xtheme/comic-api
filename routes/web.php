@@ -4,6 +4,7 @@ use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Backend\BlockController;
 use App\Http\Controllers\Backend\BookChapterController;
 use App\Http\Controllers\Backend\BookController;
+use App\Http\Controllers\Backend\ComicBlockController;
 use App\Http\Controllers\Backend\ReportController;
 use App\Http\Controllers\Backend\ReportTypeController;
 use App\Http\Controllers\Backend\CommentController;
@@ -66,7 +67,7 @@ Route::middleware(['auth'])->prefix('backend')->as('backend.')->group(function (
     Route::resource('config', ConfigController::class);
 
     // 用户管理
-    Route::put('user/{id}/block', [UserController::class, 'block'])->name('user.block'); // 切换用户状态
+    Route::put('user/{id}/comic_block', [UserController::class, 'comic_block'])->name('user.comic_block'); // 切换用户状态
     Route::resource('user', UserController::class);
 
     // 订单
@@ -143,16 +144,16 @@ Route::middleware(['auth'])->prefix('backend')->as('backend.')->group(function (
         Route::delete('destroy/{id}', [NoticeController::class , 'destroy'])->name('destroy');
     });
 
-    // 首頁模塊
-    Route::prefix('block')->as('block.')->group(function () {
-        Route::get('/', [BlockController::class , 'index'])->name('index');
-        Route::get('create', [BlockController::class , 'create'])->name('create');
-        Route::post('store', [BlockController::class , 'store'])->name('store');
-        Route::get('edit/{id}', [BlockController::class , 'edit'])->name('edit');
-        Route::put('update/{id}', [BlockController::class , 'update'])->name('update');
-        Route::delete('destroy/{id}', [BlockController::class , 'destroy'])->name('destroy');
-        Route::put('sort', [BlockController::class , 'sort'])->name('sort');
-        Route::post('batch/destroy/{ids?}', [BlockController::class, 'batchDestroy'])->name('batch.destroy');
+    // 漫画首頁模塊
+    Route::prefix('comic_block')->as('comic_block.')->group(function () {
+        Route::get('/', [ComicBlockController::class , 'index'])->name('index');
+        Route::get('create', [ComicBlockController::class , 'create'])->name('create');
+        Route::post('store', [ComicBlockController::class , 'store'])->name('store');
+        Route::get('edit/{id}', [ComicBlockController::class , 'edit'])->name('edit');
+        Route::put('update/{id}', [ComicBlockController::class , 'update'])->name('update');
+        Route::delete('destroy/{id}', [ComicBlockController::class , 'destroy'])->name('destroy');
+        Route::put('sort', [ComicBlockController::class , 'sort'])->name('sort');
+        Route::post('batch/destroy/{ids?}', [ComicBlockController::class, 'batchDestroy'])->name('batch.destroy');
     });
 
     // 举报类型
@@ -221,6 +222,19 @@ Route::middleware(['auth'])->prefix('backend')->as('backend.')->group(function (
         Route::put('sort', [AdController::class , 'sort'])->name('sort');
         Route::put('batch/{action?}', [AdController::class, 'batch'])->name('batch'); // 批量操作
         Route::post('batch/destroy/{ids?}', [AdController::class, 'batchDestroy'])->name('batch.destroy');
+    });
+
+    // 首頁模塊
+    Route::prefix('block')->as('block.')->group(function () {
+        Route::get('/', [BlockController::class , 'index'])->name('index');
+        Route::get('create', [BlockController::class , 'create'])->name('create');
+        Route::post('store', [BlockController::class , 'store'])->name('store');
+        Route::get('edit/{id}', [BlockController::class , 'edit'])->name('edit');
+        Route::put('update/{id}', [BlockController::class , 'update'])->name('update');
+        Route::delete('destroy/{id}', [BlockController::class , 'destroy'])->name('destroy');
+        Route::put('sort', [BlockController::class , 'sort'])->name('sort');
+        Route::put('batch/{action?}', [BlockController::class, 'batch'])->name('batch');
+        Route::post('batch/destroy/{ids?}', [BlockController::class, 'batchDestroy'])->name('batch.destroy');
     });
 
 });

@@ -32,6 +32,10 @@
                     "url": "/backend/video_statistics",
                     "name": "Play Statistics",
                     "icon": "bx bx-right-arrow-alt"
+                },
+                {
+                    "url": "/backend/block",
+                    "name": "Block List"
                 }
             ]
         },

@@ -16,7 +16,36 @@
         </div>
         <div class="card">
             <div class="card-header">
-                <h4 class="card-title">@yield('title')</h4>
+                <div class="float-left">
+                    <h4 class="card-title">@yield('title')</h4>
+                </div>
+                <div class="float-right d-flex flex-wrap">
+                    <form id="search-form" class="form form-horizontal" method="get" action="{{ url()->current() }}" novalidate>
+                        <div class="form-body">
+                            <div class="d-flex align-items-center">
+                                <div class="form-group mr-1">
+                                    <div class="controls">
+                                        <select id="class-type" class="form-control" name="causer">
+                                            <option value="" >全部</option>
+                                            <option value="video" @if(request()->get('causer') == 'video') selected @endif >动画</option>
+                                            <option value="comic" @if(request()->get('causer') == 'comic') selected @endif >漫画</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="form-group mr-1">
+                                    <div class="controls">
+                                        <input type="text" class="form-control" name="title"
+                                               placeholder="请输入标题"
+                                               value="{{ request()->get('title') }}">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <button type="submit" class="btn btn-primary">搜索</button>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
             </div>
             <div class="card-content">
                 <div class="card-body">
@@ -31,11 +60,12 @@
                                         <label for="check-all"></label>
                                     </div>
                                 </th>
+                                <th>模块</th>
+                                <th>标题</th>
                                 <th>排序</th>
                                 <th>编号</th>
-                                <th>标题</th>
-                                <th>圖示</th>
-                                <th>展示风格</th>
+                                <th>聚焦数</th>
+                                <th>每行数</th>
                                 <th>添加时间</th>
                                 <th>状态</th>
                                 <th>操作</th>
@@ -50,21 +80,43 @@
                                             <label for="check-{{ $item->id }}"></label>
                                         </div>
                                     </td>
-                                    <td><span class="jeditable" data-pk="{{ $item->id }}" data-value="" > {{ $item->listorder }}</td>
-                                    <td>{{ $item->id }}</td>
-                                    <td>{{ $item->title }}</td>
                                     <td>
-                                        <img src="{{ $item->icon_thumb }}" alt="" width="50" height="50">
+                                        @if($causer[$item->causer] == 'video')
+                                            <span class="badge badge-pill badge-glow badge-primary">动画</span>
+                                        @else
+                                            <span class="badge badge-pill badge-glow badge-success">漫画</span>
+                                        @endif
                                     </td>
-                                    <td>{{ $item->style_status }}</td>
-                                    <td>{{ date('Y-m-d H:i:s',$item->addtime)}}</td>
-                                    <td>{!! $item->display_status !!}</td>
+                                    <td>
+                                        {{ $item->title }}
+                                        @if(!empty($item->properties))
+                                            <div class="d-flex align-content-center flex-wrap" style="margin-top: 5px;">
+                                                @foreach($item->properties[3]['value'] as $tagged)
+                                                    <span class="badge badge-pill badge-light-primary" style="margin-right: 3px; margin-bottom: 3px;">{{ $tagged }}</span>
+                                                @endforeach
+                                            </div>
+                                        @endif
+                                    </td>
+                                    <td><span class="jeditable" data-pk="{{ $item->id }}" data-value="" > {{ $item->sort }}</td>
+                                    <td>{{ $item->id }}</td>
+                                    <td>{{ $item->focus }}</td>
+                                    <td>{{ $item->row }}</td>
+                                    <td>{{ $item->created_at->diffForHumans()  }}</td>
+                                    <td>
+                                        @if($item->status == 1)
+                                            <a class="badge badge-pill badge-light-success" data-confirm href="{{ route('backend.block.batch', ['action'=>'disable', 'ids' => $item->id]) }}" title="下架该模块">上架</a>
+                                        @else
+                                            <a class="badge badge-pill badge-light-danger" data-confirm href="{{ route('backend.block.batch', ['action'=>'enable', 'ids' => $item->id]) }}" title="上架该模块">下架</a>
+                                        @endif
+
+                                    </td>
                                     <td @if($loop->count == 1)style="position: fixed;"@endif>
                                         <div class="@if(($loop->count - $loop->iteration) < 3){{'dropup'}}@else{{'dropdown'}}@endif">
                                             <span class="bx bx-dots-vertical-rounded font-medium-3 dropdown-toggle nav-hide-arrow cursor-pointer"
                                                   id="dropdownMenuButton{{ $item->id }}" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></span>
                                             <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuButton{{ $item->id }}">
-                                                <a class="dropdown-item" data-modal href="{{ route('backend.block.edit', $item->id) }}" title="修改首页模块"><i class="bx bx-edit-alt mr-1"></i> 修改</a>
+                                                <a class="dropdown-item show_list" data-properties="{{json_encode($item->properties)}}" href="{{ route('backend.video.index') }}" title="查看列表"><i class="bx bx-link-external mr-1"></i>查看</a>
+                                                <a class="dropdown-item" data-modal href="{{ route('backend.block.edit', $item->id) }}" title="修改首页模块"><i class="bx bx-edit-alt mr-1"></i>修改</a>
                                                 <a class="dropdown-item" data-destroy href="{{ route('backend.block.destroy', $item->id) }}" title="刪除首页模块"><i class="bx bx-trash mr-1"></i>刪除</a>
                                             </div>
                                         </div>
@@ -115,6 +167,37 @@
                         message: res.msg
                     });
                 }
+            });
+
+
+            $('.show_list').click(function (e) {
+                e.preventDefault();
+
+                var properties = $(this).data('properties')
+
+                let parms_url = '';
+
+                $.each(properties, function (idx, item) {
+
+                    //没数值不搜寻
+                    if (!item.value){
+                        return;
+                    }
+
+                    //tag 額外處理
+                    if (item.field == "tag[]"){
+                        $.each(item.value, function (index, tag) {
+                            parms_url += item.field + '=' + tag + '&';
+                        });
+                        return;
+                    }
+                    parms_url += item.field + '=' + item.value + '&';
+                });
+
+                let url = $(this).attr('href') + '?' + parms_url;
+                console.log(url);
+
+                window.open(url);
             });
 
         });
