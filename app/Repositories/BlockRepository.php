@@ -4,10 +4,8 @@ namespace App\Repositories;
 
 use App\Models\Block;
 use App\Repositories\Contracts\BlockRepositoryInterface;
-use Conner\Tagging\Model\Tag;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
-use Illuminate\Support\Collection;
 
 class BlockRepository extends Repository implements BlockRepositoryInterface
 {
@@ -30,11 +28,11 @@ class BlockRepository extends Repository implements BlockRepositoryInterface
      */
     public function filter(Request $request): Builder
     {
-        $title = $request->get('title') ?? '';
-        $causer = $request->get('causer') ?? '';
+        $title = $request->input('title') ?? '';
+        $causer = $request->input('causer') ?? '';
 
-        $order = $request->get('order') ?? 'sort';
-        $sort = $request->get('sort') ?? 'asc';
+        $order = $request->input('order') ?? 'sort';
+        $sort = $request->input('sort') ?? 'asc';
 
         return $this->model::when($title, function (Builder $query, $title) {
             return $query->where('title', 'like' , '%' . $title . '%' );
@@ -54,10 +52,5 @@ class BlockRepository extends Repository implements BlockRepositoryInterface
                 return $query->orderBy($order);
             }
         });
-    }
-
-    public function getTags(): ?Collection
-    {
-        return Tag::where('tag_group_id', 1)->where('suggest', 1)->orderByDesc('priority')->get();
     }
 }

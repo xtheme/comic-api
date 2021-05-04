@@ -1,6 +1,7 @@
 <?php
 
 use App\Models\Config;
+use App\Repositories\TagRepository;
 
 if (!function_exists('getConfig')) {
     /**
@@ -147,5 +148,13 @@ if (!function_exists('checkHex')) {
             }
         }
         return true;
+    }
+}
+
+if (!function_exists('getSuggestTags')) {
+
+    function getSuggestTags()
+    {
+        return app(TagRepository::class)->suggest();
     }
 }

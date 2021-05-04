@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Backend\VideoRequest;
 use App\Models\Video;
 use App\Repositories\Contracts\VideoRepositoryInterface;
+use App\Repositories\TagRepository;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Response;
 
@@ -27,7 +28,7 @@ class VideoController extends Controller
             'status_options' => self::STATUS_OPTIONS,
             'ribbon_options' => self::RIBBON_OPTIONS,
             'videos' => $this->repository->filter($request)->paginate($request->get('limit')),
-            'tags' => $this->repository->getTags(),
+            'tags' => getSuggestTags(),
             'pageConfigs' => ['hasSearchForm' => true],
         ];
 
@@ -39,7 +40,7 @@ class VideoController extends Controller
         $data = [
             'status_options' => self::STATUS_OPTIONS,
             'ribbon_options' => self::RIBBON_OPTIONS,
-            'tags' => $this->repository->getTags(),
+            'tags' => getSuggestTags(),
         ];
 
         return view('backend.video.create')->with($data);
@@ -57,7 +58,7 @@ class VideoController extends Controller
         $data = [
             'status_options' => self::STATUS_OPTIONS,
             'ribbon_options' => self::RIBBON_OPTIONS,
-            'tags' => $this->repository->getTags(),
+            'tags' => getSuggestTags(),
             'video' => $this->repository->find($id),
         ];
 

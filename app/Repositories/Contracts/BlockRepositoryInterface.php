@@ -6,6 +6,4 @@ use Illuminate\Support\Collection;
 
 interface BlockRepositoryInterface extends RepositoryInterface
 {
-    public function getTags(): ?Collection;
-
 }

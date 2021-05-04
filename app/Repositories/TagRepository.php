@@ -2,11 +2,11 @@
 
 namespace App\Repositories;
 
-
 use App\Models\Tag;
 use App\Repositories\Contracts\TagRepositoryInterface;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
+use Illuminate\Support\Collection;
 
 class TagRepository extends Repository implements TagRepositoryInterface
 {
@@ -32,7 +32,7 @@ class TagRepository extends Repository implements TagRepositoryInterface
         $tagged_book = $request->get('tagged_book') ?? '';
         $tagged_video = $request->get('tagged_video') ?? '';
 
-        return Tag::with(['tagged_book', 'tagged_video'])->withCount(['tagged_book', 'tagged_video'])->when($keyword, function (Builder $query, $keyword) {
+        return $this->model::with(['tagged_book', 'tagged_video'])->withCount(['tagged_book', 'tagged_video'])->when($keyword, function (Builder $query, $keyword) {
             return $query->where('name', 'like', '%' . $keyword . '%')
                 ->orWhere('description', 'like', '%' . $keyword . '%');
         })->when($suggest, function (Builder $query, $suggest) {
@@ -42,5 +42,10 @@ class TagRepository extends Repository implements TagRepositoryInterface
         })->when($tagged_video, function (Builder $query) {
             return $query->having('tagged_video_count', '>', 0);
         })->orderByDesc('priority');
+    }
+
+    public function suggest(): ?Collection
+    {
+        return $this->model::where('tag_group_id', 1)->where('suggest', 1)->orderByDesc('priority')->get();
     }
 }

@@ -3,7 +3,6 @@
 namespace App\Repositories;
 
 use App\Models\Video;
-use App\Models\VideoDomain;
 use App\Repositories\Contracts\VideoRepositoryInterface;
 use Conner\Tagging\Model\Tag;
 use Illuminate\Database\Eloquent\Builder;
@@ -32,7 +31,6 @@ class VideoRepository extends Repository implements VideoRepositoryInterface
      */
     public function filter(Request $request): Builder
     {
-        $date_register = $request->input('date_register') ?? '';
         $title = $request->input('title') ?? '';
         $author = $request->input('author') ?? '';
         $ribbon = $request->input('ribbon') ?? '';
@@ -97,10 +95,5 @@ class VideoRepository extends Repository implements VideoRepositoryInterface
         $model->fill($input);
         $model->retag($input['tag']);
         return $model->save();
-    }
-
-    public function getTags(): ?Collection
-    {
-        return Tag::where('tag_group_id', 1)->where('suggest', 1)->orderByDesc('priority')->get();
     }
 }
