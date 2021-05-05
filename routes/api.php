@@ -31,15 +31,12 @@ Route::prefix(config('api.version'))->middleware(['api.header', 'api.sign', 'jwt
         Route::post('/logout', [UserController::class, 'logout'])->name('logout');
         Route::post('/modify', [UserController::class, 'modify'])->name('modify');
         Route::post('/avatar', [UserController::class, 'avatar'])->name('avatar');
+        Route::get('/signDetail', [SignController::class, 'signDetail'])->name('signDetail');
+        Route::post('/sign', [SignController::class, 'sign'])->name('sign');
     });
 
     Route::prefix('sms')->as('sms.')->group(function () {
         Route::post('/send', [SmsController::class, 'send'])->name('send');
-    });
-
-    Route::prefix('sign')->as('sign.')->group(function () {
-        Route::post('/signDetail', [SignController::class, 'signDetail'])->name('signDetail');
-        Route::post('/signin', [SignController::class, 'signin'])->name('signin');
     });
 
     Route::prefix('ad')->as('ad.')->group(function () {

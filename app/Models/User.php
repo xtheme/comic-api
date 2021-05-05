@@ -146,7 +146,7 @@ class User extends Model
         return $this->hasOne('App\Models\ViewsOrdersSuccessCount');
     }
 
-    public function signin()
+    public function sign_in()
     {
         return $this->hasOne('App\Models\Sign', 'uid', 'id');
     }
