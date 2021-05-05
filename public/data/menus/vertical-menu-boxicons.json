@@ -1,0 +1,79 @@
+{
+    "menu": [
+        {
+            "url": "/backend/dashboard",
+            "name": "Dashboard",
+            "slug": "dashboard",
+            "icon": "bx bxs-home"
+        },
+        {
+            "url": "/backend/tag",
+            "name": "Tags",
+            "slug": "tags",
+            "icon": "bx bxs-purchase-tag"
+        },
+        {
+            "url": "#",
+            "name": "Videos",
+            "slug": "videos",
+            "icon": "bx bxs-videos",
+            "submenu": [
+                {
+                    "url": "/backend/video",
+                    "name": "Video List",
+                    "icon": "bx bx-right-arrow-alt"
+                },
+                {
+                    "url": "/backend/video_domain",
+                    "name": "Video Domain",
+                    "icon": "bx bx-right-arrow-alt"
+                },
+                {
+                    "url": "/backend/video_statistics",
+                    "name": "Play Statistics",
+                    "icon": "bx bx-right-arrow-alt"
+                },
+                {
+                    "url": "/backend/block",
+                    "name": "Block List"
+                }
+            ]
+        },
+        {
+            "url": "#",
+            "name": "Ad",
+            "slug": "books",
+            "icon": "bx bxs-slideshow",
+            "submenu": [
+                {
+                    "url": "/backend/ad_space",
+                    "name": "AdPlace List"
+                },
+                {
+                    "url": "/backend/ad",
+                    "name": "Ad List"
+                }
+            ]
+        },
+        {
+            "url": "#",
+            "name": "Systems",
+            "slug": "systems",
+            "icon": "bx bxs-cog",
+            "submenu": [
+                {
+                    "url": "/backend/notice",
+                    "name": "Notice List"
+                },
+                {
+                    "url": "/terminal",
+                    "name": "Terminal"
+                },
+                {
+                    "url": "/log-viewer/logs",
+                    "name": "Log Viewer"
+                }
+            ]
+        }
+    ]
+}
