@@ -15,6 +15,20 @@ class VideoSeries extends BaseModel
         'length',
     ];
 
+    protected $appends = [
+        'encrypt_url',
+    ];
+
+    protected $hidden = [
+        'cdn',
+        'video_domain_id',
+        'link',
+    ];
+
+    protected $casts = [
+        'vip' => 'boolean',
+    ];
+
     public function video()
     {
         return $this->belongsTo('App\Models\Video');
@@ -34,4 +48,6 @@ class VideoSeries extends BaseModel
     {
         return $this->cdn->encrypt_domain . $this->link;
     }
+
+
 }

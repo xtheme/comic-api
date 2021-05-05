@@ -43,12 +43,19 @@ Route::prefix(config('api.version'))->middleware(['api.header', 'api.sign', 'jwt
         Route::get('/space', [AdController::class, 'space'])->name('space');
     });
 
-    Route::prefix('video')->as('video.')->group(function () {
-        Route::post('/list', [VideoController::class, 'list'])->name('list');
-    });
+    // 主题区块
+    Route::get('topic/{causer}', [TopicController::class, 'topic'])->name('topic');
 
-    // 主题区块, video/topic or book/topic
-    Route::post('{causer}/topic', [TopicController::class, 'topic'])->name('topic');
+    Route::prefix('video')->as('video.')->group(function () {
+        Route::get('/list', [VideoController::class, 'list'])->name('list');
+        Route::get('/detail/{id?}', [VideoController::class, 'detail'])->name('detail');
+        Route::get('/recommend/{limit?}', [VideoController::class, 'recommend'])->name('recommend');
+    });
 });
 
-
+Route::fallback(function () {
+    return response()->json([
+        'code' => 200,
+        'msg'  => 'Route Not Found!',
+    ], 404);
+});

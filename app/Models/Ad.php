@@ -47,8 +47,9 @@ class Ad extends BaseModel
      */
     public function getImageThumbAttribute()
     {
-
-        return getConfig('api_url') . $this->image;
+        // @todo change config
+        return getOldConfig('web_config', 'api_url') . $this->image;
+        // return getConfig('api_url') . $this->image;
     }
 
 

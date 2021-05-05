@@ -42,7 +42,7 @@ Route::get('lang/{locale}', [LanguageController::class, 'swap'])->name('language
 
 // Login / Logout
 Auth::routes(['verify' => true]);
-Route::get('logout', [LoginController::class, 'logout'])->name('logout');
+Route::get('logout', [LoginController::class, 'logout']);
 
 // Homepage
 Route::get('/', [HomeController::class, 'index']);

@@ -96,4 +96,9 @@ class VideoRepository extends Repository implements VideoRepositoryInterface
         $model->retag($input['tag']);
         return $model->save();
     }
+
+    public function random(int $limit): Collection
+    {
+        return Video::inRandomOrder()->limit($limit)->get();
+    }
 }
