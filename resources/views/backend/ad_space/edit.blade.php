@@ -10,7 +10,7 @@
         @method('PUT')
         <div class="form-body">
             <div class="row">
-                <div class="col-6">
+                <div class="col-4">
                     <div class="form-group">
                         <label for="input-name">广告位类型</label>
                         <div class="controls">
@@ -35,7 +35,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-6">
+                <div class="col-4">
                     <div class="form-group">
                         <label for="input-name">状态</label>
                         <div class="controls">
@@ -60,7 +60,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-6">
+                <div class="col-4">
                     <div class="form-group">
                         <label for="select-type">接入广告SDK</label>
                         <div class="controls">
