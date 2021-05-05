@@ -50,10 +50,8 @@ Route::prefix(config('api.version'))->middleware(['api.header', 'api.sign', 'jwt
         Route::post('/list', [VideoController::class, 'list'])->name('list');
     });
 
-    Route::prefix('topic')->as('topic.')->group(function () {
-        Route::post('/video', [TopicController::class, 'video'])->name('video');
-        // Route::post('/book', [TopicController::class, 'book'])->name('book');
-    });
+    // 主题区块, video/topic or book/topic
+    Route::post('{causer}/topic', [TopicController::class, 'topic'])->name('topic');
 });
 
 

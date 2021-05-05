@@ -31,6 +31,7 @@ class BlockRepository extends Repository implements BlockRepositoryInterface
     {
         $title = $request->input('title') ?? '';
         $causer = $request->input('causer') ?? '';
+        $status = $request->input('status') ?? '';
 
         $order = $request->input('order') ?? 'sort';
         $sort = $request->input('sort') ?? 'asc';
@@ -40,6 +41,8 @@ class BlockRepository extends Repository implements BlockRepositoryInterface
         })->when($causer, function (Builder $query, $causer) {
             $causer = sprintf('App\Models\%s', Str::ucfirst($causer));
             return $query->where('causer', $causer);
+        })->when($status, function (Builder $query, $status) {
+            return $query->where('status', $status);
         })->when($sort, function (Builder $query, $sort) use ($order) {
             if ($sort == 'desc') {
                 return $query->orderByDesc($order);
