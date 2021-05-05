@@ -32,7 +32,7 @@ use Illuminate\Database\Eloquent\Model;
  * @method static \Illuminate\Database\Eloquent\Builder|Notice whereTime($value)
  * @mixin \Eloquent
  */
-class Notice extends Model
+class Notice extends BaseModel
 {
     use HasFactory;
     protected $table = 'notice';

@@ -59,35 +59,4 @@ class Block extends BaseModel
 
     }
 
-
-    /**
-     * 广告图片组合
-     *
-     * @return string
-     */
-    public function getImageThumbAttribute()
-    {
-        return getConfig('api_url');
-    }
-
-    /**
-     * 特性条件 时间区间 - 时间切割
-     *
-     * @return string
-     */
-    public function getCreatedSplitAttribute()
-    {
-        return explode('-' , $this->properties['date_between']['value']);
-    }
-
-    /**
-     * 特性条件 tag - 字串切割
-     *
-     * @return string
-     */
-    public function getTagsSplitAttribute()
-    {
-        return explode('-' , $this->properties['tag']['value']);
-    }
-
 }

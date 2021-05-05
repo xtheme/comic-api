@@ -79,7 +79,7 @@ use Illuminate\Database\Eloquent\Model;
  * @method static \Illuminate\Database\Eloquent\Builder|Book whereZhuishu($value)
  * @mixin \Eloquent
  */
-class Book extends Model
+class Book extends BaseModel
 {
     use HasFactory, CacheTrait, Taggable;
 

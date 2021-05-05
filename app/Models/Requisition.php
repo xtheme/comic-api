@@ -39,7 +39,7 @@ use Illuminate\Database\Eloquent\Model;
  * @method static \Illuminate\Database\Eloquent\Builder|Requisition whereWeight($value)
  * @mixin \Eloquent
  */
-class Requisition extends Model
+class Requisition extends BaseModel
 {
     use HasFactory;
 }

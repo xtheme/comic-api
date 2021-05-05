@@ -40,7 +40,7 @@ use Illuminate\Database\Eloquent\Model;
  * @method static \Illuminate\Database\Eloquent\Builder|Comment whereZan($value)
  * @mixin \Eloquent
  */
-class Comment extends Model
+class Comment extends BaseModel
 {
     use HasFactory;
 

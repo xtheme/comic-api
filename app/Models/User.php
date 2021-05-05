@@ -70,7 +70,7 @@ use Illuminate\Notifications\Notifiable;
  * @property-read \App\Models\ViewsOrdersSuccessCount|null $orders_success_count
  * @property-read \App\Models\Sign|null $signin
  */
-class User extends Model
+class User extends BaseModel
 {
     use HasFactory, Notifiable;
 
@@ -146,7 +146,7 @@ class User extends Model
         return $this->hasOne('App\Models\ViewsOrdersSuccessCount');
     }
 
-    public function signin()
+    public function sign_in()
     {
         return $this->hasOne('App\Models\Sign', 'uid', 'id');
     }

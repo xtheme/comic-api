@@ -3,14 +3,12 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
-use App\Models\User;
 use App\Services\SignService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Response;
 
 class SignController extends Controller
 {
-    protected $userService;
 
     public function __construct(SignService $signService)
     {
@@ -26,8 +24,7 @@ class SignController extends Controller
      */
     public function signDetail(Request $request)
     {
-
-        $sign = $request->user->signin;
+        $sign = $request->user->sign_in;
 
         $yDay = strtotime(date('Y-m-d',strtotime('-1 day')) . "00:00:00");
 
@@ -58,9 +55,9 @@ class SignController extends Controller
      *
      * @return Response|Json
      */
-    public function signin(Request $request)
+    public function sign(Request $request)
     {
-        $sign  = $request->user->signin;
+        $sign  = $request->user->sign_in;
         $toDay = strtotime(date('Y-m-d') . "00:00:00");
         $yDay  = strtotime(date('Y-m-d',strtotime('-1 day')) . "00:00:00");
 

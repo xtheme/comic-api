@@ -54,7 +54,7 @@ use Illuminate\Database\Eloquent\Model;
  * @method static \Illuminate\Database\Eloquent\Builder|BookChapter whereVolumeId($value)
  * @mixin \Eloquent
  */
-class BookChapter extends Model
+class BookChapter extends BaseModel
 {
     use HasFactory;
 

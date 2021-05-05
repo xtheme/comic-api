@@ -32,7 +32,7 @@ use Illuminate\Database\Eloquent\Model;
  * @method static \Illuminate\Database\Eloquent\Builder|FeedBack whereVersion($value)
  * @mixin \Eloquent
  */
-class FeedBack extends Model
+class FeedBack extends BaseModel
 {
     use HasFactory;
     protected $table = 'feedback';
