@@ -18,16 +18,66 @@ class TopicController extends BaseController
         $this->videoRepository = app(VideoRepository::class);
     }
 
-    public function video(Request $request)
+    private function buildQuery($topic)
+    {
+        $model = new $topic->causer;
+
+        $query = $model::query();
+
+        foreach ($topic->properties as $key => $data) {
+            $value = $data['value'] ?? null;
+
+            if (!$value) {
+                continue;
+            }
+
+            switch ($key) {
+                case 'tag':
+                    $query->withAllTags($value);
+                    break;
+                case 'limit':
+                    $query->limit($value);
+                    break;
+                case 'order':
+                    $query->orderByDesc($value);
+                    break;
+                case 'author':
+                    $query->whereLike('author', $value);
+                    break;
+                case 'date_between':
+                    $date = explode(' - ', $value);
+                    $start_date = $date[0] . ' 00:00:00';
+                    $end_date = $date[1] . ' 23:59:59';
+                    $query->whereBetween('created_at', [
+                        $start_date,
+                        $end_date,
+                    ]);
+                    break;
+            }
+        }
+
+        return $query->get();
+    }
+
+    public function topic(Request $request, $causer)
     {
         $request->merge([
-            'causer' => 'video',
+            'causer' => $causer,
+            'status' => 1,
         ]);
 
-        $data = $this->blockRepository->filter($request)->take(1)->get();
+        $topics = $this->blockRepository->filter($request)->get();
 
-        return $data;
-        // return Response::jsonSuccess(__('api.success'), $data);
+        $data = $topics->map(function ($topic) {
+            return [
+                'title'     => $topic->title,
+                'spotlight' => $topic->spotlight,
+                'per_line'  => $topic->row,
+                'list'      => $this->buildQuery($topic),
+            ];
+        });
+
+        return Response::jsonSuccess(__('api.success'), $data);
     }
 
 
