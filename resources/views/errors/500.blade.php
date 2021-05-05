@@ -1,7 +1,7 @@
 @extends('layouts.fullLayoutMaster')
 
 {{-- page title --}}
-@section('title', 'Error 403')
+@section('title', 'Error 500')
 
 @section('content')
     <!-- errors 500 -->
@@ -11,10 +11,10 @@
             <div class="card bg-transparent shadow-none">
                 <div class="card-content">
                     <div class="card-body text-center bg-transparent miscellaneous">
-                        <img src="{{ asset('images/pages/403.png') }}" class="img-fluid my-3" alt="branding logo">
-                        <h1 class="error-title mt-1">权限不足!</h1>
+                        <img src="{{ asset('images/pages/500.png') }}" class="img-fluid my-3" alt="branding logo">
+                        <h1 class="error-title mt-1">内部服务错误!</h1>
                         <p class="p-2">
-                            您没有足够的权限可以访问本页面，如有任何疑问请洽询运营人员．
+                            出现了一些技术问题导致您看到此信息，请联系开发人员排查．
                         </p>
                         <a href="{{ asset('/dashboard') }}" class="btn btn-primary round glow">返回控制台</a>
                     </div>

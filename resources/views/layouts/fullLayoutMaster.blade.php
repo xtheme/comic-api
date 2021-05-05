@@ -1,16 +1,4 @@
 <!DOCTYPE html>
-<!--
-Template Name: Frest HTML Admin Template
-Author: :Pixinvent
-Website: http://www.pixinvent.com/
-Contact: hello@pixinvent.com
-Follow: www.twitter.com/pixinvents
-Like: www.facebook.com/pixinvents
-Purchase: https://1.envato.market/pixinvent_portfolio
-Renew Support: https://1.envato.market/pixinvent_portfolio
-License: You must have a valid license purchased only from themeforest(the above link) in order to legally use the theme for your project.
-
--->
 {{-- pageConfigs variable pass to Helper's updatePageConfig function to update page configuration  --}}
 @isset($pageConfigs)
     {!! Helper::updatePageConfig($pageConfigs) !!}
@@ -38,48 +26,20 @@ License: You must have a valid license purchased only from themeforest(the above
 <!-- END: Head-->
 
 <!-- BEGIN: Body-->
-<body class="vertical-layout vertical-menu-modern 1-column navbar-sticky {{$configData['bodyCustomClass']}} footer-static
+<body class="vertical-layout vertical-menu-modern 1-column navbar-sticky {{$configData['bodyCustomClass']}} footer-static blank-page
   @if($configData['theme'] === 'dark'){{'dark-layout'}} @elseif($configData['theme'] === 'semi-dark'){{'semi-dark-layout'}} @else {{'light-layout'}} @endif @if($configData['isCardShadow'] === false){{'no-card-shadow'}}@endif" data-open="click" data-menu="vertical-menu-modern" data-col="1-column" data-framework="laravel">
 
-<!-- BEGIN: Header-->
-@include('panels.navbar')
-<!-- END: Header-->
 
 <!-- BEGIN: Content-->
 <div class="app-content content">
-    {{-- Application page structure --}}
-    @if($configData['isContentSidebar'] === true)
-        <div class="content-area-wrapper">
-            <div class="sidebar-left">
-                <div class="sidebar">
-                    @yield('sidebar-content')
-                </div>
-            </div>
-            <div class="content-right">
-                <div class="content-overlay"></div>
-                <div class="content-wrapper">
-                    <div class="content-header row">
-                    </div>
-                    <div class="content-body">
-                        @yield('content')
-                    </div>
-                </div>
-            </div>
+    <div class="content-overlay"></div>
+    <div class="content-wrapper">
+        <div class="content-header row">
         </div>
-    @else
-        {{-- others page structures --}}
-        <div class="content-overlay"></div>
-        <div class="content-wrapper">
-            <div class="content-header row">
-                @if($configData['pageHeader']=== true && isset($breadcrumbs))
-                    @include('panels.breadcrumbs')
-                @endif
-            </div>
-            <div class="content-body">
-                @yield('content')
-            </div>
+        <div class="content-body">
+            @yield('content')
         </div>
-    @endif
+    </div>
 </div>
 <!-- END: Content-->
 

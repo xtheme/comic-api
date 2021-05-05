@@ -29,4 +29,19 @@ class HomeController extends Controller
     public function storeRequisition()
     {
     }
+
+    public function noPermission()
+    {
+        return view('errors.403');
+    }
+
+    public function notFound()
+    {
+        return view('errors.404');
+    }
+
+    public function internalError()
+    {
+        return view('errors.500');
+    }
 }
