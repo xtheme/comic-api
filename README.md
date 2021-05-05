@@ -6,3 +6,4 @@
 4. 刷新配置与释放缓存： ```php artisan dev```
 5. 数据表结构更新： ```php artisan migrate```
 6. 新增本次升级数据： ```php artisan db:seed --class=UpgradeSeeder```
+7. 发布视图资源： ```npm run prod```
