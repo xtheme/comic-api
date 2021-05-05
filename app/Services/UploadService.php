@@ -210,6 +210,7 @@ class UploadService
         // Storage::delete($path);
         Storage::deleteDirectory($this->path);
 
+        // @todo change config
         $api_url = getOldConfig('web_config', 'api_url');
 
         if (Str::endsWith($api_url, '/')) {
