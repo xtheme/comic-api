@@ -93,24 +93,10 @@
                     <div class="form-group">
                         <label for="input-name">状态</label>
                         <div class="controls">
-                            <ul class="list-unstyled mb-0">
-                                <li class="d-inline-block mr-2 mb-1">
-                                    <fieldset>
-                                        <div class="radio">
-                                            <input type="radio" name="status" id="status_active_1" value="1" checked>
-                                            <label for="status_active_1">上架</label>
-                                        </div>
-                                    </fieldset>
-                                </li>
-                                <li class="d-inline-block mr-2 mb-1">
-                                    <fieldset>
-                                        <div class="radio">
-                                            <input type="radio" name="status" id="status_active_2" value="-1">
-                                            <label for="status_active_2">下架</label>
-                                        </div>
-                                    </fieldset>
-                                </li>
-                            </ul>
+                            <select id="select-platform" class="form-control" name="status">
+                                <option value="1">上架</option>
+                                <option value="-1">下架</option>
+                            </select>
                         </div>
                     </div>
                 </div>

@@ -170,15 +170,15 @@ class AdController extends Controller
      */
     public function batch(Request $request, $action)
     {
-        $ids = explode(',', $request->post('ids'));
+        $ids = explode(',', $request->input('ids'));
 
         switch ($action) {
             case 'enable':
-                $text = '批量启用';
+                $text = '上架';
                 $data = ['status' => 1];
                 break;
             case 'disable':
-                $text = '批量封禁';
+                $text = '下架';
                 $data = ['status' => -1];
                 break;
             default:

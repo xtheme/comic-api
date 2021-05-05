@@ -75,9 +75,9 @@
                                     <td>@if($item->updated_at){{ $item->updated_at->diffForHumans()  }}@endif</td>
                                     <td>
                                         @if($item->status == 1)
-                                            <span class="badge badge-pill badge-light-primary ">上架</span>
+                                            <a class="badge badge-pill badge-light-success" data-confirm href="{{ route('backend.ad.batch', ['action'=>'disable', 'ids' => $item->id]) }}" title="下架广告">上架</a>
                                         @else
-                                            <span class="badge badge-pill badge-light-danger">下架</span>
+                                            <a class="badge badge-pill badge-light-danger" data-confirm href="{{ route('backend.ad.batch', ['action'=>'enable', 'ids' => $item->id]) }}" title="上架广告">下架</a>
                                         @endif
                                     </td>
                                     <td @if($loop->count == 1)style="position: fixed;"@endif>
