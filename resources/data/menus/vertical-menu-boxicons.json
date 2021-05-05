@@ -13,6 +13,12 @@
             "icon": "bx bxs-purchase-tag"
         },
         {
+            "url": "/backend/block",
+            "name": "Block List",
+            "slug": "Block List",
+            "icon": "bx bx-columns"
+        },
+        {
             "url": "#",
             "name": "Videos",
             "slug": "videos",
@@ -32,10 +38,6 @@
                     "url": "/backend/video_statistics",
                     "name": "Play Statistics",
                     "icon": "bx bx-right-arrow-alt"
-                },
-                {
-                    "url": "/backend/block",
-                    "name": "Block List"
                 }
             ]
         },
