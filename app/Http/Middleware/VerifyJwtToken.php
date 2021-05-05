@@ -63,7 +63,7 @@ class VerifyJwtToken
                 return Response::jsonError('Token 格式错误！');
             }
         } catch (\Exception $e) {
-            // @todo jwt 过期自动签发?
+            // todo jwt 过期自动签发?
             return Response::jsonError(__('jwt.' . $e->getMessage()));
         }
 

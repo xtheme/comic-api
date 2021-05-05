@@ -89,7 +89,7 @@ class Book extends BaseModel
     const UPDATED_AT = 'book_updatetime';
 
     /**
-     * @todo 可刪除字段
+     * todo 可刪除字段
      * 关注章节 gzzj
      * 今日推荐 daytj
      * 派单指数 zhishu

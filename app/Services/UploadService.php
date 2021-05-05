@@ -210,7 +210,7 @@ class UploadService
         // Storage::delete($path);
         Storage::deleteDirectory($this->path);
 
-        // @todo change config
+        // todo change config
         $api_url = getOldConfig('web_config', 'api_url');
 
         if (Str::endsWith($api_url, '/')) {
@@ -221,7 +221,7 @@ class UploadService
             'success' => true,
             'message' => __('response.upload.success'),
             'path' => $response['image_path'],
-            'domain' => $api_url, // @todo 切换配置, CDN 域名 https://uatoriginalmanhuapic.ngxs9.app/
+            'domain' => $api_url, // todo 切换配置, CDN 域名 https://uatoriginalmanhuapic.ngxs9.app/
         ];
         return $result;
     }

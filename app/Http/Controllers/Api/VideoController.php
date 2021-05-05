@@ -40,6 +40,8 @@ class VideoController extends BaseController
         $data = $video->toarray();
         $data['series'] = $video->series;
 
+        // todo 訪問數+1
+
         return Response::jsonSuccess(__('api.success'), $data);
     }
 
