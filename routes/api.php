@@ -47,7 +47,7 @@ Route::prefix(config('api.version'))->middleware(['api.header', 'api.sign', 'jwt
     Route::get('topic/{causer}', [TopicController::class, 'topic'])->name('topic');
 
     Route::prefix('video')->as('video.')->group(function () {
-        Route::get('/list', [VideoController::class, 'list'])->name('list');
+        Route::get('/list/{page?}', [VideoController::class, 'list'])->name('list');
         Route::get('/detail/{id?}', [VideoController::class, 'detail'])->name('detail');
         Route::get('/recommend/{limit?}', [VideoController::class, 'recommend'])->name('recommend');
     });

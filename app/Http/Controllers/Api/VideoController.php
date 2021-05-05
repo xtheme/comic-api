@@ -15,9 +15,10 @@ class VideoController extends BaseController
         $this->repository = $repository;
     }
 
-    public function list(Request $request)
+    public function list(Request $request, $page = 1)
     {
         $request->merge([
+            'page' => $request->has('page') ? $request->input('page') : $page,
             'status' => 1, // 強制查詢上架的視頻
         ]);
 
