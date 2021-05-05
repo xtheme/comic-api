@@ -45,7 +45,7 @@ use Illuminate\Database\Eloquent\Model;
  * @method static \Illuminate\Database\Eloquent\Builder|Order whereUserId($value)
  * @mixin \Eloquent
  */
-class Order extends Model
+class Order extends BaseModel
 {
     use HasFactory;
 

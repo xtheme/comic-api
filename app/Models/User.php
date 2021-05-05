@@ -70,7 +70,7 @@ use Illuminate\Notifications\Notifiable;
  * @property-read \App\Models\ViewsOrdersSuccessCount|null $orders_success_count
  * @property-read \App\Models\Sign|null $signin
  */
-class User extends Model
+class User extends BaseModel
 {
     use HasFactory, Notifiable;
 

@@ -33,7 +33,7 @@ use Illuminate\Database\Eloquent\Model;
  * @method static \Illuminate\Database\Eloquent\Builder|Location whereUpdatedAt($value)
  * @mixin \Eloquent
  */
-class Location extends Model
+class Location extends BaseModel
 {
     use HasFactory;
 

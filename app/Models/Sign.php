@@ -22,7 +22,7 @@ use Illuminate\Database\Eloquent\Model;
  * @method static \Illuminate\Database\Eloquent\Builder|Sign whereUid($value)
  * @mixin \Eloquent
  */
-class Sign extends Model
+class Sign extends BaseModel
 {
 
     protected $table = 'sign';

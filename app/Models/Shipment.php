@@ -25,7 +25,7 @@ use Illuminate\Database\Eloquent\Model;
  * @method static \Illuminate\Database\Eloquent\Builder|Shipment whereUpdatedAt($value)
  * @mixin \Eloquent
  */
-class Shipment extends Model
+class Shipment extends BaseModel
 {
     use HasFactory;
 }

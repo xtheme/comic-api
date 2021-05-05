@@ -36,7 +36,7 @@ use Illuminate\Database\Eloquent\Model;
  * @method static \Illuminate\Database\Eloquent\Builder|PricingPackage whereUpdatedAt($value)
  * @mixin \Eloquent
  */
-class PricingPackage extends Model
+class PricingPackage extends BaseModel
 {
     use HasFactory;
     protected $table = 'pricing_packages';
