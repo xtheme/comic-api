@@ -234,9 +234,9 @@ $.extend({
 			callback : null
 		}, options);
 
-		let element = $('#main-content');
+		// let element = $('#main-content');
 
-		$(element).block({
+        $.blockUI({
 			message: `<span class="semibold">${settings.icon} ${settings.message}</span>`,
 			timeout: settings.timeout, //unblock after 2 seconds
 			overlayCSS: {
@@ -266,7 +266,8 @@ $.extend({
                     title: settings.title,
                     message: '请稍后数据刷新'
                 });
-			}
+			},
+            onOverlayClick: $.unblockUI
 		});
 	},
 	reloadModal: function (options) {
@@ -279,9 +280,7 @@ $.extend({
 			callback : null
 		}, options);
 
-		let element = parent.$('#global-modal .modal-content');
-
-		$(element).block({
+        $.blockUI({
 			message: `<span class="semibold">${settings.icon} ${settings.message}</span>`,
 			timeout: settings.timeout, //unblock after 2 seconds
 			overlayCSS: {
@@ -301,6 +300,7 @@ $.extend({
 			},
 			onBlock: function () {
 				console.log(settings.reloadUrl);
+                let element = parent.$('#global-modal .modal-content');
                 let $iframe = element.find('iframe');
 
                 $iframe.attr('src', settings.reloadUrl);
@@ -309,7 +309,8 @@ $.extend({
                     title: settings.title,
                     message: '请稍后数据刷新'
                 });
-			}
+			},
+            onOverlayClick: $.unblockUI
 		});
 	},
 	confirm: function (options) {
