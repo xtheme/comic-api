@@ -238,7 +238,6 @@ Route::middleware(['auth'])->prefix('backend')->as('backend.')->group(function (
         Route::delete('destroy/{id}', [BlockController::class , 'destroy'])->name('destroy');
         Route::put('sort', [BlockController::class , 'sort'])->name('sort');
         Route::put('batch/{action?}', [BlockController::class, 'batch'])->name('batch');
-        Route::post('batch/destroy/{ids?}', [BlockController::class, 'batchDestroy'])->name('batch.destroy');
     });
 
 });

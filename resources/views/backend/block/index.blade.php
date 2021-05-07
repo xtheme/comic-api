@@ -11,7 +11,6 @@
 @section('content')
     <section id="config-list">
         <div class="mb-1">
-            <a href="{{ route('backend.block.batch.destroy') }}" data-batch data-type="post" title="刪除主题模块" class="btn btn-danger" role="button" aria-pressed="true">批量刪除</a>
             <a href="{{ route('backend.block.create') }}" data-modal class="btn btn-primary" title="添加主题模块" role="button" aria-pressed="true">添加主题模块</a>
         </div>
         <div class="card">
@@ -20,9 +19,25 @@
                     <h4 class="card-title">@yield('title')</h4>
                 </div>
                 <div class="float-right d-flex flex-wrap">
-                    <form id="search-form" class="form form-horizontal" method="get" action="{{ url()->current() }}" novalidate>
+                    <form id="batch-action" class="form form-vertical" method="get" action="{{ route('backend.block.batch') }}" novalidate>
                         <div class="form-body">
                             <div class="d-flex align-items-center">
+                                <div class="form-group mr-1">
+                                    <select class="form-control" name="action">
+                                        <option value="enable">启用</option>
+                                        <option value="disable">隐藏</option>
+                                        <option value="destroy">删除</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <button type="submit" class="btn btn-primary">批量操作</button>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+{{--                    <form id="search-form" class="form form-horizontal" method="get" action="{{ url()->current() }}" novalidate>--}}
+{{--                        <div class="form-body">--}}
+{{--                            <div class="d-flex align-items-center">--}}
 {{--                                <div class="form-group mr-1">--}}
 {{--                                    <div class="controls">--}}
 {{--                                        <select id="class-type" class="form-control" name="causer">--}}
@@ -32,19 +47,19 @@
 {{--                                        </select>--}}
 {{--                                    </div>--}}
 {{--                                </div>--}}
-                                <div class="form-group mr-1">
-                                    <div class="controls">
-                                        <input type="text" class="form-control" name="title"
-                                               placeholder="请输入标题"
-                                               value="{{ request()->get('title') }}">
-                                    </div>
-                                </div>
-                                <div class="form-group">
-                                    <button type="submit" class="btn btn-primary">搜索</button>
-                                </div>
-                            </div>
-                        </div>
-                    </form>
+{{--                                <div class="form-group mr-1">--}}
+{{--                                    <div class="controls">--}}
+{{--                                        <input type="text" class="form-control" name="title"--}}
+{{--                                               placeholder="请输入标题"--}}
+{{--                                               value="{{ request()->get('title') }}">--}}
+{{--                                    </div>--}}
+{{--                                </div>--}}
+{{--                                <div class="form-group">--}}
+{{--                                    <button type="submit" class="btn btn-primary">搜索</button>--}}
+{{--                                </div>--}}
+{{--                            </div>--}}
+{{--                        </div>--}}
+{{--                    </form>--}}
                 </div>
             </div>
             <div class="card-content">
@@ -107,9 +122,9 @@
                                     <td>{{ $item->created_at->diffForHumans()  }}</td>
                                     <td>
                                         @if($item->status == 1)
-                                            <a class="badge badge-pill badge-light-success" data-confirm href="{{ route('backend.block.batch', ['action'=>'disable', 'ids' => $item->id]) }}" title="关闭该模块">开启</a>
+                                            <a class="badge badge-pill badge-light-success" data-confirm href="{{ route('backend.block.batch', ['action'=>'disable', 'ids' => $item->id]) }}" title="隐藏该模块">启用</a>
                                         @else
-                                            <a class="badge badge-pill badge-light-danger" data-confirm href="{{ route('backend.block.batch', ['action'=>'enable', 'ids' => $item->id]) }}" title="开启该模块">关闭</a>
+                                            <a class="badge badge-pill badge-light-danger" data-confirm href="{{ route('backend.block.batch', ['action'=>'enable', 'ids' => $item->id]) }}" title="启用该模块">隐藏</a>
                                         @endif
                                     </td>
                                     <td>{{ $item->query_count }}</td>
@@ -170,6 +185,40 @@
                         message: res.msg
                     });
                 }
+            });
+
+            $('#batch-action').submit(function (e) {
+                e.preventDefault();
+
+                let $this = $(this);
+                let ids   = $.checkedIds();
+                let url   = $this.attr('action') + '/' + $this.find('select[name="action"]').val();
+
+                if (!ids) {
+                    parent.$.toast({
+                        type: 'error',
+                        message: '请先选择要操作的数据'
+                    });
+                    return false;
+                }
+
+                $.confirm({
+                    text: `请确认是否要继续批量操作?`,
+                    callback: function () {
+                        $.request({
+                            url: url,
+                            type: 'put',
+                            data: {'ids': ids},
+                            debug: true,
+                            callback: function (res) {
+                                parent.$.reloadIFrame({
+                                    title: '提交成功',
+                                    message: '请稍后数据刷新'
+                                });
+                            }
+                        });
+                    }
+                });
             });
         });
     </script>
