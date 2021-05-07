@@ -2,20 +2,17 @@
 
 namespace App\Http\Controllers\Backend;
 
+use App\Enums\Options;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Backend\VideoRequest;
 use App\Models\Video;
 use App\Repositories\Contracts\VideoRepositoryInterface;
-use App\Repositories\TagRepository;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Response;
 
 class VideoController extends Controller
 {
     private $repository;
-
-    const STATUS_OPTIONS = [1 => '上架', -1 => '下架'];
-    const RIBBON_OPTIONS = [1 => '限时免费', 2 => '会员抢先'];
 
     public function __construct(VideoRepositoryInterface $repository)
     {
@@ -25,8 +22,8 @@ class VideoController extends Controller
     public function index(Request $request)
     {
         $data = [
-            'status_options' => self::STATUS_OPTIONS,
-            'ribbon_options' => self::RIBBON_OPTIONS,
+            'status_options' => Options::STATUS_OPTIONS,
+            'ribbon_options' => Options::RIBBON_OPTIONS,
             'videos' => $this->repository->filter($request)->paginate($request->get('limit')),
             'tags' => getSuggestTags(),
             'pageConfigs' => ['hasSearchForm' => true],
@@ -38,8 +35,8 @@ class VideoController extends Controller
     public function create()
     {
         $data = [
-            'status_options' => self::STATUS_OPTIONS,
-            'ribbon_options' => self::RIBBON_OPTIONS,
+            'status_options' => Options::STATUS_OPTIONS,
+            'ribbon_options' => Options::RIBBON_OPTIONS,
             'tags' => getSuggestTags(),
         ];
 
@@ -56,8 +53,8 @@ class VideoController extends Controller
     public function edit($id)
     {
         $data = [
-            'status_options' => self::STATUS_OPTIONS,
-            'ribbon_options' => self::RIBBON_OPTIONS,
+            'status_options' => Options::STATUS_OPTIONS,
+            'ribbon_options' => Options::RIBBON_OPTIONS,
             'tags' => getSuggestTags(),
             'video' => $this->repository->find($id),
         ];

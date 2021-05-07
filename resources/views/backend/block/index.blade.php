@@ -99,7 +99,7 @@
                                     </td>
                                     <td>{{ $item->id }}</td>
                                     <td>
-                                        @if($causer[$item->causer] == 'video')
+                                        @if($item->causer == 'video')
                                             <span class="badge badge-pill badge-primary">动画</span>
                                         @else
                                             <span class="badge badge-pill badge-success">漫画</span>
@@ -107,9 +107,9 @@
                                     </td>
                                     <td>
                                         {{ $item->title }}
-                                        @if(!empty($item->properties))
+                                        @if(!empty($item->properties['tag'] ))
                                             <div class="d-flex align-content-center flex-wrap" style="margin-top: 5px;">
-                                                @foreach($item->properties['tag']['value'] as $tagged)
+                                                @foreach($item->properties['tag'] as $tagged)
                                                     <span class="badge badge-pill badge-light-primary" style="margin-right: 3px; margin-bottom: 3px;">{{ $tagged }}</span>
                                                 @endforeach
                                             </div>

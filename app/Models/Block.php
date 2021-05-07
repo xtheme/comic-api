@@ -8,11 +8,6 @@ use Illuminate\Support\Str;
 
 class Block extends BaseModel
 {
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var array
-     */
     protected $fillable = [
         'title',
         'sort',
@@ -23,47 +18,17 @@ class Block extends BaseModel
         'status',
     ];
 
-
-    /**
-     * The accessors to append to the model's array form.
-     *
-     * @var array
-     */
-    protected $appends = [
-    ];
-
     protected $casts = [
         'properties' => 'array',
     ];
 
-    /**
-     * 写入动画跟漫画的种类别
-     */
-    public function setCauserAttribute($value)
-    {
-        $this->attributes['causer'] = sprintf('App\Models\%s', Str::ucfirst($value));
-    }
-
-    /**
-     * json_encode 后写入特性条件
-     */
-    public function setPropertiesAttribute($properties)
-    {
-        //tags特性額外處理空值
-        if (!isset($properties['tag']['value'])){
-            $properties['tag']['value'] = [];
-        }
-
-        $this->attributes['properties'] = json_encode($properties);
-    }
-
     public function getQueryUrlAttribute()
     {
         switch ($this->causer) {
-            case 'App\Models\Video':
+            case 'video':
                 $route = route('backend.video.index');
                 break;
-            case 'App\Models\Book':
+            case 'book':
                 $route = route('backend.book.index');
                 break;
             default:
@@ -71,23 +36,18 @@ class Block extends BaseModel
                 break;
         }
 
-        $arr = [];
-
-        foreach ($this->properties as $property => $data) {
-            $arr[$property] = $data['value'];
-        }
-
-        return urldecode($route . '?' . http_build_query($arr));
+        return urldecode($route . '?' . http_build_query($this->properties));
     }
 
     public function buildQuery(): Builder
     {
-        $model = new $this->causer;
+        $causer = sprintf('App\Models\%s', Str::ucfirst($this->causer));
 
-        $query = $model::query();
+        $model = new $causer;
 
-        foreach ($this->properties as $key => $data) {
-            $value = $data['value'] ?? null;
+        $query = $model::query()->where('status', 1);
+
+        foreach ($this->properties as $key => $value) {
 
             if (!$value) {
                 continue;
@@ -105,6 +65,11 @@ class Block extends BaseModel
                     break;
                 case 'author':
                     $query->where('author', $value);
+                    break;
+                case 'ribbon':
+                    if ($this->causer == 'video') {
+                        $query->where('ribbon', $value);
+                    }
                     break;
                 case 'date_between':
                     $date = explode(' - ', $value);

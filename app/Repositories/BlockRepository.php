@@ -6,7 +6,6 @@ use App\Models\Block;
 use App\Repositories\Contracts\BlockRepositoryInterface;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
-use Illuminate\Support\Str;
 
 class BlockRepository extends Repository implements BlockRepositoryInterface
 {
@@ -39,7 +38,6 @@ class BlockRepository extends Repository implements BlockRepositoryInterface
         return $this->model::when($title, function (Builder $query, $title) {
             return $query->where('title', 'like' , '%' . $title . '%' );
         })->when($causer, function (Builder $query, $causer) {
-            $causer = sprintf('App\Models\%s', Str::ucfirst($causer));
             return $query->where('causer', $causer);
         })->when($status, function (Builder $query, $status) {
             return $query->where('status', $status);

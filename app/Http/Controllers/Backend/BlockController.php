@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Backend;
 
+use App\Enums\Options;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Backend\BlockRequest;
 use App\Models\Block;
@@ -13,16 +14,11 @@ class BlockController extends Controller
 {
 
     private $repository;
-    private $style;
     private $causer;
 
     public function __construct(BlockRepositoryInterface $repository)
     {
         $this->repository = $repository;
-
-        $this->style = [
-            '1_2' => '动漫一大二小'
-        ];
 
         $this->causer = [
             'App\Models\Video' => 'video' ,
@@ -34,7 +30,6 @@ class BlockController extends Controller
     {
         $data = [
             'tags' => getSuggestTags(),
-            'style'=> $this->style,
             'causer'=> $this->causer,
             'list' => $this->repository->filter($request)->paginate(),
         ];
@@ -45,8 +40,9 @@ class BlockController extends Controller
     public function create()
     {
         $data = [
-            'style' => $this->style,
-            'tags' => getSuggestTags()
+            'tags' => getSuggestTags(),
+            'causer_options' => Options::CAUSER_OPTIONS,
+            'ribbon_options' => Options::RIBBON_OPTIONS,
         ];
 
         return view('backend.block.create')->with($data);
@@ -64,10 +60,11 @@ class BlockController extends Controller
     public function edit($id)
     {
         $data = [
-            'data'  => $this->repository->find($id),
-            'style' => $this->style,
-            'causer'=> $this->causer,
-            'tags' => getSuggestTags()
+            'data'           => $this->repository->find($id),
+            'causer'         => $this->causer,
+            'tags'           => getSuggestTags(),
+            'causer_options' => Options::CAUSER_OPTIONS,
+            'ribbon_options' => Options::RIBBON_OPTIONS,
         ];
 
         return view('backend.block.edit')->with($data);
@@ -100,9 +97,6 @@ class BlockController extends Controller
 
     /**
      * 批量操作
-     *
-     * @param \Illuminate\Http\Request $request
-     * @return \Illuminate\Http\Response
      */
     public function batch(Request $request, $action)
     {

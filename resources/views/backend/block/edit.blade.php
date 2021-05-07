@@ -16,8 +16,9 @@
                         <label><span class="danger">*</span> 类型</label>
                         <div class="controls">
                             <select class="form-control" name="causer">
-                                <option value="video" @if($causer[$data->causer] == 'video'){{'selected'}}@endif>动画</option>
-                                <option value="comic" @if($causer[$data->causer] == 'comic'){{'selected'}}@endif>漫画</option>
+                                @foreach ($causer_options as $key => $val)
+                                <option value="{{ $key }}" @if($data->causer == $key){{'selected'}}@endif>{{ $val }}</option>
+                                @endforeach
                             </select>
                         </div>
                     </div>
@@ -32,7 +33,7 @@
                 </div>
                 <div class="col-6">
                     <div class="form-group">
-                        <span class="float-right font-size-small text-danger">(数字由大到小排序)</span>
+                        <span class="float-right font-size-small text-light">(数字由大到小排序)</span>
                         <label><span class="danger">*</span> 模块排序</label>
                         <div class="controls">
                             <input type="text" class="form-control" name="sort" placeholder="请输入排序" value="{{ $data->sort }}">
@@ -43,7 +44,7 @@
                     <div class="form-group">
                         <label><span class="danger">*</span> 状态</label>
                         <div class="controls">
-                            <select class="form-control" name="status" >
+                            <select class="form-control" name="status">
                                 <option value="1" @if($data->status == 1){{'selected'}}@endif>开启</option>
                                 <option value="-1" @if($data->status == -1){{'selected'}}@endif>关闭</option>
                             </select>
@@ -68,19 +69,15 @@
                         </div>
                     </div>
                 </div>
-                {{--                <div class="col-12">--}}
-                {{--                    <div class="form-group">--}}
-                {{--                        <label><span class="danger">*</span> 模块展示</label>--}}
-                {{--                        <div class="controls">--}}
-                {{--                            <select class="form-control" name="style" >--}}
-                {{--                                <option value="">请选择风格</option>--}}
-                {{--                                @foreach ($style as $key => $item)--}}
-                {{--                                    <option value="{{ $key }}">{{ $item }}</option>--}}
-                {{--                                @endforeach--}}
-                {{--                            </select>--}}
-                {{--                        </div>--}}
-                {{--                    </div>--}}
-                {{--                </div>--}}
+                <div class="col-6">
+                    <div class="form-group">
+                        <span class="float-right font-size-small text-danger">(例如：动漫1大2小, 填入5, 扣除聚焦笔数1则展示2行)</span>
+                        <label><span class="danger">*</span> 模块展示笔数</label>
+                        <div class="controls">
+                            <input type="number" class="form-control" name="properties[limit]" value="{{ $data->properties['limit'] ?? 0 }}">
+                        </div>
+                    </div>
+                </div>
             </div>
             <div class="divider">
                 <div class="divider-text">筛选条件, 留空表示忽略该条件</div>
@@ -88,32 +85,38 @@
             <div class="row">
                 <div class="col-6">
                     <div class="form-group">
-                        <label><span class="danger">*</span> 挑选笔数</label>
+                        <span class="float-right font-size-small text-danger">(此条件只对动画类型有效)</span>
+                        <label>角标</label>
                         <div class="controls">
-                            <input type="number" class="form-control" name="properties[limit][value]" value="{{$data->properties['limit']['value']}}">
+                            <select class="form-control" name="ribbon">
+                                <option value="">忽略</option>
+                                @foreach ($ribbon_options as $key => $val)
+                                    <option value="{{ $key }}" @if(($data->properties['ribbon'] ?? '') == $key){{'selected'}}@endif>{{ $val }}</option>
+                                @endforeach
+                            </select>
                         </div>
                     </div>
                 </div>
                 <div class="col-6">
                     <div class="form-group">
-                        <span class="float-right font-size-small text-muted">(留空不设置挑选条件)</span>
+                        <span class="float-right font-size-small text-light">(留空不设置挑选条件)</span>
                         <label>挑选作者</label>
                         <div class="controls">
-                            <input type="text" class="form-control" name="properties[author][value]" value="{{$data->properties['author']['value']}}">
+                            <input type="text" class="form-control" name="properties[author]" value="{{ $data->properties['author'] ?? '' }}">
                         </div>
                     </div>
                 </div>
-                <input type="hidden" name="properties[order][value]" value="created_at">
+                <input type="hidden" name="properties[order]" value="created_at">
                 {{--                <div class="col-6">--}}
                 {{--                    <div class="form-group">--}}
                 {{--                        <label><span class="danger">*</span> 挑选排序</label>--}}
                 {{--                        <div class="controls">--}}
-                {{--                            <input type="hidden" name="properties[1][value]" value="created_at">--}}
+                {{--                            <input type="hidden" name="properties[1]" value="created_at">--}}
                 {{--                            <ul class="list-unstyled mb-0">--}}
                 {{--                                <li class="d-inline-block mr-2 mb-1">--}}
                 {{--                                    <fieldset>--}}
                 {{--                                        <div class="radio radio-shadow">--}}
-                {{--                                            <input type="radio" id="radio_condition_1"  name="properties[1][value]" value="created_at" checked>--}}
+                {{--                                            <input type="radio" id="radio_condition_1"  name="properties[1]" value="created_at" checked>--}}
                 {{--                                            <label for="radio_condition_1">时间</label>--}}
                 {{--                                        </div>--}}
                 {{--                                    </fieldset>--}}
@@ -121,7 +124,7 @@
                 {{--                                <li class="d-inline-block mr-2 mb-1">--}}
                 {{--                                    <fieldset>--}}
                 {{--                                        <div class="radio radio-shadow">--}}
-                {{--                                            <input type="radio" id="radio_condition_2" name="properties[1][value]" value="hot" >--}}
+                {{--                                            <input type="radio" id="radio_condition_2" name="properties[1]" value="hot" >--}}
                 {{--                                            <label for="radio_condition_2">热度</label>--}}
                 {{--                                        </div>--}}
                 {{--                                    </fieldset>--}}
@@ -129,7 +132,7 @@
                 {{--                                <li class="d-inline-block mr-2 mb-1">--}}
                 {{--                                    <fieldset>--}}
                 {{--                                        <div class="radio radio-shadow">--}}
-                {{--                                            <input type="radio" id="radio_condition_3" name="properties[1][value]" value="collect" >--}}
+                {{--                                            <input type="radio" id="radio_condition_3" name="properties[1]" value="collect" >--}}
                 {{--                                            <label for="radio_condition_3">收藏量</label>--}}
                 {{--                                        </div>--}}
                 {{--                                    </fieldset>--}}
@@ -140,11 +143,11 @@
                 {{--                </div>--}}
                 <div class="col-12">
                     <div class="form-group">
-                        <span class="float-right font-size-small text-muted">(留空不设置挑选条件)</span>
-                        <label>挑选作品时间区间</label>
+                        <span class="float-right font-size-small text-light">(留空不设置挑选条件)</span>
+                        <label>挑选作品上架时间段</label>
                         <div class="controls">
                             <fieldset class="form-group position-relative has-icon-left">
-                                <input type="text" class="form-control date-picker" name="properties[date_between][value]" autocomplete="off" value="{{$data->properties['date_between']['value']}}">
+                                <input type="text" class="form-control date-picker" name="properties[date_between]" autocomplete="off" value="{{ $data->properties['date_between'] ?? '' }}">
                                 <div class="form-control-position">
                                     <i class='bx bx-calendar-check'></i>
                                 </div>
@@ -156,9 +159,9 @@
                     <div class="form-group">
                         <label>挑选标签</label>
                         <div class="controls">
-                            <select id="tags-selector" class="form-control" name="properties[tag][value][]" multiple="multiple">
+                            <select id="tags-selector" class="form-control" name="properties[tag][]" multiple="multiple">
                                 @foreach($tags as $tag)
-                                    <option value="{{ $tag->name }}" @if(in_array($tag->name, $data->properties['tag']['value'])){{'selected'}}@endif>{{ $tag->name }}</option>
+                                    <option value="{{ $tag->name }}" @if(isset($data->properties['tag']) && in_array($tag->name, $data->properties['tag'])){{'selected'}}@endif>{{ $tag->name }}</option>
                                 @endforeach
                             </select>
                         </div>
