@@ -18,47 +18,6 @@ class TopicController extends BaseController
         $this->videoRepository = app(VideoRepository::class);
     }
 
-    private function buildQuery($topic)
-    {
-        $model = new $topic->causer;
-
-        $query = $model::query();
-
-        foreach ($topic->properties as $key => $data) {
-            $value = $data['value'] ?? null;
-
-            if (!$value) {
-                continue;
-            }
-
-            switch ($key) {
-                case 'tag':
-                    $query->withAllTags($value);
-                    break;
-                case 'limit':
-                    $query->limit($value);
-                    break;
-                case 'order':
-                    $query->orderByDesc($value);
-                    break;
-                case 'author':
-                    $query->whereLike('author', $value);
-                    break;
-                case 'date_between':
-                    $date = explode(' - ', $value);
-                    $start_date = $date[0] . ' 00:00:00';
-                    $end_date = $date[1] . ' 23:59:59';
-                    $query->whereBetween('created_at', [
-                        $start_date,
-                        $end_date,
-                    ]);
-                    break;
-            }
-        }
-
-        return $query->get();
-    }
-
     public function topic(Request $request, $causer)
     {
         $request->merge([
@@ -73,7 +32,7 @@ class TopicController extends BaseController
                 'title'     => $topic->title,
                 'spotlight' => $topic->spotlight,
                 'per_line'  => $topic->row,
-                'list'      => $this->buildQuery($topic),
+                'list'      => $topic->query_result,
             ];
         });
 

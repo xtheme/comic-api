@@ -10,56 +10,66 @@
     <form id="form" class="form" method="post" action="{{ route('backend.block.store') }}" novalidate>
         <div class="form-body">
             <div class="row">
-                <div class="col-6">
+                <div class="col-4">
                     <div class="form-group">
-                        <label for="input-username"><span class="danger">*</span> 模块名称</label>
+                        <label><span class="danger">*</span> 类型</label>
                         <div class="controls">
-                            <input type="text" id="input-username" class="form-control" name="title"
-                                   placeholder="请输入模块名称"
-                                   required
-                                   data-validation-required-message="请输入模块名称">
+                            <select class="form-control" name="causer">
+                                <option value="video">动画</option>
+                                <option value="comic">漫画</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-8">
+                    <div class="form-group">
+                        <label><span class="danger">*</span> 模块标题</label>
+                        <div class="controls">
+                            <input type="text" class="form-control" name="title" placeholder="请输入模块标题">
                         </div>
                     </div>
                 </div>
                 <div class="col-6">
                     <div class="form-group">
-                        <label for="input-username"><span class="danger">*</span> 模块排序<span class="danger">(由0到999排序)</span></label>
+                        <span class="float-right font-size-small text-danger">(数字由大到小排序)</span>
+                        <label><span class="danger">*</span> 模块排序</label>
                         <div class="controls">
-                            <input type="text" id="input-username" class="form-control" name="sort"
-                                   placeholder="请输入排序"
-                                   required
-                                   data-validation-required-message="请输入排序"
-                                   value="0">
+                            <input type="text" class="form-control" name="sort" placeholder="请输入排序" value="0">
                         </div>
                     </div>
                 </div>
                 <div class="col-6">
                     <div class="form-group">
-                        <label for="input-username">聚焦的数量<span class="danger">(例如：动漫1大2小 则填入1)</span></label>
+                        <label><span class="danger">*</span> 状态</label>
                         <div class="controls">
-                            <input type="text" id="input-username" class="form-control" name="spotlight"
-                                   placeholder="请输入聚焦数"
-                                   required
-                                   data-validation-required-message="请输入聚焦数"
-                                   value="0">
+                            <select class="form-control" name="status" >
+                                <option value="1">开启</option>
+                                <option value="-1">关闭</option>
+                            </select>
                         </div>
                     </div>
                 </div>
                 <div class="col-6">
                     <div class="form-group">
-                        <label for="input-username">每行几个内容<span class="danger">(例如：动漫1大2小 则填入2))</span></label>
+                        <span class="float-right font-size-small text-danger">(例如：动漫1大2小, 则填入1)</span>
+                        <label>聚焦笔数</label>
                         <div class="controls">
-                            <input type="text" id="input-username" class="form-control" name="row"
-                                   placeholder="请输入行数"
-                                   required
-                                   data-validation-required-message="请输入行数"
-                                   value="0">
+                            <input type="number" class="form-control" name="spotlight" placeholder="请输入聚焦数" value="0">
+                        </div>
+                    </div>
+                </div>
+                <div class="col-6">
+                    <div class="form-group">
+                        <span class="float-right font-size-small text-danger">(例如：动漫1大2小, 则填入2)</span>
+                        <label>聚焦之外的数据每行几笔</label>
+                        <div class="controls">
+                            <input type="number" class="form-control" name="row" placeholder="请输入每行笔数" value="0">
                         </div>
                     </div>
                 </div>
 {{--                <div class="col-12">--}}
 {{--                    <div class="form-group">--}}
-{{--                        <label for="input-username"><span class="danger">*</span> 模块展示</label>--}}
+{{--                        <label><span class="danger">*</span> 模块展示</label>--}}
 {{--                        <div class="controls">--}}
 {{--                            <select class="form-control" name="style" >--}}
 {{--                                <option value="">请选择风格</option>--}}
@@ -70,55 +80,32 @@
 {{--                        </div>--}}
 {{--                    </div>--}}
 {{--                </div>--}}
+            </div>
+            <div class="divider">
+                <div class="divider-text">筛选条件, 留空表示忽略该条件</div>
+            </div>
+            <div class="row">
                 <div class="col-6">
                     <div class="form-group">
-                        <label for="input-username"><span class="danger">*</span> 模块模型</label>
+                        <label><span class="danger">*</span> 挑选笔数</label>
                         <div class="controls">
-                            <select class="form-control" name="causer" >
-                                <option value="video" >动画</option>
-                                <option value="comic" >漫画</option>
-                            </select>
+                            <input type="number" class="form-control" name="properties[limit][value]" value="6">
                         </div>
                     </div>
                 </div>
                 <div class="col-6">
                     <div class="form-group">
-                        <label for="input-username"><span class="danger">*</span> 状态</label>
+                        <span class="float-right font-size-small text-muted">(留空不设置挑选条件)</span>
+                        <label>挑选作者</label>
                         <div class="controls">
-                            <select class="form-control" name="status" >
-                                <option value="1" >开启</option>
-                                <option value="-1" >关闭</option>
-                            </select>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-6">
-                    <div class="form-group">
-                        <label for="input-username">挑选笔数</label>
-                        <div class="controls">
-                            <input type="text" id="input-username" class="form-control" name="properties[limit][value]"
-                                   placeholder="请输入挑选笔数，留空不设置挑选条件"
-                                   required
-                                   data-validation-required-message="请输入挑选笔数"
-                                   value="6">
-                        </div>
-                    </div>
-                </div>
-                <div class="col-6">
-                    <div class="form-group">
-                        <label for="input-username">挑选作者</label>
-                        <div class="controls">
-                            <input type="text" id="input-username" class="form-control" name="properties[author][value]"
-                                   placeholder="请输入作者，留空不设置挑选条件"
-                                   data-validation-required-message="请输入作者"
-                            >
+                            <input type="text" class="form-control" name="properties[author][value]">
                         </div>
                     </div>
                 </div>
                 <input type="hidden" name="properties[order][value]" value="created_at">
 {{--                <div class="col-6">--}}
 {{--                    <div class="form-group">--}}
-{{--                        <label for="input-username"><span class="danger">*</span> 挑选排序</label>--}}
+{{--                        <label><span class="danger">*</span> 挑选排序</label>--}}
 {{--                        <div class="controls">--}}
 {{--                            <input type="hidden" name="properties[1][value]" value="created_at">--}}
 {{--                            <ul class="list-unstyled mb-0">--}}
@@ -152,13 +139,11 @@
 {{--                </div>--}}
                 <div class="col-12">
                     <div class="form-group">
-                        <label for="input-username">挑选作品时间区间</label>
+                        <span class="float-right font-size-small text-muted">(留空不设置挑选条件)</span>
+                        <label>挑选作品时间区间</label>
                         <div class="controls">
                             <fieldset class="form-group position-relative has-icon-left">
-                                <input type="text" id="input-date-register" class="form-control date-picker"
-                                       name="properties[date_between][value]"
-                                       autocomplete="off"
-                                       placeholder="请输入时间区间，留空不设置挑选条件">
+                                <input type="text" class="form-control date-picker" name="properties[date_between][value]" autocomplete="off">
                                 <div class="form-control-position">
                                     <i class='bx bx-calendar-check'></i>
                                 </div>
@@ -168,7 +153,7 @@
                 </div>
                 <div class="col-12">
                     <div class="form-group">
-                        <label for="input-username">挑选标签</label>
+                        <label>挑选标签</label>
                         <div class="controls">
                             <select id="tags-selector" class="form-control" name="properties[tag][value][]" multiple="multiple">
                                 @foreach($tags as $tag)
@@ -190,15 +175,14 @@
 {{-- vendor scripts --}}
 @section('vendor-scripts')
     <script src="{{ asset('vendors/js/extensions/moment.min.js') }}"></script>
-    <script src="{{ asset('vendors/js/extensions/locale-all.js') }}"></script>
     <script src="{{ asset('vendors/js/pickers/daterange/daterangepicker.js') }}"></script>
+    <script src="{{ asset('vendors/js/extensions/locale/zh-cn.js') }}"></script>
     <script src="{{ asset('vendors/js/bootstrap-multiselect/bootstrap-multiselect.js') }}"></script>
 @endsection
 
 
 {{-- page scripts --}}
 @section('page-scripts')
-    <script src="{{ asset('js/scripts/forms/validation/form-validation.js') }}"></script>
     <script>
         let $datePicker = $('.date-picker');
 
@@ -214,8 +198,6 @@
         $datePicker.on('cancel.daterangepicker', function(ev, picker) {
             $(this).val('');
         });
-
-
 
 		$(document).ready(function () {
             $('#tags-selector').multiselect({

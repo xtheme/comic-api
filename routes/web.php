@@ -48,7 +48,7 @@ Route::get('logout', [LoginController::class, 'logout']);
 Route::get('/', [HomeController::class, 'index']);
 Route::get('403', [HomeController::class, 'noPermission'])->name('403');
 Route::get('404', [HomeController::class, 'notFound'])->name('404');
-Route::get('500', [HomeController::class, 'nternalError'])->name('500');
+Route::get('500', [HomeController::class, 'internalError'])->name('500');
 
 
 // Route::prefix('requisition')->as('requisition.')->group(function () {
