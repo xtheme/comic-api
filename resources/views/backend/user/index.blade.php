@@ -11,9 +11,9 @@
 @section('content')
     <section id="config-list">
         <div class="mb-1">
-            <a href="#" data-batch class="btn btn-primary glow" role="button" aria-pressed="true">批量启用</a>
-            <a href="#" data-batch class="btn btn-danger glow" role="button" aria-pressed="true">批量封禁</a>
-            <a href="#" data-modal class="btn btn-success glow" role="button" aria-pressed="true">添加用户</a>
+            <a href="#" data-batch class="btn btn-primary" role="button" aria-pressed="true">批量启用</a>
+            <a href="#" data-batch class="btn btn-danger" role="button" aria-pressed="true">批量封禁</a>
+            <a href="#" data-modal class="btn btn-success" role="button" aria-pressed="true">添加用户</a>
         </div>
         <div class="card">
             <div class="card-header">

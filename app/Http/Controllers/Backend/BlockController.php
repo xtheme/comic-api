@@ -98,22 +98,8 @@ class BlockController extends Controller
         return Response::jsonSuccess('更新资料成功！');
     }
 
-
     /**
-     * 批量刪除
-     *
-     * @param \Illuminate\Http\Request $request
-     * @return \Illuminate\Http\Response
-     */
-    public function batchDestroy(Request $request, $ids)
-    {
-        $data = explode(',', $ids);
-        Block::destroy($data);
-        return Response::jsonSuccess('删除成功！');
-    }
-
-    /**
-     * 上下架
+     * 批量操作
      *
      * @param \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
@@ -124,18 +110,20 @@ class BlockController extends Controller
 
         switch ($action) {
             case 'enable':
-                $text = '开启';
-                $data = ['status' => 1];
+                $text = '启用';
+                Block::whereIn('id', $ids)->update(['status' => 1]);
                 break;
             case 'disable':
-                $text = '关闭';
-                $data = ['status' => -1];
+                $text = '隐藏';
+                Block::whereIn('id', $ids)->update(['status' => -1]);
+                break;
+            case 'destroy':
+                $text = '删除';
+                Block::destroy($ids);
                 break;
             default:
                 return Response::jsonError(__('response.error.unknown'));
         }
-
-        Block::whereIn('id', $ids)->update($data);
 
         return Response::jsonSuccess(__('response.success.complete', ['action' => $text]));
     }

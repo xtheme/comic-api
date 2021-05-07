@@ -1,7 +1,7 @@
 @extends('layouts.iframePage')
 
 {{-- page Title --}}
-@section('title','首页模块')
+@section('title','主题模块')
 
 {{-- vendor style --}}
 @section('vendor-styles')
@@ -11,8 +11,7 @@
 @section('content')
     <section id="config-list">
         <div class="mb-1">
-            <a href="{{ route('backend.block.batch.destroy') }}" data-batch data-type="post"  title="刪除首页模块" class="btn btn-danger glow" role="button" aria-pressed="true">批量刪除</a>
-            <a href="{{ route('backend.block.create') }}" class="btn btn-primary glow" data-modal title="添加首页模块" role="button" aria-pressed="true">添加首页模块</a>
+            <a href="{{ route('backend.block.create') }}" data-modal class="btn btn-primary" title="添加主题模块" role="button" aria-pressed="true">添加主题模块</a>
         </div>
         <div class="card">
             <div class="card-header">
@@ -20,9 +19,25 @@
                     <h4 class="card-title">@yield('title')</h4>
                 </div>
                 <div class="float-right d-flex flex-wrap">
-                    <form id="search-form" class="form form-horizontal" method="get" action="{{ url()->current() }}" novalidate>
+                    <form id="batch-action" class="form form-vertical" method="get" action="{{ route('backend.block.batch') }}" novalidate>
                         <div class="form-body">
                             <div class="d-flex align-items-center">
+                                <div class="form-group mr-1">
+                                    <select class="form-control" name="action">
+                                        <option value="enable">启用</option>
+                                        <option value="disable">隐藏</option>
+                                        <option value="destroy">删除</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <button type="submit" class="btn btn-primary">批量操作</button>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+{{--                    <form id="search-form" class="form form-horizontal" method="get" action="{{ url()->current() }}" novalidate>--}}
+{{--                        <div class="form-body">--}}
+{{--                            <div class="d-flex align-items-center">--}}
 {{--                                <div class="form-group mr-1">--}}
 {{--                                    <div class="controls">--}}
 {{--                                        <select id="class-type" class="form-control" name="causer">--}}
@@ -32,19 +47,19 @@
 {{--                                        </select>--}}
 {{--                                    </div>--}}
 {{--                                </div>--}}
-                                <div class="form-group mr-1">
-                                    <div class="controls">
-                                        <input type="text" class="form-control" name="title"
-                                               placeholder="请输入标题"
-                                               value="{{ request()->get('title') }}">
-                                    </div>
-                                </div>
-                                <div class="form-group">
-                                    <button type="submit" class="btn btn-primary">搜索</button>
-                                </div>
-                            </div>
-                        </div>
-                    </form>
+{{--                                <div class="form-group mr-1">--}}
+{{--                                    <div class="controls">--}}
+{{--                                        <input type="text" class="form-control" name="title"--}}
+{{--                                               placeholder="请输入标题"--}}
+{{--                                               value="{{ request()->get('title') }}">--}}
+{{--                                    </div>--}}
+{{--                                </div>--}}
+{{--                                <div class="form-group">--}}
+{{--                                    <button type="submit" class="btn btn-primary">搜索</button>--}}
+{{--                                </div>--}}
+{{--                            </div>--}}
+{{--                        </div>--}}
+{{--                    </form>--}}
                 </div>
             </div>
             <div class="card-content">
@@ -60,14 +75,16 @@
                                         <label for="check-all"></label>
                                     </div>
                                 </th>
-                                <th>模块</th>
+                                <th>ID</th>
+                                <th>类型</th>
                                 <th>标题</th>
                                 <th>排序</th>
-                                <th>编号</th>
-                                <th>聚焦数</th>
-                                <th>每行数</th>
+                                <th>展示风格</th>
+{{--                                <th>聚焦数</th>--}}
+{{--                                <th>每行数</th>--}}
                                 <th>添加时间</th>
                                 <th>状态</th>
+                                <th>匹配数</th>
                                 <th>操作</th>
                             </tr>
                             </thead>
@@ -80,11 +97,12 @@
                                             <label for="check-{{ $item->id }}"></label>
                                         </div>
                                     </td>
+                                    <td>{{ $item->id }}</td>
                                     <td>
                                         @if($causer[$item->causer] == 'video')
-                                            <span class="badge badge-pill badge-glow badge-primary">动画</span>
+                                            <span class="badge badge-pill badge-primary">动画</span>
                                         @else
-                                            <span class="badge badge-pill badge-glow badge-success">漫画</span>
+                                            <span class="badge badge-pill badge-success">漫画</span>
                                         @endif
                                     </td>
                                     <td>
@@ -98,24 +116,24 @@
                                         @endif
                                     </td>
                                     <td><span class="jeditable" data-pk="{{ $item->id }}" data-value="" > {{ $item->sort }}</td>
-                                    <td>{{ $item->id }}</td>
-                                    <td>{{ $item->spotlight }}</td>
-                                    <td>{{ $item->row }}</td>
+                                    <td>{{ $item->style_alias }}</td>
+{{--                                    <td>{{ $item->spotlight }}</td>--}}
+{{--                                    <td>{{ $item->row }}</td>--}}
                                     <td>{{ $item->created_at->diffForHumans()  }}</td>
                                     <td>
                                         @if($item->status == 1)
-                                            <a class="badge badge-pill badge-light-success" data-confirm href="{{ route('backend.block.batch', ['action'=>'disable', 'ids' => $item->id]) }}" title="关闭该模块">开启</a>
+                                            <a class="badge badge-pill badge-light-success" data-confirm href="{{ route('backend.block.batch', ['action'=>'disable', 'ids' => $item->id]) }}" title="隐藏该模块">启用</a>
                                         @else
-                                            <a class="badge badge-pill badge-light-danger" data-confirm href="{{ route('backend.block.batch', ['action'=>'enable', 'ids' => $item->id]) }}" title="开启该模块">关闭</a>
+                                            <a class="badge badge-pill badge-light-danger" data-confirm href="{{ route('backend.block.batch', ['action'=>'enable', 'ids' => $item->id]) }}" title="启用该模块">隐藏</a>
                                         @endif
-
                                     </td>
+                                    <td>{{ $item->query_count }}</td>
                                     <td @if($loop->count == 1)style="position: fixed;"@endif>
                                         <div class="@if(($loop->count - $loop->iteration) < 3){{'dropup'}}@else{{'dropdown'}}@endif">
                                             <span class="bx bx-dots-vertical-rounded font-medium-3 dropdown-toggle nav-hide-arrow cursor-pointer"
                                                   id="dropdownMenuButton{{ $item->id }}" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></span>
                                             <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuButton{{ $item->id }}">
-                                                <a class="dropdown-item show_list" data-properties="{{json_encode($item->properties)}}" href="{{ route('backend.video.index') }}" title="查看列表"><i class="bx bx-link-external mr-1"></i>查看</a>
+                                                <a class="dropdown-item" href="{{ $item->query_url }}" target="_blank"><i class="bx bx-link-external mr-1"></i>查看匹配</a>
                                                 <a class="dropdown-item" data-modal href="{{ route('backend.block.edit', $item->id) }}" title="修改首页模块"><i class="bx bx-edit-alt mr-1"></i>修改</a>
                                                 <a class="dropdown-item" data-destroy href="{{ route('backend.block.destroy', $item->id) }}" title="刪除首页模块"><i class="bx bx-trash mr-1"></i>刪除</a>
                                             </div>
@@ -169,39 +187,40 @@
                 }
             });
 
-
-            $('.show_list').click(function (e) {
+            $('#batch-action').submit(function (e) {
                 e.preventDefault();
 
-                var properties = $(this).data('properties')
+                let $this = $(this);
+                let ids   = $.checkedIds();
+                let url   = $this.attr('action') + '/' + $this.find('select[name="action"]').val();
 
-                let parms_url = '';
+                if (!ids) {
+                    parent.$.toast({
+                        type: 'error',
+                        message: '请先选择要操作的数据'
+                    });
+                    return false;
+                }
 
-                $.each(properties, function (key, item) {
-
-                    //没数值不搜寻
-                    if (!item.value){
-                        return;
-                    }
-
-                    //tag 額外處理
-                    if (key == "tag"){
-                        $.each(item.value, function (index, tag) {
-                            parms_url += key + '[]=' + tag + '&';
+                $.confirm({
+                    text: `请确认是否要继续批量操作?`,
+                    callback: function () {
+                        $.request({
+                            url: url,
+                            type: 'put',
+                            data: {'ids': ids},
+                            debug: true,
+                            callback: function (res) {
+                                parent.$.reloadIFrame({
+                                    title: '提交成功',
+                                    message: '请稍后数据刷新'
+                                });
+                            }
                         });
-                        return;
                     }
-                    parms_url += key + '=' + item.value + '&';
                 });
-
-                let url = $(this).attr('href') + '?' + parms_url;
-                console.log(url);
-
-                window.open(url);
             });
-
         });
-
     </script>
 @endsection
 

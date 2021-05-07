@@ -7,7 +7,7 @@
 
 @section('content')
     <div class="float-left">
-        <a href="#" data-batch class="btn btn-primary" role="button" aria-pressed="true">添加章节</a>
+        <a href="#" class="btn btn-primary" role="button" aria-pressed="true">添加章节</a>
     </div>
     <div class="float-right">
         <form id="batch-action" class="form form-vertical" method="get" action="{{ route('backend.book_chapter.batch') }}" novalidate>

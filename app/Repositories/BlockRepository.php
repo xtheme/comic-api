@@ -34,7 +34,7 @@ class BlockRepository extends Repository implements BlockRepositoryInterface
         $status = $request->input('status') ?? '';
 
         $order = $request->input('order') ?? 'sort';
-        $sort = $request->input('sort') ?? 'asc';
+        $sort = $request->input('sort') ?? 'desc';
 
         return $this->model::when($title, function (Builder $query, $title) {
             return $query->where('title', 'like' , '%' . $title . '%' );

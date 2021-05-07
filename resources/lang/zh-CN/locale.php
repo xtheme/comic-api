@@ -31,7 +31,7 @@ return [
     "Comments" => "評論管理",
     "Comment List" => "漫画评论",
     "Notice List" => "公告列表",
-    "Block List" => "首页模块",
+    "Block List" => "主题模块",
     "Book Report" => "漫画举报管理",
     "ReportType List" => "举报类型设置",
     "Report List" => "用户举报列表",
