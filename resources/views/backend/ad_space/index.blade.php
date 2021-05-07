@@ -52,7 +52,7 @@
                                 <th>ID</th>
                                 <th>广告位名称</th>
                                 <th>广告位类型</th>
-                                <th>备注</th>
+{{--                                <th>备注</th>--}}
                                 <th>状态</th>
                                 <th>接入广告SDK</th>
                                 <th>更新时间</th>
@@ -63,15 +63,20 @@
                             @foreach ($list as $item)
                                 <tr>
                                     <td>{{ $item->id }}</td>
-                                    <td>{{ $item->name }}</td>
+                                    <td>
+                                        <span class="text-bold-600 text-dark">{{ $item->name }}</span>
+                                        <em class="d-flex align-content-center flex-wrap text-light" style="margin-top: 5px;">
+                                            {{ $item->remark }}
+                                        </em>
+                                    </td>
                                     <td>
                                         @if($item->class == 'video')
-                                            <span class="badge badge-pill badge-glow badge-primary">动画</span>
+                                            <span class="badge badge-pill badge-primary">动画</span>
                                         @else
-                                            <span class="badge badge-pill badge-glow badge-success">漫画</span>
+                                            <span class="badge badge-pill badge-success">漫画</span>
                                         @endif
                                     </td>
-                                    <td>{{ $item->remark }}</td>
+{{--                                    <td>{{ $item->remark }}</td>--}}
                                     <td>
                                         @if($item->status == 1)
                                             <span class="badge badge-pill badge-light-primary">上架</span>
@@ -83,7 +88,7 @@
                                         @if($item->sdk == 1)
                                             <span class="badge badge-pill badge-light-primary">开启</span>
                                         @else
-                                            <span class="badge badge-pill badge-light-danger">关闭</span>
+                                            <span class="badge badge-pill badge-light-secondary">关闭</span>
                                         @endif
                                     </td>
                                     <td>@if($item->updated_at){{ $item->updated_at->diffForHumans()  }}@endif</td>
