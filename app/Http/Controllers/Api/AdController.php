@@ -6,7 +6,6 @@ use App\Http\Controllers\Controller;
 use App\Repositories\Contracts\AdSpaceRepositoryInterface;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Response;
-use Illuminate\Support\Facades\Validator;
 
 class AdController extends Controller
 {
@@ -18,31 +17,13 @@ class AdController extends Controller
         $this->repository = $repository;
     }
 
-
     /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
+     * 查询廣告位底下的廣告列表
      */
-    public function space(Request $request)
+    public function space(Request $request, $id)
     {
-
-        $name = $request->post('name');
-        // 验证规则
-        $validator = Validator::make([
-            'name' => $name,
-        ], [
-            'name' => 'required',
-        ]);
-
-        if ($validator->fails()) {
-            return Response::jsonError($validator->errors()->first(), 500);
-        }
-
-        $data = $this->repository->getAdList($name)->get();
-
+        $data = $this->repository->ads($request, $id)->get()->first();
 
         return Response::jsonSuccess('返回成功', $data);
-
     }
 }

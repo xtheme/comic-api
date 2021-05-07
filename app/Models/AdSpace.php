@@ -25,5 +25,4 @@ class AdSpace extends BaseModel
     {
         return $this->hasMany('App\Models\Ad', 'space_id', 'id')->where('status' , 1);
     }
-
 }

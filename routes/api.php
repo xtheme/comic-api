@@ -40,7 +40,7 @@ Route::prefix(config('api.version'))->middleware(['api.header', 'api.sign', 'jwt
     });
 
     Route::prefix('ad')->as('ad.')->group(function () {
-        Route::get('/space', [AdController::class, 'space'])->name('space');
+        Route::get('/space/{id}', [AdController::class, 'space'])->name('space');
     });
 
     // 主题区块
