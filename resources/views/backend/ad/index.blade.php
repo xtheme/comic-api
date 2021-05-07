@@ -12,10 +12,10 @@
     <section id="config-list">
 
         <div class="mb-1">
-            <a href="{{ route('backend.ad.batch') }}" data-action="enable" title="上架" class="btn btn-success glow batch-action" role="button" aria-pressed="true">批量上架</a>
-            <a href="{{ route('backend.ad.batch') }}" data-action="disable" title="下架" class="btn btn-light glow batch-action" role="button" aria-pressed="true">批量下架</a>
-            <a href="{{ route('backend.ad.batch.destroy') }}" data-batch data-type="post"  title="刪除" class="btn btn-danger glow" role="button" aria-pressed="true">批量刪除</a>
-            <a href=" {{ route('backend.ad.create') }}" data-modal data-size="lg" title="添加广告" class="btn btn-primary glow">添加广告</a>
+            <a href="{{ route('backend.ad.batch') }}" data-action="enable" title="上架" class="btn btn-success batch-action" role="button" aria-pressed="true">批量上架</a>
+            <a href="{{ route('backend.ad.batch') }}" data-action="disable" title="下架" class="btn btn-light batch-action" role="button" aria-pressed="true">批量下架</a>
+            <a href="{{ route('backend.ad.batch.destroy') }}" data-batch data-type="post"  title="刪除" class="btn btn-danger" role="button" aria-pressed="true">批量刪除</a>
+            <a href=" {{ route('backend.ad.create') }}" data-modal data-size="lg" title="添加广告" class="btn btn-primary">添加广告</a>
         </div>
         <div class="card">
             <div class="card-header">

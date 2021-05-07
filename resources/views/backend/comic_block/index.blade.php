@@ -11,8 +11,8 @@
 @section('content')
     <section id="config-list">
         <div class="mb-1">
-            <a href="{{ route('backend.comic_block.batch.destroy') }}" data-batch data-type="post"  title="刪除首页模块" class="btn btn-danger glow" role="button" aria-pressed="true">批量刪除</a>
-            <a href="{{ route('backend.comic_block.create') }}" class="btn btn-primary glow" data-modal title="添加首页模块" role="button" aria-pressed="true">添加首页模块</a>
+            <a href="{{ route('backend.comic_block.batch.destroy') }}" data-batch data-type="post" title="刪除首页模块" class="btn btn-danger" role="button" aria-pressed="true">批量刪除</a>
+            <a href="{{ route('backend.comic_block.create') }}" class="btn btn-primary" data-modal title="添加首页模块" role="button" aria-pressed="true">添加首页模块</a>
         </div>
         <div class="card">
             <div class="card-header">
