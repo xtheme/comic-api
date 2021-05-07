@@ -12,12 +12,14 @@ use App\Repositories\Contracts\BlockRepositoryInterface;
 use App\Repositories\Contracts\BookChapterRepositoryInterface;
 use App\Repositories\Contracts\BookRepositoryInterface;
 use App\Repositories\Contracts\OrderRepositoryInterface;
+use App\Repositories\Contracts\HistoryRepositoryInterface;
 use App\Repositories\Contracts\TagRepositoryInterface;
 use App\Repositories\Contracts\VideoDomainRepositoryInterface;
 use App\Repositories\Contracts\VideoRepositoryInterface;
 use App\Repositories\Contracts\VideoSeriesRepositoryInterface;
 use App\Repositories\Contracts\AdRepositoryInterface;
 use App\Repositories\OrderRepository;
+use App\Repositories\HistoryRepository;
 use App\Repositories\TagRepository;
 use App\Repositories\UserRepository;
 use App\Repositories\Contracts\CommentRepositoryInterface;
@@ -50,6 +52,8 @@ class RepositoryServiceProvider extends ServiceProvider
         $this->app->bind(AdSpaceRepositoryInterface::class, AdSpaceRepository::class);
         $this->app->bind(AdRepositoryInterface::class, AdRepository::class);
         $this->app->bind(BlockRepositoryInterface::class, BlockRepository::class);
+        $this->app->bind(HistoryRepositoryInterface::class, HistoryRepository::class);
+
     }
 
     /**
