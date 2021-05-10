@@ -74,7 +74,7 @@ class User extends BaseModel
 {
     use HasFactory, Notifiable;
 
-    protected $table = 'users_clone';
+    // protected $table = 'users_clone';
 
     /**
      * The attributes that are mass assignable.
