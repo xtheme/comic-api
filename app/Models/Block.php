@@ -45,7 +45,16 @@ class Block extends BaseModel
 
         $model = new $causer;
 
-        $query = $model::query()->where('status', 1);
+        $query = $model::query();
+
+        switch ($this->causer) {
+            case 'video':
+                $query->where('status', 1);
+                break;
+            case 'book':
+                $query->where('book_status', 1);
+                break;
+        }
 
         foreach ($this->properties as $key => $value) {
 
