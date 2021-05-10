@@ -44,7 +44,7 @@ class VideoRepository extends Repository implements VideoRepositoryInterface
         $page = $request->input('page') ?? 1;
         $perPage = $request->input('perPage') ?? 10;
 
-        return $this->model::withCount(['series'])->when($title, function (Builder $query, $title) {
+        return $this->model::withCount(['series' , 'visit' , 'play'])->when($title, function (Builder $query, $title) {
             return $query->whereLike('title', $title);
         })->when($author, function (Builder $query, $author) {
             return $query->whereLike('author', $author);

@@ -39,6 +39,18 @@ class VideoSeries extends BaseModel
         return $this->hasOne('App\Models\VideoDomain', 'id', 'video_domain_id');
     }
 
+
+    public function member()
+    {
+        return $this->hasOne('App\Models\ViewsHistoriesVipCount', 'minor_id' , 'id')->where('class' , 'video');
+    }
+
+
+    public function not_member()
+    {
+        return $this->hasOne('App\Models\ViewsHistoriesNotVipCount', 'minor_id' , 'id')->where('class' , 'video');
+    }
+
     public function getUrlAttribute()
     {
         return $this->cdn->domain . $this->link;

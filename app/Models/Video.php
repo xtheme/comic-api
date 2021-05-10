@@ -19,7 +19,7 @@ class Video extends BaseModel
     ];
 
     protected $appends = [
-        'tagged_tags'
+        'tagged_tags',
     ];
 
     protected $hidden = [
@@ -29,6 +29,23 @@ class Video extends BaseModel
     public function series()
     {
         return $this->hasMany('App\Models\VideoSeries');
+    }
+
+    public function visit()
+    {
+        return $this->hasMany('App\Models\History' , 'major_id' , 'id')->where([
+            ['type' , 'visit'],
+            ['class' , 'video']
+        ]);
+    }
+
+
+    public function play()
+    {
+        return $this->hasMany('App\Models\History' , 'major_id' , 'id')->where([
+            ['type' , 'play'],
+            ['class' , 'video']
+        ]);
     }
 
     public function getTaggedTagsAttribute()
