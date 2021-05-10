@@ -40,15 +40,21 @@ class VideoSeries extends BaseModel
     }
 
 
-    public function member()
+    public function user()
     {
-        return $this->hasOne('App\Models\ViewsHistoriesVipCount', 'minor_id' , 'id')->where('class' , 'video');
+        return $this->hasOne('App\Models\ViewsHistoriesUser', 'minor_id', 'id')->where([
+            ['class', 'video'],
+            ['type', 'play']
+        ]);
     }
 
 
-    public function not_member()
+    public function guest()
     {
-        return $this->hasOne('App\Models\ViewsHistoriesNotVipCount', 'minor_id' , 'id')->where('class' , 'video');
+        return $this->hasOne('App\Models\ViewsHistoriesGuest', 'minor_id', 'id')->where([
+            ['class', 'video'],
+            ['type', 'play']
+        ]);
     }
 
     public function getUrlAttribute()

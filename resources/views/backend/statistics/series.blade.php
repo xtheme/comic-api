@@ -45,9 +45,9 @@
                                             </div>
                                         @endif
                                     </td>
-                                    <td>{{ $item->not_member->count  ?? '0' }}</td>
-                                    <td>{{ $item->member->count  ?? '0' }}</td>
-                                    <td>{{ ($item->not_member->count ?? '0') + ($item->member->count ?? '0')}}</td>
+                                    <td>{{ $item->guest->count  ?? '0' }}</td>
+                                    <td>{{ $item->user->count  ?? '0' }}</td>
+                                    <td>{{ ($item->guest->count ?? '0') + ($item->user->count ?? '0')}}</td>
                                 </tr>
                             @endforeach
                             </tbody>
