@@ -9,4 +9,19 @@ class History extends Model
 {
     use HasFactory;
 
+    /**
+     * The attributes that are mass assignable.
+     *
+     * @var array
+     */
+    protected $fillable = [
+        'major_id',
+        'minor_id',
+        'user_vip',
+        'user_id',
+        'type',
+        'class',
+        'created_at'
+    ];
+
 }

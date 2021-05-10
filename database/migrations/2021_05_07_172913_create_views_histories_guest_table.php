@@ -22,7 +22,7 @@ class CreateViewsHistoriesGuestTable extends Migration
             'class',
             'type',
         ]);
-        Schema::createOrReplaceView('views_histories_guest', $query);
+        Schema::createOrReplaceView('views_histories_guests', $query);
     }
 
     /**
@@ -32,6 +32,6 @@ class CreateViewsHistoriesGuestTable extends Migration
      */
     public function down()
     {
-        Schema::dropViewIfExists('views_histories_guest');
+        Schema::dropViewIfExists('views_histories_guests');
     }
 }
