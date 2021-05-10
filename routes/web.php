@@ -13,6 +13,7 @@ use App\Http\Controllers\Backend\FeedbackController;
 use App\Http\Controllers\Backend\NoticeController;
 use App\Http\Controllers\Backend\OrderController;
 use App\Http\Controllers\Backend\PricingController;
+use App\Http\Controllers\Backend\StatisticsController;
 use App\Http\Controllers\Backend\TagController;
 use App\Http\Controllers\Backend\UserController;
 use App\Http\Controllers\Backend\VideoController;
@@ -238,6 +239,12 @@ Route::middleware(['auth'])->prefix('backend')->as('backend.')->group(function (
         Route::delete('destroy/{id}', [BlockController::class , 'destroy'])->name('destroy');
         Route::put('sort', [BlockController::class , 'sort'])->name('sort');
         Route::put('batch/{action?}', [BlockController::class, 'batch'])->name('batch');
+    });
+
+    // 数据统计
+    Route::prefix('statistics')->as('statistics.')->group(function () {
+        Route::get('/', [StatisticsController::class , 'index'])->name('index');
+        Route::get('/series/{video_id}', [StatisticsController::class , 'series'])->name('series');
     });
 
 });
