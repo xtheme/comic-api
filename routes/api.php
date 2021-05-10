@@ -46,7 +46,7 @@ Route::prefix(config('api.version'))->middleware(['api.header', 'api.sign', 'jwt
     // 主题区块
     Route::prefix('topic')->as('topic.')->group(function () {
         Route::get('/{causer}', [TopicController::class, 'list'])->name('list');
-        Route::get('/{causer}/more/{page?}', [TopicController::class, 'more'])->name('more');
+        Route::get('/more/{topic}/{page?}', [TopicController::class, 'more'])->name('more');
     });
 
     Route::prefix('video')->as('video.')->group(function () {

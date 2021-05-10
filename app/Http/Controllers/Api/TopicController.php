@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\Response;
 class TopicController extends BaseController
 {
     protected $blockRepository;
+
     // protected $videoRepository;
 
     public function __construct()
@@ -29,7 +30,9 @@ class TopicController extends BaseController
 
         $data = $topics->map(function ($topic) {
             return [
+                'topic'     => $topic->id,
                 'title'     => $topic->title,
+                'tags'      => $topic->properties['tag'] ?? [],
                 'spotlight' => $topic->spotlight,
                 'per_line'  => $topic->row,
                 'list'      => $topic->query_result,
@@ -39,23 +42,27 @@ class TopicController extends BaseController
         return Response::jsonSuccess(__('api.success'), $data);
     }
 
-    public function more(Request $request, $causer, $page)
+    public function more($topic_id, $page = 1)
     {
-        $request->merge([
-            'causer' => $causer,
-            'status' => 1,
-        ]);
+        $topic = $this->blockRepository->find($topic_id);
 
-        $topics = $this->blockRepository->filter($request)->get();
+        $per_page = 10;
 
-        $data = $topics->map(function ($topic) {
-            return [
-                'title'     => $topic->title,
-                'spotlight' => $topic->spotlight,
-                'per_line'  => $topic->row,
-                'list'      => $topic->query_result,
-            ];
-        });
+        $count = $topic->setUnlimited()->buildQuery()->count();
+
+        $total_page = ceil($count / $per_page);
+
+        $list = $topic->setUnlimited()->buildQuery()->forPage($page, $per_page)->get();
+
+        $data = [
+            'topic'      => $topic_id,
+            'title'      => $topic->title,
+            'tags'       => $topic->properties['tag'] ?? [],
+            'per_page'   => $per_page,
+            'total_page' => $total_page,
+            'page'       => $page,
+            'list'       => $list,
+        ];
 
         return Response::jsonSuccess(__('api.success'), $data);
     }

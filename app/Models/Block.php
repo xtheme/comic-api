@@ -8,6 +8,8 @@ use Illuminate\Support\Str;
 
 class Block extends BaseModel
 {
+    protected $unlimited = false;
+
     protected $fillable = [
         'title',
         'sort',
@@ -21,6 +23,13 @@ class Block extends BaseModel
     protected $casts = [
         'properties' => 'array',
     ];
+
+    public function setUnlimited()
+    {
+        $this->unlimited = true;
+
+        return $this;
+    }
 
     public function getQueryUrlAttribute()
     {
@@ -67,10 +76,13 @@ class Block extends BaseModel
                     $query->withAllTags($value);
                     break;
                 case 'limit':
-                    $query->limit($value);
+                    if (!$this->unlimited) {
+                        $query->limit($value);
+                    }
                     break;
                 case 'order':
-                    $query->orderByDesc($value);
+                    // $query->orderByDesc($value);
+                    $query->latest();
                     break;
                 case 'author':
                     $query->where('author', $value);
