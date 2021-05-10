@@ -5,6 +5,7 @@
 
 {{-- vendor style --}}
 @section('vendor-styles')
+    <link rel="stylesheet" type="text/css" href="{{ asset('vendors/css/bootstrap-multiselect/bootstrap-multiselect.css') }}">
     <link rel="stylesheet" type="text/css" href="{{ asset('vendors/css/x-editable/bootstrap-editable.css') }}">
 @endsection
 
@@ -159,7 +160,7 @@
                                             <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuButton{{ $book->id }}">
                                                 <a class="dropdown-item" data-modal href="" title="推荐设置"><i class="bx bxs-bookmark-star mr-1"></i>推荐设置</a>
                                                 <a class="dropdown-item" data-modal data-size="full" href="{{ route('backend.book_chapter.index', $book->id) }}" title="章节列表"><i class="bx bx-list-ol mr-1"></i>章节列表</a>
-                                                <a class="dropdown-item" data-modal href="" title="编辑漫画"><i class="bx bx-edit-alt mr-1"></i>编辑漫画</a>
+                                                <a class="dropdown-item" data-modal href="{{ route('backend.book.edit', $book->id) }}" title="编辑漫画"><i class="bx bx-edit-alt mr-1"></i>编辑漫画</a>
                                                 <a class="dropdown-item" data-confirm href="" title="删除漫画"><i class="bx bx-trash mr-1"></i>删除漫画</a>
                                                 <a class="dropdown-item" data-confirm href="" title="漫画审核"><i class="bx bxs-check-shield mr-1"></i>漫画审核</a>
                                             </div>
@@ -210,10 +211,15 @@
                 <div class="col-12">
                     <div class="form-group">
                         <label>标签分类</label>
-                        <select class="form-control" name="tag">
-                            <option value="">全部</option>
+{{--                        <select class="form-control" name="tag">--}}
+{{--                            <option value="">全部</option>--}}
+{{--                            @foreach($tags as $tag)--}}
+{{--                                <option value="{{ $tag->name }}" @if(request()->get('tag') == $tag->name){{'selected'}}@endif>{{ $tag->name }} ({{ $tag->count }})</option>--}}
+{{--                            @endforeach--}}
+{{--                        </select>--}}
+                        <select id="tags-selector" class="form-control" name="tag[]" multiple="multiple">
                             @foreach($tags as $tag)
-                                <option value="{{ $tag->name }}" @if(request()->get('tag') == $tag->name){{'selected'}}@endif>{{ $tag->name }} ({{ $tag->count }})</option>
+                                <option value="{{ $tag->name }}" @if(in_array($tag->name, request()->get('tag') ?? [])){{'selected'}}@endif>{{ $tag->name }}</option>
                             @endforeach
                         </select>
                     </div>
@@ -262,6 +268,7 @@
 
 {{-- vendor scripts --}}
 @section('vendor-scripts')
+    <script src="{{ asset('vendors/js/bootstrap-multiselect/bootstrap-multiselect.js') }}"></script>
     <script src="{{ asset('vendors/js/x-editable/bootstrap-editable.js') }}"></script>
 @endsection
 
@@ -287,6 +294,28 @@
                         title: '提交成功',
                         message: res.msg
                     });
+                }
+            });
+
+            $('#tags-selector').multiselect({
+                buttonWidth: '100%',
+                buttonTextAlignment: 'left',
+                buttonText: function(options, select) {
+                    if (options.length === 0) {
+                        return '请选择标签';
+                    }
+                    else {
+                        var labels = [];
+                        options.each(function() {
+                            if ($(this).attr('label') !== undefined) {
+                                labels.push($(this).attr('label'));
+                            }
+                            else {
+                                labels.push($(this).html());
+                            }
+                        });
+                        return labels.join(', ') + '';
+                    }
                 }
             });
 
