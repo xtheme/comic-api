@@ -23,7 +23,7 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-Route::prefix(config('api.version'))->middleware(['api.header', 'api.sign', 'jwt.token'])->group(function () {
+Route::prefix(config('api.version'))->as('api.')->middleware(['api.header', 'api.sign', 'jwt.token'])->group(function () {
 
     Route::prefix('user')->as('user.')->group(function () {
         Route::post('/device', [UserController::class, 'device'])->name('device');

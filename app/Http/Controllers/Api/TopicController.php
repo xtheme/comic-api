@@ -36,6 +36,7 @@ class TopicController extends BaseController
                 'spotlight' => $topic->spotlight,
                 'per_line'  => $topic->row,
                 'list'      => $topic->query_result,
+                // 'more'      => route('api.topic.more', $topic->id),
             ];
         });
 
