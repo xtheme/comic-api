@@ -51,7 +51,7 @@ Route::prefix(config('api.version'))->as('api.')->middleware(['api.header', 'api
 
     Route::prefix('video')->as('video.')->group(function () {
         Route::get('/list/{page?}', [VideoController::class, 'list'])->name('list');
-        Route::get('/detail/{id?}', [VideoController::class, 'detail'])->name('detail');
+        Route::get('/detail/{id}', [VideoController::class, 'detail'])->name('detail');
         Route::get('/recommend/{limit?}', [VideoController::class, 'recommend'])->name('recommend');
     });
 });

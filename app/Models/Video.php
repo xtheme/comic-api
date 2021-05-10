@@ -20,10 +20,14 @@ class Video extends BaseModel
 
     protected $appends = [
         'tagged_tags',
+        'visit_count',
+        'play_count',
     ];
 
     protected $hidden = [
-        'tagged'
+        'tagged',
+        'visit_histories',
+        'play_histories',
     ];
 
     public function series()
@@ -31,20 +35,19 @@ class Video extends BaseModel
         return $this->hasMany('App\Models\VideoSeries');
     }
 
-    public function visit()
+    public function visit_histories()
     {
         return $this->hasMany('App\Models\History' , 'major_id' , 'id')->where([
+            ['class' , 'video'],
             ['type' , 'visit'],
-            ['class' , 'video']
         ]);
     }
 
-
-    public function play()
+    public function play_histories()
     {
         return $this->hasMany('App\Models\History' , 'major_id' , 'id')->where([
+            ['class' , 'video'],
             ['type' , 'play'],
-            ['class' , 'video']
         ]);
     }
 
@@ -63,5 +66,15 @@ class Video extends BaseModel
         }
 
         return $api_url . $value;
+    }
+
+    public function getVisitCountAttribute()
+    {
+        return $this->visit_histories->count();
+    }
+
+    public function getPlayCountAttribute()
+    {
+        return $this->play_histories->count();
     }
 }

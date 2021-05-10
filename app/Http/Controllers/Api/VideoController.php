@@ -27,18 +27,9 @@ class VideoController extends BaseController
         return Response::jsonSuccess(__('api.success'), $data);
     }
 
-    public function detail(Request $request, $id = null)
+    public function detail($id = null)
     {
-        if ($id) {
-            $request->merge([
-                'id' => $id
-            ]);
-        }
-
-        $video = $this->repository->find($request->input('id'));
-
-        $data = $video->toarray();
-        $data['series'] = $video->series;
+        $data = $this->repository->find($id)->toarray();
 
         // todo 訪問數+1
 

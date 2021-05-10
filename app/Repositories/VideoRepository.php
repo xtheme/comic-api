@@ -22,6 +22,11 @@ class VideoRepository extends Repository implements VideoRepositoryInterface
         return Video::class;
     }
 
+    public function find($id): ?Model
+    {
+        return $this->model->with(['series', 'series.cdn', 'series.play_histories'])->findOrFail($id);
+    }
+
     /**
      * 查询DB
      *
@@ -44,7 +49,7 @@ class VideoRepository extends Repository implements VideoRepositoryInterface
         $page = $request->input('page') ?? 1;
         $perPage = $request->input('perPage') ?? 10;
 
-        return $this->model::withCount(['series' , 'visit' , 'play'])->when($title, function (Builder $query, $title) {
+        return $this->model::with(['series' , 'series.cdn'])->withCount(['series' , 'visit' , 'play'])->when($title, function (Builder $query, $title) {
             return $query->whereLike('title', $title);
         })->when($author, function (Builder $query, $author) {
             return $query->whereLike('author', $author);

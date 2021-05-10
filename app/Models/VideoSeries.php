@@ -17,12 +17,14 @@ class VideoSeries extends BaseModel
 
     protected $appends = [
         'encrypt_url',
+        'play_count',
     ];
 
     protected $hidden = [
         'cdn',
         'video_domain_id',
         'link',
+        'play_histories',
     ];
 
     protected $casts = [
@@ -39,21 +41,11 @@ class VideoSeries extends BaseModel
         return $this->hasOne('App\Models\VideoDomain', 'id', 'video_domain_id');
     }
 
-
-    public function user()
+    public function play_histories()
     {
-        return $this->hasOne('App\Models\ViewsHistoriesUser', 'minor_id', 'id')->where([
+        return $this->hasMany('App\Models\History', 'minor_id', 'id')->where([
             ['class', 'video'],
-            ['type', 'play']
-        ]);
-    }
-
-
-    public function guest()
-    {
-        return $this->hasOne('App\Models\ViewsHistoriesGuest', 'minor_id', 'id')->where([
-            ['class', 'video'],
-            ['type', 'play']
+            ['type', 'play'],
         ]);
     }
 
@@ -67,5 +59,8 @@ class VideoSeries extends BaseModel
         return $this->cdn->encrypt_domain . $this->link;
     }
 
-
+    public function getPlayCountAttribute()
+    {
+        return $this->play_histories->where('major_id', $this->video_id)->count();
+    }
 }
