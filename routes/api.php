@@ -40,12 +40,14 @@ Route::as('api.')->group(function () {
         })->name('me');
 
         Route::prefix(config('api.version'))->group(function () {
+            // 会员
             Route::prefix('user')->as('user.')->group(function () {
                 Route::post('/device', [UserController::class, 'device'])->name('device');
                 Route::post('/mobile', [UserController::class, 'mobile'])->name('mobile')->middleware('sso');
                 Route::post('/logout', [UserController::class, 'logout'])->name('logout');
                 Route::post('/modify', [UserController::class, 'modify'])->name('modify');
                 Route::post('/avatar', [UserController::class, 'avatar'])->name('avatar');
+                // 签到
                 Route::get('/signDetail', [SignController::class, 'signDetail'])->name('signDetail');
                 Route::post('/sign', [SignController::class, 'sign'])->name('sign');
             });
@@ -54,6 +56,7 @@ Route::as('api.')->group(function () {
                 Route::post('/send', [SmsController::class, 'send'])->name('send');
             });
 
+            // 广告
             Route::prefix('ad')->as('ad.')->group(function () {
                 Route::get('/space/{id}', [AdController::class, 'space'])->name('space');
             });
@@ -64,6 +67,7 @@ Route::as('api.')->group(function () {
                 Route::get('/more/{topic}/{page?}', [TopicController::class, 'more'])->name('more');
             });
 
+            // 动画
             Route::prefix('video')->as('video.')->group(function () {
                 Route::get('/list/{page?}', [VideoController::class, 'list'])->name('list');
                 Route::get('/detail/{id}', [VideoController::class, 'detail'])->name('detail');
@@ -74,6 +78,7 @@ Route::as('api.')->group(function () {
     });
 });
 
+// 路由不存在时返回 json error
 Route::fallback(function () {
     return response()->json([
         'code' => 200,
