@@ -25,6 +25,7 @@ class History extends Model
         'user_id',
         'type',
         'class',
+        'created_at',
     ];
 
 }
