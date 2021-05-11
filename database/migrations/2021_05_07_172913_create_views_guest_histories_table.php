@@ -22,6 +22,7 @@ class CreateViewsGuestHistoriesTable extends Migration
             ->where('user_vip', -1)
             ->where('major_id', '!=', 0)
             ->groupBy([
+                'major_id',
                 'minor_id',
                 'class',
                 'type',
