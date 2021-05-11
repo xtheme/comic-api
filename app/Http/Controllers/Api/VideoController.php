@@ -28,7 +28,7 @@ class VideoController extends BaseController
         return Response::jsonSuccess(__('api.success'), $data);
     }
 
-    public function detail(Request $request, $id = null)
+    public function detail(Request $request, $id)
     {
         $data = $this->repository->find($id)->toarray();
 
@@ -46,6 +46,24 @@ class VideoController extends BaseController
         return Response::jsonSuccess(__('api.success'), $data);
     }
 
+    // 紀錄點擊播放
+    public function play(Request $request, $id, $series_id)
+    {
+        // todo 訪問數+1
+        $log = [
+            'major_id' => $id,
+            'minor_id' => $series_id,
+            'user_vip' => $request->user->subscribed_status,
+            'user_id'  => $request->user->id,
+            'type'     => 'play',
+            'class'    => 'video',
+        ];
+        app(HistoryRepository::class)->log($log);
+
+        return Response::jsonSuccess(__('api.success'));
+    }
+
+    // 猜你喜歡
     public function recommend($limit = 4)
     {
         $data = $this->repository->random($limit);

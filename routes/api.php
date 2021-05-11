@@ -67,6 +67,7 @@ Route::as('api.')->group(function () {
             Route::prefix('video')->as('video.')->group(function () {
                 Route::get('/list/{page?}', [VideoController::class, 'list'])->name('list');
                 Route::get('/detail/{id}', [VideoController::class, 'detail'])->name('detail');
+                Route::get('/play/{id}/{series_id}', [VideoController::class, 'play'])->name('play');
                 Route::get('/recommend/{limit?}', [VideoController::class, 'recommend'])->name('recommend');
             });
         });
