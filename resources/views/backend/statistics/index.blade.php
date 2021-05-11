@@ -52,7 +52,7 @@
                                             <span class="bx bx-dots-vertical-rounded font-medium-3 dropdown-toggle nav-hide-arrow cursor-pointer"
                                                   id="dropdownMenuButton{{ $item->id }}" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></span>
                                             <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuButton{{ $item->id }}">
-                                                <a class="dropdown-item" data-modal data-size="full" href="{{ route('backend.statistics.series', $item->id) }}" title="分集统计"><i class="bx bx-list-ol mr-1"></i>分集统计</a>
+                                                <a class="dropdown-item" data-modal href="{{ route('backend.statistics.series', $item->id) }}" title="分集统计"><i class="bx bx-list-ol mr-1"></i>分集统计</a>
                                             </div>
                                         </div>
                                     </td>
