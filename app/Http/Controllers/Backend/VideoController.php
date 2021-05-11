@@ -21,7 +21,6 @@ class VideoController extends Controller
 
     public function index(Request $request)
     {
-        return Response::jsonError(__('response.create.success'), 997);
         $data = [
             'status_options' => Options::STATUS_OPTIONS,
             'ribbon_options' => Options::RIBBON_OPTIONS,

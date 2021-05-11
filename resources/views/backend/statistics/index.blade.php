@@ -45,8 +45,8 @@
                                             </div>
                                         @endif
                                     </td>
-                                    <td>{{ $item->visit_count }}</td>
-                                    <td>{{ $item->play_count }}</td>
+                                    <td>{{ $item->visit_histories_count }}</td>
+                                    <td>{{ $item->play_histories_count }}</td>
                                     <td @if($loop->count == 1)style="position: fixed;"@endif>
                                         <div class="@if(($loop->count - $loop->iteration) < 3){{'dropup'}}@else{{'dropdown'}}@endif">
                                             <span class="bx bx-dots-vertical-rounded font-medium-3 dropdown-toggle nav-hide-arrow cursor-pointer"

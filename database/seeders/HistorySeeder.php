@@ -20,12 +20,12 @@ class HistorySeeder extends Seeder
 
         $faker = \Faker\Factory::create();
 
-        for ($user_id = 1250; $user_id < 1800; $user_id++) {
+        for ($user_id = 1; $user_id < 10000; $user_id++) {
 
-            $type = $faker->randomElement(['visit' , 'play' , 'favorites']);
+            $type = $faker->randomElement(['visit' , 'play']);
 
             History::insert([
-                'major_id' => $faker->numberBetween(1 , 4),
+                'major_id' => 1,
                 'minor_id' => ($type == 'visit') ? 0 : rand(1 , 6),
                 'user_vip' => $faker->randomElement(['1' , '-1']),
                 'user_id' => $user_id,
