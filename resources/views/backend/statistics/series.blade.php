@@ -34,8 +34,8 @@
                         @endif
                     </td>
                     <td class="text-center">{{ $item->guest_histories->count  ?? '0' }}</td>
-                    <td class="text-center">{{ $item->user_histories->count  ?? '0' }}</td>
-                    <td class="text-center">{{ ($item->guest_histories->count ?? '0') + ($item->user_histories->count ?? '0')}}</td>
+                    <td class="text-center">{{ $item->member_histories->count  ?? '0' }}</td>
+                    <td class="text-center">{{ ($item->guest_histories->count ?? '0') + ($item->member_histories->count ?? '0')}}</td>
                 </tr>
             @endforeach
             </tbody>
