@@ -14,6 +14,7 @@ class CreateViewsGuestHistoriesTable extends Migration
     public function up()
     {
         $query = DB::table('histories')->select([
+            'major_id',
             'minor_id',
             'class',
             'type',

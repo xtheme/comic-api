@@ -49,7 +49,7 @@ class VideoSeries extends BaseModel
         ]);
     }
 
-    public function user_histories()
+    public function member_histories()
     {
         return $this->hasOne('App\Models\ViewsMemberHistories', 'minor_id', 'id')->where([
             ['class', 'video'],
