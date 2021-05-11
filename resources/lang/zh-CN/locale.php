@@ -18,7 +18,9 @@ return [
     "Terminal" => "命令模式",
     "Log Viewer" => "系统日志",
 
+    "Categories" => "分类管理",
     "Tags" => "标签分类",
+    "Block List" => "主题模块",
 
     "Videos" => "动画管理",
     "Video List" => "动画列表",
@@ -31,7 +33,7 @@ return [
     "Comments" => "評論管理",
     "Comment List" => "漫画评论",
     "Notice List" => "公告列表",
-    "Block List" => "主题模块",
+
     "Book Report" => "漫画举报管理",
     "ReportType List" => "举报类型设置",
     "Report List" => "用户举报列表",

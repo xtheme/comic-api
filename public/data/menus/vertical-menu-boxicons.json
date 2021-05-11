@@ -7,16 +7,32 @@
             "icon": "bx bxs-home"
         },
         {
-            "url": "/backend/tag",
-            "name": "Tags",
-            "slug": "tags",
-            "icon": "bx bxs-purchase-tag"
+            "url": "#",
+            "name": "Customers",
+            "slug": "customers",
+            "icon": "bx bxs-group",
+            "submenu": [
+                {
+                    "url": "/backend/order",
+                    "name": "Order List"
+                }
+            ]
         },
         {
-            "url": "/backend/block",
-            "name": "Block List",
-            "slug": "Block List",
-            "icon": "bx bx-columns"
+            "url": "#",
+            "name": "Categories",
+            "slug": "categories",
+            "icon": "bx bxs-purchase-tag",
+            "submenu": [
+                {
+                    "url": "/backend/tag",
+                    "name": "Tags"
+                },
+                {
+                    "url": "/backend/block",
+                    "name": "Block List"
+                }
+            ]
         },
         {
             "url": "#",
