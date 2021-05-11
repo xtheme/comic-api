@@ -52,20 +52,22 @@
                 </div>
                 <div class="col-6">
                     <div class="form-group">
-                        <span class="float-right font-size-small text-danger">(例如：动漫1大2小, 则填入1)</span>
-                        <label>聚焦笔数</label>
-                        <div class="controls">
-                            <input type="number" class="form-control" name="spotlight" placeholder="请输入聚焦数" value="0">
-                        </div>
+                        <span class="float-right font-size-small text-danger">(例如：动漫1大2小, 则选择是)</span>
+                        <label>首笔聚焦</label>
+                        <select class="form-control" name="spotlight">
+                            <option value="0">否</option>
+                            <option value="1">是</option>
+                        </select>
                     </div>
                 </div>
                 <div class="col-6">
                     <div class="form-group">
-                        <span class="float-right font-size-small text-danger">(例如：动漫1大2小, 则填入2)</span>
+                        <span class="float-right font-size-small text-danger">(例如：动漫1大2小, 则选择2)</span>
                         <label>聚焦之外的数据每行几笔</label>
-                        <div class="controls">
-                            <input type="number" class="form-control" name="row" placeholder="请输入每行笔数" value="0">
-                        </div>
+                        <select class="form-control" name="row">
+                            <option value="2">每行 2 笔</option>
+                            <option value="3">每行 3 笔</option>
+                        </select>
                     </div>
                 </div>
                 <div class="col-6">
