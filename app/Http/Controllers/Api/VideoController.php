@@ -36,7 +36,7 @@ class VideoController extends BaseController
         $log = [
             'major_id' => $id,
             'minor_id' => 0,
-            'user_vip' => $request->user->subscribed_status,
+            'user_vip' => $request->user->subscribed_status ? 1 : -1,
             'user_id'  => $request->user->id,
             'type'     => 'visit',
             'class'    => 'video',
@@ -53,7 +53,7 @@ class VideoController extends BaseController
         $log = [
             'major_id' => $id,
             'minor_id' => $series_id,
-            'user_vip' => $request->user->subscribed_status,
+            'user_vip' => $request->user->subscribed_status ? 1 : -1,
             'user_id'  => $request->user->id,
             'type'     => 'play',
             'class'    => 'video',
