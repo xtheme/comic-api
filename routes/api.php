@@ -8,6 +8,7 @@ use App\Http\Controllers\Api\UserController;
 use App\Http\Controllers\Api\VideoController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -19,40 +20,56 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::middleware('auth:api')->get('/user', function (Request $request) {
-    return $request->user();
-});
+Route::as('api.')->group(function () {
 
-Route::prefix(config('api.version'))->as('api.')->middleware(['api.header', 'api.sign', 'jwt.token'])->group(function () {
+    Route::get('/', function () {
+        return response()->json([
+            'code' => 200,
+            'msg'  => 'Hello World!',
+        ], 200);
+    })->name('home');
 
-    Route::prefix('user')->as('user.')->group(function () {
-        Route::post('/device', [UserController::class, 'device'])->name('device');
-        Route::post('/mobile', [UserController::class, 'mobile'])->name('mobile')->middleware('sso');
-        Route::post('/logout', [UserController::class, 'logout'])->name('logout');
-        Route::post('/modify', [UserController::class, 'modify'])->name('modify');
-        Route::post('/avatar', [UserController::class, 'avatar'])->name('avatar');
-        Route::get('/signDetail', [SignController::class, 'signDetail'])->name('signDetail');
-        Route::post('/sign', [SignController::class, 'sign'])->name('sign');
-    });
+    Route::middleware(['api.header', 'api.sign', 'jwt.token'])->group(function () {
 
-    Route::prefix('sms')->as('sms.')->group(function () {
-        Route::post('/send', [SmsController::class, 'send'])->name('send');
-    });
+        Route::get('/me', function (Request $request) {
+            return response()->json([
+                'code' => 200,
+                'msg'  => 'Hello World!',
+                'data'  => $request->user,
+            ], 200);
+        })->name('me');
 
-    Route::prefix('ad')->as('ad.')->group(function () {
-        Route::get('/space/{id}', [AdController::class, 'space'])->name('space');
-    });
+        Route::prefix(config('api.version'))->group(function () {
+            Route::prefix('user')->as('user.')->group(function () {
+                Route::post('/device', [UserController::class, 'device'])->name('device');
+                Route::post('/mobile', [UserController::class, 'mobile'])->name('mobile')->middleware('sso');
+                Route::post('/logout', [UserController::class, 'logout'])->name('logout');
+                Route::post('/modify', [UserController::class, 'modify'])->name('modify');
+                Route::post('/avatar', [UserController::class, 'avatar'])->name('avatar');
+                Route::get('/signDetail', [SignController::class, 'signDetail'])->name('signDetail');
+                Route::post('/sign', [SignController::class, 'sign'])->name('sign');
+            });
 
-    // 主题区块
-    Route::prefix('topic')->as('topic.')->group(function () {
-        Route::get('/{causer}', [TopicController::class, 'list'])->name('list');
-        Route::get('/more/{topic}/{page?}', [TopicController::class, 'more'])->name('more');
-    });
+            Route::prefix('sms')->as('sms.')->group(function () {
+                Route::post('/send', [SmsController::class, 'send'])->name('send');
+            });
 
-    Route::prefix('video')->as('video.')->group(function () {
-        Route::get('/list/{page?}', [VideoController::class, 'list'])->name('list');
-        Route::get('/detail/{id}', [VideoController::class, 'detail'])->name('detail');
-        Route::get('/recommend/{limit?}', [VideoController::class, 'recommend'])->name('recommend');
+            Route::prefix('ad')->as('ad.')->group(function () {
+                Route::get('/space/{id}', [AdController::class, 'space'])->name('space');
+            });
+
+            // 主题区块
+            Route::prefix('topic')->as('topic.')->group(function () {
+                Route::get('/{causer}', [TopicController::class, 'list'])->name('list');
+                Route::get('/more/{topic}/{page?}', [TopicController::class, 'more'])->name('more');
+            });
+
+            Route::prefix('video')->as('video.')->group(function () {
+                Route::get('/list/{page?}', [VideoController::class, 'list'])->name('list');
+                Route::get('/detail/{id}', [VideoController::class, 'detail'])->name('detail');
+                Route::get('/recommend/{limit?}', [VideoController::class, 'recommend'])->name('recommend');
+            });
+        });
     });
 });
 
