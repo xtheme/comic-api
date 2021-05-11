@@ -45,9 +45,9 @@
                                             </div>
                                         @endif
                                     </td>
-                                    <td>{{ $item->guest->count  ?? '0' }}</td>
-                                    <td>{{ $item->user->count  ?? '0' }}</td>
-                                    <td>{{ ($item->guest->count ?? '0') + ($item->user->count ?? '0')}}</td>
+                                    <td>{{ $item->guest_histories->count  ?? '0' }}</td>
+                                    <td>{{ $item->user_histories->count  ?? '0' }}</td>
+                                    <td>{{ ($item->guest_histories->count ?? '0') + ($item->user_histories->count ?? '0')}}</td>
                                 </tr>
                             @endforeach
                             </tbody>

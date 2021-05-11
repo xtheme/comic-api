@@ -49,6 +49,23 @@ class VideoSeries extends BaseModel
         ]);
     }
 
+    public function user_histories()
+    {
+        return $this->hasOne('App\Models\ViewsMemberHistories', 'minor_id', 'id')->where([
+            ['class', 'video'],
+            ['type', 'play']
+        ]);
+    }
+
+    public function guest_histories()
+    {
+        return $this->hasOne('App\Models\ViewsGuestHistories', 'minor_id', 'id')->where([
+            ['class', 'video'],
+            ['type', 'play']
+        ]);
+    }
+
+
     public function getUrlAttribute()
     {
         return $this->cdn->domain . $this->link;
