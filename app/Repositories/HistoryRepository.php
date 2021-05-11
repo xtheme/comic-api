@@ -7,6 +7,7 @@ use App\Repositories\Contracts\HistoryRepositoryInterface;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
+use Illuminate\Support\Carbon;
 
 class HistoryRepository extends Repository implements HistoryRepositoryInterface
 {
@@ -40,7 +41,7 @@ class HistoryRepository extends Repository implements HistoryRepositoryInterface
             return $this->model::create($input);
         }
 
-        return false;
+        return $this->model::where($where)->update(['created_at' => Carbon::now()]);
     }
 
     /**

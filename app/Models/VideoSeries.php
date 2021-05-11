@@ -65,7 +65,6 @@ class VideoSeries extends BaseModel
         ]);
     }
 
-
     public function getUrlAttribute()
     {
         return $this->cdn->domain . $this->link;
