@@ -5,8 +5,8 @@ namespace App\Repositories;
 use App\Models\History;
 use App\Repositories\Contracts\HistoryRepositoryInterface;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
-use Illuminate\Support\Str;
 
 class HistoryRepository extends Repository implements HistoryRepositoryInterface
 {
@@ -21,6 +21,29 @@ class HistoryRepository extends Repository implements HistoryRepositoryInterface
     }
 
     /**
+     * @param array $input
+     */
+    public function log(array $input = [])
+    {
+        $where = [
+            'major_id' => $input['major_id'],
+            'minor_id' => $input['minor_id'],
+            'user_vip' => $input['user_vip'],
+            'user_id'  => $input['user_id'],
+            'type'     => $input['type'],
+            'class'    => $input['class'],
+        ];
+
+        $exists = $this->model::where($where)->exists();
+
+        if (!$exists) {
+            return $this->model::create($input);
+        }
+
+        return false;
+    }
+
+    /**
      * 查询DB
      *
      * @param  Request  $request
@@ -31,7 +54,7 @@ class HistoryRepository extends Repository implements HistoryRepositoryInterface
     {
         $title = $request->input('title') ?? '';
         $class = $request->input('class') ?? '';
-        $date_between = $request->input('date_between') ?? '';
+        // $date_between = $request->input('date_between') ?? '';
         $tag = $request->input('tag') ?? '';
 
         $order = $request->input('order') ?? 'created_at';

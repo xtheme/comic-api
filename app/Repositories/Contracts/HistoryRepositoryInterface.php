@@ -2,8 +2,8 @@
 
 namespace App\Repositories\Contracts;
 
-use Illuminate\Support\Collection;
 
 interface HistoryRepositoryInterface extends RepositoryInterface
 {
+    public function log(array $input);
 }

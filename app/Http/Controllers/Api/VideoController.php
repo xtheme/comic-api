@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Repositories\Contracts\VideoRepositoryInterface;
+use App\Repositories\HistoryRepository;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Response;
 
@@ -27,11 +28,20 @@ class VideoController extends BaseController
         return Response::jsonSuccess(__('api.success'), $data);
     }
 
-    public function detail($id = null)
+    public function detail(Request $request, $id = null)
     {
         $data = $this->repository->find($id)->toarray();
 
         // todo 訪問數+1
+        $log = [
+            'major_id' => $id,
+            'minor_id' => 0,
+            'user_vip' => $request->user->subscribed_status,
+            'user_id'  => $request->user->id,
+            'type'     => 'visit',
+            'class'    => 'video',
+        ];
+        app(HistoryRepository::class)->log($log);
 
         return Response::jsonSuccess(__('api.success'), $data);
     }

@@ -9,6 +9,10 @@ class History extends Model
 {
     use HasFactory;
 
+    public $incrementing = false;
+
+    const UPDATED_AT = null;
+
     /**
      * The attributes that are mass assignable.
      *
@@ -21,7 +25,6 @@ class History extends Model
         'user_id',
         'type',
         'class',
-        'created_at'
     ];
 
 }
