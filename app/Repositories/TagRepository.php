@@ -46,6 +46,6 @@ class TagRepository extends Repository implements TagRepositoryInterface
 
     public function suggest(): ?Collection
     {
-        return $this->model::where('tag_group_id', 1)->where('suggest', 1)->orderByDesc('priority')->get();
+        return $this->model::where('suggest', 1)->orderByDesc('priority')->get();
     }
 }
