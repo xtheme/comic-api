@@ -13,7 +13,7 @@
             "icon": "bx bxs-group",
             "submenu": [
                 {
-                    "url": "/backend/order",
+                    "url": "/backend/order?status=2",
                     "name": "Order List"
                 }
             ]

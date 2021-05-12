@@ -28,10 +28,11 @@ class OrderRepository extends Repository implements OrderRepositoryInterface
      */
     public function filter(Request $request): Builder
     {
-
         $id = $request->get('id') ?? '';
         $user_id = $request->get('user_id') ?? '';
         $status = $request->get('status') ?? '';
+        $platform = $request->get('platform') ?? 0;
+        $app_version = $request->get('app_version') ?? 0;
         $created_at = $request->get('created_at') ?? '';
 
         return $this->model::has('user')->with(['user', 'user.orders_count', 'user.orders_success_count'])
@@ -41,6 +42,10 @@ class OrderRepository extends Repository implements OrderRepositoryInterface
                 return $query->where('user_id', $user_id);
             })->when($status, function (Builder $query, $status) {
                 return $query->where('status', $status - 1);
+            })->when($platform, function (Builder $query, $platform) {
+                return $query->where('platform', $platform);
+            })->when($app_version, function (Builder $query, $app_version) {
+                return $query->where('app_version', $app_version);
             })->when($created_at, function (Builder $query, $created_at) {
                 $date = explode(' - ', $created_at);
                 $start_date = $date[0];
@@ -52,51 +57,36 @@ class OrderRepository extends Repository implements OrderRepositoryInterface
             })->latest();
     }
 
-    public function orders_count(): int
+    public function orders_count(Request $request): int
     {
-        $key = 'orders:count';
-
-        return Cache::remember($key, $this->cache_ttl, function () {
-            return Order::count();
-        });
+        return $this->filter($request)->count();
+        // return Order::count();
     }
 
-    public function success_orders_count(): int
-    {
-        $key = 'orders:success_count';
+    // public function success_orders_count(Request $request): int
+    // {
+    //     return $this->filter($request)->where('status', 1)->count();
+    //     // return Order::whereStatus(1)->count();
+    // }
 
-        return Cache::remember($key, $this->cache_ttl, function () {
-            return Order::whereStatus(1)->count();
-        });
+    public function orders_amount(Request $request): string
+    {
+        $amount = $this->filter($request)->sum('amount');
+        // $amount = Order::whereStatus(1)->sum('amount');
+        return number_format($amount);
     }
 
-    public function orders_amount(): string
+    public function renew_orders_count(Request $request): int
     {
-        $key = 'orders:total';
-
-        return Cache::remember($key, $this->cache_ttl, function () {
-            $amount = Order::whereStatus(1)->sum('amount');
-            return number_format($amount);
-        });
-    }
-
-    public function renew_orders_count(): int
-    {
-        $key = 'orders:renew_count';
-
-        return Cache::remember($key, $this->cache_ttl, function () {
-            return Order::whereStatus(1)->whereFirst(0)->count();
-        });
+        return $this->filter($request)->where('first', 0)->count();
+        // return Order::whereStatus(1)->whereFirst(0)->count();
 
     }
 
-    public function renew_orders_amount(): string
+    public function renew_orders_amount(Request $request): string
     {
-        $key = 'orders:renew_total';
-
-        return Cache::remember($key, $this->cache_ttl, function () {
-            $amount = Order::whereStatus(1)->whereFirst(0)->sum('amount');
-            return number_format($amount);
-        });
+        $amount = $this->filter($request)->where('first', 0)->sum('amount');
+        // $amount = Order::whereStatus(1)->whereFirst(0)->sum('amount');
+        return number_format($amount);
     }
 }

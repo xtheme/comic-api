@@ -29,11 +29,11 @@ class OrderController extends Controller
         $data = [
             'list' => $this->repository->filter($request)->paginate(),
             'status_options' => ['1' => '未付款', '2' => '已付款'],
-            'orders_count' => $this->repository->orders_count(),
-            'success_orders_count' => $this->repository->success_orders_count(),
-            'orders_amount' => $this->repository->orders_amount(),
-            'renew_orders_count' => $this->repository->renew_orders_count(),
-            'renew_orders_amount' => $this->repository->renew_orders_amount(),
+            'orders_count' => $this->repository->orders_count($request),
+            // 'success_orders_count' => $this->repository->success_orders_count($request),
+            'orders_amount' => $this->repository->orders_amount($request),
+            'renew_orders_count' => $this->repository->renew_orders_count($request),
+            'renew_orders_amount' => $this->repository->renew_orders_amount($request),
             'pageConfigs' => ['hasSearchForm' => true],
         ];
 

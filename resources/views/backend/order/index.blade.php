@@ -18,14 +18,21 @@
                 <h4 class="card-title">@yield('title')</h4>
             </div>
             <div class="card-content">
-                <ul class="list-horizontal m-1">
-                    <li>总订单数:： <b>{{ $orders_count }}</b></li>
-                    <li>成功订单数:： <b>{{ $success_orders_count }}</b></li>
-                    <li>成功订单金额:： <b>{{ $orders_amount }}</b></li>
-                    <li>续费订单数： <b>{{ $renew_orders_count }}</b></li>
-                    <li>续费订单金熬： <b>{{ $renew_orders_amount }}</b></li>
-                </ul>
                 <div class="card-body">
+                    <div class="row bg-primary bg-lighten-5 rounded mb-2 mx-25 text-center text-lg-left">
+                        <div class="col-12 col-sm-3 p-1">
+                            <h6 class="text-primary mb-0">总订单数：<span class="font-medium-3 align-middle">{{ $orders_count }}</span></h6>
+                        </div>
+                        <div class="col-12 col-sm-3 p-1">
+                            <h6 class="text-primary mb-0">总金额：<span class="font-medium-3 align-middle">{{ $orders_amount }}</span></h6>
+                        </div>
+                        <div class="col-12 col-sm-3 p-1">
+                            <h6 class="text-primary mb-0">续费订单数：<span class="font-medium-3 align-middle">{{ $renew_orders_count }}</span></h6>
+                        </div>
+                        <div class="col-12 col-sm-3 p-1">
+                            <h6 class="text-primary mb-0">续费总金熬：<span class="font-medium-3 align-middle">{{ $renew_orders_amount }}</span></h6>
+                        </div>
+                    </div>
                     <!-- Table with outer spacing -->
                     <div class="table-responsive">
                         <table class="table table-striped table-hover">
@@ -60,9 +67,9 @@
                                     <td>{{ $order->user->orders_success_count->count ?? 0 }}</td>
                                     <td>@if($order->platform == 1)<label class="badge badge-primary badge-pill">安卓</label>@else<label class="badge badge-danger badge-pill">苹果</label>@endif</td>
                                     <td>{{ $order->app_version }}</td>
-                                    <td>{{ $order->user->created_at->diffForHumans() ?? '' }}</td>
-                                    <td>{{ $order->created_at->diffForHumans() ?? '' }}</td>
-                                    <td>{{ $order->updated_at->diffForHumans() ?? '' }}</td>
+                                    <td>{{ optional($order->user->created_at)->diffForHumans() ?? '' }}</td>
+                                    <td>{{ optional($order->created_at)->diffForHumans() ?? '' }}</td>
+                                    <td>{{ optional($order->updated_at)->diffForHumans() ?? '' }}</td>
                                     <td>@if($order->status == 1)<label class="badge badge-success badge-pill">已付款</label>@endif</td>
                                 </tr>
                             @endforeach
@@ -98,6 +105,26 @@
                 </div>
                 <div class="col-12">
                     <div class="form-group">
+                        <label>手机系统</label>
+                        <select class="form-control" name="platform">
+                            <option value="">全部</option>
+                            <option value="1" @if(request()->get('platform') == 1){{'selected'}}@endif>Android</option>
+                            <option value="2" @if(request()->get('platform') == 2){{'selected'}}@endif>iOS</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="col-12">
+                    <div class="form-group">
+                        <label>APP版本号</label>
+                        <div class="controls">
+                            <input type="text" class="form-control"
+                                   name="app_version" value="{{ request()->get('app_version') }}"
+                                   placeholder="1.3.0">
+                        </div>
+                    </div>
+                </div>
+                <div class="col-12">
+                    <div class="form-group">
                         <label>用户ID</label>
                         <div class="controls">
                             <input type="text" class="form-control"
@@ -108,7 +135,7 @@
                 </div>
                 <div class="col-12">
                     <div class="form-group">
-                        <label for="input-created">建立时间</label>
+                        <label>建立时间</label>
                         <div class="controls">
                             <fieldset class="form-group position-relative has-icon-left">
                                 <input type="text" class="form-control" id="input-created" placeholder="请选择建立时间" name="created_at" autocomplete="off" value="{{ request()->get('created_at') }}">
@@ -121,8 +148,8 @@
                 </div>
                 <div class="col-12">
                     <div class="form-group">
-                        <label for="select-status">订单状态</label>
-                        <select class="form-control" id="select-status" name="status">
+                        <label>订单状态</label>
+                        <select class="form-control" name="status">
                             <option value="">全部</option>
                             @foreach ($status_options as $key => $val)
                                 @if (request()->get('status') == $key)
