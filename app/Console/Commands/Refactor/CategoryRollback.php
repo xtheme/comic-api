@@ -43,6 +43,7 @@ class CategoryRollback extends Command
     {
         if ($this->confirm('请确认是否运行回滚脚本? 执行且请先备份数据表!')) {
 
+            DB::table('tagging_tag_groups')->truncate();
             DB::table('tagging_tags')->truncate();
             DB::table('tagging_tagged')->truncate();
 

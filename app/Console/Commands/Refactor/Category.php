@@ -43,11 +43,11 @@ class Category extends Command
     {
         if ($this->confirm('请确认是否运行重构脚本? 执行且请先备份数据表!')) {
             // 標籤分組
-            $groups = ['category', 'section'];
-
-            foreach ($groups as $group) {
-                TagGroup::create(['name' => $group]);
-            }
+            // $groups = ['category', 'section'];
+            //
+            // foreach ($groups as $group) {
+            //     TagGroup::create(['name' => $group]);
+            // }
 
             $categories = DB::table('category')->where('status', 1)->get();
 
@@ -60,7 +60,7 @@ class Category extends Command
                     'name' => $item->name,
                     'suggest' => $item->status,
                     'count' => 0,
-                    'tag_group_id' => 1,
+                    'tag_group_id' => null,
                     'description' => $item->desc,
                     'queries' => 0,
                     'priority' => $item->orders,
