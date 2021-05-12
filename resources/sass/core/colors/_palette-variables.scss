@@ -16,11 +16,11 @@ $light: (
   "base": theme-color("light")
 );
 $primary-color: (
-  "lighten-5": lighten(theme-color("primary"), 25%),
-  "lighten-4": lighten(theme-color("primary"), 20%),
-  "lighten-3": lighten(theme-color("primary"), 15%),
-  "lighten-2": lighten(theme-color("primary"), 10%),
-  "lighten-1": lighten(theme-color("primary"), 5%),
+  "lighten-5": lighten(theme-color("primary"), 30%),
+  "lighten-4": lighten(theme-color("primary"), 25%),
+  "lighten-3": lighten(theme-color("primary"), 20%),
+  "lighten-2": lighten(theme-color("primary"), 15%),
+  "lighten-1": lighten(theme-color("primary"), 10%),
   "base": theme-color("primary"),
   "darken-1": darken(theme-color("primary"), 5%),
   "darken-2": darken(theme-color("primary"), 10%),
@@ -32,11 +32,11 @@ $primary-color: (
   "accent-4": #3df9ff
 );
 $secondary-color: (
-  "lighten-5": lighten(theme-color("secondary"), 25%),
-  "lighten-4": lighten(theme-color("secondary"), 20%),
-  "lighten-3": lighten(theme-color("secondary"), 15%),
-  "lighten-2": lighten(theme-color("secondary"), 10%),
-  "lighten-1": lighten(theme-color("secondary"), 5%),
+  "lighten-5": lighten(theme-color("secondary"), 30%),
+  "lighten-4": lighten(theme-color("secondary"), 25%),
+  "lighten-3": lighten(theme-color("secondary"), 20%),
+  "lighten-2": lighten(theme-color("secondary"), 15%),
+  "lighten-1": lighten(theme-color("secondary"), 10%),
   "base": theme-color("secondary"),
   "darken-1": darken(theme-color("secondary"), 5%),
   "darken-2": darken(theme-color("secondary"), 10%),
@@ -44,11 +44,11 @@ $secondary-color: (
   "darken-4": darken(theme-color("secondary"), 20%)
 );
 $success-color: (
-  "lighten-5": lighten(theme-color("success"), 25%),
-  "lighten-4": lighten(theme-color("success"), 20%),
-  "lighten-3": lighten(theme-color("success"), 15%),
-  "lighten-2": lighten(theme-color("success"), 10%),
-  "lighten-1": lighten(theme-color("success"), 5%),
+  "lighten-5": lighten(theme-color("success"), 30%),
+  "lighten-4": lighten(theme-color("success"), 25%),
+  "lighten-3": lighten(theme-color("success"), 20%),
+  "lighten-2": lighten(theme-color("success"), 15%),
+  "lighten-1": lighten(theme-color("success"), 10%),
   "base": theme-color("success"),
   "darken-1": darken(theme-color("success"), 5%),
   "darken-2": darken(theme-color("success"), 10%),
@@ -60,11 +60,11 @@ $success-color: (
   "accent-4": #62ffb5
 );
 $info-color: (
-  "lighten-5": lighten(theme-color("info"), 25%),
-  "lighten-4": lighten(theme-color("info"), 20%),
-  "lighten-3": lighten(theme-color("info"), 15%),
-  "lighten-2": lighten(theme-color("info"), 10%),
-  "lighten-1": lighten(theme-color("info"), 5%),
+  "lighten-5": lighten(theme-color("info"), 30%),
+  "lighten-4": lighten(theme-color("info"), 25%),
+  "lighten-3": lighten(theme-color("info"), 20%),
+  "lighten-2": lighten(theme-color("info"), 15%),
+  "lighten-1": lighten(theme-color("info"), 10%),
   "base": theme-color("info"),
   "darken-1": darken(theme-color("info"), 5%),
   "darken-2": darken(theme-color("info"), 10%),
@@ -76,11 +76,11 @@ $info-color: (
   "accent-4": #7fe7ff
 );
 $warning-color: (
-  "lighten-5": lighten(theme-color("warning"), 25%),
-  "lighten-4": lighten(theme-color("warning"), 20%),
-  "lighten-3": lighten(theme-color("warning"), 15%),
-  "lighten-2": lighten(theme-color("warning"), 10%),
-  "lighten-1": lighten(theme-color("warning"), 5%),
+  "lighten-5": lighten(theme-color("warning"), 30%),
+  "lighten-4": lighten(theme-color("warning"), 25%),
+  "lighten-3": lighten(theme-color("warning"), 20%),
+  "lighten-2": lighten(theme-color("warning"), 15%),
+  "lighten-1": lighten(theme-color("warning"), 10%),
   "base": theme-color("warning"),
   "darken-1": darken(theme-color("warning"), 5%),
   "darken-2": darken(theme-color("warning"), 10%),
@@ -92,11 +92,11 @@ $warning-color: (
   "accent-4": #ffe3da
 );
 $danger-color: (
-  "lighten-5": lighten(theme-color("danger"), 25%),
-  "lighten-4": lighten(theme-color("danger"), 20%),
-  "lighten-3": lighten(theme-color("danger"), 15%),
-  "lighten-2": lighten(theme-color("danger"), 10%),
-  "lighten-1": lighten(theme-color("danger"), 5%),
+  "lighten-5": lighten(theme-color("danger"), 30%),
+  "lighten-4": lighten(theme-color("danger"), 25%),
+  "lighten-3": lighten(theme-color("danger"), 20%),
+  "lighten-2": lighten(theme-color("danger"), 15%),
+  "lighten-1": lighten(theme-color("danger"), 10%),
   "base": theme-color("danger"),
   "darken-1": darken(theme-color("danger"), 5%),
   "darken-2": darken(theme-color("danger"), 10%),

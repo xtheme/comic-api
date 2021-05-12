@@ -20,16 +20,16 @@
             <div class="card-content">
                 <div class="card-body">
                     <div class="row bg-primary bg-lighten-5 rounded mb-2 mx-25 text-center text-lg-left">
-                        <div class="col-12 col-sm-3 p-1">
+                        <div class="col-12 col-sm-2 p-1">
                             <h6 class="text-primary mb-0">总订单数：<span class="font-medium-3 align-middle">{{ $orders_count }}</span></h6>
                         </div>
-                        <div class="col-12 col-sm-3 p-1">
+                        <div class="col-12 col-sm-2 p-1">
                             <h6 class="text-primary mb-0">总金额：<span class="font-medium-3 align-middle">{{ $orders_amount }}</span></h6>
                         </div>
-                        <div class="col-12 col-sm-3 p-1">
+                        <div class="col-12 col-sm-2 p-1">
                             <h6 class="text-primary mb-0">续费订单数：<span class="font-medium-3 align-middle">{{ $renew_orders_count }}</span></h6>
                         </div>
-                        <div class="col-12 col-sm-3 p-1">
+                        <div class="col-12 col-sm-2 p-1">
                             <h6 class="text-primary mb-0">续费总金熬：<span class="font-medium-3 align-middle">{{ $renew_orders_amount }}</span></h6>
                         </div>
                     </div>
