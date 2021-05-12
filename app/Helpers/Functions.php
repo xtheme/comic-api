@@ -43,23 +43,16 @@ if (!function_exists('webp')) {
     /**
      * webp 图片规格
      *
-     * @param $file_path
-     * @param  string  $pic_width
-     * @param  string  $versionName
+     * @param  string  $file_path
+     * @param  string  $webp_width
      *
      * @return string
      */
-    function webp($file_path, $pic_width = '0', $versionName = '0')
+    function webp(string $file_path, string $webp_width = '$w540')
     {
-        if ($pic_width != '0' && $versionName > '1.1.6') {
-            $str = strrchr($file_path, '.');
-            $arr = explode($str, $file_path);
-            $fileName = $arr[0] . $pic_width . $str;
-        } else {
-            $fileName = $file_path;
-        }
-
-        return $fileName;
+        $extension = strrchr($file_path, '.');
+        $file_name = explode($extension, $file_path)[0];
+        return $file_name . $webp_width . $extension;
     }
 }
 

@@ -36,6 +36,22 @@
         },
         {
             "url": "#",
+            "name": "Books",
+            "slug": "books",
+            "icon": "bx bxs-book-open",
+            "submenu": [
+                {
+                    "url": "/backend/book",
+                    "name": "Books List"
+                },
+                {
+                    "url": "/backend/book/caching",
+                    "name": "CDN Caching List"
+                }
+            ]
+        },
+        {
+            "url": "#",
             "name": "Videos",
             "slug": "videos",
             "icon": "bx bxs-videos",

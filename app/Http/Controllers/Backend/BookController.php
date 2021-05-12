@@ -25,7 +25,7 @@ class BookController extends Controller
     {
         $data = [
             'list' => $this->repository->filter($request)->paginate(),
-            'tags' => Tag::inGroup('category')->get(),
+            'tags' => Tag::where('suggest', 1)->orderByDesc('priority')->get(),
             'pageConfigs' => ['hasSearchForm' => true],
         ];
 
@@ -36,7 +36,7 @@ class BookController extends Controller
     {
 
         $data = [
-            'tags' => Tag::inGroup('category')->where('suggest', 1)->orderByDesc('priority')->get(),
+            'tags' => Tag::where('suggest', 1)->orderByDesc('priority')->get(),
         ];
 
         return view('backend.book.create')->with($data);
@@ -67,7 +67,7 @@ class BookController extends Controller
     {
         $data = [
             'book' => Book::findOrFail($id),
-            'tags' => Tag::inGroup('category')->where('suggest', 1)->orderByDesc('priority')->get(),
+            'tags' => Tag::where('suggest', 1)->orderByDesc('priority')->get(),
         ];
 
         return view('backend.book.edit')->with($data);
@@ -155,5 +155,39 @@ class BookController extends Controller
         $this->repository->editable($request->post('pk'), $field, $request->post('value'));
 
         return Response::jsonSuccess('数据已更新成功');
+    }
+
+    public function caching(Request $request)
+    {
+        $books = $this->repository->filter($request)->take(20)->get();
+
+        $domain = getOldConfig('web_config', 'img_sync_url_password_webp');
+
+        $images = $books->reject(function ($book) {
+            return $book->chapters_count === 0;
+        })->map(function ($book) use ($domain) {
+            $chapters = $book->chapters;
+
+            return $chapters->reject(function ($chapter)  {
+                return $chapter->json_images === '';
+            })->map(function ($chapter) use ($domain) {
+                return collect($chapter->json_images)->map(function ($image) use ($domain)  {
+                    return $domain . webp($image['url']);
+                });
+            })->flatten()->toArray();
+
+        })->flatten()->toArray();
+
+        $txt = '';
+
+        foreach ($images as $image) {
+            $txt .= $image . "\n";
+        }
+
+        return response($txt)->withHeaders([
+                'Content-Type'        => 'text/plain',
+                'Cache-Control'       => 'no-store, no-cache',
+                'Content-Disposition' => 'attachment; filename="CDN预热名单_' . date('Y-m-d') . '.txt',
+            ]);
     }
 }

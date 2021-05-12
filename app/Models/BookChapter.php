@@ -65,6 +65,10 @@ class BookChapter extends BaseModel
     const CREATED_AT = 'addtime';
     const UPDATED_AT = 'updatetime';
 
+    protected $casts = [
+        'json_images' => 'array',
+    ];
+
     public function book()
     {
         return $this->belongsTo('App\Models\Book');

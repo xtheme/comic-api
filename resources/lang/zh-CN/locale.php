@@ -10,9 +10,10 @@ return [
     "Pricing List" => "会员套餐",
     "Order List" => "订单列表",
     "Books" => "漫画管理",
-
     "Books List" => "漫画列表",
     "Recommended Books" => "推荐漫画",
+    "CDN Caching List" => "CDN 预热名单",
+
     "Feedback" => "意見反饋",
     "Systems" => "系统设定",
     "Terminal" => "命令模式",

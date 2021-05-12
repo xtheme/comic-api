@@ -90,6 +90,7 @@ Route::middleware(['auth'])->prefix('backend')->as('backend.')->group(function (
         Route::put('update/{id}', [BookController::class , 'update'])->name('update');
         Route::put('batch/{action?}', [BookController::class, 'batch'])->name('batch');
         Route::put('editable/{field}', [BookController::class, 'editable'])->name('editable');
+        Route::get('caching', [BookController::class, 'caching'])->name('caching');
     });
 
     // 漫画分类
