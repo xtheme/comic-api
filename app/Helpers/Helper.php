@@ -11,16 +11,17 @@ class Helper
     {
         // Demo
         $fullURL = request()->fullurl();
-        if (App()->environment() === 'production') {
-            for ($i = 1; $i < 7; $i++) {
-                $contains = Str::contains($fullURL, 'demo-' . $i);
-                if ($contains === true) {
-                    $data = config('custom.' . 'demo-' . $i);
-                }
-            }
-        } else {
-            $data = config('custom.custom');
-        }
+        // if (App()->environment() === 'production') {
+        //     for ($i = 1; $i < 7; $i++) {
+        //         $contains = Str::contains($fullURL, 'demo-' . $i);
+        //         if ($contains === true) {
+        //             $data = config('custom.' . 'demo-' . $i);
+        //         }
+        //     }
+        // } else {
+        //     $data = config('custom.custom');
+        // }
+        $data = config('custom.custom');
 
         // default data value
         $dataDefault = [
@@ -143,16 +144,16 @@ class Helper
     public static function updatePageConfig($pageConfigs)
     {
         $demo = 'custom';
-        $custom = 'custom';
-        $fullURL = request()->fullurl();
-        if (App()->environment() === 'production') {
-            for ($i = 1; $i < 7; $i++) {
-                $contains = Str::contains($fullURL, 'demo-' . $i);
-                if ($contains === true) {
-                    $demo = 'demo-' . $i;
-                }
-            }
-        }
+        // $custom = 'custom';
+        // $fullURL = request()->fullurl();
+        // if (App()->environment() === 'production') {
+        //     for ($i = 1; $i < 7; $i++) {
+        //         $contains = Str::contains($fullURL, 'demo-' . $i);
+        //         if ($contains === true) {
+        //             $demo = 'demo-' . $i;
+        //         }
+        //     }
+        // }
         if (isset($pageConfigs)) {
             if (count($pageConfigs) > 0) {
                 foreach ($pageConfigs as $config => $val) {
