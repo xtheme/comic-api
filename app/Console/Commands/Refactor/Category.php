@@ -86,6 +86,8 @@ class Category extends Command
                 })->toArray();
 
                 $book->tag($categories);
+
+                $this->line('#' . $book->id . ' 已改用標籤關聯');
             });
 
             $this->line('漫畫類別已改用標籤關聯');
