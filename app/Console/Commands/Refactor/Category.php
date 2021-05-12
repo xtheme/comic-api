@@ -49,7 +49,7 @@ class Category extends Command
                 TagGroup::create(['name' => $group]);
             }
 
-            $categories = DB::table('category')->get();
+            $categories = DB::table('category')->where('status', 1)->get();
 
             $bulk = $categories->reject(function ($item) {
                 return $item->name === '';
@@ -77,6 +77,7 @@ class Category extends Command
 
             $books->each(function ($book) {
                 $ids = explode(',', $book->cate_id);
+                $ids = array_diff($ids, [1405]); // 拿掉 "最新"
                 $categories = DB::table('category')->where('status', 1)->whereIn('id', $ids)->get();
                 $categories = $categories->reject(function ($category) {
                     return Tag::where('name', $category->name)->exists() === false;
