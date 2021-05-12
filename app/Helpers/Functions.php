@@ -144,10 +144,10 @@ if (!function_exists('checkHex')) {
     }
 }
 
-if (!function_exists('getSuggestTags')) {
+if (!function_exists('getAllTags')) {
 
-    function getSuggestTags()
+    function getAllTags()
     {
-        return app(TagRepository::class)->suggest();
+        return app(TagRepository::class)->all();
     }
 }

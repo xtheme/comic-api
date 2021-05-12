@@ -29,7 +29,7 @@ class BlockController extends Controller
     public function index(Request $request)
     {
         $data = [
-            'tags' => getSuggestTags(),
+            'tags' => getAllTags(),
             'causer'=> $this->causer,
             'list' => $this->repository->filter($request)->paginate(),
         ];
@@ -40,7 +40,7 @@ class BlockController extends Controller
     public function create()
     {
         $data = [
-            'tags' => getSuggestTags(),
+            'tags' => getAllTags(),
             'causer_options' => Options::CAUSER_OPTIONS,
             'ribbon_options' => Options::RIBBON_OPTIONS,
         ];
@@ -62,7 +62,7 @@ class BlockController extends Controller
         $data = [
             'data'           => $this->repository->find($id),
             'causer'         => $this->causer,
-            'tags'           => getSuggestTags(),
+            'tags'           => getAllTags(),
             'causer_options' => Options::CAUSER_OPTIONS,
             'ribbon_options' => Options::RIBBON_OPTIONS,
         ];

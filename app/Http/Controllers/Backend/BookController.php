@@ -6,7 +6,6 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Backend\BookRequest;
 use App\Models\Book;
 use App\Repositories\Contracts\BookRepositoryInterface;
-use Conner\Tagging\Model\Tag;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\Validator;
@@ -25,7 +24,7 @@ class BookController extends Controller
     {
         $data = [
             'list' => $this->repository->filter($request)->paginate(),
-            'tags' => Tag::where('suggest', 1)->orderByDesc('priority')->get(),
+            'tags' => getAllTags(),
             'pageConfigs' => ['hasSearchForm' => true],
         ];
 
@@ -36,7 +35,7 @@ class BookController extends Controller
     {
 
         $data = [
-            'tags' => Tag::where('suggest', 1)->orderByDesc('priority')->get(),
+            'tags' => getAllTags(),
         ];
 
         return view('backend.book.create')->with($data);
@@ -67,7 +66,7 @@ class BookController extends Controller
     {
         $data = [
             'book' => Book::findOrFail($id),
-            'tags' => Tag::where('suggest', 1)->orderByDesc('priority')->get(),
+            'tags' => getAllTags(),
         ];
 
         return view('backend.book.edit')->with($data);

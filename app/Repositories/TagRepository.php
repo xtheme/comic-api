@@ -44,8 +44,9 @@ class TagRepository extends Repository implements TagRepositoryInterface
         })->orderByDesc('priority');
     }
 
-    public function suggest(): ?Collection
+    public function all(): ?Collection
     {
-        return $this->model::where('suggest', 1)->orderByDesc('priority')->get();
+        return $this->model::orderByDesc('priority')->get();
+        // return $this->model::where('suggest', 1)->orderByDesc('priority')->get();
     }
 }
