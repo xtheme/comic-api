@@ -17,18 +17,17 @@ class Tag extends \Conner\Tagging\Model\Tag
 
         static::saved(function ($tag) {
 
-            if ($tag->isDirty('slug')) {
-                Tagged::where('tag_name', $tag->getOriginal('slug'))->update([
-                    'tag_name' => $tag->slug,
+            if ($tag->isDirty('name')) {
+                Tagged::where('tag_name', $tag->getOriginal('name'))->update([
+                    'tag_name' => $tag->name,
                     'tag_slug' => $tag->slug,
                 ]);
             }
         });
 
         static::deleted(function ($tag) {
-            Tagged::where('tag_name' , $tag->slug)->delete();
+            Tagged::where('tag_name' , $tag->name)->delete();
         });
-
     }
 
     public function tagged_book()

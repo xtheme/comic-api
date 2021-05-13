@@ -59,7 +59,7 @@ class TagController extends Controller
         switch ($field) {
             case 'name':
                 $data = [
-                    'slug' => $request->post('value'),
+                    'slug' => mb_strtolower($request->post('value'), 'UTF-8'),
                     'name' => $request->post('value')
                 ];
 
