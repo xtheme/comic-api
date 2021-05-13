@@ -2,11 +2,11 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Models\History;
 use App\Services\SmsService;
 use App\Services\UserService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
-use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
@@ -212,7 +212,7 @@ class UserController extends BaseController
             return Response::jsonError('很抱歉，上传头像失败！');
         }
 
-        // $user->userface = $filename;
+        // $user->userface = $filename;a
         $user->avatar = '/storage' . $filename;
         $user->save();
 
@@ -220,5 +220,46 @@ class UserController extends BaseController
         $this->userService->updateUserCache($user);
 
         return Response::jsonSuccess($user);
+    }
+
+    // 歷史紀錄 (閱覽/ 播放/ 收藏)
+    public function visit_history(Request $request, $class)
+    {
+        $histories = History::with(['video'])->where('user_id', $request->user->id)
+            ->where('class', $class)
+            ->where('type', 'visit')
+            ->orderByDesc('created_at')
+            ->get();
+
+        $histories->transform(function ($item) use ($class) {
+            switch ($class) {
+                case 'video':
+                    return [
+                        'id' => $item->major_id,
+                        'title' => $item->video->title,
+                        'author' => $item->video->author,
+                        'cover' => $item->video->cover,
+                        'ribbon' => $item->video->ribbon,
+                        'tagged_tags' => $item->video->tagged_tags,
+                        // 'series_id' => $item->minor_id,
+                        'created_at' => $item->created_at->format('Y-m-d H:i:s'),
+                    ];
+                case 'book':
+                    return [
+                        'id' => $item->major_id,
+                        'title' => $item->book->title,
+                        'author' => $item->book->author,
+                        'cover' => $item->book->cover,
+                        'ribbon' => $item->book->ribbon,
+                        // 'tagged_tags' => $item->video->tagged_tags,
+                        // 'series_id' => $item->minor_id,
+                        'created_at' => $item->created_at->format('Y-m-d H:i:s'),
+                    ];
+                default:
+                    return $item;
+            }
+        });
+
+        return Response::jsonSuccess(__('api.success'), $histories);
     }
 }

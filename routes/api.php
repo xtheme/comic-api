@@ -50,6 +50,8 @@ Route::as('api.')->group(function () {
                 // 签到
                 Route::get('/signDetail', [SignController::class, 'signDetail'])->name('signDetail');
                 Route::post('/sign', [SignController::class, 'sign'])->name('sign');
+                // 歷史紀錄 (閱覽/ 播放/ 收藏)
+                Route::get('/{class}/visit/history', [UserController::class, 'visit_history'])->name('visit.history');
             });
 
             Route::prefix('sms')->as('sms.')->group(function () {

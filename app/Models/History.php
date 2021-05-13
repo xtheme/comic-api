@@ -23,4 +23,13 @@ class History extends BaseModel
         'created_at',
     ];
 
+    public function video()
+    {
+        return $this->hasOne('App\Models\Video', 'id', 'major_id');
+    }
+
+    public function book()
+    {
+        return $this->hasOne('App\Models\Book', 'id', 'major_id');
+    }
 }
