@@ -2,40 +2,27 @@
 
 namespace App\Http\Requests\Backend;
 
-
 use App\Http\Requests\BaseRequest;
 
 class BlockRequest extends BaseRequest
 {
-    /**
-     * Get the validation rules that apply to the request.
-     *
-     * @return array
-     */
     public function rules()
     {
         return [
-            'title' => 'required',
+            'title'     => 'required',
             'spotlight' => 'numeric',
-            'row' => 'numeric',
-            'sort' => 'required|numeric',
+            'row'       => 'numeric',
+            'sort'      => 'required|numeric',
         ];
     }
 
-    /**
-     * Get custom messages for validator errors.
-     *
-     * @return array
-     */
-    public function messages()
+    public function attributes()
     {
         return [
-            'title.required' => '模块名称不能为空',
-            'spotlight.numeric' => '聚焦数必須為數字',
-            'row.numeric' => '行数必須為數字',
-            'sort.required' => '排序不能为空',
-            'sort.numeric' => '排序必須為數字',
-
+            'title'     => '模块标题',
+            'spotlight' => '首笔聚焦',
+            'row'       => '每行笔数',
+            'sort'      => '模块排序',
         ];
     }
 }

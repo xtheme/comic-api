@@ -17,13 +17,6 @@ class OrderController extends Controller
         $this->repository = $repository;
     }
 
-    /**
-     * 订单列表
-     *
-     * @param  Request  $request
-     *
-     * @return \Illuminate\Contracts\View\View|\Illuminate\Contracts\View\Factory
-     */
     public function index(Request $request)
     {
         $data = [
@@ -40,15 +33,6 @@ class OrderController extends Controller
         return view('backend.order.index')->with($data);
     }
 
-    /**
-     * 汇出订单
-     *
-     * @param  Request  $request
-     *
-     * @return \Symfony\Component\HttpFoundation\BinaryFileResponse
-     * @throws \PhpOffice\PhpSpreadsheet\Exception
-     * @throws \PhpOffice\PhpSpreadsheet\Writer\Exception
-     */
     public function export(Request $request)
     {
         $query = $this->repository->filter($request);

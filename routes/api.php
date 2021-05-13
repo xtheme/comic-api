@@ -55,6 +55,7 @@ Route::as('api.')->group(function () {
             });
 
             Route::prefix('sms')->as('sms.')->group(function () {
+                Route::post('/verify', [SmsController::class, 'verify'])->name('verify');
                 Route::post('/send', [SmsController::class, 'send'])->name('send');
             });
 

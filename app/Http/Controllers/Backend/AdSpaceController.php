@@ -10,7 +10,6 @@ use Illuminate\Support\Facades\Response;
 
 class AdSpaceController extends Controller
 {
-
     private $repository;
 
     public function __construct(AdSpaceRepositoryInterface $repository)

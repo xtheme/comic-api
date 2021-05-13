@@ -7,11 +7,6 @@ use App\Http\Requests\BaseRequest;
 
 class RecomclassRequest extends BaseRequest
 {
-    /**
-     * Get the validation rules that apply to the request.
-     *
-     * @return array
-     */
     public function rules()
     {
         return [
@@ -22,19 +17,13 @@ class RecomclassRequest extends BaseRequest
         ];
     }
 
-    /**
-     * Get custom messages for validator errors.
-     *
-     * @return array
-     */
-    public function messages()
+    public function attributes()
     {
         return [
-            'listorder.required' => '請填寫排序',
-            'listorder.numeric' => '排序必须为数字',
-            'title.required' => '請填寫推荐名称',
-            'icon.required' => '請上传图标',
-            'style.required' => '請选择展示风格'
+            'listorder' => '排序',
+            'title' => '推荐名称',
+            'icon' => '图标',
+            'style' => '展示风格',
         ];
     }
 }

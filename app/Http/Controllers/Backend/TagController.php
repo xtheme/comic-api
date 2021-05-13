@@ -5,11 +5,9 @@ namespace App\Http\Controllers\Backend;
 use App\Http\Controllers\Controller;
 use App\Models\Tag;
 use App\Repositories\Contracts\TagRepositoryInterface;
-use Conner\Tagging\Model\Tagged;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\Validator;
-use Illuminate\Support\Facades\View;
 
 class TagController extends Controller
 {
@@ -114,12 +112,6 @@ class TagController extends Controller
         return Response::jsonSuccess(__('response.success.complete', ['action' => $text]));
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param int $id
-     * @return \Illuminate\Http\Response
-     */
     public function destroy($id)
     {
         $this->repository->destroy($id);
@@ -127,6 +119,4 @@ class TagController extends Controller
         return Response::jsonSuccess('删除成功！');
 
     }
-
-
 }

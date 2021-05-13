@@ -16,6 +16,10 @@ class SmsController extends BaseController
         $this->smsService = $smsService;
     }
 
+    public function verify(Request $request)
+    {
+    }
+
     public function send(Request $request)
     {
         $area = $request->post('area') ? trim($request->post('area')) : '86';

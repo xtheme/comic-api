@@ -18,12 +18,6 @@ class CommentController extends Controller
         $this->repository = $repository;
     }
 
-
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function index(Request $request)
     {
         $list = $this->repository->filter($request)->paginate();
@@ -32,15 +26,8 @@ class CommentController extends Controller
             'list' => $list,
             'pageConfigs' => ['hasSearchForm' => true],
         ]);
-
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param int $id
-     * @return \Illuminate\Http\Response
-     */
     public function destroy($id)
     {
         $comment = Comment::findOrFail($id);
@@ -48,7 +35,6 @@ class CommentController extends Controller
         $comment->delete();
 
         return Response::jsonSuccess('删除成功！');
-
     }
 
     public function batchDestroy(Request $request)
@@ -56,6 +42,4 @@ class CommentController extends Controller
         Comment::destroy($request->post('ids'));
         return Response::jsonSuccess('删除成功！');
     }
-
-
 }

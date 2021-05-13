@@ -8,11 +8,6 @@ use App\Repositories\Contracts\UserRepositoryInterface;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Response;
 
-/**
- * Class UserController
- *
- * @package App\Http\Controllers\Admin
- */
 class UserController extends Controller
 {
     private $repository;
@@ -22,11 +17,6 @@ class UserController extends Controller
         $this->repository = $repository;
     }
 
-    /**
-     * 用户列表
-     *
-     * @return \Illuminate\Contracts\View\View|\Illuminate\Contracts\View\Factory
-     */
     public function index()
     {
         $data = [
@@ -37,11 +27,6 @@ class UserController extends Controller
         return view('backend.user.index')->with($data);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Contracts\View\View|\Illuminate\Contracts\View\Factory
-     */
     public function create()
     {
         $username = '茄子漫画' . substr(str_shuffle('abcdefghijklmnopqrstuvwxyz'), 0, 5);
@@ -51,12 +36,6 @@ class UserController extends Controller
         ]);
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
     public function store(Request $request)
     {
         $validated = $request->validated();
@@ -76,23 +55,7 @@ class UserController extends Controller
         return Response::jsonSuccess('新增用户成功！');
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        //
-    }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Contracts\View\View|\Illuminate\Contracts\View\Factory
-     */
     public function edit($id)
     {
         $data = [
@@ -102,13 +65,6 @@ class UserController extends Controller
         return view('backend.user.edit')->with($data);
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
     public function update(Request $request, $id)
     {
         $validated = $request->validated();
@@ -120,12 +76,6 @@ class UserController extends Controller
         return Response::jsonSuccess('資料已更新！');
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
     public function destroy($id)
     {
         $model = User::findOrFail($id);
@@ -135,13 +85,6 @@ class UserController extends Controller
         return Response::jsonSuccess('資料已刪除！');
     }
 
-    /**
-     * 封封禁户
-     *
-     * @param $id
-     *
-     * @return Response
-     */
     public function block($id)
     {
         $model = User::findOrFail($id);

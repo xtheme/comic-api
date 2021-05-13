@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Backend;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\Backend\VideoAdRequest;
+use App\Http\Requests\Backend\AdRequest;
 use App\Models\Ad;
 use App\Models\AdSpace;
 use App\Repositories\Contracts\AdRepositoryInterface;
@@ -16,7 +16,7 @@ class AdController extends Controller
 
     private $repository;
 
-    const JUMPTYPE = [
+    const JUMP_TYPE = [
         1 => '内置浏览器',
         2 => 'App下载',
         3 => '外部浏览器',
@@ -30,47 +30,30 @@ class AdController extends Controller
         $this->repository = $repository;
     }
 
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function index(Request $request)
     {
         $data = [
             'list' => $this->repository->filter($request)->paginate(),
             'pageConfigs' => ['hasSearchForm' => true],
             'ad_spaces' => AdSpace::orderBy('id')->get(),
-            'jump_type' => self::JUMPTYPE,
+            'jump_type' => self::JUMP_TYPE,
         ];
 
         return view('backend.ad.index')->with($data);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function create()
     {
         $data = [
             'ad_spaces' => AdSpace::orderBy('id')->get(),
-            'jump_type' => self::JUMPTYPE,
+            'jump_type' => self::JUMP_TYPE,
         ];
 
         return view('backend.ad.create')->with($data);
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param VideoAdRequest $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(VideoAdRequest $request)
+    public function store(AdRequest $request)
     {
-
         $post = $request->post();
 
         $video_ad = new Ad;
@@ -85,12 +68,6 @@ class AdController extends Controller
         return Response::jsonSuccess('新增资料成功！');
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param int $id
-     * @return \Illuminate\Http\Response
-     */
     public function edit($id)
     {
 
@@ -98,21 +75,13 @@ class AdController extends Controller
             'data' => Ad::findOrFail($id),
             'pageConfigs' => ['hasSearchForm' => true],
             'ad_spaces' => AdSpace::orderBy('id')->get(),
-            'jump_type' => self::JUMPTYPE,
+            'jump_type' => self::JUMP_TYPE,
         ];
 
         return view('backend.ad.edit')->with($data);;
-
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param VideoAdRequest $request
-     * @param int $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(VideoAdRequest $request, $id)
+    public function update(AdRequest $request, $id)
     {
 
         $post = $request->post();
@@ -127,19 +96,11 @@ class AdController extends Controller
             }
         }
 
-
-
         $video_ad->fill($post)->save();
 
         return Response::jsonSuccess('更新资料成功！');
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param int $id
-     * @return \Illuminate\Http\Response
-     */
     public function destroy($id)
     {
         $bookReportType = Ad::findOrFail($id);
@@ -149,12 +110,6 @@ class AdController extends Controller
         return Response::jsonSuccess('删除资料成功！');
     }
 
-    /**
-     * 修改順序
-     *
-     * @param \Illuminate\Http\Request $request
-     * @return \Illuminate\Http\Response
-     */
     public function sort(Request $request)
     {
         $post = $request->post();
@@ -164,10 +119,6 @@ class AdController extends Controller
         return Response::jsonSuccess('更新资料成功！');
     }
 
-
-    /**
-     * 批次更新
-     */
     public function batch(Request $request, $action)
     {
         $ids = explode(',', $request->input('ids'));
@@ -189,13 +140,7 @@ class AdController extends Controller
         return Response::jsonSuccess($text . '成功！');
     }
 
-
-    /**
-     * 批量刪除
-     *
-     * @param \Illuminate\Http\Request $request
-     * @return \Illuminate\Http\Response
-     */
+    // todo 应该合并到 batch()
     public function batchDestroy(Request $request, $ids)
     {
         $data = explode(',', $ids);

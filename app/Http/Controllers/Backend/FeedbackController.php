@@ -9,11 +9,6 @@ use Illuminate\Support\Facades\Response;
 
 class FeedbackController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function index()
     {
 
@@ -24,12 +19,6 @@ class FeedbackController extends Controller
         ]);
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
     public function destroy($id)
     {
         $feedback = FeedBack::findOrFail($id);
@@ -44,6 +33,4 @@ class FeedbackController extends Controller
         FeedBack::destroy($request->post('ids'));
         return Response::jsonSuccess('删除成功！');
     }
-
-
 }

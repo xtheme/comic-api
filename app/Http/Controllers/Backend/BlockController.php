@@ -12,7 +12,6 @@ use Illuminate\Support\Facades\Response;
 
 class BlockController extends Controller
 {
-
     private $repository;
     private $causer;
 

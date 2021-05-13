@@ -10,8 +10,6 @@ use Illuminate\Support\Facades\Response;
 
 class ComicBlockController extends Controller
 {
-
-
     private $style;
 
     public function __construct()
@@ -24,12 +22,6 @@ class ComicBlockController extends Controller
         ];
     }
 
-
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function index()
     {
         $list = ComicBlock::orderBy('listorder')->paginate();
@@ -39,11 +31,6 @@ class ComicBlockController extends Controller
         ]);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function create()
     {
         return view('backend.comic_block.create', [
@@ -51,15 +38,8 @@ class ComicBlockController extends Controller
         ]);
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param \Illuminate\Http\Request $request
-     * @return \Illuminate\Http\Response
-     */
     public function store(RecomclassRequest $request)
     {
-
         $post = $request->post();
 
         $block = new ComicBlock;
@@ -71,16 +51,9 @@ class ComicBlockController extends Controller
         return Response::jsonSuccess('添加推荐分类成功！');
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param int $id
-     * @return \Illuminate\Http\Response
-     */
     public function edit($id)
     {
         $data = ComicBlock::findOrFail($id);
-
 
         return view('backend.comic_block.edit', [
             'data' => $data,
@@ -88,13 +61,6 @@ class ComicBlockController extends Controller
         ]);
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param \Illuminate\Http\Request $request
-     * @param int $id
-     * @return \Illuminate\Http\Response
-     */
     public function update(RecomclassRequest $request, $id)
     {
         $block = ComicBlock::findOrFail($id);
@@ -104,12 +70,6 @@ class ComicBlockController extends Controller
         return Response::jsonSuccess('推荐分类修改成功！');
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param int $id
-     * @return \Illuminate\Http\Response
-     */
     public function destroy($id)
     {
         $block = ComicBlock::findOrFail($id);
@@ -119,12 +79,6 @@ class ComicBlockController extends Controller
         return Response::jsonSuccess('删除成功！');
     }
 
-    /**
-     * 修改順序
-     *
-     * @param \Illuminate\Http\Request $request
-     * @return \Illuminate\Http\Response
-     */
     public function sort(Request $request)
     {
         $post = $request->post();
@@ -134,18 +88,10 @@ class ComicBlockController extends Controller
         return Response::jsonSuccess('更新资料成功！');
     }
 
-
-    /**
-     * 批量刪除
-     *
-     * @param \Illuminate\Http\Request $request
-     * @return \Illuminate\Http\Response
-     */
     public function batchDestroy(Request $request, $ids)
     {
         $data = explode(',', $ids);
         ComicBlock::destroy($data);
         return Response::jsonSuccess('删除成功！');
     }
-
 }

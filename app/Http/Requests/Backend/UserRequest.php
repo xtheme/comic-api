@@ -6,11 +6,6 @@ use App\Http\Requests\BaseRequest;
 
 final class UserRequest extends BaseRequest
 {
-    /**
-     * Get the validation rules that apply to the request.
-     *
-     * @return array
-     */
     public function rules()
     {
         return [
@@ -19,17 +14,11 @@ final class UserRequest extends BaseRequest
         ];
     }
 
-    /**
-     * Get custom messages for validator errors.
-     *
-     * @return array
-     */
-    public function messages()
+    public function attributes()
     {
         return [
-            'username.required' => '请填写用户昵称',
-            'username.max'      => '昵称不能大于11个字',
-            'mobile.required'   => '请填写用户手机号',
+            'username' => '用户昵称',
+            'mobile'   => '手机号',
         ];
     }
 }

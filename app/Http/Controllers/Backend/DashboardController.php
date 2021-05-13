@@ -7,7 +7,6 @@ use Illuminate\Support\Facades\Auth;
 
 class DashboardController extends Controller
 {
-    // index
     public function index()
     {
         return view('backend.index');

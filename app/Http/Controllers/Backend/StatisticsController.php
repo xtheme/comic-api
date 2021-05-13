@@ -9,7 +9,6 @@ use Illuminate\Http\Request;
 
 class StatisticsController extends Controller
 {
-
     private $video_repository, $series_repository;
 
     const STATUS_OPTIONS = [
