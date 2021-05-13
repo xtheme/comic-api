@@ -2,10 +2,6 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
-
-class ViewsMemberHistories extends Model
+class ViewsMemberHistories extends BaseModel
 {
-    use HasFactory;
 }

@@ -2,18 +2,8 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
-
 class Ad extends BaseModel
 {
-    use HasFactory;
-
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var array
-     */
     protected $fillable = [
         'space_id',
         'name',
@@ -26,11 +16,6 @@ class Ad extends BaseModel
         'status'
     ];
 
-    /**
-     * The accessors to append to the model's array form.
-     *
-     * @var array
-     */
     protected $appends = [
         'image_thumb'
     ];
@@ -42,8 +27,6 @@ class Ad extends BaseModel
 
     /**
      * 广告图片组合
-     *
-     * @return string
      */
     public function getImageThumbAttribute()
     {
@@ -51,6 +34,4 @@ class Ad extends BaseModel
         return getOldConfig('web_config', 'api_url') . $this->image;
         // return getConfig('api_url') . $this->image;
     }
-
-
 }

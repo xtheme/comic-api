@@ -2,18 +2,8 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
-
 class BookReportType extends BaseModel
 {
-    use HasFactory;
-
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var array
-     */
     protected $fillable = [
         'name',
         'operator',
@@ -21,7 +11,7 @@ class BookReportType extends BaseModel
         'sort',
         'status',
         'created_at',
-        'updated_at'
+        'updated_at',
     ];
 
     public function admin()
@@ -29,12 +19,7 @@ class BookReportType extends BaseModel
         return $this->hasOne('App\Models\Admin', 'id', 'operator_id');
     }
 
-    /**
-     * status_type
-     *
-     * @return string
-     */
-    public function getStatusTypeAttribute ()
+    public function getStatusTypeAttribute()
     {
         switch ($this->status) {
             case 0:
@@ -45,6 +30,4 @@ class BookReportType extends BaseModel
                 return '<span class="text-muted">未知</span>';
         }
     }
-
-
 }

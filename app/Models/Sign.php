@@ -24,25 +24,17 @@ use Illuminate\Database\Eloquent\Model;
  */
 class Sign extends BaseModel
 {
-
     protected $table = 'sign';
+
     public $timestamps = false;
 
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var array
-     */
     protected $fillable = [
         'days',
         'addtime'
     ];
 
-
     public function user()
     {
-        return $this->hasOne('App\Models\User' , 'id', 'uid');
+        return $this->hasOne('App\Models\User', 'id', 'uid');
     }
-
-
 }
