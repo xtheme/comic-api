@@ -17,4 +17,7 @@ interface RepositoryInterface
     public function filter(Request $request): Builder;
 
     public function editable($id, $field, $value);
+
+    public function destroy($id): bool;
+
 }

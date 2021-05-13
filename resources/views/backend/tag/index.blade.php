@@ -23,6 +23,8 @@
                                     <select class="form-control" name="action">
                                         <option value="dismiss_book">解除关联的漫画</option>
                                         <option value="dismiss_video">解除关联的动画</option>
+                                        <option value="enable">显示前端推荐</option>
+                                        <option value="disable">隐藏前端推荐</option>
                                     </select>
                                 </div>
                                 <div class="form-group">
@@ -78,10 +80,10 @@
                                     <td class="text-center">
                                         @switch($tag->suggest)
                                             @case(1)
-                                            <label class="badge badge-success badge-pill">推荐</label>
+                                                <a class="badge badge-pill badge-light-success" data-confirm href="{{ route('backend.tag.batch', ['action'=>'disable', 'ids' => $tag->id]) }}" title="隐藏前台推荐">推荐</a>
                                             @break
-                                            @case(-1)
-                                            <label class="badge badge-danger badge-pill">隐藏</label>
+                                            @case(0)
+                                                <a class="badge badge-pill badge-light-danger" data-confirm href="{{ route('backend.tag.batch', ['action'=>'enable', 'ids' => $tag->id]) }}" title="显示前台推荐">隐藏</a>
                                             @break
                                         @endswitch
                                     </td>
@@ -106,6 +108,7 @@
                                             <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuButton{{ $tag->id }}">
                                                 <a class="dropdown-item" href="{{ route('backend.book.index', ['tag[]' => $tag->name]) }}"><i class="bx bx-book mr-1"></i>查看关联漫画</a>
                                                 <a class="dropdown-item" href="{{ route('backend.video.index', ['tag[]' => $tag->name]) }}"><i class="bx bx-movie mr-1"></i>查看关联动画</a>
+                                                <a class="dropdown-item" data-destroy href="{{ route('backend.tag.destroy', $tag->id) }}" title="删除标签"><i class="bx bx-trash mr-1"></i> 删除标签</a>
                                             </div>
                                         </div>
                                     </td>

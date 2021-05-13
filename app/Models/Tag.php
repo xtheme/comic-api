@@ -11,6 +11,26 @@ class Tag extends \Conner\Tagging\Model\Tag
     //     'related_video_count',
     // ];
 
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::saved(function ($tag) {
+
+            if ($tag->isDirty('slug')) {
+                Tagged::where('tag_name', $tag->getOriginal('slug'))->update([
+                    'tag_name' => $tag->slug,
+                    'tag_slug' => $tag->slug,
+                ]);
+            }
+        });
+
+        static::deleted(function ($tag) {
+            Tagged::where('tag_name' , $tag->slug)->delete();
+        });
+
+    }
+
     public function tagged_book()
     {
         return $this->hasMany('Conner\Tagging\Model\Tagged', 'tag_name', 'name')->where('taggable_type', 'App\Models\Book');

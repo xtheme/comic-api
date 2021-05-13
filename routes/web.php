@@ -98,6 +98,7 @@ Route::middleware(['auth'])->prefix('backend')->as('backend.')->group(function (
         Route::get('/', [TagController::class, 'index'])->name('index');
         Route::put('batch/{action?}', [TagController::class, 'batch'])->name('batch');
         Route::put('editable/{field}', [TagController::class, 'editable'])->name('editable');
+        Route::delete('destroy/{id}', [TagController::class , 'destroy'])->name('destroy');
     });
 
     // 漫画章节
