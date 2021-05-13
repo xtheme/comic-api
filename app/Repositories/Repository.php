@@ -69,4 +69,12 @@ abstract class Repository implements RepositoryInterface
     {
         $this->model::where('id', $id)->update([$field => $value]);
     }
+
+    /**
+     * @param $id
+     */
+    public function destroy($id): bool
+    {
+        return $this->model::findOrFail($id)->delete();
+    }
 }
