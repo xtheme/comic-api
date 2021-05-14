@@ -42,10 +42,10 @@ Route::as('api.')->group(function () {
         Route::prefix(config('api.version'))->group(function () {
             // 会员
             Route::prefix('user')->as('user.')->group(function () {
-                Route::post('/device', [UserController::class, 'device'])->name('device');
+                Route::get('/device', [UserController::class, 'device'])->name('device');
                 // Route::post('/mobile', [UserController::class, 'mobile'])->name('mobile')->middleware('sso');
                 Route::post('/mobile', [UserController::class, 'mobile'])->name('mobile');
-                Route::post('/logout', [UserController::class, 'logout'])->name('logout');
+                Route::get('/logout', [UserController::class, 'logout'])->name('logout');
                 Route::post('/modify', [UserController::class, 'modify'])->name('modify');
                 Route::post('/avatar', [UserController::class, 'avatar'])->name('avatar');
                 // 签到

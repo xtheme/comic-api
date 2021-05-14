@@ -2,121 +2,109 @@
 
 {{-- page style --}}
 @section('page-styles')
-    <link rel="stylesheet" type="text/css" href="{{ asset('css/plugins/forms/validation/form-validation.css') }}">
 @endsection
 
 @section('content')
     <form id="form" class="form" method="post" action="{{ route('backend.pricing.store') }}" novalidate>
         <div class="form-body">
             <div class="row">
-                <div class="col-12">
+                <div class="col-6">
                     <div class="form-group">
-                        <label for="input-username">套餐名称</label>
+                        <label>套餐名称</label>
                         <div class="controls">
-                            <input type="text" id="input-username" class="form-control" name="type"
-                                   placeholder="请输入套餐名称"
-                                   required
-                                   data-validation-required-message="请输入套餐名称">
+                            <input type="text" class="form-control" name="type" placeholder="请输入套餐名称">
+                        </div>
+                    </div>
+                </div>
+                <div class="col-2">
+                    <div class="form-group">
+                        <label></label>
+                        <div class="controls">
+                            <div class="checkbox">
+                                <input type="checkbox" class="checkbox-input" id="checkbox-preset" name="preset" value="1">
+                                <label for="checkbox-preset">预设</label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-4">
+                    <div class="form-group">
+                        <label>显示顺序</label>
+                        <div class="controls">
+                            <input type="text" class="form-control" name="sort" placeholder="数字由大到小排序">
                         </div>
                     </div>
                 </div>
                 <div class="col-6">
                     <div class="form-group">
-                        <label for="input-username">小标题</label>
+                        <label>小标题</label>
                         <div class="controls">
-                            <input type="text" id="input-username" class="form-control" name="name"
-                                   placeholder="请输入小标题"
-                                   required
-                                   data-validation-required-message="请输入小标题">
+                            <input type="text" class="form-control" name="name" placeholder="请输入小标题">
                         </div>
                     </div>
                 </div>
                 <div class="col-6">
                     <div class="form-group">
-                        <label for="input-username">会员支付价</label>
+                        <label>会员支付价</label>
                         <div class="controls">
-                            <input type="text" id="input-username" class="form-control" name="price"
-                                   placeholder="请输入会员支付价"
-                                   required
-                                   data-validation-required-message="请输入会员支付价">
+                            <input type="text" class="form-control" name="price" placeholder="请输入会员支付价">
                         </div>
                     </div>
                 </div>
                 <div class="col-6">
                     <div class="form-group">
-                        <label for="input-username">会员原价</label>
+                        <label>会员原价</label>
                         <div class="controls">
-                            <input type="text" id="input-username" class="form-control" name="list_price"
-                                   placeholder="请输入会员原价"
-                                   required
-                                   data-validation-required-message="请输入会员原价">
+                            <input type="text" class="form-control" name="list_price" placeholder="请输入会员原价">
                         </div>
                     </div>
                 </div>
                 <div class="col-6">
                     <div class="form-group">
-                        <label for="input-username">天数</label>
+                        <label>天数</label>
                         <div class="controls">
-                            <input type="text" id="input-username" class="form-control" name="days"
-                                   placeholder="请输入天数"
-                                   required
-                                   data-validation-required-message="请输入天数">
+                            <input type="text" class="form-control" name="days" placeholder="请输入天数">
                         </div>
                     </div>
                 </div>
                 <div class="col-6">
                     <div class="form-group">
-                        <label for="input-username">标签</label>
+                        <label>标签</label>
                         <div class="controls">
-                            <input type="text" id="input-username" class="form-control" name="label"
-                                   placeholder="标签长度请介于2~6字"
-                                   required
-                                   data-validation-required-message="标签长度请介于2~6字">
+                            <input type="text" class="form-control" name="label" placeholder="标签长度请介于2~6字">
                         </div>
                     </div>
                 </div>
                 <div class="col-6">
                     <div class="form-group">
-                        <label for="select-sex">用户状态</label>
+                        <label>用户状态</label>
                         <div class="controls">
                             <ul class="list-unstyled mb-0">
                                 <li class="d-inline-block mr-2 mb-1">
                                     <fieldset>
                                         <div class="radio radio-shadow">
-                                            <input type="radio" id="radioshadow1" name="status" value="0" checked>
-                                            <label for="radioshadow1">全部用户</label>
+                                            <input type="radio" id="radio-status-0" name="status" value="0" checked>
+                                            <label for="radio-status-0">全部用户</label>
                                         </div>
                                     </fieldset>
                                 </li>
                                 <li class="d-inline-block mr-2 mb-1">
                                     <fieldset>
                                         <div class="radio radio-shadow">
-                                            <input type="radio" id="radioshadow2"  name="status" value="1">
-                                            <label for="radioshadow2">新用户</label>
+                                            <input type="radio" id="radio-status-1" name="status" value="1">
+                                            <label for="radio-status-1">新用户</label>
                                         </div>
                                     </fieldset>
                                 </li>
                                 <li class="d-inline-block mr-2 mb-1">
                                     <fieldset>
                                         <div class="radio radio-shadow">
-                                            <input type="radio" id="radioshadow3"  name="status" value="2">
-                                            <label for="radioshadow3">老用户</label>
+                                            <input type="radio" id="radio-status-2" name="status" value="2">
+                                            <label for="radio-status-2">老用户</label>
                                         </div>
                                     </fieldset>
                                 </li>
                             </ul>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-12">
-                    <div class="form-group">
-                        <label>显示顺序</label>
-                        <div class="controls">
-                            <input type="text" id="input-username" class="form-control" name="sort"
-                                   placeholder="请输入显示顺序"
-                                   required
-                                   data-validation-required-message="请输入显示顺序">
-                            <div class="col-sm-8 dd_ts">值越大, 显示越靠前</div>
                         </div>
                     </div>
                 </div>
@@ -131,12 +119,10 @@
 
 {{-- vendor scripts --}}
 @section('vendor-scripts')
-    <script src="{{ asset('vendors/js/forms/validation/jqBootstrapValidation.js') }}"></script>
 @endsection
 
 {{-- page scripts --}}
 @section('page-scripts')
-    <script src="{{ asset('js/scripts/forms/validation/form-validation.js') }}"></script>
     <script>
 		$(document).ready(function () {
 			$('#form').submit(function (e) {

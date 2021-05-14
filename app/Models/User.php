@@ -9,6 +9,7 @@ class User extends BaseModel
     use Notifiable;
 
     // protected $table = 'users_clone';
+
     // todo User 欄位調整
     const CREATED_AT = 'create_time';
     const UPDATED_AT = 'update_time';

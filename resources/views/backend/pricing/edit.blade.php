@@ -2,8 +2,6 @@
 
 {{-- page style --}}
 @section('page-styles')
-    <link rel="stylesheet" type="text/css" href="{{ asset('vendors/css/pickers/daterange/daterangepicker.css') }}">
-    <link rel="stylesheet" type="text/css" href="{{ asset('css/plugins/forms/validation/form-validation.css') }}">
 @endsection
 
 @section('content')
@@ -11,121 +9,103 @@
         @method('put')
         <div class="form-body">
             <div class="row">
-                <div class="col-12">
+                <div class="col-6">
                     <div class="form-group">
-                        <label for="input-username">套餐名称</label>
+                        <label>套餐名称</label>
                         <div class="controls">
-                            <input type="text" id="input-username" class="form-control" name="type"
-                                   placeholder="请输入套餐名称"
-                                   required
-                                   data-validation-required-message="请输入套餐名称"
-                                   value="{{ $data->type }}">
+                            <input type="text" class="form-control" name="type" placeholder="请输入套餐名称" value="{{ $data->type }}">
+                        </div>
+                    </div>
+                </div>
+                <div class="col-2">
+                    <div class="form-group">
+                        <label></label>
+                        <div class="controls">
+                            <div class="checkbox">
+                                <input type="checkbox" class="checkbox-input" id="checkbox-preset" name="preset" value="1" @if($data->preset == 1){{'checked'}}@endif>
+                                <label for="checkbox-preset">预设</label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-4">
+                    <div class="form-group">
+                        <label>显示顺序</label>
+                        <div class="controls">
+                            <input type="text" class="form-control" name="sort" placeholder="数字由大到小排序" value="{{ $data->sort }}">
                         </div>
                     </div>
                 </div>
                 <div class="col-6">
                     <div class="form-group">
-                        <label for="input-username">小标题</label>
+                        <label>小标题</label>
                         <div class="controls">
-                            <input type="text" id="input-username" class="form-control" name="name"
-                                   placeholder="请输入小标题"
-                                   required
-                                   data-validation-required-message="请输入小标题"
-                                   value="{{ $data->name }}">
+                            <input type="text" class="form-control" name="name" placeholder="请输入小标题" value="{{ $data->name }}">
                         </div>
                     </div>
                 </div>
                 <div class="col-6">
                     <div class="form-group">
-                        <label for="input-username">会员支付价</label>
+                        <label>会员支付价</label>
                         <div class="controls">
-                            <input type="text" id="input-username" class="form-control" name="price"
-                                   placeholder="请输入会员支付价"
-                                   required
-                                   data-validation-required-message="请输入会员支付价"
-                                   value="{{ $data->price }}">
+                            <input type="text" class="form-control" name="price" placeholder="请输入会员支付价" value="{{ $data->price }}">
                         </div>
                     </div>
                 </div>
                 <div class="col-6">
                     <div class="form-group">
-                        <label for="input-username">会员原价</label>
+                        <label>会员原价</label>
                         <div class="controls">
-                            <input type="text" id="input-username" class="form-control" name="list_price"
-                                   placeholder="请输入会员原价"
-                                   required
-                                   data-validation-required-message="请输入会员原价"
-                                   value="{{ $data->list_price }}">
+                            <input type="text" class="form-control" name="list_price" placeholder="请输入会员原价" value="{{ $data->list_price }}">
                         </div>
                     </div>
                 </div>
                 <div class="col-6">
                     <div class="form-group">
-                        <label for="input-username">天数</label>
+                        <label>天数</label>
                         <div class="controls">
-                            <input type="text" id="input-username" class="form-control" name="days"
-                                   placeholder="请输入天数"
-                                   required
-                                   data-validation-required-message="请输入天数"
-                                   value="{{ $data->days }}">
+                            <input type="text" class="form-control" name="days" placeholder="请输入天数" value="{{ $data->days }}">
                         </div>
                     </div>
                 </div>
                 <div class="col-6">
                     <div class="form-group">
-                        <label for="input-username">标签</label>
+                        <label>标签</label>
                         <div class="controls">
-                            <input type="text" id="input-username" class="form-control" name="label"
-                                   placeholder="标签长度请介于2~6字"
-                                   required
-                                   data-validation-required-message="标签长度请介于2~6字"
-                                   value="{{ $data->label }}">
+                            <input type="text" class="form-control" name="label" placeholder="标签长度请介于2~6字" value="{{ $data->label }}">
                         </div>
                     </div>
                 </div>
                 <div class="col-6">
                     <div class="form-group">
-                        <label for="select-sex">用户状态</label>
+                        <label>用户状态</label>
                         <div class="controls">
                             <ul class="list-unstyled mb-0">
                                 <li class="d-inline-block mr-2 mb-1">
                                     <fieldset>
                                         <div class="radio radio-shadow">
-                                            <input type="radio" id="radioshadow1" name="status" value="0" @if($data->status == 0) checked @endif >
-                                            <label for="radioshadow1">全部用户</label>
+                                            <input type="radio" id="radio-status-0" name="status" value="0" @if($data->status == 0){{'checked'}}@endif>
+                                            <label for="radio-status-0">全部用户</label>
                                         </div>
                                     </fieldset>
                                 </li>
                                 <li class="d-inline-block mr-2 mb-1">
                                     <fieldset>
                                         <div class="radio radio-shadow">
-                                            <input type="radio" id="radioshadow2"  name="status" value="1" @if($data->status == 1) checked @endif>
-                                            <label for="radioshadow2">新用户</label>
+                                            <input type="radio" id="radio-status-1" name="status" value="1" @if($data->status == 1){{'checked'}}@endif>
+                                            <label for="radio-status-1">新用户</label>
                                         </div>
                                     </fieldset>
                                 </li>
                                 <li class="d-inline-block mr-2 mb-1">
                                     <fieldset>
                                         <div class="radio radio-shadow">
-                                            <input type="radio" id="radioshadow3"  name="status" value="2" @if($data->status == 2) checked @endif>
-                                            <label for="radioshadow3">老用户</label>
+                                            <input type="radio" id="radio-status-2" name="status" value="2" @if($data->status == 2){{'checked'}}@endif>
+                                            <label for="radio-status-2">老用户</label>
                                         </div>
                                     </fieldset>
                                 </li>
                             </ul>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-12">
-                    <div class="form-group">
-                        <label>显示顺序</label>
-                        <div class="controls">
-                            <input type="text" id="input-username" class="form-control" name="sort"
-                                   placeholder="请输入显示顺序"
-                                   required
-                                   data-validation-required-message="请输入显示顺序"
-                                   value="{{ $data->sort }}">
-                            <div class="col-sm-8 dd_ts">值越大, 显示越靠前</div>
                         </div>
                     </div>
                 </div>
@@ -140,11 +120,6 @@
 
 {{-- vendor scripts --}}
 @section('vendor-scripts')
-    <script src="{{ asset('vendors/js/extensions/moment.min.js') }}"></script>
-    <script src="{{ asset('vendors/js/extensions/locale/zh-cn.js') }}"></script>
-    <script src="{{ asset('vendors/js/pickers/daterange/daterangepicker.js') }}"></script>
-    <script src="{{ asset('vendors/js/forms/validation/jqBootstrapValidation.js') }}"></script>
-    <script src="{{ asset('js/scripts/forms/validation/form-validation.js') }}"></script>
 @endsection
 
 {{-- page scripts --}}
@@ -179,45 +154,6 @@
 					}
 				});
 			});
-
-            // 日期時間選擇
-            moment.locale('zh-cn');
-
-            let $created = $('input[name="subscribed_at"]');
-
-            $created.daterangepicker({
-                drops: 'up',
-                buttonClasses: 'btn',
-                applyClass: 'btn-success',
-                cancelClass: 'btn-danger',
-                autoUpdateInput: false,
-                locale: {
-                    direction       : 'ltr',
-                    format          : moment.localeData().longDateFormat('L'),
-                    separator       : ' - ',
-                    applyLabel      : '确定',
-                    cancelLabel     : '取消',
-                    weekLabel       : 'W',
-                    customRangeLabel: 'Custom Range',
-                    daysOfWeek      : moment.weekdaysMin(),
-                    monthNames      : moment.monthsShort(),
-                    firstDay        : moment.localeData().firstDayOfWeek()
-                },
-                singleDatePicker: true,
-                timePicker: true,
-                timePicker24Hour: true,
-                timePickerSeconds: true,
-                timePickerIncrement: 5,
-                // minDate: moment().subtract(1, 'days'),
-            });
-
-            $created.on('apply.daterangepicker', function(ev, picker) {
-                $(this).val(picker.startDate.format('YYYY-MM-DD HH:mm:ss'));
-            });
-
-            $created.on('cancel.daterangepicker', function(ev, picker) {
-                $(this).val('');
-            });
 		});
     </script>
 @endsection

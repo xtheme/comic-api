@@ -40,7 +40,11 @@
                             @foreach ($list as $item)
                                 <tr>
                                     <td>{{ $item->id }}</td>
-                                    <td>{{ $item->type }}</td>
+                                    <td>{{ $item->type }}
+                                        @if($item->preset == 1)
+                                        <span class="badge badge-pill badge-light-primary ml-1">预设</span>
+                                        @endif
+                                    </td>
                                     <td>{{ $item->days }}</td>
                                     <td>{{ $item->name }}</td>
                                     <td>{{ $item->price }}</td>

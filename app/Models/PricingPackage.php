@@ -4,7 +4,7 @@ namespace App\Models;
 
 class PricingPackage extends BaseModel
 {
-    protected $table = 'pricing_packages';
+    // protected $table = 'pricing_packages';
 
     protected $fillable = [
         'type',
@@ -15,8 +15,9 @@ class PricingPackage extends BaseModel
         'list_price',
         'status',
         'sort',
-        'created_at',
-        'updated_at',
+        'preset',
+        // 'created_at',
+        // 'updated_at',
     ];
 
     public function getPackStatusAttribute()
