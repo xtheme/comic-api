@@ -29,7 +29,7 @@ Route::as('api.')->group(function () {
         ], 200);
     })->name('home');
 
-    Route::middleware(['api.header', 'api.sign', 'jwt.token'])->group(function () {
+    Route::middleware(['api.header', 'api.sign', 'jwt.token', 'device.sso'])->group(function () {
 
         Route::get('/me', function (Request $request) {
             return response()->json([
@@ -43,7 +43,8 @@ Route::as('api.')->group(function () {
             // 会员
             Route::prefix('user')->as('user.')->group(function () {
                 Route::post('/device', [UserController::class, 'device'])->name('device');
-                Route::post('/mobile', [UserController::class, 'mobile'])->name('mobile')->middleware('sso');
+                // Route::post('/mobile', [UserController::class, 'mobile'])->name('mobile')->middleware('sso');
+                Route::post('/mobile', [UserController::class, 'mobile'])->name('mobile');
                 Route::post('/logout', [UserController::class, 'logout'])->name('logout');
                 Route::post('/modify', [UserController::class, 'modify'])->name('modify');
                 Route::post('/avatar', [UserController::class, 'avatar'])->name('avatar');
@@ -55,7 +56,7 @@ Route::as('api.')->group(function () {
             });
 
             Route::prefix('sms')->as('sms.')->group(function () {
-                Route::post('/verify', [SmsController::class, 'verify'])->name('verify');
+                Route::post('/verify', [SmsController::class, 'verify'])->name('verify'); // 校验SSO
                 Route::post('/send', [SmsController::class, 'send'])->name('send');
             });
 

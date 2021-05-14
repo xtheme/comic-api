@@ -25,7 +25,7 @@ class UserService
     {
         $uuid = $request->header('uuid');
 
-        return User::whereDeviceId($uuid)->first();
+        return User::where('device_id', $uuid)->first();
     }
 
     /**
@@ -38,7 +38,7 @@ class UserService
      */
     public function getUserByMobile($area, $mobile)
     {
-        return User::whereArea($area)->whereMobile($mobile)->first();
+        return User::where('area', $area)->where('mobile', $mobile)->first();
     }
 
     /**

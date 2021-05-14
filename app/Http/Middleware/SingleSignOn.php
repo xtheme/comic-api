@@ -18,6 +18,18 @@ class SingleSignOn
      */
     public function handle(Request $request, Closure $next)
     {
+        $request_route = $request->route()->getName();
+
+        $white_routes = [
+            'api.user.mobile',
+            'api.sms.verify',
+            'api.sms.send',
+        ];
+
+        if (in_array($request_route, $white_routes)) {
+            return $next($request);
+        }
+
         $uuid = $request->header('uuid');
         $area = $request->input('area') ?? null;
         $mobile = $request->input('mobile') ?? null;
@@ -29,9 +41,6 @@ class SingleSignOn
             if ($device_id && $device_id != $uuid) {
                 return Response::jsonError('请您先退出旧设备再登录！', 996);
             }
-
-            // 记录设备号
-            Cache::forever($sso_key, $uuid);
         }
 
         return $next($request);

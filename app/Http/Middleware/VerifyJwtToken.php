@@ -20,8 +20,14 @@ class VerifyJwtToken
      */
     public function handle(Request $request, Closure $next)
     {
+        $request_route = $request->route()->getName();
+
+        $white_routes = [
+            'api.user.device',
+        ];
+
         // UserController@device 不帶 token 請求時, 將作為 token 發行用途, 可略過檢查
-        if ($request->route()->getName() == 'api.user.device' && !$request->header('token')) {
+        if (in_array($request_route, $white_routes) && !$request->header('token')) {
             return $next($request);
         }
 

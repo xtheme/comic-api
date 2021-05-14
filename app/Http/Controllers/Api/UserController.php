@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Http\Requests\Api\MobileRequest;
 use App\Models\History;
 use App\Services\SmsService;
 use App\Services\UserService;
@@ -9,7 +10,6 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\Storage;
-use Illuminate\Support\Facades\Validator;
 use Vinkla\Hashids\Facades\Hashids;
 
 class UserController extends BaseController
@@ -23,10 +23,6 @@ class UserController extends BaseController
 
     /**
      * 初始化接口
-     *
-     * @param  Request  $request
-     *
-     * @return \Illuminate\Http\JsonResponse
      */
     public function device(Request $request)
     {
@@ -60,34 +56,29 @@ class UserController extends BaseController
 
     /**
      * 用户短信登录与注册 (手机绑定)
-     *
-     * @param  Request  $request
-     *
-     * @return \Illuminate\Http\JsonResponse
      */
-    public function mobile(Request $request)
+    public function mobile(MobileRequest $request)
     {
-        // $uuid = $request->header('uuid');
         $area = $request->input('area') ?? 86;
         $mobile = $request->input('mobile');
         $sms_code = $request->input('sms_code');
-
-        // 验证规则
-        $validator = Validator::make([
-            'mobile' => $mobile,
-            'sms_code' => $sms_code,
-        ], [
-            'mobile'   => 'required|numeric',
-            'sms_code' => 'required|numeric',
-        ]);
-
-        if ($validator->fails()) {
-            return Response::jsonError($validator->errors()->first(), 500);
-        }
+        $force = $request->input('force') ?? false; // force reset sso
 
         if (config('api.sms.check')) {
             if (!(new SmsService())->isVerifyCode($mobile, $area, $sms_code)) {
                 return Response::jsonError('很抱歉，短信验证码不正确！');
+            }
+        }
+
+        $sso_key = sprintf('sso:%s-%s', $area, $mobile);
+
+        if ($force) {
+            Cache::forget($sso_key);
+        } else {
+            $uuid = $request->header('uuid');
+            $device_id = Cache::get($sso_key);
+            if ($device_id && $device_id != $uuid) {
+                return Response::jsonError('请您先退出旧设备再登录！', 996);
             }
         }
 
@@ -125,15 +116,15 @@ class UserController extends BaseController
         Cache::forget($cache_key);
         $response = $this->userService->addDeviceCache($cache_key, $mobile_user);
 
+        // todo SSO
+        $sso_key = sprintf('sso:%s-%s', $area, $mobile);
+        Cache::forever($sso_key, $request->header('uuid'));
+
         return Response::jsonSuccess($response);
     }
 
     /**
      * 退出登录
-     *
-     * @param Request $request
-     *
-     * @return \Illuminate\Http\JsonResponse
      */
     public function logout(Request $request)
     {

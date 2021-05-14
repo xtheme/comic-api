@@ -70,6 +70,6 @@ class Kernel extends HttpKernel
     'api.header' => VerifyApiHeader::class,
     'api.sign' => VerifyApiSign::class,
     'jwt.token' => VerifyJwtToken::class,
-    'sso' => SingleSignOn::class,
+    'device.sso' => SingleSignOn::class,
   ];
 }

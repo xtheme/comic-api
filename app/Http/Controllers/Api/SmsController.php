@@ -2,8 +2,9 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Http\Requests\Api\MobileRequest;
 use App\Services\SmsService;
-use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\Validator;
 
@@ -16,11 +17,23 @@ class SmsController extends BaseController
         $this->smsService = $smsService;
     }
 
-    public function verify(Request $request)
+    public function verify(MobileRequest $request)
     {
+        $uuid = $request->header('uuid');
+        $area = $request->input('area') ?? null;
+        $mobile = $request->input('mobile') ?? null;
+
+        $sso_key = sprintf('sso:%s-%s', $area, $mobile);
+        $device_id = Cache::get($sso_key);
+
+        if ($device_id && $device_id != $uuid) {
+            return Response::jsonError('请您先退出旧设备再登录！', 996);
+        }
+
+        return $this->send($request);
     }
 
-    public function send(Request $request)
+    public function send(MobileRequest $request)
     {
         $area = $request->post('area') ? trim($request->post('area')) : '86';
         $mobile = $request->post('mobile') ? trim($request->post('mobile')) : '';
