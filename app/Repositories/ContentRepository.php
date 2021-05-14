@@ -172,7 +172,7 @@ class ContentRepository extends Repository implements ContentRepositoryInterface
         // 1. 检查封面
         $list[] = [
             'type' => '封面图片',
-            'url'  => getConfig('img_domain') . $article->thumb,
+            'url'  => getOldConfig('web_config', 'img_domain') . $article->thumb,
         ];
 
         $list[] = [
@@ -186,7 +186,7 @@ class ContentRepository extends Repository implements ContentRepositoryInterface
         foreach($images[1] as $key => $image) {
             $list[] = [
                 'type' => '正文图片',
-                'url'  => getConfig('img_domain') . $image,
+                'url'  => getOldConfig('web_config', 'img_domain') . $image,
                 'timeout' => 1,
             ];
             if ($key >= 3) break;
@@ -196,7 +196,7 @@ class ContentRepository extends Repository implements ContentRepositoryInterface
         if ($article->model_id == 3) {
             $list[] = [
                 'type' => '视频封面图片',
-                'url'  => getConfig('img_domain') . $article->video_cover,
+                'url'  => getOldConfig('web_config', 'img_domain') . $article->video_cover,
             ];
 
             $list[] = [
@@ -206,12 +206,12 @@ class ContentRepository extends Repository implements ContentRepositoryInterface
 
             $list[] = [
                 'type' => '视频网址',
-                'url'  => getConfig('video_domain') . $article->video,
+                'url'  => getOldConfig('web_config', 'video_domain') . $article->video,
             ];
 
             $list[] = [
                 'type' => '视频切片',
-                'url'  => getConfig('hls_domain') . str_replace('.mp4', '/index.m3u8', $article->video),
+                'url'  => getOldConfig('web_config', 'hls_domain') . str_replace('.mp4', '/index.m3u8', $article->video),
             ];
         }
 
@@ -219,12 +219,12 @@ class ContentRepository extends Repository implements ContentRepositoryInterface
         if ($article->model_id == 5) {
             $list[] = [
                 'type' => '音频网址',
-                'url'  => getConfig('audio_domain') . $article->video,
+                'url'  => getOldConfig('web_config', 'audio_domain') . $article->video,
             ];
 
             $list[] = [
                 'type' => '音频下载网址',
-                'url'  => getConfig('audio_download_domain') . $article->video,
+                'url'  => getOldConfig('web_config', 'audio_download_domain') . $article->video,
             ];
         }
 

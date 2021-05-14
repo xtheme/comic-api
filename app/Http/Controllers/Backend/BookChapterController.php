@@ -41,7 +41,7 @@ class BookChapterController extends Controller
 
         $json_images = json_decode($chapter->json_images);
 
-        $domain = ($chapter->operating == 1) ? getConfig('api_url') : getConfig('img_sync_url');
+        $domain = ($chapter->operating == 1) ? getOldConfig('web_config', 'api_url') : getOldConfig('web_config', 'img_sync_url');
 
         $images = [];
 

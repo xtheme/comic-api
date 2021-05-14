@@ -37,7 +37,7 @@ class ComicBlock extends BaseModel
 
     public function getIconThumbAttribute()
     {
-        return getConfig('api_url') . '/' . $this->icon;
+        return getOldConfig('web_config', 'api_url') . '/' . $this->icon;
     }
 
     public function getDisplayStatusAttribute()

@@ -32,6 +32,6 @@ class Ad extends BaseModel
     {
         // todo change config
         return getOldConfig('web_config', 'api_url') . $this->image;
-        // return getConfig('api_url') . $this->image;
+        // return getOldConfig('web_config', 'api_url') . $this->image;
     }
 }

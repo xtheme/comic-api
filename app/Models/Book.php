@@ -81,13 +81,13 @@ class Book extends BaseModel
     {
         if ($this->operating == 1) {
             if (true == config('api.encrypt.image')) {
-                return webp(getConfig('img_sync_url_password_webp') . $this->book_thumb, 0);
+                return webp(getOldConfig('web_config', 'img_sync_url_password_webp') . $this->book_thumb, 0);
             }
 
-            return getConfig('api_url') . $this->book_thumb;
+            return getOldConfig('web_config', 'api_url') . $this->book_thumb;
         }
 
-        return getConfig('img_sync_url') . $this->book_thumb;
+        return getOldConfig('web_config', 'img_sync_url') . $this->book_thumb;
     }
 
     /**
@@ -97,13 +97,13 @@ class Book extends BaseModel
     {
         if ($this->operating == 1) {
             if (true == config('api.encrypt.image')) {
-                return webp(getConfig('img_sync_url_password_webp') . $this->book_thumb2, 0);
+                return webp(getOldConfig('web_config', 'img_sync_url_password_webp') . $this->book_thumb2, 0);
             }
 
-            return getConfig('api_url') . $this->book_thumb2;
+            return getOldConfig('web_config', 'api_url') . $this->book_thumb2;
         }
 
-        return getConfig('img_sync_url') . $this->book_thumb2;
+        return getOldConfig('web_config', 'img_sync_url') . $this->book_thumb2;
     }
 
     public function getViewAttribute($value)
