@@ -2,9 +2,7 @@
 
 namespace App\Http\Requests\Api;
 
-use App\Http\Requests\BaseRequest;
-
-class SmsRequest extends BaseRequest
+class SmsRequest extends BaseApiRequest
 {
     public function rules()
     {

@@ -2,7 +2,6 @@
 
 namespace App\Http\Requests\Backend;
 
-
 use App\Http\Requests\BaseRequest;
 
 class RecomclassRequest extends BaseRequest

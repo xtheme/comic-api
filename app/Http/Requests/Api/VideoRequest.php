@@ -2,9 +2,7 @@
 
 namespace App\Http\Requests\Api;
 
-use App\Http\Requests\BaseRequest;
-
-class VideoRequest extends BaseRequest
+class VideoRequest extends BaseApiRequest
 {
     public function rules()
     {
