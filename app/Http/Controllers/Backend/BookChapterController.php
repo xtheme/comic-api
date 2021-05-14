@@ -39,14 +39,14 @@ class BookChapterController extends Controller
     {
         $chapter = BookChapter::findOrFail($id);
 
-        $json_images = json_decode($chapter->json_images);
+        $json_images = $chapter->json_images;
 
         $domain = ($chapter->operating == 1) ? getOldConfig('web_config', 'api_url') : getOldConfig('web_config', 'img_sync_url');
 
         $images = [];
 
         foreach ($json_images as $image) {
-            $images[] = $domain . $image->url;
+            $images[] = $domain . $image['url'];
         }
 
         $data = [
