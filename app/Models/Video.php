@@ -37,7 +37,7 @@ class Video extends BaseModel
 
     public function visit_histories()
     {
-        return $this->hasMany('App\Models\History' , 'major_id' , 'id')->where([
+        return $this->hasMany('App\Models\History', 'major_id', 'id')->where([
             ['class' , 'video'],
             ['type' , 'visit'],
         ]);
@@ -45,9 +45,9 @@ class Video extends BaseModel
 
     public function play_histories()
     {
-        return $this->hasMany('App\Models\History' , 'major_id' , 'id')->where([
-            ['class' , 'video'],
-            ['type' , 'play'],
+        return $this->hasMany('App\Models\History', 'major_id', 'id')->where([
+            ['class', 'video'],
+            ['type', 'play'],
         ]);
     }
 

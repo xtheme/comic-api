@@ -28,28 +28,28 @@ class BookRepository extends Repository implements BookRepositoryInterface
     public function filter(Request $request): Builder
     {
         $id = $request->get('id') ?? '';
-        $title = $request->get('title') ?? '';
+        $book_name = $request->get('book_name') ?? '';
         $tag = $request->get('tag') ?? '';
-        $review = $request->get('review') ?? '';
-        $status = $request->get('status') ?? '';
+        $check_status = $request->get('check_status') ?? '';
+        $book_status = $request->get('book_status') ?? '';
         $charge = $request->get('charge') ?? '';
 
         $order = $request->get('order') ?? 'id';
         $sort = $request->get('sort') ?? 'desc';
 
-        return $this->model::with(['tagged', 'chapters'])->withCount(['chapters', 'charge_chapters', 'visit_histories', 'collect_histories'])->when($id, function (Builder $query, $id) {
+        return $this->model::with(['tagged', 'chapters'])->withCount(['chapters', 'charge_chapters'])->when($id, function (Builder $query, $id) {
                 return $query->where('id', $id);
-            })->when($title, function (Builder $query, $title) {
-                return $query->where('title', 'like', '%' . $title . '%');
+            })->when($book_name, function (Builder $query, $book_name) {
+                return $query->where('book_name', 'like', '%' . $book_name . '%');
             })->when($tag, function (Builder $query, $tag) {
                 /** @noinspection PhpUndefinedMethodInspection */
                 return $query->withAnyTag($tag);
-            })->when($review, function (Builder $query, $review) {
-                return $query->where('review', $review);
-            })->when($status, function (Builder $query, $status) {
-                return $query->where('status', $status);
+            })->when($check_status, function (Builder $query, $check_status) {
+                return $query->where('check_status', $check_status - 1);
+            })->when($book_status, function (Builder $query, $book_status) {
+                return $query->where('book_status', $book_status - 1);
             })->when($charge, function (Builder $query, $charge) {
-                // $charge = $charge - 1;
+                $charge = $charge - 1;
                 if (!$charge) {
                     return $query->having('charge_chapters_count', 0);
                 } else {

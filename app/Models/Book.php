@@ -19,18 +19,24 @@ class Book extends BaseModel
         'horizontal_cover',
         'type',
         'status',
-        'charge',
+        // 'charge',
         'review',
         'operating',
     ];
 
-    protected $hidden = [
+    protected $appends = [
+        'tagged_tags',
+        'charge',
+        'release_at',
+    ];
 
+    protected $hidden = [
+        'tagged',
     ];
 
     public function chapters()
     {
-        return $this->hasMany('App\Models\BookChapter')->where('chapter_status', 1);
+        return $this->hasMany('App\Models\BookChapter')->where('status', 1)->latest();
     }
 
     /**
@@ -38,69 +44,83 @@ class Book extends BaseModel
      */
     public function charge_chapters()
     {
-        return $this->hasMany('App\Models\BookChapter')->where('chapter_status', 1)->where('isvip', 2);
+        return $this->hasMany('App\Models\BookChapter')->where('status', 1)->where('charge', 1);
     }
 
-    /**
-     * 獲取漫畫類別陣列
-     * todo 換成標籤
-     */
-    public function getCategoriesAttribute()
+    public function visit_histories()
     {
-        $ids = explode(',', $this->cate_id);
+        return $this->hasMany('App\Models\History', 'major_id', 'id')->where([
+            ['class', 'book'],
+            ['type', 'visit'],
+        ]);
+    }
 
-        $categories = BookCategory::query()->select(['id', 'name'])->where('status', 1)->whereIn('id', $ids)->get();
+    public function collect_histories()
+    {
+        return $this->hasMany('App\Models\History', 'major_id', 'id')->where([
+            ['class', 'book'],
+            ['type', 'visit'],
+        ]);
+    }
 
-        $categories = $categories->mapWithKeys(function($category) {
-            return [$category->id => $category->name];
-        })->toArray();
+    public function getTaggedTagsAttribute()
+    {
+        return $this->tagged->pluck('tag_name')->toArray();
+    }
 
-        return $categories;
+    public function getChargeAttribute()
+    {
+        return $this->chapters->where('charge', 1)->exist();
+    }
+
+    public function getReleaseAtAttribute()
+    {
+        return $this->chapters->first()->created_at;
     }
 
     /**
      * 直幅封面 / 竖向封面
      */
-    public function getVerticalThumbAttribute()
+    public function getVerticalCoverAttribute($value)
     {
         if ($this->operating == 1) {
             if (true == config('api.encrypt.image')) {
-                return webp(getOldConfig('web_config', 'img_sync_url_password_webp') . $this->book_thumb, 0);
+                return webp(getOldConfig('web_config', 'img_sync_url_password_webp') . $value, 0);
             }
 
-            return getOldConfig('web_config', 'api_url') . $this->book_thumb;
+            return getOldConfig('web_config', 'api_url') . $value;
         }
 
-        return getOldConfig('web_config', 'img_sync_url') . $this->book_thumb;
+        return getOldConfig('web_config', 'img_sync_url') . $value;
     }
 
     /**
      * 橫幅封面 / 横向封面
      */
-    public function getHorizontalThumbAttribute()
+    public function getHorizontalCoverAttribute($value)
     {
         if ($this->operating == 1) {
             if (true == config('api.encrypt.image')) {
-                return webp(getOldConfig('web_config', 'img_sync_url_password_webp') . $this->book_thumb2, 0);
+                return webp(getOldConfig('web_config', 'img_sync_url_password_webp') . $value, 0);
             }
 
-            return getOldConfig('web_config', 'api_url') . $this->book_thumb2;
+            return getOldConfig('web_config', 'api_url') . $value;
         }
 
-        return getOldConfig('web_config', 'img_sync_url') . $this->book_thumb2;
+        return getOldConfig('web_config', 'img_sync_url') . $value;
     }
 
-    public function getViewAttribute($value)
-    {
-        return shortenNumber($value);
-    }
+    // public function getViewAttribute($value)
+    // {
+    //     return shortenNumber($value);
+    // }
 
-    public function getBookChaptertimeAttribute($value)
-    {
-        return date('Y-m-d', $value);
-    }
+    // public function getBookChaptertimeAttribute($value)
+    // {
+    //     return date('Y-m-d', $value);
+    // }
 
-    public function getCartoonTypeAttribute($value)
+    public function getTypeAttribute($value)
     {
         $types = [
             1 => '日漫',
@@ -113,22 +133,20 @@ class Book extends BaseModel
     public function getReleaseStatusStyleAttribute()
     {
         $types = [
-            1 => 'primary',
-            2 => 'success',
-            3 => 'danger',
+            1 => 'success',
+            -1 => 'primary',
         ];
 
-        return $types[$this->book_isend];
+        return $types[$this->end];
     }
 
     public function getReleaseStatusAttribute()
     {
         $types = [
             1 => '已完结',
-            2 => '连载中',
-            3 => '暂停',
+            -1 => '连载中',
         ];
 
-        return $types[$this->book_isend];
+        return $types[$this->end];
     }
 }

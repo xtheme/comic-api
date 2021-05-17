@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Backend;
 
+use App\Enums\Options;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Backend\BookRequest;
 use App\Models\Book;
@@ -23,6 +24,9 @@ class BookController extends Controller
     public function index(Request $request)
     {
         $data = [
+            'status_options' => Options::STATUS_OPTIONS,
+            'review_options' => Options::REVIEW_OPTIONS,
+            'charge_options' => Options::CHARGE_OPTIONS,
             'list' => $this->repository->filter($request)->paginate(),
             'tags' => getAllTags(),
             'pageConfigs' => ['hasSearchForm' => true],
@@ -85,31 +89,35 @@ class BookController extends Controller
         $ids = explode(',', $request->post('ids'));
 
         switch ($action) {
-            case 'check_status-0':
-            case 'check_status-1':
-            case 'check_status-2':
-            case 'check_status-3':
-            case 'check_status-4':
+            case 'review-0':
+            case 'review-1':
+            case 'review-2':
+            case 'review-3':
+            case 'review-4':
                 $text = '审核状态';
                 $check_status = (int) explode('-', $action)[1];
-                $data = ['check_status' => $check_status];
+                $data = ['review' => $check_status];
+                break;
+            case 'enable':
+                $text = '批量上架';
+                $data = ['status' => 1];
                 break;
             case 'disable':
-                $text = '批量封禁';
-                $data = ['chapter_status' => 0];
+                $text = '批量下架';
+                $data = ['status' => -1];
                 break;
             case 'charge':
                 $text = '批量收费';
-                $data = ['isvip' => 2];
+                $data = ['charge' => 1];
                 break;
             case 'free':
                 $text = '批量免费';
-                $data = ['isvip' => 0];
+                $data = ['charge' => -1];
                 break;
-            case 'destroy':
-                $text = '批量删除';
-                $data = ['book_status' => 1];
-                break;
+            // case 'destroy':
+            //     $text = '批量删除';
+            //     $data = ['book_status' => 1];
+            //     break;
             default:
                 return Response::jsonError('未知的操作');
         }
@@ -118,7 +126,7 @@ class BookController extends Controller
             case 'charge':
                 $books = Book::whereIn('id', $ids)->get();
                 foreach ($books as $book) {
-                    $book->chapters()->where('idx', '>', 10)->update($data);
+                    $book->chapters()->where('episode', '>', 10)->update($data);
                 }
                 break;
             case 'free':

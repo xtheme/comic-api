@@ -13,6 +13,18 @@
             <div class="row">
                 <div class="col-12">
                     <div class="form-group">
+                        <label>标签分类</label>
+                        <div class="controls">
+                            <select id="tags-selector" class="form-control" name="tag[]" multiple="multiple">
+                                @foreach($tags as $tag)
+                                    <option value="{{ $tag->name }}">{{ $tag->name }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-12">
+                    <div class="form-group">
                         <label><span class="danger">*</span> 作品名称</label>
                         <div class="controls">
                             <input type="text" class="form-control" name="title" value="" placeholder="">
@@ -47,18 +59,6 @@
                             <select class="form-control" id="select-status" name="status">
                                 @foreach ($status_options as $key => $val)
                                     <option value="{{ $key }}">{{ $val }}</option>
-                                @endforeach
-                            </select>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-12">
-                    <div class="form-group">
-                        <label>标签分类</label>
-                        <div class="controls">
-                            <select id="tags-selector" class="form-control" name="tag[]" multiple="multiple">
-                                @foreach($tags as $tag)
-                                <option value="{{ $tag->name }}">{{ $tag->name }}</option>
                                 @endforeach
                             </select>
                         </div>

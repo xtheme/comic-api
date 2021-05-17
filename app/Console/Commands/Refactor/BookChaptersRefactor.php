@@ -60,7 +60,7 @@ class BookChaptersRefactor extends Command
                         'json_images' => $chapter->json_images ?? '',
                         'status' => $chapter->status ? 1 : -1,
                         'charge' => $chapter->isvip ? 1 : -1,
-                        'review' => $chapter->check_status,
+                        'review' => $chapter->check_status + 1,
                         'operating' => $chapter->operating,
                         'created_at' => date('Y-m-d H:i:S', $chapter->addtime),
                         'updated_at' => date('Y-m-d H:i:S', $chapter->updatetime),

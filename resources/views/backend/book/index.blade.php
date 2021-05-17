@@ -12,7 +12,7 @@
 @section('content')
     <section>
         <div class="mb-1">
-            <a href="{{ route('backend.book.create') }}" class="btn btn-primary" data-modal title="添加漫画" data-size="full" data-height="70vh" role="button" aria-pressed="true">添加漫画</a>
+            <a href="{{ route('backend.book.create') }}" class="btn btn-primary" data-modal title="添加漫画" data-height="55vh" role="button" aria-pressed="true">添加漫画</a>
 {{--            <a href="{{ route('rbac.content.tag.add', request()->input()) }}" class="btn btn-primary glow" data-modal title="添加标签" data-size="full" data-height="70vh" role="button" aria-pressed="true">添加标签</a>--}}
 {{--            <a href="{{ route('rbac.content.tag.remove', request()->input()) }}" class="btn btn-danger glow" data-modal title="移除标签" data-size="full" data-height="70vh" role="button" aria-pressed="true">移除标签</a>--}}
         </div>
@@ -27,18 +27,18 @@
                             <div class="d-flex align-items-center">
                                 <div class="form-group mr-1">
                                     <select class="form-control" name="action">
-                                        <option value="check_status-0">待审核</option>
-                                        <option value="check_status-1">审核成功</option>
-                                        <option value="check_status-2">审核未通过</option>
-                                        <option value="check_status-3">屏蔽</option>
-                                        <option value="check_status-4">未审核</option>
+                                        <option value="review-0">待审核</option>
+                                        <option value="review-1">审核成功</option>
+                                        <option value="review-2">审核未通过</option>
+                                        <option value="review-3">屏蔽</option>
+                                        <option value="review-4">未审核</option>
                                         <option value="charge">第10章节后收费</option>
                                         <option value="free">所有章节免费</option>
                                         <option value="destroy">删除</option>
                                     </select>
                                 </div>
                                 <div class="form-group">
-                                    <button type="submit" class="btn btn-dark">批量操作</button>
+                                    <button type="submit" class="btn btn-primary">批量操作</button>
                                 </div>
                             </div>
                         </div>
@@ -64,9 +64,7 @@
                                 <th>作者</th>
                                 <th>类型</th>
                                 <th>发布时间</th>
-{{--                                <th>今日推荐</th>--}}
                                 <th>采集</th>
-{{--                                <th>fake阅读数</th>--}}
                                 <th>阅读数</th>
                                 <th>收藏数</th>
                                 <th>章节数</th>
@@ -88,10 +86,9 @@
                                     </td>
                                     <td>{{ $book->id }}</td>
                                     <td style="max-width: 300px;">
-                                        <span data-toggle="tooltip" data-placement="top" data-original-title="{{ $book->book_name }}">
-                                            {{ Str::limit($book->book_name, 50, '...') }}
+                                        <span data-toggle="tooltip" data-placement="top" data-original-title="{{ $book->title }}">
+                                            {{ Str::limit($book->title, 50, '...') }}
                                         </span>
-
                                         @if(!empty($book->tagged))
                                         <div class="d-flex align-content-center flex-wrap" style="margin-top: 5px;">
                                             @foreach($book->tagged as $tagged)
@@ -101,21 +98,14 @@
                                         @endif
                                     </td>
                                     <td>
-                                        <img src="{{ $book->vertical_thumb }}" alt="" width="38" height="50">
+                                        <img src="{{ $book->vertical_cover }}" alt="" width="38" height="50">
                                     </td>
-                                    <td>{{ $book->pen_name }}</td>
-                                    <td>{{ $book->cartoon_type }}</td>
-                                    <td>{{ $book->book_chaptertime }}</td>
-{{--                                    <td>@if($book->daytj == 1){{'是'}}@else{{'否'}}@endif</td>--}}
+                                    <td>{{ $book->author }}</td>
+                                    <td>{{ $book->type }}</td>
+                                    <td>{{ $book->release_at->format('Y-m-d') }}</td>
                                     <td>@if($book->operating == 1){{'人工'}}@else{{'自动'}}@endif</td>
-{{--                                    <td>--}}
-{{--                                        <span data-type="text" data-pk="{{ $book->id }}" data-title="修改阅读数" class="editable editable-click" data-url="{{ route('backend.book.editable', 'view') }}">{{ $book->view }}</span>--}}
-{{--                                    </td>--}}
-                                    <td>{{ $book->real_view }}</td>
-                                    <td>
-                                        <span data-type="text" data-pk="{{ $book->id }}" data-title="修改收藏数" class="editable editable-click" data-url="{{ route('backend.book.editable', 'collect') }}">{{ $book->collect }}</span>
-                                    </td>
-{{--                                    <td>{{ $book->chapters->last()->title ?? '暂无' }}</td>--}}
+                                    <td>{{ $book->visit_histories_count }}</td>
+                                    <td>{{ $book->collect_histories_count }}</td>
                                     <td>{{ $book->chapters_count }}</td>
                                     <td>
                                         @if($book->charge_chapters_count == 0)
@@ -128,29 +118,29 @@
                                         <span class="badge badge-pill badge-light-{{ $book->release_status_style }}">{{ $book->release_status }}</span>
                                     </td>
                                     <td>
-                                        @switch($book->check_status )
-                                            @case(0)
+                                        @switch($book->review )
+                                            @case(1)
                                             <span class="badge badge-pill badge-light-secondary">待审核</span>
                                             @break
-                                            @case(1)
+                                            @case(2)
                                             <span class="badge badge-pill badge-light-success">审核成功</span>
                                             @break
-                                            @case(2)
+                                            @case(3)
                                             <span class="badge badge-pill badge-light-warning">审核未通过</span>
                                             @break
-                                            @case(3)
+                                            @case(4)
                                             <span class="badge badge-pill badge-light-danger">屏蔽</span>
                                             @break
-                                            @case(4)
+                                            @case(5)
                                             <span class="badge badge-pill badge-light-secondary">未审核</span>
                                             @break
                                         @endswitch
                                     </td>
                                     <td>
-                                        @if($book->book_status == 0)
-                                            <span class="badge badge-pill badge-light-primary">正常</span>
+                                        @if($book->status == 1)
+                                            <a class="badge badge-pill badge-light-success" data-confirm href="{{ route('backend.book.batch', ['action'=>'disable', 'ids' => $book->id]) }}" title="下架该作品">上架</a>
                                         @else
-                                            <span class="badge badge-pill badge-light-danger">删除</span>
+                                            <a class="badge badge-pill badge-light-danger" data-confirm href="{{ route('backend.book.batch', ['action'=>'enable', 'ids' => $book->id]) }}" title="上架该作品">下架</a>
                                         @endif
                                     </td>
                                     <td @if($loop->count == 1)style="position: fixed;"@endif>
@@ -203,7 +193,7 @@
                         <label>漫画名称</label>
                         <div class="controls">
                             <input type="text" class="form-control"
-                                   name="book_name" value="{{ request()->get('book_name') }}"
+                                   name="title" value="{{ request()->get('title') }}"
                                    placeholder="">
                         </div>
                     </div>
@@ -211,12 +201,6 @@
                 <div class="col-12">
                     <div class="form-group">
                         <label>标签分类</label>
-{{--                        <select class="form-control" name="tag">--}}
-{{--                            <option value="">全部</option>--}}
-{{--                            @foreach($tags as $tag)--}}
-{{--                                <option value="{{ $tag->name }}" @if(request()->get('tag') == $tag->name){{'selected'}}@endif>{{ $tag->name }} ({{ $tag->count }})</option>--}}
-{{--                            @endforeach--}}
-{{--                        </select>--}}
                         <select id="tags-selector" class="form-control" name="tag[]" multiple="multiple">
                             @foreach($tags as $tag)
                                 <option value="{{ $tag->name }}" @if(in_array($tag->name, request()->get('tag') ?? [])){{'selected'}}@endif>{{ $tag->name }}</option>
@@ -227,23 +211,22 @@
                 <div class="col-12">
                     <div class="form-group">
                         <label>审核状态</label>
-                        <select class="form-control" name="check_status">
+                        <select class="form-control" name="review">
                             <option value="">全部</option>
-                            <option value="1" @if(request()->get('check_status') == 1){{'selected'}}@endif>待审核</option>
-                            <option value="2" @if(request()->get('check_status') == 2){{'selected'}}@endif>审核成功</option>
-                            <option value="3" @if(request()->get('check_status') == 3){{'selected'}}@endif>审核未通过</option>
-                            <option value="4" @if(request()->get('check_status') == 4){{'selected'}}@endif>屏蔽</option>
-                            <option value="5" @if(request()->get('check_status') == 5){{'selected'}}@endif>未审核</option>
+                            @foreach ($review_options as $key => $val)
+                                <option value="{{ $key }}" @if(request()->get('review') == $key){{'selected'}}@endif>{{ $val }}</option>
+                            @endforeach
                         </select>
                     </div>
                 </div>
                 <div class="col-12">
                     <div class="form-group">
-                        <label>删除状态</label>
-                        <select class="form-control" name="book_status">
+                        <label>状态</label>
+                        <select class="form-control" name="status">
                             <option value="">全部</option>
-                            <option value="1" @if(request()->get('book_status') == 1){{'selected'}}@endif>漫画正常</option>
-                            <option value="2" @if(request()->get('book_status') == 2){{'selected'}}@endif>漫画已删除</option>
+                            @foreach ($status_options as $key => $val)
+                                <option value="{{ $key }}" @if(request()->get('status') == $key){{'selected'}}@endif>{{ $val }}</option>
+                            @endforeach
                         </select>
                     </div>
                 </div>
@@ -252,8 +235,9 @@
                         <label>收费状态</label>
                         <select class="form-control" name="charge">
                             <option value="">全部</option>
-                            <option value="1" @if(request()->get('charge') == 1){{'selected'}}@endif>免费</option>
-                            <option value="2" @if(request()->get('charge') == 2){{'selected'}}@endif>收费</option>
+                            @foreach ($charge_options as $key => $val)
+                                <option value="{{ $key }}" @if(request()->get('charge') == $key){{'selected'}}@endif>{{ $val }}</option>
+                            @endforeach
                         </select>
                     </div>
                 </div>

@@ -1,6 +1,9 @@
 @extends('layouts.modal')
 
-{{-- page style --}}
+@section('vendor-styles')
+    <link rel="stylesheet" type="text/css" href="{{ asset('vendors/css/bootstrap-multiselect/bootstrap-multiselect.css') }}">
+@endsection
+
 @section('page-styles')
 @endsection
 
@@ -8,17 +11,29 @@
     <form id="form" class="form" method="post" enctype="multipart/form-data" action="{{ route('backend.book.store') }}">
         <div class="form-body">
             <div class="row">
+{{--                <div class="col-12">--}}
+{{--                    <div class="form-group">--}}
+{{--                        <label><span class="danger">*</span> 漫画分类</label>--}}
+{{--                        <ul class="list-unstyled mb-0">--}}
+{{--                            @foreach($tags as $tag)--}}
+{{--                                <li class="d-inline-block mr-2 mb-1 checkbox">--}}
+{{--                                    <input type="checkbox" class="checkbox-input" id="tag-{{ $tag->id }}" name="tag[]" value="{{ $tag->name }}">--}}
+{{--                                    <label for="tag-{{ $tag->id }}">{{ $tag->name }}</label>--}}
+{{--                                </li>--}}
+{{--                            @endforeach--}}
+{{--                        </ul>--}}
+{{--                    </div>--}}
+{{--                </div>--}}
                 <div class="col-12">
                     <div class="form-group">
-                        <label><span class="danger">*</span> 漫画分类</label>
-                        <ul class="list-unstyled mb-0">
-                            @foreach($tags as $tag)
-                                <li class="d-inline-block mr-2 mb-1 checkbox">
-                                    <input type="checkbox" class="checkbox-input" id="tag-{{ $tag->id }}" name="tag[]" value="{{ $tag->name }}">
-                                    <label for="tag-{{ $tag->id }}">{{ $tag->name }}</label>
-                                </li>
-                            @endforeach
-                        </ul>
+                        <label>标签分类</label>
+                        <div class="controls">
+                            <select id="tags-selector" class="form-control" name="tag[]" multiple="multiple">
+                                @foreach($tags as $tag)
+                                    <option value="{{ $tag->name }}">{{ $tag->name }}</option>
+                                @endforeach
+                            </select>
+                        </div>
                     </div>
                 </div>
                 <div class="col-8">
@@ -115,12 +130,35 @@
 
 {{-- vendor scripts --}}
 @section('vendor-scripts')
+    <script src="{{ asset('vendors/js/bootstrap-multiselect/bootstrap-multiselect.js') }}"></script>
 @endsection
 
 {{-- page scripts --}}
 @section('page-scripts')
     <script>
 		$(document).ready(function () {
+            $('#tags-selector').multiselect({
+                buttonWidth: '100%',
+                buttonTextAlignment: 'left',
+                buttonText: function(options, select) {
+                    if (options.length === 0) {
+                        return '请选择标签';
+                    }
+                    else {
+                        var labels = [];
+                        options.each(function() {
+                            if ($(this).attr('label') !== undefined) {
+                                labels.push($(this).attr('label'));
+                            }
+                            else {
+                                labels.push($(this).html());
+                            }
+                        });
+                        return labels.join(', ') + '';
+                    }
+                }
+            });
+
 			$('#form').submit(function (e) {
 				e.preventDefault();
                 $.ajax({
