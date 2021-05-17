@@ -14,7 +14,7 @@ class ConfigController extends Controller
     public function __construct()
     {
         $this->tags = [
-            'base' => '基础设置',
+            'web' => '基础设置',
             'service' => '客服配置',
             'payment' => '支付配置',
         ];
