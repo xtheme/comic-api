@@ -4,28 +4,44 @@ namespace App\Models;
 
 use App\Traits\CacheTrait;
 use Conner\Tagging\Taggable;
-use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Book extends BaseModel
 {
-    use CacheTrait, Taggable, SoftDeletes;
+    use CacheTrait, Taggable;
+
+    protected $table = 'book';
+
+    const CREATED_AT = 'book_addtime';
+    const UPDATED_AT = 'book_updatetime';
+
+    /**
+     * todo 可刪除字段
+     * 关注章节 gzzj
+     * 今日推荐 daytj
+     * 派单指数 zhishu
+     * book_thumb_banner
+     * book_thumb2_banner
+     * cate_id
+     */
 
     protected $fillable = [
-        'title',
-        'author',
-        'description',
-        'end',
-        'vertical_cover',
-        'horizontal_cover',
-        'type',
-        'status',
-        'charge',
-        'review',
+        'book_name',
+        'cartoon_type',
+        'book_desc',
+        'pen_name',
+        'view',
+        'collect',
+        'book_thumb',
+        'book_thumb2',
+        'book_isend',
         'operating',
     ];
 
     protected $hidden = [
-
+        'cate_id',  // getCategoriesAttr
+        'operating', // 決定圖片路徑
+        'book_thumb', // getVerticalThumbAttr
+        'book_thumb2', // getHorizontalThumbAttr
     ];
 
     public function chapters()

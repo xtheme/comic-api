@@ -4,15 +4,22 @@ namespace App\Models;
 
 class BookChapter extends BaseModel
 {
-    protected $table = 'chapterlist';
-
     protected $perPage = 10;
 
-    const CREATED_AT = 'addtime';
-    const UPDATED_AT = 'updatetime';
+    protected $fillable = [
+        'book_id',
+        'episode',
+        'title',
+        'content',
+        'json_images',
+        'status',
+        'charge',
+        'review',
+        'operating',
+    ];
 
     protected $casts = [
-        'json_images' => 'array',
+        // 'json_images' => 'array',
     ];
 
     public function book()
