@@ -2,13 +2,12 @@
 
 namespace App\Console\Commands\Refactor;
 
-use App\Models\User;
 use Illuminate\Console\Command;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 
-class Users extends Command
+class UserRefactor extends Command
 {
     /**
      * The name and signature of the console command.

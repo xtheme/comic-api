@@ -4,11 +4,10 @@ namespace App\Console\Commands\Refactor;
 
 use App\Models\Book;
 use Conner\Tagging\Model\Tag;
-use Conner\Tagging\Model\TagGroup;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\DB;
 
-class Category extends Command
+class CategoryRefactor extends Command
 {
     /**
      * The name and signature of the console command.
@@ -42,12 +41,6 @@ class Category extends Command
     public function handle()
     {
         if ($this->confirm('请确认是否运行重构脚本? 执行且请先备份数据表!')) {
-            // 標籤分組
-            // $groups = ['category', 'section'];
-            //
-            // foreach ($groups as $group) {
-            //     TagGroup::create(['name' => $group]);
-            // }
 
             $categories = DB::table('category')->where('status', 1)->get();
 
