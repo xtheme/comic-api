@@ -113,11 +113,11 @@ class VideoSeriesController extends Controller
                 break;
             case 'charge':
                 $text = '观看资格变更为收费';
-                $data = ['vip' => 1];
+                $data = ['charge' => 1];
                 break;
             case 'free':
                 $text = '观看资格变更为免费';
-                $data = ['vip' => -1];
+                $data = ['charge' => -1];
                 break;
             default:
                 return Response::jsonError(__('response.error.unknown'));

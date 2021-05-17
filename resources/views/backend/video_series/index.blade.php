@@ -16,10 +16,10 @@
                 <div class="form-body">
                     <div class="d-flex align-items-center">
                         <div class="form-group mr-1">
-                            <select class="form-control" name="vip">
+                            <select class="form-control" name="charge">
                                 <option value="">观看资格</option>
                                 @foreach ($charge_options as $key => $val)
-                                    <option value="{{ $key }}" @if(request()->get('vip') == $key){{'selected'}}@endif>{{ $val }}</option>
+                                    <option value="{{ $key }}" @if(request()->get('charge') == $key){{'selected'}}@endif>{{ $val }}</option>
                                 @endforeach
                             </select>
                         </div>
@@ -113,10 +113,10 @@
 {{--                    <td>{{ $series->cdn->domain . $series->link }}</td>--}}
                     <td>{{ clearLength($series->length) }}</td>
                     <td>
-                        @if($series->vip == 1)
-                            <a class="badge badge-pill badge-light-primary" data-modal-confirm href="{{ route('backend.video_series.batch', ['action'=>'free', 'ids' => $series->id]) }}" title="观看资格调整为免费">VIP</a>
+                        @if($series->charge == 1)
+                            <a class="badge badge-pill badge-light-primary" data-modal-confirm href="{{ route('backend.video_series.batch', ['action'=>'free', 'ids' => $series->id]) }}" title="观看资格调整为免费">付费</a>
                         @else
-                            <a class="badge badge-pill badge-light-secondary" data-modal-confirm href="{{ route('backend.video_series.batch', ['action'=>'charge', 'ids' => $series->id]) }}" title="观看资格调整为 VIP">免费</a>
+                            <a class="badge badge-pill badge-light-secondary" data-modal-confirm href="{{ route('backend.video_series.batch', ['action'=>'charge', 'ids' => $series->id]) }}" title="观看资格调整为付费">免费</a>
                         @endif
                     </td>
                     <td>

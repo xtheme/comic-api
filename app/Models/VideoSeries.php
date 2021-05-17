@@ -8,8 +8,8 @@ class VideoSeries extends BaseModel
         'video_id',
         'episode',
         'title',
-        'vip',
         'status',
+        'charge',
         'video_domain_id',
         'link',
         'length',
@@ -28,7 +28,7 @@ class VideoSeries extends BaseModel
     ];
 
     protected $casts = [
-        'vip' => 'boolean',
+        'charge' => 'boolean',
     ];
 
     public function video()

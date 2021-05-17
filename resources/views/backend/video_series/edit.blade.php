@@ -81,16 +81,16 @@
                                 <li class="d-inline-block mr-2 mb-1">
                                     <fieldset>
                                         <div class="radio">
-                                            <input type="radio" name="vip" id="series-free-1" value="-1" @if($series->vip == -1){{'checked'}}@endif>
-                                            <label for="series-free-1">免费</label>
+                                            <input type="radio" name="charge" id="series-charge-1" value="-1" @if($series->charge == -1){{'checked'}}@endif>
+                                            <label for="series-charge-1">免费</label>
                                         </div>
                                     </fieldset>
                                 </li>
                                 <li class="d-inline-block mr-2 mb-1">
                                     <fieldset>
                                         <div class="radio">
-                                            <input type="radio" name="vip" id="series-free-2" value="1" @if($series->vip == 1){{'checked'}}@endif>
-                                            <label for="series-free-2">VIP</label>
+                                            <input type="radio" name="charge" id="series-charge-2" value="1" @if($series->charge == 1){{'checked'}}@endif>
+                                            <label for="series-charge-2">付费</label>
                                         </div>
                                     </fieldset>
                                 </li>
