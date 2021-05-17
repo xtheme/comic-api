@@ -2,21 +2,17 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Repositories\BlockRepository;
-use App\Repositories\VideoRepository;
+use App\Repositories\Contracts\BlockRepositoryInterface;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Response;
 
 class TopicController extends BaseController
 {
-    protected $blockRepository;
+    protected $repository;
 
-    // protected $videoRepository;
-
-    public function __construct()
+    public function __construct(BlockRepositoryInterface $repository)
     {
-        $this->blockRepository = app(BlockRepository::class);
-        // $this->videoRepository = app(VideoRepository::class);
+        $this->repository = $repository;
     }
 
     public function list(Request $request, $causer)
@@ -26,7 +22,7 @@ class TopicController extends BaseController
             'status' => 1,
         ]);
 
-        $topics = $this->blockRepository->filter($request)->get();
+        $topics = $this->repository->filter($request)->get();
 
         $data = $topics->map(function ($topic) {
             return [
@@ -45,7 +41,7 @@ class TopicController extends BaseController
 
     public function more($topic_id, $page = 1)
     {
-        $topic = $this->blockRepository->find($topic_id);
+        $topic = $this->repository->find($topic_id);
 
         $per_page = 10;
 
