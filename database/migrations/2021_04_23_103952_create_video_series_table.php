@@ -24,6 +24,10 @@ class CreateVideoSeriesTable extends Migration
             $table->string('link')->comment('视频链结');
             $table->string('length')->comment('视频长度');
             $table->timestamps();
+
+            $table->index('video_id');
+            $table->index('status');
+            $table->index('charge');
         });
     }
 

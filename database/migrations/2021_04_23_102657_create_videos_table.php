@@ -22,6 +22,8 @@ class CreateVideosTable extends Migration
             $table->tinyInteger('ribbon')->unsigned()->default(0)->comment('角标: 0=无, 1=限时免费, 2=会员抢先');
             $table->boolean('status')->default(0)->comment('状态: 1=上架, -1=下架');
             $table->timestamps();
+
+            $table->index('status');
         });
     }
 
