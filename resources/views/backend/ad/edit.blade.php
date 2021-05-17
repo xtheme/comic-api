@@ -2,7 +2,6 @@
 
 {{-- page style --}}
 @section('page-styles')
-    <link rel="stylesheet" type="text/css" href="{{ asset('css/plugins/forms/validation/form-validation.css') }}">
 @endsection
 
 @section('content')
@@ -12,7 +11,7 @@
             <div class="row">
                 <div class="col-6">
                     <div class="form-group">
-                        <label for="input-name"><span class="danger">*</span>广告位</label>
+                        <label><span class="danger">*</span> 广告位</label>
                         <div class="controls">
                             <select id="select-type" class="form-control" name="space_id">
                                 @foreach($ad_spaces as $key => $item)
@@ -24,92 +23,74 @@
                 </div>
                 <div class="col-6">
                     <div class="form-group">
-                        <label for="input-name"><span class="danger">*</span>广告名称</label>
+                        <label><span class="danger">*</span> 广告名称</label>
                         <div class="controls">
-                            <input type="text" id="input-name" class="form-control" name="name"
-                                   placeholder="请输入广告名称"
-                                   required
-                                   data-validation-required-message="广告名称"
-                                   value="{{$data->name}}"
-                            >
+                            <input type="text" class="form-control" name="name" placeholder="请输入广告名称" value="{{$data->name}}">
                         </div>
                     </div>
                 </div>
                 <div class="col-6">
                     <div class="form-group">
-                        <label for="input-name"><span class="danger">*</span>排序</label>
+                        <label><span class="danger">*</span> 排序</label>
                         <div class="controls">
-                            <input type="text" id="input-name" class="form-control" name="sort"
-                                   placeholder="请输入排序顺序"
-                                   required
-                                   data-validation-required-message="排序顺序"
-                                   value="{{$data->sort}}"
-                            >
+                            <input type="text" class="form-control" name="sort" placeholder="数字由大到小排序" value="{{$data->sort}}">
                         </div>
                     </div>
                 </div>
                 <div class="col-6">
                     <div class="form-group">
-                        <label for="select-platform"><span class="danger">*</span>所属平台</label>
+                        <label><span class="danger">*</span> 所属平台</label>
                         <div class="controls">
-                            <select id="select-platform" class="form-control" name="platform">
-                                <option value="1" @if($data->platform == 1) selected @endif>安卓</option>
-                                <option value="2" @if($data->platform == 2) selected @endif>IOS</option>
+                            <select class="form-control" name="platform">
+                                <option value="1" @if($data->platform == 1){{'selected'}}@endif>安卓</option>
+                                <option value="2" @if($data->platform == 2){{'selected'}}@endif>IOS</option>
                             </select>
                         </div>
                     </div>
                 </div>
                 <div class="col-6">
                     <div class="form-group">
-                        <label for="jump-type"><span class="danger">*</span>跳转类型</label>
+                        <label><span class="danger">*</span> 跳转类型</label>
                         <div class="controls">
                             <select id="jump-type" class="form-control" name="jump_type">
                                 <option value="">请选择跳转类型</option>
                                 @foreach ($jump_type as $key => $val)
-                                    <option value="{{ $key }}" @if($data->jump_type == $key) selected @endif>{{ $val }}</option>
+                                    <option value="{{ $key }}" @if($data->jump_type == $key){{'selected'}}@endif>{{ $val }}</option>
                                 @endforeach
                             </select>
                         </div>
                     </div>
                 </div>
-                <div class="url col-6 @if($data->jump_type == 5) hidden @endif">
+                <div class="col-6">
                     <div class="form-group">
-                        <label for="input-url">广告地址</label>
+                        <label>广告地址</label>
                         <div class="controls">
-                            <input type="text" id="input-url" class="form-control" name="url"
-                                   placeholder="请输入网站地址"
-                                   data-validation-required-message="请输入网站地址"
-                                   value="{{$data->url}}"
-                            >
+                            <input type="text" class="form-control" name="url" value="{{$data->url}}" @if($data->jump_type == 5){{'disabled'}}@endif>
                         </div>
                     </div>
                 </div>
                 <div class="col-6">
                     <div class="form-group">
-                        <label for="input-times">显示时间</label>
+                        <label>显示时间</label>
                         <div class="controls">
-                            <input type="text" id="input-times" class="form-control" name="show_time"
-                                   placeholder="秒"
-                                   data-validation-required-message="秒"
-                                   value="{{$data->show_time}}"
-                            >
+                            <input type="text" class="form-control" name="show_time" placeholder="秒" value="{{$data->show_time}}">
                         </div>
                     </div>
                 </div>
                 <div class="col-6">
                     <div class="form-group">
-                        <label for="input-name">状态</label>
+                        <label>状态</label>
                         <div class="controls">
-                            <select id="select-platform" class="form-control" name="status">
-                                <option value="1" @if($data->status == 1) selected @endif>上架</option>
-                                <option value="-1" @if($data->status == -1) selected @endif>下架</option>
+                            <select class="form-control" name="status">
+                                <option value="1" @if($data->status == 1){{'selected'}}@endif>上架</option>
+                                <option value="-1" @if($data->status == -1){{'selected'}}@endif>下架</option>
                             </select>
                         </div>
                     </div>
                 </div>
                 <div class="col-12">
                     <div class="form-group">
-                        <label for="input-username"><span class="danger">*</span>广告图</label>
+                        <label for="input-username"><span class="danger">*</span> 广告图</label>
                         <div class="input-group">
                             <div class="custom-file">
                                 <input type="hidden" name="image" value="{{$data->image}}">
@@ -119,7 +100,7 @@
                         </div>
                     </div>
                     <div class="input-group mb-1">
-                        <img src="{{ $data->image_thumb }}" width="160px">
+                        <img src="{{ $data->image_thumb }}" alt="" width="160px">
                     </div>
                 </div>
                 <div class="col-12 justify-content-end">
@@ -134,19 +115,18 @@
 
 {{-- page scripts --}}
 @section('page-scripts')
-    <script src="{{ asset('js/scripts/forms/validation/form-validation.js') }}"></script>
     <script>
 		$(document).ready(function () {
 
             $('#jump-type').on('change', function () {
-                if ($(this).val() == 5){
-                    $('.url').addClass('hidden');
-                    return;
+                const $url = $('input[name="url"]');
+                console.log($(this).val());
+                if ($(this).val() == 5) {
+                    $url.attr('disabled', true);
+                } else {
+                    $url.attr('disabled', false);
                 }
-
-                $('.url').removeClass('hidden');
             });
-
 
             $('#form').submit(function (e) {
                 e.preventDefault();

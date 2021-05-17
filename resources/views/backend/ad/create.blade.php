@@ -2,18 +2,17 @@
 
 {{-- page style --}}
 @section('page-styles')
-    <link rel="stylesheet" type="text/css" href="{{ asset('css/plugins/forms/validation/form-validation.css') }}">
 @endsection
 
 @section('content')
-    <form id="form" class="form" method="post"  enctype="multipart/form-data" action="{{ route('backend.ad.store') }}">
+    <form id="form" class="form" method="post" enctype="multipart/form-data" action="{{ route('backend.ad.store') }}">
         <div class="form-body">
             <div class="row">
                 <div class="col-6">
                     <div class="form-group">
-                        <label for="input-name"><span class="danger">*</span>广告位</label>
+                        <label><span class="danger">*</span> 广告位</label>
                         <div class="controls">
-                            <select id="select-type" class="form-control" name="space_id">
+                            <select class="form-control" name="space_id">
                                 @foreach($ad_spaces as $key => $item)
                                     <option value="{{$item->id}}" >{{$item->name}}</option>
                                 @endforeach
@@ -23,31 +22,25 @@
                 </div>
                 <div class="col-6">
                     <div class="form-group">
-                        <label for="input-name"><span class="danger">*</span>广告名称</label>
+                        <label><span class="danger">*</span> 广告名称</label>
                         <div class="controls">
-                            <input type="text" id="input-name" class="form-control" name="name"
-                                   placeholder="请输入广告名称"
-                                   required
-                                   data-validation-required-message="广告名称">
+                            <input type="text" class="form-control" name="name" placeholder="请输入广告名称">
                         </div>
                     </div>
                 </div>
                 <div class="col-6">
                     <div class="form-group">
-                        <label for="input-name"><span class="danger">*</span>排序</label>
+                        <label><span class="danger">*</span> 排序</label>
                         <div class="controls">
-                            <input type="text" id="input-name" class="form-control" name="sort"
-                                   placeholder="请输入排序顺序"
-                                   required
-                                   data-validation-required-message="排序顺序">
+                            <input type="text" class="form-control" name="sort" placeholder="数字由大到小排序">
                         </div>
                     </div>
                 </div>
                 <div class="col-6">
                     <div class="form-group">
-                        <label for="select-platform"><span class="danger">*</span>所属平台</label>
+                        <label><span class="danger">*</span> 所属平台</label>
                         <div class="controls">
-                            <select id="select-platform" class="form-control" name="platform">
+                            <select class="form-control" name="platform">
                                 <option value="1">安卓</option>
                                 <option value="2">IOS</option>
                             </select>
@@ -56,7 +49,7 @@
                 </div>
                 <div class="col-6">
                     <div class="form-group">
-                        <label for="jump-type"><span class="danger">*</span>跳转类型</label>
+                        <label><span class="danger">*</span> 跳转类型</label>
                         <div class="controls">
                             <select id="jump-type" class="form-control" name="jump_type">
                                 <option value="">请选择跳转类型</option>
@@ -67,33 +60,27 @@
                         </div>
                     </div>
                 </div>
-                <div class="url col-6">
+                <div class="col-6">
                     <div class="form-group">
-                        <label for="input-url">广告地址</label>
+                        <label>广告地址</label>
                         <div class="controls">
-                            <input type="text" id="input-url" class="form-control" name="url"
-                                   placeholder="请输入网站地址"
-                                   data-validation-required-message="请输入网站地址">
+                            <input type="text" class="form-control" name="url" placeholder="请输入网址">
                         </div>
                     </div>
                 </div>
                 <div class="col-6">
                     <div class="form-group">
-                        <label for="input-times">显示时间</label>
+                        <label>显示时间</label>
                         <div class="controls">
-                            <input type="text" id="input-times" class="form-control" name="show_time"
-                                   placeholder="秒"
-                                   data-validation-required-message="秒"
-                                   value="0"
-                            >
+                            <input type="text" class="form-control" name="show_time" placeholder="秒" value="0">
                         </div>
                     </div>
                 </div>
                 <div class="col-6">
                     <div class="form-group">
-                        <label for="input-name">状态</label>
+                        <label>状态</label>
                         <div class="controls">
-                            <select id="select-platform" class="form-control" name="status">
+                            <select class="form-control" name="status">
                                 <option value="1">上架</option>
                                 <option value="-1">下架</option>
                             </select>
@@ -102,7 +89,7 @@
                 </div>
                 <div class="col-12">
                     <div class="form-group">
-                        <label for="input-username"><span class="danger">*</span>广告图</label>
+                        <label><span class="danger">*</span> 广告图</label>
                         <div class="input-group">
                             <div class="custom-file">
                                 <input type="file" class="custom-file-input" id="vertical-thumb" name="image">
@@ -130,14 +117,14 @@
 		$(document).ready(function () {
 
             $('#jump-type').on('change', function () {
-                if ($(this).val() == 5){
-                    $('.url').addClass('hidden');
-                    return;
+                const $url = $('input[name="url"]');
+                console.log($(this).val());
+                if ($(this).val() == 5) {
+                    $url.attr('disabled', true);
+                } else {
+                    $url.attr('disabled', false);
                 }
-
-                $('.url').removeClass('hidden');
             });
-
 
 			$('#form').submit(function (e) {
                 e.preventDefault();

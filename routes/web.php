@@ -211,14 +211,14 @@ Route::middleware(['auth'])->prefix('backend')->as('backend.')->group(function (
         Route::put('editable/{field}', [VideoDomainController::class, 'editable'])->name('editable');
     });
 
-    //广告位
+    // 广告位
     Route::prefix('ad_space')->as('ad_space.')->group(function () {
         Route::get('/', [AdSpaceController::class , 'index'])->name('index');
         Route::get('edit/{id}', [AdSpaceController::class , 'edit'])->name('edit');
         Route::put('update/{id}', [AdSpaceController::class , 'update'])->name('update');
     });
 
-    //广告
+    // 广告
     Route::prefix('ad')->as('ad.')->group(function () {
         Route::get('/', [AdController::class , 'index'])->name('index');
         Route::get('create', [AdController::class , 'create'])->name('create');
@@ -228,7 +228,6 @@ Route::middleware(['auth'])->prefix('backend')->as('backend.')->group(function (
         Route::delete('destroy/{id}', [AdController::class , 'destroy'])->name('destroy');
         Route::put('sort', [AdController::class , 'sort'])->name('sort');
         Route::put('batch/{action?}', [AdController::class, 'batch'])->name('batch'); // 批量操作
-        Route::post('batch/destroy/{ids?}', [AdController::class, 'batchDestroy'])->name('batch.destroy');
     });
 
     // 首頁模塊

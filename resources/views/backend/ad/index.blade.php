@@ -10,17 +10,31 @@
 
 @section('content')
     <section id="config-list">
-
         <div class="mb-1">
-            <a href="{{ route('backend.ad.batch') }}" data-action="enable" title="上架" class="btn btn-success batch-action" role="button" aria-pressed="true">批量上架</a>
-            <a href="{{ route('backend.ad.batch') }}" data-action="disable" title="下架" class="btn btn-light batch-action" role="button" aria-pressed="true">批量下架</a>
-            <a href="{{ route('backend.ad.batch.destroy') }}" data-batch data-type="post"  title="刪除" class="btn btn-danger" role="button" aria-pressed="true">批量刪除</a>
             <a href=" {{ route('backend.ad.create') }}" data-modal data-size="lg" title="添加广告" class="btn btn-primary">添加广告</a>
         </div>
         <div class="card">
             <div class="card-header">
                 <div class="float-left">
                     <h4 class="card-title">@yield('title')</h4>
+                </div>
+                <div class="float-right d-flex flex-wrap">
+                    <form id="batch-action" class="form form-vertical" method="get" action="{{ route('backend.ad.batch') }}" novalidate>
+                        <div class="form-body">
+                            <div class="d-flex align-items-center">
+                                <div class="form-group mr-1">
+                                    <select class="form-control" name="action">
+                                        <option value="enable">上架</option>
+                                        <option value="disable">下架</option>
+                                        <option value="destroy">刪除</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <button type="submit" class="btn btn-primary">批量操作</button>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
                 </div>
             </div>
             <div class="card-content">
@@ -69,7 +83,7 @@
                                             <i class="bx bxl-apple font-medium-2"></i>
                                         @endif
                                     </td>
-                                    <td><img src="{{ $item->image_thumb }}" class="cursor-pointer" width="50px" data-lightbox title="点击查看大图"></td>
+                                    <td><img src="{{ $item->image_thumb }}" class="cursor-pointer" width="50px" data-lightbox alt="点击查看大图"></td>
                                     <td>{{ $item->url }}</td>
                                     <td>{{ $item->show_time }}</td>
                                     <td>@if($item->updated_at){{ $item->updated_at->diffForHumans()  }}@endif</td>
@@ -114,11 +128,9 @@
             <div class="row">
                 <div class="col-12">
                     <div class="form-group">
-                        <label for="input-id">广告名称</label>
+                        <label>广告名称</label>
                         <div class="controls">
-                            <input type="text" id="input-id" class="form-control"
-                                   name="name" value="{{ request()->get('name') }}"
-                                   placeholder="">
+                            <input type="text" class="form-control" name="name" value="{{ request()->get('name') }}" placeholder="">
                         </div>
                     </div>
                 </div>
@@ -129,7 +141,7 @@
                             <select id="select-type" class="form-control" name="space_id">
                                 <option value="" >全部</option>
                                 @foreach($ad_spaces as $key => $item)
-                                    <option value="{{$item->id}}" @if(request()->get('space_id') == $item->id) selected @endif >{{$item->name}}</option>
+                                    <option value="{{$item->id}}" @if(request()->get('space_id') == $item->id){{'selected'}}@endif>{{$item->name}}</option>
                                 @endforeach
                             </select>
                         </div>
@@ -142,7 +154,7 @@
                             <select id="jump-type" class="form-control" name="jump_type">
                                 <option value="">全部</option>
                                 @foreach ($jump_type as $key => $val)
-                                    <option value="{{ $key }}" @if(request()->get('jump_type') == $key) selected @endif >{{ $val }}</option>
+                                    <option value="{{ $key }}" @if(request()->get('jump_type') == $key){{'selected'}}@endif>{{ $val }}</option>
                                 @endforeach
                             </select>
                         </div>
@@ -154,8 +166,8 @@
                         <div class="controls">
                             <select id="select-platform" class="form-control" name="platform">
                                 <option value="">全部</option>
-                                <option value="1" @if(request()->get('platform') == 1) selected @endif>安卓</option>
-                                <option value="2" @if(request()->get('platform') == 2) selected @endif>IOS</option>
+                                <option value="1" @if(request()->get('platform') == 1){{'selected'}}@endif>安卓</option>
+                                <option value="2" @if(request()->get('platform') == 2){{'selected'}}@endif>IOS</option>
                             </select>
                         </div>
                     </div>
@@ -165,8 +177,8 @@
                         <label for="select-status">状态</label>
                         <select id="jump-type" class="form-control" name="status">
                             <option value="">全部</option>
-                            <option value="1" @if(request()->get('status') == 1) selected @endif>开启</option>
-                            <option value="-1" @if(request()->get('status') == -1) selected @endif>关闭</option>
+                            <option value="1" @if(request()->get('status') == 1){{'selected'}}@endif>开启</option>
+                            <option value="-1" @if(request()->get('status') == -1){{'selected'}}@endif>关闭</option>
                         </select>
                     </div>
                 </div>
@@ -214,7 +226,6 @@
                 }
             });
 
-
             $('[data-lightbox]').on('click', function (e) {
                 e.preventDefault();
                 let $this = $(this);
@@ -226,13 +237,12 @@
                 });
             });
 
-
-            $('.batch-action').on('click', function (e) {
+            $('#batch-action').submit(function (e) {
                 e.preventDefault();
 
                 let $this = $(this);
                 let ids   = $.checkedIds();
-                let url   = $this.attr('href') + '/' + $this.data('action');
+                let url   = $this.attr('action') + '/' + $this.find('select[name="action"]').val();
 
                 if (!ids) {
                     parent.$.toast({
@@ -251,10 +261,23 @@
                             data: {'ids' : ids},
                             debug   : true,
                             callback: function (res) {
-                                parent.$.reloadIFrame();
+                                parent.$.reloadIFrame({
+                                    title: '提交成功',
+                                    message: '请稍后数据刷新'
+                                });
                             }
                         });
                     }
+                });
+            });
+
+            $('#search-form').submit(function(e) {
+                e.preventDefault();
+
+                let url = $(this).attr('action') + '?' + $(this).serialize();
+                console.log(url);
+                parent.$.reloadIFrame({
+                    reloadUrl: url
                 });
             });
         });

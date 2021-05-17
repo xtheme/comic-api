@@ -127,24 +127,20 @@ class AdController extends Controller
             case 'enable':
                 $text = '上架';
                 $data = ['status' => 1];
+                Ad::whereIn('id', $ids)->update($data);
                 break;
             case 'disable':
                 $text = '下架';
                 $data = ['status' => -1];
+                Ad::whereIn('id', $ids)->update($data);
+                break;
+            case 'destroy':
+                $text = '删除';
+                Ad::destroy($ids);
                 break;
             default:
         }
 
-        Ad::whereIn('id', $ids)->update($data);
-
         return Response::jsonSuccess($text . '成功！');
-    }
-
-    // todo 应该合并到 batch()
-    public function batchDestroy(Request $request, $ids)
-    {
-        $data = explode(',', $ids);
-        Ad::destroy($data);
-        return Response::jsonSuccess('删除成功！');
     }
 }
