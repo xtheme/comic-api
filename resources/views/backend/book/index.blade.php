@@ -27,11 +27,11 @@
                             <div class="d-flex align-items-center">
                                 <div class="form-group mr-1">
                                     <select class="form-control" name="action">
-                                        <option value="review-0">待审核</option>
-                                        <option value="review-1">审核成功</option>
-                                        <option value="review-2">审核未通过</option>
-                                        <option value="review-3">屏蔽</option>
-                                        <option value="review-4">未审核</option>
+                                        <option value="review-1">待审核</option>
+                                        <option value="review-2">审核成功</option>
+                                        <option value="review-3">审核未通过</option>
+                                        <option value="review-4">屏蔽</option>
+                                        <option value="review-5">未审核</option>
                                         <option value="charge">第10章节后收费</option>
                                         <option value="free">所有章节免费</option>
                                         <option value="destroy">删除</option>
@@ -63,15 +63,15 @@
                                 <th>封面图</th>
                                 <th>作者</th>
                                 <th>类型</th>
+                                <th>是否收费</th>
+                                <th>章节数</th>
                                 <th>发布时间</th>
+                                <th>连载状态</th>
                                 <th>采集</th>
                                 <th>阅读数</th>
                                 <th>收藏数</th>
-                                <th>章节数</th>
-                                <th>是否收费</th>
-                                <th>连载状态</th>
                                 <th>审核状态</th>
-                                <th>删除状态</th>
+                                <th>上架状态</th>
                                 <th>操作</th>
                             </tr>
                             </thead>
@@ -92,7 +92,7 @@
                                         @if(!empty($book->tagged))
                                         <div class="d-flex align-content-center flex-wrap" style="margin-top: 5px;">
                                             @foreach($book->tagged as $tagged)
-                                                <span class="badge badge-light-primary" style="margin-right: 3px; margin-bottom: 3px;">{{ $tagged->tag_name }}</span>
+                                                <span class="badge badge-pill badge-light-primary" style="margin-right: 3px; margin-bottom: 3px;">{{ $tagged->tag_name }}</span>
                                             @endforeach
                                         </div>
                                         @endif
@@ -102,11 +102,6 @@
                                     </td>
                                     <td>{{ $book->author }}</td>
                                     <td>{{ $book->type }}</td>
-                                    <td>{{ $book->release_at->format('Y-m-d') }}</td>
-                                    <td>@if($book->operating == 1){{'人工'}}@else{{'自动'}}@endif</td>
-                                    <td>{{ $book->visit_histories_count }}</td>
-                                    <td>{{ $book->collect_histories_count }}</td>
-                                    <td>{{ $book->chapters_count }}</td>
                                     <td>
                                         @if($book->charge_chapters_count == 0)
                                             <span class="badge badge-pill badge-light-primary">免费</span>
@@ -114,9 +109,14 @@
                                             <span class="badge badge-pill badge-light-danger">收费</span>
                                         @endif
                                     </td>
+                                    <td>{{ $book->chapters_count }}</td>
+                                    <td>{{ $book->release_at }}</td>
                                     <td>
                                         <span class="badge badge-pill badge-light-{{ $book->release_status_style }}">{{ $book->release_status }}</span>
                                     </td>
+                                    <td>@if($book->operating == 1){{'人工'}}@else{{'自动'}}@endif</td>
+                                    <td>{{ $book->visit_histories_count }}</td>
+                                    <td>{{ $book->collect_histories_count }}</td>
                                     <td>
                                         @switch($book->review )
                                             @case(1)
@@ -148,7 +148,7 @@
                                             <span class="bx bx-dots-vertical-rounded font-medium-3 dropdown-toggle nav-hide-arrow cursor-pointer"
                                                   id="dropdownMenuButton{{ $book->id }}" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></span>
                                             <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuButton{{ $book->id }}">
-                                                <a class="dropdown-item" data-modal href="" title="推荐设置"><i class="bx bxs-bookmark-star mr-1"></i>推荐设置</a>
+{{--                                                <a class="dropdown-item" data-modal href="" title="推荐设置"><i class="bx bxs-bookmark-star mr-1"></i>推荐设置</a>--}}
                                                 <a class="dropdown-item" data-modal data-size="full" href="{{ route('backend.book_chapter.index', $book->id) }}" title="章节列表"><i class="bx bx-list-ol mr-1"></i>章节列表</a>
                                                 <a class="dropdown-item" data-modal href="{{ route('backend.book.edit', $book->id) }}" title="编辑漫画"><i class="bx bx-edit-alt mr-1"></i>编辑漫画</a>
                                                 <a class="dropdown-item" data-confirm href="" title="删除漫画"><i class="bx bx-trash mr-1"></i>删除漫画</a>

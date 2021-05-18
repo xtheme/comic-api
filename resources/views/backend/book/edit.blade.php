@@ -8,7 +8,8 @@
 @endsection
 
 @section('content')
-    <form id="form" class="form" method="post" action="{{ route('backend.book.store') }}">
+    <form id="form" class="form" method="post" action="{{ route('backend.book.update', $book->id) }}">
+        @method('PUT')
         <div class="form-body">
             <div class="row">
                 <div class="col-12">
@@ -17,7 +18,7 @@
                         <div class="controls">
                             <select id="tags-selector" class="form-control" name="tag[]" multiple="multiple">
                                 @foreach($tags as $tag)
-                                    <option value="{{ $tag->name }}">{{ $tag->name }}</option>
+                                    <option value="{{ $tag->name }} "@if(in_array($tag->name, $book->tagged_tags)){{'selected'}}@endif>{{ $tag->name }}</option>
                                 @endforeach
                             </select>
                         </div>
@@ -27,7 +28,7 @@
                     <div class="form-group">
                         <label><span class="danger">*</span> 漫画名称</label>
                         <div class="controls">
-                            <input type="text" class="form-control" name="title">
+                            <input type="text" class="form-control" name="title" value="{{ $book->title }}">
                         </div>
                     </div>
                 </div>
@@ -35,7 +36,7 @@
                     <div class="form-group">
                         <label><span class="danger">*</span> 作者</label>
                         <div class="controls">
-                            <input type="text" class="form-control" name="author" value="">
+                            <input type="text" class="form-control" name="author" value="{{ $book->author }}">
                         </div>
                     </div>
                 </div>
@@ -43,9 +44,9 @@
                     <div class="form-group">
                         <label>上架状态</label>
                         <div class="controls">
-                            <select class="form-control" id="select-status" name="status">
+                            <select class="form-control" name="status">
                                 @foreach ($status_options as $key => $val)
-                                    <option value="{{ $key }}">{{ $val }}</option>
+                                    <option value="{{ $key }}" @if($key == $book->status){{'selected'}}@endif>{{ $val }}</option>
                                 @endforeach
                             </select>
                         </div>
@@ -53,11 +54,11 @@
                 </div>
                 <div class="col-4">
                     <div class="form-group">
-                        <label for="input-email">漫画类型</label>
+                        <label>漫画类型</label>
                         <div class="controls">
                             <select class="form-control" name="type">
-                                <option value="1">日漫</option>
-                                <option value="2">韩漫</option>
+                                <option value="1" @if($key == $book->type){{'selected'}}@endif>日漫</option>
+                                <option value="2" @if($key == $book->type){{'selected'}}@endif>韩漫</option>
                             </select>
                         </div>
 {{--                        <div class="controls">--}}
@@ -65,7 +66,7 @@
 {{--                                <li class="d-inline-block mr-2 mb-1">--}}
 {{--                                    <fieldset>--}}
 {{--                                        <div class="radio">--}}
-{{--                                            <input type="radio" name="type" id="cartoon-type-1" value="1" checked>--}}
+{{--                                            <input type="radio" name="type" id="cartoon-type-1" value="1" @if(1 == $book->type){{'checked'}}@endif>--}}
 {{--                                            <label for="cartoon-type-1">日漫</label>--}}
 {{--                                        </div>--}}
 {{--                                    </fieldset>--}}
@@ -73,7 +74,7 @@
 {{--                                <li class="d-inline-block mr-2 mb-1">--}}
 {{--                                    <fieldset>--}}
 {{--                                        <div class="radio">--}}
-{{--                                            <input type="radio" name="type" id="cartoon-type-2" value="2">--}}
+{{--                                            <input type="radio" name="type" id="cartoon-type-2" value="2" @if(2 == $book->type){{'checked'}}@endif>--}}
 {{--                                            <label for="cartoon-type-2">韩漫</label>--}}
 {{--                                        </div>--}}
 {{--                                    </fieldset>--}}
@@ -87,8 +88,8 @@
                         <label for="input-email">连载状态</label>
                         <div class="controls">
                             <select class="form-control" name="end">
-                                <option value="-1">连载中</option>
-                                <option value="1">已完结</option>
+                                <option value="-1" @if($key == $book->end){{'selected'}}@endif>连载中</option>
+                                <option value="1" @if($key == $book->end){{'selected'}}@endif>已完结</option>
                             </select>
                         </div>
 {{--                        <div class="controls">--}}
@@ -96,7 +97,7 @@
 {{--                                <li class="d-inline-block mr-2 mb-1">--}}
 {{--                                    <fieldset>--}}
 {{--                                        <div class="radio">--}}
-{{--                                            <input type="radio" name="end" id="end-1" value="-1" checked>--}}
+{{--                                            <input type="radio" name="end" id="end-1" value="-1" @if(-1 == $book->end){{'checked'}}@endif>--}}
 {{--                                            <label for="end-1">连载中</label>--}}
 {{--                                        </div>--}}
 {{--                                    </fieldset>--}}
@@ -104,7 +105,7 @@
 {{--                                <li class="d-inline-block mr-2 mb-1">--}}
 {{--                                    <fieldset>--}}
 {{--                                        <div class="radio">--}}
-{{--                                            <input type="radio" name="type" id="end-2" value="1">--}}
+{{--                                            <input type="radio" name="type" id="end-2" value="1" @if(1 == $book->end){{'checked'}}@endif>--}}
 {{--                                            <label for="end-2">已完结</label>--}}
 {{--                                        </div>--}}
 {{--                                    </fieldset>--}}
@@ -116,7 +117,7 @@
                 <div class="col-12">
                     <div class="form-group">
                         <label><span class="danger">*</span> 内容简介</label>
-                        <textarea name="description" class="form-control" rows="3" placeholder="内容简介"></textarea>
+                        <textarea name="description" class="form-control" rows="3" placeholder="内容简介">{{ $book->description }}</textarea>
                     </div>
                 </div>
 {{--                <div class="col-4">--}}
@@ -139,7 +140,7 @@
                     <div class="form-group">
                         <label>竖向封面</label>
                         <div class="input-group">
-                            <input type="text" class="form-control image-path" name="vertical_cover" autocomplete="off">
+                            <input type="text" class="form-control image-path" name="vertical_cover" value="{{ $book->vertical_cover }}" autocomplete="off">
                             <input type="file" class="hidden-file-upload" data-path="book">
                             <div class="input-group-append" id="input-file-addon">
                                 <button class="btn btn-primary upload-image" type="button">上传</button>
@@ -157,7 +158,7 @@
                     <div class="form-group">
                         <label>横向封面</label>
                         <div class="input-group">
-                            <input type="text" class="form-control image-path" name="horizontal_cover" autocomplete="off">
+                            <input type="text" class="form-control image-path" name="horizontal_cover" value="{{ $book->horizontal_cover }}" autocomplete="off">
                             <input type="file" class="hidden-file-upload" data-path="book">
                             <div class="input-group-append" id="input-file-addon">
                                 <button class="btn btn-primary upload-image" type="button">上传</button>

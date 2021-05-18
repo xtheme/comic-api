@@ -10,7 +10,6 @@ use App\Repositories\Contracts\BookRepositoryInterface;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\Validator;
-use Upload;
 
 class BookController extends Controller
 {
@@ -37,8 +36,8 @@ class BookController extends Controller
 
     public function create()
     {
-
         $data = [
+            'status_options' => Options::STATUS_OPTIONS,
             'tags' => getAllTags(),
         ];
 
@@ -47,38 +46,38 @@ class BookController extends Controller
 
     public function store(BookRequest $request)
     {
-        // $validated = $request->validated();
+        $validated = $request->validated();
 
-        // Book::create($validated);
+        $book = $this->repository->create($validated);
 
-        // dd($validated);
-        // return Response::jsonSuccess('OK', Upload::Ok());
+        $book->tag($validated['tag']);
 
-        // Book::create($validated);
-
-        $response = Upload::unsync()->to('book', 12345)->store($request->file('book_thumb'));
-
-        if (!$response['success']) {
-            return Response::jsonError($response['message']);
-        }
-
-        return Response::jsonSuccess($response['message'], $response['path']);
+        return Response::jsonSuccess(__('response.create.success'));
     }
 
 
     public function edit($id)
     {
         $data = [
-            'book' => Book::findOrFail($id),
+            'status_options' => Options::STATUS_OPTIONS,
             'tags' => getAllTags(),
+            'book' => Book::findOrFail($id),
         ];
 
         return view('backend.book.edit')->with($data);
     }
 
-    public function update(Request $request, Book $book)
+    public function update(BookRequest $request, $id)
     {
-        //
+        $validated = $request->validated();
+
+        $this->repository->update($id, $validated);
+
+        $book = $this->repository->find($id);
+
+        $book->tag($validated['tag']);
+
+        return Response::jsonSuccess(__('response.update.success'));
     }
 
     /**

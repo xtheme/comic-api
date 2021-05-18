@@ -19,7 +19,6 @@ class Book extends BaseModel
         'horizontal_cover',
         'type',
         'status',
-        // 'charge',
         'review',
         'operating',
     ];
@@ -75,39 +74,43 @@ class Book extends BaseModel
 
     public function getReleaseAtAttribute()
     {
-        return $this->chapters->first()->created_at;
+        if ($this->chapters->first()) {
+            return $this->chapters->first()->created_at->format('Y-m-d');
+        }
+
+        return '';
     }
 
     /**
      * 直幅封面 / 竖向封面
      */
-    public function getVerticalCoverAttribute($value)
+    public function getVerticalThumbAttribute()
     {
         if ($this->operating == 1) {
             if (true == config('api.encrypt.image')) {
-                return webp(getOldConfig('web_config', 'img_sync_url_password_webp') . $value, 0);
+                return webp(getOldConfig('web_config', 'img_sync_url_password_webp') . $this->vertical_cover, 0);
             }
 
-            return getOldConfig('web_config', 'api_url') . $value;
+            return getOldConfig('web_config', 'api_url') . $this->vertical_cover;
         }
 
-        return getOldConfig('web_config', 'img_sync_url') . $value;
+        return getOldConfig('web_config', 'img_sync_url') . $this->vertical_cover;
     }
 
     /**
      * 橫幅封面 / 横向封面
      */
-    public function getHorizontalCoverAttribute($value)
+    public function getHorizontalThumbAttribute()
     {
         if ($this->operating == 1) {
             if (true == config('api.encrypt.image')) {
-                return webp(getOldConfig('web_config', 'img_sync_url_password_webp') . $value, 0);
+                return webp(getOldConfig('web_config', 'img_sync_url_password_webp') . $this->horizontal_cover, 0);
             }
 
-            return getOldConfig('web_config', 'api_url') . $value;
+            return getOldConfig('web_config', 'api_url') . $this->horizontal_cover;
         }
 
-        return getOldConfig('web_config', 'img_sync_url') . $value;
+        return getOldConfig('web_config', 'img_sync_url') . $this->horizontal_cover;
     }
 
     // public function getViewAttribute($value)

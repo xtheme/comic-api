@@ -9,12 +9,16 @@ class BookRequest extends BaseRequest
     public function rules()
     {
         return [
-            'tag' => 'required|array',
-            'book_name' => 'required',
-            'book_desc' => 'required',
-            'pen_name' => 'required',
-            'book_thumb' => 'required|image',
-            'book_thumb2' => 'required|image',
+            'tag' => 'array',
+            'title' => 'required',
+            'description' => 'required',
+            'author' => 'required',
+            'vertical_cover' => 'required',
+            'horizontal_cover' => 'required',
+            'end' => 'required',
+            'type' => 'required',
+            'status' => 'required',
+            'operating' => 'required',
         ];
     }
 
@@ -22,11 +26,15 @@ class BookRequest extends BaseRequest
     {
         return [
             'tag' => '漫画分类',
-            'book_name' => '漫画名称',
-            'book_desc' => '内容简介',
-            'pen_name' => '作者',
-            'book_thumb' => '竖向封面',
-            'book_thumb2' => '横向封面',
+            'title' => '漫画名称',
+            'description' => '内容简介',
+            'author' => '作者',
+            'vertical_cover' => '竖向封面',
+            'horizontal_cover' => '横向封面',
+            'end' => '连载状态',
+            'type' => '漫画类型',
+            'status' => '上架状态',
+            'operating' => '采集方式',
         ];
     }
 }
