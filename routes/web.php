@@ -88,9 +88,12 @@ Route::middleware(['auth'])->prefix('backend')->as('backend.')->group(function (
         Route::any('store', [BookController::class , 'store'])->name('store');
         Route::get('edit/{id}', [BookController::class , 'edit'])->name('edit');
         Route::put('update/{id}', [BookController::class , 'update'])->name('update');
+        Route::delete('destroy/{id}', [BookController::class , 'destroy'])->name('destroy'); // 軟刪除
+        Route::get('review/{id}', [BookController::class , 'review'])->name('review');
+        Route::put('update/review/{id}', [BookController::class , 'updateReview'])->name('update.review');
         Route::put('batch/{action?}', [BookController::class, 'batch'])->name('batch');
         Route::put('editable/{field}', [BookController::class, 'editable'])->name('editable');
-        Route::get('caching', [BookController::class, 'caching'])->name('caching');
+        Route::get('caching', [BookController::class, 'caching'])->name('caching'); // 下載CDN緩存文件
     });
 
     // 漫画分类

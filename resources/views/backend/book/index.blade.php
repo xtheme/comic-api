@@ -34,6 +34,8 @@
                                         <option value="review-5">未审核</option>
                                         <option value="charge">第10章节后收费</option>
                                         <option value="free">所有章节免费</option>
+                                        <option value="enable">上架</option>
+                                        <option value="disable">下架</option>
                                         <option value="destroy">删除</option>
                                     </select>
                                 </div>
@@ -151,8 +153,8 @@
 {{--                                                <a class="dropdown-item" data-modal href="" title="推荐设置"><i class="bx bxs-bookmark-star mr-1"></i>推荐设置</a>--}}
                                                 <a class="dropdown-item" data-modal data-size="full" href="{{ route('backend.book_chapter.index', $book->id) }}" title="章节列表"><i class="bx bx-list-ol mr-1"></i>章节列表</a>
                                                 <a class="dropdown-item" data-modal href="{{ route('backend.book.edit', $book->id) }}" title="编辑漫画"><i class="bx bx-edit-alt mr-1"></i>编辑漫画</a>
-                                                <a class="dropdown-item" data-confirm href="" title="删除漫画"><i class="bx bx-trash mr-1"></i>删除漫画</a>
-                                                <a class="dropdown-item" data-confirm href="" title="漫画审核"><i class="bx bxs-check-shield mr-1"></i>漫画审核</a>
+                                                <a class="dropdown-item" data-destroy href="{{ route('backend.book.destroy', $book->id) }}" title="删除漫画"><i class="bx bx-trash mr-1"></i>删除漫画</a>
+                                                <a class="dropdown-item" data-modal data-size="sm" data-height="30vh" href="{{ route('backend.book.review', $book->id) }}" title="漫画审核"><i class="bx bxs-check-shield mr-1"></i>漫画审核</a>
                                             </div>
                                         </div>
                                     </td>

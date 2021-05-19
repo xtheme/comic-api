@@ -9,6 +9,10 @@ return [
         'success' => '修改成功',
         'fail'    => '修改失败',
     ],
+    'destroy' => [
+        'success' => '删除成功',
+        'fail'    => '删除失败',
+    ],
     'upload' => [
         'success' => '文件上传成功',
         'fail'    => [

@@ -55,7 +55,6 @@ class BookController extends Controller
         return Response::jsonSuccess(__('response.create.success'));
     }
 
-
     public function edit($id)
     {
         $data = [
@@ -80,6 +79,30 @@ class BookController extends Controller
         return Response::jsonSuccess(__('response.update.success'));
     }
 
+    public function destroy($id)
+    {
+        $this->repository->destroy($id);
+
+        return Response::jsonSuccess(__('response.destroy.success'));
+    }
+
+    public function review($id)
+    {
+        $data = [
+            'review_options' => Options::REVIEW_OPTIONS,
+            'book' => Book::findOrFail($id),
+        ];
+
+        return view('backend.book.review')->with($data);
+    }
+
+    public function updateReview(Request $request, $id)
+    {
+        $this->repository->update($id, $request->input());
+
+        return Response::jsonSuccess(__('response.update.success'));
+    }
+
     /**
      * 批次更新
      */
@@ -88,11 +111,11 @@ class BookController extends Controller
         $ids = explode(',', $request->post('ids'));
 
         switch ($action) {
-            case 'review-0':
             case 'review-1':
             case 'review-2':
             case 'review-3':
             case 'review-4':
+            case 'review-5':
                 $text = '审核状态';
                 $check_status = (int) explode('-', $action)[1];
                 $data = ['review' => $check_status];
@@ -107,16 +130,13 @@ class BookController extends Controller
                 break;
             case 'charge':
                 $text = '批量收费';
-                $data = ['charge' => 1];
                 break;
             case 'free':
                 $text = '批量免费';
-                $data = ['charge' => -1];
                 break;
-            // case 'destroy':
-            //     $text = '批量删除';
-            //     $data = ['book_status' => 1];
-            //     break;
+            case 'destroy':
+                $text = '批量删除';
+                break;
             default:
                 return Response::jsonError('未知的操作');
         }
@@ -125,14 +145,17 @@ class BookController extends Controller
             case 'charge':
                 $books = Book::whereIn('id', $ids)->get();
                 foreach ($books as $book) {
-                    $book->chapters()->where('episode', '>', 10)->update($data);
+                    $book->chapters()->where('episode', '>', 10)->update(['charge' => 1]);
                 }
                 break;
             case 'free':
                 $books = Book::whereIn('id', $ids)->get();
                 foreach ($books as $book) {
-                    $book->chapters()->update($data);
+                    $book->chapters()->update(['charge' => -1]);
                 }
+                break;
+            case 'destroy':
+                Book::whereIn('id', $ids)->delete();
                 break;
             default:
                 Book::whereIn('id', $ids)->update($data);
