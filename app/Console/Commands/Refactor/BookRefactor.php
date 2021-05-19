@@ -59,6 +59,7 @@ class BookRefactor extends Command
                         'vertical_cover' => $book->book_thumb,
                         'horizontal_cover' => $book->book_thumb2,
                         'type' => $book->cartoon_type,
+                        'visits' => $book->view,
                         'status' => $book->book_status ? 1 : -1,
                         // 'charge' => $book->book_vip ? 1 : -1,
                         'review' => $book->check_status + 1,

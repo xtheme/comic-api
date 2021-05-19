@@ -22,6 +22,7 @@ class CreateBooksTable extends Migration
             $table->string('vertical_cover')->comment('竖向封面');
             $table->string('horizontal_cover')->comment('横向封面');
             $table->tinyInteger('type')->default(1)->comment('类型: 1=日漫, 2=韩漫');
+            $table->integer('visits')->default(0)->comment('访问数');
             $table->tinyInteger('status')->default(1)->comment('状态: 1=上架, -1=下架');
             $table->tinyInteger('review')->default(1)->comment('审核状态: 0=待审核, 1=审核成功, 2=审核失败, 3=屏蔽, 4=未审核');
             $table->tinyInteger('operating')->default(1)->comment('添加方式: 1=手动, 2=自动');

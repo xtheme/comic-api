@@ -117,7 +117,7 @@
                                         <span class="badge badge-pill badge-light-{{ $book->release_status_style }}">{{ $book->release_status }}</span>
                                     </td>
                                     <td>@if($book->operating == 1){{'人工'}}@else{{'自动'}}@endif</td>
-                                    <td>{{ $book->visit_histories_count }}</td>
+                                    <td>{{ shortenNumber($book->visits) }}</td>
                                     <td>{{ $book->collect_histories_count }}</td>
                                     <td>
                                         @switch($book->review )
