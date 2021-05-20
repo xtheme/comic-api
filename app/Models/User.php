@@ -14,6 +14,8 @@ class User extends BaseModel
     const CREATED_AT = 'create_time';
     const UPDATED_AT = 'update_time';
 
+    public $timestamps = false;
+
     /**
      * The attributes that are mass assignable.
      *
@@ -29,6 +31,7 @@ class User extends BaseModel
         'password',
         'device_id',
         'token',
+        'sign_days',
         'subscribed_at',
     ];
 
@@ -84,9 +87,9 @@ class User extends BaseModel
         return $this->hasOne('App\Models\ViewsOrdersSuccessCount');
     }
 
-    public function sign_in()
+    public function signs()
     {
-        return $this->hasOne('App\Models\Sign', 'uid', 'id');
+        return $this->hasMany('App\Models\Sign', 'user_id', 'id');
     }
 
     public function histories()

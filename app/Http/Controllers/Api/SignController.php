@@ -19,87 +19,69 @@ class SignController extends Controller
     /**
      * 签到详情
      *
-     * @param  Request  $request
+     * @param Request $request
      *
      * @return Response
      */
     public function signDetail(Request $request)
     {
-        $sign = $request->user->sign_in;
 
-        $yDay = strtotime(date('Y-m-d', strtotime('-1 day')) . "00:00:00");
+        $sign_days = $this->signService->days();
 
-        if (!empty($sign)) {
-            $days = $sign->days;
-        }
+        $today_sign = $sign_days->pluck('date')->contains(date('Y-m-d'));
 
-        //判斷數據是否從沒寫過 從0天開始計算   或是 昨天到目前都沒簽到 也算是從0開始
-        if (empty($sign) || ($yDay >= $sign->addtime)) {
-            $days = 0;
+
+        $exists = $sign_days->exists();
+
+        $days = 0;
+        if ($exists) {
+            $days = $request->user->sign_days;
         }
 
         $score_list = $this->signService->scoreList();
 
         $data = [
-            'days'       => $days,
+            'days' => $days,
+            'today_sign' => $today_sign,
             'score_list' => $score_list,
         ];
 
-        return Response::jsonSuccess('返回成功', $data);
+        return Response::jsonSuccess(__('api.success'), $data);
     }
 
     /**
      * 签到
      *
-     * @param  Request  $request
+     * @param Request $request
      *
      * @return Response
      */
     public function sign(Request $request)
     {
-        $sign = $request->user->sign_in; // 签到记录
-        $today = strtotime(date('Y-m-d') . "00:00:00");
-        $yesterday = strtotime(date('Y-m-d', strtotime('-1 day')) . "00:00:00");
 
-        // 查询不到资料走写入資料流程
-        if (empty($sign)) {
-            $score = $this->signService->insertSign();
+        $sign_days = $this->signService->days();
 
-            // 刷新缓存暫無
-            // $user = User::find($request->user->id);
-            // $this->userService->updateUserCache($user);
+        $exists = $sign_days->pluck('date')->contains(date('Y-m-d'));
 
-            $data = [
-                'score' => $score,
-                'days'  => 1,
-            ];
-
-            return Response::jsonSuccess('签到成功,获得' . $score . '书币', $data);
-        }
-
-        if ($sign->addtime >= $today) {
+        if ($exists) {
             return Response::jsonError('今日已签到');
         }
 
-        $days = $sign->days + 1;
+        $exists = $sign_days->pluck('date')->contains(date('Y-m-d', strtotime('-1 day')));
 
-        // 有资料决定走更新当笔数据的day为哪一天
-        // 签到超过第七天 或是昨天没有签到 重置为第1天重新签到
-        if ($sign->days + 1 > 7 || ($yesterday >= $sign->addtime)) {
-            $days = 1;
+        $days = 0;
+        if ($exists) {
+            $days = request()->user->sign_days;
         }
 
-        $score = $this->signService->updateSign($days);
-
-        // 刷新缓存暫無
-        // $user = User::find($request->user->id);
-        // $this->userService->updateUserCache($user);
+        //寫入簽到
+        $data = $this->signService->ins_sign($days);
 
         $data = [
-            'score' => $score,
-            'days'  => $days,
+            'score' => $data['score'],
+            'days' => $data['days']
         ];
 
-        return Response::jsonSuccess('签到成功,获得' . $score . '书币', $data);
+        return Response::jsonSuccess(__('api.success'), $data);
     }
 }

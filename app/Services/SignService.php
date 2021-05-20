@@ -4,89 +4,82 @@ namespace App\Services;
 
 use App\Models\Config;
 use App\Models\Sign;
+use App\Models\User;
+use Carbon\Carbon;
+use Illuminate\Support\Facades\DB;
 
 class SignService
 {
 
     /**
-     * 積分列表
+     * 積分config
      *
      */
     public function scoreList()
     {
-        $getUserConfig = Config::where('code' , 'sign_config')->first();
-        $sign = explode(';',$getUserConfig->content);
+        $configs = explode(';', getConfig('sign_config'));
         $score_list = [];
-        foreach($sign as $k=>$v){
-            $arr = explode("|",$v);
+        foreach ($configs as $k => $v) {
+            $arr = explode("|", $v);
             $score_list[$k] = $arr[1];
         }
         return $score_list;
     }
 
     /**
-     * 写入签到
-     * @return $score
+     * 查詢昨天今天簽到記錄
+     *
      */
-    public function insertSign()
+    public function days()
     {
-        $data = [
-            'uid'       => request()->user->id ,
-            'days'      => 1 ,
-            'addtime'   => time() ,
-        ];
-        $score = $this->scoreGet();
 
-        $sign = new Sign();
-        foreach ($data as $key => $value) {
-            $sign->$key = $value;
-        }
-        $sign->save();
-        $sign->user()->increment('score',$score);
+        $signs = request()->user->signs()->select(DB::raw('DATE(created_at) as date'))->whereBetween(DB::raw('DATE(created_at)'), [date('Y-m-d', strtotime('-1 day')), date('Y-m-d')]);
 
-        return $score;
+        return $signs;
     }
 
     /**
-     * 更新签到
-     * @return $score
+     * 写入签到
+     * @return array
      */
-    public function updateSign($days)
+    public function ins_sign($sign_days)
     {
         $data = [
-            'days'      => $days ,
-            'addtime'   => time() ,
+            'user_id' => request()->user->id,
+            'created_at' => Carbon::now(),
         ];
-        $score = $this->scoreGet($days);
 
-        $sign = request()->user->signin;
+        Sign::insert($data);
 
-        foreach ($data as $key => $value) {
-            $sign->$key = $value;
-        }
+        $days = ($sign_days === 7) ? 1 : $sign_days + 1;
 
-        $sign->save();
-        $sign->user()->increment('score',$score);
 
-        return $score;
+        //查詢此次簽到分數
+        $score = $this->score_get($days);
+
+        request()->user->update([
+            'score' => DB::raw("score + {$score}"),
+            'sign_days' => $days
+        ]);
+
+        return ['score' => $score, 'days' => $days];
     }
-
 
     /**
      * 積分查询需要的分数
-     * @param $day   //取第几天的分数
+     * @param $day //取第几天的分数
      *
+     * @return int
      */
-    public function scoreGet($day = 1)
+    public function score_get($day)
     {
         $scoreList = $this->scoreList();
 
         $score = 0;
-        //進入的起始天數 -1  迴圈key從0開始比對
         $day--;
-        foreach ($scoreList as $k=>$v){
-            if($k == $day){
-                $score=$v;
+        foreach ($scoreList as $k => $v) {
+            if ($k == $day) {
+                $score = $v;
                 break;
             }
         }
