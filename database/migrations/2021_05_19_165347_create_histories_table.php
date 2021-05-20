@@ -14,6 +14,7 @@ class CreateHistoriesTable extends Migration
     public function up()
     {
         Schema::create('histories', function (Blueprint $table) {
+            $table->id();
             $table->integer('major_id')->comment('主id');
             $table->integer('minor_id')->comment('从id');
             $table->integer('user_vip')->comment('是否vip [-1:非vip,1:vip]');
@@ -21,14 +22,19 @@ class CreateHistoriesTable extends Migration
             $table->string('type', 20)->comment('种类 [浏览:visit,播放:play,收藏:favorites]');
             $table->string('class', 20)->comment('分类 [动画:video,漫画:comic]');
             $table->timestamp('created_at')->comment('创建时间');
-            $table->primary([
+            $table->unique([
                 'major_id',
                 'minor_id',
                 'user_vip',
                 'user_id',
                 'type',
                 'class',
-            ], 'primary_key');
+            ], 'unique_key');
+
+            $table->index([
+                'class',
+                'type',
+            ], 'class_type_index');
         });
     }
 

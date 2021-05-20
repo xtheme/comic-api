@@ -27,13 +27,13 @@
                             <div class="d-flex align-items-center">
                                 <div class="form-group mr-1">
                                     <select class="form-control" name="action">
-                                        <option value="review-1">待审核</option>
-                                        <option value="review-2">审核成功</option>
-                                        <option value="review-3">审核未通过</option>
-                                        <option value="review-4">屏蔽</option>
-                                        <option value="review-5">未审核</option>
-                                        <option value="charge">第10章节后收费</option>
-                                        <option value="free">所有章节免费</option>
+{{--                                        <option value="review-1">待审核</option>--}}
+{{--                                        <option value="review-2">审核成功</option>--}}
+{{--                                        <option value="review-3">审核未通过</option>--}}
+{{--                                        <option value="review-4">屏蔽</option>--}}
+{{--                                        <option value="review-5">未审核</option>--}}
+                                        <option value="charge">章节收费</option>
+                                        <option value="free">章节免费</option>
                                         <option value="enable">上架</option>
                                         <option value="disable">下架</option>
                                         <option value="destroy">删除</option>
@@ -72,7 +72,7 @@
                                 <th>采集</th>
                                 <th>阅读数</th>
                                 <th>收藏数</th>
-                                <th>审核状态</th>
+{{--                                <th>审核状态</th>--}}
                                 <th>上架状态</th>
                                 <th>操作</th>
                             </tr>
@@ -118,26 +118,26 @@
                                     </td>
                                     <td>@if($book->operating == 1){{'人工'}}@else{{'自动'}}@endif</td>
                                     <td>{{ shortenNumber($book->visits) }}</td>
-                                    <td>{{ $book->collect_histories_count }}</td>
-                                    <td>
-                                        @switch($book->review )
-                                            @case(1)
-                                            <span class="badge badge-pill badge-light-secondary">待审核</span>
-                                            @break
-                                            @case(2)
-                                            <span class="badge badge-pill badge-light-success">审核成功</span>
-                                            @break
-                                            @case(3)
-                                            <span class="badge badge-pill badge-light-warning">审核未通过</span>
-                                            @break
-                                            @case(4)
-                                            <span class="badge badge-pill badge-light-danger">屏蔽</span>
-                                            @break
-                                            @case(5)
-                                            <span class="badge badge-pill badge-light-secondary">未审核</span>
-                                            @break
-                                        @endswitch
-                                    </td>
+                                    <td>{{ $book->favorite_histories_count }}</td>
+{{--                                    <td>--}}
+{{--                                        @switch($book->review)--}}
+{{--                                            @case(1)--}}
+{{--                                            <span class="badge badge-pill badge-light-secondary">待审核</span>--}}
+{{--                                            @break--}}
+{{--                                            @case(2)--}}
+{{--                                            <span class="badge badge-pill badge-light-success">审核成功</span>--}}
+{{--                                            @break--}}
+{{--                                            @case(3)--}}
+{{--                                            <span class="badge badge-pill badge-light-warning">审核未通过</span>--}}
+{{--                                            @break--}}
+{{--                                            @case(4)--}}
+{{--                                            <span class="badge badge-pill badge-light-danger">屏蔽</span>--}}
+{{--                                            @break--}}
+{{--                                            @case(5)--}}
+{{--                                            <span class="badge badge-pill badge-light-secondary">未审核</span>--}}
+{{--                                            @break--}}
+{{--                                        @endswitch--}}
+{{--                                    </td>--}}
                                     <td>
                                         @if($book->status == 1)
                                             <a class="badge badge-pill badge-light-success" data-confirm href="{{ route('backend.book.batch', ['action'=>'disable', 'ids' => $book->id]) }}" title="下架该作品">上架</a>

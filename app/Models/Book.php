@@ -54,11 +54,11 @@ class Book extends BaseModel
         ]);
     }
 
-    public function collect_histories()
+    public function favorite_histories()
     {
         return $this->hasMany('App\Models\History', 'major_id', 'id')->where([
             ['class', 'book'],
-            ['type', 'visit'],
+            ['type', 'favorite'],
         ]);
     }
 
