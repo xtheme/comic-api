@@ -2,6 +2,8 @@
 
 namespace App\Models;
 
+use App\Casts\BooleanCast;
+
 class BookChapter extends BaseModel
 {
     protected $perPage = 10;
@@ -19,7 +21,8 @@ class BookChapter extends BaseModel
     ];
 
     protected $casts = [
-        // 'json_images' => 'array',
+        'json_images' => 'array',
+        'charge' => BooleanCast::class,
     ];
 
     public function book()

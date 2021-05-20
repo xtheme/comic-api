@@ -2,6 +2,8 @@
 
 namespace App\Models;
 
+use App\Casts\BooleanCast;
+
 class VideoSeries extends BaseModel
 {
     protected $fillable = [
@@ -28,7 +30,7 @@ class VideoSeries extends BaseModel
     ];
 
     protected $casts = [
-        'charge' => 'boolean',
+        'charge' => BooleanCast::class,
     ];
 
     public function video()

@@ -113,15 +113,10 @@ class Book extends BaseModel
         return getOldConfig('web_config', 'img_sync_url') . $this->horizontal_cover;
     }
 
-    // public function getViewAttribute($value)
-    // {
-    //     return shortenNumber($value);
-    // }
-
-    // public function getBookChaptertimeAttribute($value)
-    // {
-    //     return date('Y-m-d', $value);
-    // }
+    public function getVisitAttribute($value)
+    {
+        return shortenNumber($value);
+    }
 
     public function getTypeAttribute($value)
     {
