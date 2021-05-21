@@ -1,8 +1,10 @@
 <?php
 
 use App\Http\Controllers\Api\AdController;
+use App\Http\Controllers\Api\BookController;
 use App\Http\Controllers\Api\SignController;
 use App\Http\Controllers\Api\SmsController;
+use App\Http\Controllers\Api\TagController;
 use App\Http\Controllers\Api\TopicController;
 use App\Http\Controllers\Api\UserController;
 use App\Http\Controllers\Api\VideoController;
@@ -71,12 +73,26 @@ Route::as('api.')->group(function () {
                 Route::get('/more/{topic}/{page?}', [TopicController::class, 'more'])->name('more');
             });
 
+            Route::prefix('tag')->as('tag.')->group(function () {
+                Route::get('/', [TagController::class, 'list'])->name('list');
+                Route::get('/book/{tag}/{page?}', [TagController::class, 'book'])->name('book');
+                Route::get('/video/{tag}/{page?}', [TagController::class, 'video'])->name('video');
+            });
+
             // 动画
             Route::prefix('video')->as('video.')->group(function () {
                 Route::get('/list/{page?}', [VideoController::class, 'list'])->name('list');
                 Route::get('/detail/{id}', [VideoController::class, 'detail'])->name('detail');
                 Route::get('/recommend/{limit?}', [VideoController::class, 'recommend'])->name('recommend');
                 Route::post('/play/{id}/{series_id}', [VideoController::class, 'play'])->name('play');
+            });
+
+            // 漫畫
+            Route::prefix('book')->as('book.')->group(function () {
+                // Route::get('/list/{page?}', [VideoController::class, 'list'])->name('list');
+                // Route::get('/detail/{id}', [VideoController::class, 'detail'])->name('detail');
+                Route::get('/recommend/{limit?}', [BookController::class, 'recommend'])->name('recommend');
+                // Route::post('/play/{id}/{series_id}', [VideoController::class, 'play'])->name('play');
             });
         });
     });

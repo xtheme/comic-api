@@ -25,8 +25,8 @@ class Book extends BaseModel
 
     protected $appends = [
         'tagged_tags',
-        'charge',
-        'release_at',
+        // 'charge',
+        // 'release_at',
     ];
 
     protected $hidden = [
@@ -69,7 +69,7 @@ class Book extends BaseModel
 
     public function getChargeAttribute()
     {
-        return $this->chapters->where('charge', 1)->exist();
+        return $this->chapters->where('charge', 1)->count() > 0;
     }
 
     public function getReleaseAtAttribute()

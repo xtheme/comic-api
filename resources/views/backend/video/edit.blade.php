@@ -69,7 +69,7 @@
                         <label><span class="danger">*</span> 封面图</label>
                         <div class="input-group">
                             <div class="input-group">
-                                <input type="text" class="form-control image-path" name="cover" autocomplete="off" value="{{ $video->cover }}">
+                                <input type="text" class="form-control image-path" name="cover" autocomplete="off" value="{{ $video->getRawOriginal('cover') }}">
                                 <input type="file" class="hidden-file-upload" data-path="video/{{ $video->id }}">
                                 <div class="input-group-append" id="input-file-addon">
                                     <button class="btn btn-primary upload-image" type="button">上传</button>
