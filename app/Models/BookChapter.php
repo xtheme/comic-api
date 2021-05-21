@@ -22,7 +22,7 @@ class BookChapter extends BaseModel
 
     protected $casts = [
         'json_images' => 'array',
-        'charge' => BooleanCast::class,
+        // 'charge' => BooleanCast::class,
     ];
 
     public function book()

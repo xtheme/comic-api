@@ -30,7 +30,7 @@ class VideoSeries extends BaseModel
     ];
 
     protected $casts = [
-        'charge' => BooleanCast::class,
+        // 'charge' => BooleanCast::class,
     ];
 
     public function video()
