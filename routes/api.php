@@ -83,7 +83,7 @@ Route::as('api.')->group(function () {
             Route::prefix('video')->as('video.')->group(function () {
                 Route::get('/list/{page?}', [VideoController::class, 'list'])->name('list');
                 Route::get('/detail/{id}', [VideoController::class, 'detail'])->name('detail');
-                Route::get('/recommend/{limit?}', [VideoController::class, 'recommend'])->name('recommend');
+                Route::get('/recommend/{id?}', [VideoController::class, 'recommend'])->name('recommend');
                 Route::post('/play/{id}/{series_id}', [VideoController::class, 'play'])->name('play');
             });
 
@@ -91,7 +91,7 @@ Route::as('api.')->group(function () {
             Route::prefix('book')->as('book.')->group(function () {
                 // Route::get('/list/{page?}', [VideoController::class, 'list'])->name('list');
                 // Route::get('/detail/{id}', [VideoController::class, 'detail'])->name('detail');
-                Route::get('/recommend/{limit?}', [BookController::class, 'recommend'])->name('recommend');
+                Route::get('/recommend/{id?}', [BookController::class, 'recommend'])->name('recommend');
                 // Route::post('/play/{id}/{series_id}', [VideoController::class, 'play'])->name('play');
             });
         });

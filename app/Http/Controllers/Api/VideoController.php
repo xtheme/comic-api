@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Models\Book;
+use App\Models\Video;
 use App\Repositories\Contracts\VideoRepositoryInterface;
 use App\Repositories\HistoryRepository;
 use Illuminate\Http\Request;
@@ -64,9 +66,33 @@ class VideoController extends BaseController
     }
 
     // 猜你喜歡
-    public function recommend($limit = 4)
+    public function recommend($id = null)
     {
-        $data = $this->repository->random($limit);
+        $limit = 4;
+        $tags = [];
+
+        if ($id) {
+            $video = Video::findOrFail($id);
+            $tags = $video->tagged_tags;
+        }
+
+        if ($tags) {
+            $videos = Video::select(['id', 'title', 'cover'])->withAnyTag($tags)->where('id', '!=', $id)->inRandomOrder()->limit($limit)->get();
+        } else {
+            $videos = Video::select(['id', 'title', 'cover'])->inRandomOrder()->limit($limit)->get();
+        }
+
+        $data = $videos->map(function($book) {
+            return [
+                'id' => $book->id,
+                'title' => $book->title,
+                // 'author' => $book->author,
+                // 'description' => $book->description,
+                'cover' => $book->cover,
+                'tagged_tags' => $book->tagged_tags,
+
+            ];
+        })->toArray();
 
         return Response::jsonSuccess(__('api.success'), $data);
     }
