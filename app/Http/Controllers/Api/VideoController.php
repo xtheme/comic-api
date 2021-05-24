@@ -32,7 +32,7 @@ class VideoController extends BaseController
 
     public function detail(Request $request, $id)
     {
-        $data = $this->repository->find($id)->toarray();
+        $data = $this->repository->find($id)->toArray();
 
         // todo 訪問數+1
         $log = [

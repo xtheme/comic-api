@@ -69,7 +69,7 @@ class Book extends BaseModel
 
     public function getChargeAttribute()
     {
-        return $this->chapters->where('charge', 1)->count() > 0;
+        return $this->chapters->where('charge', 1)->count() ? 1 : -1;
     }
 
     public function getReleaseAtAttribute()
