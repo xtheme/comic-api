@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Api\AdController;
 use App\Http\Controllers\Api\BookController;
+use App\Http\Controllers\Api\PricingController;
 use App\Http\Controllers\Api\SignController;
 use App\Http\Controllers\Api\SmsController;
 use App\Http\Controllers\Api\TagController;
@@ -93,6 +94,10 @@ Route::as('api.')->group(function () {
                 Route::get('/{id}/chapters', [BookController::class, 'chapters'])->name('chapters');
                 Route::get('/{id}/chapter/{chapter_id}/{page?}', [BookController::class, 'chapter'])->name('chapter');
                 Route::get('/recommend/{id?}', [BookController::class, 'recommend'])->name('recommend');
+            });
+
+            Route::prefix('pricing')->as('pricing.')->group(function () {
+                Route::get('/', [PricingController::class, 'list'])->name('list');
             });
         });
     });
