@@ -89,10 +89,10 @@ Route::as('api.')->group(function () {
 
             // 漫畫
             Route::prefix('book')->as('book.')->group(function () {
-                // Route::get('/list/{page?}', [VideoController::class, 'list'])->name('list');
-                Route::get('/detail/{id}', [BookController::class, 'detail'])->name('detail');
+                Route::get('/{id}', [BookController::class, 'detail'])->name('detail');
+                Route::get('/{id}/chapters', [BookController::class, 'chapters'])->name('chapters');
+                Route::get('/{id}/chapter/{chapter_id}/{page?}', [BookController::class, 'chapter'])->name('chapter');
                 Route::get('/recommend/{id?}', [BookController::class, 'recommend'])->name('recommend');
-                // Route::post('/play/{id}/{series_id}', [VideoController::class, 'play'])->name('play');
             });
         });
     });

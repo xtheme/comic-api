@@ -73,7 +73,7 @@
                                         </div>
                                     </td>
                                     <td>{{ $item->id }}</td>
-                                    <td>{{ $item->ad_space->name }}</td>
+                                    <td>{{ $item->space->name }}</td>
                                     <td><span class="jeditable" data-pk="{{ $item->id }}" data-value="" > {{ $item->sort }}</td>
                                     <td>{{ $item->name }}</td>
                                     <td>

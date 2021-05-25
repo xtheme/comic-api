@@ -37,7 +37,7 @@ class AdRepository extends Repository implements AdRepositoryInterface
         $order = $request->get('order') ?? 'sort';
         $sort = $request->get('sort') ?? 'ASC';
 
-        return $this->model::with(['ad_space'])->when($name, function (Builder $query, $name) {
+        return $this->model::with(['space'])->when($name, function (Builder $query, $name) {
             return $query->where('name', 'like', '%' . $name . '%');
         })->when($space_id, function (Builder $query, $space_id) {
             return $query->where('space_id', $space_id);

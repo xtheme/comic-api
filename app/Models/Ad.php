@@ -17,10 +17,9 @@ class Ad extends BaseModel
     ];
 
     protected $appends = [
-        'image_thumb'
     ];
 
-    public function ad_space()
+    public function space()
     {
         return $this->hasOne('App\Models\AdSpace', 'id', 'space_id');
     }
@@ -28,10 +27,9 @@ class Ad extends BaseModel
     /**
      * 广告图片组合
      */
-    public function getImageThumbAttribute()
+    public function getImageAttribute($value)
     {
         // todo change config
-        return getOldConfig('web_config', 'api_url') . $this->image;
-        // return getOldConfig('web_config', 'api_url') . $this->image;
+        return getOldConfig('web_config', 'api_url') . $value;
     }
 }

@@ -93,8 +93,8 @@
                         <label for="input-username"><span class="danger">*</span> 广告图</label>
                         <div class="input-group">
                             <div class="custom-file">
-                                <input type="hidden" name="image" value="{{$data->image}}">
-                                <input type="file" class="custom-file-input" id="vertical-thumb" name="image" >
+                                <input type="hidden" name="image" value="{{ $data->getRawOriginal('image') }}">
+                                <input type="file" class="custom-file-input" id="vertical-thumb" name="image">
                                 <label class="custom-file-label" for="vertical-thumb">请选择文件</label>
                             </div>
                         </div>

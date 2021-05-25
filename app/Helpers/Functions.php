@@ -39,23 +39,6 @@ if (!function_exists('getOldConfig')) {
     }
 }
 
-if (!function_exists('webp')) {
-    /**
-     * webp 图片规格
-     *
-     * @param  string  $file_path
-     * @param  string  $webp_width
-     *
-     * @return string
-     */
-    function webp(string $file_path, string $webp_width = '$w540')
-    {
-        $extension = strrchr($file_path, '.');
-        $file_name = explode($extension, $file_path)[0];
-        return $file_name . $webp_width . $extension;
-    }
-}
-
 if (!function_exists('shortenNumber')) {
     /**
      * 数字大於4位數, 以万為单位重新格式化, 取小數點一位, 無條件進位
@@ -149,5 +132,110 @@ if (!function_exists('getAllTags')) {
     function getAllTags()
     {
         return app(TagRepository::class)->all();
+    }
+}
+
+if (!function_exists('parseImgFromHtml')) {
+    function parseImgFromHtml($content)
+    {
+        preg_match_all('/<\s*img\s+[^>]*?src\s*=\s*(\'|\")(.*?)\\1[^>]*?\/?\s*>/i', $content, $matches);
+
+        $img_arr = $matches[0];
+        $img = [];
+        $width = 500;
+        $height = 700;
+        // todo change config
+        $base_url = getOldConfig('web_config', 'api_url');
+
+        for ($i = 0; $i < count($img_arr); $i++) {
+            preg_match('/<img.+(width=\"?\d*\"?).+(height=\"?\d*\"?).+>/i', $img_arr[$i], $match); //匹配宽高
+
+            if (!empty($match)) {
+                preg_match('/<\s*img\s+[^>]*?src\s*=\s*(\'|\")(.*?)\\1[^>]*?\/?\s*>/i', $match[0], $match2);
+                $match2[2] = str_replace($base_url, '', $match2[2]);
+                $img[$i]['url'] = $match2[2];
+                $img[$i]['width'] = (int) str_replace('"', '', substr($match[1], 6, strlen($match[1])));
+                $img[$i]['height'] = (int) str_replace('"', '', substr($match[2], 7, strlen($match[2])));
+
+                if ($img[$i]['width'] == 0 || $img[$i]['height'] == 0) {
+                    try {
+                        $get_img_info = getimagesize($base_url . $img[$i]['url']);
+                        $img[$i]['width'] = (int) $get_img_info[0];
+                        $img[$i]['height'] = (int) $get_img_info[1];
+                    } catch (\Exception $exception) {
+                        $img[$i]['width'] = $width;
+                        $img[$i]['height'] = $height;
+                    }
+                }
+            } else {
+                $matches[2][$i] = str_replace($base_url, '', $matches[2][$i]);
+                $img[$i]['url'] = $matches[2][$i];
+
+                try {
+                    $get_img_info = getimagesize($base_url . $img[$i]['url']);
+                    $img[$i]['width'] = (int) $get_img_info[0];
+                    $img[$i]['height'] = (int) $get_img_info[1];
+                } catch (\Exception $exception) {
+                    $img[$i]['width'] = $width;
+                    $img[$i]['height'] = $height;
+                }
+            }
+        }
+
+        return $img;
+    }
+}
+
+if (!function_exists('webp')) {
+    /**
+     * webp 图片规格
+     *
+     * @param  string  $file_path
+     * @param  string  $webp_width
+     *
+     * @return string
+     */
+    function webp(string $file_path, string $webp_width = '$w540')
+    {
+        $extension = strrchr($file_path, '.');
+        $file_name = explode($extension, $file_path)[0];
+        return $file_name . $webp_width . $extension;
+    }
+}
+
+if (!function_exists('insertArray')) {
+    function insertArray(array $array, array $insert, int $position = 0)
+    {
+        $num = count($array);
+
+        // 未指定位置时, 将新数据插入至原数组中间
+        if ($position == 0) {
+            $position = ceil($num / 2);
+        }
+
+        // 將元素插入陣列開頭
+        if ($position == 1) {
+            array_unshift($array, $insert);
+
+            return $array;
+        }
+
+        // 將元素插入陣列最后
+        if ($position > $num) {
+            array_push($array, $insert);
+
+            return $array;
+        }
+
+        $new_array = [];
+
+        foreach ($array as $key => $value) {
+            array_push($new_array, $value);
+            if ($key + 1 == $position) {
+                array_push($new_array, $insert);
+            }
+        }
+
+        return $new_array;
     }
 }
