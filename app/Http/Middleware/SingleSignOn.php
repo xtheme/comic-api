@@ -31,15 +31,19 @@ class SingleSignOn
         }
 
         $uuid = $request->header('uuid');
-        $area = $request->input('area') ?? null;
-        $mobile = $request->input('mobile') ?? null;
+        $area = $request->user->area;
+        $mobile = $request->user->mobile;
 
         if ($mobile) {
             $sso_key = sprintf('sso:%s-%s', $area, $mobile);
             $device_id = Cache::get($sso_key);
 
-            if ($device_id && $device_id != $uuid) {
-                return Response::jsonError('请您先退出旧设备再登录！', 996);
+            if ($device_id) {
+                if ($device_id != $uuid) {
+                    return Response::jsonError('请您先退出旧设备再登录！', 996);
+                }
+            } else {
+                Cache::forever($sso_key, $uuid);
             }
         }
 
