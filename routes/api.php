@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Api\AdController;
 use App\Http\Controllers\Api\BookController;
+use App\Http\Controllers\Api\PaymentController;
 use App\Http\Controllers\Api\PricingController;
 use App\Http\Controllers\Api\SignController;
 use App\Http\Controllers\Api\SmsController;
@@ -32,9 +33,9 @@ Route::as('api.')->group(function () {
         ], 200);
     })->name('home');
 
-    Route::prefix('payment')->as('payment.')->group(function () {
-        Route::get('/', [PricingController::class, 'list'])->name('list');
-        Route::get('/{id}', [PricingController::class, 'url'])->name('url');
+    Route::as('payment.')->group(function () {
+        Route::post('/balance_transfer', [PaymentController::class, 'balanceTransfer'])->name('balance_transfer');
+        Route::get('/order', [PaymentController::class, 'orderInfo'])->name('order_info');
     });
 
     Route::middleware(['api.header', 'api.sign', 'jwt.token', 'device.sso'])->group(function () {
