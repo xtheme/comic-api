@@ -4,14 +4,17 @@ namespace App\Models;
 
 class Comment extends BaseModel
 {
+
+    protected $table = 'comments_clone';
+
     public function user()
     {
-        return $this->hasOne('App\Models\User', 'id', 'uid');
+        return $this->hasOne('App\Models\User', 'id', 'user_id');
     }
 
     public function book_chapter()
     {
-        return $this->hasOne('App\Models\BookChapter', 'id', 'post_id');
+        return $this->hasOne('App\Models\BookChapter', 'id', 'chapter_id');
     }
 
     public function getStatusTextAttribute ()

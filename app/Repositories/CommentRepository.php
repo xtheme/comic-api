@@ -27,29 +27,35 @@ class CommentRepository extends Repository implements CommentRepositoryInterface
     {
 
         $username = $request->get('username') ?? '';
-        $id = $request->get('id') ?? '';
+        $book_title = $request->get('book_title') ?? '';
+        $chapter_title = $request->get('chapter_title') ?? '';
         $status = $request->get('status') ?? '';
         $date_register = $request->get('date_register') ?? '';
+        $order = $request->get('order') ?? 'created_at';
 
         return $this->model::with(['user' , 'book_chapter' , 'book_chapter.book'])
             ->when($username, function (Builder $query, $username) {
                 $query->whereHas('user', function (Builder $query) use ($username) {
                     return $query->where('username', 'like', '%' . $username . '%');
                 });
-            })->when($id, function (Builder $query, $id) {
-                $query->whereHas('book_chapter.book', function (Builder $query) use ($id) {
-                    return $query->where('id', '=', $id)->orWhere('book_name' , 'like' , '%' . $id . '%');
+            })->when($book_title, function (Builder $query, $book_title) {
+                $query->whereHas('book_chapter.book', function (Builder $query) use ($book_title) {
+                    return $query->where('id', '=', $book_title)->orWhere('title' , 'like' , '%' . $book_title . '%');
+                });
+            })->when($chapter_title, function (Builder $query, $chapter_title) {
+                $query->whereHas('book_chapter', function (Builder $query) use ($chapter_title) {
+                    return $query->where('title' , 'like' , '%' . $chapter_title . '%');
                 });
             })->when($status, function (Builder $query, $status) {
                 return $query->where('status', $status);
             })->when($date_register, function (Builder $query, $date_register) {
                 $date = explode(' - ', $date_register);
-                $start_date = strtotime($date[0] . ' 00:00:00');
-                $end_date = strtotime($date[1] . ' 23:59:59');
-                return $query->whereBetween('createtime', [
+                $start_date = $date[0] . ' 00:00:00';
+                $end_date = $date[1] . ' 23:59:59';
+                return $query->whereBetween('created_at', [
                     $start_date,
                     $end_date,
                 ]);
-            })->orderByDesc('createtime');
+            })->orderByDesc($order);
     }
 }
