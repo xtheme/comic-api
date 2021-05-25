@@ -32,6 +32,11 @@ Route::as('api.')->group(function () {
         ], 200);
     })->name('home');
 
+    Route::prefix('payment')->as('payment.')->group(function () {
+        Route::get('/', [PricingController::class, 'list'])->name('list');
+        Route::get('/{id}', [PricingController::class, 'url'])->name('url');
+    });
+
     Route::middleware(['api.header', 'api.sign', 'jwt.token', 'device.sso'])->group(function () {
 
         Route::get('/me', function (Request $request) {
@@ -98,6 +103,7 @@ Route::as('api.')->group(function () {
 
             Route::prefix('pricing')->as('pricing.')->group(function () {
                 Route::get('/', [PricingController::class, 'list'])->name('list');
+                Route::get('/{id}', [PricingController::class, 'url'])->name('url');
             });
         });
     });
