@@ -36,6 +36,7 @@
                                 <th>漫画名字</th>
                                 <th>章节名</th>
                                 <th width="20%">评论内容</th>
+                                <th>热度数</th>
                                 <th>评论时间</th>
                                 <th>状态</th>
                                 <th>操作</th>
@@ -53,10 +54,11 @@
                                     <td>{{ $item->id }}</td>
                                     <td>{{$item->user->id}}</td>
                                     <td>{{ $item->user->username }}</td>
-                                    <td>{{ $item->book_chapter->book->book_name }}</td>
+                                    <td>{{ $item->book_chapter->book->title }}</td>
                                     <td>{{ $item->book_chapter->title }}</td>
                                     <td>{{ $item->content }}</td>
-                                    <td>{{ date('Y-m-d H:i:s',$item->createtime) }}</td>
+                                    <td>{{ $item->likes }}</td>
+                                    <td>{{ $item->created_at }}</td>
                                     <td>{!! $item->status_text !!}</td>
                                     <td @if($loop->count == 1)style="position: fixed;"@endif>
                                         <div class="@if(($loop->count - $loop->iteration) < 3){{'dropup'}}@else{{'dropdown'}}@endif">
@@ -105,7 +107,17 @@
                         <label for="input-id">漫画ID或者名称</label>
                         <div class="controls">
                             <input type="text" id="input-id" class="form-control"
-                                   name="id" value="{{ request()->get('id') }}"
+                                   name="book_title" value="{{ request()->get('book_title') }}"
+                                   placeholder="">
+                        </div>
+                    </div>
+                </div>
+                <div class="col-12">
+                    <div class="form-group">
+                        <label for="input-id">章节名</label>
+                        <div class="controls">
+                            <input type="text" id="input-id" class="form-control"
+                                   name="chapter_title" value="{{ request()->get('chapter_title') }}"
                                    placeholder="">
                         </div>
                     </div>
@@ -135,6 +147,17 @@
                                     <i class='bx bx-calendar-check'></i>
                                 </div>
                             </fieldset>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-12">
+                    <div class="form-group">
+                        <label for="input-mobile">排序</label>
+                        <div class="controls">
+                            <select name="order" id="order" class="form-control">
+                                <option value="created_at">最新留言</option>
+                                <option value="likes">热度最高</option>
+                            </select>
                         </div>
                     </div>
                 </div>
@@ -221,7 +244,7 @@
         });
 
         $datePicker.on('apply.daterangepicker', function(ev, picker) {
-            $(this).val(picker.startDate.format(moment.localeData().longDateFormat('L')) + ' - ' + picker.endDate.format(moment.localeData().longDateFormat('L')));
+            $(this).val(picker.startDate.format('YYYY-MM-DD') + ' - ' + picker.endDate.format('YYYY-MM-DD'));
         });
 
         $datePicker.on('cancel.daterangepicker', function(ev, picker) {
