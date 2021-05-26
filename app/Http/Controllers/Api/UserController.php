@@ -51,7 +51,7 @@ class UserController extends BaseController
 
         $response = $this->userService->addDeviceCache($cache_key, $user);
 
-        return Response::jsonSuccess($response);
+        return Response::jsonSuccess(__('api.success'), $response);
     }
 
     /**
@@ -120,7 +120,7 @@ class UserController extends BaseController
         $sso_key = sprintf('sso:%s-%s', $area, $mobile);
         Cache::forever($sso_key, $request->header('uuid'));
 
-        return Response::jsonSuccess($response);
+        return Response::jsonSuccess(__('api.success'), $response);
     }
 
     /**
@@ -152,7 +152,7 @@ class UserController extends BaseController
         $cache_key = $this->getCacheKeyPrefix() . sprintf('user:device:%s', $uuid);
         $response = $this->userService->addDeviceCache($cache_key, $user);
 
-        return Response::jsonSuccess($response);
+        return Response::jsonSuccess(__('api.success'), $response);
     }
 
     /**
@@ -166,7 +166,7 @@ class UserController extends BaseController
     {
         $user = $this->userService->update($request);
 
-        return Response::jsonSuccess($user);
+        return Response::jsonSuccess(__('api.success'), $user);
     }
 
     /**
@@ -210,7 +210,7 @@ class UserController extends BaseController
         // 刷新缓存
         $this->userService->updateUserCache($user);
 
-        return Response::jsonSuccess($user);
+        return Response::jsonSuccess(__('api.success'), $user);
     }
 
     // 歷史紀錄 (閱覽/ 播放/ 收藏)
