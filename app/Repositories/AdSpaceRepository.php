@@ -49,7 +49,7 @@ class AdSpaceRepository extends Repository implements AdSpaceRepositoryInterface
 
         return $this->model::with([
             'ads' => function ($query) use ($platform) {
-                return $query->where('platform', $platform);
+                return $query->whereIn('platform', [$platform , '-1'])->orderByDesc('sort');
             },
         ])->when($id, function (Builder $query, $id) {
             return $query->where('id', $id)->orWhere('name', $id);

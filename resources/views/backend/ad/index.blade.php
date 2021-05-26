@@ -79,8 +79,10 @@
                                     <td>
                                         @if($item->platform == 1)
                                             <i class="bx bxl-android font-medium-2"></i>
-                                        @else
+                                        @elseif($item->platform == 2)
                                             <i class="bx bxl-apple font-medium-2"></i>
+                                        @else
+                                            平台共用
                                         @endif
                                     </td>
                                     <td><img src="{{ $item->image_thumb }}" class="cursor-pointer" width="50px" data-lightbox alt="点击查看大图"></td>

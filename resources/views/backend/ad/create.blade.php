@@ -41,6 +41,7 @@
                         <label><span class="danger">*</span> 所属平台</label>
                         <div class="controls">
                             <select class="form-control" name="platform">
+                                <option value="-1">平台共用</option>
                                 <option value="1">安卓</option>
                                 <option value="2">IOS</option>
                             </select>
