@@ -29,6 +29,11 @@ class SingleSignOn
             return $next($request);
         }
 
+        // 第一次請求 user/device 不帶 token 狀況下 $request->user 不存在
+        if (!$request->user) {
+            return $next($request);
+        }
+
         $uuid = $request->header('uuid');
         $area = $request->user->area;
         $mobile = $request->user->mobile;
