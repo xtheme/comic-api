@@ -22,7 +22,6 @@ class SingleSignOn
 
         $white_routes = [
             'api.user.mobile',
-            'api.sms.verify',
             'api.sms.send',
         ];
 
