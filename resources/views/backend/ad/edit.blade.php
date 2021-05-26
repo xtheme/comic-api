@@ -42,6 +42,7 @@
                         <label><span class="danger">*</span> 所属平台</label>
                         <div class="controls">
                             <select class="form-control" name="platform">
+                                <option value="-1" @if($data->platform == -1){{'selected'}}@endif>平台共用</option>
                                 <option value="1" @if($data->platform == 1){{'selected'}}@endif>安卓</option>
                                 <option value="2" @if($data->platform == 2){{'selected'}}@endif>IOS</option>
                             </select>
