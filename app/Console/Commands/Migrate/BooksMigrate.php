@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Console\Commands\Refactor;
+namespace App\Console\Commands\Migrate;
 
 ini_set('memory_limit', '-1');
 
@@ -8,21 +8,21 @@ use App\Models\Book;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\DB;
 
-class BookRefactor extends Command
+class BooksMigrate extends Command
 {
     /**
      * The name and signature of the console command.
      *
      * @var string
      */
-    protected $signature = 'refactor:book';
+    protected $signature = 'migrate:books';
 
     /**
      * The console command description.
      *
      * @var string
      */
-    protected $description = '重构 book 数据表, 数据将迁移至 books, 执行且请先备份数据表!';
+    protected $description = '將数据表 book 数据将迁移至新表 books!';
 
     /**
      * Create a new command instance.

@@ -38,7 +38,6 @@ class CommentRefactor extends Command
      */
     public function handle()
     {
-
         DB::table('comments_clone')->truncate();
         DB::table('comment_likes')->truncate();
 

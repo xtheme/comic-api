@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Console\Commands\Refactor;
+namespace App\Console\Commands\Migrate;
 
 ini_set('memory_limit', '-1');
 
@@ -8,21 +8,21 @@ use App\Models\BookChapter;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\DB;
 
-class BookChaptersRefactor extends Command
+class BookChaptersMigrate extends Command
 {
     /**
      * The name and signature of the console command.
      *
      * @var string
      */
-    protected $signature = 'refactor:book_chapter';
+    protected $signature = 'migrate:book_chapters';
 
     /**
      * The console command description.
      *
      * @var string
      */
-    protected $description = '重构 chapterlist 数据表, 数据将迁移至 book_chapters, 执行且请先备份数据表!';
+    protected $description = '將数据表 chapterlist 数据将迁移至新表 book_chapters!';
 
     /**
      * Create a new command instance.
@@ -41,11 +41,10 @@ class BookChaptersRefactor extends Command
      */
     public function handle()
     {
-        // if ($this->confirm('请确认是否运行重构脚本? 执行且请先备份数据表!')) {
+        if ($this->confirm('请确认是否执行数据迁移？')) {
 
             // 分割集合
             $data = DB::table('chapterlist')->get()->chunk(50);
-            // $data = DB::table('chapterlist')->where('id', 27793)->get();
 
             $this->line('共有' . count($data) . '批数据等待迁移!');
 
@@ -73,7 +72,7 @@ class BookChaptersRefactor extends Command
             });
 
             $this->line('数据迁移完成');
-        // }
+        }
 
         return 0;
     }

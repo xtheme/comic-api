@@ -1,27 +1,27 @@
 <?php
 
-namespace App\Console\Commands\Refactor;
+namespace App\Console\Commands\Migrate;
 
 use App\Models\Book;
 use Conner\Tagging\Model\Tag;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\DB;
 
-class CategoryRefactor extends Command
+class TaggingTagsMigrate extends Command
 {
     /**
      * The name and signature of the console command.
      *
      * @var string
      */
-    protected $signature = 'refactor:categories';
+    protected $signature = 'migrate:tagging_tags';
 
     /**
      * The console command description.
      *
      * @var string
      */
-    protected $description = '重構 category 資料表, 將數據轉換到 tagging_tags, 漫畫類別改用關聯方式查詢, 执行且请先备份数据表!';
+    protected $description = '將数据表 category 数据将迁移至新表 tagging_tags!';
 
     /**
      * Create a new command instance.
@@ -40,7 +40,11 @@ class CategoryRefactor extends Command
      */
     public function handle()
     {
-        if ($this->confirm('请确认是否运行重构脚本? 执行且请先备份数据表!')) {
+        if ($this->confirm('请确认是否执行数据迁移？')) {
+
+            DB::table('tagging_tag_groups')->truncate();
+            DB::table('tagging_tags')->truncate();
+            DB::table('tagging_tagged')->truncate();
 
             $categories = DB::table('category')->where('status', 1)->get();
 
@@ -48,7 +52,6 @@ class CategoryRefactor extends Command
                 return $item->name === '';
             })->map(function ($item) {
                 return [
-                    // 'slug' => mb_strtolower(pinyin_permalink($item->name), 'UTF-8'),
                     'slug' =>  mb_strtolower($item->name, 'UTF-8'),
                     'name' => $item->name,
                     'suggest' => $item->status,

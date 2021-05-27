@@ -1,25 +1,25 @@
 <?php
 
-namespace App\Console\Commands\Refactor;
+namespace App\Console\Commands\Migrate;
 
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\DB;
 
-class Signs extends Command
+class SignsMigrate extends Command
 {
     /**
      * The name and signature of the console command.
      *
      * @var string
      */
-    protected $signature = 'refactor:signs';
+    protected $signature = 'migrate:signs';
 
     /**
      * The console command description.
      *
      * @var string
      */
-    protected $description = '把原先的签到写到新表记录';
+    protected $description = '將数据表 sign 数据将迁移至新表 signs!';
 
     /**
      * Create a new command instance.
@@ -38,11 +38,10 @@ class Signs extends Command
      */
     public function handle()
     {
-
         $signs = DB::table('sign')->orderByDesc('addtime')->get();
 
-
         DB::table('signs')->truncate();
+
         $signs->each(function ($sign) {
             for ($i = 0 ; $i < $sign->days ; $i++) {
                 $date = date('Y-m-d H:i:s',strtotime("-".$i." day", $sign->addtime));
