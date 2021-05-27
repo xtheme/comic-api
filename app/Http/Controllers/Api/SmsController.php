@@ -19,16 +19,16 @@ class SmsController extends BaseController
 
     public function verify(MobileRequest $request)
     {
-        // $uuid = $request->header('uuid');
-        // $area = $request->input('area') ?? null;
-        // $mobile = $request->input('mobile') ?? null;
-        //
-        // $sso_key = sprintf('sso:%s-%s', $area, $mobile);
-        // $device_id = Cache::get($sso_key);
-        //
-        // if ($device_id && $device_id != $uuid) {
-        //     return Response::jsonError('请您先退出旧设备再登录！', 996);
-        // }
+        $uuid = $request->header('uuid');
+        $area = $request->input('area') ?? null;
+        $mobile = $request->input('mobile') ?? null;
+
+        $sso_key = sprintf('sso:%s-%s', $area, $mobile);
+        $device_id = Cache::get($sso_key);
+
+        if ($device_id && $device_id != $uuid) {
+            return Response::jsonError('请您先退出旧设备再登录！', 996);
+        }
 
         return $this->send($request);
     }
