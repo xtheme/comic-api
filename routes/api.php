@@ -3,6 +3,7 @@
 use App\Http\Controllers\Api\AdController;
 use App\Http\Controllers\Api\BookController;
 use App\Http\Controllers\Api\PaymentController;
+use App\Http\Controllers\Api\CommentController;
 use App\Http\Controllers\Api\PricingController;
 use App\Http\Controllers\Api\SignController;
 use App\Http\Controllers\Api\SmsController;
@@ -106,6 +107,12 @@ Route::as('api.')->group(function () {
                 Route::get('/', [PricingController::class, 'list'])->name('list');
                 Route::get('/{id}', [PricingController::class, 'url'])->name('url');
             });
+
+            //评论
+            Route::prefix('comment')->as('comment.')->group(function () {
+                Route::post('/add', [CommentController::class, 'add'])->name('add');
+            });
+
         });
     });
 });
