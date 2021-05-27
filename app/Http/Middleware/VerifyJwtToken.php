@@ -27,14 +27,6 @@ class VerifyJwtToken
             return $next($request);
         }
 
-        // $white_routes = [
-        //     'api.user.logout',
-        // ];
-        //
-        // if (in_array($request_route, $white_routes)) {
-        //     return $next($request);
-        // }
-
         $data = [
             'token' => $request->header('token'),
             'uuid' => $request->header('uuid'),
@@ -66,7 +58,12 @@ class VerifyJwtToken
                 if ($request->user->mobile) {
                     // 检查请求的 token 跟用户数据的 token 是否相符
                     if ($data['token'] != $request->user->token) {
-                        return Response::jsonError('您已经在其他设备上登录！', 997);
+                        // 設備重複登入時只能登出, 否則一率報錯
+                        if ($request_route == 'api.user.logout') {
+                            return $next($request);
+                        }
+                        
+                        return Response::jsonError('您已经在其他设备上登录！',  582);
                     }
                 }
             } else {

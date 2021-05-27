@@ -45,7 +45,7 @@ class SingleSignOn
 
             if ($device_id) {
                 if ($device_id != $uuid) {
-                    return Response::jsonError('请您先退出旧设备再登录！', 996);
+                    return Response::jsonError('请您先退出旧设备再登录！', 581);
                 }
             } else {
                 Cache::forever($sso_key, $uuid);

@@ -39,17 +39,17 @@ class ResponseMacroServiceProvider extends ServiceProvider
                 'msg' => $message,
             ];
 
-            $http_status = ($status < 100 || $status >= 600) ? 400 : $status;
+            // $http_status = ($status < 100 || $status >= 600) ? 400 : $status;
 
             // 数据加密
             if (true == config('api.encrypt.response') && request()->hasHeader('sign')) {
                 $response = json_encode($response);
                 $aes = new AesService();
                 $response = $aes->encrypt($response);
-                return response($response, $http_status);
+                return response($response, $status);
             }
 
-            return Response::json($response, $http_status);
+            return Response::json($response, $status);
         });
     }
 }
