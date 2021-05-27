@@ -22,13 +22,16 @@ class VerifyJwtToken
     {
         $request_route = $request->route()->getName();
 
+        // UserController@device 不帶 token 請求時, 將作為 token 發行用途, 可略過檢查
+        if ($request_route == 'api.user.device' && !$request->header('token')) {
+            return $next($request);
+        }
+
         $white_routes = [
-            'api.user.device',
             'api.user.logout',
         ];
 
-        // UserController@device 不帶 token 請求時, 將作為 token 發行用途, 可略過檢查
-        if (in_array($request_route, $white_routes) && !$request->header('token')) {
+        if (in_array($request_route, $white_routes)) {
             return $next($request);
         }
 

@@ -7,7 +7,6 @@ use App\Models\Order;
 use App\Models\User;
 use App\Traits\CacheTrait;
 use Cache;
-use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Response;
