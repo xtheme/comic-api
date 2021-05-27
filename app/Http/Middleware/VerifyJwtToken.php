@@ -27,13 +27,13 @@ class VerifyJwtToken
             return $next($request);
         }
 
-        $white_routes = [
-            'api.user.logout',
-        ];
-
-        if (in_array($request_route, $white_routes)) {
-            return $next($request);
-        }
+        // $white_routes = [
+        //     'api.user.logout',
+        // ];
+        //
+        // if (in_array($request_route, $white_routes)) {
+        //     return $next($request);
+        // }
 
         $data = [
             'token' => $request->header('token'),
