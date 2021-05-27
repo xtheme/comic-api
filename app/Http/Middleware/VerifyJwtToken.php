@@ -24,6 +24,7 @@ class VerifyJwtToken
 
         $white_routes = [
             'api.user.device',
+            'api.user.logout',
         ];
 
         // UserController@device 不帶 token 請求時, 將作為 token 發行用途, 可略過檢查
