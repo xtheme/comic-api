@@ -20,8 +20,8 @@ class Video extends BaseModel
 
     protected $appends = [
         'tagged_tags',
-        'visit_count',
-        'play_count',
+        // 'visit_count',
+        // 'play_count',
     ];
 
     protected $hidden = [
@@ -68,13 +68,13 @@ class Video extends BaseModel
         return $api_url . $value;
     }
 
-    public function getVisitCountAttribute()
-    {
-        return $this->visit_histories->count();
-    }
-
-    public function getPlayCountAttribute()
-    {
-        return $this->play_histories->count();
-    }
+    // public function getVisitCountAttribute()
+    // {
+    //     return $this->visit_histories->count();
+    // }
+    //
+    // public function getPlayCountAttribute()
+    // {
+    //     return $this->play_histories->count();
+    // }
 }

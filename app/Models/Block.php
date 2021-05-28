@@ -58,10 +58,10 @@ class Block extends BaseModel
 
         switch ($this->causer) {
             case 'video':
-                $query->where('status', 1);
+                $query->with(['tagged'])->withCount(['visit_histories' , 'play_histories'])->where('status', 1);
                 break;
             case 'book':
-                $query->where('book_status', 1);
+                $query->with(['tagged'])->withCount(['visit_histories', 'favorite_histories'])->where('status', 1);
                 break;
         }
 

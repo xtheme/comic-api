@@ -15,6 +15,38 @@ class TopicController extends BaseController
         $this->repository = $repository;
     }
 
+    public function arrangeData($topic)
+    {
+        switch ($topic->causer) {
+            case 'video':
+                $list = $topic->query_result->map(function($item) {
+                    return [
+                        'id'          => $item->id,
+                        'title'       => $item->title,
+                        'author'      => $item->author,
+                        'cover'       => $item->cover,
+                        'tagged_tags' => $item->tagged_tags,
+                    ];
+                })->toArray();
+                break;
+
+            case 'book':
+                $row = $topic->row;
+                $list = $topic->query_result->map(function($item) use ($row) {
+                    return [
+                        'id'          => $item->id,
+                        'title'       => $item->title,
+                        'author'      => $item->author,
+                        'cover'       => ($row > 2) ? $item->horizontal_thumb : $item->vertical_thumb,
+                        'tagged_tags' => $item->tagged_tags,
+                    ];
+                })->toArray();
+                break;
+        }
+
+        return $list;
+    }
+
     public function list(Request $request, $causer)
     {
         $request->merge([
@@ -27,12 +59,13 @@ class TopicController extends BaseController
         $data = $topics->map(function ($topic) {
             return [
                 'topic'     => $topic->id,
+                'causer'    => $topic->causer,
                 'title'     => $topic->title,
                 'tags'      => $topic->properties['tag'] ?? [],
                 'spotlight' => $topic->spotlight,
                 'per_line'  => $topic->row,
-                'list'      => $topic->query_result,
-                // 'more'      => route('api.topic.more', $topic->id),
+                'list'      => $this->arrangeData($topic),
+                // 'list'      => $topic->query_result,
             ];
         });
 
