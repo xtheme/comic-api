@@ -27,7 +27,7 @@ class SmsController extends BaseController
         $device_id = Cache::get($sso_key);
 
         if ($device_id && $device_id != $uuid) {
-            return Response::jsonError('请您先退出旧设备再登录！', 996);
+            return Response::jsonError('请您先退出旧设备再登录！', 581);
         }
 
         return $this->send($request);
