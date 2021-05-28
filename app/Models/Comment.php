@@ -7,6 +7,14 @@ class Comment extends BaseModel
 
     protected $table = 'comments_clone';
 
+    protected $fillable = [
+        'chapter_id',
+        'user_id',
+        'content',
+        'status',
+        'likes',
+    ];
+
     public function user()
     {
         return $this->hasOne('App\Models\User', 'id', 'user_id');
