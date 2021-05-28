@@ -16,7 +16,8 @@ class AppServiceProvider extends ServiceProvider
      * @var array
      */
     public $singletons = [
-        'UploadService' => \App\Services\UploadService::class
+        'UploadService' => \App\Services\UploadService::class,
+        'RecordService' => \App\Services\RecordService::class,
     ];
 
     /**

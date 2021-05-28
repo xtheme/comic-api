@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Models\Book;
+use Record;
 use App\Models\Video;
 use App\Repositories\Contracts\VideoRepositoryInterface;
 use App\Repositories\HistoryRepository;
@@ -30,20 +30,13 @@ class VideoController extends BaseController
         return Response::jsonSuccess(__('api.success'), $data);
     }
 
-    public function detail(Request $request, $id)
+    public function detail($id)
     {
-        $data = $this->repository->find($id)->toArray();
+        // $data = $this->repository->find($id)->toArray();
+        $data = Video::withCount(['visit_histories'])->find($id)->toArray();
 
         // todo 訪問數+1
-        $log = [
-            'major_id' => $id,
-            'minor_id' => 0,
-            'user_vip' => $request->user->subscribed_status ? 1 : -1,
-            'user_id'  => $request->user->id,
-            'type'     => 'visit',
-            'class'    => 'video',
-        ];
-        app(HistoryRepository::class)->log($log);
+        Record::from('video')->visit($id);
 
         return Response::jsonSuccess(__('api.success'), $data);
     }
@@ -52,15 +45,7 @@ class VideoController extends BaseController
     public function play(Request $request, $id, $series_id)
     {
         // todo 訪問數+1
-        $log = [
-            'major_id' => $id,
-            'minor_id' => $series_id,
-            'user_vip' => $request->user->subscribed_status ? 1 : -1,
-            'user_id'  => $request->user->id,
-            'type'     => 'play',
-            'class'    => 'video',
-        ];
-        app(HistoryRepository::class)->log($log);
+        Record::from('video')->play($id, $series_id);
 
         return Response::jsonSuccess(__('api.success'));
     }

@@ -92,9 +92,24 @@ class User extends BaseModel
         return $this->hasMany('App\Models\Sign', 'user_id', 'id');
     }
 
-    public function histories()
+    // public function histories()
+    // {
+    //     return $this->hasMany('App\Models\History', 'user_id', 'id');
+    // }
+
+    public function book_visit_histories()
     {
-        return $this->hasMany('App\Models\History', 'user_id', 'id');
+        return $this->hasMany('App\Models\BookVisit', 'user_id', 'id');
+    }
+
+    public function video_visit_histories()
+    {
+        return $this->hasMany('App\Models\VideoVisit', 'user_id', 'id');
+    }
+
+    public function video_play_histories()
+    {
+        return $this->hasMany('App\Models\VideoPlayLogs', 'user_id', 'id');
     }
 
     public function getGenderAttribute()

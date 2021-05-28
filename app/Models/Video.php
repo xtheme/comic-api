@@ -37,18 +37,12 @@ class Video extends BaseModel
 
     public function visit_histories()
     {
-        return $this->hasMany('App\Models\History', 'major_id', 'id')->where([
-            ['class' , 'video'],
-            ['type' , 'visit'],
-        ]);
+        return $this->hasMany('App\Models\VideoVisit', 'video_id', 'id');
     }
 
     public function play_histories()
     {
-        return $this->hasMany('App\Models\History', 'major_id', 'id')->where([
-            ['class', 'video'],
-            ['type', 'play'],
-        ]);
+        return $this->hasMany('App\Models\VideoPlayLog', 'video_id', 'id');
     }
 
     public function getTaggedTagsAttribute()

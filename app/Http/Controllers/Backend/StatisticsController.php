@@ -17,9 +17,9 @@ class StatisticsController extends Controller
     ];
 
     const ORDER_BY_OPTIONS = [
-        'created_at'          => '上架时间',
+        'created_at'            => '上架时间',
         'visit_histories_count' => '点击量',
-        'play_histories_count' => '播放总量',
+        'play_histories_count'  => '播放总量',
     ];
 
     public function __construct(VideoRepositoryInterface $video_repository, VideoSeriesRepositoryInterface $series_repository)

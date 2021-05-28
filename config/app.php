@@ -239,6 +239,7 @@ return [
          * Custom Facades...
          */
         'Upload' => App\Facades\UploadFacade::class,
+        'Record' => App\Facades\RecordFacade::class,
     ],
 
 ];

@@ -12,6 +12,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Str;
+use Record;
 
 class BookController extends BaseController
 {
@@ -44,15 +45,7 @@ class BookController extends BaseController
         ];
 
         // todo 訪問數+1
-        $log = [
-            'major_id' => $id,
-            'minor_id' => 0,
-            'user_vip' => $request->user->subscribed_status ? 1 : -1,
-            'user_id'  => $request->user->id,
-            'type'     => 'visit',
-            'class'    => 'book',
-        ];
-        app(HistoryRepository::class)->log($log);
+        Record::from('book')->visit($id);
 
         return Response::jsonSuccess(__('api.success'), $data);
     }

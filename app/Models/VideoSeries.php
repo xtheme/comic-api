@@ -45,26 +45,17 @@ class VideoSeries extends BaseModel
 
     public function play_histories()
     {
-        return $this->hasMany('App\Models\History', 'minor_id', 'id')->where([
-            ['class', 'video'],
-            ['type', 'play'],
-        ]);
+        return $this->hasMany('App\Models\VideoPlayLog', 'series_id', 'id');
     }
 
     public function member_histories()
     {
-        return $this->hasOne('App\Models\ViewsMemberHistories', 'minor_id', 'id')->where([
-            ['class', 'video'],
-            ['type', 'play']
-        ]);
+        return $this->hasMany('App\Models\VideoPlayLog', 'series_id', 'id')->where('vip', 1);
     }
 
     public function guest_histories()
     {
-        return $this->hasOne('App\Models\ViewsGuestHistories', 'minor_id', 'id')->where([
-            ['class', 'video'],
-            ['type', 'play']
-        ]);
+        return $this->hasMany('App\Models\VideoPlayLog', 'series_id', 'id')->where('vip', -1);
     }
 
     public function getUrlAttribute()

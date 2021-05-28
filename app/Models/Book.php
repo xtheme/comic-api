@@ -48,18 +48,12 @@ class Book extends BaseModel
 
     public function visit_histories()
     {
-        return $this->hasMany('App\Models\History', 'major_id', 'id')->where([
-            ['class', 'book'],
-            ['type', 'visit'],
-        ]);
+        return $this->hasMany('App\Models\BookVisit', 'book_id', 'id');
     }
 
     public function favorite_histories()
     {
-        return $this->hasMany('App\Models\History', 'major_id', 'id')->where([
-            ['class', 'book'],
-            ['type', 'favorite'],
-        ]);
+        return $this->hasMany('App\Models\BookFavorite', 'book_id', 'id');
     }
 
     public function getTaggedTagsAttribute()

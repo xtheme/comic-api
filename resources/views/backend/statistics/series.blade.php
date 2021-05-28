@@ -24,7 +24,6 @@
                     <td>{{ $item->id }}</td>
                     <td>
                         {{ $item->title }}
-
                         @if(!empty($item->tagged))
                             <div class="d-flex align-content-center flex-wrap" style="margin-top: 5px;">
                                 @foreach($item->tagged as $tagged)
@@ -33,9 +32,9 @@
                             </div>
                         @endif
                     </td>
-                    <td class="text-center">{{ $item->guest_histories->count  ?? '0' }}</td>
-                    <td class="text-center">{{ $item->member_histories->count  ?? '0' }}</td>
-                    <td class="text-center">{{ ($item->guest_histories->count ?? '0') + ($item->member_histories->count ?? '0')}}</td>
+                    <td class="text-center">{{ $item->guest_histories->count()  ?? '0' }}</td>
+                    <td class="text-center">{{ $item->member_histories->count()  ?? '0' }}</td>
+                    <td class="text-center">{{ ($item->guest_histories->count() ?? '0') + ($item->member_histories->count() ?? '0')}}</td>
                 </tr>
             @endforeach
             </tbody>
