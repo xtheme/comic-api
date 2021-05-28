@@ -24,6 +24,7 @@ class SingleSignOn
             'api.user.mobile',
             'api.sms.verify',
             'api.sms.send',
+            'api.user.logout',
         ];
 
         if (in_array($request_route, $white_routes)) {
