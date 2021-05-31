@@ -48,4 +48,15 @@ return [
         'product' => env('SMS_PRODUCT'),
         'message' => env('SMS_MESSAGE'),
     ],
+
+    /**
+     * DUN
+     */
+    'dun' => [
+        'id' => env('DUN_SECRET_ID'),
+        'key' => env('DUN_SECRET_KEY'),
+        'url' => env('DUN_TEXT_API'),
+        'bid' => env('DUN_TEXT_BID'),
+        'version' => env('DUN_TEXT_VERSION'),
+    ],
 ];
