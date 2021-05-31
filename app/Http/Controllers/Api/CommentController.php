@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Repositories\CommentRepository;
 use App\Services\CommentService;
+use App\Services\DunService;
 use Illuminate\Support\Facades\Response;
 
 class CommentController extends Controller
@@ -13,11 +14,13 @@ class CommentController extends Controller
 
     private $repository;
     private $commentService;
+    private $dunService;
 
-    public function __construct(CommentRepository $repository , CommentService $commentService)
+    public function __construct(CommentRepository $repository , CommentService $commentService , DunService $dunService)
     {
         $this->repository = $repository;
         $this->commentService = $commentService;
+        $this->dunService = $dunService;
     }
 
     public function add(Request $request)
@@ -30,6 +33,10 @@ class CommentController extends Controller
 
         if (!$this->commentService->check_frequency($request->user->id)){
             return Response::jsonError('超过一天评论次数限制,请珍惜评论次数！');
+        }
+
+        if (!$this->dunService->sendRequest($request->post('content'))){
+            return Response::jsonError('评论内容不合法！');
         }
 
 
