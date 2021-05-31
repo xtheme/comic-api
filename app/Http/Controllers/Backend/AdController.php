@@ -60,7 +60,7 @@ class AdController extends Controller
 
         $response = Upload::to('video_ads' , 1)->store($request->file('image'));
 
-        if ($response['success'] == 1){
+        if ($response['success'] == 1) {
             $post['image'] = $response['path'];
         }
         $video_ad->fill($post)->save();

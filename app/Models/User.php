@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Str;
 
 class User extends BaseModel
 {
@@ -50,8 +51,8 @@ class User extends BaseModel
      */
     protected $appends = [
         // 旧版字段相容
-        'email_bind',
-        'userface',
+        // 'email_bind',
+        // 'userface',
         // 'create_time',
         // 关联统计字段
         'subscribed_status',
@@ -168,10 +169,17 @@ class User extends BaseModel
         return false;
     }
 
-    // public function getOrdersCountAttribute()
-    // {
-    //     return $this->orders_count()->first()->count ?? 0;
-    // }
+    public function getAvatarAttribute($value)
+    {
+        // todo change config
+        $api_url = getOldConfig('web_config', 'api_url');
+
+        if (Str::endsWith($api_url, '/')) {
+            $api_url = substr($api_url, 0, -1);
+        }
+
+        return $api_url . $value;
+    }
 
     public function getOsAttribute()
     {
@@ -204,6 +212,7 @@ class User extends BaseModel
     {
         return $this->mobile ? 1 : 0;
     }
+
     /**
      * 旧版字段相容 userface
      *

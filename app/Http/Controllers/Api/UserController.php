@@ -10,6 +10,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\Storage;
+use Upload;
 use Vinkla\Hashids\Facades\Hashids;
 
 class UserController extends BaseController
@@ -186,25 +187,13 @@ class UserController extends BaseController
 
         $user = $request->user;
 
-        // 临时文件的绝对路径
-        $realPath = $file->getRealPath();
+        $response = Upload::to('user' , $user->id)->store($request->file('avatar'));
 
-        // 获取后缀名
-        $ext = $file->getClientOriginalExtension();
-
-        // 生成文件路径
-        // $filename = '/uploads/avatar/' . uniqid() . '.' . $ext;
-        $filename = '/avatar/' . Hashids::encode($user->id) . '.' . $ext;
-
-        // 上传文件
-        $success = Storage::put($filename, file_get_contents($realPath));
-
-        if (!$success) {
+        if ($response['success'] != 1){
             return Response::jsonError('很抱歉，上传头像失败！');
         }
 
-        // $user->userface = $filename;a
-        $user->avatar = '/storage' . $filename;
+        $user->avatar = $response['path'];
         $user->save();
 
         // 刷新缓存
