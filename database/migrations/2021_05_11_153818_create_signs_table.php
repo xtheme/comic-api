@@ -14,10 +14,9 @@ class CreateSignsTable extends Migration
     public function up()
     {
         Schema::create('signs', function (Blueprint $table) {
-            $table->integer('user_id')->comment('用户id');
-            $table->timestamp('created_at')->comment('创建时间');
-            $table->index('user_id');
-            $table->index('created_at');
+            $table->bigIncrements('id');
+            $table->integer('user_id')->index()->comment('用户id');
+            $table->timestamp('created_at')->useCurrent()->index()->comment('创建时间');
         });
     }
 
