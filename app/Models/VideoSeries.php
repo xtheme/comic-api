@@ -19,7 +19,7 @@ class VideoSeries extends BaseModel
 
     protected $appends = [
         'encrypt_url',
-        'play_count',
+        // 'play_count',
     ];
 
     protected $hidden = [
@@ -68,8 +68,8 @@ class VideoSeries extends BaseModel
         return $this->cdn->encrypt_domain . $this->link;
     }
 
-    public function getPlayCountAttribute()
-    {
-        return $this->play_histories->where('major_id', $this->video_id)->count();
-    }
+    // public function getPlayCountAttribute()
+    // {
+    //     return $this->play_histories->where('major_id', $this->video_id)->count();
+    // }
 }

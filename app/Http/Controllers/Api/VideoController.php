@@ -33,7 +33,7 @@ class VideoController extends BaseController
     public function detail($id)
     {
         // $data = $this->repository->find($id)->toArray();
-        $data = Video::withCount(['visit_histories'])->find($id)->toArray();
+        $data = Video::with(['series', 'series.cdn'])->withCount(['visit_histories', 'play_histories'])->find($id)->toArray();
 
         // todo 訪問數+1
         Record::from('video')->visit($id);
