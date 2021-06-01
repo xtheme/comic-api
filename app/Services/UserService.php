@@ -75,18 +75,18 @@ class UserService
 
 
                 //簽到資料組成
-                $sign_days = $this->days($user);
+                $days = $this->days($user);
 
-                $today_sign = $sign_days->pluck('date')->contains(date('Y-m-d'));
-                $exists = $sign_days->exists();
-                $days = 0;
+                $today_sign = $days->pluck('date')->contains(date('Y-m-d'));
+                $exists = $days->exists();
+                $sign_days = 0;
                 if ($exists) {
-                    $days = $user->sign_days;
+                    $sign_days = $user->sign_days;
                 }
         
                 $score_list = $this->scoreList();
         
-                $user->days = $days;
+                $user->sign_days  = $sign_days;
                 $user->today_sign = $today_sign;
                 $user->score_list = $score_list;
             }
