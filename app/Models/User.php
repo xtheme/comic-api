@@ -42,6 +42,7 @@ class User extends BaseModel
      * @var array
      */
     protected $hidden = [
+        'sign_days'
     ];
 
     /**

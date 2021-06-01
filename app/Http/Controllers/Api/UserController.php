@@ -242,4 +242,44 @@ class UserController extends BaseController
 
         return Response::jsonSuccess(__('api.success'), $histories);
     }
+
+
+    /**
+     * 签到
+     *
+     * @param Request $request
+     *
+     * @return Response
+     */
+    public function sign(Request $request)
+    {
+
+        $sign_days = $this->userService->days($request->user);
+
+        $exists = $sign_days->pluck('date')->contains(date('Y-m-d'));
+
+        if ($exists) {
+            return Response::jsonError('今日已签到');
+        }
+
+        $exists = $sign_days->pluck('date')->contains(date('Y-m-d', strtotime('-1 day')));
+
+        $days = 0;
+        if ($exists) {
+            $days = $request->user->sign_days;
+        }
+
+        //寫入簽到
+        $data = $this->userService->sign_in($days);
+
+        $this->userService->updateUserCache($request->user);
+
+        $data = [
+            'score' => $data['score'],
+            'days' => $data['days']
+        ];
+
+        return Response::jsonSuccess(__('api.success'), $data);
+    }
+
 }
