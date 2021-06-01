@@ -5,7 +5,6 @@ use App\Http\Controllers\Api\BookController;
 use App\Http\Controllers\Api\PaymentController;
 use App\Http\Controllers\Api\CommentController;
 use App\Http\Controllers\Api\PricingController;
-use App\Http\Controllers\Api\SignController;
 use App\Http\Controllers\Api\SmsController;
 use App\Http\Controllers\Api\TagController;
 use App\Http\Controllers\Api\TopicController;
@@ -58,9 +57,7 @@ Route::as('api.')->group(function () {
                 Route::get('/logout', [UserController::class, 'logout'])->name('logout');
                 Route::post('/modify', [UserController::class, 'modify'])->name('modify');
                 Route::post('/avatar', [UserController::class, 'avatar'])->name('avatar');
-                // 签到
-                Route::get('/signDetail', [SignController::class, 'signDetail'])->name('signDetail');
-                Route::post('/sign', [SignController::class, 'sign'])->name('sign');
+                Route::post('/sign', [UserController::class, 'sign'])->name('sign');
                 // 歷史紀錄 (閱覽/ 播放/ 收藏)
                 Route::get('/{class}/visit/history', [UserController::class, 'visit_history'])->name('visit.history');
             });
