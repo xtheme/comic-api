@@ -29,7 +29,7 @@ if (!function_exists('getOldConfig')) {
      */
     function getOldConfig($type, $key)
     {
-        $cache_key = 'old_config:' . $type;
+        $cache_key = 'old_config:' . $type . ':' . $key;
 
         return Cache::remember($cache_key, 300, function () use ($type, $key) {
             $config = DB::table('config')->where('config_type', $type)->first();
