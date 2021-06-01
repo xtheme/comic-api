@@ -42,7 +42,52 @@ class User extends BaseModel
      * @var array
      */
     protected $hidden = [
-        'sign_days'
+        'sign_days',
+        'name',
+        'nickname',
+        'password',
+        'email',
+        'email_bind',
+        'userface',
+        'money',
+        'role',
+        'group',
+        'sort',
+        'openid',
+        'did',
+        'isvip',
+        'vipstime',
+        'vipetime',
+        'fcbl',
+        'xingming',
+        'fangshi',
+        'zhanghao',
+        'tgid',
+        'guanzhu',
+        'ewm',
+        'isguanzhu',
+        'sxid',
+        'isout',
+        'gzopenid',
+        'agentlogin',
+        'payopenid',
+        'zjgz',
+        'idnumber',
+        'qq_id',
+        'qq_uid',
+        'weibo_id',
+        'weixin_uid',
+        'weixin_id',
+        'auto_buy',
+        'user_type',
+        'tzurl',
+        'device_tokens',
+        'cover_img',
+        'invite_uid',
+        'invite_install_code',
+        'version_type',
+        'del_comment',
+        'total_comment',
     ];
 
     /**
@@ -51,13 +96,13 @@ class User extends BaseModel
      * @var array
      */
     protected $appends = [
-        // 旧版字段相容
-        // 'email_bind',
-        // 'userface',
-        // 'create_time',
-        // 关联统计字段
+        // 訂閱狀態
         'subscribed_status',
-        // 'orders_count',
+        // 旧版字段相容
+        'integral',
+        'is_author',
+        'works',
+        'praise_num',
     ];
 
     protected $dates = [
@@ -205,22 +250,42 @@ class User extends BaseModel
     }
 
     /**
-     * 旧版字段相容 email_bind
+     * 旧版 /v2/dt/myCenter 字段兼容 integral 積分
      *
      * @return int
      */
-    public function getEmailBindAttribute()
+    public function getIntegralAttribute()
     {
-        return $this->mobile ? 1 : 0;
+        return 0;
     }
 
     /**
-     * 旧版字段相容 userface
+     * 旧版 /v2/dt/myCenter 字段兼容 is_author 是否為作者
      *
-     * @return string
+     * @return int
      */
-    public function getUserfaceAttribute()
+    public function getIsAuthorAttribute()
     {
-        return $this->avatar;
+        return 0;
+    }
+
+    /**
+     * 旧版 /v2/dt/myCenter 字段兼容 works 作品數
+     *
+     * @return int
+     */
+    public function getWorksAttribute()
+    {
+        return 0;
+    }
+
+    /**
+     * 旧版 /v2/dt/myCenter 字段兼容 praise 作品讚數
+     *
+     * @return int
+     */
+    public function getPraiseNumAttribute()
+    {
+        return 0;
     }
 }

@@ -19,6 +19,7 @@ class CreateConfigsTable extends Migration
             $table->string('name')->nullable();
             $table->string('type')->nullable();
             $table->string('code')->nullable();
+            $table->string('old_code')->nullable();
             $table->text('content');
             $table->timestamps();
         });
