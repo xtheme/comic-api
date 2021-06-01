@@ -66,8 +66,8 @@ class UserService
 
                 // 更新资料
                 // todo User 欄位調整
-                $user->last_login_time = time(); // old
-                // $user->last_login_at = Carbon::now(); // new
+                // $user->last_login_time = time(); // old
+                $user->last_login_at = Carbon::now(); // new
                 $user->last_login_ip = request()->header('ip');
                 $user->platform = request()->header('platform');
                 $user->version = request()->header('app-version');
