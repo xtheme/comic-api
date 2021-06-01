@@ -4,9 +4,11 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Requests\Api\MobileRequest;
 use App\Models\History;
+use App\Models\User;
 use App\Services\SmsService;
 use App\Services\UserService;
 use Illuminate\Http\Request;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\Storage;
@@ -167,7 +169,11 @@ class UserController extends BaseController
     {
         $user = $this->userService->update($request);
 
-        return Response::jsonSuccess(__('api.success'), $user);
+        if ($user instanceof Collection) {
+            return Response::jsonSuccess(__('api.success'), $user);
+        }
+
+        return Response::jsonError($user, 500);
     }
 
     /**

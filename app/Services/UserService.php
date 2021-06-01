@@ -341,7 +341,7 @@ class UserService
      *
      * @param  Request  $request
      *
-     * @return User
+     * @return User|string
      */
     public function update(Request $request)
     {
@@ -365,7 +365,7 @@ class UserService
                 case 'username':
                     $used = $this->isNameUsed($value);
                     if ($used) {
-                        return Response::jsonError('很抱歉，当前昵称已被使用！', 500);
+                        return '很抱歉，当前昵称已被使用！';
                     }
                     break;
             }
