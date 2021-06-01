@@ -1,18 +1,18 @@
 <?php
 
-namespace App\Console\Commands\Refactor;
+namespace App\Console\Commands\Migrate;
 
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\DB;
 
-class CommentRefactor extends Command
+class CommentMigrate extends Command
 {
     /**
      * The name and signature of the console command.
      *
      * @var string
      */
-    protected $signature = 'refactor:comments';
+    protected $signature = 'migrate:comments';
 
     /**
      * The console command description.
