@@ -162,7 +162,7 @@ class UserService
         $data = [
             'username' => $this->getUserNiceName(),
             'device_id' => $request->header('uuid'),
-            'area' => '',
+            'area' => '86',
             'mobile' => '',
             'sex' => 0,
             'status' => 1,
