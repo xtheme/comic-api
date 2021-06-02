@@ -23,15 +23,25 @@ class CommentController extends Controller
         $this->dunService = $dunService;
     }
 
+
+    public function list(Request $request , $chapter_id , $order)
+    {
+
+        $data = $this->repository->list($chapter_id , $order)->get();
+
+        return Response::jsonSuccess(__('api.success'), $data);
+    }
+
+
     public function add(Request $request)
     {
         
-        if (!$this->commentService->check_coll_down($request->user->id)){
+        if (!$this->commentService->check_coll_down()){
             return Response::jsonError('评论过于频繁,请稍候再试！');
         }
 
 
-        if (!$this->commentService->check_frequency($request->user->id)){
+        if (!$this->commentService->check_frequency()){
             return Response::jsonError('超过一天评论次数限制,请珍惜评论次数！');
         }
 
@@ -50,9 +60,10 @@ class CommentController extends Controller
             return Response::jsonError('评论失败');
         }
 
-        $this->commentService->update_cache($request->user->id);
+        $this->commentService->update_cache();
         
 
         return Response::jsonSuccess(__('api.success'), []);
     }
+
 }

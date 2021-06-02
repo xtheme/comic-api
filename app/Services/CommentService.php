@@ -3,8 +3,9 @@
 namespace App\Services;
 
 use App\Traits\CacheTrait;
-use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Cache;
 
 class CommentService
 {
@@ -14,14 +15,13 @@ class CommentService
     /**
      * 检查冷却时间
      *
-     * @param $user_id
      */
-    public function check_coll_down($user_id)
+    public function check_coll_down()
     {
 
         $comment_colldown = getConfig('comment_colldown');
 
-        $colldown_key = $this->getCacheKeyPrefix() . sprintf('comment:colldown-%s', $user_id);
+        $colldown_key = $this->getCacheKeyPrefix() . sprintf('comment:colldown-%s', request()->user->id);
         $cache_time = Cache::get($colldown_key);
 
         if (isset($cache_time) && ($cache_time + $comment_colldown) > time()) {
@@ -34,14 +34,13 @@ class CommentService
     /**
      * 检查每日评论数
      *
-     * @param $user_id
      */
-    public function check_frequency($user_id)
+    public function check_frequency()
     {
 
         $comment_frequency = getConfig('comment_frequency');
 
-        $cache_key = $this->getCacheKeyPrefix() . sprintf('comment:frequency-%s', $user_id);
+        $cache_key = $this->getCacheKeyPrefix() . sprintf('comment:frequency-%s', request()->user->id);
         $today_request = Cache::get($cache_key);
 
         if (!$today_request) {
@@ -60,19 +59,17 @@ class CommentService
     /**
      * 更新缓存
      *
-     * @param $user_id
      */
-    public function update_cache($user_id)
+    public function update_cache()
     {
 
-        $colldown_key = $this->getCacheKeyPrefix() . sprintf('comment:colldown-%s', $user_id);
+        $colldown_key = $this->getCacheKeyPrefix() . sprintf('comment:colldown-%s', request()->user->id);
         Cache::set($colldown_key , time());
 
 
-        $cache_key = $this->getCacheKeyPrefix() . sprintf('comment:frequency-%s', $user_id);
+        $cache_key = $this->getCacheKeyPrefix() . sprintf('comment:frequency-%s', request()->user->id);
         Cache::increment($cache_key);
 
     }
-    
     
 }

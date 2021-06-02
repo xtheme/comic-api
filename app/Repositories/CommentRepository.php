@@ -58,4 +58,18 @@ class CommentRepository extends Repository implements CommentRepositoryInterface
                 ]);
             })->orderByDesc($order);
     }
+
+
+        /**
+     * @param  Request  $request
+     *
+     * @return Builder
+     */
+    public function list($chapter_id , $order): Builder
+    {
+        return $this->model::with(['user'])
+            ->when($chapter_id, function (Builder $query, $chapter_id) {
+                return $query->where('chapter_id', $chapter_id);
+            })->where('status', 1)->orderByDesc($order);
+    }
 }
