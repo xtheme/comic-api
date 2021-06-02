@@ -45,9 +45,9 @@ class UserController extends BaseController
             $user = $this->userService->registerDevice($request); // return Model (Object)
         }
 
-        if (!$user->status) {
-            return Response::jsonError('很抱歉，您的账号已被禁止！');
-        }
+        // if (!$user->status) {
+        //     return Response::jsonError('很抱歉，您的账号已被禁止！', 500);
+        // }
 
         $response = $this->userService->addDeviceCache($cache_key, $user);
 
@@ -90,9 +90,9 @@ class UserController extends BaseController
             $mobile_user = $this->userService->registerMobile($request);
         }
 
-        if (!$mobile_user->status) {
-            return Response::jsonError('很抱歉，您的账号已被禁止！', 500);
-        }
+        // if (!$mobile_user->status) {
+        //     return Response::jsonError('很抱歉，您的账号已被禁止！', 500);
+        // }
 
         // 前任裝置帳號
         $device_user = $this->userService->getUserByDevice($request);

@@ -54,6 +54,11 @@ class VerifyJwtToken
             if (isset($decoded->uid)) {
                 $request->user = User::findOrFail($decoded->uid);
 
+                // 帳號是否封禁
+                if (!$request->user->status) {
+                    return Response::jsonError('很抱歉，您的账号已被禁止！', 500);
+                }
+
                 // 電話帳號
                 if ($request->user->mobile) {
                     // 检查请求的 token 跟用户数据的 token 是否相符
