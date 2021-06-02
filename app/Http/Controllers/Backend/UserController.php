@@ -6,7 +6,9 @@ use App\Http\Controllers\Controller;
 use App\Models\User;
 use App\Repositories\Contracts\UserRepositoryInterface;
 use Illuminate\Http\Request;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Response;
+use Illuminate\Support\Facades\Validator;
 
 class UserController extends Controller
 {
@@ -17,17 +19,17 @@ class UserController extends Controller
         $this->repository = $repository;
     }
 
-    public function index()
+    public function index(Request $request)
     {
         $data = [
-            'list' => User::paginate(),
+            'list' => $this->repository->filter($request)->paginate(),
             'pageConfigs' => ['hasSearchForm' => true],
         ];
 
         return view('backend.user.index')->with($data);
     }
 
-    public function create()
+    /*public function create()
     {
         $username = '茄子漫画' . substr(str_shuffle('abcdefghijklmnopqrstuvwxyz'), 0, 5);
 
@@ -53,7 +55,7 @@ class UserController extends Controller
         User::create($validated);
 
         return Response::jsonSuccess('新增用户成功！');
-    }
+    }*/
 
 
     public function edit($id)
@@ -76,6 +78,22 @@ class UserController extends Controller
         return Response::jsonSuccess('資料已更新！');
     }
 
+    public function editVip($id)
+    {
+        $data = [
+            'user' => User::findOrFail($id)
+        ];
+
+        return view('backend.user.edit_vip')->with($data);
+    }
+
+    public function updateVip(Request $request, $id)
+    {
+        User::findOrFail($id)->update(['subscribed_at' => Carbon::now()->addDays($request->input('day'))]);
+
+        return Response::jsonSuccess('資料已更新！');
+    }
+
     public function destroy($id)
     {
         $model = User::findOrFail($id);
@@ -94,5 +112,49 @@ class UserController extends Controller
         $model->save();
 
         return Response::jsonSuccess('資料已更新！');
+    }
+
+    /**
+     * 批次更新
+     */
+    public function batch(Request $request, $action)
+    {
+        $ids = explode(',', $request->post('ids'));
+
+        switch ($action) {
+            case 'enable':
+                $text = '批量启用';
+                $data = ['status' => 1];
+                break;
+            case 'disable':
+                $text = '批量封禁';
+                $data = ['status' => 0];
+                break;
+        }
+
+        User::whereIn('id', $ids)->update($data);
+
+        return Response::jsonSuccess($text . '成功！');
+    }
+
+    public function editable(Request $request, $field)
+    {
+        $data = [
+            'pk' => $request->post('pk'),
+            'value' => $request->post('value'),
+        ];
+
+        $validator = Validator::make($data, [
+            'pk' => 'required',
+            'value' => 'required',
+        ]);
+
+        if ($validator->fails()) {
+            return Response::jsonError($validator->errors()->first(), 500);
+        }
+
+        $this->repository->editable($request->post('pk'), $field, $request->post('value'));
+
+        return Response::jsonSuccess('数据已更新成功');
     }
 }

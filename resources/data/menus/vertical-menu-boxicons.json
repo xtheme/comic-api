@@ -13,6 +13,10 @@
             "icon": "bx bxs-group",
             "submenu": [
                 {
+                    "url": "/backend/user",
+                    "name": "Customer List"
+                },
+                {
                     "url": "/backend/pricing",
                     "name": "Pricing List"
                 },

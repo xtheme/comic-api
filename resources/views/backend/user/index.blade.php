@@ -10,14 +10,33 @@
 
 @section('content')
     <section id="config-list">
-        <div class="mb-1">
-            <a href="#" data-batch class="btn btn-primary" role="button" aria-pressed="true">批量启用</a>
-            <a href="#" data-batch class="btn btn-danger" role="button" aria-pressed="true">批量封禁</a>
-            <a href="#" data-modal class="btn btn-success" role="button" aria-pressed="true">添加用户</a>
-        </div>
+{{--        <div class="mb-1">--}}
+{{--            <a href="#" data-batch class="btn btn-primary" role="button" aria-pressed="true">批量启用</a>--}}
+{{--            <a href="#" data-batch class="btn btn-danger" role="button" aria-pressed="true">批量封禁</a>--}}
+{{--            <a href="{{ route('backend.user.create') }}" data-modal class="btn btn-primary" title="添加用户">添加用户</a>--}}
+{{--        </div>--}}
         <div class="card">
             <div class="card-header">
-                <h4 class="card-title">@yield('title')</h4>
+                <div class="float-left">
+                    <h4 class="card-title">@yield('title')</h4>
+                </div>
+                <div class="float-right">
+                    <form id="batch-action" class="form form-vertical" method="get" action="{{ route('backend.user.batch') }}" novalidate>
+                        <div class="form-body">
+                            <div class="d-flex align-items-center">
+                                <div class="form-group mr-1">
+                                    <select class="form-control" name="action">
+                                        <option value="enable">启用</option>
+                                        <option value="disable">封禁</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <button type="submit" class="btn btn-primary">批量操作</button>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
             </div>
             <div class="card-content">
                 <div class="card-body">
@@ -33,19 +52,18 @@
                                     </div>
                                 </th>
                                 <th>ID</th>
-                                <th>用户类型</th>
                                 <th>昵称</th>
-                                <th>版本号</th>
-                                <th class="text-center">平台</th>
-{{--                                <th class="text-center">头像</th>--}}
-                                <th class="text-center">性别</th>
-                                <th class="text-center">金币</th>
-                                <th>手机号</th>
-                                <th>VIP</th>
+                                <th class="text-center">帐号类型</th>
+                                <th class="text-center">VIP</th>
                                 <th class="text-center">VIP到期时间</th>
+                                <th class="text-center">版本号</th>
+                                <th class="text-center">平台</th>
+                                <th class="text-center">性别</th>
+                                <th class="text-center">积分</th>
+{{--                                <th>手机号/UUID</th>--}}
                                 <th>状态</th>
                                 <th>注册时间</th>
-                                <th>最后登陆时间</th>
+                                <th>最近登陆</th>
                                 <th>操作</th>
                             </tr>
                             </thead>
@@ -59,19 +77,84 @@
                                         </div>
                                     </td>
                                     <td>{{ $item->id }}</td>
-                                    <td>{{ $item->account_type }}</td>
                                     <td>{{ $item->username }}</td>
-                                    <td>{{ $item->version }}</td>
-                                    <td class="text-center">{!! $item->os !!}</td>
-{{--                                    <td class="text-center">头像</td>--}}
-                                    <td class="text-center">{!! $item->gender !!}</td>
+                                    <td class="text-center">
+                                        @if($item->mobile)
+                                            <span class="badge badge-pill badge-light-primary">电话</span>
+                                        @else
+                                            <span class="badge badge-pill badge-light-light">设备</span>
+                                        @endif
+                                    </td>
+                                    <td class="text-center">
+                                        @if($item->subscribed_status)
+                                            <span class="badge badge-pill badge-light-primary">VIP</span>
+                                        @else
+                                            <span class="badge badge-pill badge-light-light">普通</span>
+                                        @endif
+                                    </td>
+                                    <td class="text-center">
+                                        @if($item->subscribed_at)
+                                            <span data-toggle="tooltip" data-placement="top" data-original-title="{{ $item->subscribed_at}}">
+                                            {{ $item->subscribed_at->diffForHumans() }}
+                                            </span>
+                                        @else
+                                            <span class="text-light">N/A</span>
+                                        @endif
+                                    </td>
+                                    <td class="text-center">{{ $item->version }}</td>
+                                    <td class="text-center">
+                                        @if($item->platform == 1)
+                                            安卓
+                                        @else
+                                            iOS
+                                        @endif
+                                    </td>
+                                    <td class="text-center">
+                                        @switch($item->sex)
+                                            @case(1)
+                                            男
+                                            @break
+                                            @case(2)
+                                            女
+                                            @break
+                                            @default
+                                            未知
+                                            @break
+                                        @endswitch
+                                    </td>
                                     <td class="text-right">{{ $item->score }}</td>
-                                    <td>{{ $item->phone }}</td>
-                                    <td>@if($item->subscribed_status)<span class="text-success">VIP</span>@else<span class="text-muted">普通</span>@endif</td>
-                                    <td class="text-center">@if($item->subscribed_at){{ $item->subscribed_at->diffForHumans() }}@else<span class="text-light">N/A</span>@endif</td>
-                                    <td>{!! $item->identity !!}</td>
-                                    <td>{{ $item->created_at->diffForHumans() }}</td>
-                                    <td>@if($item->last_login_at){{ $item->last_login_at->diffForHumans() }}@else<span class="text-light">N/A</span>@endif</td>
+                                    {{--<td>
+                                        @if(!$item->mobile)
+                                            {{ $item->device_id }}
+                                        @else
+                                            {{ $item->phone }}
+                                        @endif
+                                    </td>--}}
+                                    <td>
+                                        @if(!$item->status)
+                                            <span class="badge badge-pill badge-light-danger">禁用</span>
+                                        @else
+                                            <span class="badge badge-pill badge-light-primary">正常</span>
+                                        @endif
+                                    </td>
+                                    <td>
+                                        @if($item->created_at)
+                                            <span data-toggle="tooltip" data-placement="top" data-original-title="{{ $item->created_at}}">
+                                            {{ $item->created_at->diffForHumans() }}
+                                            </span>
+                                        @else
+                                            <span class="text-light">N/A</span>
+                                        @endif
+                                    </td>
+                                    <td>
+                                        @if($item->last_login_at)
+                                            <span data-toggle="tooltip" data-placement="top" data-original-title="{{ $item->last_login_at}}">
+                                            {{ $item->last_login_at->diffForHumans() }}
+                                            </span>
+                                        @else
+                                            <span class="text-light">N/A</span>
+                                        @endif
+                                    </td>
                                     <td @if($loop->count == 1)style="position: fixed;"@endif>
                                         <div class="@if(($loop->count - $loop->iteration) < 3){{'dropup'}}@else{{'dropdown'}}@endif">
                                             <span class="bx bx-dots-vertical-rounded font-medium-3 dropdown-toggle nav-hide-arrow cursor-pointer"
@@ -79,24 +162,11 @@
                                             <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuButton{{ $item->id }}">
                                                 <a class="dropdown-item" data-modal href="{{ route('backend.user.edit', $item->id) }}" title="修改用户信息"><i class="bx bx-edit-alt mr-1"></i>修改</a>
                                                 @if ($item->status == '1')
+                                                    <a class="dropdown-item" data-modal data-size="sm" data-height="10vh" href="{{ route('backend.user.edit.vip', $item->id) }}" title="开通天數"><i class="bx bxs-crown mr-1"></i>开通天數</a>
                                                     <a class="dropdown-item" data-confirm href="{{ route('backend.user.block', $item->id) }}" title="封禁该账号"><i class="bx bx-lock mr-1"></i>封禁</a>
                                                 @else
                                                     <a class="dropdown-item" data-confirm href="{{ route('backend.user.block', $item->id) }}" title="启用该账号"><i class="bx bx-lock-open mr-1"></i>启用</a>
                                                 @endif
-{{--                                                @if (!$item->deleted_at)--}}
-{{--                                                    @if ($item->status == '1')--}}
-{{--                                                        <a class="dropdown-item" data-confirm href="{{ route('rbac.user.block', $item->id) }}" title="封禁该账号"><i class="bx bx-lock mr-1"></i>封禁</a>--}}
-{{--                                                    @else--}}
-{{--                                                        <a class="dropdown-item" data-confirm href="{{ route('rbac.user.block', $item->id) }}" title="启用该账号"><i class="bx bx-lock-open mr-1"></i>启用</a>--}}
-{{--                                                    @endif--}}
-{{--                                                    <a class="dropdown-item" data-modal data-size="full" data-height="70vh" href="{{ route('rbac.user.devices', $item->id) }}" title="用户设备列表"><i class="bx bx-mobile mr-1"></i>设备</a>--}}
-{{--                                                    <a class="dropdown-item" data-modal href="{{ route('rbac.user.edit', $item->id) }}" title="修改用户信息"><i class="bx bx-edit-alt mr-1"></i>修改</a>--}}
-{{--                                                    @if ($item->status != '3')--}}
-{{--                                                        <a class="dropdown-item" data-confirm href="{{ route('rbac.user.destroy', $item->id) }}" title="删除该用户"><i class="bx bxs-user-x mr-1"></i>删除</a>--}}
-{{--                                                    @endif--}}
-{{--                                                @else--}}
-{{--                                                    <a class="dropdown-item" data-confirm href="{{ route('rbac.user.restore', $item->id) }}" title="复权该用户"><i class="bx bxs-user-check mr-1"></i>恢复</a>--}}
-{{--                                                @endif--}}
                                             </div>
                                         </div>
                                     </td>
@@ -124,9 +194,9 @@
             <div class="row">
                 <div class="col-12">
                     <div class="form-group">
-                        <label for="input-id">用户ID</label>
+                        <label>用户ID</label>
                         <div class="controls">
-                            <input type="text" id="input-id" class="form-control"
+                            <input type="text" class="form-control"
                                    name="id" value="{{ request()->get('id') }}"
                                    placeholder="">
                         </div>
@@ -134,9 +204,9 @@
                 </div>
                 <div class="col-12">
                     <div class="form-group">
-                        <label for="input-nickname">昵称</label>
+                        <label>昵称</label>
                         <div class="controls">
-                            <input type="text" id="input-nickname" class="form-control"
+                            <input type="text" class="form-control"
                                    name="nickname" value="{{ request()->get('nickname') }}"
                                    placeholder="">
                         </div>
@@ -144,9 +214,19 @@
                 </div>
                 <div class="col-12">
                     <div class="form-group">
-                        <label for="input-mobile">手机号</label>
+                        <label>装置 UUID</label>
                         <div class="controls">
-                            <input type="text" id="input-mobile" class="form-control"
+                            <input type="text" class="form-control"
+                                   name="uuid" value="{{ request()->get('uuid') }}"
+                                   placeholder="">
+                        </div>
+                    </div>
+                </div>
+                <div class="col-12">
+                    <div class="form-group">
+                        <label>手机号</label>
+                        <div class="controls">
+                            <input type="text" class="form-control"
                                    name="mobile" value="{{ request()->get('mobile') }}"
                                    placeholder="">
                         </div>
@@ -154,16 +234,41 @@
                 </div>
                 <div class="col-12">
                     <div class="form-group">
-                        <label for="select-status">状态</label>
-                        <select class="form-control" id="select-status" name="status">
+                        <label>VIP</label>
+                        <select class="form-control" name="subscribed">
                             <option value="">全部</option>
-{{--                            @foreach ($status_options as $key => $val)--}}
-{{--                                @if (request()->get('status') == $key)--}}
-{{--                                    <option value="{{ $key }}" selected>{{ $val }}</option>--}}
-{{--                                @else--}}
-{{--                                    <option value="{{ $key }}">{{ $val }}</option>--}}
-{{--                                @endif--}}
-{{--                            @endforeach--}}
+                            <option value="2" @if(request()->get('status') == 2){{'selected'}}@endif>是</option>
+                            <option value="1" @if(request()->get('subscribed') == 1){{'selected'}}@endif>否</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="col-12">
+                    <div class="form-group">
+                        <label>状态</label>
+                        <select class="form-control" name="status">
+                            <option value="">全部</option>
+                            <option value="1" @if(request()->get('status') == 1){{'selected'}}@endif>禁用</option>
+                            <option value="2" @if(request()->get('status') == 2){{'selected'}}@endif>正常</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="col-12">
+                    <div class="form-group">
+                        <label>版本号</label>
+                        <div class="controls">
+                            <input type="text" class="form-control"
+                                   name="version" value="{{ request()->get('version') }}"
+                                   placeholder="1.3.0">
+                        </div>
+                    </div>
+                </div>
+                <div class="col-12">
+                    <div class="form-group">
+                        <label>平台类型</label>
+                        <select class="form-control" name="platform">
+                            <option value="">全部</option>
+                            <option value="1" @if(request()->get('platform') == 1){{'selected'}}@endif>安卓</option>
+                            <option value="2" @if(request()->get('platform') == 2){{'selected'}}@endif>iOS</option>
                         </select>
                     </div>
                 </div>
@@ -177,16 +282,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-12">
-                    <div class="form-group">
-                        <label for="input-date-login">最后登录时间</label>
-                        <div class="controls">
-                            <input type="text" id="input-date-login" class="form-control date-picker"
-                                   name="date_login" value="{{ request()->get('date_login') }}"
-                                   autocomplete="off">
-                        </div>
-                    </div>
-                </div>
+
                 <div class="col-12 d-flex justify-content-end">
                     <button type="submit" class="btn btn-primary mr-1 mb-1">搜索</button>
                     <button type="reset" class="btn btn-light-secondary mr-1 mb-1">重置</button>
@@ -232,6 +328,40 @@
 			    reloadUrl: url
             });
 	    });
+
+        $('#batch-action').submit(function (e) {
+	        e.preventDefault();
+
+	        let $this = $(this);
+	        let ids   = $.checkedIds();
+	        let url   = $this.attr('action') + '/' + $this.find('select[name="action"]').val();
+
+	        if (!ids) {
+		        parent.$.toast({
+			        type: 'error',
+			        message: '请先选择要操作的数据'
+		        });
+		        return false;
+	        }
+
+	        $.confirm({
+		        text: `请确认是否要继续批量操作?`,
+		        callback: function () {
+			        $.request({
+				        url: url,
+				        type: 'put',
+				        data: {'ids': ids},
+				        debug: true,
+				        callback: function (res) {
+					        parent.$.reloadIFrame({
+						        title: '提交成功',
+						        message: '请稍后数据刷新'
+					        });
+				        }
+			        });
+		        }
+	        });
+        });
     </script>
 @endsection
 

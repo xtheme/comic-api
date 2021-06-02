@@ -13,7 +13,7 @@
             <div class="row">
                 <div class="col-12">
                     <div class="form-group">
-                        <label for="input-username">头像</label>
+                        <label>头像</label>
                         <div class="input-group">
                             <input type="file" class="hidden-file-upload" data-path="avatar/{{ $user->id }}">
                             <input type="text" class="form-control image-path" name="avatar" value="{{ $user->userface ?? '' }}" autocomplete="off" aria-describedby="input-file-addon">
@@ -24,24 +24,12 @@
                         <div class="upload-image-callback">@if($user->avatar)<img src="{{ $user->avatar }}">@endif</div>
                     </div>
                 </div>
-                {{--<div class="col-12">
-                    <div class="form-group">
-                        <label for="input-username"><span class="danger">*</span> 账号</label>
-                        <div class="controls">
-                            <input type="text" id="input-username" class="form-control" name="username"
-                                   value="{{$user->username}}"
-                                   readonly="readonly">
-                        </div>
-                    </div>
-                </div>--}}
                 <div class="col-6">
                     <div class="form-group">
-                        <label for="input-username"><span class="danger">*</span> 昵称</label>
+                        <label><span class="danger">*</span> 昵称</label>
                         <div class="controls">
-                            <input type="text" id="input-username" class="form-control" name="username"
+                            <input type="text" class="form-control" name="username"
                                    placeholder="请填写用户昵称"
-                                   required
-                                   data-validation-required-message="请填写用户昵称"
                                    value="{{ $user->username }}">
                         </div>
                     </div>
@@ -59,32 +47,24 @@
                 </div>
                 <div class="col-6">
                     <div class="form-group">
-                        <label for="input-mobile">手机号</label>
+                        <label>手机号</label>
                         <div class="controls">
                             <input type="text" class="form-control" name="mobile"
-                                   value="{{ $user->area }}-{{ $user->mobile }}"
+                                   value="{{ $user->mobile }}"
                                    readonly="readonly">
                         </div>
                     </div>
                 </div>
                 <div class="col-6">
                     <div class="form-group">
-                        <label for="input-score">设备号</label>
+                        <label>设备号</label>
                         <div class="controls">
-                            <input type="text" class="form-control" name="mobile"
+                            <input type="text" class="form-control" name="device_id"
                                    value="{{$user->device_id}}"
                                    readonly="readonly">
                         </div>
                     </div>
                 </div>
-                {{--<div class="col-6">
-                    <div class="form-group">
-                        <label for="input-email">邮箱</label>
-                        <div class="controls">
-                            <input type="text" class="form-control" name="email" value="{{ $user->email }}">
-                        </div>
-                    </div>
-                </div>--}}
                 <div class="col-6">
                     <div class="form-group">
                         <label>状态</label>
@@ -94,14 +74,14 @@
                                     <fieldset>
                                         <div class="radio">
                                             <input type="radio" name="status" id="status-active" value="1" @if($user->status == 1){{'checked'}}@endif>
-                                            <label for="status-active">正常</label>
+                                            <label for="status-active">启用</label>
                                         </div>
                                     </fieldset>
                                 </li>
                                 <li class="d-inline-block mr-2 mb-1">
                                     <fieldset>
                                         <div class="radio">
-                                            <input type="radio" name="status" id="status-inactive" value="2" @if($user->status == 2){{'checked'}}@endif>
+                                            <input type="radio" name="status" id="status-inactive" value="0" @if($user->status == 0){{'checked'}}@endif>
                                             <label for="status-inactive">封禁</label>
                                         </div>
                                     </fieldset>
@@ -112,38 +92,13 @@
                 </div>
                 <div class="col-6">
                     <div class="form-group">
-                        <label for="input-score">积分</label>
+                        <label>积分</label>
                         <div class="controls">
                             <input type="text" class="form-control" name="score" value="{{$user->score ?? 0}}">
                         </div>
                     </div>
                 </div>
-                {{--<div class="col-6">
-                    <div class="form-group">
-                        <label>评论状态</label>
-                        <div class="controls">
-                            <ul class="list-unstyled mb-0">
-                                <li class="d-inline-block mr-2 mb-1">
-                                    <fieldset>
-                                        <div class="radio">
-                                            <input type="radio" name="comment_status" id="comment-active" value="1" @if($user->comment_status == 1){{'checked'}}@endif>
-                                            <label for="comment-active">正常</label>
-                                        </div>
-                                    </fieldset>
-                                </li>
-                                <li class="d-inline-block mr-2 mb-1">
-                                    <fieldset>
-                                        <div class="radio">
-                                            <input type="radio" name="comment_status" id="comment-inactive" value="0" @if($user->comment_status == 0){{'checked'}}@endif>
-                                            <label for="comment-inactive">禁言</label>
-                                        </div>
-                                    </fieldset>
-                                </li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>--}}
-                <div class="col-6">
+                <div class="col-12">
                     <div class="form-group">
                         <label>用户简介</label>
                         <textarea name="sign" class="form-control" rows="3" placeholder="请输入用户简介，最长255个字符">{{$user->sign}}</textarea>

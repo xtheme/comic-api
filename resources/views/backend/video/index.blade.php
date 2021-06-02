@@ -11,9 +11,9 @@
 
 @section('content')
     <section id="config-list">
-        <div class="mb-1">
-            <a href=" {{ route('backend.video.create') }}" data-modal data-height="55vh" title="添加动画" class="btn btn-primary glow">添加动画</a>
-        </div>
+{{--        <div class="mb-1">--}}
+{{--            <a href=" {{ route('backend.video.create') }}" data-modal data-height="55vh" title="添加动画" class="btn btn-primary glow">添加动画</a>--}}
+{{--        </div>--}}
         <div class="card">
             <div class="card-header">
                 <div class="float-left">

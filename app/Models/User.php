@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Str;
 
 class User extends BaseModel
@@ -165,7 +166,7 @@ class User extends BaseModel
         return $this->hasMany('App\Models\VideoPlayLogs', 'user_id', 'id');
     }
 
-    public function getGenderAttribute()
+    /*public function getGenderAttribute()
     {
         switch ($this->sex) {
             case 1:
@@ -175,19 +176,19 @@ class User extends BaseModel
             default:
                 return '<span class="text-muted">未知</span>';
         }
-    }
+    }*/
 
-    public function getIdentityAttribute()
+    /*public function getIdentityAttribute()
     {
         switch ($this->status) {
             case 1:
                 return '<span class="text-success">正常</span>';
-            case 2:
+            case 0:
                 return '<span class="text-danger">禁用</span>';
             default:
                 return '<span class="text-muted">未知</span>';
         }
-    }
+    }*/
 
     /**
      * 電話號碼
@@ -206,19 +207,20 @@ class User extends BaseModel
      */
     public function getSubscribedStatusAttribute()
     {
-        $subscribed_at = $this->subscribed_at;
-
-        if (!$subscribed_at) {
-            return false;
-        }
-
-        $now = time();
-
-        if ($now <= strtotime($subscribed_at)) {
-            return true;
-        }
-
-        return false;
+        // $subscribed_at = $this->subscribed_at;
+        //
+        // if (!$subscribed_at) {
+        //     return false;
+        // }
+        //
+        // $now = time();
+        //
+        // if ($now <= strtotime($subscribed_at)) {
+        //     return true;
+        // }
+        //
+        // return false;
+        return Carbon::now()->lt($this->subscribed_at);
     }
 
     public function getAvatarAttribute($value)
@@ -233,7 +235,7 @@ class User extends BaseModel
         return $api_url . $value;
     }
 
-    public function getOsAttribute()
+    /*public function getOsAttribute()
     {
         switch ($this->platform) {
             case 1:
@@ -248,12 +250,12 @@ class User extends BaseModel
         }
 
         return $platform;
-    }
+    }*/
 
-    public function getAccountTypeAttribute()
+    /*public function getAccountTypeAttribute()
     {
         return $this->mobile ? '电话' : '设备';
-    }
+    }*/
 
     /**
      * 旧版 /v2/dt/myCenter 字段兼容 integral 積分

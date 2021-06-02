@@ -72,8 +72,19 @@ Route::middleware(['auth'])->prefix('backend')->as('backend.')->group(function (
     Route::resource('config', ConfigController::class);
 
     // 用户管理
-    Route::put('user/{id}/comic_block', [UserController::class, 'comic_block'])->name('user.comic_block'); // 切换用户状态
-    Route::resource('user', UserController::class);
+    Route::prefix('user')->as('user.')->group(function () {
+        Route::get('/', [UserController::class, 'index'])->name('index');
+        // Route::get('create', [UserController::class , 'create'])->name('create');
+        // Route::post('store', [UserController::class , 'store'])->name('store');
+        Route::get('edit/{id}', [UserController::class , 'edit'])->name('edit');
+        Route::put('update/{id}', [UserController::class , 'update'])->name('update');
+        Route::delete('destroy/{id}', [UserController::class , 'destroy'])->name('destroy'); // 軟刪除
+        Route::put('block/{id}', [UserController::class, 'block'])->name('block');
+        Route::put('batch/{action?}', [UserController::class, 'batch'])->name('batch'); // 批量操作
+        Route::put('editable/{field}', [UserController::class, 'editable'])->name('editable');
+        Route::get('edit/vip/{id}', [UserController::class , 'editVip'])->name('edit.vip');
+        Route::put('update/vip/{id}', [UserController::class , 'updateVip'])->name('update.vip');
+    });
 
     // 订单
     Route::prefix('order')->as('order.')->group(function () {
@@ -85,7 +96,7 @@ Route::middleware(['auth'])->prefix('backend')->as('backend.')->group(function (
     Route::prefix('book')->as('book.')->group(function () {
         Route::get('/', [BookController::class, 'index'])->name('index');
         Route::get('create', [BookController::class , 'create'])->name('create');
-        Route::any('store', [BookController::class , 'store'])->name('store');
+        Route::post('store', [BookController::class , 'store'])->name('store');
         Route::get('edit/{id}', [BookController::class , 'edit'])->name('edit');
         Route::put('update/{id}', [BookController::class , 'update'])->name('update');
         Route::delete('destroy/{id}', [BookController::class , 'destroy'])->name('destroy'); // 軟刪除
