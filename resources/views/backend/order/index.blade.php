@@ -30,7 +30,7 @@
                             <h6 class="text-primary mb-0">续费订单数：<span class="font-medium-3 align-middle">{{ $renew_orders_count }}</span></h6>
                         </div>
                         <div class="col-12 col-sm-2 p-1">
-                            <h6 class="text-primary mb-0">续费总金熬：<span class="font-medium-3 align-middle">{{ $renew_orders_amount }}</span></h6>
+                            <h6 class="text-primary mb-0">续费总金额：<span class="font-medium-3 align-middle">{{ $renew_orders_amount }}</span></h6>
                         </div>
                     </div>
                     <!-- Table with outer spacing -->
