@@ -54,8 +54,8 @@
                                     <td>{{ $item->id }}</td>
                                     <td>{{$item->user->id}}</td>
                                     <td>{{ $item->user->username }}</td>
-                                    <td>{{ $item->book_chapter->book->title }}</td>
-                                    <td>{{ $item->book_chapter->title }}</td>
+                                    <td>{{ (isset($item->book_chapter)) ? $item->book_chapter->book->title : '' }}</td>
+                                    <td>{{ (isset($item->book_chapter)) ? $item->book_chapter->title : '' }}</td>
                                     <td>{{ $item->content }}</td>
                                     <td>{{ $item->likes }}</td>
                                     <td>{{ $item->created_at }}</td>

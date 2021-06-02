@@ -17,7 +17,7 @@ class Comment extends BaseModel
 
     public function user()
     {
-        return $this->hasOne('App\Models\User', 'id', 'user_id');
+        return $this->hasOne('App\Models\User', 'id', 'user_id')->select('id' , 'username', 'avatar');
     }
 
     public function book_chapter()

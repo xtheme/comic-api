@@ -107,6 +107,7 @@ Route::as('api.')->group(function () {
 
             //评论
             Route::prefix('comment')->as('comment.')->group(function () {
+                Route::get('/list/{chapter_id}/{order}', [CommentController::class, 'list'])->name('list');
                 Route::post('/add', [CommentController::class, 'add'])->name('add');
             });
 
