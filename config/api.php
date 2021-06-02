@@ -3,6 +3,10 @@
 return [
     'version' => env('API_VERSION', 'v5'),
 
+    'account' => [
+        'prefix' => env('ACCOUNT_PREFIX', '茄子漫画'),
+    ],
+
     /**
      * 第三方接口
      */
