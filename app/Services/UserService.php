@@ -161,17 +161,19 @@ class UserService
     {
         $data = [
             'username' => $this->getUserNiceName(),
-            'userface' => '',
-            'signup_ip' => $request->header('ip'),
-            'create_time' => time(),
-            'status' => 1,
-            'role' => 3,
-            'sex' => 0,
             'device_id' => $request->header('uuid'),
+            'area' => '',
+            'mobile' => '',
+            'sex' => 0,
+            'status' => 1,
+            'signup_ip' => $request->header('ip'),
             'platform' => $request->header('platform'),
             'version' => $request->header('app-version'),
             'subscribed_at' => null,
-            'mobile_bind' => 0,
+            // 'userface' => '',
+            // 'create_time' => time(),
+            // 'role' => 3,
+            // 'mobile_bind' => 0,
         ];
 
         return User::create($data);
@@ -188,18 +190,19 @@ class UserService
     {
         $data = [
             'username' => $this->getUserNiceName(),
-            'userface' => '',
-            'signup_ip' => $request->header('ip'),
-            'create_time' => time(),
-            'status' => 1,
-            'role' => 3,
-            'sex' => 0,
-            'mobile_bind' => 1,
+            'device_id' => '',
             'area' => $request->input('area'),
             'mobile' => $request->input('mobile'),
+            'sex' => 0,
+            'status' => 1,
+            'signup_ip' => $request->header('ip'),
             'platform' => $request->header('platform'),
             'version' => $request->header('app-version'),
             'subscribed_at' => null,
+            // 'userface' => '',
+            // 'create_time' => time(),
+            // 'role' => 3,
+            // 'mobile_bind' => 1,
         ];
 
         return User::create($data);

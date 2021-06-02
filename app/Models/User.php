@@ -9,13 +9,13 @@ class User extends BaseModel
 {
     use Notifiable;
 
-    // protected $table = 'users_clone';
+    // protected $table = 'users_new';
 
     // todo User 欄位調整
-    const CREATED_AT = 'create_time';
-    const UPDATED_AT = 'update_time';
+    // const CREATED_AT = 'create_time';
+    // const UPDATED_AT = 'update_time';
 
-    public $timestamps = false;
+    // public $timestamps = false;
 
     /**
      * The attributes that are mass assignable.
@@ -24,15 +24,21 @@ class User extends BaseModel
      */
     protected $fillable = [
         'username',
+        'device_id',
+        'area',
+        'mobile',
         'avatar',
         'sex',
         'score',
-        'status',
         'sign',
-        'password',
-        'device_id',
+        'status',
+        'platform',
+        'version',
         'token',
         'sign_days',
+        'signup_ip',
+        'last_login_ip',
+        'last_login_at',
         'subscribed_at',
     ];
 
@@ -46,6 +52,7 @@ class User extends BaseModel
         'nickname',
         'password',
         'email',
+        'mobile_bind',
         'email_bind',
         'userface',
         'money',
@@ -97,7 +104,7 @@ class User extends BaseModel
     protected $appends = [
         // 訂閱狀態
         'subscribed_status',
-        // 旧版字段相容
+        // todo 旧版字段相容
         'integral',
         'is_author',
         'works',
