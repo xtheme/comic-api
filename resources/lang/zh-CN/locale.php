@@ -32,17 +32,20 @@ return [
     "Video Domain" => "动画域名配置",
     "Play Statistics" => "播放统计",
 
-    "Ad" => "广告管理",
+    "Ad" => "广告与公告",
     "AdPlace List" => "广告位列表",
     "Ad List" => "广告列表",
+    "Notice List" => "公告列表",
 
     "Comments" => "評論管理",
     "Comment List" => "漫画评论",
-
-    "Notice List" => "公告列表",
 
     "Book Report" => "漫画举报管理",
     "ReportType List" => "举报类型设置",
     "Report List" => "用户举报列表",
 
+    "Permission Manage" => "权限管理",
+    "Administrator list" => "管理员列表",
+    "Role List" => "角色列表",
+    "Permission List" => "权限列表",
 ];

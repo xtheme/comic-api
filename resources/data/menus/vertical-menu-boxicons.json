@@ -94,30 +94,10 @@
                 {
                     "url": "/backend/ad",
                     "name": "Ad List"
-                }
-            ]
-        },
-        {
-            "url": "#",
-            "name": "Systems",
-            "slug": "systems",
-            "icon": "bx bxs-cog",
-            "submenu": [
+                },
                 {
                     "url": "/backend/notice",
                     "name": "Notice List"
-                },
-                {
-                    "url": "/terminal",
-                    "name": "Terminal"
-                },
-                {
-                    "url": "/backend/activity",
-                    "name": "Activity Log"
-                },
-                {
-                    "url": "/log-viewer/logs",
-                    "name": "System Log"
                 }
             ]
         }
