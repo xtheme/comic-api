@@ -2,8 +2,6 @@
 
 namespace App\Models;
 
-use App\Models\Comment;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Database\Eloquent\Model;
 
 class CommentLike extends Model
@@ -19,11 +17,13 @@ class CommentLike extends Model
         parent::boot();
 
         static::created(function ($commentLike) {
-
-            Comment::where('id', $commentLike->comment_id)->update([
-                'likes' => DB::raw("likes + 1")
-            ]);
+            $commentLike->comment->increment('likes');
         });
+    }
+
+    public function comment()
+    {
+        return $this->belongsTo('App\Models\Comment');
     }
 
 }
