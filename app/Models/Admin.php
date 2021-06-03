@@ -5,7 +5,10 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Carbon;
 use Spatie\Permission\Traits\HasRoles;
+
+use function React\Promise\reject;
 
 class Admin extends Authenticatable
 {
@@ -48,15 +51,21 @@ class Admin extends Authenticatable
         'token',
     ];
 
-    protected $dates = [
-        'logintime',
-        'create_time',
-        'update_time'
-    ];
+    public function getLogintimeAttribute($value)
+    {
+        if (!$value) return '';
+        return Carbon::createFromTimeStamp($value);
+    }
 
-    protected $casts = [
-        'logintime' => 'datetime',
-        'create_time' => 'datetime',
-        'update_time' => 'datetime'
-    ];
+    public function getCreateTimeAttribute($value)
+    {
+        if (!$value) return '';
+        return Carbon::createFromTimeStamp($value);
+    }
+
+    public function getUpdateTimeAttribute($value)
+    {
+        if (!$value) return '';
+        return Carbon::createFromTimeStamp($value);
+    }
 }
