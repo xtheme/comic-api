@@ -176,7 +176,9 @@ class UserService
             // 'mobile_bind' => 0,
         ];
 
-        return User::create($data);
+        $user = User::create($data);
+
+        return $user->fresh();
     }
 
     /**
@@ -205,7 +207,9 @@ class UserService
             // 'mobile_bind' => 1,
         ];
 
-        return User::create($data);
+        $user = User::create($data);
+
+        return $user->fresh();
     }
 
     /**
