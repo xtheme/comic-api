@@ -25,6 +25,11 @@ class Comment extends BaseModel
         return $this->hasOne('App\Models\BookChapter', 'id', 'chapter_id');
     }
 
+    public function comment_likes()
+    {
+        return $this->hasMany('App\Models\CommentLike', 'id', 'chapter_id');
+    }
+
     public function getStatusTextAttribute ()
     {
 

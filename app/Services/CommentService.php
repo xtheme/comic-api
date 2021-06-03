@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Models\CommentLike;
 use App\Traits\CacheTrait;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
@@ -71,5 +72,34 @@ class CommentService
         Cache::increment($cache_key);
 
     }
+
+    /**
+     * 评论点赞
+     *
+     */
+    public function like($comment_id)
+    {
+
+        $exists = CommentLike::where([
+            'user_id' => request()->user->id , 
+            'comment_id' => $comment_id
+        ])->exists();
+        
+        //评论已点赞过
+        if ($exists){
+            return false;
+        }
+
+        CommentLike::create([
+            'user_id' => request()->user->id , 
+            'comment_id' => $comment_id
+        ]);
+
+        return true;
+
+    }
+
+
+    
     
 }
