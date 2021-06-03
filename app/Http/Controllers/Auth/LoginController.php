@@ -121,6 +121,12 @@ class LoginController extends Controller
 
             activity()->useLog('管理員')->causedBy(auth()->user())->log('登录成功!');
 
+            $data = [
+                'logintime' => time(),
+                'loginip' => $request->ip(),
+            ];
+            $admin->update($data);
+
             return Response::jsonSuccess('登录成功!');
         }
 
