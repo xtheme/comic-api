@@ -66,4 +66,15 @@ class CommentController extends Controller
         return Response::jsonSuccess(__('api.success'), []);
     }
 
+
+    public function like(Request $request , $comment_id)
+    {
+
+        if(!$this->commentService->like($comment_id)){
+            return Response::jsonError('您已点赞噢！');
+        }
+
+        return Response::jsonSuccess(__('api.success'), []);
+    }
+
 }

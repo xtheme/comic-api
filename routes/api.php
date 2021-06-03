@@ -109,6 +109,7 @@ Route::as('api.')->group(function () {
             Route::prefix('comment')->as('comment.')->group(function () {
                 Route::get('/list/{chapter_id}/{order}', [CommentController::class, 'list'])->name('list');
                 Route::post('/add', [CommentController::class, 'add'])->name('add');
+                Route::post('/like/{comment_id}', [CommentController::class, 'like'])->name('like');
             });
 
         });
