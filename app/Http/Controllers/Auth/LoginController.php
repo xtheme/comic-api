@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Admin;
 use App\Providers\RouteServiceProvider;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Response;
 use Illuminate\Validation\ValidationException;
@@ -23,7 +24,9 @@ class LoginController extends Controller
       |
       */
 
-    use AuthenticatesUsers;
+    use AuthenticatesUsers {
+        logout as traitLogout;
+    }
 
     /**
      * Where to redirect users after login.
@@ -73,8 +76,6 @@ class LoginController extends Controller
      */
     public function login(Request $request)
     {
-        $post = $request->post();
-
         $this->validateLogin($request);
 
         // If the class is using the ThrottlesLogins trait, we can automatically throttle
@@ -86,6 +87,13 @@ class LoginController extends Controller
 
             return $this->sendLockoutResponse($request);
         }
+
+        // If the login attempt was unsuccessful we will increment the number of attempts
+        // to login and redirect the user back to the login form. Of course, when this
+        // user surpasses their maximum number of attempts they will get locked out.
+        $this->incrementLoginAttempts($request);
+
+        $post = $request->post();
 
         if (empty($post['username'])) {
             return Response::jsonError('请输入账号!', 500);
@@ -110,9 +118,25 @@ class LoginController extends Controller
         }
 
         if ($this->attemptLogin($request)) {
+
+            activity()->useLog('管理員')->causedBy(auth()->user())->log('登录成功!');
+
             return Response::jsonSuccess('登录成功!');
         }
 
         return Response::jsonError('登录失敗!');
+    }
+
+    /**
+     * Log the user out of the application.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\RedirectResponse|\Illuminate\Http\JsonResponse
+     */
+    public function logout(Request $request)
+    {
+        activity()->useLog('管理員')->causedBy(auth()->user())->log('登出成功!');
+
+        return $this->traitLogout($request);
     }
 }
