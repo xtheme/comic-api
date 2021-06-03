@@ -4,28 +4,25 @@ namespace App\Services;
 
 use App\Models\CommentLike;
 use App\Traits\CacheTrait;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Cache;
 
 class CommentService
 {
-
     use CacheTrait;
 
     /**
      * 检查冷却时间
-     *
      */
-    public function check_coll_down()
+    public function check_cool_down()
     {
+        // todo 錯字
+        $cool_down = getConfig('comment_colldown');
 
-        $comment_colldown = getConfig('comment_colldown');
+        $cache_key = $this->getCacheKeyPrefix() . sprintf('comment:cd-%s', request()->user->id);
 
-        $colldown_key = $this->getCacheKeyPrefix() . sprintf('comment:colldown-%s', request()->user->id);
-        $cache_time = Cache::get($colldown_key);
+        $cache_time = Cache::get($cache_key);
 
-        if (isset($cache_time) && ($cache_time + $comment_colldown) > time()) {
+        if (isset($cache_time) && ($cache_time + $cool_down) > time()) {
             return false;
         }
 
@@ -34,7 +31,6 @@ class CommentService
 
     /**
      * 检查每日评论数
-     *
      */
     public function check_frequency()
     {
@@ -54,52 +50,34 @@ class CommentService
         }
 
         return true;
-
     }
 
     /**
      * 更新缓存
-     *
      */
     public function update_cache()
     {
-
-        $colldown_key = $this->getCacheKeyPrefix() . sprintf('comment:colldown-%s', request()->user->id);
-        Cache::set($colldown_key , time());
-
+        $cache_key = $this->getCacheKeyPrefix() . sprintf('comment:cd-%s', request()->user->id);
+        Cache::set($cache_key , time());
 
         $cache_key = $this->getCacheKeyPrefix() . sprintf('comment:frequency-%s', request()->user->id);
         Cache::increment($cache_key);
-
     }
 
     /**
      * 评论点赞
-     *
      */
     public function like($comment_id)
     {
+        $like = CommentLike::firstOrCreate([
+            'user_id'    => request()->user->id,
+            'comment_id' => $comment_id,
+        ]);
 
-        $exists = CommentLike::where([
-            'user_id' => request()->user->id , 
-            'comment_id' => $comment_id
-        ])->exists();
-        
-        //评论已点赞过
-        if ($exists){
+        if (!$like->wasRecentlyCreated) {
             return false;
         }
 
-        CommentLike::create([
-            'user_id' => request()->user->id , 
-            'comment_id' => $comment_id
-        ]);
-
         return true;
-
     }
-
-
-    
-    
 }
