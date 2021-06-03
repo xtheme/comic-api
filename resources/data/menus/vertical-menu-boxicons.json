@@ -112,8 +112,12 @@
                     "name": "Terminal"
                 },
                 {
+                    "url": "/backend/activity",
+                    "name": "Activity Log"
+                },
+                {
                     "url": "/log-viewer/logs",
-                    "name": "Log Viewer"
+                    "name": "System Log"
                 }
             ]
         }

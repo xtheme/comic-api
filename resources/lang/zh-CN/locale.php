@@ -5,19 +5,23 @@ return [
 
     "Dashboard" => "控制台",
     "Configs" => "配置项",
+
     "Customers" => "会员管理",
     "Customer List" => "会员列表",
     "Pricing List" => "会员套餐",
     "Order List" => "订单列表",
+
     "Books" => "漫画管理",
     "Books List" => "漫画列表",
     "Recommended Books" => "推荐漫画",
     "CDN Caching List" => "CDN 预热名单",
 
     "Feedback" => "意見反饋",
+
     "Systems" => "系统设定",
     "Terminal" => "命令模式",
-    "Log Viewer" => "系统日志",
+    "Activity Log" => "操作日志",
+    "System Log" => "系统日志",
 
     "Categories" => "分类管理",
     "Tags" => "标签分类",
@@ -27,12 +31,14 @@ return [
     "Video List" => "动画列表",
     "Video Domain" => "动画域名配置",
     "Play Statistics" => "播放统计",
+
     "Ad" => "广告管理",
     "AdPlace List" => "广告位列表",
     "Ad List" => "广告列表",
 
     "Comments" => "評論管理",
     "Comment List" => "漫画评论",
+
     "Notice List" => "公告列表",
 
     "Book Report" => "漫画举报管理",

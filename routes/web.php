@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Auth\LoginController;
+use App\Http\Controllers\Backend\ActivityLogController;
 use App\Http\Controllers\Backend\BlockController;
 use App\Http\Controllers\Backend\BookChapterController;
 use App\Http\Controllers\Backend\BookController;
@@ -51,11 +52,6 @@ Route::get('403', [HomeController::class, 'noPermission'])->name('403');
 Route::get('404', [HomeController::class, 'notFound'])->name('404');
 Route::get('500', [HomeController::class, 'internalError'])->name('500');
 
-
-// Route::prefix('requisition')->as('requisition.')->group(function () {
-//     Route::get('create', [RequisitionController::class, 'create'])->name('create');
-//     Route::post('store', [RequisitionController::class, 'store'])->name('store');
-// });
 
 // Backend iframe layout
 Route::middleware(['auth'])->group(function () {
@@ -260,6 +256,13 @@ Route::middleware(['auth'])->prefix('backend')->as('backend.')->group(function (
     Route::prefix('statistics')->as('statistics.')->group(function () {
         Route::get('/', [StatisticsController::class , 'index'])->name('index');
         Route::get('/series/{video_id}', [StatisticsController::class , 'series'])->name('series');
+    });
+
+    // 操作记录
+    Route::prefix('activity')->as('activity.')->group(function () {
+        Route::get('/', [ActivityLogController::class , 'index'])->name('index');
+        Route::get('/diff/{id}', [ActivityLogController::class , 'diff'])->name('diff'); // 查看差異
+        Route::post('/restore/{id}', [ActivityLogController::class , 'restore'])->name('restore'); // 數據回滾
     });
 
 });
