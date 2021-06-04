@@ -15,9 +15,9 @@ class PricingController extends Controller
 {
     public function list(Request $request)
     {
-        $status = $request->user->orders->where('status', 1)->count() ? 0 : 1;
+        $status = $request->user->orders->where('status', 1)->count() ? 2 : 1;
 
-        $data = PricingPackage::where('status', $status)->orderByDesc('sort')->get();
+        $data = PricingPackage::whereIn('status', [0 , $status])->orderByDesc('sort')->get();
 
         return Response::jsonSuccess(__('api.success'), $data);
     }
