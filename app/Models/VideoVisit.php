@@ -10,7 +10,7 @@ class VideoVisit extends BaseModel
         'user_id',
     ];
 
-    public function book()
+    public function video()
     {
         return $this->hasOne('App\Models\Video', 'id', 'video_id');
     }

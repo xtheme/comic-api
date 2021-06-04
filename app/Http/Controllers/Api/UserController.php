@@ -3,14 +3,14 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Requests\Api\MobileRequest;
-use App\Models\History;
+use App\Models\BookVisit;
+use App\Models\VideoVisit;
 use App\Services\SmsService;
 use App\Services\UserService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Response;
 use Upload;
-use Vinkla\Hashids\Facades\Hashids;
 
 class UserController extends BaseController
 {
@@ -206,42 +206,40 @@ class UserController extends BaseController
     }
 
     // 歷史紀錄 (閱覽/ 播放/ 收藏)
-    public function visit_history(Request $request, $class)
+    public function visit_history(Request $request, $type)
     {
-        $histories = History::with(['video'])->where('user_id', $request->user->id)
-            ->where('class', $class)
-            ->where('type', 'visit')
-            ->orderByDesc('created_at')
-            ->get();
+        switch ($type) {
+            case 'book':
+                $histories = BookVisit::where('user_id', $request->user->id)->get();
 
-        $histories->transform(function ($item) use ($class) {
-            switch ($class) {
-                case 'video':
+                $histories = $histories->transform(function ($item) {
                     return [
-                        'id' => $item->major_id,
+                        'id' => $item->id,
+                        'title' => $item->book->title,
+                        'author' => $item->book->author,
+                        'cover' => $item->book->cover,
+                        // 'ribbon' => $item->video->ribbon,
+                        'tagged_tags' => $item->book->tagged_tags,
+                        'created_at' => $item->created_at->format('Y-m-d H:i:s'),
+                    ];
+                })->toArray();
+                break;
+            case 'video':
+                $histories = VideoVisit::where('user_id', $request->user->id)->get();
+
+                $histories = $histories->transform(function ($item) {
+                    return [
+                        'id' => $item->id,
                         'title' => $item->video->title,
                         'author' => $item->video->author,
                         'cover' => $item->video->cover,
                         'ribbon' => $item->video->ribbon,
                         'tagged_tags' => $item->video->tagged_tags,
-                        // 'series_id' => $item->minor_id,
                         'created_at' => $item->created_at->format('Y-m-d H:i:s'),
                     ];
-                case 'book':
-                    return [
-                        'id' => $item->major_id,
-                        'title' => $item->book->title,
-                        'author' => $item->book->author,
-                        'cover' => $item->book->cover,
-                        'ribbon' => $item->book->ribbon,
-                        // 'tagged_tags' => $item->video->tagged_tags,
-                        // 'series_id' => $item->minor_id,
-                        'created_at' => $item->created_at->format('Y-m-d H:i:s'),
-                    ];
-                default:
-                    return $item;
-            }
-        });
+                })->toArray();
+                break;
+        }
 
         return Response::jsonSuccess(__('api.success'), $histories);
     }
