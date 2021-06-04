@@ -12,6 +12,7 @@ class VideoDomainRequest extends BaseRequest
             'title' => 'required',
             'domain' => 'required|url',
             'encrypt_domain' => 'required|url',
+            'sort' => 'required|numeric',
         ];
     }
 
@@ -21,6 +22,7 @@ class VideoDomainRequest extends BaseRequest
             'title' => '域名名称',
             'domain' => 'CDN 域名',
             'encrypt_domain' => 'CDN 加密域名',
+            'sort' => '排序',
         ];
     }
 }

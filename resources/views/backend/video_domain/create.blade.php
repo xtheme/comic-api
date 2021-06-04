@@ -44,7 +44,7 @@
                     <div class="form-group">
                         <label>排序</label>
                         <div class="controls">
-                            <input type="number" class="form-control" name="sort" value="" placeholder="">
+                            <input type="number" class="form-control" name="sort" value="0" placeholder="">
                         </div>
                     </div>
                 </div>
