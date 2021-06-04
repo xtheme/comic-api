@@ -36,7 +36,7 @@ class CommentController extends Controller
     public function add(Request $request)
     {
         
-        if (!$this->commentService->check_coll_down()){
+        if (!$this->commentService->check_cool_down()){
             return Response::jsonError('评论过于频繁,请稍候再试！');
         }
 
