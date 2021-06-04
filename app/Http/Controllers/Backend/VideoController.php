@@ -52,11 +52,14 @@ class VideoController extends Controller
 
     public function edit($id)
     {
+        $video = $this->repository->find($id);
+
         $data = [
             'status_options' => Options::STATUS_OPTIONS,
             'ribbon_options' => Options::RIBBON_OPTIONS,
             'tags' => getAllTags(),
-            'video' => $this->repository->find($id),
+            'video' => $video,
+            'tagged' => $video->tagged->pluck('tag_name')->toArray(),
         ];
 
         return view('backend.video.edit')->with($data);

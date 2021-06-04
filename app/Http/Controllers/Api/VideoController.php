@@ -18,6 +18,9 @@ class VideoController extends BaseController
         $this->repository = $repository;
     }
 
+    /**
+     * @deprecated
+     */
     public function list(Request $request, $page = 1)
     {
         $request->merge([

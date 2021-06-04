@@ -47,7 +47,8 @@ class Video extends BaseModel
 
     public function getTaggedTagsAttribute()
     {
-        return $this->tagged->pluck('tag_name')->toArray();
+        // return $this->tagged->pluck('tag_name')->toArray();
+        return $this->tags->where('suggest', 1)->sortByDesc('priority')->take(3)->pluck('name')->toArray();
     }
 
     public function getCoverAttribute($value)
