@@ -26,6 +26,7 @@ class TopicController extends BaseController
                         'author'      => $item->author,
                         'cover'       => $item->cover,
                         'tagged_tags' => $item->tagged_tags,
+                        'ribbon'      => $item->ribbon,
                     ];
                 })->toArray();
                 break;
