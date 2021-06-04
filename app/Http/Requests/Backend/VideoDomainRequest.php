@@ -10,8 +10,8 @@ class VideoDomainRequest extends BaseRequest
     {
         return [
             'title' => 'required',
-            'domain' => 'required',
-            'encrypt_domain' => 'required',
+            'domain' => 'required|url',
+            'encrypt_domain' => 'required|url',
         ];
     }
 

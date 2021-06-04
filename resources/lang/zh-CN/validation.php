@@ -115,7 +115,7 @@ return [
     'timezone'    => ':attribute必须是一个合法的时区值。',
     'unique'      => ':attribute已经存在。',
     'uploaded'    => ':attribute上传失败。',
-    'url'         => ':attribute格式不正确。',
+    'url'         => ':attribute必须是有效的 URL。',
     'uuid'        => ':attribute必须是有效的 UUID。',
 
     /*
