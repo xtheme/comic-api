@@ -109,6 +109,8 @@ Route::middleware(['auth'])->prefix('backend')->as('backend.')->group(function (
     // 漫画分类
     Route::prefix('tag')->as('tag.')->group(function () {
         Route::get('/', [TagController::class, 'index'])->name('index');
+        Route::get('create', [TagController::class , 'create'])->name('create');
+        Route::post('store', [TagController::class , 'store'])->name('store');
         Route::put('batch/{action?}', [TagController::class, 'batch'])->name('batch');
         Route::put('editable/{field}', [TagController::class, 'editable'])->name('editable');
         Route::delete('destroy/{id}', [TagController::class , 'destroy'])->name('destroy');

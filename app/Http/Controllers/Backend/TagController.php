@@ -2,12 +2,13 @@
 
 namespace App\Http\Controllers\Backend;
 
-use App\Http\Controllers\Controller;
 use App\Models\Tag;
-use App\Repositories\Contracts\TagRepositoryInterface;
 use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Response;
+use App\Http\Requests\Backend\TagRequest;
 use Illuminate\Support\Facades\Validator;
+use App\Repositories\Contracts\TagRepositoryInterface;
 
 class TagController extends Controller
 {
@@ -37,6 +38,37 @@ class TagController extends Controller
 
         return view('backend.tag.index')->with($data);
     }
+
+    public function create()
+    {
+        $data = [
+            'status_options' => self::STATUS_OPTIONS
+        ];
+
+        return view('backend.tag.create')->with($data);
+    }
+
+    public function store(TagRequest $request)
+    {
+
+        $request->validated();
+
+        if (Tag::where('name' , $request->post('name'))->exists()){
+            return Response::jsonError('已有相同标签');
+        }
+        
+        $request->merge([
+            'slug' => $request->post('name'),
+            'queries' => 0
+        ]);
+
+        $this->repository->create($request->post());
+
+
+        return Response::jsonSuccess(__('response.create.success'));
+    }
+
+
 
     public function editable(Request $request, $field)
     {
