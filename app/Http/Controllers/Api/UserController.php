@@ -275,7 +275,7 @@ class UserController extends BaseController
         //寫入簽到
         $data = $this->userService->sign_in($days);
 
-        $this->userService->updateUserCache($request->user->fresh());
+        $this->userService->updateUserCache($request->user);
 
         $data = [
             'score' => $data['score'],

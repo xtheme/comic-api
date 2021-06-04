@@ -102,6 +102,8 @@ class UserService
      */
     public function updateUserCache(User $user)
     {
+        $user->refresh();
+
         if (!empty($user->area) && !empty($user->mobile)) {
             $cache_key = $this->getCacheKeyPrefix($user->version) . sprintf('user:mobile:%s-%s', $user->area, $user->mobile);
         } else {
@@ -178,7 +180,7 @@ class UserService
 
         $user = User::create($data);
 
-        return $user->fresh();
+        return $user->refresh();
     }
 
     /**
@@ -209,7 +211,7 @@ class UserService
 
         $user = User::create($data);
 
-        return $user->fresh();
+        return $user->refresh();
     }
 
     /**

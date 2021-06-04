@@ -11,7 +11,6 @@ class CommentLike extends Model
         'comment_id'
     ];
 
-
     protected static function boot()
     {
         parent::boot();
