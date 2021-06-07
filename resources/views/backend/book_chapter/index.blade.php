@@ -48,7 +48,7 @@
                 <th>章节详情</th>
                 <th>审核状态</th>
                 <th>脚本状态</th>
-                <th>人工/自动</th>
+                <th>采集</th>
                 <th>显示/隐藏</th>
                 <th>删除状态</th>
                 <th>操作</th>
@@ -65,17 +65,17 @@
                     </td>
                     <td>{{ $chapter->id }}</td>
                     <td>
-                        <span data-type="text" data-pk="{{ $chapter->id }}" data-title="修改章节顺序" class="editable editable-click" data-url="{{ route('backend.book_chapter.editable', 'idx') }}">{{ $chapter->idx }}</span>
+                        <span data-type="text" data-pk="{{ $chapter->id }}" data-title="修改章节顺序" class="editable editable-click" data-url="{{ route('backend.book_chapter.editable', 'episode') }}">{{ $chapter->episode }}</span>
                     </td>
                     <td>{{ $chapter->title }}</td>
                     <td>章节封面</td>
-                    <td>@if($chapter->isvip == 0)
+                    <td>@if($chapter->charge == -1)
                             <span class="badge badge-pill badge-light-primary">免费</span>
                         @else
                             <span class="badge badge-pill badge-light-danger">收费</span>
                         @endif</td>
-                    <td>{{ $chapter->addtime }}</td>
-                    <td>{{ $chapter->updatetime }}</td>
+                    <td>{{ $chapter->created_at }}</td>
+                    <td>{{ $chapter->updated_at }}</td>
                     <td>
                         <a href="{{ route('backend.book_chapter.preview', $chapter->id) }}" title="章节详情" target="_blank">查看</a>
                     </td>
