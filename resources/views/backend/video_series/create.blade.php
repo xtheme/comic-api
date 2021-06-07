@@ -51,7 +51,7 @@
                                 <div class="input-group-prepend">
                                     <span class="input-group-text">第</span>
                                 </div>
-                                <input type="number" class="form-control" name="episode">
+                                <input type="number" class="form-control" name="episode" value="{{ $prev_episode }}">
                                 <div class="input-group-append">
                                     <span class="input-group-text">集</span>
                                 </div>

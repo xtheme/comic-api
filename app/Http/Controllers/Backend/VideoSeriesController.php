@@ -51,6 +51,7 @@ class VideoSeriesController extends Controller
             'status_options' => self::STATUS_OPTIONS,
             'charge_options' => self::CHARGE_OPTIONS,
             'domains' => $this->repository->getDomains(),
+            'prev_episode' => $this->repository->filter($request)->count() + 1,
         ];
 
         return view('backend.video_series.create')->with($data);

@@ -11,7 +11,7 @@ class VideoSeriesRequest extends BaseRequest
         return [
             'episode'         => 'required',
             'title'           => 'required',
-            'vip'             => 'required',
+            'charge'          => 'required',
             'status'          => 'required',
             'video_domain_id' => 'required',
             'link'            => 'required|starts_with:/|ends_with:m3u8',
@@ -23,7 +23,7 @@ class VideoSeriesRequest extends BaseRequest
         return [
             'episode'         => '集数',
             'title'           => '影集标题',
-            'vip'             => '付费观看',
+            'charge'          => '付费观看',
             'status'          => '状态',
             'video_domain_id' => '视频域名',
             'link'            => '视频链结',
