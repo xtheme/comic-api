@@ -11,7 +11,7 @@
     <form id="form" class="form" method="post" action="{{ route('backend.tag.store') }}">
         <div class="form-body">
             <div class="row">
-                <div class="col-6">
+                <div class="col-12">
                     <div class="form-group">
                         <label>添加标签</label>
                         <div class="controls">
@@ -19,7 +19,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-6">
+                <div class="col-12">
                     <div class="form-group">
                         <label>添加描述</label>
                         <div class="controls">
@@ -27,7 +27,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-6">
+                <div class="col-12">
                     <div class="form-group">
                         <span class="float-right font-size-small text-light">(数字由大到小排序)</span>
                         <label>排序</label>
@@ -36,9 +36,9 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-6">
+                <div class="col-12">
                     <div class="form-group">
-                        <label>前台推荐</label>
+                        <label>前端显示</label>
                         <div class="controls">
                             <select class="form-control" id="select-status" name="suggest">
                                 @foreach ($status_options as $key => $val)
@@ -50,7 +50,7 @@
                 </div>
                 <div class="col-12 d-flex justify-content-end">
                     <button type="submit" class="btn btn-primary mr-1">提交</button>
-                    <button type="reset" class="btn btn-light-secondary">还原</button>
+{{--                    <button type="reset" class="btn btn-light-secondary">还原</button>--}}
                 </div>
             </div>
         </div>

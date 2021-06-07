@@ -11,7 +11,7 @@
 @section('content')
     <section>
         <div class="mb-1">
-            <a href=" {{ route('backend.tag.create') }}" data-modal data-height="55vh" title="添加标签" class="btn btn-primary glow">添加标签</a>
+            <a href=" {{ route('backend.tag.create') }}" data-modal data-size="sm" data-height="30vh" title="添加标签" class="btn btn-primary glow">添加标签</a>
         </div>
         <div class="card">
             <div class="card-header">
@@ -26,8 +26,8 @@
                                     <select class="form-control" name="action">
                                         <option value="dismiss_book">解除关联的漫画</option>
                                         <option value="dismiss_video">解除关联的动画</option>
-                                        <option value="enable">显示前端推荐</option>
-                                        <option value="disable">隐藏前端推荐</option>
+                                        <option value="enable">在前端显示</option>
+                                        <option value="disable">在前端隐藏</option>
                                     </select>
                                 </div>
                                 <div class="form-group">
@@ -55,7 +55,7 @@
                                 <th>分类名称</th>
                                 <th>描述</th>
                                 <th class="text-right">查询次数</th>
-                                <th class="text-center">前台推荐</th>
+                                <th class="text-center">前端显示</th>
                                 <th class="text-center">关联漫画数</th>
                                 <th class="text-center">关联动画数</th>
                                 <th>操作</th>
@@ -83,23 +83,23 @@
                                     <td class="text-center">
                                         @switch($tag->suggest)
                                             @case(1)
-                                                <a class="badge badge-pill badge-light-success" data-confirm href="{{ route('backend.tag.batch', ['action'=>'disable', 'ids' => $tag->id]) }}" title="隐藏前台推荐">推荐</a>
+                                                <a class="badge badge-pill badge-light-primary" data-confirm href="{{ route('backend.tag.batch', ['action'=>'disable', 'ids' => $tag->id]) }}" title="在前端隐藏">显示</a>
                                             @break
                                             @case(0)
-                                                <a class="badge badge-pill badge-light-danger" data-confirm href="{{ route('backend.tag.batch', ['action'=>'enable', 'ids' => $tag->id]) }}" title="显示前台推荐">隐藏</a>
+                                                <a class="badge badge-pill badge-light-danger" data-confirm href="{{ route('backend.tag.batch', ['action'=>'enable', 'ids' => $tag->id]) }}" title="在前端显示">隐藏</a>
                                             @break
                                         @endswitch
                                     </td>
                                     <td class="text-center">
                                         @if($tag->tagged_book_count > 0)
-                                            <label class="badge badge-light-success badge-pill">{{ $tag->tagged_book_count }}</label>
+                                            <label class="badge badge-light-primary badge-pill">{{ $tag->tagged_book_count }}</label>
                                         @else
                                             {{ $tag->tagged_book_count }}
                                         @endif
                                     </td>
                                     <td class="text-center">
                                         @if($tag->tagged_video_count > 0)
-                                            <label class="badge badge-light-success badge-pill">{{ $tag->tagged_video_count }}</label>
+                                            <label class="badge badge-light-primary badge-pill">{{ $tag->tagged_video_count }}</label>
                                         @else
                                             {{ $tag->tagged_video_count }}
                                         @endif
@@ -150,7 +150,7 @@
                         <div class="float-right font-small-1 text-muted mt-1">推荐的标签会显示在前台供用户查询</div>
                         <div class="checkbox">
                             <input type="checkbox" class="checkbox-input" id="suggest" name="suggest" value="1" @if(request()->get('suggest')){{'checked'}}@endif>
-                            <label for="suggest">前台推荐</label>
+                            <label for="suggest">前台显示</label>
                         </div>
                     </div>
                 </div>

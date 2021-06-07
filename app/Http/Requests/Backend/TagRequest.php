@@ -18,7 +18,7 @@ class TagRequest extends BaseRequest
     {
         return [
             'name' => '标签',
-            'suggest'   => '前台推荐',
+            'suggest'   => '前台显示',
         ];
     }
 }

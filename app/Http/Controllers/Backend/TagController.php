@@ -14,7 +14,7 @@ class TagController extends Controller
 {
     private $repository;
 
-    const STATUS_OPTIONS = [1 => '推荐', -1 => '隐藏'];
+    const STATUS_OPTIONS = [1 => '显示', -1 => '隐藏'];
 
     public function __construct(TagRepositoryInterface $repository)
     {
@@ -122,7 +122,7 @@ class TagController extends Controller
                 }
                 break;
             case 'disable':
-                $text = '隐藏前台推荐';
+                $text = '在前端隐藏';
                 $tags = Tag::whereIn('id', $ids)->get();
                 foreach ($tags as $tag) {
                     $tag->suggest = false;
@@ -130,7 +130,7 @@ class TagController extends Controller
                 }
                 break;
             case 'enable':
-                $text = '显示前台推荐';
+                $text = '在前端显示';
                 $tags = Tag::whereIn('id', $ids)->get();
                 foreach ($tags as $tag) {
                     $tag->suggest = true;
