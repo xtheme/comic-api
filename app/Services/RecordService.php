@@ -21,29 +21,25 @@ class RecordService
     {
         switch ($this->type) {
             case 'video':
-                $where = [
-                    'video_id'  => $target_id,
+                $history = VideoVisit::firstOrCreate([
+                    'video_id' => $target_id,
                     'series_id' => 0,
-                    'user_id'   => request()->user->id,
-                ];
-                $model = VideoVisit::where($where)->get()->first();
-                if ($model) {
-                    $model->touch();
-                } else {
-                    VideoVisit::create($where);
+                    'user_id' => request()->user->id,
+                ]);
+
+                if (!$history->wasRecentlyCreated) {
+                    $history->touch();
                 }
                 break;
             case 'book':
-                $where = [
-                    'book_id'  => $target_id,
+                $history = BookVisit::firstOrCreate([
+                    'book_id' => $target_id,
                     'chapter_id' => 0,
-                    'user_id'   => request()->user->id,
-                ];
-                $model = VideoVisit::where($where)->get()->first();
-                if ($model) {
-                    $model->touch();
-                } else {
-                    BookVisit::create($where);
+                    'user_id' => request()->user->id,
+                ]);
+
+                if (!$history->wasRecentlyCreated) {
+                    $history->touch();
                 }
                 break;
         }
@@ -51,17 +47,15 @@ class RecordService
 
     public static function play($video_id, $series_id)
     {
-        $where = [
+        $history = VideoPlayLog::firstOrCreate([
             'video_id'  => $video_id,
             'series_id' => $series_id,
             'user_id'   => request()->user->id,
             'vip'       => request()->user->subscribed_status ? 1 : -1,
-        ];
-        $model = VideoPlayLog::where($where)->get()->first();
-        if ($model) {
-            $model->touch();
-        } else {
-            VideoPlayLog::create($where);
+        ]);
+
+        if (!$history->wasRecentlyCreated) {
+            $history->touch();
         }
     }
 }
