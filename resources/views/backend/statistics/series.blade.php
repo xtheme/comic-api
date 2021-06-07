@@ -32,9 +32,9 @@
                             </div>
                         @endif
                     </td>
-                    <td class="text-center">{{ $item->guest_histories->count()  ?? '0' }}</td>
-                    <td class="text-center">{{ $item->member_histories->count()  ?? '0' }}</td>
-                    <td class="text-center">{{ ($item->guest_histories->count() ?? '0') + ($item->member_histories->count() ?? '0')}}</td>
+                    <td class="text-center">{{ $item->guest_histories_count }}</td>
+                    <td class="text-center">{{ $item->member_histories_count }}</td>
+                    <td class="text-center">{{ $item->guest_histories_count  + $item->member_histories_count }}</td>
                 </tr>
             @endforeach
             </tbody>

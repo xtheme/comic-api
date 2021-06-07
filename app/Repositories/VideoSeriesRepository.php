@@ -38,7 +38,11 @@ class VideoSeriesRepository extends Repository implements VideoSeriesRepositoryI
         $order = $request->get('order') ?? 'created_at';
         $sort = $request->get('sort') ?? 'desc';
 
-        return $this->model::with(['cdn' , 'member_histories' , 'guest_histories'])->when($video_id, function (Builder $query, $video_id) {
+        return $this->model::with(['cdn'])->withCount(['member_histories' => function(Builder $query) use ($video_id) {
+            $query->where('video_id', $video_id);
+        } , 'guest_histories' => function(Builder $query) use ($video_id) {
+            $query->where('video_id', $video_id);
+        }])->when($video_id, function (Builder $query, $video_id) {
             return $query->where('video_id', $video_id);
         })->when($id, function (Builder $query, $id) {
             return $query->where('id', $id);
