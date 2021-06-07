@@ -1,15 +1,6 @@
 <?php
 
-use App\Http\Controllers\Api\AdController;
-use App\Http\Controllers\Api\BookController;
-use App\Http\Controllers\Api\PaymentController;
-use App\Http\Controllers\Api\CommentController;
-use App\Http\Controllers\Api\PricingController;
-use App\Http\Controllers\Api\SmsController;
-use App\Http\Controllers\Api\TagController;
-use App\Http\Controllers\Api\TopicController;
-use App\Http\Controllers\Api\UserController;
-use App\Http\Controllers\Api\VideoController;
+use App\Http\Controllers\Api;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -30,12 +21,12 @@ Route::as('api.')->group(function () {
         return response()->json([
             'code' => 200,
             'msg'  => 'Hello World!',
-        ], 200);
-    })->name('home');
+        ]);
+    })->name('hello');
 
     Route::as('payment.')->group(function () {
-        Route::post('/balance_transfer', [PaymentController::class, 'balanceTransfer'])->name('balance_transfer');
-        Route::get('/order', [PaymentController::class, 'orderInfo'])->name('order_info');
+        Route::post('/balance_transfer', [Api\PaymentController::class, 'balanceTransfer'])->name('balance_transfer');
+        Route::get('/order', [Api\PaymentController::class, 'orderInfo'])->name('order_info');
     });
 
     Route::middleware(['api.header', 'api.sign', 'jwt.token', 'device.sso'])->group(function () {
@@ -51,65 +42,73 @@ Route::as('api.')->group(function () {
         Route::prefix(config('api.version'))->group(function () {
             // 会员
             Route::prefix('user')->as('user.')->group(function () {
-                Route::get('/device', [UserController::class, 'device'])->name('device');
+                Route::get('/device', [Api\UserController::class, 'device'])->name('device');
                 // Route::post('/mobile', [UserController::class, 'mobile'])->name('mobile')->middleware('sso');
-                Route::post('/mobile', [UserController::class, 'mobile'])->name('mobile');
-                Route::get('/logout', [UserController::class, 'logout'])->name('logout');
-                Route::post('/modify', [UserController::class, 'modify'])->name('modify');
-                Route::post('/avatar', [UserController::class, 'avatar'])->name('avatar');
-                Route::post('/sign', [UserController::class, 'sign'])->name('sign');
+                Route::post('/mobile', [Api\UserController::class, 'mobile'])->name('mobile');
+                Route::get('/logout', [Api\UserController::class, 'logout'])->name('logout');
+                Route::post('/modify', [Api\UserController::class, 'modify'])->name('modify');
+                Route::post('/avatar', [Api\UserController::class, 'avatar'])->name('avatar');
+                Route::post('/sign', [Api\UserController::class, 'sign'])->name('sign');
+
                 // 歷史紀錄 (閱覽/ 播放/ 收藏)
-                Route::get('/{type}/visit/history', [UserController::class, 'visit_history'])->name('visit.history');
+                Route::get('/{type}/visit/history', [Api\VisitHistoryController::class, 'list'])->name('visit.history');
+            });
+
+            Route::prefix('history')->as('history.')->group(function () {
+
+                // 閱覽 (訪問) 歷史紀錄
+                Route::get('/visit/{type}', [Api\VisitHistoryController::class, 'list'])->name('visit.history');
+                Route::post('visit/{type}/destroy', [Api\VisitHistoryController::class, 'destroy'])->name('visit.history');
             });
 
             Route::prefix('sms')->as('sms.')->group(function () {
-                Route::post('/verify', [SmsController::class, 'verify'])->name('verify'); // 校验SSO
-                Route::post('/send', [SmsController::class, 'send'])->name('send');
+                Route::post('/verify', [Api\SmsController::class, 'verify'])->name('verify'); // 校验SSO
+                Route::post('/send', [Api\SmsController::class, 'send'])->name('send');
             });
 
             // 广告
             Route::prefix('ad')->as('ad.')->group(function () {
-                Route::get('/space/{id}', [AdController::class, 'space'])->name('space');
+                Route::get('/space/{id}', [Api\AdController::class, 'space'])->name('space');
             });
 
             // 主题区块
             Route::prefix('topic')->as('topic.')->group(function () {
-                Route::get('/{causer}', [TopicController::class, 'list'])->name('list');
-                Route::get('/more/{topic}/{page?}', [TopicController::class, 'more'])->name('more');
+                Route::get('/{causer}', [Api\TopicController::class, 'list'])->name('list');
+                Route::get('/more/{topic}/{page?}', [Api\TopicController::class, 'more'])->name('more');
             });
 
             Route::prefix('tag')->as('tag.')->group(function () {
-                Route::get('/', [TagController::class, 'list'])->name('list');
-                Route::get('/book/{tag}/{page?}', [TagController::class, 'book'])->name('book');
-                Route::get('/video/{tag}/{page?}', [TagController::class, 'video'])->name('video');
+                Route::get('/', [Api\TagController::class, 'list'])->name('list');
+                Route::get('/book/{tag}/{page?}', [Api\TagController::class, 'book'])->name('book');
+                Route::get('/video/{tag}/{page?}', [Api\TagController::class, 'video'])->name('video');
             });
 
             // 动画
             Route::prefix('video')->as('video.')->group(function () {
-                Route::get('/list/{page?}', [VideoController::class, 'list'])->name('list');
-                Route::get('/detail/{id}', [VideoController::class, 'detail'])->name('detail');
-                Route::get('/recommend/{id?}', [VideoController::class, 'recommend'])->name('recommend');
-                Route::post('/play/{id}/{series_id}', [VideoController::class, 'play'])->name('play');
+                Route::get('/list/{page?}', [Api\VideoController::class, 'list'])->name('list');
+                Route::get('/detail/{id}', [Api\VideoController::class, 'detail'])->name('detail');
+                Route::get('/recommend/{id?}', [Api\VideoController::class, 'recommend'])->name('recommend');
+                Route::post('/play/{id}/{series_id}', [Api\VideoController::class, 'play'])->name('play');
             });
 
             // 漫畫
             Route::prefix('book')->as('book.')->group(function () {
-                Route::get('/{id}', [BookController::class, 'detail'])->name('detail');
-                Route::get('/{id}/chapters', [BookController::class, 'chapters'])->name('chapters');
-                Route::get('/{id}/chapter/{chapter_id}/{page?}', [BookController::class, 'chapter'])->name('chapter');
-                Route::get('/recommend/{id?}', [BookController::class, 'recommend'])->name('recommend');
+                Route::get('/{id}', [Api\BookController::class, 'detail'])->name('detail');
+                Route::get('/{id}/chapters', [Api\BookController::class, 'chapters'])->name('chapters');
+                Route::get('/{id}/chapter/{chapter_id}/{page?}', [Api\BookController::class, 'chapter'])->name('chapter');
+                Route::get('/recommend/{id?}', [Api\BookController::class, 'recommend'])->name('recommend');
             });
 
             Route::prefix('pricing')->as('pricing.')->group(function () {
-                Route::get('/', [PricingController::class, 'list'])->name('list');
-                Route::get('/{id}', [PricingController::class, 'url'])->name('url');
+                Route::get('/', [Api\PricingController::class, 'list'])->name('list');
+                Route::get('/{id}', [Api\PricingController::class, 'url'])->name('url');
             });
 
             //评论
             Route::prefix('comment')->as('comment.')->group(function () {
-                Route::get('/list/{chapter_id}/{order}', [CommentController::class, 'list'])->name('list');
-                Route::post('/add', [CommentController::class, 'add'])->name('add');
-                Route::post('/like/{comment_id}', [CommentController::class, 'like'])->name('like');
+                Route::get('/list/{chapter_id}/{order}', [Api\CommentController::class, 'list'])->name('list');
+                Route::post('/add', [Api\CommentController::class, 'add'])->name('add');
+                Route::post('/like/{comment_id}', [Api\CommentController::class, 'like'])->name('like');
             });
 
         });

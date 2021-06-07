@@ -205,46 +205,6 @@ class UserController extends BaseController
         return Response::jsonSuccess(__('api.success'), $user);
     }
 
-    // 歷史紀錄 (閱覽/ 播放/ 收藏)
-    public function visit_history(Request $request, $type)
-    {
-        switch ($type) {
-            case 'book':
-                $histories = BookVisit::where('user_id', $request->user->id)->get();
-
-                $histories = $histories->transform(function ($item) {
-                    return [
-                        'id' => $item->id,
-                        'title' => $item->book->title,
-                        'author' => $item->book->author,
-                        'cover' => $item->book->cover,
-                        // 'ribbon' => $item->video->ribbon,
-                        'tagged_tags' => $item->book->tagged_tags,
-                        'created_at' => $item->created_at->format('Y-m-d H:i:s'),
-                    ];
-                })->toArray();
-                break;
-            case 'video':
-                $histories = VideoVisit::where('user_id', $request->user->id)->get();
-
-                $histories = $histories->transform(function ($item) {
-                    return [
-                        'id' => $item->id,
-                        'title' => $item->video->title,
-                        'author' => $item->video->author,
-                        'cover' => $item->video->cover,
-                        'ribbon' => $item->video->ribbon,
-                        'tagged_tags' => $item->video->tagged_tags,
-                        'created_at' => $item->created_at->format('Y-m-d H:i:s'),
-                    ];
-                })->toArray();
-                break;
-        }
-
-        return Response::jsonSuccess(__('api.success'), $histories);
-    }
-
-
     /**
      * 签到
      *
