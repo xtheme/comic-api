@@ -23,6 +23,7 @@ class VisitHistoryController extends BaseController
         $histories = $histories->transform(function ($item) {
             return [
                 'id' => $item->id,
+                'book_id' => $item->book_id,
                 'title' => $item->book->title,
                 'author' => $item->book->author,
                 'cover' => $item->book->cover,
@@ -42,6 +43,7 @@ class VisitHistoryController extends BaseController
         $histories = $histories->transform(function ($item) {
             return [
                 'id' => $item->id,
+                'video_id' => $item->video_id,
                 'title' => $item->video->title,
                 'author' => $item->video->author,
                 'cover' => $item->video->cover,
