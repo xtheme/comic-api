@@ -13,13 +13,12 @@ class TagController extends BaseController
     {
         $tags = Tag::where('suggest', 1)->orderByDesc('priority')->get();
 
-        $data = $tags->map(function($tag) {
+        $data = $tags->map(function ($tag) {
             return [
-                'id' => $tag->id,
-                'name' => $tag->name,
-                'priority' => $tag->priority,
+                'id'          => $tag->id,
+                'name'        => $tag->name,
+                'priority'    => $tag->priority,
                 'description' => $tag->description,
-
             ];
         })->toArray();
 
@@ -28,17 +27,17 @@ class TagController extends BaseController
 
     public function book($tag, $page = 1)
     {
-         $books = Book::with(['tagged'])->withAnyTag([$tag])->forPage($page)->get();
+        $books = Book::with(['tagged'])->withCount(['visit_histories'])->withAnyTag([$tag])->forPage($page)->get();
 
-        $data = $books->map(function($book) {
+        $data = $books->map(function ($book) {
             return [
-                'id' => $book->id,
-                'title' => $book->title,
-                'author' => $book->author,
-                'cover' => $book->vertical_thumb,
-                'tagged_tags' => $book->tagged_tags,
-                'updated_at' => $book->updated_at->format('Y-m-d'),
-
+                'id'                    => $book->id,
+                'title'                 => $book->title,
+                'author'                => $book->author,
+                'cover'                 => $book->vertical_thumb,
+                'tagged_tags'           => $book->tagged_tags,
+                'visit_histories_count' => shortenNumber($book->visit_histories_count),
+                'updated_at'            => $book->updated_at->format('Y-m-d'),
             ];
         })->toArray();
 
@@ -47,17 +46,18 @@ class TagController extends BaseController
 
     public function video($tag, $page = 1)
     {
-        $videos = Video::with(['tagged'])->withAnyTag([$tag])->forPage($page)->get();
+        $videos = Video::with(['tagged'])->withCount(['visit_histories'])->withAnyTag([$tag])->forPage($page)->get();
 
-        $data = $videos->map(function($video) {
+        $data = $videos->map(function ($video) {
             return [
-                'id' => $video->id,
-                'title' => $video->title,
-                'author' => $video->author,
-                'ribbon' => $video->ribbon,
-                'cover' => $video->cover,
-                'tagged_tags' => $video->tagged_tags,
-                'updated_at' => $video->updated_at->format('Y-m-d'),
+                'id'                    => $video->id,
+                'title'                 => $video->title,
+                'author'                => $video->author,
+                'ribbon'                => $video->ribbon,
+                'cover'                 => $video->cover,
+                'tagged_tags'           => $video->tagged_tags,
+                'visit_histories_count' => shortenNumber($video->visit_histories_count),
+                'updated_at'            => $video->updated_at->format('Y-m-d'),
             ];
         })->toArray();
 

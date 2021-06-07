@@ -27,7 +27,8 @@ class BookController extends BaseController
 
     public function detail($id)
     {
-        $book = Book::with(['chapters'])->withCount(['chapters', 'visit_histories', 'favorite_histories'])->find($id);
+        // $book = Book::with(['chapters'])->withCount(['chapters', 'visit_histories', 'favorite_histories'])->find($id);
+        $book = Book::with(['chapters'])->withCount(['chapters', 'visit_histories'])->find($id);
 
         $data = [
             'id' => $book->id,
@@ -41,8 +42,8 @@ class BookController extends BaseController
             'release_at' => $book->release_at,
             'latest_chapter_title' => $book->chapters_count ? $book->chapters->first()->title : '',
             'tagged_tags' => $book->tagged_tags,
-            'visit_histories_count' => $book->visit_histories_count,
-            'favorite_histories_count' => $book->favorite_histories_count,
+            'visit_histories_count' => shortenNumber($book->visit_histories_count),
+            // 'favorite_histories_count' => shortenNumber($book->favorite_histories_count),
         ];
 
         // todo 訪問數+1
@@ -176,9 +177,9 @@ class BookController extends BaseController
         }
 
         if ($tags) {
-            $books = Book::select(['id', 'title', 'vertical_cover'])->withAnyTag($tags)->where('id', '!=', $id)->inRandomOrder()->limit($limit)->get();
+            $books = Book::select(['id', 'title', 'vertical_cover'])->withCount(['visit_histories'])->withAnyTag($tags)->where('id', '!=', $id)->inRandomOrder()->limit($limit)->get();
         } else {
-            $books = Book::select(['id', 'title', 'vertical_cover'])->inRandomOrder()->limit($limit)->get();
+            $books = Book::select(['id', 'title', 'vertical_cover'])->withCount(['visit_histories'])->inRandomOrder()->limit($limit)->get();
         }
 
         $data = $books->map(function($book) {
@@ -189,7 +190,7 @@ class BookController extends BaseController
                 // 'description' => $book->description,
                 'cover' => $book->vertical_thumb,
                 'tagged_tags' => $book->tagged_tags,
-
+                'visit_histories_count' => shortenNumber($book->visit_histories_count),
             ];
         })->toArray();
 

@@ -19,27 +19,29 @@ class TopicController extends BaseController
     {
         switch ($topic->causer) {
             case 'video':
-                $list = $topic->query_result->map(function($item) {
+                $list = $topic->query_result->map(function ($item) {
                     return [
-                        'id'          => $item->id,
-                        'title'       => $item->title,
-                        'author'      => $item->author,
-                        'cover'       => $item->cover,
-                        'tagged_tags' => $item->tagged_tags,
-                        'ribbon'      => $item->ribbon,
+                        'id'                    => $item->id,
+                        'title'                 => $item->title,
+                        'author'                => $item->author,
+                        'cover'                 => $item->cover,
+                        'tagged_tags'           => $item->tagged_tags,
+                        'ribbon'                => $item->ribbon,
+                        'visit_histories_count' => shortenNumber($item->visit_histories_count),
                     ];
                 })->toArray();
                 break;
 
             case 'book':
                 $row = $topic->row;
-                $list = $topic->query_result->map(function($item) use ($row) {
+                $list = $topic->query_result->map(function ($item) use ($row) {
                     return [
-                        'id'          => $item->id,
-                        'title'       => $item->title,
-                        'author'      => $item->author,
-                        'cover'       => ($row > 2) ? $item->horizontal_thumb : $item->vertical_thumb,
-                        'tagged_tags' => $item->tagged_tags,
+                        'id'                    => $item->id,
+                        'title'                 => $item->title,
+                        'author'                => $item->author,
+                        'cover'                 => ($row > 2) ? $item->horizontal_thumb : $item->vertical_thumb,
+                        'tagged_tags'           => $item->tagged_tags,
+                        'visit_histories_count' => shortenNumber($item->visit_histories_count),
                     ];
                 })->toArray();
                 break;
