@@ -87,6 +87,11 @@ class TopicController extends BaseController
 
         $list = $topic->setUnlimited()->buildQuery()->forPage($page, $per_page)->get();
 
+        $list->map(function ($item) {
+            $item->cover = image_thumb($item->cover);
+        });
+
+
         $data = [
             'topic'      => $topic_id,
             'title'      => $topic->title,
