@@ -24,12 +24,12 @@
                         <table class="table table-striped table-hover">
                             <thead>
                             <tr>
-                                <th>
+{{--                                <th>
                                     <div class="checkbox">
                                         <input type="checkbox" class="checkbox-input check-all" id="check-all">
                                         <label for="check-all"></label>
                                     </div>
-                                </th>
+                                </th>--}}
                                 <th>ID</th>
                                 <th>域名名称</th>
                                 <th>未加密域名</th>
@@ -44,14 +44,14 @@
                             <tbody>
                             @foreach ($domains as $domain)
                                 <tr>
-                                    <td>
+{{--                                    <td>
                                         <div class="checkbox">
                                             <input type="checkbox" class="checkbox-input check-opt" id="check-{{ $domain->id }}" name="ids[]" value="{{ $domain->id }}">
                                             <label for="check-{{ $domain->id }}"></label>
                                         </div>
-                                    </td>
+                                    </td>--}}
                                     <td>{{ $domain->id }}</td>
-                                    <td>{{ $domain->title }}</td>
+                                    <td>{{ $domain->title }} ({{ $domain->series_count }})</td>
                                     <td>{{ $domain->domain }}</td>
                                     <td>{{ $domain->encrypt_domain }}</td>
                                     <td>
@@ -160,7 +160,7 @@
                 }
             });
 
-            $('#batch-action').submit(function (e) {
+            /*$('#batch-action').submit(function (e) {
                 e.preventDefault();
 
                 let $this = $(this);
@@ -192,7 +192,7 @@
                         });
                     }
                 });
-            });
+            });*/
 
             $('#search-form').submit(function(e) {
                 e.preventDefault();

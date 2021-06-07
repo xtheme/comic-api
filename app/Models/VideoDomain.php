@@ -12,4 +12,9 @@ class VideoDomain extends BaseModel
         'sort',
         'status',
     ];
+
+    public function series()
+    {
+        return $this->hasMany('App\Models\VideoSeries', 'video_domain_id');
+    }
 }

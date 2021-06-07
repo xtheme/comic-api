@@ -76,18 +76,18 @@ class VideoDomainController extends Controller
     /**
      * 批次更新
      */
-    public function batch(Request $request, $action)
+    /*public function batch(Request $request, $action)
     {
         $ids = explode(',', $request->post('ids'));
 
         switch ($action) {
             case 'enable':
                 $text = '批量启用';
-                $data = ['chapter_status' => 1];
+                $data = ['status' => 1];
                 break;
             case 'disable':
                 $text = '批量封禁';
-                $data = ['chapter_status' => 0];
+                $data = ['status' => -1];
                 break;
             case 'charge':
                 $text = '批量收费';
@@ -103,7 +103,7 @@ class VideoDomainController extends Controller
         VideoDomain::whereIn('id', $ids)->update($data);
 
         return Response::jsonSuccess($text . '成功！');
-    }
+    }*/
 
     public function editable(Request $request, $field)
     {

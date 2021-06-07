@@ -32,7 +32,7 @@ class VideoDomainRepository extends Repository implements VideoDomainRepositoryI
         $order = $request->get('order') ?? 'sort';
         $sort = $request->get('sort') ?? 'desc';
 
-        return $this->model::when($domain, function (Builder $query, $domain) {
+        return $this->model::withCount(['series'])->when($domain, function (Builder $query, $domain) {
             return $query->where('domain', 'like', '%'.$domain.'%')
                 ->orWhere('encrypt_domain', 'like', '%'.$domain.'%');
         })->when($status, function (Builder $query, $status) {

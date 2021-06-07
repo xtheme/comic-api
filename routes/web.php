@@ -2,12 +2,12 @@
 
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Backend\ActivityLogController;
-use App\Http\Controllers\Backend\AdministratorController;
+// use App\Http\Controllers\Backend\AdministratorController;
 use App\Http\Controllers\Backend\BlockController;
 use App\Http\Controllers\Backend\BookChapterController;
 use App\Http\Controllers\Backend\BookController;
 use App\Http\Controllers\Backend\ComicBlockController;
-use App\Http\Controllers\Backend\PermissionController;
+// use App\Http\Controllers\Backend\PermissionController;
 use App\Http\Controllers\Backend\ReportController;
 use App\Http\Controllers\Backend\ReportTypeController;
 use App\Http\Controllers\Backend\CommentController;
@@ -16,7 +16,7 @@ use App\Http\Controllers\Backend\FeedbackController;
 use App\Http\Controllers\Backend\NoticeController;
 use App\Http\Controllers\Backend\OrderController;
 use App\Http\Controllers\Backend\PricingController;
-use App\Http\Controllers\Backend\RoleController;
+// use App\Http\Controllers\Backend\RoleController;
 use App\Http\Controllers\Backend\StatisticsController;
 use App\Http\Controllers\Backend\TagController;
 use App\Http\Controllers\Backend\UserController;
@@ -222,7 +222,7 @@ Route::middleware(['auth'])->prefix('backend')->as('backend.')->group(function (
         Route::post('store', [VideoDomainController::class , 'store'])->name('store');
         Route::get('edit/{id}', [VideoDomainController::class , 'edit'])->name('edit');
         Route::post('update/{id}', [VideoDomainController::class , 'update'])->name('update');
-        Route::put('batch/{action?}', [VideoDomainController::class, 'batch'])->name('batch');
+        // Route::put('batch/{action?}', [VideoDomainController::class, 'batch'])->name('batch');
         Route::put('editable/{field}', [VideoDomainController::class, 'editable'])->name('editable');
     });
 
@@ -271,33 +271,33 @@ Route::middleware(['auth'])->prefix('backend')->as('backend.')->group(function (
     });
 
     // 管理員
-    Route::prefix('administrator')->as('administrator.')->group(function () {
-        Route::get('/', [AdministratorController::class , 'index'])->name('index');
-        Route::get('create', [AdministratorController::class , 'create'])->name('create');
-        Route::post('store', [AdministratorController::class , 'store'])->name('store');
-        Route::get('edit/{id}', [AdministratorController::class , 'edit'])->name('edit');
-        Route::put('update/{id}', [AdministratorController::class , 'update'])->name('update');
-        Route::delete('destroy/{id}', [AdministratorController::class , 'destroy'])->name('destroy');
-    });
+    // Route::prefix('administrator')->as('administrator.')->group(function () {
+    //     Route::get('/', [AdministratorController::class , 'index'])->name('index');
+    //     Route::get('create', [AdministratorController::class , 'create'])->name('create');
+    //     Route::post('store', [AdministratorController::class , 'store'])->name('store');
+    //     Route::get('edit/{id}', [AdministratorController::class , 'edit'])->name('edit');
+    //     Route::put('update/{id}', [AdministratorController::class , 'update'])->name('update');
+    //     Route::delete('destroy/{id}', [AdministratorController::class , 'destroy'])->name('destroy');
+    // });
 
     // 角色
-    Route::prefix('role')->as('role.')->group(function () {
-        Route::get('/', [RoleController::class , 'index'])->name('index');
-        Route::get('create', [RoleController::class , 'create'])->name('create');
-        Route::post('store', [RoleController::class , 'store'])->name('store');
-        Route::get('edit/{id}', [RoleController::class , 'edit'])->name('edit');
-        Route::put('update/{id}', [RoleController::class , 'update'])->name('update');
-        Route::delete('destroy/{id}', [RoleController::class , 'destroy'])->name('destroy');
-    });
+    // Route::prefix('role')->as('role.')->group(function () {
+    //     Route::get('/', [RoleController::class , 'index'])->name('index');
+    //     Route::get('create', [RoleController::class , 'create'])->name('create');
+    //     Route::post('store', [RoleController::class , 'store'])->name('store');
+    //     Route::get('edit/{id}', [RoleController::class , 'edit'])->name('edit');
+    //     Route::put('update/{id}', [RoleController::class , 'update'])->name('update');
+    //     Route::delete('destroy/{id}', [RoleController::class , 'destroy'])->name('destroy');
+    // });
 
     // 權限
-    Route::prefix('permission')->as('permission.')->group(function () {
-        Route::get('/', [PermissionController::class , 'index'])->name('index');
-        Route::get('create', [RoleController::class , 'create'])->name('create');
-        Route::post('store', [RoleController::class , 'store'])->name('store');
-        Route::get('edit/{id}', [RoleController::class , 'edit'])->name('edit');
-        Route::put('update/{id}', [RoleController::class , 'update'])->name('update');
-        Route::delete('destroy/{id}', [RoleController::class , 'destroy'])->name('destroy');
-    });
+    // Route::prefix('permission')->as('permission.')->group(function () {
+    //     Route::get('/', [PermissionController::class , 'index'])->name('index');
+    //     Route::get('create', [RoleController::class , 'create'])->name('create');
+    //     Route::post('store', [RoleController::class , 'store'])->name('store');
+    //     Route::get('edit/{id}', [RoleController::class , 'edit'])->name('edit');
+    //     Route::put('update/{id}', [RoleController::class , 'update'])->name('update');
+    //     Route::delete('destroy/{id}', [RoleController::class , 'destroy'])->name('destroy');
+    // });
 
 });
