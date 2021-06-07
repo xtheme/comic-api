@@ -25,9 +25,9 @@ class BookController extends BaseController
         $this->repository = $repository;
     }
 
-    public function detail(Request $request, $id)
+    public function detail($id)
     {
-        $book = $this->repository->find($id);
+        $book = Book::with(['chapters'])->withCount(['chapters', 'visit_histories', 'favorite_histories'])->find($id);
 
         $data = [
             'id' => $book->id,
@@ -36,12 +36,13 @@ class BookController extends BaseController
             'cover' => $book->horizontal_thumb,
             'description' => $book->description,
             'charge' => $book->charge,
-            'visit' => $book->visit_histories->count(),
-            'favorite' => $book->favorite_histories->count(),
+            'end' => $book->end,
+            'type' => $book->type,
             'release_at' => $book->release_at,
-            'latest_chapter_title' => $book->chapters->first()->title,
-            'tagged_tags' => $book->tagged_tags
-            // 'vertical_thumb' => $book->vertical_thumb,
+            'latest_chapter_title' => $book->chapters_count ? $book->chapters->first()->title : '',
+            'tagged_tags' => $book->tagged_tags,
+            'visit_histories_count' => $book->visit_histories_count,
+            'favorite_histories_count' => $book->favorite_histories_count,
         ];
 
         // todo 訪問數+1

@@ -48,12 +48,12 @@ class Book extends BaseModel
 
     public function visit_histories()
     {
-        return $this->hasMany('App\Models\BookVisit', 'book_id', 'id');
+        return $this->hasMany('App\Models\BookVisit');
     }
 
     public function favorite_histories()
     {
-        return $this->hasMany('App\Models\BookFavorite', 'book_id', 'id');
+        return $this->hasMany('App\Models\BookFavorite');
     }
 
     public function getTaggedTagsAttribute()

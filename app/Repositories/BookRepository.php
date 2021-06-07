@@ -37,7 +37,7 @@ class BookRepository extends Repository implements BookRepositoryInterface
         $order = $request->get('order') ?? 'id';
         $sort = $request->get('sort') ?? 'desc';
 
-        return $this->model::with(['tagged', 'chapters'])->withCount(['chapters', 'charge_chapters', 'visit_histories', 'favorite_histories'])->when($id, function (Builder $query, $id) {
+        return $this->model::with(['tagged'])->withCount(['chapters', 'charge_chapters', 'visit_histories', 'favorite_histories'])->when($id, function (Builder $query, $id) {
                 return $query->where('id', $id);
             })->when($title, function (Builder $query, $title) {
                 return $query->where('title', 'like', '%' . $title . '%');
