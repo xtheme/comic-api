@@ -14,4 +14,9 @@ class BookFavorite extends BaseModel
     {
         return $this->hasOne('App\Models\Book', 'id', 'book_id');
     }
+
+    public function chapter()
+    {
+        return $this->hasOne('App\Models\BookChapter', 'id', 'chapter_id');
+    }
 }

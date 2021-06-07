@@ -36,7 +36,7 @@ Route::as('api.')->group(function () {
                 'code' => 200,
                 'msg'  => 'Hello World!',
                 'data'  => $request->user,
-            ], 200);
+            ]);
         })->name('me');
 
         Route::prefix(config('api.version'))->group(function () {
@@ -54,13 +54,19 @@ Route::as('api.')->group(function () {
                 Route::get('/{type}/visit/history', [Api\VisitHistoryController::class, 'list'])->name('visit.history');
             });
 
+            // 歷史紀錄 (閱覽/ 播放/ 收藏)
             Route::prefix('history')->as('history.')->group(function () {
-
                 // 閱覽 (訪問) 歷史紀錄
                 Route::get('/visit/{type}', [Api\VisitHistoryController::class, 'list'])->name('visit.history');
                 Route::post('visit/{type}/destroy', [Api\VisitHistoryController::class, 'destroy'])->name('visit.history');
+
+                // 收藏 (最愛) 歷史紀錄
+                Route::get('/favorite/{type}', [Api\FavoriteHistoryController::class, 'list'])->name('favorite.history');
+                Route::post('favorite/{type}/save', [Api\FavoriteHistoryController::class, 'save'])->name('favorite.save');
+                Route::post('favorite/{type}/destroy', [Api\FavoriteHistoryController::class, 'destroy'])->name('favorite.history');
             });
 
+            // 簡訊
             Route::prefix('sms')->as('sms.')->group(function () {
                 Route::post('/verify', [Api\SmsController::class, 'verify'])->name('verify'); // 校验SSO
                 Route::post('/send', [Api\SmsController::class, 'send'])->name('send');
@@ -77,6 +83,7 @@ Route::as('api.')->group(function () {
                 Route::get('/more/{topic}/{page?}', [Api\TopicController::class, 'more'])->name('more');
             });
 
+            // 分類標籤
             Route::prefix('tag')->as('tag.')->group(function () {
                 Route::get('/', [Api\TagController::class, 'list'])->name('list');
                 Route::get('/book/{tag}/{page?}', [Api\TagController::class, 'book'])->name('book');
@@ -99,12 +106,13 @@ Route::as('api.')->group(function () {
                 Route::get('/recommend/{id?}', [Api\BookController::class, 'recommend'])->name('recommend');
             });
 
+            // 會員套餐
             Route::prefix('pricing')->as('pricing.')->group(function () {
                 Route::get('/', [Api\PricingController::class, 'list'])->name('list');
                 Route::get('/{id}', [Api\PricingController::class, 'url'])->name('url');
             });
 
-            //评论
+            // 评论
             Route::prefix('comment')->as('comment.')->group(function () {
                 Route::get('/list/{chapter_id}/{order}', [Api\CommentController::class, 'list'])->name('list');
                 Route::post('/add', [Api\CommentController::class, 'add'])->name('add');
