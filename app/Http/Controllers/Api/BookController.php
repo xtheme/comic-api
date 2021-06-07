@@ -30,6 +30,10 @@ class BookController extends BaseController
         // $book = Book::with(['chapters'])->withCount(['chapters', 'visit_histories', 'favorite_histories'])->find($id);
         $book = Book::with(['chapters'])->withCount(['chapters', 'visit_histories'])->find($id);
 
+        if (!$book) {
+            return Response::jsonError('该漫画不存在或已下架！');
+        }
+
         $data = [
             'id' => $book->id,
             'title' => $book->title,
@@ -44,6 +48,15 @@ class BookController extends BaseController
             'tagged_tags' => $book->tagged_tags,
             'visit_histories_count' => shortenNumber($book->visit_histories_count),
             // 'favorite_histories_count' => shortenNumber($book->favorite_histories_count),
+            'chapters' => $book->chapters->map(function ($chapter) {
+                return [
+                    'book_id' => $chapter->book_id,
+                    'chapter_id' => $chapter->id,
+                    'title' => $chapter->title,
+                    'charge' => $chapter->charge,
+                    'created_at' => $chapter->created_at->format('Y-m-d'),
+                ];
+            })->toArray(),
         ];
 
         // todo 訪問數+1
@@ -54,7 +67,7 @@ class BookController extends BaseController
 
     public function chapters($book_id)
     {
-        $book = BookChapter::find($book_id);
+        $book = Book::find($book_id);
 
         if (!$book) {
             return Response::jsonError('该漫画不存在或已下架！');
