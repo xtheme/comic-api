@@ -51,7 +51,7 @@ class Video extends BaseModel
         return $this->tags->where('suggest', 1)->sortByDesc('priority')->take(3)->pluck('name')->toArray();
     }
 
-    public function getCoverAttribute($value)
+    public function getCoverThumbAttribute($value)
     {
         // todo change config
         $api_url = getOldConfig('web_config', 'api_url');
@@ -60,7 +60,7 @@ class Video extends BaseModel
             $api_url = substr($api_url, 0, -1);
         }
 
-        return $api_url . $value;
+        return $api_url . $this->cover;
     }
 
     // public function getVisitCountAttribute()

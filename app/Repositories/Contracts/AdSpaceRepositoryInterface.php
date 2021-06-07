@@ -7,5 +7,4 @@ use Illuminate\Http\Request;
 
 interface AdSpaceRepositoryInterface extends RepositoryInterface
 {
-    public function ads(Request $request, $id): Builder;
 }

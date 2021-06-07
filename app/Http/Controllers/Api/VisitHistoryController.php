@@ -46,7 +46,7 @@ class VisitHistoryController extends BaseController
                 'video_id' => $item->video_id,
                 'title' => $item->video->title,
                 'author' => $item->video->author,
-                'cover' => $item->video->cover,
+                'cover' => image_thumb($item->video->cover),
                 'ribbon' => $item->video->ribbon,
                 'tagged_tags' => $item->video->tagged_tags,
                 'created_at' => $item->created_at->format('Y-m-d H:i:s'),

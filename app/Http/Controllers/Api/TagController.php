@@ -54,7 +54,7 @@ class TagController extends BaseController
                 'title'                 => $video->title,
                 'author'                => $video->author,
                 'ribbon'                => $video->ribbon,
-                'cover'                 => $video->cover,
+                'cover'                 => image_thumb($video->cover),
                 'tagged_tags'           => $video->tagged_tags,
                 'visit_histories_count' => shortenNumber($video->visit_histories_count),
                 'updated_at'            => $video->updated_at->format('Y-m-d'),

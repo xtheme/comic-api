@@ -83,7 +83,7 @@
                                         @endif
                                     </td>
                                     <td>
-                                        <img src="{{ $video->cover }}" alt="" class="cursor-pointer" height="60px" data-lightbox title="点击查看大图">
+                                        <img src="{{ $video->cover_thumb }}" alt="" class="cursor-pointer" height="60px" data-lightbox title="点击查看大图">
                                     </td>
                                     <td>{{ $video->author }}</td>
                                     <td>{{ $video->series_count }}</td>

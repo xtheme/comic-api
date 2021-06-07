@@ -239,3 +239,26 @@ if (!function_exists('insertArray')) {
         return $new_array;
     }
 }
+
+if (!function_exists('image_thumb')) {
+    /**
+     * @param $image
+     *
+     * @return string
+     */
+    function image_thumb($image)
+    {
+        
+        $api_url = getOldConfig('web_config', 'api_url') ;
+
+        if (true == config('api.encrypt.image')){
+            $api_url = getOldConfig('web_config', 'img_sync_url_password_webp') ;
+        }
+
+        if (Str::endsWith($api_url, '/')) {
+            $api_url = substr($api_url, 0, -1);
+        }
+
+        return $api_url . $image;
+    }
+}

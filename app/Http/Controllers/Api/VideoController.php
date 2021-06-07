@@ -36,6 +36,7 @@ class VideoController extends BaseController
     {
         $data = Video::with(['series', 'series.cdn'])->withCount(['visit_histories', 'play_histories'])->find($id)->toArray();
 
+        $data['cover'] = image_thumb($data['cover']);
         // todo 訪問數+1
         Record::from('video')->visit($id);
 
@@ -74,7 +75,7 @@ class VideoController extends BaseController
                 'title' => $video->title,
                 // 'author' => $video->author,
                 // 'description' => $video->description,
-                'cover' => $video->cover,
+                'cover' => image_thumb($video->cover),
                 'tagged_tags' => $video->tagged_tags,
                 'visit_histories_count' => shortenNumber($video->visit_histories_count),
             ];

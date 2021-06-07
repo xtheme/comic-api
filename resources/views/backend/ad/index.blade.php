@@ -85,7 +85,7 @@
                                             平台共用
                                         @endif
                                     </td>
-                                    <td><img src="{{ $item->image }}" class="cursor-pointer" width="50px" data-lightbox alt="点击查看大图"></td>
+                                    <td><img src="{{ $item->image_thumb }}" class="cursor-pointer" width="50px" data-lightbox alt="点击查看大图"></td>
                                     <td>{{ $item->url }}</td>
                                     <td>{{ $item->show_time }}</td>
                                     <td>@if($item->updated_at){{ $item->updated_at->diffForHumans()  }}@endif</td>

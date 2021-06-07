@@ -2,6 +2,8 @@
 
 namespace App\Models;
 
+use Illuminate\Support\Str;
+
 class Ad extends BaseModel
 {
     protected $fillable = [
@@ -16,20 +18,24 @@ class Ad extends BaseModel
         'status'
     ];
 
-    protected $appends = [
-    ];
-
     public function space()
     {
         return $this->hasOne('App\Models\AdSpace', 'id', 'space_id');
     }
 
-    /**
-     * 广告图片组合
-     */
-    public function getImageAttribute($value)
+    public function getImageThumbAttribute()
     {
         // todo change config
-        return getOldConfig('web_config', 'api_url') . $value;
+        $api_url = getOldConfig('web_config', 'api_url') ;
+
+
+        if (Str::endsWith($api_url, '/')) {
+            $api_url = substr($api_url, 0, -1);
+        }
+
+        return $api_url . $this->image;
     }
+
+
+
 }
