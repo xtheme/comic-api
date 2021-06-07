@@ -119,6 +119,11 @@ Route::as('api.')->group(function () {
                 Route::post('/like/{comment_id}', [Api\CommentController::class, 'like'])->name('like');
             });
 
+            // 客服
+            Route::prefix('service')->as('service.')->group(function () {
+                Route::get('/url', [Api\ServiceController::class, 'url'])->name('url');
+            });
+
         });
     });
 });
