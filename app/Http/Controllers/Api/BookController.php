@@ -4,8 +4,8 @@ namespace App\Http\Controllers\Api;
 
 use App\Models\Book;
 use App\Models\BookChapter;
-use App\Repositories\Contracts\BookRepositoryInterface;
-use App\Repositories\HistoryRepository;
+// use App\Repositories\Contracts\BookRepositoryInterface;
+// use App\Repositories\HistoryRepository;
 use App\Services\AdService;
 use App\Traits\CacheTrait;
 use Illuminate\Http\Request;
@@ -18,12 +18,12 @@ class BookController extends BaseController
 {
     use CacheTrait;
 
-    protected $repository;
-
-    public function __construct(BookRepositoryInterface $repository)
-    {
-        $this->repository = $repository;
-    }
+    // protected $repository;
+    //
+    // public function __construct(BookRepositoryInterface $repository)
+    // {
+    //     $this->repository = $repository;
+    // }
 
     public function detail($id)
     {
