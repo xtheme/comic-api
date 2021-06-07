@@ -26,6 +26,10 @@ class PricingController extends Controller
 
     public function store(PricingRequest $request)
     {
+        $request->merge([
+            'preset' => $request->has('preset') ? 1 : 0,
+        ]);
+
         $post = $request->post();
 
         $pricingPackage = new PricingPackage;
@@ -47,6 +51,10 @@ class PricingController extends Controller
     public function update(Request $request, $id)
     {
         $pricingPackage = PricingPackage::findOrFail($id);
+
+        $request->merge([
+            'preset' => $request->has('preset') ? 1 : 0,
+        ]);
 
         $post = $request->post();
 
