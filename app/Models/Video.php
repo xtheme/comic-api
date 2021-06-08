@@ -51,6 +51,23 @@ class Video extends BaseModel
         return $this->tags->where('suggest', 1)->sortByDesc('priority')->take(3)->pluck('name')->toArray();
     }
 
+    public function getCoverAttribute($value)
+    {
+        $api_url = getOldConfig('web_config', 'api_url') ;
+
+        if (true == config('api.encrypt.image')){
+            $api_url = getOldConfig('web_config', 'img_sync_url_password_webp') ;
+        }
+    
+        if (Str::endsWith($api_url, '/')) {
+            $api_url = substr($api_url, 0, -1);
+        }
+    
+        return $api_url . $value;
+        
+    }
+
+
     public function getCoverThumbAttribute($value)
     {
         // todo change config
@@ -60,7 +77,7 @@ class Video extends BaseModel
             $api_url = substr($api_url, 0, -1);
         }
 
-        return $api_url . $this->cover;
+        return $api_url . $this->getRawOriginal('cover');
     }
 
     // public function getVisitCountAttribute()
