@@ -34,7 +34,11 @@ class VideoController extends BaseController
 
     public function detail($id)
     {
-        $data = Video::with(['series', 'series.cdn'])->withCount(['visit_histories', 'play_histories'])->find($id)->toArray();
+        $data = Video::with(['series' => function ($query) {
+            return $query->where('status', 1)->orderBy('episode');
+        }, 'series.cdn' => function ($query) {
+            return $query->where('status', 1);
+        }])->withCount(['visit_histories', 'play_histories'])->find($id)->toArray();
 
         // todo 訪問數+1
         Record::from('video')->visit($id);
