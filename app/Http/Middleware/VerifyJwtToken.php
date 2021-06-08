@@ -4,6 +4,8 @@ namespace App\Http\Middleware;
 
 use App\Models\User;
 use App\Services\JwtService;
+use App\Services\UserService;
+use App\Traits\CacheTrait;
 use Closure;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Response;
@@ -11,6 +13,8 @@ use Validator;
 
 class VerifyJwtToken
 {
+    use CacheTrait;
+
     /**
      * Handle an incoming request.
      *
@@ -47,7 +51,7 @@ class VerifyJwtToken
 
             // 检查 iss 与当前的 uuid 是否相符
             if ($decoded->iss !== $data['uuid']) {
-                return Response::jsonError('设备异常！');
+                return Response::jsonError('设备异常！', 580);
             }
 
             // 若 token 中能获取 uid, 在请求中注入 user 属性
@@ -75,8 +79,19 @@ class VerifyJwtToken
                 return Response::jsonError('Token 格式错误！');
             }
         } catch (\Exception $e) {
-            // todo jwt 过期自动签发?
-            return Response::jsonError(__('jwt.' . $e->getMessage()), 583);
+            // jwt 自动签发
+            $userService = app(UserService::class);
+            $uuid = $request->header('uuid');
+            $user = $userService->getUserByDevice($request); // return Model (Object)
+            $cache_key = $this->getCacheKeyPrefix() . sprintf('user:device:%s', $uuid);
+            if (!$user) {
+                // 针对此新设备生成用户数据
+                $user = $userService->registerDevice($request); // return Model (Object)
+            }
+            $response = $userService->addDeviceCache($cache_key, $user);
+            return Response::jsonSuccess(__('jwt.' . $e->getMessage()), $response, 583);
+
+            // return Response::jsonError(__('jwt.' . $e->getMessage()), 583);
         }
 
         return $next($request);
