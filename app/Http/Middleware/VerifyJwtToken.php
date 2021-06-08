@@ -68,7 +68,7 @@ class VerifyJwtToken
                             return $next($request);
                         }
                         
-                        return Response::jsonError('您已经在其他设备上登录！',  582);
+                        return Response::jsonError('您已经在其他设备上登录！', 582);
                     }
                 }
             } else {
@@ -76,7 +76,7 @@ class VerifyJwtToken
             }
         } catch (\Exception $e) {
             // todo jwt 过期自动签发?
-            return Response::jsonError(__('jwt.' . $e->getMessage()));
+            return Response::jsonError(__('jwt.' . $e->getMessage()), 583);
         }
 
         return $next($request);
