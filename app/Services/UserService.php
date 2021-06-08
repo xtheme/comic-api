@@ -57,6 +57,7 @@ class UserService
         $cache_ttl = config('api.jwt.ttl');
 
         return Cache::remember($cache_key, $cache_ttl, function () use ($user, $issue_token) {
+            // 表示是 api 請求, 才有更新 JWT 跟更新登入時間的需求
             if (request()->header('app-version')) {
                 // 签发 JWT
                 if ($issue_token) {
@@ -72,24 +73,23 @@ class UserService
                 $user->platform = request()->header('platform');
                 $user->version = request()->header('app-version');
                 $user->save();
-
-
-                //簽到資料組成
-                $days = $this->days($user);
-
-                $today_sign = $days->pluck('date')->contains(date('Y-m-d'));
-                $exists = $days->exists();
-                $sign_days = 0;
-                if ($exists) {
-                    $sign_days = $user->sign_days;
-                }
-        
-                $score_list = $this->scoreList();
-        
-                $user->sign_days  = $sign_days;
-                $user->today_sign = $today_sign;
-                $user->score_list = $score_list;
             }
+
+            //簽到資料組成
+            $days = $this->days($user);
+
+            $today_sign = $days->pluck('date')->contains(date('Y-m-d'));
+            $exists = $days->exists();
+            $sign_days = 0;
+            if ($exists) {
+                $sign_days = $user->sign_days;
+            }
+
+            $score_list = $this->scoreList();
+
+            $user->sign_days  = $sign_days;
+            $user->today_sign = $today_sign;
+            $user->score_list = $score_list;
 
             return $user->toArray();
         });

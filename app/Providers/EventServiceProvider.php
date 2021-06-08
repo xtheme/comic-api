@@ -3,8 +3,10 @@
 namespace App\Providers;
 
 use App\Models\Config;
+use App\Models\User;
 use App\Observers\ConfigObserver;
 use App\Observers\TagObserver;
+use App\Observers\UserObserver;
 use Conner\Tagging\Model\Tag;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Auth\Listeners\SendEmailVerificationNotification;
@@ -33,5 +35,6 @@ class EventServiceProvider extends ServiceProvider
     {
         Config::observe(ConfigObserver::class);
         Tag::observe(TagObserver::class);
+        User::observe(UserObserver::class);
     }
 }

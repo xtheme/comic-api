@@ -94,7 +94,7 @@
                                     </td>
                                     <td class="text-center">
                                         @if($item->subscribed_at)
-                                            <span data-toggle="tooltip" data-placement="top" data-original-title="{{ $item->subscribed_at}}">
+                                            <span data-toggle="tooltip" data-placement="top" data-original-title="{{ $item->subscribed_at }}">
                                             {{ $item->subscribed_at->diffForHumans() }}
                                             </span>
                                         @else

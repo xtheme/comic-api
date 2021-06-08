@@ -69,11 +69,11 @@ class UserController extends Controller
 
     public function update(Request $request, $id)
     {
-        $validated = $request->validated();
+        // $validated = $request->validated();
 
         $model = User::findOrFail($id);
 
-        $model->fill($validated)->save();
+        $model->fill($request->input())->save();
 
         return Response::jsonSuccess('資料已更新！');
     }

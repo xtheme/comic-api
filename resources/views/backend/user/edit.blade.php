@@ -16,7 +16,7 @@
                         <label>头像</label>
                         <div class="input-group">
                             <input type="file" class="hidden-file-upload" data-path="avatar/{{ $user->id }}">
-                            <input type="text" class="form-control image-path" name="avatar" value="{{ $user->userface ?? '' }}" autocomplete="off" aria-describedby="input-file-addon">
+                            <input type="text" class="form-control image-path" name="avatar" value="{{ $user->avatar ?? '' }}" autocomplete="off" aria-describedby="input-file-addon">
                             <div class="input-group-append" id="input-file-addon">
                                 <button class="btn btn-primary upload-image" type="button">上传</button>
                             </div>
