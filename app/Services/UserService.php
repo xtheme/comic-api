@@ -194,7 +194,7 @@ class UserService
     {
         $data = [
             'username' => $this->getUserNiceName(),
-            'device_id' => '',
+            'device_id' => null, //device_id不重复key 原因 更改成null
             'area' => $request->input('area'),
             'mobile' => $request->input('mobile'),
             'sex' => 0,
