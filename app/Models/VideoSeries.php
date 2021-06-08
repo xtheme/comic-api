@@ -65,6 +65,8 @@ class VideoSeries extends BaseModel
 
     public function getEncryptUrlAttribute()
     {
+        if (!$this->cdn) return '';
+
         return $this->cdn->encrypt_domain . $this->link;
     }
 
