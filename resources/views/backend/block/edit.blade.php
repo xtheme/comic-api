@@ -90,7 +90,7 @@
                         <span class="float-right font-size-small text-danger">(此条件只对动画类型有效)</span>
                         <label>角标</label>
                         <div class="controls">
-                            <select class="form-control" name="ribbon">
+                            <select class="form-control" name="properties[ribbon]">
                                 <option value="">忽略</option>
                                 @foreach ($ribbon_options as $key => $val)
                                     <option value="{{ $key }}" @if(($data->properties['ribbon'] ?? '') == $key){{'selected'}}@endif>{{ $val }}</option>
@@ -230,7 +230,11 @@
 
             $('#form').submit(function (e) {
                 e.preventDefault();
-
+                if ($('.btn-primary').hasClass('disabled')){
+                    return false;
+                }
+                
+                $('.btn-primary').addClass('disabled');
                 $.request({
                     url     : $(this).attr('action'),
                     type    : $(this).attr('method'),
@@ -247,6 +251,7 @@
                                 message: '请稍后数据刷新'
                             });
                         } else {
+                            $('.btn-primary').removeClass('disabled');
                             parent.$.toast({
                                 type: 'error',
                                 title: '提交失败',

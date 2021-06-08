@@ -144,6 +144,12 @@
             $('#form').submit(function (e) {
                 e.preventDefault();
 
+                if ($('.btn-primary').hasClass('disabled')){
+                    return false;
+                }
+                
+                $('.btn-primary').addClass('disabled');
+
                 $.request({
                     url: $(this).attr('action'),
                     type: $(this).attr('method'),
@@ -157,12 +163,14 @@
                                 reloadUrl: '{{ route('backend.video_series.index', $video_id) }}'
                             });
                         } else {
+                            $('.btn-primary').removeClass('disabled');
                             parent.$.toast({
                                 type: 'error',
                                 title: '提交失败',
                                 message: res.msg
                             });
                         }
+                        
                     }
                 });
             });
