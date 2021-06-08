@@ -90,7 +90,7 @@
                         <span class="float-right font-size-small text-danger">(此条件只对动画类型有效)</span>
                         <label>角标</label>
                         <div class="controls">
-                            <select class="form-control" name="ribbon">
+                            <select class="form-control" name="properties[ribbon]">
                                 <option value="">忽略</option>
                                 @foreach ($ribbon_options as $key => $val)
                                     <option value="{{ $key }}" @if(($data->properties['ribbon'] ?? '') == $key){{'selected'}}@endif>{{ $val }}</option>
