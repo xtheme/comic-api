@@ -21,7 +21,6 @@ class AdSpaceRepository extends Repository implements AdSpaceRepositoryInterface
         $id = $request->get('id') ?? '';
         $name = $request->get('name') ?? '';
         $class = $request->get('class') ?? '';
-        $status = $request->get('status') ?? '';
 
         $order = $request->get('order') ?? 'id';
         $sort = $request->get('sort') ?? 'DESC';
@@ -32,8 +31,6 @@ class AdSpaceRepository extends Repository implements AdSpaceRepositoryInterface
             return $query->where('name', $name);
         })->when($class, function (Builder $query, $class) {
             return $query->where('class', $class);
-        })->when($status, function (Builder $query, $status) {
-            return $query->where('status', $status);
         })->when($sort, function (Builder $query, $sort) use ($order) {
             if ($sort == 'desc') {
                 return $query->orderByDesc($order);
@@ -41,6 +38,22 @@ class AdSpaceRepository extends Repository implements AdSpaceRepositoryInterface
                 return $query->orderBy($order);
             }
         });
+    }
+
+    /**
+     * 查询廣告位底下的廣告列表
+     */
+    public function ads(Request $request, $id): Builder
+    {
+        $platform = $request->header('platform');
+
+        return $this->model::with([
+            'ads' => function ($query) use ($platform) {
+                return $query->whereIn('platform', [$platform , '-1'])->orderByDesc('sort');
+            },
+        ])->when($id, function (Builder $query, $id) {
+            return $query->where('id', $id)->orWhere('name', $id);
+        })->where('status', 1);
     }
 
 }
