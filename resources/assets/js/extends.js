@@ -311,7 +311,7 @@ $.extend({
                     message: '请稍后数据刷新'
                 });
 
-				parent.$('#global-modal .modal-content').unblock();
+				element.unblock();
 			}
 		});
 	},
