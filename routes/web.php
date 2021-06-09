@@ -222,6 +222,8 @@ Route::middleware(['auth'])->prefix('backend')->as('backend.')->group(function (
         Route::post('store', [VideoDomainController::class , 'store'])->name('store');
         Route::get('edit/{id}', [VideoDomainController::class , 'edit'])->name('edit');
         Route::post('update/{id}', [VideoDomainController::class , 'update'])->name('update');
+        Route::get('series/{id}', [VideoDomainController::class , 'series'])->name('series');
+        Route::put('change_domain', [VideoDomainController::class , 'change_domain'])->name('change_domain');
         // Route::put('batch/{action?}', [VideoDomainController::class, 'batch'])->name('batch');
         Route::put('editable/{field}', [VideoDomainController::class, 'editable'])->name('editable');
     });

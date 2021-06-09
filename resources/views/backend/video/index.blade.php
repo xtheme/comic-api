@@ -76,8 +76,8 @@
 
                                         @if(!empty($video->tagged))
                                             <div class="d-flex align-content-center flex-wrap" style="margin-top: 5px;">
-                                                @foreach($video->tagged as $tagged)
-                                                    <span class="badge badge-pill badge-light-primary" style="margin-right: 3px; margin-bottom: 3px;">{{ $tagged->tag_name }}</span>
+                                                @foreach($video->tags->sortByDesc('suggest') as $tag)
+                                                    <span class="badge badge-pill @if($tag->suggest == 1){{'badge-light-primary'}}@else{{'badge-light-secondary'}}@endif" style="margin-right: 3px; margin-bottom: 3px;">{{ $tag->name }}</span>
                                                 @endforeach
                                             </div>
                                         @endif
@@ -95,7 +95,15 @@
                                             <a class="badge badge-pill badge-light-danger" data-confirm href="{{ route('backend.video.batch', ['action'=>'enable', 'ids' => $video->id]) }}" title="上架该作品">下架</a>
                                         @endif
                                     </td>
-                                    <td>{{ optional($video->updated_at)->diffForHumans() }}</td>
+                                    <td>
+                                        @if($video->updated_at)
+                                            <span data-toggle="tooltip" data-placement="top" data-original-title="{{ $video->updated_at }}">
+                                            {{ $video->updated_at->diffForHumans() }}
+                                            </span>
+                                        @else
+                                            <span class="text-light">N/A</span>
+                                        @endif
+                                    </td>
                                     <td>
                                         <div class="@if(($loop->count - $loop->iteration) < 3){{'dropup'}}@else{{'dropdown'}}@endif">
                                             <span class="bx bx-dots-vertical-rounded font-medium-3 dropdown-toggle nav-hide-arrow cursor-pointer"

@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Backend;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Backend\VideoDomainRequest;
 use App\Models\VideoDomain;
+use App\Models\VideoSeries;
 use App\Repositories\Contracts\VideoDomainRepositoryInterface;
 use Illuminate\Http\Request;
 use Response;
@@ -47,7 +48,7 @@ class VideoDomainController extends Controller
 
         $this->repository->create($validated);
 
-        return Response::jsonSuccess('添加成功');
+        return Response::jsonSuccess(__('response.create.success'));
     }
 
     public function edit($id)
@@ -68,42 +69,42 @@ class VideoDomainController extends Controller
             'encrypt_domain' => rtrim($request->post('encrypt_domain'), '/'),
         ]);
 
+        if ($request->input('status') == -1) {
+            $domain = $this->repository->find($id);
+            if ($domain->series->count()) {
+                return Response::jsonError('请先转移关联动画的域名再禁用！');
+            }
+        }
+
         $this->repository->update($id, $request->post());
 
-        return Response::jsonSuccess('修改成功');
+        return Response::jsonSuccess(__('response.update.success'));
+    }
+
+    public function series(Request $request, $id)
+    {
+        $domain = $this->repository->find($id);
+
+        $data = [
+            'id' => $id,
+            'domains' => VideoDomain::where('status', 1)->where('id', '!=', $id)->get(),
+            'list' => $domain->series()->paginate(),
+        ];
+
+        return view('backend.video_domain.series')->with($data);
     }
 
     /**
      * 批次更新
      */
-    /*public function batch(Request $request, $action)
+    public function change_domain(Request $request)
     {
         $ids = explode(',', $request->post('ids'));
 
-        switch ($action) {
-            case 'enable':
-                $text = '批量启用';
-                $data = ['status' => 1];
-                break;
-            case 'disable':
-                $text = '批量封禁';
-                $data = ['status' => -1];
-                break;
-            case 'charge':
-                $text = '批量收费';
-                $data = ['isvip' => 1];
-                break;
-            default:
-            case 'free':
-                $text = '批量免费';
-                $data = ['isvip' => 0];
-                break;
-        }
+        VideoSeries::whereIn('id', $ids)->update(['video_domain_id' => $request->post('domain_id')]);
 
-        VideoDomain::whereIn('id', $ids)->update($data);
-
-        return Response::jsonSuccess($text . '成功！');
-    }*/
+        return Response::jsonSuccess('选择的影集已变更域名！');
+    }
 
     public function editable(Request $request, $field)
     {

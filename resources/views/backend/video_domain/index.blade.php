@@ -32,6 +32,7 @@
                                 </th>--}}
                                 <th>ID</th>
                                 <th>域名名称</th>
+                                <th>动画数</th>
                                 <th>未加密域名</th>
                                 <th>加密域名</th>
                                 <th>排序</th>
@@ -51,7 +52,8 @@
                                         </div>
                                     </td>--}}
                                     <td>{{ $domain->id }}</td>
-                                    <td>{{ $domain->title }} ({{ $domain->series_count }})</td>
+                                    <td>{{ $domain->title }}</td>
+                                    <td>{{ $domain->series_count }}</td>
                                     <td>{{ $domain->domain }}</td>
                                     <td>{{ $domain->encrypt_domain }}</td>
                                     <td>
@@ -71,6 +73,7 @@
                                                   id="dropdownMenuButton{{ $domain->id }}" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></span>
                                             <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuButton{{ $domain->id }}">
                                                 <a class="dropdown-item" data-modal href="{{ route('backend.video_domain.edit', $domain->id) }}" title="修改域名"><i class="bx bx-edit-alt mr-1"></i>修改</a>
+                                                <a class="dropdown-item" data-modal href="{{ route('backend.video_domain.series', $domain->id) }}" title="关联动画"><i class="bx bx-edit-alt mr-1"></i>关联动画</a>
                                             </div>
                                         </div>
                                     </td>
