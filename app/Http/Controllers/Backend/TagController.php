@@ -9,25 +9,24 @@ use Illuminate\Support\Facades\Response;
 use App\Http\Requests\Backend\TagRequest;
 use Illuminate\Support\Facades\Validator;
 use App\Repositories\Contracts\TagRepositoryInterface;
+use Illuminate\Support\Str;
 
 class TagController extends Controller
 {
     private $repository;
 
-    const STATUS_OPTIONS = [1 => '显示', -1 => '隐藏'];
+    private $front_length_limit = 4;
+
+    const STATUS_OPTIONS = [
+        1 => '显示',
+        -1 => '隐藏',
+    ];
 
     public function __construct(TagRepositoryInterface $repository)
     {
         $this->repository = $repository;
     }
 
-    /**
-     * Display a listing of the resource.
-     *
-     * @param  Request  $request
-     *
-     * @return \Illuminate\Contracts\View\View
-     */
     public function index(Request $request)
     {
         $data = [
@@ -42,7 +41,7 @@ class TagController extends Controller
     public function create()
     {
         $data = [
-            'status_options' => self::STATUS_OPTIONS
+            'status_options' => self::STATUS_OPTIONS,
         ];
 
         return view('backend.tag.create')->with($data);
@@ -50,25 +49,25 @@ class TagController extends Controller
 
     public function store(TagRequest $request)
     {
-
-        $request->validated();
-
-        if (Tag::where('name' , $request->post('name'))->exists()){
+        if (Tag::where('name', $request->post('name'))->exists()) {
             return Response::jsonError('已有相同标签');
         }
-        
+        // QZMHS-1110 新增标签限制4哥汉字
+        if ($request->has('suggest') && $request->post('suggest') == 1) {
+            if (Str::length($request->post('name')) > $this->front_length_limit) {
+                return Response::jsonError('前端显示的标签请勿超过 ' . $this->front_length_limit . ' 个字');
+            }
+        }
+
         $request->merge([
-            'slug' => $request->post('name'),
-            'queries' => 0
+            'slug' => mb_strtolower($request->post('name'), 'UTF-8'),
+            'queries' => 0,
         ]);
 
         $this->repository->create($request->post());
 
-
         return Response::jsonSuccess(__('response.create.success'));
     }
-
-
 
     public function editable(Request $request, $field)
     {
@@ -88,12 +87,21 @@ class TagController extends Controller
 
         switch ($field) {
             case 'name':
+                $tag = Tag::find($request->post('pk'));
+
+                // QZMHS-1110 新增标签限制4哥汉字
+                if ($tag->suggest == 1) {
+                    if (Str::length($request->post('value')) > $this->front_length_limit) {
+                        return Response::jsonError('前端显示的标签请勿超过 ' . $this->front_length_limit . ' 个字');
+                    }
+                }
+
                 $data = [
                     'slug' => mb_strtolower($request->post('value'), 'UTF-8'),
-                    'name' => $request->post('value')
+                    'name' => $request->post('value'),
                 ];
 
-                $this->repository->update($request->post('pk') , $data);
+                $tag->update($data);
                 break;
             default:
                 $this->repository->editable($request->post('pk'), $field, $request->post('value'));
@@ -109,33 +117,23 @@ class TagController extends Controller
         switch ($action) {
             case 'dismiss_book':
                 $text = '解除关联的漫画';
-                $tags = Tag::whereIn('id', $ids)->get();
-                foreach ($tags as $tag) {
+                Tag::whereIn('id', $ids)->each(function ($tag) {
                     $tag->tagged_book()->delete();
-                }
+                });
                 break;
             case 'dismiss_video':
                 $text = '解除关联的动画';
-                $tags = Tag::whereIn('id', $ids)->get();
-                foreach ($tags as $tag) {
+                Tag::whereIn('id', $ids)->each(function ($tag) {
                     $tag->tagged_video()->delete();
-                }
+                });
                 break;
             case 'disable':
                 $text = '在前端隐藏';
-                $tags = Tag::whereIn('id', $ids)->get();
-                foreach ($tags as $tag) {
-                    $tag->suggest = false;
-                    $tag->save();
-                }
+                Tag::whereIn('id', $ids)->update(['suggest' => 0]);
                 break;
             case 'enable':
                 $text = '在前端显示';
-                $tags = Tag::whereIn('id', $ids)->get();
-                foreach ($tags as $tag) {
-                    $tag->suggest = true;
-                    $tag->save();
-                }
+                Tag::whereIn('id', $ids)->whereRaw('CHAR_LENGTH(name) <= 4')->update(['suggest' => 1]);
                 break;
             default:
                 return Response::jsonError(__('response.error.unknown'));
@@ -149,6 +147,5 @@ class TagController extends Controller
         $this->repository->destroy($id);
 
         return Response::jsonSuccess('删除成功！');
-
     }
 }

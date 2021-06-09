@@ -206,6 +206,14 @@
                         title: '提交成功',
                         message: res.msg
                     });
+                },
+                error: function (res, newValue) {
+                    console.log(res);
+                    parent.$.toast({
+                        type: 'error',
+                        title: '提交失败',
+                        message: res.responseJSON.msg
+                    });
                 }
             });
         });
