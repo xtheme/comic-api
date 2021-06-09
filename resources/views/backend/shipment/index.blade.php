@@ -228,7 +228,7 @@
 
 		    let url = $(this).attr('action') + '?' + $(this).serialize();
             console.log(url);
-            parent.$.reloadIFrame({
+            $.reloadIFrame({
 			    reloadUrl: url
             });
 	    });

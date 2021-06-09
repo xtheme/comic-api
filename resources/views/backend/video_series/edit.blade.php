@@ -162,13 +162,13 @@
                             parent.$.hideModal();
 
                             // iframeLayoutMaster.blade.php
-                            parent.$.reloadModal({
-                                reloadUrl: '{{ route('backend.video_series.index', $series->video_id) }}'
+                            parent.$.reloadIFrame({
+{{--                                reloadUrl: '{{ route('backend.video_series.index', $series->video_id) }}'--}}
                             });
                             
                         } else {
                             $('.btn-primary').removeClass('disabled');
-                            parent.$.toast({
+                            $.toast({
                                 type: 'error',
                                 title: '提交失败',
                                 message: res.msg

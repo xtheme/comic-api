@@ -131,7 +131,7 @@
 		        let url   = $this.attr('action');
 
 		        if (!ids) {
-			        parent.$.toast({
+			        $.toast({
 				        type: 'error',
 				        message: '请先选择要操作的数据'
 			        });
@@ -148,12 +148,8 @@
 					        debug: true,
 					        callback: function (res) {
 						        // console.log(res);
-						        /*$.reloadModal({
-							        reloadUrl: '{{ route('backend.video_domain.series', $id) }}',
-							        title: res.msg
-						        });*/
 						        parent.$.hideModal();
-						        parent.parent.$.reloadIFrame({
+						        parent.$.reloadIFrame({
 							        title: '提交成功',
 							        message: '请稍后数据刷新'
 						        });

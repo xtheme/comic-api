@@ -110,7 +110,7 @@
                 url: '{{ route('backend.comic_block.sort') }}',
                 success: function (res, newValue) {
                     console.log(res);
-                    parent.$.toast({
+                    $.toast({
                         title: '提交成功',
                         message: res.msg
                     });

@@ -141,16 +141,12 @@
                         // debug: true,
                         callback: function (res) {
                             if (res.code == 200) {
-                                // iframe.blade.php
-                                parent.$.hideModal();
-
-                                // iframeLayoutMaster.blade.php
-                                parent.parent.$.reloadIFrame({
+                                $.reloadIFrame({
                                     title: '提交成功',
                                     message: '请稍后数据刷新'
                                 });
                             } else {
-                                parent.$.toast({
+                                $.toast({
                                     type: 'error',
                                     title: '提交失败',
                                     message: res.msg

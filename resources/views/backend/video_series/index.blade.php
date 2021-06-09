@@ -192,7 +192,7 @@
                 let url = $(this).attr('action') + '?' + $(this).serialize();
                 console.log(url);
 
-                $.reloadModal({
+                $.reloadIFrame({
                     reloadUrl  : url
                 });
 
@@ -213,7 +213,7 @@
                 emptytext: 'N/A',
                 success: function (res, newValue) {
                     console.log(res);
-                    parent.$.toast({
+                    $.toast({
                         title: '提交成功',
                         message: res.msg
                     });
@@ -229,7 +229,7 @@
                 let url   = $this.attr('action') + '/' + $this.find('select[name="action"]').val();
 
                 if (!ids) {
-                    parent.$.toast({
+                    $.toast({
                         type: 'error',
                         message: '请先选择要操作的数据'
                     });
@@ -245,8 +245,8 @@
                             data: {'ids' : ids},
                             debug   : true,
                             callback: function (res) {
-                                $.reloadModal({
-                                    reloadUrl: '{{ route('backend.video_series.index', $video_id) }}',
+                                $.reloadIFrame({
+{{--                                    reloadUrl: '{{ route('backend.video_series.index', $video_id) }}',--}}
                                     title: res.msg
                                 });
                             }

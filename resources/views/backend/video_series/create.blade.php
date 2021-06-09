@@ -144,11 +144,13 @@
             $('#form').submit(function (e) {
                 e.preventDefault();
 
-                if ($('.btn-primary').hasClass('disabled')){
+                let $submit_button = $(this).find('.btn-primary');
+
+                if ($submit_button.hasClass('disabled')){
                     return false;
                 }
                 
-                $('.btn-primary').addClass('disabled');
+                $submit_button.addClass('disabled');
 
                 $.request({
                     url: $(this).attr('action'),
@@ -159,18 +161,16 @@
                     callback: function (res) {
                         if (res.code == 200) {
                             parent.$.hideModal();
-                            parent.$.reloadModal({
-                                reloadUrl: '{{ route('backend.video_series.index', $video_id) }}'
-                            });
+	                        parent.$.reloadIFrame();
                         } else {
-                            $('.btn-primary').removeClass('disabled');
-                            parent.$.toast({
+                            $submit_button.removeClass('disabled');
+                            $.toast({
                                 type: 'error',
                                 title: '提交失败',
                                 message: res.msg
                             });
                         }
-                        
+
                     }
                 });
             });

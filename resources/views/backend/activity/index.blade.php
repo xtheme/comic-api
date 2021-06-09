@@ -191,7 +191,7 @@
                     data    : '',
                     title   : '删除操作不可逆, 确定是否继续?',
                     callback: function (res) {
-	                    parent.$.reloadIFrame({
+	                    $.reloadIFrame({
 		                    reloadUrl: window.location.href
 	                    });
                     }
@@ -228,7 +228,7 @@
 
 		        let url = $(this).attr('action') + '?' + $(this).serialize();
 
-		        parent.$.reloadIFrame({
+		        $.reloadIFrame({
 			        reloadUrl: url
 		        });
 	        });

@@ -167,6 +167,7 @@
                                                 @else
                                                     <a class="dropdown-item" data-confirm href="{{ route('backend.user.block', $item->id) }}" title="启用该账号"><i class="bx bx-lock-open mr-1"></i>启用</a>
                                                 @endif
+                                                <a class="dropdown-item" href="{{ route('backend.order.index') }}?user_id={{ $item->id }}" target="_blank"><i class="bx bx-link-external mr-1"></i>查看订单</a>
                                             </div>
                                         </div>
                                     </td>
@@ -324,7 +325,7 @@
 
 		    let url = $(this).attr('action') + '?' + $(this).serialize();
             console.log(url);
-            parent.$.reloadIFrame({
+            $.reloadIFrame({
 			    reloadUrl: url
             });
 	    });
@@ -337,7 +338,7 @@
 	        let url   = $this.attr('action') + '/' + $this.find('select[name="action"]').val();
 
 	        if (!ids) {
-		        parent.$.toast({
+		        $.toast({
 			        type: 'error',
 			        message: '请先选择要操作的数据'
 		        });
@@ -353,7 +354,7 @@
 				        data: {'ids': ids},
 				        debug: true,
 				        callback: function (res) {
-					        parent.$.reloadIFrame({
+					        $.reloadIFrame({
 						        title: '提交成功',
 						        message: '请稍后数据刷新'
 					        });

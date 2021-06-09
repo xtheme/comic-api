@@ -70,7 +70,7 @@
                                     <td>{{ optional($order->user->created_at)->diffForHumans() ?? '' }}</td>
                                     <td>{{ optional($order->created_at)->diffForHumans() ?? '' }}</td>
                                     <td>{{ optional($order->updated_at)->diffForHumans() ?? '' }}</td>
-                                    <td>@if($order->status == 1)<label class="badge badge-success badge-pill">已付款</label>@endif</td>
+                                    <td>@if($order->status == 1)<label class="badge badge-success badge-pill">已付款</label>@else<label class="badge badge-light badge-pill">未付款</label>@endif</td>
                                 </tr>
                             @endforeach
                             </tbody>
@@ -210,7 +210,8 @@
 
 		    let url = $(this).attr('action') + '?' + $(this).serialize();
             console.log(url);
-            parent.$.reloadIFrame({
+
+            $.reloadIFrame({
 			    reloadUrl: url
             });
 	    });

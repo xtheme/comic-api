@@ -218,7 +218,7 @@ bxs-videos mr-1"></i>影集列表</a>
                 emptytext: 'N/A',
                 success: function (res, newValue) {
                     console.log(res);
-                    parent.$.toast({
+                    $.toast({
                         title: '提交成功',
                         message: res.msg
                     });
@@ -255,7 +255,7 @@ bxs-videos mr-1"></i>影集列表</a>
                 let url   = $this.attr('action') + '/' + $this.find('select[name="action"]').val();
 
                 if (!ids) {
-                    parent.$.toast({
+                    $.toast({
                         type: 'error',
                         message: '请先选择要操作的数据'
                     });
@@ -271,7 +271,7 @@ bxs-videos mr-1"></i>影集列表</a>
                             data: {'ids': ids},
                             debug: true,
                             callback: function (res) {
-                                parent.$.reloadIFrame({
+                                $.reloadIFrame({
                                     title: '提交成功',
                                     message: '请稍后数据刷新'
                                 });
@@ -286,7 +286,7 @@ bxs-videos mr-1"></i>影集列表</a>
 
                 let url = $(this).attr('action') + '?' + $(this).serialize();
                 console.log(url);
-                parent.$.reloadIFrame({
+                $.reloadIFrame({
                     reloadUrl: url
                 });
             });

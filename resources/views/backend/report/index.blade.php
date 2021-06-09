@@ -77,11 +77,11 @@
                 inputclass: 'form-control',
                 emptyclass: 'text-light',
                 emptytext: 'N/A',
-                placeholder: '数字需大于0',
+                placeholder: '数字需大于 0',
                 url: '{{ route('backend.report_type.sort') }}',
                 success: function (res, newValue) {
                     console.log(res);
-                    parent.$.toast({
+                    $.toast({
                         title: '提交成功',
                         message: res.msg
                     });

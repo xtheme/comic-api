@@ -95,7 +95,7 @@
                     data: (Object.keys(params).length === 0) ? null : params,
                     // debug: true,
                     callback: function (res) {
-                        parent.$.reloadIFrame({title: res.msg});
+                        $.reloadIFrame({title: res.msg});
                     }
                 });
             }
@@ -188,7 +188,7 @@
                     data: (Object.keys(params).length === 0) ? null : params,
                     // debug   : true,
                     callback: function (res) {
-                        parent.$.reloadIFrame();
+                        $.reloadIFrame();
                     }
                 });
             }

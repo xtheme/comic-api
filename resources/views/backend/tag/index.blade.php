@@ -202,14 +202,14 @@
                 emptytext: 'N/A',
                 success: function (res, newValue) {
                     console.log(res);
-                    parent.$.toast({
+                    $.toast({
                         title: '提交成功',
                         message: res.msg
                     });
                 },
                 error: function (res, newValue) {
                     console.log(res);
-                    parent.$.toast({
+                    $.toast({
                         type: 'error',
                         title: '提交失败',
                         message: res.responseJSON.msg
@@ -226,7 +226,7 @@
 	        let url   = $this.attr('action') + '/' + $this.find('select[name="action"]').val();
 
 	        if (!ids) {
-		        parent.$.toast({
+		        $.toast({
 			        type: 'error',
 			        message: '请先选择要操作的数据'
 		        });
@@ -242,7 +242,7 @@
 				        data: {'ids': ids},
 				        debug: true,
 				        callback: function (res) {
-					        parent.$.reloadIFrame({
+					        $.reloadIFrame({
 						        title: '提交成功',
 						        message: '请稍后数据刷新'
 					        });
@@ -257,7 +257,7 @@
 
 		    let url = $(this).attr('action') + '?' + $(this).serialize();
             console.log(url);
-            parent.$.reloadIFrame({
+            $.reloadIFrame({
 			    reloadUrl: url
             });
 	    });
