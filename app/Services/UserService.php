@@ -75,7 +75,7 @@ class UserService
                 $user->save();
             }
 
-            //簽到資料組成
+            // 簽到資料組成
             $days = $this->days($user);
 
             $today_sign = $days->pluck('date')->contains(date('Y-m-d'));

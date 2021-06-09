@@ -80,7 +80,7 @@ class VerifyJwtToken
             }
         } catch (\Exception $e) {
             // jwt 自动签发
-            $userService = app(UserService::class);
+            /*$userService = app(UserService::class);
             $uuid = $request->header('uuid');
             $user = $userService->getUserByDevice($request); // return Model (Object)
             $cache_key = $this->getCacheKeyPrefix() . sprintf('user:device:%s', $uuid);
@@ -89,9 +89,9 @@ class VerifyJwtToken
                 $user = $userService->registerDevice($request); // return Model (Object)
             }
             $response = $userService->addDeviceCache($cache_key, $user);
-            return Response::jsonSuccess(__('jwt.' . $e->getMessage()), $response, 583);
+            return Response::jsonSuccess(__('jwt.' . $e->getMessage()), $response, 583);*/
 
-            // return Response::jsonError(__('jwt.' . $e->getMessage()), 583);
+            return Response::jsonError(__('jwt.' . $e->getMessage()), 583);
         }
 
         return $next($request);
