@@ -224,19 +224,62 @@ $.extend({
 			}
 		});
 	},
-	reloadIFrame: function (options) {
+	blockMask: function (element, options, callback) {
 		let settings = $.extend({
 			icon     : '<i class="bx bx-loader icon-spin"></i>',
 			title    : '',
 			message  : '数据加载中...',
-			timeout  : 500,
+			timeout  : 1500,
 			reloadUrl: null,
 			callback : null
 		}, options);
 
-		let element = parent.$('#main-content');
+		$(element).block({
+			message: `<span class="semibold">${settings.icon} ${settings.message}</span>`,
+			timeout: settings.timeout, //unblock after 2 seconds
+			overlayCSS: {
+				backgroundColor: '#5A8DEE',
+				opacity: 0.8,
+				cursor: 'wait'
+			},
+			css: {
+				width: 200,
+				height: 50,
+				lineHeight: 1,
+				border: 0,
+				borderRadius: 30,
+				padding: 15,
+				color: '#5A8DEE',
+				backgroundColor: '#F2F4F4'
+			},
+			onBlock: function () {
+				callback();
 
-        $(element).block({
+				setTimeout(function () {
+					element.unblock();
+				}, settings.timeout);
+			}
+		});
+	},
+	reloadIFrame: function (options) {
+		// let element = parent.$('#main-content');
+		let element = $('body');
+
+		$.blockMask(element, options, function() {
+			if (options.reloadUrl == null) {
+				window.location.reload();
+			} else {
+				console.log(options.reloadUrl);
+				window.location = options.reloadUrl;
+			}
+
+			$.toast({
+				title: options.title,
+				message: '请稍后数据刷新'
+			});
+		});
+
+        /*$(element).block({
 			message: `<span class="semibold">${settings.icon} ${settings.message}</span>`,
 			timeout: settings.timeout, //unblock after 2 seconds
 			overlayCSS: {
@@ -267,22 +310,28 @@ $.extend({
                     message: '请稍后数据刷新'
                 });
 
+				element.unblock();
 			}
-		});
+		});*/
 	},
 	reloadModal: function (options) {
-		let settings = $.extend({
-			icon     : '<i class="bx bx-loader icon-spin"></i>',
-			title    : '',
-			message  : '数据加载中...',
-			timeout  : 5000,
-			reloadUrl: null,
-			callback : null
-		}, options);
+        let element = $('body');
 
-        let element = parent.$('#global-modal .modal-content');
+		$.blockMask(element, options, function() {
+			if (options.reloadUrl == null) {
+				window.location.reload();
+			} else {
+				console.log(options.reloadUrl);
+				window.location = options.reloadUrl;
+			}
 
-        $(element).block({
+			$.toast({
+				title: options.title,
+				message: '请稍后数据刷新'
+			});
+		});
+
+        /*$(element).block({
 			message: `<span class="semibold">${settings.icon} ${settings.message}</span>`,
 			timeout: settings.timeout, //unblock after 2 seconds
 			overlayCSS: {
@@ -313,7 +362,7 @@ $.extend({
 
 				element.unblock();
 			}
-		});
+		});*/
 	},
 	confirm: function (options) {
 		let settings = $.extend({
