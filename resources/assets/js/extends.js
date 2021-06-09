@@ -317,33 +317,31 @@ $.extend({
 	},
 	confirm: function (options) {
 		let settings = $.extend({
-			// title  : '操作确认',
-			// type: 'warning',
 			text: '是否确认执行此操作？',
 			showCancelButton: true,
 			confirmButtonColor: '#719DF0',
 			cancelButtonColor: '#FF5B5C',
 			confirmButtonText: '确认',
-			confirmButtonClass: 'btn btn-primary',
 			cancelButtonText: '取消',
-			cancelButtonClass: 'btn btn-danger ml-1',
-			buttonsStyling: false,
-			callback: null
+			customClass: {
+				confirmButton: 'btn btn-primary',
+				cancelButton: 'btn btn-danger ml-1'
+			},
+			buttonsStyling: false
 		}, options);
 
 		Swal.fire({
-			// title  : settings.title,
-			// type:  settings.type,
 			text: settings.text,
 			showCancelButton: settings.showCancelButton,
 			confirmButtonColor: settings.confirmButtonColor,
 			cancelButtonColor: settings.cancelButtonColor,
 			confirmButtonText: settings.confirmButtonText,
-			confirmButtonClass: settings.confirmButtonClass,
 			cancelButtonText: settings.cancelButtonText,
-			cancelButtonClass: settings.cancelButtonClass,
-			buttonsStyling: settings.buttonsStyling,
-			// callback: null
+			customClass: {
+				confirmButton: settings.customClass.confirmButton,
+				cancelButton: settings.customClass.cancelButton
+			},
+			buttonsStyling: settings.buttonsStyling
 		}).then(function (result) {
 			if (result.value) {
 				if (typeof settings.callback === 'function') {
