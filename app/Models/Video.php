@@ -53,6 +53,8 @@ class Video extends BaseModel
 
     public function getCoverAttribute($value)
     {
+        if (!$value) return '';
+
         $api_url = getOldConfig('web_config', 'api_url') ;
 
         if (true == config('api.encrypt.image')){
@@ -67,9 +69,12 @@ class Video extends BaseModel
         
     }
 
-
-    public function getCoverThumbAttribute($value)
+    public function getCoverThumbAttribute()
     {
+        $cover = $this->getRawOriginal('cover');
+
+        if (!$cover) return '';
+
         // todo change config
         $api_url = getOldConfig('web_config', 'api_url');
 
@@ -77,7 +82,7 @@ class Video extends BaseModel
             $api_url = substr($api_url, 0, -1);
         }
 
-        return $api_url . $this->getRawOriginal('cover');
+        return $api_url . $cover;
     }
 
     // public function getVisitCountAttribute()
