@@ -266,6 +266,8 @@ $.extend({
                     title: settings.title,
                     message: '请稍后数据刷新'
                 });
+
+				setTimeout($.unblockUI, 500);
 			}
 		});
 	},
@@ -309,6 +311,8 @@ $.extend({
                     title: settings.title,
                     message: '请稍后数据刷新'
                 });
+
+				setTimeout($.unblockUI, 500);
 			}
 		});
 	},
