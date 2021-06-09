@@ -162,10 +162,10 @@
                             parent.$.hideModal();
 
                             // iframeLayoutMaster.blade.php
-                            parent.parent.$.reloadIFrame({
-                                title  : '提交成功',
-                                message: '请稍后数据刷新'
+                            parent.$.reloadModal({
+                                reloadUrl: '{{ route('backend.video_series.index', $series->video_id) }}'
                             });
+                            
                         } else {
                             $('.btn-primary').removeClass('disabled');
                             parent.$.toast({

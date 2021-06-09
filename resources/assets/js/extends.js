@@ -267,7 +267,6 @@ $.extend({
                     message: '请稍后数据刷新'
                 });
 
-				setTimeout($.unblockUI, 500);
 			}
 		});
 	},
@@ -276,7 +275,7 @@ $.extend({
 			icon     : '<i class="bx bx-loader icon-spin"></i>',
 			title    : '',
 			message  : '数据加载中...',
-			timeout  : 500,
+			timeout  : 5000,
 			reloadUrl: null,
 			callback : null
 		}, options);
@@ -312,7 +311,7 @@ $.extend({
                     message: '请稍后数据刷新'
                 });
 
-				setTimeout($.unblockUI, 500);
+				parent.$('#global-modal .modal-content').unblock();
 			}
 		});
 	},
