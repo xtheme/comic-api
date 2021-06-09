@@ -89,7 +89,7 @@
 {{-- vendor scripts --}}
 @section('vendor-scripts')
     <script src="{{ asset('vendors/js/extensions/moment.min.js') }}"></script>
-    <script src="{{ asset('vendors/js/extensions/locale-all.js') }}"></script>
+    <script src="{{ asset('vendors/js/extensions/locale/zh-cn.js') }}"></script>
 @endsection
 
 {{-- page scripts --}}

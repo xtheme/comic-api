@@ -199,7 +199,7 @@
 {{-- vendor scripts --}}
 @section('vendor-scripts')
     <script src="{{ asset('vendors/js/extensions/moment.min.js') }}"></script>
-    <script src="{{ asset('vendors/js/extensions/locale-all.js') }}"></script>
+    <script src="{{ asset('vendors/js/extensions/locale/zh-cn.js') }}"></script>
     <script src="{{ asset('vendors/js/pickers/daterange/daterangepicker.js') }}"></script>
 @endsection
 
