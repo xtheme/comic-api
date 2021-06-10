@@ -8,6 +8,7 @@ use App\Models\User;
 use App\Services\PaymentService;
 use App\Services\UserService;
 use Illuminate\Http\Request;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Response;
 
@@ -74,9 +75,16 @@ class PaymentController extends Controller
             $user = User::find($order['user_id']);
 
             if ($user) {
-                $subscribed_at = $user->subscribed_at ? strtotime($user->subscribed_at) : time();
-                $user->subscribed_at = date('Y-m-d H:i:s', $subscribed_at + (86400 * $order->days));
+                if ($user->subscribed_at) {
+                    $user->subscribed_at = $user->subscribed_at->addDays($order->days);
+                } else {
+                    $user->subscribed_at = Carbon::now()->addDays($order->days);
+                }
+
                 $user->save();
+
+                $data = getChangeAttributes($user);
+                activity()->useLog('API')->performedOn($user)->withProperties($data)->log('用户充值');
 
                 // 刷新缓存
                 $userService = new UserService();
