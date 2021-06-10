@@ -80,9 +80,13 @@
                                     <td>{{ $item->username }}</td>
                                     <td class="text-center">
                                         @if($item->mobile)
-                                            <span class="badge badge-pill badge-light-primary">电话</span>
+                                            <span data-toggle="tooltip" data-placement="top" data-original-title="{{ $item->phone }}">
+                                                <span class="badge badge-pill badge-light-primary">电话</span>
+                                            </span>
                                         @else
-                                            <span class="badge badge-pill badge-light-light">设备</span>
+                                            <span data-toggle="tooltip" data-placement="top" data-original-title="{{ $item->device_id }}">
+                                                <span class="badge badge-pill badge-light-light">设备</span>
+                                            </span>
                                         @endif
                                     </td>
                                     <td class="text-center">

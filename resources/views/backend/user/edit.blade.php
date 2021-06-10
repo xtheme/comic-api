@@ -2,8 +2,8 @@
 
 {{-- page style --}}
 @section('page-styles')
-    <link rel="stylesheet" type="text/css" href="{{ asset('vendors/css/pickers/daterange/daterangepicker.css') }}">
-    <link rel="stylesheet" type="text/css" href="{{ asset('css/plugins/forms/validation/form-validation.css') }}">
+{{--    <link rel="stylesheet" type="text/css" href="{{ asset('vendors/css/pickers/daterange/daterangepicker.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ asset('css/plugins/forms/validation/form-validation.css') }}">--}}
 @endsection
 
 @section('content')
@@ -50,7 +50,7 @@
                         <label>手机号</label>
                         <div class="controls">
                             <input type="text" class="form-control" name="mobile"
-                                   value="{{ $user->mobile }}"
+                                   value="{{ $user->phone }}"
                                    readonly="readonly">
                         </div>
                     </div>
@@ -104,14 +104,14 @@
                         <textarea name="sign" class="form-control" rows="3" placeholder="请输入用户简介，最长255个字符">{{$user->sign}}</textarea>
                     </div>
                 </div>
-                <div class="col-6">
+                {{--<div class="col-6">
                     <div class="form-group">
                         <label for="input-score">VIP到期时间</label>
                         <div class="controls">
                             <input type="text" class="form-control" name="subscribed_at" value="{{$user->subscribed_at}}">
                         </div>
                     </div>
-                </div>
+                </div>--}}
                 <div class="col-12 d-flex justify-content-end">
                     <button type="submit" class="btn btn-primary mr-1">提交</button>
                     <button type="reset" class="btn btn-light-secondary mr-1">还原</button>
@@ -123,9 +123,9 @@
 
 {{-- vendor scripts --}}
 @section('vendor-scripts')
-    <script src="{{ asset('vendors/js/extensions/moment.min.js') }}"></script>
+    {{--<script src="{{ asset('vendors/js/extensions/moment.min.js') }}"></script>
     <script src="{{ asset('vendors/js/pickers/daterange/daterangepicker.js') }}"></script>
-    <script src="{{ asset('vendors/js/extensions/locale/zh-cn.js') }}"></script>
+    <script src="{{ asset('vendors/js/extensions/locale/zh-cn.js') }}"></script>--}}
     <script src="{{ asset('vendors/js/forms/validation/jqBootstrapValidation.js') }}"></script>
     <script src="{{ asset('js/scripts/forms/validation/form-validation.js') }}"></script>
 @endsection
@@ -164,43 +164,43 @@
 			});
 
             // 日期時間選擇
-            moment.locale('zh-cn');
-
-            let $created = $('input[name="subscribed_at"]');
-
-            $created.daterangepicker({
-                drops: 'up',
-                buttonClasses: 'btn',
-                applyClass: 'btn-success',
-                cancelClass: 'btn-danger',
-                autoUpdateInput: false,
-                locale: {
-                    direction       : 'ltr',
-                    format          : moment.localeData().longDateFormat('L'),
-                    separator       : ' - ',
-                    applyLabel      : '确定',
-                    cancelLabel     : '取消',
-                    weekLabel       : 'W',
-                    customRangeLabel: 'Custom Range',
-                    daysOfWeek      : moment.weekdaysMin(),
-                    monthNames      : moment.monthsShort(),
-                    firstDay        : moment.localeData().firstDayOfWeek()
-                },
-                singleDatePicker: true,
-                timePicker: true,
-                timePicker24Hour: true,
-                timePickerSeconds: true,
-                timePickerIncrement: 5,
-                // minDate: moment().subtract(1, 'days'),
-            });
-
-            $created.on('apply.daterangepicker', function(ev, picker) {
-                $(this).val(picker.startDate.format('YYYY-MM-DD HH:mm:ss'));
-            });
-
-            $created.on('cancel.daterangepicker', function(ev, picker) {
-                $(this).val('');
-            });
+            // moment.locale('zh-cn');
+            //
+            // let $created = $('input[name="subscribed_at"]');
+            //
+            // $created.daterangepicker({
+            //     drops: 'up',
+            //     buttonClasses: 'btn',
+            //     applyClass: 'btn-success',
+            //     cancelClass: 'btn-danger',
+            //     autoUpdateInput: false,
+            //     locale: {
+            //         direction       : 'ltr',
+            //         format          : moment.localeData().longDateFormat('L'),
+            //         separator       : ' - ',
+            //         applyLabel      : '确定',
+            //         cancelLabel     : '取消',
+            //         weekLabel       : 'W',
+            //         customRangeLabel: 'Custom Range',
+            //         daysOfWeek      : moment.weekdaysMin(),
+            //         monthNames      : moment.monthsShort(),
+            //         firstDay        : moment.localeData().firstDayOfWeek()
+            //     },
+            //     singleDatePicker: true,
+            //     timePicker: true,
+            //     timePicker24Hour: true,
+            //     timePickerSeconds: true,
+            //     timePickerIncrement: 5,
+            //     // minDate: moment().subtract(1, 'days'),
+            // });
+            //
+            // $created.on('apply.daterangepicker', function(ev, picker) {
+            //     $(this).val(picker.startDate.format('YYYY-MM-DD HH:mm:ss'));
+            // });
+            //
+            // $created.on('cancel.daterangepicker', function(ev, picker) {
+            //     $(this).val('');
+            // });
 		});
     </script>
 @endsection
