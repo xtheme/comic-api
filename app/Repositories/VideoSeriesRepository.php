@@ -30,7 +30,7 @@ class VideoSeriesRepository extends Repository implements VideoSeriesRepositoryI
     {
         $video_id = $request->get('video_id') ?? '';
         $id = $request->get('id') ?? '';
-        $vip = $request->get('vip') ?? '';
+        $charge= $request->get('charge') ?? '';
         $status = $request->get('status') ?? '';
         $title = $request->get('title') ?? '';
         $created_between = $request->get('created_between') ?? '';
@@ -46,8 +46,8 @@ class VideoSeriesRepository extends Repository implements VideoSeriesRepositoryI
             return $query->where('video_id', $video_id);
         })->when($id, function (Builder $query, $id) {
             return $query->where('id', $id);
-        })->when($vip, function (Builder $query, $vip) {
-            return $query->where('vip', $vip);
+        })->when($charge, function (Builder $query, $charge) {
+            return $query->where('charge', $charge);
         })->when($status, function (Builder $query, $status) {
             return $query->where('status', $status);
         })->when($title, function (Builder $query, $title) {
