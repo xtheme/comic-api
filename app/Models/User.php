@@ -126,18 +126,6 @@ class User extends BaseModel
      */
     protected $casts = [];
 
-    protected static function boot()
-    {
-        parent::boot();
-
-        static::updated(function ($user) {
-            if ($user->isDirty('subscribed_at')) {
-                $data = getChangeAttributes($user);
-                activity()->useLog('后台')->causedBy(auth()->user())->performedOn($user)->withProperties($data)->log('开通 VIP');
-            }
-        });
-    }
-
     public function orders()
     {
         return $this->hasMany('App\Models\Order');

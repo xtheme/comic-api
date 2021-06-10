@@ -99,6 +99,8 @@ class UserController extends Controller
 
         $user->save();
 
+        activity()->useLog('后台')->causedBy(auth()->user())->performedOn($user)->withProperties($user->getChanges())->log('开通 VIP');
+
         return Response::jsonSuccess('資料已更新！');
     }
 

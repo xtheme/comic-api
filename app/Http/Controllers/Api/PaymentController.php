@@ -83,7 +83,7 @@ class PaymentController extends Controller
 
                 $user->save();
 
-                activity()->useLog('API')->performedOn($user)->withProperties($user->getChanges())->log('用户充值');
+                activity()->useLog('API')->performedOn($user)->withProperties($user->getChanges())->log('充值成功回调');
             }
         }
 
