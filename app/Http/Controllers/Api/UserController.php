@@ -38,16 +38,16 @@ class UserController extends BaseController
             // 使用设备账号登入 (访客)
             $user = $this->userService->getUserByDevice($request); // return Model (Object)
             $cache_key = $this->getCacheKeyPrefix() . sprintf('user:device:%s', $uuid);
+            if (!$request->hasHeader('token') || $request->header('token') == '') {
+                // 重新簽發 JWT
+                Cache::forget($cache_key);
+            }
         }
 
         if (!$user) {
             // 针对此新设备生成用户数据
             $user = $this->userService->registerDevice($request); // return Model (Object)
         }
-
-        // if (!$user->status) {
-        //     return Response::jsonError('很抱歉，您的账号已被禁止！', 500);
-        // }
 
         $response = $this->userService->addDeviceCache($cache_key, $user);
 
