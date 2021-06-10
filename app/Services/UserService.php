@@ -227,11 +227,18 @@ class UserService
             'mobile' => '',
         ];
 
-        $update = [
-            'mobile' => sprintf('%s-%s', $mobile_user->area, $mobile_user->mobile),
-        ];
+        $ids = Order::where($where)->get()->pluck('id')->toArray();
 
-        Order::where($where)->update($update);
+        if ($ids) {
+            $update = [
+                'mobile' => sprintf('%s-%s', $mobile_user->area, $mobile_user->mobile),
+            ];
+
+            Order::where($where)->update($update);
+
+            $properties = ['order_id' => implode(', ', $ids)];
+            activity()->useLog('API')->performedOn($mobile_user)->withProperties($properties)->log('关联 #' . $device_user->id . ' 订单');
+        }
     }
 
     /**
@@ -242,16 +249,16 @@ class UserService
      */
     public function transferSubscribed(User $mobile_user, User $device_user)
     {
-        // 比對 VIP 時效
-        $prev_subscribed_at = $device_user->subscribed_at ? strtotime($device_user->subscribed_at) : null;
-
-        if ($prev_subscribed_at) {
-            $current_subscribed_at = $mobile_user->subscribed_at ? strtotime($mobile_user->subscribed_at) : time();
-            $keep_subscribed_at = ($prev_subscribed_at > $current_subscribed_at) ? $prev_subscribed_at : $current_subscribed_at;
-
+        if ($device_user->subscribed_at) {
             // 更新電話帳號 VIP 時效
-            $mobile_user->subscribed_at = date('Y-m-d H:i:s', $keep_subscribed_at);
-            $mobile_user->save();
+            if ($device_user->subscribed_at->greaterThan($mobile_user->subscribed_at)) {
+                $mobile_user->subscribed_at = $device_user->subscribed_at;
+                $mobile_user->save();
+
+                activity()->useLog('API')->performedOn($mobile_user)->withProperties($mobile_user->getChanges())->log('继承 #' . $device_user->id . ' VIP 效期');
+            }
+
+            activity()->useLog('API')->performedOn($device_user)->log('原 VIP 效期 ' . $device_user->subscribed_at . ' 因转换为电话帐号而重置');
 
             // 清空裝置帳號 VIP 時效
             $device_user->subscribed_at = null;
