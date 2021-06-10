@@ -89,7 +89,15 @@ class UserController extends Controller
 
     public function updateVip(Request $request, $id)
     {
-        User::findOrFail($id)->update(['subscribed_at' => Carbon::now()->addDays($request->input('day'))]);
+        $user = User::findOrFail($id);
+
+        if ($user->subscribed_at) {
+            $user->subscribed_at = $user->subscribed_at->addDays($request->input('day'));
+        } else {
+            $user->subscribed_at = Carbon::now()->addDays($request->input('day'));
+        }
+
+        $user->save();
 
         return Response::jsonSuccess('資料已更新！');
     }
