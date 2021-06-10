@@ -89,6 +89,7 @@ Route::middleware(['auth'])->prefix('backend')->as('backend.')->group(function (
     Route::prefix('order')->as('order.')->group(function () {
         Route::get('/', [OrderController::class, 'index'])->name('index');        // 订单列表
         Route::get('export', [OrderController::class, 'export'])->name('export'); // 汇出订单
+        Route::put('callback/{id}', [OrderController::class, 'callback'])->name('callback'); // 第三方更改訂單狀態失效時手動回調
     });
 
     // 漫画

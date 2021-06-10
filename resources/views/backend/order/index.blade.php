@@ -51,7 +51,8 @@
                                 <th>注册时间</th>
                                 <th>订单创建时间</th>
                                 <th>更新时间</th>
-                                <th>订单状态</th>
+                                <th>状态</th>
+                                <th>操作</th>
                             </tr>
                             </thead>
                             <tbody>
@@ -71,6 +72,11 @@
                                     <td>{{ optional($order->created_at)->diffForHumans() ?? '' }}</td>
                                     <td>{{ optional($order->updated_at)->diffForHumans() ?? '' }}</td>
                                     <td>@if($order->status == 1)<label class="badge badge-success badge-pill">已付款</label>@else<label class="badge badge-light badge-pill">未付款</label>@endif</td>
+                                    <td>
+                                        @if($order->status != 1)
+                                        <a class="btn btn-warning btn-sm" data-confirm href="{{ route('backend.order.callback', $order->id) }}" title="回调订单为已付款">回調</a>
+                                        @endif
+                                    </td>
                                 </tr>
                             @endforeach
                             </tbody>

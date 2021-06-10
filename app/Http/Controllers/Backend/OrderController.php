@@ -4,8 +4,12 @@ namespace App\Http\Controllers\Backend;
 
 use App\Exports\OrdersExport;
 use App\Http\Controllers\Controller;
+use App\Models\Order;
+use App\Models\User;
 use App\Repositories\Contracts\OrderRepositoryInterface;
 use Illuminate\Http\Request;
+use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\Response;
 use Maatwebsite\Excel\Facades\Excel;
 
 class OrderController extends Controller
@@ -38,5 +42,37 @@ class OrderController extends Controller
         $query = $this->repository->filter($request);
 
         return Excel::download(new OrdersExport($query), 'orders-' . date('Y-m-d') . '.xlsx');
+    }
+
+    public function callback($id)
+    {
+        $order = Order::findOrFail($id);
+
+        // 更新订单数据
+        $update = [
+            'status' => 1,
+            'transaction_at' => date('Y-m-d H:i:s'),
+        ];
+
+        $order->update($update);
+
+        activity()->useLog('后台')->causedBy(auth()->user())->performedOn($order)->withProperties($order->getChanges())->log('回调订单为已付款');
+
+        // 更新用户 subscribed_at
+        $user = User::find($order->user_id);
+
+        if ($user) {
+            if ($user->subscribed_at) {
+                $user->subscribed_at = $user->subscribed_at->addDays($order->days);
+            } else {
+                $user->subscribed_at = Carbon::now()->addDays($order->days);
+            }
+
+            $user->save();
+
+            activity()->useLog('后台')->causedBy(auth()->user())->performedOn($user)->withProperties($user->getChanges())->log('补发 VIP');
+        }
+
+        return Response::jsonSuccess('回调订单完成！');
     }
 }
