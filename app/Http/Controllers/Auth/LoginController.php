@@ -119,7 +119,7 @@ class LoginController extends Controller
 
         if ($this->attemptLogin($request)) {
 
-            activity()->useLog('管理員')->causedBy(auth()->user())->log('登录成功!');
+            activity()->useLog('后台')->causedBy(auth()->user())->log('登录成功!');
 
             $data = [
                 'logintime' => time(),
@@ -141,7 +141,7 @@ class LoginController extends Controller
      */
     public function logout(Request $request)
     {
-        activity()->useLog('管理員')->causedBy(auth()->user())->log('登出成功!');
+        activity()->useLog('后台')->causedBy(auth()->user())->log('登出成功!');
 
         return $this->traitLogout($request);
     }
