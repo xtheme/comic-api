@@ -25,7 +25,7 @@
                         </div>
                         <div class="form-group mr-1">
                             <select class="form-control" name="status">
-                                <option value="">上架状态</option>
+                                <option value="">状态</option>
                                 @foreach ($status_options as $key => $val)
                                     <option value="{{ $key }}" @if(request()->get('status') == $key){{'selected'}}@endif>{{ $val }}</option>
                                 @endforeach

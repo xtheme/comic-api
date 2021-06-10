@@ -15,7 +15,7 @@ class VideoSeriesController extends Controller
     private $repository;
 
     const STATUS_OPTIONS = [1 => '上架', -1 => '下架'];
-    const CHARGE_OPTIONS = [1 => 'VIP', -1 => '免费'];
+    const CHARGE_OPTIONS = [1 => '收费', -1 => '免费'];
 
     public function __construct(VideoSeriesRepositoryInterface $repository)
     {
