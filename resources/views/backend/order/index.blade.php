@@ -61,7 +61,7 @@
                                     <td>{{ $order->amount }}</td>
                                     <td>{{ $order->type }}</td>
                                     <td>{{ $order->name }}</td>
-                                    <td>{{ $order->user_id }}</td>
+                                    <td><a data-modal href="{{ route('backend.user.edit', $order->user_id) }}" title="修改用户信息">{{ $order->user_id }}</a></td>
                                     <td>{{ $order->ip }}</td>
                                     <td>{{ $order->user->orders_count->count ?? 0 }}</td>
                                     <td>{{ $order->user->orders_success_count->count ?? 0 }}</td>
