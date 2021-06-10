@@ -1,10 +1,9 @@
 @extends('layouts.iframePage')
 
 {{-- page Title --}}
-@section('title','操作记录')
+@section('title','操作日志')
 
 @section('vendor-styles')
-    <link rel="stylesheet" type="text/css" href="{{ asset('vendors/css/pickers/pickadate/pickadate.css') }}">
     <link rel="stylesheet" type="text/css" href="{{ asset('vendors/css/pickers/daterange/daterangepicker.css') }}">
 @endsection
 
@@ -66,24 +65,17 @@
                                     <tr>
                                         <td>{{ $row->id }}</td>
                                         <td>{{ $row->log_name }}</td>
-                                        <td>{{ $row->description }}
+                                        <td>
                                             @if($row->subject)
                                                 <span class="badge badge-pill badge-light-primary">#{{ $row->subject_id }}</span>
-                                                <span class="badge badge-pill badge-light-secondary">{{ Str::limit($row->subject->title, 50, '...') }}</span>
                                             @endif
+                                            {{ $row->description }}
                                         </td>
                                         <td>{{ $row->causer->nickname ?? '' }}</td>
                                         <td>{{ $row->created_at->diffForHumans() }}</td>
                                         <td>
                                             @if ($row->isChanged())
-                                                <div class="@if($loop->last){{'dropup'}}@else{{'dropdown'}}@endif">
-                                                    <span class="bx bx-dots-vertical-rounded font-medium-3 dropdown-toggle nav-hide-arrow cursor-pointer"
-                                                      id="dropdownMenuButton{{ $row->id }}" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></span>
-                                                    <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuButton{{ $row->id }}">
-                                                        <a class="dropdown-item" data-modal href="{{ route('rbac.activity.diff', $row->id) }}" title="操作记录详情"><i class="bx bx-edit-alt mr-1"></i>详情</a>
-                                                        <a class="dropdown-item" data-confirm href="{{ route('rbac.activity.restore', $row->id) }}"><i class="bx bx-lock-open mr-1"></i> 恢复</a>
-                                                    </div>
-                                                </div>
+                                                <a class="btn btn-primary btn-sm" data-modal href="{{ route('backend.activity.diff', $row->id) }}" title="查看变更">查看变更</a>
                                             @endif
                                         </td>
                                     </tr>
@@ -101,7 +93,7 @@
     </section>
 @endsection
 
-@section('customizer-content')
+@section('search-form')
     <h4 class="text-uppercase mb-0">查询</h4>
     <small></small>
     <hr>
@@ -173,31 +165,15 @@
 @endsection
 
 @section('vendor-scripts')
-    <script src="{{ asset('vendors/js/pickers/daterange/moment.min.js') }}"></script>
+    <script src="{{ asset('vendors/js/extensions/moment.min.js') }}"></script>
     <script src="{{ asset('vendors/js/pickers/daterange/daterangepicker.js') }}"></script>
-    <script src="{{ asset('vendors/js/pickers/daterange/locale.js') }}"></script>
+    <script src="{{ asset('vendors/js/extensions/locale/zh-cn.js') }}"></script>
 @endsection
 
 {{-- page scripts --}}
 @section('page-scripts')
     <script>
         $(document).ready(function () {
-            $('[data-confirm]').on('click', function (e) {
-                e.preventDefault();
-
-                $.confirm({
-                    url     : $(this).attr('href'),
-                    type    : 'post',
-                    data    : '',
-                    title   : '删除操作不可逆, 确定是否继续?',
-                    callback: function (res) {
-	                    $.reloadIFrame({
-		                    reloadUrl: window.location.href
-	                    });
-                    }
-                });
-            });
-
             let $created = $('#input-created');
 
             // Date Ranges Initially Empty

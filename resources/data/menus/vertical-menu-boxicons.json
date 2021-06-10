@@ -100,6 +100,22 @@
                     "name": "Notice List"
                 }
             ]
+        },
+        {
+            "url": "#",
+            "name": "Systems",
+            "slug": "systems",
+            "icon": "bx bxs-cog",
+            "submenu": [
+                {
+                    "url": "/backend/activity",
+                    "name": "Activity Log"
+                },
+                {
+                    "url": "/log-viewer/logs",
+                    "name": "System Log"
+                }
+            ]
         }
     ]
 }
