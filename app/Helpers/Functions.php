@@ -262,22 +262,3 @@ if (!function_exists('image_thumb')) {
         return $api_url . $image;
     }
 }
-
-if (!function_exists('getChangeAttributes')) {
-    /**
-     * @param $model
-     *
-     * @return array
-     */
-    function getChangeAttributes($model)
-    {
-        $changes = $model->getChanges();
-
-        return [
-            'attributes' => $changes,
-            'old' => collect($changes)->map(function($value, $key) use ($model){
-                return $model->getRawOriginal($key);
-            })
-        ];
-    }
-}

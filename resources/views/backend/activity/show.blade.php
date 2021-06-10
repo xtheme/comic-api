@@ -6,16 +6,14 @@
             <thead>
             <tr>
                 <th>字段</th>
-                <th>旧数据</th>
-                <th>新数据</th>
+                <th>数据</th>
             </tr>
             </thead>
             <tbody>
-            @foreach ($changed as $row)
+            @foreach ($properties as $key => $value)
                 <tr>
-                    <td>{{ $row['field'] }}</td>
-                    <td>{{ $row['old'] }}</td>
-                    <td>{{ $row['new'] }}</td>
+                    <td>{{ $key }}</td>
+                    <td>{{ $value }}</td>
                 </tr>
             @endforeach
             </tbody>

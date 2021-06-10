@@ -3,12 +3,12 @@
 namespace App\Http\Controllers\Backend;
 
 use App\Http\Controllers\Controller;
-use App\Models\ActivityLog;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Response;
 use Illuminate\View\View;
 use App\Models\Admin;
+use Spatie\Activitylog\Models\Activity;
 
 class ActivityLogController extends Controller
 {
@@ -21,7 +21,7 @@ class ActivityLogController extends Controller
         $created_at = $request->get('created_at') ?? '';
 
         // 查询日志
-        $logs = ActivityLog::when($id, function (Builder $query, $id) {
+        $logs = Activity::when($id, function (Builder $query, $id) {
             return $query->where('id', $id)->orWhere('subject_id', $id);
         })->when($log_name, function (Builder $query, $log_name) {
             return $query->inLog($log_name);
@@ -38,10 +38,10 @@ class ActivityLogController extends Controller
         })->orderByDesc('id')->paginate(config('custom.perpage'));
         // dd($logs);
         // 列出所有的日志名称
-        $name_options = ActivityLog::groupBy('log_name')->pluck('log_name');
+        $name_options = Activity::groupBy('log_name')->pluck('log_name');
 
         // 列出所有的操作者
-        $causer = ActivityLog::whereNotNull('causer_id')->groupBy('causer_id')->pluck('causer_id');
+        $causer = Activity::whereNotNull('causer_id')->groupBy('causer_id')->pluck('causer_id');
         $admin_options = $causer->map(function ($causer_id) {
             return Admin::find($causer_id);
         });
@@ -65,10 +65,10 @@ class ActivityLogController extends Controller
      * @return View
      */
     public function diff($id) {
-        $activity = ActivityLog::findOrFail($id);
-
+        $activity = Activity::findOrFail($id);
+// dd($activity->properties);
         return view('backend.activity.show', [
-                'changed' => $activity->getChanged(),
+                'properties' => $activity->properties,
             ]
         );
     }
@@ -81,7 +81,7 @@ class ActivityLogController extends Controller
      * @return Response
      */
     public function restore($id) {
-        $activity = ActivityLog::findOrFail($id);
+        $activity = Activity::findOrFail($id);
 
         $model = $activity->subject;
         $changed = $activity->getChanged();
