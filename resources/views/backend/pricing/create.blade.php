@@ -127,11 +127,7 @@
 		$(document).ready(function () {
 			$('#form').submit(function (e) {
 				e.preventDefault();
-                if ($('.btn-primary').hasClass('disabled')){
-                    return false;
-                }
-                
-                $('.btn-primary').addClass('disabled');
+
 				$.request({
 					url     : $(this).attr('action'),
 					type    : $(this).attr('method'),
@@ -148,7 +144,6 @@
                                 message: '请稍后数据刷新'
                             });
                         } else {
-                            $('.btn-primary').removeClass('disabled');
                             $.toast({
                                 type: 'error',
                                 title: '提交失败',
