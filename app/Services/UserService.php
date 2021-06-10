@@ -72,7 +72,7 @@ class UserService
                 $user->last_login_ip = request()->header('ip');
                 $user->platform = request()->header('platform');
                 $user->version = request()->header('app-version');
-                $user->save();
+                $user->saveQuietly();
             }
 
             // 簽到資料組成
