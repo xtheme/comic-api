@@ -144,14 +144,6 @@
             $('#form').submit(function (e) {
                 e.preventDefault();
 
-	            let $submit_button = $(this).find('.btn-primary');
-
-                if ($submit_button.hasClass('disabled')){
-                    return false;
-                }
-                
-                $submit_button.addClass('disabled');
-
                 $.request({
                     url     : $(this).attr('action'),
                     type    : $(this).attr('method'),
@@ -163,7 +155,6 @@
 	                        parent.$.hideModal();
 	                        parent.$.reloadIFrame();
                         } else {
-                            $submit_button.removeClass('disabled');
                             $.toast({
                                 type: 'error',
                                 title: '提交失败',

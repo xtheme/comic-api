@@ -193,6 +193,12 @@ $.extend({
 			callback  : null
 		}, options);
 
+		//请求前先确认按钮是否连续点
+		if ($('.btn-primary').hasClass('disabled')){
+			return false;
+		}
+		$('.btn-primary').addClass('disabled');
+
 		$.ajax({
 			url: settings.url,
 			type: settings.type || 'post',
@@ -204,6 +210,7 @@ $.extend({
             processData: !settings.multipart,
 			dataType: 'json',
 			success: function (res) {
+				$('.btn-primary').removeClass('disabled');
 				if (settings.debug == true) {
 					console.log(res);
 				}
@@ -213,6 +220,7 @@ $.extend({
                 }
 			},
 			error: function(xhr, textStatus, errorThrown) {
+				$('.btn-primary').removeClass('disabled');
 				if (settings.debug == true) {
 					console.log(xhr);
 					console.log(textStatus);
