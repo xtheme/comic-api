@@ -69,10 +69,10 @@ class PaymentController extends Controller
                 'transaction_at' => date('Y-m-d H:i:s'),
             ];
 
-            $order->update($order['id'], $update);
+            $order->update($update);
 
             // 更新用户 subscribed_at
-            $user = User::find($order['user_id']);
+            $user = User::find($order->user_id);
 
             if ($user) {
                 if ($user->subscribed_at) {
@@ -83,8 +83,7 @@ class PaymentController extends Controller
 
                 $user->save();
 
-                $data = getChangeAttributes($user);
-                activity()->useLog('API')->performedOn($user)->withProperties($data)->log('用户充值');
+                activity()->useLog('API')->performedOn($user)->withProperties($user->getChanges())->log('用户充值');
             }
         }
 

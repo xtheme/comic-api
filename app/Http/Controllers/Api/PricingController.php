@@ -22,12 +22,26 @@ class PricingController extends Controller
         return Response::jsonSuccess(__('api.success'), $data);
     }
 
+    public function testCreateAccount(Request $request)
+    {
+        $data = app(PaymentService::class)->getAccountParams($request);
+
+        return Response::json($data);
+    }
+
+    public function testBalanceTransfer(Request $request)
+    {
+        $data = app(PaymentService::class)->getTransferParams($request);
+
+        return Response::json($data);
+    }
+
     public function url(Request $request, $id)
     {
         $paymentService = new PaymentService();
 
         // 金流方注册
-        if (!$paymentService->createAccount($request->user)) {
+        if (!$paymentService->createAccount($request)) {
             return Response::jsonError('金流方注册失败！');
         }
 

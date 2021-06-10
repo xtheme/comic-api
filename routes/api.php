@@ -112,6 +112,11 @@ Route::as('api.')->group(function () {
                 Route::get('/{id}', [Api\PricingController::class, 'url'])->name('url');
             });
 
+            Route::prefix('test')->group(function () {
+                Route::get('/create/account', [Api\PricingController::class, 'testCreateAccount']);
+                Route::post('/balance/transfer', [Api\PricingController::class, 'testBalanceTransfer']);
+            });
+
             // 评论
             Route::prefix('comment')->as('comment.')->group(function () {
                 Route::get('/list/{chapter_id}/{order}', [Api\CommentController::class, 'list'])->name('list');

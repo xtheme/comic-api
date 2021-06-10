@@ -3,24 +3,18 @@
 namespace App\Services;
 
 use App\Models\User;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 
 class PaymentService
 {
-    /**
-     * 在金流平台注册并获取 uid
-     *
-     * @param  User  $user
-     *
-     * @return bool
-     */
-    public function createAccount(User $user)
+    public function getAccountParams(Request $request): array
     {
         // todo change config
         $pay_game_id = getOldConfig('web_config', 'pay_game_id');
-        $pay_register_url = getOldConfig('web_config', 'pay_register_url');
-        // Log::debug('$pay_game_id: ' . $pay_game_id);
-        // Log::debug('$pay_register_url: ' . $pay_register_url);
+
+        $user = $request->user;
+
         // 需要加密的用户数据
         $info = [
             'uuid'     => $user->device_id,
@@ -39,10 +33,51 @@ class PaymentService
                 'timestamp' => (string) time()
             ],
             'optName' => 'system',
-            'ipAddr' => request()->header('ip'),
+            'ipAddr' => $request->header('ip'),
         ];
 
         $data['sign'] = $this->getSign($data['param']);
+
+        return $data;
+    }
+
+    public function getTransferParams(Request $request): array
+    {
+        // todo change config
+        $pay_game_id = getOldConfig('web_config', 'pay_game_id');
+
+        $data = [
+            'gameId'  => $pay_game_id,
+            'param'   => [
+                'customerId'  => $request->post('customer_id'),
+                'referenceId' => $request->post('order_id'),
+                'gameId'      => $pay_game_id,
+                'amount'      => '30.00',
+                'opType'      => '0',
+                'timestamp'   => (string) time(),
+            ],
+            'optName' => 'system',
+            'ipAddr'  => $request->header('ip'),
+        ];
+
+        $data['sign'] = $this->getSign($data['param']);
+
+        return $data;
+    }
+
+    /**
+     * 在金流平台注册并获取 uid
+     *
+     * @param  Request  $request
+     *
+     * @return bool
+     */
+    public function createAccount(Request $request)
+    {
+        // todo change config
+        $pay_register_url = getOldConfig('web_config', 'pay_register_url');
+
+        $data = $this->getAccountParams($request);
 
         $json_str = json_encode($data);
         // Log::debug($json_str);
