@@ -144,11 +144,13 @@
             $('#form').submit(function (e) {
                 e.preventDefault();
 
-                if ($('.btn-primary').hasClass('disabled')){
+	            let $submit_button = $(this).find('.btn-primary');
+
+                if ($submit_button.hasClass('disabled')){
                     return false;
                 }
                 
-                $('.btn-primary').addClass('disabled');
+                $submit_button.addClass('disabled');
 
                 $.request({
                     url     : $(this).attr('action'),
@@ -158,16 +160,10 @@
                     debug: true,
                     callback: function (res) {
                         if (res.code == 200) {
-                            // iframe.blade.php
-                            parent.$.hideModal();
-
-                            // iframeLayoutMaster.blade.php
-                            parent.$.reloadIFrame({
-{{--                                reloadUrl: '{{ route('backend.video_series.index', $series->video_id) }}'--}}
-                            });
-                            
+	                        parent.$.hideModal();
+	                        parent.$.reloadIFrame();
                         } else {
-                            $('.btn-primary').removeClass('disabled');
+                            $submit_button.removeClass('disabled');
                             $.toast({
                                 type: 'error',
                                 title: '提交失败',

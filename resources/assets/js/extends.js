@@ -224,16 +224,7 @@ $.extend({
 			}
 		});
 	},
-	blockMask: function (element, options, callback) {
-		let settings = $.extend({
-			icon     : '<i class="bx bx-loader icon-spin"></i>',
-			title    : '',
-			message  : '数据加载中...',
-			timeout  : 1500,
-			reloadUrl: null,
-			callback : null
-		}, options);
-
+	blockMask: function (element, settings, callback) {
 		$(element).block({
 			message: `<span class="semibold">${settings.icon} ${settings.message}</span>`,
 			timeout: settings.timeout, //unblock after 2 seconds
@@ -262,107 +253,30 @@ $.extend({
 		});
 	},
 	reloadIFrame: function (options) {
-		// let element = parent.$('#main-content');
 		let element = $('body');
 
-		$.blockMask(element, options, function() {
-			if (options.reloadUrl == null) {
+		let settings = $.extend({
+			icon     : '<i class="bx bx-loader icon-spin"></i>',
+			title    : '',
+			message  : '数据加载中...',
+			timeout  : 1500,
+			reloadUrl: null,
+			callback : null
+		}, options);
+
+		$.blockMask(element, settings, function() {
+			if (settings.reloadUrl == null) {
 				window.location.reload();
 			} else {
-				console.log(options.reloadUrl);
-				window.location = options.reloadUrl;
+				console.log(settings.reloadUrl);
+				window.location = settings.reloadUrl;
 			}
 
 			$.toast({
-				title: options.title,
+				title: settings.title,
 				message: '请稍后数据刷新'
 			});
 		});
-
-        /*$(element).block({
-			message: `<span class="semibold">${settings.icon} ${settings.message}</span>`,
-			timeout: settings.timeout, //unblock after 2 seconds
-			overlayCSS: {
-				backgroundColor: '#5A8DEE',
-				opacity: 0.8,
-				cursor: 'wait'
-			},
-			css: {
-				width: 200,
-				height: 50,
-				lineHeight: 1,
-				border: 0,
-				borderRadius: 30,
-				padding: 15,
-				color: '#5A8DEE',
-				backgroundColor: '#F2F4F4'
-			},
-			onBlock: function () {
-				console.log(settings.reloadUrl);
-				if (settings.reloadUrl == null) {
-					document.getElementById('content-frame').contentWindow.location.reload(true);
-				} else {
-					document.getElementById('content-frame').src = settings.reloadUrl;
-				}
-
-                $.toast({
-                    title: settings.title,
-                    message: '请稍后数据刷新'
-                });
-
-				element.unblock();
-			}
-		});*/
-	},
-	reloadModal: function (options) {
-        let element = $('body');
-
-		$.blockMask(element, options, function() {
-			if (options.reloadUrl == null) {
-				window.location.reload();
-			} else {
-				console.log(options.reloadUrl);
-				window.location = options.reloadUrl;
-			}
-
-			$.toast({
-				title: options.title,
-				message: '请稍后数据刷新'
-			});
-		});
-
-        /*$(element).block({
-			message: `<span class="semibold">${settings.icon} ${settings.message}</span>`,
-			timeout: settings.timeout, //unblock after 2 seconds
-			overlayCSS: {
-				backgroundColor: '#5A8DEE',
-				opacity: 0.8,
-				cursor: 'wait'
-			},
-			css: {
-				width: 200,
-				height: 50,
-				lineHeight: 1,
-				border: 0,
-				borderRadius: 30,
-				padding: 15,
-				color: '#5A8DEE',
-				backgroundColor: '#F2F4F4'
-			},
-			onBlock: function () {
-				console.log(settings.reloadUrl);
-                let $iframe = element.find('iframe');
-
-                $iframe.attr('src', settings.reloadUrl);
-
-                parent.$.toast({
-                    title: settings.title,
-                    message: '请稍后数据刷新'
-                });
-
-				element.unblock();
-			}
-		});*/
 	},
 	confirm: function (options) {
 		let settings = $.extend({

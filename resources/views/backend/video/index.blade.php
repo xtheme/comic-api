@@ -109,9 +109,10 @@
                                             <span class="bx bx-dots-vertical-rounded font-medium-3 dropdown-toggle nav-hide-arrow cursor-pointer"
                                                   id="dropdownMenuButton{{ $video->id }}" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></span>
                                             <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuButton{{ $video->id }}">
-                                                <a class="dropdown-item" data-modal href="{{ route('backend.video.edit', $video->id) }}" title="编辑动画"><i class="bx bx-edit-alt mr-1"></i>编辑动画</a>
                                                 <a class="dropdown-item" data-modal data-size="full" href="{{ route('backend.video_series.index', $video->id) }}" title="影集列表"><i class="bx
 bxs-videos mr-1"></i>影集列表</a>
+                                                <a class="dropdown-item" data-modal href="{{ route('backend.video.edit', $video->id) }}" title="编辑动画"><i class="bx bx-edit-alt mr-1"></i>编辑动画</a>
+
                                             </div>
                                         </div>
                                     </td>
