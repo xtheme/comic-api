@@ -11,7 +11,7 @@
             <div class="row">
                 <div class="col-12">
                     <div class="form-group">
-                        <label>开通天數</label>
+                        <label>开通 VIP 天數</label>
                         <div class="controls">
                             <input type="number" class="form-control" name="day">
                         </div>

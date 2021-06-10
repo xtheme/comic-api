@@ -225,6 +225,8 @@ class User extends BaseModel
 
     public function getAvatarAttribute($value)
     {
+        if (!$value) return '';
+
         // todo change config
         $api_url = getOldConfig('web_config', 'api_url');
 

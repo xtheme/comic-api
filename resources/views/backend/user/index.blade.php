@@ -161,13 +161,13 @@
                                                   id="dropdownMenuButton{{ $item->id }}" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></span>
                                             <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuButton{{ $item->id }}">
                                                 <a class="dropdown-item" data-modal href="{{ route('backend.user.edit', $item->id) }}" title="修改用户信息"><i class="bx bx-edit-alt mr-1"></i>修改</a>
+                                                <a class="dropdown-item" href="{{ route('backend.order.index') }}?user_id={{ $item->id }}" target="_blank"><i class="bx bxs-cart mr-1"></i>查看订单</a>
                                                 @if ($item->status == '1')
-                                                    <a class="dropdown-item" data-modal data-size="sm" data-height="10vh" href="{{ route('backend.user.edit.vip', $item->id) }}" title="开通天數"><i class="bx bxs-crown mr-1"></i>开通天數</a>
+                                                    <a class="dropdown-item" data-modal data-size="sm" data-height="10vh" href="{{ route('backend.user.edit.vip', $item->id) }}" title="开通 VIP"><i class="bx bxs-gift mr-1"></i>开通 VIP</a>
                                                     <a class="dropdown-item" data-confirm href="{{ route('backend.user.block', $item->id) }}" title="封禁该账号"><i class="bx bx-lock mr-1"></i>封禁</a>
                                                 @else
                                                     <a class="dropdown-item" data-confirm href="{{ route('backend.user.block', $item->id) }}" title="启用该账号"><i class="bx bx-lock-open mr-1"></i>启用</a>
                                                 @endif
-                                                <a class="dropdown-item" href="{{ route('backend.order.index') }}?user_id={{ $item->id }}" target="_blank"><i class="bx bx-link-external mr-1"></i>查看订单</a>
                                             </div>
                                         </div>
                                     </td>
