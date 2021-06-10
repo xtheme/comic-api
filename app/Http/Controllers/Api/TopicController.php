@@ -28,6 +28,7 @@ class TopicController extends BaseController
                         'tagged_tags'           => $item->tagged_tags,
                         'ribbon'                => $item->ribbon,
                         'visit_histories_count' => shortenNumber($item->visit_histories_count),
+                        'play_histories_count' => shortenNumber($item->play_histories_count),
                     ];
                 })->toArray();
                 break;
@@ -86,6 +87,37 @@ class TopicController extends BaseController
         $total_page = ceil($count / $per_page);
 
         $list = $topic->setUnlimited()->buildQuery()->forPage($page, $per_page)->get();
+
+        switch ($topic->causer) {
+            case 'video':
+                $list = $list->map(function ($item) {
+                    return [
+                        'id'                    => $item->id,
+                        'title'                 => $item->title,
+                        'author'                => $item->author,
+                        'cover'                 => $item->cover,
+                        'tagged_tags'           => $item->tagged_tags,
+                        'ribbon'                => $item->ribbon,
+                        'visit_histories_count' => shortenNumber($item->visit_histories_count),
+                        'play_histories_count' => shortenNumber($item->play_histories_count),
+                    ];
+                })->toArray();
+                break;
+
+            case 'book':
+                $row = $topic->row;
+                $list = $list->map(function ($item) use ($row) {
+                    return [
+                        'id'                    => $item->id,
+                        'title'                 => $item->title,
+                        'author'                => $item->author,
+                        'cover'                 => ($row > 2) ? $item->horizontal_thumb : $item->vertical_thumb,
+                        'tagged_tags'           => $item->tagged_tags,
+                        'visit_histories_count' => shortenNumber($item->visit_histories_count),
+                    ];
+                })->toArray();
+                break;
+        }
 
         $data = [
             'topic'      => $topic_id,

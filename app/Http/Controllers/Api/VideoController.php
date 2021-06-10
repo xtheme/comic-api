@@ -40,6 +40,10 @@ class VideoController extends BaseController
             return $query->where('status', 1);
         }])->withCount(['visit_histories', 'play_histories'])->find($id)->toArray();
 
+        // 數字格式化
+        $data['visit_histories_count'] = shortenNumber($data['visit_histories_count'] );
+        $data['play_histories_count'] = shortenNumber($data['play_histories_count'] );
+
         // todo 訪問數+1
         Record::from('video')->visit($id);
 
