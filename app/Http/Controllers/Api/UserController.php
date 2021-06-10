@@ -197,10 +197,8 @@ class UserController extends BaseController
         }
 
         $user->avatar = $response['path'];
-        $user->save();
 
-        // 刷新缓存
-        $this->userService->updateUserCache($user);
+        $user->save();
 
         return Response::jsonSuccess(__('api.success'), $user);
     }
@@ -230,10 +228,8 @@ class UserController extends BaseController
             $days = $request->user->sign_days;
         }
 
-        //寫入簽到
+        // 寫入簽到
         $data = $this->userService->sign_in($days);
-
-        $this->userService->updateUserCache($request->user);
 
         $data = [
             'score' => $data['score'],

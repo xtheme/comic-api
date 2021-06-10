@@ -381,10 +381,8 @@ class UserService
 
             $user->{$key} = $value;
         }
-        $user->save();
 
-        // 刷新缓存
-        $this->updateUserCache($user);
+        $user->save();
 
         return $user;
     }
@@ -395,13 +393,16 @@ class UserService
      */
     public function scoreList()
     {
+        // todo change config
         $configs = explode(';', getOldConfig('user_config', 'sign'));
-        //$configs = explode(';', getConfig('sign_config'));
+
         $score_list = [];
+
         foreach ($configs as $k => $v) {
             $arr = explode("|", $v);
             $score_list[$k] = $arr[1];
         }
+
         return $score_list;
     }
 
@@ -411,7 +412,6 @@ class UserService
      */
     public function days($user)
     {
-
         $signs = $user->signs()->select(DB::raw('DATE(created_at) as date'))->whereBetween(DB::raw('DATE(created_at)'), [date('Y-m-d', strtotime('-1 day')), date('Y-m-d')]);
 
         return $signs;
@@ -431,7 +431,6 @@ class UserService
         Sign::insert($data);
 
         $days = ($sign_days === 7) ? 1 : $sign_days + 1;
-
 
         //查詢此次簽到分數
         $score = $this->score_get($days);

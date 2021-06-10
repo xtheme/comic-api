@@ -85,10 +85,6 @@ class PaymentController extends Controller
 
                 $data = getChangeAttributes($user);
                 activity()->useLog('API')->performedOn($user)->withProperties($data)->log('用户充值');
-
-                // 刷新缓存
-                $userService = new UserService();
-                $userService->updateUserCache($user);
             }
         }
 
