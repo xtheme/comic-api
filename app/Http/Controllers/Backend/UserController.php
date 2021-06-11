@@ -101,7 +101,37 @@ class UserController extends Controller
 
         activity()->useLog('后台')->causedBy(auth()->user())->performedOn($user)->withProperties($user->getChanges())->log('开通 VIP');
 
-        return Response::jsonSuccess('資料已更新！');
+        return Response::jsonSuccess(__('response.update.success'));
+    }
+
+    public function transferVip($id)
+    {
+        $data = [
+            'user' => User::findOrFail($id)
+        ];
+
+        return view('backend.user.transfer_vip')->with($data);
+    }
+
+    public function runTransfer(Request $request, $id)
+    {
+        $current_user = User::findOrFail($id);
+        $transfer_user = User::findOrFail($request->post('user_id'));
+
+        if ($transfer_user->subscribed_at->greaterThan($current_user->subscribed_at)) {
+            return Response::jsonError('目标的会员效期高于当前用户');
+        }
+
+        $transfer_user->subscribed_at = $current_user->subscribed_at;
+        $transfer_user->save();
+
+        $current_user->subscribed_at = null;
+        $current_user->save();
+
+        $text = sprintf('将 #%s 的 VIP 效期 %s 转移到 #%s', $current_user->id, $transfer_user->subscribed_at, $transfer_user->id);
+        activity()->useLog('后台')->causedBy(auth()->user())->performedOn($transfer_user)->withProperties($transfer_user->getChanges())->log($text);
+
+        return Response::jsonSuccess(__('response.update.success'));
     }
 
     public function destroy($id)
@@ -121,7 +151,7 @@ class UserController extends Controller
 
         $model->save();
 
-        return Response::jsonSuccess('資料已更新！');
+        return Response::jsonSuccess(__('response.update.success'));
     }
 
     /**

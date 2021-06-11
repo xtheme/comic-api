@@ -83,6 +83,8 @@ Route::middleware(['auth'])->prefix('backend')->as('backend.')->group(function (
         Route::put('editable/{field}', [UserController::class, 'editable'])->name('editable');
         Route::get('edit/vip/{id}', [UserController::class , 'editVip'])->name('edit.vip');
         Route::put('update/vip/{id}', [UserController::class , 'updateVip'])->name('update.vip');
+        Route::get('transfer/vip/{id}', [UserController::class , 'transferVip'])->name('transfer.vip');
+        Route::put('transfer/vip/{id}', [UserController::class , 'runTransfer'])->name('transfer.run');
     });
 
     // 订单
