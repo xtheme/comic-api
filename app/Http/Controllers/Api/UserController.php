@@ -3,8 +3,6 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Requests\Api\MobileRequest;
-use App\Models\BookVisit;
-use App\Models\VideoVisit;
 use App\Services\SmsService;
 use App\Services\UserService;
 use Illuminate\Http\Request;
