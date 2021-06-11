@@ -62,14 +62,39 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-6">
+
+                <div class="col-6 jump_url @if($data->jump_type == 2){{'hidden'}}@endif">
                     <div class="form-group">
                         <label>广告地址</label>
                         <div class="controls">
-                            <input type="text" class="form-control" name="url" value="{{$data->url}}" @if($data->jump_type == 5){{'disabled'}}@endif>
+                            <input type="text" class="form-control" name="url"  value="{{$data->url}}" placeholder="请输入网址" @if($data->jump_type == 5){{'disabled'}}@endif  >
                         </div>
                     </div>
                 </div>
+
+                <div class="col-3 jump_id @if($data->jump_type != 2){{'hidden'}}@endif">
+                    <div class="form-group">
+                        <label>站內跳转种类</label>
+                        <div class="controls">
+                            <select id="url-type" class="form-control" name="url_type">
+                                @foreach ($url_type as $key => $val)
+                                    <option value="{{ $key }}"  @if($data->url == $key){{'selected'}}@endif>{{ $val }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-3 jump_id @if($data->jump_type != 2){{'hidden'}}@endif ">
+                    <div class="form-group">
+                        <label>跳转ID</label>
+                        <div class="controls">
+                            <input type="text" class="form-control" name="jump_id" value="{{$data->jump_id}}" placeholder="漫画或动漫ID"  @if($data->url == 'deposit'){{'disabled'}}@endif>
+                        </div>
+                    </div>
+                </div>
+
+
                 <div class="col-6">
                     <div class="form-group">
                         <label>显示时间</label>
@@ -93,15 +118,12 @@
                     <div class="form-group">
                         <label for="input-username"><span class="danger">*</span> 广告图</label>
                         <div class="input-group">
-                            <div class="custom-file">
-                                <input type="hidden" name="image" value="{{ $data->getRawOriginal('image') }}">
-                                <input type="file" class="custom-file-input" id="vertical-thumb" name="image">
-                                <label class="custom-file-label" for="vertical-thumb">请选择文件</label>
+                            <input type="text" class="form-control image-path" name="image" autocomplete="off" value="{{ $data->getRawOriginal('image') }}">
+                            <input type="file" class="hidden-file-upload" data-path="ad/{{ $data->id }}">
+                            <div class="input-group-append" id="input-file-addon">
+                                <button class="btn btn-primary upload-image" type="button">上传</button>
                             </div>
                         </div>
-                    </div>
-                    <div class="input-group mb-1">
-                        <img src="{{ $data->image_thumb }}" alt="" width="160px">
                     </div>
                 </div>
                 <div class="col-12 justify-content-end">
@@ -119,9 +141,33 @@
     <script>
 		$(document).ready(function () {
 
+
+            $('#url-type').on('change', function () {
+                const $jump_id = $('input[name="jump_id"]');
+                
+                if ($(this).val() == 'deposit') {
+                    $jump_id.attr('disabled', true);
+                    $jump_id.attr('value', 0);
+                } else {
+                    $jump_id.attr('disabled', false);
+                }
+            });
+
             $('#jump-type').on('change', function () {
                 const $url = $('input[name="url"]');
+                const $jump_id = $('input[name="jump_id"]');
                 console.log($(this).val());
+
+                if ($(this).val() == 2) {
+                    $('.jump_id').removeClass('hidden');
+                    $('.jump_url').addClass('hidden');
+                    $jump_id.attr('disabled', true);
+                    $jump_id.attr('value', 0);
+                }else{
+                    $('.jump_id').addClass('hidden');
+                    $('.jump_url').removeClass('hidden');
+                }
+
                 if ($(this).val() == 5) {
                     $url.attr('disabled', true);
                 } else {

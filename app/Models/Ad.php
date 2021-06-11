@@ -12,6 +12,7 @@ class Ad extends BaseModel
         'sort',
         'platform',
         'jump_type',
+        'jump_id',
         'url',
         'show_time',
         'image',
@@ -55,6 +56,25 @@ class Ad extends BaseModel
         
     }
 
+    public function getUrlTextAttribute()
+    {
 
+        switch ($this->url) {
+            case 'deposit':
+                $text = '内部跳转存款页';
+                break;
+            case 'book':
+                $text = '内部跳转漫画id: ' . $this->jump_id;
+                break;
+            case 'video':
+                $text = '内部跳转动画id: ' . $this->jump_id;
+                break;
+            default:
+                $text = $this->url;
+        }
+    
+        return $text;
+        
+    }
 
 }

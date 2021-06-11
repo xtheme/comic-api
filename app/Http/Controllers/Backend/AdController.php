@@ -18,11 +18,15 @@ class AdController extends Controller
 
     const JUMP_TYPE = [
         1 => '内置浏览器',
-        2 => 'App下载',
+        2 => '站內功能跳转',
         3 => '外部浏览器',
-        4 => '站内充值页',
         5 => '不跳转'
+    ];
 
+    const URL_TYPE = [
+        'deposit' => '存款页',
+        'book' => '漫画页',
+        'video' => '动漫页'
     ];
 
     public function __construct(AdRepositoryInterface $repository)
@@ -47,6 +51,7 @@ class AdController extends Controller
         $data = [
             'ad_spaces' => AdSpace::orderBy('id')->get(),
             'jump_type' => self::JUMP_TYPE,
+            'url_type' => self::URL_TYPE,
         ];
 
         return view('backend.ad.create')->with($data);
@@ -54,16 +59,13 @@ class AdController extends Controller
 
     public function store(AdRequest $request)
     {
-        $post = $request->post();
-
         $video_ad = new Ad;
+        
+        $request->merge([
+            'url'   => ($request->input('jump_type') == 2) ? $request->input('url_type') : $request->input('url')
+        ]);
 
-        $response = Upload::to('video_ads' , 1)->store($request->file('image'));
-
-        if ($response['success'] == 1) {
-            $post['image'] = $response['path'];
-        }
-        $video_ad->fill($post)->save();
+        $video_ad->fill($request->post())->save();
 
         return Response::jsonSuccess('新增资料成功！');
     }
@@ -76,6 +78,7 @@ class AdController extends Controller
             'pageConfigs' => ['hasSearchForm' => true],
             'ad_spaces' => AdSpace::orderBy('id')->get(),
             'jump_type' => self::JUMP_TYPE,
+            'url_type' => self::URL_TYPE,
         ];
 
         return view('backend.ad.edit')->with($data);;
@@ -88,15 +91,11 @@ class AdController extends Controller
 
         $video_ad = Ad::findOrFail($id);
 
-        if ($request->file('image')){
-            $response = Upload::to('video_ads' , 1)->store($request->file('image'));
+        $request->merge([
+            'url'   => ($request->input('jump_type') == 2) ? $request->input('url_type') : $request->input('url')
+        ]);
 
-            if ($response['success'] == 1){
-                $post['image'] = $response['path'];
-            }
-        }
-
-        $video_ad->fill($post)->save();
+        $video_ad->fill($request->post())->save();
 
         return Response::jsonSuccess('更新资料成功！');
     }

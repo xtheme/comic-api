@@ -61,11 +61,33 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-6">
+                <div class="col-6 jump_url">
                     <div class="form-group">
                         <label>广告地址</label>
                         <div class="controls">
                             <input type="text" class="form-control" name="url" placeholder="请输入网址">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-3 jump_id hidden">
+                    <div class="form-group">
+                        <label>站內跳转种类</label>
+                        <div class="controls">
+                            <select id="url-type" class="form-control" name="url_type">
+                                @foreach ($url_type as $key => $val)
+                                    <option value="{{ $key }}">{{ $val }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-3 jump_id hidden">
+                    <div class="form-group">
+                        <label>跳转ID</label>
+                        <div class="controls">
+                            <input type="text" class="form-control" name="jump_id" placeholder="漫画或动漫ID" disabled>
                         </div>
                     </div>
                 </div>
@@ -92,13 +114,15 @@
                     <div class="form-group">
                         <label><span class="danger">*</span> 广告图</label>
                         <div class="input-group">
-                            <div class="custom-file">
-                                <input type="file" class="custom-file-input" id="vertical-thumb" name="image">
-                                <label class="custom-file-label" for="vertical-thumb">请选择文件</label>
+                            <input type="text" class="form-control image-path" name="image" autocomplete="off">
+                            <input type="file" class="hidden-file-upload" data-path="ad">
+                            <div class="input-group-append" id="input-file-addon">
+                                <button class="btn btn-primary upload-image" type="button">上传</button>
                             </div>
                         </div>
                     </div>
                 </div>
+                
                 <div class="col-12 justify-content-end">
                     <button type="submit" class="btn btn-primary mr-1 mb-1">提交</button>
                     <button type="reset" class="btn btn-light-secondary mr-1 mb-1">还原</button>
@@ -117,9 +141,29 @@
     <script>
 		$(document).ready(function () {
 
+
+            $('#url-type').on('change', function () {
+                const $jump_id = $('input[name="jump_id"]');
+                
+                if ($(this).val() == 'deposit') {
+                    $jump_id.attr('disabled', true);
+                    $jump_id.attr('value', 0);
+                } else {
+                    $jump_id.attr('disabled', false);
+                }
+            });
+
             $('#jump-type').on('change', function () {
                 const $url = $('input[name="url"]');
-                console.log($(this).val());
+
+                if ($(this).val() == 2) {
+                    $('.jump_id').removeClass('hidden');
+                    $('.jump_url').addClass('hidden');
+                }else{
+                    $('.jump_id').addClass('hidden');
+                    $('.jump_url').removeClass('hidden');
+                }
+                
                 if ($(this).val() == 5) {
                     $url.attr('disabled', true);
                 } else {

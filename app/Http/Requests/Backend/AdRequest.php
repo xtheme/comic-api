@@ -15,12 +15,8 @@ class AdRequest extends BaseRequest
             'platform' => 'required|numeric',
             'jump_type' => 'required|numeric',
             'times' => 'numeric',
-            'image' => 'required|image'
+            'image' => 'required'
         ];
-
-        if ($this->method() == 'PUT') {
-            unset($rules['image']);
-        }
 
         return $rules;
     }
