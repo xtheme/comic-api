@@ -95,7 +95,15 @@
                     data: (Object.keys(params).length === 0) ? null : params,
                     // debug: true,
                     callback: function (res) {
-                        $.reloadIFrame({title: res.msg});
+	                    // console.log(res);
+                    	if (res.code != 200) {
+		                    $.toast({
+			                    type: 'error',
+			                    message: res.msg
+		                    });
+	                    } else {
+		                    $.reloadIFrame({title: res.msg});
+	                    }
                     }
                 });
             }

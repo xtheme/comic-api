@@ -7,6 +7,7 @@ use App\Models\User;
 use App\Repositories\Contracts\UserRepositoryInterface;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\Validator;
 
@@ -132,6 +133,27 @@ class UserController extends Controller
         activity()->useLog('后台')->causedBy(auth()->user())->performedOn($transfer_user)->withProperties($transfer_user->getChanges())->log($text);
 
         return Response::jsonSuccess(__('response.update.success'));
+    }
+
+    public function unbindSso($id)
+    {
+        $user = User::findOrFail($id);
+
+        if (!$user->mobile) {
+            return Response::jsonError('非手机帐号不需解绑');
+        }
+
+        $sso_key = sprintf('sso:%s-%s', $user->area, $user->mobile);
+
+        if (!Cache::has($sso_key)) {
+            return Response::jsonError('绑定纪录并不存在！');
+        }
+
+        Cache::forget($sso_key);
+
+        activity()->useLog('后台')->causedBy(auth()->user())->performedOn($user)->log('解绑手机登录限制: ' . $user->phone);
+
+        return Response::jsonSuccess('已解绑该手机登录限制！');
     }
 
     public function destroy($id)

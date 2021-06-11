@@ -85,6 +85,7 @@ Route::middleware(['auth'])->prefix('backend')->as('backend.')->group(function (
         Route::put('update/vip/{id}', [UserController::class , 'updateVip'])->name('update.vip');
         Route::get('transfer/vip/{id}', [UserController::class , 'transferVip'])->name('transfer.vip');
         Route::put('transfer/vip/{id}', [UserController::class , 'runTransfer'])->name('transfer.run');
+        Route::put('unbind/{id}', [UserController::class , 'unbindSso'])->name('unbind');
     });
 
     // 订单

@@ -81,7 +81,7 @@
                                     <td class="text-center">
                                         @if($item->mobile)
                                             <span data-toggle="tooltip" data-placement="top" data-original-title="{{ $item->phone }}">
-                                                <span class="badge badge-pill badge-light-primary">电话</span>
+                                                <a data-confirm href="{{ route('backend.user.unbind', $item->id) }}" title="解绑手机登录限制" class="badge badge-pill badge-light-primary">电话</a>
                                             </span>
                                         @else
                                             <span data-toggle="tooltip" data-placement="top" data-original-title="{{ $item->device_id }}">
