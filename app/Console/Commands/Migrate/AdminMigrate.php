@@ -7,21 +7,21 @@ use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 
-class UserMigrate extends Command
+class AdminMigrate extends Command
 {
     /**
      * The name and signature of the console command.
      *
      * @var string
      */
-    protected $signature = 'migrate:users';
+    protected $signature = 'migrate:admins';
 
     /**
      * The console command description.
      *
      * @var string
      */
-    protected $description = '將数据表 users 数据将迁移至新表 users_new!';
+    protected $description = '將数据表 admin 数据将迁移至新表 admins!';
 
     /**
      * Create a new command instance.
@@ -47,8 +47,8 @@ class UserMigrate extends Command
         $chunk_num = 500;
 
         // 新舊數據表名稱
-        $old_table = 'users';
-        $new_table = 'users_new';
+        $old_table = 'admin';
+        $new_table = 'admins';
 
         // 目前用戶表最後 uid
         $old_primary_id = DB::table($old_table)->orderByDesc('id')->first()->id;
@@ -66,22 +66,13 @@ class UserMigrate extends Command
                 $insert = $items->map(function($item) use ($new_table) {
                     return [
                         'id' => $item->id,
+                        'nickname' => $item->nickname,
                         'username' => $item->username,
-                        'device_id' => $item->device_id,
-                        'area' => $item->area,
-                        'mobile' => $item->mobile,
-                        'avatar' => $item->userface,
-                        'sex' => $item->sex,
-                        'score' => $item->score,
-                        'sign' => $item->sign,
+                        'password' => $item->password,
+                        'avatar' => $item->image,
                         'status' => $item->status,
-                        'platform' => $item->platform,
-                        'version' => $item->version,
-                        'subscribed_at' => $item->subscribed_at,
-                        'sign_days' => $item->sign_days,
-                        'signup_ip' => $item->signup_ip,
-                        'last_login_ip' => $item->last_login_ip,
-                        'last_login_at' => $item->last_login_time ? Carbon::createFromTimestamp($item->last_login_time) : null,
+                        'login_ip' => $item->loginip,
+                        'login_at' => $item->logintime ? Carbon::createFromTimestamp($item->logintime) : null,
                         'created_at' => $item->create_time ? Carbon::createFromTimestamp($item->create_time) : null,
                         'updated_at' => $item->update_time ? Carbon::createFromTimestamp($item->update_time) : null,
                     ];
@@ -99,19 +90,12 @@ class UserMigrate extends Command
             $pending_num = DB::table($old_table)->where('id', '>', $latest_primary_id)->count();
 
             if ($this->confirm('尚有' . $pending_num . '筆數據等待遷移，是否繼續執行此腳本？')) {
-                $this->call('migrate:users');
+                $this->call('migrate:admins');
             } else {
                 $this->line('操作已結束');
             }
         } else {
-            if ($this->confirm('目前沒有等待遷移的數據，是否切換新舊數據表名稱？')) {
-                // 舊表變更名稱
-                Schema::rename($old_table, $old_table . '_backup');
-                // 新表變更名稱
-                Schema::rename($new_table, $old_table);
-            }
-
-            $this->line('操作已結束');
+            $this->line('目前沒有等待遷移的數據，操作已結束');
         }
 
         return 0;
