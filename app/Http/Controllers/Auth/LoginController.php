@@ -3,13 +3,11 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
-use App\Models\Admin;
 use App\Providers\RouteServiceProvider;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
-use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Response;
-use Illuminate\Validation\ValidationException;
 
 class LoginController extends Controller
 {
@@ -93,34 +91,24 @@ class LoginController extends Controller
         // user surpasses their maximum number of attempts they will get locked out.
         $this->incrementLoginAttempts($request);
 
-        $post = $request->post();
-
-        if (empty($post['username'])) {
+        if (empty($request->post('username'))) {
             return Response::jsonError('请输入账号!', 500);
         }
 
-        if (empty($post['password'])) {
+        if (empty($request->post('password'))) {
             return Response::jsonError('请输入密码!', 500);
         }
 
-        $admin = Admin::where('username', $post['username'])->first();
-
-        if (empty($admin)) {
-            return Response::jsonError('账号不存在!', 500);
-        }
-
-        if (!password_verify($post['password'], $admin->password)) {
-            return Response::jsonError('密码输入不正确!', 500);
-        }
-
-        if ($admin->status == 2) {
-            return Response::jsonError('账号被封禁!', 500);
-        }
-
         if ($this->attemptLogin($request)) {
+            $admin = Auth::user();
 
-            activity()->useLog('后台')->causedBy(auth()->user())->log('登录成功!');
+            if ($admin->status != 1) {
+                return Response::jsonError('账号被封禁!', 500);
+            }
 
+            activity()->useLog('后台')->causedBy($admin)->log('登录成功!');
+
+            // todo Admin 重構
             $data = [
                 'logintime' => time(),
                 'loginip' => $request->ip(),
@@ -130,7 +118,7 @@ class LoginController extends Controller
             return Response::jsonSuccess('登录成功!');
         }
 
-        return Response::jsonError('登录失敗!');
+        return Response::jsonError('帐号或密码错误!', 500);
     }
 
     /**

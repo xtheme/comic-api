@@ -21,14 +21,12 @@
                                     <form id="login-form" class="form form-vertical" action="{{ route('login') }}" novalidate>
                                         <div class="form-group mb-2">
                                             <div class="controls">
-                                                <input type="text" class="form-control" name="username" placeholder="请输入账号"
-                                                       required
-                                                       data-validation-required-message="请填写关键字">
+                                                <input type="text" class="form-control" name="username" placeholder="请输入账号">
                                             </div>
                                         </div>
                                         <div class="form-group mb-2">
                                             <div class="controls">
-                                                <input type="password" class="form-control" name="password" placeholder="请输入密码">
+                                                <input type="password" class="form-control" name="password" placeholder="请输入密码" autocomplete="on">
                                             </div>
                                         </div>
                                         <button type="submit" class="btn btn-primary glow w-100 position-relative">登录
@@ -90,6 +88,7 @@
                         } else {
                             $.toast({
                                 title  : '登录失败',
+                                type  : 'error',
                                 message: res.msg
                             });
                         }
