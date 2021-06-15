@@ -103,6 +103,7 @@ class LoginController extends Controller
             $admin = Auth::user();
 
             if ($admin->status != 1) {
+                Auth::logout();
                 return Response::jsonError('账号被封禁!', 500);
             }
 
