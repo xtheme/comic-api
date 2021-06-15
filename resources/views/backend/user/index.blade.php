@@ -68,53 +68,54 @@
                             </tr>
                             </thead>
                             <tbody>
-                            @foreach ($list as $item)
+                            @foreach ($list as $user)
                                 <tr>
                                     <td>
                                         <div class="checkbox">
-                                            <input type="checkbox" class="checkbox-input check-opt" id="check-{{ $item->id }}" name="ids[]" value="{{ $item->id }}">
-                                            <label for="check-{{ $item->id }}"></label>
+                                            <input type="checkbox" class="checkbox-input check-opt" id="check-{{ $user->id }}" name="ids[]" value="{{ $user->id }}">
+                                            <label for="check-{{ $user->id }}"></label>
                                         </div>
                                     </td>
-                                    <td>{{ $item->id }}</td>
-                                    <td>{{ $item->username }}</td>
+                                    <td>{{ $user->id }}</td>
+                                    <td>{{ $user->username }}</td>
                                     <td class="text-center">
-                                        @if($item->mobile)
-                                            <span data-toggle="tooltip" data-placement="top" data-original-title="{{ $item->phone }}">
-                                                <a data-confirm href="{{ route('backend.user.unbind', $item->id) }}" title="解绑手机登录限制" class="badge badge-pill badge-light-primary">电话</a>
+                                        @if($user->mobile)
+                                            <span data-toggle="tooltip" data-placement="top" data-original-title="{{ $user->phone }}">
+                                                <a data-confirm href="{{ route('backend.user.unbind', $user->id) }}" title="解绑手机登录限制" class="badge badge-pill badge-light-primary">电话</a>
                                             </span>
                                         @else
-                                            <span data-toggle="tooltip" data-placement="top" data-original-title="{{ $item->device_id }}">
+                                            <span data-toggle="tooltip" data-placement="top" data-original-title="{{ $user->device_id }}">
                                                 <span class="badge badge-pill badge-light-light">设备</span>
                                             </span>
                                         @endif
                                     </td>
                                     <td class="text-center">
-                                        @if($item->subscribed_status)
-                                            <span class="badge badge-pill badge-light-primary">VIP</span>
+                                        @if($user->subscribed_status)
+                                            <span data-toggle="tooltip" data-placement="top" data-original-title="{{ $user->subscribed_at }}"
+                                                  class="badge badge-pill badge-light-primary">VIP</span>
                                         @else
                                             <span class="badge badge-pill badge-light-light">普通</span>
                                         @endif
                                     </td>
                                     <td class="text-center">
-                                        @if($item->subscribed_at)
-                                            <span data-toggle="tooltip" data-placement="top" data-original-title="{{ $item->subscribed_at }}">
-                                            {{ $item->subscribed_at->diffForHumans() }}
+                                        @if($user->subscribed_at)
+                                            <span data-toggle="tooltip" data-placement="top" data-original-title="{{ $user->subscribed_at }}">
+                                            {{ $user->subscribed_at->diffForHumans() }}
                                             </span>
                                         @else
                                             <span class="text-light">N/A</span>
                                         @endif
                                     </td>
-                                    <td class="text-center">{{ $item->version }}</td>
+                                    <td class="text-center">{{ $user->version }}</td>
                                     <td class="text-center">
-                                        @if($item->platform == 1)
+                                        @if($user->platform == 1)
                                             安卓
                                         @else
                                             iOS
                                         @endif
                                     </td>
                                     <td class="text-center">
-                                        @switch($item->sex)
+                                        @switch($user->sex)
                                             @case(1)
                                             男
                                             @break
@@ -126,34 +127,34 @@
                                             @break
                                         @endswitch
                                     </td>
-                                    <td class="text-right">{{ $item->score }}</td>
+                                    <td class="text-right">{{ $user->score }}</td>
                                     {{--<td>
-                                        @if(!$item->mobile)
-                                            {{ $item->device_id }}
+                                        @if(!$user->mobile)
+                                            {{ $user->device_id }}
                                         @else
-                                            {{ $item->phone }}
+                                            {{ $user->phone }}
                                         @endif
                                     </td>--}}
                                     <td>
-                                        @if(!$item->status)
+                                        @if(!$user->status)
                                             <span class="badge badge-pill badge-light-danger">禁用</span>
                                         @else
                                             <span class="badge badge-pill badge-light-primary">正常</span>
                                         @endif
                                     </td>
                                     <td>
-                                        @if($item->created_at)
-                                            <span data-toggle="tooltip" data-placement="top" data-original-title="{{ $item->created_at}}">
-                                            {{ $item->created_at->diffForHumans() }}
+                                        @if($user->created_at)
+                                            <span data-toggle="tooltip" data-placement="top" data-original-title="{{ $user->created_at}}">
+                                            {{ $user->created_at->diffForHumans() }}
                                             </span>
                                         @else
                                             <span class="text-light">N/A</span>
                                         @endif
                                     </td>
                                     <td>
-                                        @if($item->last_login_at)
-                                            <span data-toggle="tooltip" data-placement="top" data-original-title="{{ $item->last_login_at}}">
-                                            {{ $item->last_login_at->diffForHumans() }}
+                                        @if($user->last_login_at)
+                                            <span data-toggle="tooltip" data-placement="top" data-original-title="{{ $user->last_login_at}}">
+                                            {{ $user->last_login_at->diffForHumans() }}
                                             </span>
                                         @else
                                             <span class="text-light">N/A</span>
@@ -162,18 +163,18 @@
                                     <td @if($loop->count == 1)style="position: fixed;"@endif>
                                         <div class="@if(($loop->count - $loop->iteration) < 3){{'dropup'}}@else{{'dropdown'}}@endif">
                                             <span class="bx bx-dots-vertical-rounded font-medium-3 dropdown-toggle nav-hide-arrow cursor-pointer"
-                                                  id="dropdownMenuButton{{ $item->id }}" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></span>
-                                            <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuButton{{ $item->id }}">
-                                                <a class="dropdown-item" data-modal href="{{ route('backend.user.edit', $item->id) }}" title="修改用户信息"><i class="bx bx-edit-alt mr-1"></i>修改</a>
-                                                <a class="dropdown-item" href="{{ route('backend.order.index') }}?user_id={{ $item->id }}" target="_blank"><i class="bx bxs-cart mr-1"></i>查看订单</a>
-                                                @if ($item->status == '1')
-                                                    <a class="dropdown-item" data-modal data-size="sm" data-height="10vh" href="{{ route('backend.user.edit.vip', $item->id) }}" title="开通 VIP"><i class="bx bxs-gift mr-1"></i>开通 VIP</a>
-                                                    @if($item->subscribed_status)
-                                                    <a class="dropdown-item" data-modal data-size="sm" data-height="20vh" href="{{ route('backend.user.transfer.vip', $item->id) }}" title="转让 VIP"><i class="bx bx-transfer mr-1"></i>转让 VIP</a>
+                                                  id="dropdownMenuButton{{ $user->id }}" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></span>
+                                            <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuButton{{ $user->id }}">
+                                                <a class="dropdown-item" data-modal href="{{ route('backend.user.edit', $user->id) }}" title="修改用户信息"><i class="bx bx-edit-alt mr-1"></i>修改</a>
+                                                <a class="dropdown-item" href="{{ route('backend.order.index') }}?user_id={{ $user->id }}" target="_blank"><i class="bx bxs-cart mr-1"></i>查看订单</a>
+                                                @if ($user->status == '1')
+                                                    <a class="dropdown-item" data-modal data-size="sm" data-height="10vh" href="{{ route('backend.user.edit.vip', $user->id) }}" title="开通 VIP"><i class="bx bxs-gift mr-1"></i>开通 VIP</a>
+                                                    @if($user->subscribed_status)
+                                                    <a class="dropdown-item" data-modal data-size="sm" data-height="20vh" href="{{ route('backend.user.transfer.vip', $user->id) }}" title="转让 VIP"><i class="bx bx-transfer mr-1"></i>转让 VIP</a>
                                                     @endif
-                                                    <a class="dropdown-item" data-confirm href="{{ route('backend.user.block', $item->id) }}" title="封禁该账号"><i class="bx bx-lock mr-1"></i>封禁</a>
+                                                    <a class="dropdown-item" data-confirm href="{{ route('backend.user.block', $user->id) }}" title="封禁该账号"><i class="bx bx-lock mr-1"></i>封禁</a>
                                                 @else
-                                                    <a class="dropdown-item" data-confirm href="{{ route('backend.user.block', $item->id) }}" title="启用该账号"><i class="bx bx-lock-open mr-1"></i>启用</a>
+                                                    <a class="dropdown-item" data-confirm href="{{ route('backend.user.block', $user->id) }}" title="启用该账号"><i class="bx bx-lock-open mr-1"></i>启用</a>
                                                 @endif
                                             </div>
                                         </div>

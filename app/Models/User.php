@@ -237,22 +237,12 @@ class User extends BaseModel
         return $api_url . $value;
     }
 
-    /*public function getOsAttribute()
+    public function getSubscribedAtAttribute($value)
     {
-        switch ($this->platform) {
-            case 1:
-                $platform = '<i class="bx bxl-android font-medium-2"></i>';
-                break;
-            case 2:
-                $platform = '<i class="bx bxl-apple font-medium-2"></i>';
-                break;
-            default:
-                $platform = '<span class="text-muted">未知</span>';
-                break;
-        }
+        if (Carbon::now()->gte(Carbon::create($value))) return null;
 
-        return $platform;
-    }*/
+        return Carbon::create($value);
+    }
 
     /*public function getAccountTypeAttribute()
     {
