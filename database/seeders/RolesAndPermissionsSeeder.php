@@ -26,22 +26,28 @@ class RolesAndPermissionsSeeder extends Seeder
         $this->addRoles();
     }
 
+    /**
+     * 只取後台有頁面的路由
+     * @return array
+     */
     protected function getBackendRoutesName()
     {
         return collect(Route::getRoutes())->filter(function ($route) {
-            return Str::startsWith($route->getName(), 'backend');
-        })->reject(function ($route) {
-            return Str::is('backend.dashboard', $route->getName());
-        })->map(function ($route) {
-            return Str::replaceFirst('backend.', '', $route->getName());
-        });
+                return Str::startsWith($route->getName(), 'backend');
+            })->reject(function ($route) {
+                return !in_array('GET', $route->methods);
+            })->reject(function ($route) {
+                return Str::is('backend.dashboard', $route->getName());
+            })->map(function ($route) {
+                return Str::replaceFirst('backend.', '', $route->getName());
+            })->values()->toArray();
     }
 
     protected function addPermissions()
     {
         $routes = $this->getBackendRoutesName();
 
-        $routes->each(function ($route) {
+        collect($routes)->each(function ($route) {
             Permission::findOrCreate($route);
         });
     }
