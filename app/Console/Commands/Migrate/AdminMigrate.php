@@ -54,7 +54,7 @@ class AdminMigrate extends Command
         $old_primary_id = DB::table($old_table)->orderByDesc('id')->first()->id;
 
         // 新表最後 uid
-        $new_primary_id = DB::table($new_table)->orderByDesc('id')->first()->id;
+        $new_primary_id = DB::table($new_table)->orderByDesc('id')->first()->id ?? 0;
 
         if ($old_primary_id > $new_primary_id) {
             // 分割集合

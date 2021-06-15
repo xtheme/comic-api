@@ -188,7 +188,7 @@
                             data: {'ids' : ids},
                             debug   : true,
                             callback: function (res) {
-                                parent.$.reloadIFrame({
+                                $.reloadIFrame({
                                     title  : '提交成功',
                                     message: '请稍后数据刷新'
                                 });
