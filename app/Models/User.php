@@ -241,7 +241,7 @@ class User extends BaseModel
     {
         if (Carbon::now()->gte(Carbon::create($value))) return null;
 
-        return Carbon::create($value);
+        return Carbon::create($value)->format('Y-m-d H:i:s');
     }
 
     /*public function getAccountTypeAttribute()
