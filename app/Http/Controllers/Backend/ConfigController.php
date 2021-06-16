@@ -58,11 +58,6 @@ class ConfigController extends Controller
         return Response::jsonSuccess('添加资料成功！');
     }
 
-    public function show($id)
-    {
-        //
-    }
-
     public function edit($id)
     {
         $config = Config::findOrFail($id);

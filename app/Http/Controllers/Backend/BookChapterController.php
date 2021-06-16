@@ -62,7 +62,7 @@ class BookChapterController extends Controller
      */
     public function batch(Request $request, $action)
     {
-        $ids = explode(',', $request->post('ids'));
+        $ids = explode(',', $request->input('ids'));
 
         switch ($action) {
             case 'enable':
