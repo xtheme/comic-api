@@ -24,6 +24,12 @@ class RolesAndPermissionsSeeder extends Seeder
 
         $this->addPermissions();
         $this->addRoles();
+
+        $this->setSuperAdmin();
+        $this->setAdmin();
+        $this->setContentManager();
+        $this->setAdManager();
+        $this->setUserManager();
     }
 
     /**
@@ -32,15 +38,17 @@ class RolesAndPermissionsSeeder extends Seeder
      */
     protected function getBackendRoutesName()
     {
+        // Permission::query()->delete();
+
         return collect(Route::getRoutes())->filter(function ($route) {
-                return Str::startsWith($route->getName(), 'backend');
-            })->reject(function ($route) {
-                return !in_array('GET', $route->methods);
-            })->reject(function ($route) {
-                return Str::is('backend.dashboard', $route->getName());
-            })->map(function ($route) {
-                return Str::replaceFirst('backend.', '', $route->getName());
-            })->values()->toArray();
+            return Str::startsWith($route->getName(), 'backend');
+        })->filter(function ($route) {
+            $abilities = ['index', 'create', 'edit', 'destroy', 'review', 'preview', 'export', 'editable', 'batch', 'transfer'];
+            $name = last(explode('.', $route->getName()));
+            return Str::endsWith($name, $abilities);
+        })->map(function ($route) {
+            return $route->getName();
+        })->values()->toArray();
     }
 
     protected function addPermissions()
@@ -59,5 +67,47 @@ class RolesAndPermissionsSeeder extends Seeder
         Role::findOrCreate('漫画管理员');
         Role::findOrCreate('广告管理员');
         Role::findOrCreate('用户管理员');
+    }
+
+    protected function setSuperAdmin()
+    {
+        $role = Role::findOrFail(1);
+        $role->syncPermissions(Permission::all());
+    }
+
+    protected function setAdmin()
+    {
+        $role = Role::findOrFail(2);
+        $permissions = Permission::all()->reject(function ($permission) {
+            return Str::contains($permission->name, 'destroy');
+        });
+        $role->syncPermissions($permissions);
+    }
+
+    protected function setContentManager()
+    {
+        $role = Role::findOrFail(3);
+        $permissions = Permission::all()->filter(function ($permission) {
+            return Str::contains($permission->name, ['book', 'video', 'user', 'vip', 'report']);
+        });
+        $role->syncPermissions($permissions);
+    }
+
+    protected function setAdManager()
+    {
+        $role = Role::findOrFail(4);
+        $permissions = Permission::all()->filter(function ($permission) {
+            return Str::contains($permission->name, ['ad', 'ad_space']);
+        });
+        $role->syncPermissions($permissions);
+    }
+
+    protected function setUserManager()
+    {
+        $role = Role::findOrFail(5);
+        $permissions = Permission::all()->filter(function ($permission) {
+            return Str::contains($permission->name, ['user', 'vip']);
+        });
+        $role->syncPermissions($permissions);
     }
 }

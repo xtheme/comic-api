@@ -22,13 +22,14 @@
                         <div class="form-body">
                             <div class="d-flex align-items-center">
                                 <div class="form-group mr-1">
-                                    <select class="form-control" name="action">
-                                        <option value="enable">启用</option>
-                                        <option value="disable">封禁</option>
+                                    <select class="form-control" name="role">
+                                        @foreach($roles as $role)
+                                            <option value="{{ $role }}">{{ $role }}</option>
+                                        @endforeach
                                     </select>
                                 </div>
                                 <div class="form-group">
-                                    <button type="submit" class="btn btn-primary">批量操作</button>
+                                    <button type="submit" class="btn btn-primary">指派角色</button>
                                 </div>
                             </div>
                         </div>
@@ -126,23 +127,23 @@
 
                 let $this = $(this);
                 let ids   = $.checkedIds();
-                let url   = $this.attr('action') + '/' + $this.find('select[name="action"]').val();
+                let url   = $this.attr('action') + '/assign';
 
                 if (!ids) {
                     parent.$.toast({
                         type: 'error',
-                        message: '请先选择要操作的数据'
+                        message: '请先选择要指派的管理员'
                     });
                     return false;
                 }
 
                 $.confirm({
-                    text: `请确认是否要继续批量操作?`,
+                    text: `请确认是否要继续指派角色?`,
                     callback: function () {
                         $.request({
                             url: url,
                             type: 'put',
-                            data: {'ids' : ids},
+                            data: {'ids' : ids, 'role': $this.find('select[name="role"]').val()},
                             debug   : true,
                             callback: function (res) {
                                 $.reloadIFrame({
