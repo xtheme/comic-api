@@ -239,7 +239,7 @@ class User extends BaseModel
 
     public function getSubscribedAtAttribute($value)
     {
-        if (Carbon::now()->gte(Carbon::create($value))) return null;
+        if (!$value || Carbon::now()->gte(Carbon::create($value))) return null;
 
         return Carbon::create($value)->format('Y-m-d H:i:s');
     }
