@@ -103,6 +103,22 @@
         },
         {
             "url": "#",
+            "name": "Permission Manage",
+            "slug": "permission",
+            "icon": "bx bxs-lock-alt",
+            "submenu": [
+                {
+                    "url": "/backend/admin",
+                    "name": "Administrator list"
+                },
+                {
+                    "url": "/backend/role",
+                    "name": "Role List"
+                }
+            ]
+        },
+        {
+            "url": "#",
             "name": "Systems",
             "slug": "systems",
             "icon": "bx bxs-cog",

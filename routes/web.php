@@ -65,7 +65,7 @@ Route::middleware(['auth'])->group(function () {
 });
 
 // Backend iframe pages
-Route::middleware(['auth'])->prefix('backend')->as('backend.')->group(function () {
+Route::middleware(['auth', 'auth.route.role', 'log.activity'])->prefix('backend')->as('backend.')->group(function () {
     Route::get('dashboard', [DashboardController::class, 'dashboard'])->name('dashboard');
 
     // 系统配置
