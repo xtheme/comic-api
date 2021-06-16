@@ -7,7 +7,7 @@
 @endsection
 
 @section('content')
-    <form id="form" class="form" method="post" action="{{ route('backend.book.update.review', $book->id) }}">
+    <form id="form" class="form" method="post" action="{{ route('backend.book.review_update', $book->id) }}">
         @method('PUT')
         <div class="form-body">
             <div class="row">

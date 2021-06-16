@@ -11,7 +11,7 @@
 @section('content')
     <section id="config-list">
         <div class="mb-1">
-            <a href="{{ route('backend.feedback.batch.destroy') }}" data-confirm-feeback data-type="post" data-flag="batch" class="btn btn-danger glow" role="button" aria-pressed="true">批量刪除</a>
+            <a href="{{ route('backend.feedback.batch_destroy') }}" data-confirm-feeback data-type="post" data-flag="batch" class="btn btn-danger glow" role="button" aria-pressed="true">批量刪除</a>
         </div>
         <div class="card">
             <div class="card-header">

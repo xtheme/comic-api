@@ -116,7 +116,7 @@ Route::middleware(['auth'])->prefix('backend')->as('backend.')->group(function (
         Route::put('update/{id}', [BookController::class , 'update'])->name('update');
         Route::delete('destroy/{id}', [BookController::class , 'destroy'])->name('destroy'); // 軟刪除
         Route::get('review/{id}', [BookController::class , 'review'])->name('review');
-        Route::put('update/review/{id}', [BookController::class , 'updateReview'])->name('update.review');
+        Route::put('update/review/{id}', [BookController::class , 'updateReview'])->name('review_update');
         Route::put('batch/{action?}', [BookController::class, 'batch'])->name('batch');
         Route::put('editable/{field}', [BookController::class, 'editable'])->name('editable');
         Route::get('caching', [BookController::class, 'caching'])->name('caching'); // 下載CDN緩存文件
@@ -148,7 +148,7 @@ Route::middleware(['auth'])->prefix('backend')->as('backend.')->group(function (
     Route::prefix('feedback')->as('feedback.')->group(function () {
         Route::get('/', [FeedbackController::class , 'index'])->name('index');
         Route::delete('destroy/{id}', [FeedbackController::class , 'destroy'])->name('destroy');
-        Route::post('batch/destroy', [FeedbackController::class, 'batchDestroy'])->name('batch.destroy');
+        Route::post('batch/destroy', [FeedbackController::class, 'batchDestroy'])->name('batch_destroy');
     });
 
     // 會員套餐
@@ -164,7 +164,7 @@ Route::middleware(['auth'])->prefix('backend')->as('backend.')->group(function (
     Route::prefix('comment')->as('comment.')->group(function () {
         Route::get('/', [CommentController::class , 'index'])->name('index');
         Route::delete('destroy/{id}', [CommentController::class , 'destroy'])->name('destroy');
-        Route::post('batch/destroy', [CommentController::class, 'batchDestroy'])->name('batch.destroy');
+        Route::post('batch/destroy', [CommentController::class, 'batchDestroy'])->name('batch_destroy');
     });
 
     // 公告
@@ -186,7 +186,7 @@ Route::middleware(['auth'])->prefix('backend')->as('backend.')->group(function (
         Route::put('update/{id}', [ComicBlockController::class , 'update'])->name('update');
         Route::delete('destroy/{id}', [ComicBlockController::class , 'destroy'])->name('destroy');
         Route::put('sort', [ComicBlockController::class , 'sort'])->name('sort');
-        Route::post('batch/destroy/{ids?}', [ComicBlockController::class, 'batchDestroy'])->name('batch.destroy');
+        Route::post('batch/destroy/{ids?}', [ComicBlockController::class, 'batchDestroy'])->name('batch_destroy');
     });*/
 
     // 举报类型
