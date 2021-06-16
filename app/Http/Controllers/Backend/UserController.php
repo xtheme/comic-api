@@ -114,7 +114,7 @@ class UserController extends Controller
         return view('backend.user.transfer_vip')->with($data);
     }
 
-    public function runTransfer(Request $request, $id)
+    public function transferUpdate(Request $request, $id)
     {
         $current_user = User::findOrFail($id);
         $transfer_user = User::findOrFail($request->post('user_id'));

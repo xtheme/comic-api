@@ -2,12 +2,12 @@
 
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Backend\ActivityLogController;
-// use App\Http\Controllers\Backend\AdministratorController;
+use App\Http\Controllers\Backend\AdminController;
 use App\Http\Controllers\Backend\BlockController;
 use App\Http\Controllers\Backend\BookChapterController;
 use App\Http\Controllers\Backend\BookController;
 use App\Http\Controllers\Backend\ComicBlockController;
-// use App\Http\Controllers\Backend\PermissionController;
+use App\Http\Controllers\Backend\PermissionController;
 use App\Http\Controllers\Backend\ReportController;
 use App\Http\Controllers\Backend\ReportTypeController;
 use App\Http\Controllers\Backend\CommentController;
@@ -16,7 +16,7 @@ use App\Http\Controllers\Backend\FeedbackController;
 use App\Http\Controllers\Backend\NoticeController;
 use App\Http\Controllers\Backend\OrderController;
 use App\Http\Controllers\Backend\PricingController;
-// use App\Http\Controllers\Backend\RoleController;
+use App\Http\Controllers\Backend\RoleController;
 use App\Http\Controllers\Backend\StatisticsController;
 use App\Http\Controllers\Backend\TagController;
 use App\Http\Controllers\Backend\UserController;
@@ -47,6 +47,7 @@ Route::get('lang/{locale}', [LanguageController::class, 'swap'])->name('language
 
 // Login / Logout
 Auth::routes(['verify' => true]);
+Route::post('login', [LoginController::class, 'login']);
 Route::get('logout', [LoginController::class, 'logout']);
 
 // Homepage
@@ -68,7 +69,14 @@ Route::middleware(['auth'])->prefix('backend')->as('backend.')->group(function (
     Route::get('dashboard', [DashboardController::class, 'dashboard'])->name('dashboard');
 
     // 系统配置
-    Route::resource('config', ConfigController::class);
+    Route::prefix('config')->as('config.')->group(function () {
+        Route::get('/', [ConfigController::class, 'index'])->name('index');
+        Route::get('create', [ConfigController::class , 'create'])->name('create');
+        Route::post('store', [ConfigController::class , 'store'])->name('store');
+        Route::get('edit/{id}', [ConfigController::class , 'edit'])->name('edit');
+        Route::put('update/{id}', [ConfigController::class , 'update'])->name('update');
+        Route::delete('destroy/{id}', [ConfigController::class , 'destroy'])->name('destroy');
+    });
 
     // 用户管理
     Route::prefix('user')->as('user.')->group(function () {
@@ -81,11 +89,15 @@ Route::middleware(['auth'])->prefix('backend')->as('backend.')->group(function (
         Route::put('block/{id}', [UserController::class, 'block'])->name('block');
         Route::put('batch/{action?}', [UserController::class, 'batch'])->name('batch'); // 批量操作
         Route::put('editable/{field}', [UserController::class, 'editable'])->name('editable');
-        Route::get('edit/vip/{id}', [UserController::class , 'editVip'])->name('edit.vip');
-        Route::put('update/vip/{id}', [UserController::class , 'updateVip'])->name('update.vip');
-        Route::get('transfer/vip/{id}', [UserController::class , 'transferVip'])->name('transfer.vip');
-        Route::put('transfer/vip/{id}', [UserController::class , 'runTransfer'])->name('transfer.run');
+        // 特殊
         Route::put('unbind/{id}', [UserController::class , 'unbindSso'])->name('unbind');
+    });
+
+    Route::prefix('vip')->as('vip.')->group(function () {
+        Route::get('edit/vip/{id}', [UserController::class , 'editVip'])->name('edit');
+        Route::put('update/vip/{id}', [UserController::class , 'updateVip'])->name('update');
+        Route::get('transfer/vip/{id}', [UserController::class , 'transferVip'])->name('transfer');
+        Route::put('transfer/vip/{id}', [UserController::class , 'transferUpdate'])->name('transfer_update');
     });
 
     // 订单
@@ -132,11 +144,6 @@ Route::middleware(['auth'])->prefix('backend')->as('backend.')->group(function (
         Route::put('editable/{field}', [BookChapterController::class, 'editable'])->name('editable');
     });
 
-    // 物流
-    // Route::resource('location', LocationController::class);
-    // Route::resource('shipment', ShipmentController::class);
-    // Route::resource('requisition', RequisitionController::class);
-
     // 意見反饋
     Route::prefix('feedback')->as('feedback.')->group(function () {
         Route::get('/', [FeedbackController::class , 'index'])->name('index');
@@ -171,7 +178,7 @@ Route::middleware(['auth'])->prefix('backend')->as('backend.')->group(function (
     });
 
     // 漫画首頁模塊
-    Route::prefix('comic_block')->as('comic_block.')->group(function () {
+    /*Route::prefix('comic_block')->as('comic_block.')->group(function () {
         Route::get('/', [ComicBlockController::class , 'index'])->name('index');
         Route::get('create', [ComicBlockController::class , 'create'])->name('create');
         Route::post('store', [ComicBlockController::class , 'store'])->name('store');
@@ -180,7 +187,7 @@ Route::middleware(['auth'])->prefix('backend')->as('backend.')->group(function (
         Route::delete('destroy/{id}', [ComicBlockController::class , 'destroy'])->name('destroy');
         Route::put('sort', [ComicBlockController::class , 'sort'])->name('sort');
         Route::post('batch/destroy/{ids?}', [ComicBlockController::class, 'batchDestroy'])->name('batch.destroy');
-    });
+    });*/
 
     // 举报类型
     Route::prefix('report_type')->as('report_type.')->group(function () {
@@ -277,33 +284,24 @@ Route::middleware(['auth'])->prefix('backend')->as('backend.')->group(function (
     });
 
     // 管理員
-    // Route::prefix('administrator')->as('administrator.')->group(function () {
-    //     Route::get('/', [AdministratorController::class , 'index'])->name('index');
-    //     Route::get('create', [AdministratorController::class , 'create'])->name('create');
-    //     Route::post('store', [AdministratorController::class , 'store'])->name('store');
-    //     Route::get('edit/{id}', [AdministratorController::class , 'edit'])->name('edit');
-    //     Route::put('update/{id}', [AdministratorController::class , 'update'])->name('update');
-    //     Route::delete('destroy/{id}', [AdministratorController::class , 'destroy'])->name('destroy');
-    // });
+    Route::prefix('admin')->as('admin.')->group(function () {
+        Route::get('/', [AdminController::class, 'index'])->name('index');
+        Route::get('create', [AdminController::class, 'create'])->name('create');
+        Route::post('store', [AdminController::class, 'store'])->name('store');
+        Route::get('edit/{id}', [AdminController::class, 'edit'])->name('edit');
+        Route::put('update/{id}', [AdminController::class, 'update'])->name('update');
+        Route::delete('destroy/{id}', [AdminController::class, 'destroy'])->name('destroy');
+        Route::put('batch/{action?}', [AdminController::class, 'batch'])->name('batch');
+    });
 
     // 角色
-    // Route::prefix('role')->as('role.')->group(function () {
-    //     Route::get('/', [RoleController::class , 'index'])->name('index');
-    //     Route::get('create', [RoleController::class , 'create'])->name('create');
-    //     Route::post('store', [RoleController::class , 'store'])->name('store');
-    //     Route::get('edit/{id}', [RoleController::class , 'edit'])->name('edit');
-    //     Route::put('update/{id}', [RoleController::class , 'update'])->name('update');
-    //     Route::delete('destroy/{id}', [RoleController::class , 'destroy'])->name('destroy');
-    // });
-
-    // 權限
-    // Route::prefix('permission')->as('permission.')->group(function () {
-    //     Route::get('/', [PermissionController::class , 'index'])->name('index');
-    //     Route::get('create', [RoleController::class , 'create'])->name('create');
-    //     Route::post('store', [RoleController::class , 'store'])->name('store');
-    //     Route::get('edit/{id}', [RoleController::class , 'edit'])->name('edit');
-    //     Route::put('update/{id}', [RoleController::class , 'update'])->name('update');
-    //     Route::delete('destroy/{id}', [RoleController::class , 'destroy'])->name('destroy');
-    // });
+    Route::prefix('role')->as('role.')->group(function () {
+        Route::get('/', [RoleController::class , 'index'])->name('index');
+        Route::get('create', [RoleController::class , 'create'])->name('create');
+        Route::post('store', [RoleController::class , 'store'])->name('store');
+        Route::get('edit/{id}', [RoleController::class , 'edit'])->name('edit');
+        Route::put('update/{id}', [RoleController::class , 'update'])->name('update');
+        Route::delete('destroy/{id}', [RoleController::class , 'destroy'])->name('destroy');
+    });
 
 });

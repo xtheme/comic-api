@@ -168,9 +168,9 @@
                                                 <a class="dropdown-item" data-modal href="{{ route('backend.user.edit', $user->id) }}" title="修改用户信息"><i class="bx bx-edit-alt mr-1"></i>修改</a>
                                                 <a class="dropdown-item" href="{{ route('backend.order.index') }}?user_id={{ $user->id }}" target="_blank"><i class="bx bxs-cart mr-1"></i>查看订单</a>
                                                 @if ($user->status == '1')
-                                                    <a class="dropdown-item" data-modal data-size="sm" data-height="10vh" href="{{ route('backend.user.edit.vip', $user->id) }}" title="开通 VIP"><i class="bx bxs-gift mr-1"></i>开通 VIP</a>
+                                                    <a class="dropdown-item" data-modal data-size="sm" data-height="10vh" href="{{ route('backend.vip.edit', $user->id) }}" title="开通 VIP"><i class="bx bxs-gift mr-1"></i>开通 VIP</a>
                                                     @if($user->subscribed_status)
-                                                    <a class="dropdown-item" data-modal data-size="sm" data-height="20vh" href="{{ route('backend.user.transfer.vip', $user->id) }}" title="转让 VIP"><i class="bx bx-transfer mr-1"></i>转让 VIP</a>
+                                                    <a class="dropdown-item" data-modal data-size="sm" data-height="20vh" href="{{ route('backend.vip.transfer', $user->id) }}" title="转让 VIP"><i class="bx bx-transfer mr-1"></i>转让 VIP</a>
                                                     @endif
                                                     <a class="dropdown-item" data-confirm href="{{ route('backend.user.block', $user->id) }}" title="封禁该账号"><i class="bx bx-lock mr-1"></i>封禁</a>
                                                 @else

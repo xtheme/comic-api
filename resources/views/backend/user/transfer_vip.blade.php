@@ -5,7 +5,7 @@
 @endsection
 
 @section('content')
-    <form id="form" class="form" method="post" action="{{ route('backend.user.transfer.run', $user->id) }}" novalidate>
+    <form id="form" class="form" method="post" action="{{ route('backend.vip.transfer_update', $user->id) }}" novalidate>
         @method('put')
         <div class="form-body">
             <div class="row">
