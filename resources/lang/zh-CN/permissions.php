@@ -11,6 +11,7 @@ return [
     'export' => '汇出',
     'editable' => '实时编辑',
     'batch' => '批量操作',
+    'batch_destroy' => '批量删除',
     // 特殊操作
     'transfer' => '转让',
     'unbind' => '解绑',
@@ -24,7 +25,7 @@ return [
     'book_chapter' => '漫画章节',
     'tag' => '标签',
     'feedback' => '用户反馈',
-    'comment' => '访问评论',
+    'comment' => '评论',
     'pricing' => '会员套餐',
     'notice' => '公告',
     'report_type' => '举报类型',
