@@ -66,6 +66,7 @@
                 </div>
                 <div class="col-12">
                     <div class="form-group">
+                        <span class="float-right font-size-small text-light">(图片尺寸比例请保持 16:9)</span>
                         <label><span class="danger">*</span> 封面图</label>
                         <div class="input-group">
                             <div class="input-group">
