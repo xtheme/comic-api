@@ -75,7 +75,7 @@ class PaymentController extends Controller
             $user = User::find($order->user_id);
 
             if ($user) {
-                if ($user->subscribed_at) {
+                if ($user->subscribed_at && $user->subscribed_at->greaterThan(Carbon::now())) {
                     $user->subscribed_at = $user->subscribed_at->addDays($order->days);
                 } else {
                     $user->subscribed_at = Carbon::now()->addDays($order->days);
