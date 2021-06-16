@@ -237,12 +237,12 @@ class User extends BaseModel
         return $api_url . $value;
     }
 
-    /*public function getSubscribedAtAttribute($value)
+    public function getSubscribedAtAttribute($value)
     {
-        if (!$value || Carbon::now()->gte(Carbon::create($value))) return null;
+        if (Carbon::now()->gte(Carbon::create($value))) return null;
 
         return Carbon::create($value)->format('Y-m-d H:i:s');
-    }*/
+    }
 
     /*public function getAccountTypeAttribute()
     {
