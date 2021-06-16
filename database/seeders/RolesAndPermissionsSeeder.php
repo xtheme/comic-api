@@ -43,7 +43,7 @@ class RolesAndPermissionsSeeder extends Seeder
         return collect(Route::getRoutes())->filter(function ($route) {
             return Str::startsWith($route->getName(), 'backend');
         })->filter(function ($route) {
-            $abilities = ['index', 'create', 'edit', 'destroy', 'review', 'preview', 'export', 'editable', 'batch', 'transfer'];
+            $abilities = ['index', 'create', 'edit', 'destroy', 'review', 'preview', 'export', 'editable', 'batch', 'transfer', 'unbind'];
             $name = last(explode('.', $route->getName()));
             return Str::endsWith($name, $abilities);
         })->map(function ($route) {

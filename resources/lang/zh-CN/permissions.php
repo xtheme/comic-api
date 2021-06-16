@@ -4,8 +4,11 @@ return [
     // 操作描述
     'index' => '访问',
     'create' => '添加',
+    'store' => '添加',
     'edit' => '修改',
+    'update' => '修改',
     'destroy' => '删除',
+    'delete' => '删除',
     'review' => '审查',
     'preview' => '预览',
     'export' => '汇出',

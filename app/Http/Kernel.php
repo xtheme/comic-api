@@ -3,6 +3,7 @@
 namespace App\Http;
 
 use App\Http\Middleware\AuthRouteRole;
+use App\Http\Middleware\LogActivity;
 use App\Http\Middleware\SingleSignOn;
 use App\Http\Middleware\VerifyApiHeader;
 use App\Http\Middleware\VerifyApiSign;
@@ -73,5 +74,6 @@ class Kernel extends HttpKernel
     'jwt.token' => VerifyJwtToken::class,
     'device.sso' => SingleSignOn::class,
     'auth.route.role' => AuthRouteRole::class,
+    'log.activity' => LogActivity::class,
   ];
 }

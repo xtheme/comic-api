@@ -74,7 +74,9 @@
                                         <td>{{ $row->causer->nickname ?? '' }}</td>
                                         <td>{{ $row->created_at->diffForHumans() }}</td>
                                         <td>
+                                            @if($row->subject_id)
                                             <a class="btn btn-primary btn-sm" data-modal href="{{ route('backend.activity.diff', $row->id) }}" title="查看变更">查看变更</a>
+                                            @endif
                                         </td>
                                     </tr>
                                 @endforeach
