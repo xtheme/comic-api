@@ -17,12 +17,12 @@
                         </div>
                     </div>
                 </div>
-                @foreach($permissions as $key => $group)
+                @foreach($route_permissions as $key => $permissions)
                     <div class="col-4 mt-1">
                         <div class="form-group">
                             <label class="font-medium-2 text-primary">{{ __('permissions.' . $key) }}</label>
                             <div class="controls">
-                                @foreach($group as $permission)
+                                @foreach($permissions as $permission)
                                     <fieldset>
                                         <div class="checkbox mt-1">
                                             <input type="checkbox" name="permission[]" id="{{ $permission['route'] }}" value="{{ $permission['route'] }}" @if(in_array($permission['route'], $role_permissions)){{'checked'}}@endif>

@@ -3,16 +3,17 @@
 namespace App\Http\Controllers\Backend;
 
 use App\Http\Controllers\Controller;
-use App\Models\Admin;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Str;
+use Spatie\Permission\Models\Permission;
 use Spatie\Permission\Models\Role;
 
 class RoleController extends Controller
 {
-    private function getPermissions()
+    // 路由對應的權限
+    private function getRoutePermissions()
     {
         return collect(Route::getRoutes())->filter(function ($route) {
             return Str::startsWith($route->getName(), 'backend');
@@ -29,6 +30,23 @@ class RoleController extends Controller
         })->sortBy('route')->toArray();
     }
 
+    // 實際存在的權限
+    private function getRealPermissions()
+    {
+        return Permission::all()->pluck('name')->toArray();
+    }
+
+    private function checkPermissions($permissions)
+    {
+        $real_permissions = $this->getRealPermissions();
+
+        collect($permissions)->each(function($permission) use ($real_permissions) {
+            if (!in_array($permission, $real_permissions)) {
+                Permission::findOrCreate($permission);
+            }
+        });
+    }
+
     public function index()
     {
         $data = [
@@ -41,7 +59,7 @@ class RoleController extends Controller
     public function create()
     {
         $data = [
-            'permissions' => $this->getPermissions(),
+            'permissions' => $this->getRoutePermissions(),
         ];
 
         return view('backend.role.create')->with($data);
@@ -54,7 +72,11 @@ class RoleController extends Controller
             'guard_name' => 'web',
         ]);
 
-        $role->givePermissionTo($request->input('permission'));
+        $permissions = $request->input('permission');
+
+        $this->checkPermissions($permissions);
+
+        $role->givePermissionTo($permissions);
 
         return Response::jsonSuccess(__('response.create.success'));
     }
@@ -66,7 +88,7 @@ class RoleController extends Controller
         $data = [
             'role' => $role,
             'role_permissions' => $role->getAllPermissions()->pluck('name')->toArray(),
-            'permissions' => $this->getPermissions(),
+            'route_permissions' => $this->getRoutePermissions(),
         ];
 
         return view('backend.role.edit')->with($data);
@@ -78,7 +100,11 @@ class RoleController extends Controller
         $role->name = $request->input('name');
         $role->save();
 
-        $role->syncPermissions($request->input('permission'));
+        $permissions = $request->input('permission');
+
+        $this->checkPermissions($permissions);
+
+        $role->syncPermissions($permissions);
 
         return Response::jsonSuccess(__('response.update.success'));
     }
