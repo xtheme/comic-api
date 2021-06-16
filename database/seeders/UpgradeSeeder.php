@@ -18,6 +18,36 @@ class UpgradeSeeder extends Seeder
         // 升级添加广告位
         $this->addAdSpace('动画详情页广告' , 'video');
 
+        $this->addAdSpace('入口-引导页广告' , 'other');
+
+        $this->addAdSpace('首页-弹出广告' , 'other');
+
+        $this->addAdSpace('漫画-首页bannner广告' , 'comics');
+
+        $this->addAdSpace('漫画-章节列表广告' , 'comics');
+
+        $this->addAdSpace('漫画-模块间广告' , 'comics');
+
+        $this->addAdSpace('漫画-详情页广告' , 'comics');
+
+        $this->addAdSpace('首页-推荐App' , 'other');
+
+        $this->addAdSpace('漫画-栏目推荐更多广告' , 'comics');
+
+        $this->addAdSpace('漫画-最新更新广告' , 'comics');
+
+        $this->addAdSpace('漫画-历史导航广告' , 'comics');
+
+        $this->addAdSpace('首页-活动界面' , 'other');
+
+        $this->addAdSpace('首页-招商广告' , 'other');
+
+        $this->addAdSpace('首页-文内浮层广告' , 'other');
+
+        $this->addAdSpace('漫画-章节间广告' , 'comics');
+
+        $this->addAdSpace('漫画-详情间广告' , 'comics');
+
         // 升级 CDN 域名
         $this->addCdn();
 
@@ -27,7 +57,7 @@ class UpgradeSeeder extends Seeder
      * 添加视频广告位
      *
      * @param  string  $name  广告名称
-     * @param  string  $class  广告位分类 (video：视频，comics：漫画)
+     * @param  string  $class  广告位分类 (video：视频，comics：漫画，other：其他)
      */
     protected function addAdSpace(string $name, string $class)
     {

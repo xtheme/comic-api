@@ -12,6 +12,12 @@ class AdSpaceController extends Controller
 {
     private $repository;
 
+    const CLASS_TYPE = [
+        'video' => '动画',
+        'comics' => '漫画',
+        'other' => '其他'
+    ];
+
     public function __construct(AdSpaceRepositoryInterface $repository)
     {
         $this->repository = $repository;
@@ -22,7 +28,8 @@ class AdSpaceController extends Controller
         $list = $this->repository->filter($request)->paginate();
 
         return view('backend.ad_space.index', [
-            'list' => $list
+            'list' => $list,
+            'class_type' => self::CLASS_TYPE,
         ]);
     }
 
