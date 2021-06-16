@@ -22,8 +22,9 @@
                                     <div class="controls">
                                         <select id="class-type" class="form-control" name="class">
                                             <option value="" >全部</option>
-                                            <option value="video" @if(request()->get('class') == 'video') selected @endif >动画</option>
-                                            <option value="comic" @if(request()->get('class') == 'comic') selected @endif >漫画</option>
+                                            @foreach($class_type as $key => $item)
+                                                <option value="{{$key}}" @if(request()->get('class') == $key){{'selected'}}@endif>{{$item}}</option>
+                                            @endforeach
                                         </select>
                                     </div>
                                 </div>
@@ -72,8 +73,10 @@
                                     <td>
                                         @if($item->class == 'video')
                                             <span class="badge badge-pill badge-primary">动画</span>
-                                        @else
+                                        @elseif($item->class == 'comics')
                                             <span class="badge badge-pill badge-success">漫画</span>
+                                        @else
+                                            <span class="badge badge-pill badge-light-danger">其他</span>
                                         @endif
                                     </td>
 {{--                                    <td>{{ $item->remark }}</td>--}}
