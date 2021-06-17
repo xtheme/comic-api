@@ -37,7 +37,8 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-12">
+                <input type="hidden" name="status" value="1">
+                {{--<div class="col-12">
                     <div class="form-group">
                         <label>状态</label>
                         <div class="controls">
@@ -47,7 +48,7 @@
                             </select>
                         </div>
                     </div>
-                </div>
+                </div>--}}
                 <div class="col-12">
                     <div class="form-group">
                         <label>原密码</label>

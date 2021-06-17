@@ -79,10 +79,14 @@
                                     <td>{{ $admin->logintime }}</td>
                                     <td>{{ $admin->loginip }}</td>
                                     <td>
-                                        @if($admin->status == 1)
-                                            <a class="badge badge-pill badge-light-success" data-confirm href="{{ route('backend.admin.batch', ['action'=>'disable', 'ids' => $admin->id]) }}" title="封禁帐号">启用</a>
+                                        @if($admin->id == 1)
+                                            <span class="badge badge-pill badge-light-warning">超级管理员</span>
                                         @else
-                                            <a class="badge badge-pill badge-light-danger" data-confirm href="{{ route('backend.admin.batch', ['action'=>'enable', 'ids' => $admin->id]) }}" title="启用帐号">封禁</a>
+                                            @if($admin->status == 1)
+                                                <a class="badge badge-pill badge-light-success" data-confirm href="{{ route('backend.admin.batch', ['action'=>'disable', 'ids' => $admin->id]) }}" title="封禁帐号">启用</a>
+                                            @else
+                                                <a class="badge badge-pill badge-light-danger" data-confirm href="{{ route('backend.admin.batch', ['action'=>'enable', 'ids' => $admin->id]) }}" title="启用帐号">封禁</a>
+                                            @endif
                                         @endif
                                     </td>
                                     <td @if($loop->count == 1)style="position: fixed;"@endif>
@@ -91,7 +95,9 @@
                                                   id="dropdownMenuButton{{ $admin->id }}" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></span>
                                             <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuButton{{ $admin->id }}">
                                                 <a class="dropdown-item" data-modal data-size="md" data-height="40vh" href="{{ route('backend.admin.edit', $admin->id) }}" title="修改管理员"><i class="bx bx-edit-alt mr-1"></i> 修改</a>
+                                                @if($admin->id != 1)
                                                 <a class="dropdown-item" data-destroy href="{{ route('backend.admin.destroy', $admin->id) }}" title="刪除管理员"><i class="bx bx-trash mr-1"></i> 删除</a>
+                                                @endif
                                             </div>
                                         </div>
                                     </td>

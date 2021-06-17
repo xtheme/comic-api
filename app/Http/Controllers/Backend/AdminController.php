@@ -7,7 +7,6 @@ use App\Http\Requests\Backend\AdminUpdateRequest;
 use App\Models\Admin;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Response;
 use Spatie\Permission\Models\Role;
 
@@ -54,7 +53,7 @@ class AdminController extends Controller
         $admin = Admin::findOrFail($id);
         $admin->username = $request->post('username');
         $admin->nickname = $request->post('nickname');
-        $admin->status = $request->post('status');
+        // $admin->status = $request->post('status');
 
         if ($request->post('password') && $request->post('new_password')) {
             if (!Hash::check($request->post('password'), $admin->getAuthPassword())) {
@@ -74,8 +73,9 @@ class AdminController extends Controller
 
     public function destroy($id)
     {
-        $admin = Admin::findOrFail($id);
+        if ($id == 1) return Response::jsonError('无法删除超级管理员');
 
+        $admin = Admin::findOrFail($id);
         $admin->roles()->detach();
         $admin->delete();
 
@@ -88,6 +88,11 @@ class AdminController extends Controller
     public function batch(Request $request, $action)
     {
         $ids = explode(',', $request->input('ids'));
+
+        // 保護超級管理員
+        $ids = array_filter($ids, function($v, $k) {
+            return $v != 1;
+        }, ARRAY_FILTER_USE_BOTH);
 
         switch ($action) {
             case 'enable':
