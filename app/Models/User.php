@@ -146,11 +146,6 @@ class User extends BaseModel
         return $this->hasMany('App\Models\Sign', 'user_id', 'id');
     }
 
-    // public function histories()
-    // {
-    //     return $this->hasMany('App\Models\History', 'user_id', 'id');
-    // }
-
     public function book_visit_histories()
     {
         return $this->hasMany('App\Models\BookVisit', 'user_id', 'id');
@@ -165,30 +160,6 @@ class User extends BaseModel
     {
         return $this->hasMany('App\Models\VideoPlayLogs', 'user_id', 'id');
     }
-
-    /*public function getGenderAttribute()
-    {
-        switch ($this->sex) {
-            case 1:
-                return '<span class="text-success">男</span>';
-            case 2:
-                return '<span class="text-danger">女</span>';
-            default:
-                return '<span class="text-muted">未知</span>';
-        }
-    }*/
-
-    /*public function getIdentityAttribute()
-    {
-        switch ($this->status) {
-            case 1:
-                return '<span class="text-success">正常</span>';
-            case 0:
-                return '<span class="text-danger">禁用</span>';
-            default:
-                return '<span class="text-muted">未知</span>';
-        }
-    }*/
 
     /**
      * 電話號碼
@@ -207,19 +178,6 @@ class User extends BaseModel
      */
     public function getSubscribedStatusAttribute()
     {
-        // $subscribed_at = $this->subscribed_at;
-        //
-        // if (!$subscribed_at) {
-        //     return false;
-        // }
-        //
-        // $now = time();
-        //
-        // if ($now <= strtotime($subscribed_at)) {
-        //     return true;
-        // }
-        //
-        // return false;
         return Carbon::now()->lt($this->subscribed_at);
     }
 
@@ -243,11 +201,6 @@ class User extends BaseModel
 
         return Carbon::create($value)->format('Y-m-d H:i:s');
     }
-
-    /*public function getAccountTypeAttribute()
-    {
-        return $this->mobile ? '电话' : '设备';
-    }*/
 
     /**
      * 旧版 /v2/dt/myCenter 字段兼容 integral 積分
