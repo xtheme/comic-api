@@ -27,7 +27,6 @@ class ReportTypeController extends Controller
 
     public function store(ReportTypeRequest $request)
     {
-
         $post = $request->post();
 
         $bookReportType = new BookReportType;
@@ -36,7 +35,7 @@ class ReportTypeController extends Controller
 
         $bookReportType->fill($post)->save();
 
-        return Response::jsonSuccess('新增资料成功！');
+        return Response::jsonSuccess(__('response.create.success'));
     }
 
     public function edit($id)
@@ -58,7 +57,7 @@ class ReportTypeController extends Controller
 
         $bookReportType->fill($post)->save();
 
-        return Response::jsonSuccess('更新资料成功！');
+        return Response::jsonSuccess(__('response.update.success'));
     }
 
     public function destroy($id)
@@ -67,7 +66,7 @@ class ReportTypeController extends Controller
 
         $bookReportType->delete();
 
-        return Response::jsonSuccess('删除资料成功！');
+        return Response::jsonSuccess(__('response.destroy.success'));
     }
 
     public function sort(Request $request)
@@ -76,6 +75,6 @@ class ReportTypeController extends Controller
 
         BookReportType::where('id', $post['pk'])->update(['sort' => $post['value']]);
 
-        return Response::jsonSuccess('更新资料成功！');
+        return Response::jsonSuccess(__('response.update.success'));
     }
 }

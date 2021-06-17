@@ -50,6 +50,6 @@ class AdSpaceController extends Controller
 
         $data->fill($post)->save();
 
-        return Response::jsonSuccess('更新资料成功！');
+        return Response::jsonSuccess(__('response.update.success'));
     }
 }

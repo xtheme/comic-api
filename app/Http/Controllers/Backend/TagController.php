@@ -107,7 +107,7 @@ class TagController extends Controller
                 $this->repository->editable($request->post('pk'), $field, $request->post('value'));
         }
 
-        return Response::jsonSuccess('数据已更新成功');
+        return Response::jsonSuccess(__('response.update.success'));
     }
 
     public function batch(Request $request, $action)
@@ -146,6 +146,6 @@ class TagController extends Controller
     {
         $this->repository->destroy($id);
 
-        return Response::jsonSuccess('删除成功！');
+        return Response::jsonSuccess(__('response.destroy.success'));
     }
 }

@@ -114,7 +114,7 @@ class AdminController extends Controller
                 });
                 break;
             default:
-                return Response::jsonError('未知的操作');
+                return Response::jsonError(__('response.error.unknown'));
         }
 
         return Response::jsonSuccess($text . '成功！');

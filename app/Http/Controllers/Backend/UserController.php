@@ -162,7 +162,7 @@ class UserController extends Controller
 
         $model->delete();
 
-        return Response::jsonSuccess('資料已刪除！');
+        return Response::jsonSuccess(__('response.destroy.success'));
     }
 
     public function block($id)
@@ -217,6 +217,6 @@ class UserController extends Controller
 
         $this->repository->editable($request->post('pk'), $field, $request->post('value'));
 
-        return Response::jsonSuccess('数据已更新成功');
+        return Response::jsonSuccess(__('response.update.success'));
     }
 }

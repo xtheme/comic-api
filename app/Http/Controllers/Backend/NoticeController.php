@@ -33,7 +33,7 @@ class NoticeController extends Controller
 
         $notice->fill($post)->save();
 
-        return Response::jsonSuccess('添加公告成功！');
+        return Response::jsonSuccess(__('response.create.success'));
     }
 
     public function edit($id)
@@ -53,7 +53,7 @@ class NoticeController extends Controller
 
         $notice->fill($post)->save();
 
-        return Response::jsonSuccess('修改公告成功！');
+        return Response::jsonSuccess(__('response.update.success'));
     }
 
     public function destroy($id)
@@ -62,6 +62,6 @@ class NoticeController extends Controller
 
         $notice->delete();
 
-        return Response::jsonSuccess('删除公告成功！');
+        return Response::jsonSuccess(__('response.destroy.success'));
     }
 }

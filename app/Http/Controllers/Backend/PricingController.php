@@ -36,7 +36,7 @@ class PricingController extends Controller
 
         $pricingPackage->fill($post)->save();
 
-        return Response::jsonSuccess('添加套餐成功！');
+        return Response::jsonSuccess(__('response.create.success'));
     }
 
     public function edit($id)
@@ -60,7 +60,7 @@ class PricingController extends Controller
 
         $pricingPackage->fill($post)->save();
 
-        return Response::jsonSuccess('修改套餐成功！');
+        return Response::jsonSuccess(__('response.update.success'));
     }
 
     public function destroy($id)
@@ -69,6 +69,6 @@ class PricingController extends Controller
 
         $pricingPackage->delete();
 
-        return Response::jsonSuccess('刪除套餐成功！');
+        return Response::jsonSuccess(__('response.destroy.success'));
     }
 }

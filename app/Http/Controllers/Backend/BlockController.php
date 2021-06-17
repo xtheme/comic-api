@@ -53,7 +53,7 @@ class BlockController extends Controller
 
         $this->repository->create($post);
 
-        return Response::jsonSuccess('添加模块成功！');
+        return Response::jsonSuccess(__('response.create.success'));
     }
 
     public function edit($id)
@@ -73,7 +73,7 @@ class BlockController extends Controller
     {
         $this->repository->update($id , $request->post());
 
-        return Response::jsonSuccess('模块修改成功！');
+        return Response::jsonSuccess(__('response.update.success'));
     }
 
     public function destroy($id)
@@ -82,7 +82,7 @@ class BlockController extends Controller
 
         $block->delete();
 
-        return Response::jsonSuccess('删除成功！');
+        return Response::jsonSuccess(__('response.destroy.success'));
     }
 
     public function sort(Request $request)

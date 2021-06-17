@@ -129,12 +129,10 @@ class VideoSeriesController extends Controller
         return Response::jsonSuccess(__('response.success.complete', ['action' => $text]));
     }
 
-    public function preview(Request $request, $id)
+    public function preview($id)
     {
-        $series = VideoSeries::findOrFail($id);
-
         $data = [
-            'series' => $series,
+            'series' => VideoSeries::findOrFail($id),
         ];
 
         return view('backend.video_series.preview')->with($data);

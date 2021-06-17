@@ -67,7 +67,7 @@ class AdController extends Controller
 
         $video_ad->fill($request->post())->save();
 
-        return Response::jsonSuccess('新增资料成功！');
+        return Response::jsonSuccess(__('response.create.success'));
     }
 
     public function edit($id)
@@ -81,14 +81,11 @@ class AdController extends Controller
             'url_type' => self::URL_TYPE,
         ];
 
-        return view('backend.ad.edit')->with($data);;
+        return view('backend.ad.edit')->with($data);
     }
 
     public function update(AdRequest $request, $id)
     {
-
-        $post = $request->post();
-
         $video_ad = Ad::findOrFail($id);
 
         $request->merge([
@@ -97,7 +94,7 @@ class AdController extends Controller
 
         $video_ad->fill($request->post())->save();
 
-        return Response::jsonSuccess('更新资料成功！');
+        return Response::jsonSuccess(__('response.update.success'));
     }
 
     public function destroy($id)
@@ -106,7 +103,7 @@ class AdController extends Controller
 
         $bookReportType->delete();
 
-        return Response::jsonSuccess('删除资料成功！');
+        return Response::jsonSuccess(__('response.destroy.success'));
     }
 
     public function sort(Request $request)
@@ -115,7 +112,7 @@ class AdController extends Controller
 
         Ad::where('id', $post['pk'])->update(['sort' => $post['value']]);
 
-        return Response::jsonSuccess('更新资料成功！');
+        return Response::jsonSuccess(__('response.update.success'));
     }
 
     public function batch(Request $request, $action)

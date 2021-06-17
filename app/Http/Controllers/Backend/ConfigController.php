@@ -55,7 +55,7 @@ class ConfigController extends Controller
 
         $config->fill($post)->save();
 
-        return Response::jsonSuccess('添加资料成功！');
+        return Response::jsonSuccess(__('response.create.success'));
     }
 
     public function edit($id)
@@ -83,7 +83,7 @@ class ConfigController extends Controller
 
         $config->fill($post)->save();
 
-        return Response::jsonSuccess('更新资料成功！');
+        return Response::jsonSuccess(__('response.create.success'));
     }
 
     public function destroy($id)
@@ -92,6 +92,6 @@ class ConfigController extends Controller
 
         $config->delete();
 
-        return Response::jsonSuccess('操作成功！');
+        return Response::jsonSuccess(__('response.destroy.success'));
     }
 }

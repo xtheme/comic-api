@@ -34,12 +34,13 @@ class CommentController extends Controller
 
         $comment->delete();
 
-        return Response::jsonSuccess('删除成功！');
+        return Response::jsonSuccess(__('response.destroy.success'));
     }
 
     public function batchDestroy(Request $request)
     {
         Comment::destroy($request->post('ids'));
-        return Response::jsonSuccess('删除成功！');
+
+        return Response::jsonSuccess(__('response.destroy.success'));
     }
 }

@@ -11,7 +11,6 @@ class FeedbackController extends Controller
 {
     public function index()
     {
-
         $list = FeedBack::with('user')->orderByDesc('addtime')->paginate();
 
         return view('backend.feedback.index', [
@@ -25,12 +24,13 @@ class FeedbackController extends Controller
 
         $feedback->delete();
 
-        return Response::jsonSuccess('操作成功！');
+        return Response::jsonSuccess(__('response.destroy.success'));
     }
 
     public function batchDestroy(Request $request)
     {
         FeedBack::destroy($request->post('ids'));
-        return Response::jsonSuccess('删除成功！');
+
+        return Response::jsonSuccess(__('response.destroy.success'));
     }
 }
