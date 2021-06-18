@@ -5,8 +5,7 @@
 @endsection
 
 @section('content')
-    <form id="form" class="form" method="post" action="{{ route('backend.role.create') }}" novalidate>
-        @method('PUT')
+    <form id="form" class="form" method="post" action="{{ route('backend.role.store') }}" novalidate>
         <div class="form-body">
             <div class="row">
                 <div class="col-12">

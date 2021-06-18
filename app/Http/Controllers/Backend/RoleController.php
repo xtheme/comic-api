@@ -59,7 +59,7 @@ class RoleController extends Controller
     public function create()
     {
         $data = [
-            'permissions' => $this->getRoutePermissions(),
+            'route_permissions' => $this->getRoutePermissions(),
         ];
 
         return view('backend.role.create')->with($data);
