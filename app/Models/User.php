@@ -196,12 +196,12 @@ class User extends BaseModel
         return $api_url . $value;
     }
 
-    public function getSubscribedAtAttribute($value)
+    /*public function getSubscribedAtAttribute($value)
     {
         if (!$value || Carbon::now()->gte(Carbon::create($value))) return null;
 
         return Date::parse($value);
-    }
+    }*/
 
     /**
      * 旧版 /v2/dt/myCenter 字段兼容 integral 積分

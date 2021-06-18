@@ -92,7 +92,7 @@ class UserController extends Controller
     {
         $user = User::findOrFail($id);
 
-        if ($user->subscribed_at) {
+        if ($user->subscribed_at && $user->subscribed_at->greaterThan(Carbon::now())) {
             $user->subscribed_at = $user->subscribed_at->addDays($request->input('day'));
         } else {
             $user->subscribed_at = Carbon::now()->addDays($request->input('day'));
