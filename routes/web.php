@@ -107,6 +107,16 @@ Route::middleware(['auth', 'auth.route.role', 'log.activity'])->prefix('backend'
         Route::put('callback/{id}', [OrderController::class, 'callback'])->name('callback'); // 第三方更改訂單狀態失效時手動回調
     });
 
+    // 漫画分类
+    Route::prefix('tag')->as('tag.')->group(function () {
+        Route::get('/', [TagController::class, 'index'])->name('index');
+        Route::get('create', [TagController::class , 'create'])->name('create');
+        Route::post('store', [TagController::class , 'store'])->name('store');
+        Route::put('batch/{action?}', [TagController::class, 'batch'])->name('batch');
+        Route::put('editable/{field}', [TagController::class, 'editable'])->name('editable');
+        Route::delete('destroy/{id}', [TagController::class , 'destroy'])->name('destroy');
+    });
+
     // 漫画
     Route::prefix('book')->as('book.')->group(function () {
         Route::get('/', [BookController::class, 'index'])->name('index');
@@ -120,16 +130,6 @@ Route::middleware(['auth', 'auth.route.role', 'log.activity'])->prefix('backend'
         Route::put('batch/{action?}', [BookController::class, 'batch'])->name('batch');
         Route::put('editable/{field}', [BookController::class, 'editable'])->name('editable');
         Route::get('caching', [BookController::class, 'caching'])->name('caching'); // 下載CDN緩存文件
-    });
-
-    // 漫画分类
-    Route::prefix('tag')->as('tag.')->group(function () {
-        Route::get('/', [TagController::class, 'index'])->name('index');
-        Route::get('create', [TagController::class , 'create'])->name('create');
-        Route::post('store', [TagController::class , 'store'])->name('store');
-        Route::put('batch/{action?}', [TagController::class, 'batch'])->name('batch');
-        Route::put('editable/{field}', [TagController::class, 'editable'])->name('editable');
-        Route::delete('destroy/{id}', [TagController::class , 'destroy'])->name('destroy');
     });
 
     // 漫画章节
@@ -212,6 +212,7 @@ Route::middleware(['auth', 'auth.route.role', 'log.activity'])->prefix('backend'
         Route::post('store', [VideoController::class , 'store'])->name('store');
         Route::get('edit/{id}', [VideoController::class , 'edit'])->name('edit');
         Route::post('update/{id}', [VideoController::class , 'update'])->name('update');
+        Route::delete('destroy/{id}', [VideoController::class , 'destroy'])->name('destroy');
         Route::put('batch/{action?}', [VideoController::class, 'batch'])->name('batch');
         Route::put('editable/{field}', [VideoController::class, 'editable'])->name('editable');
     });
@@ -222,6 +223,7 @@ Route::middleware(['auth', 'auth.route.role', 'log.activity'])->prefix('backend'
         Route::post('store/{video_id}', [VideoSeriesController::class , 'store'])->name('store');
         Route::get('edit/{video_id}/{id}', [VideoSeriesController::class , 'edit'])->name('edit');
         Route::post('update/{video_id}/{id}', [VideoSeriesController::class , 'update'])->name('update');
+        Route::delete('destroy/{id}', [VideoSeriesController::class , 'destroy'])->name('destroy');
         Route::put('batch/{action?}', [VideoSeriesController::class, 'batch'])->name('batch');
         Route::put('editable/{field}', [VideoSeriesController::class, 'editable'])->name('editable');
         Route::any('preview/{id}', [VideoSeriesController::class, 'preview'])->name('preview');
@@ -233,6 +235,7 @@ Route::middleware(['auth', 'auth.route.role', 'log.activity'])->prefix('backend'
         Route::post('store', [VideoDomainController::class , 'store'])->name('store');
         Route::get('edit/{id}', [VideoDomainController::class , 'edit'])->name('edit');
         Route::post('update/{id}', [VideoDomainController::class , 'update'])->name('update');
+        Route::delete('destroy/{id}', [VideoDomainController::class , 'destroy'])->name('destroy');
         Route::get('series/{id}', [VideoDomainController::class , 'series'])->name('series');
         Route::put('change_domain', [VideoDomainController::class , 'change_domain'])->name('change_domain');
         // Route::put('batch/{action?}', [VideoDomainController::class, 'batch'])->name('batch');

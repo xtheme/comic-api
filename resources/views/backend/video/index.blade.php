@@ -112,7 +112,7 @@
                                                 <a class="dropdown-item" data-modal data-size="full" href="{{ route('backend.video_series.index', $video->id) }}" title="影集列表"><i class="bx
 bxs-videos mr-1"></i>影集列表</a>
                                                 <a class="dropdown-item" data-modal href="{{ route('backend.video.edit', $video->id) }}" title="编辑动画"><i class="bx bx-edit-alt mr-1"></i>编辑动画</a>
-
+                                                <a class="dropdown-item" data-destroy href="{{ route('backend.video.destroy', $video->id) }}" title="刪除动画"><i class="bx bx-trash mr-1"></i>刪除动画</a>
                                             </div>
                                         </div>
                                     </td>

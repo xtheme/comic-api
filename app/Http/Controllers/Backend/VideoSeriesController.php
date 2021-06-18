@@ -137,4 +137,11 @@ class VideoSeriesController extends Controller
 
         return view('backend.video_series.preview')->with($data);
     }
+
+    public function destroy($id)
+    {
+        $this->repository->destroy($id);
+
+        return Response::jsonSuccess(__('response.destroy.success'));
+    }
 }

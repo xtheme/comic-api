@@ -72,6 +72,13 @@ class VideoController extends Controller
         return Response::jsonSuccess(__('response.update.success'));
     }
 
+    public function destroy($id)
+    {
+        $this->repository->destroy($id);
+
+        return Response::jsonSuccess(__('response.destroy.success'));
+    }
+
     public function batch(Request $request, $action)
     {
         $ids = explode(',', $request->input('ids'));

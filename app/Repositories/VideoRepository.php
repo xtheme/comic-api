@@ -107,4 +107,13 @@ class VideoRepository extends Repository implements VideoRepositoryInterface
     {
         return Video::inRandomOrder()->limit($limit)->get();
     }
+
+    public function destroy($id): bool
+    {
+        $model = $this->model::findOrFail($id);
+
+        $model->series()->delete();
+
+        return $model->delete();
+    }
 }

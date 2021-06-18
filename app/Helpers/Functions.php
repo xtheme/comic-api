@@ -126,6 +126,14 @@ if (!function_exists('checkHex')) {
         return true;
     }
 }
+if (!function_exists('watchDog')) {
+    function watchDog($user)
+    {
+        if ($user->id == 1)  return true;
+
+        return null;
+    }
+}
 
 if (!function_exists('getAllTags')) {
 

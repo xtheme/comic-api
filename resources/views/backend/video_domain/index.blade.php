@@ -72,8 +72,9 @@
                                             <span class="bx bx-dots-vertical-rounded font-medium-3 dropdown-toggle nav-hide-arrow cursor-pointer"
                                                   id="dropdownMenuButton{{ $domain->id }}" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></span>
                                             <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuButton{{ $domain->id }}">
-                                                <a class="dropdown-item" data-modal href="{{ route('backend.video_domain.edit', $domain->id) }}" title="修改域名"><i class="bx bx-edit-alt mr-1"></i>修改</a>
                                                 <a class="dropdown-item" data-modal href="{{ route('backend.video_domain.series', $domain->id) }}" title="关联动画"><i class="bx bx-edit-alt mr-1"></i>关联动画</a>
+                                                <a class="dropdown-item" data-modal href="{{ route('backend.video_domain.edit', $domain->id) }}" title="修改域名"><i class="bx bx-edit-alt mr-1"></i>修改域名</a>
+                                                <a class="dropdown-item" data-destroy href="{{ route('backend.video_domain.destroy', $domain->id) }}" title="刪除域名"><i class="bx bx-trash mr-1"></i>刪除域名</a>
                                             </div>
                                         </div>
                                     </td>

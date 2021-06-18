@@ -133,6 +133,7 @@
                                   id="dropdownMenuButton{{ $series->id }}" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></span>
                             <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuButton{{ $series->id }}">
                                 <a class="dropdown-item" data-modal href="{{ route('backend.video_series.edit', [$video_id, $series->id]) }}" title="编辑影集"><i class="bx bx-edit-alt mr-1"></i>编辑影集</a>
+                                <a class="dropdown-item" data-destroy href="{{ route('backend.video_series.destroy', $series->id) }}" title="刪除影集"><i class="bx bx-trash mr-1"></i>刪除影集</a>
                             </div>
                         </div>
                     </td>
