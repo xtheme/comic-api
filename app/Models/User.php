@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\Date;
 use Illuminate\Support\Str;
 
 class User extends BaseModel
@@ -199,7 +200,7 @@ class User extends BaseModel
     {
         if (!$value || Carbon::now()->gte(Carbon::create($value))) return null;
 
-        return Carbon::create($value)->format('Y-m-d H:i:s');
+        return Date::parse($value);
     }
 
     /**
