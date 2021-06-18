@@ -13,9 +13,11 @@ class AddPriorityToTaggingTagsTable extends Migration
      */
     public function up()
     {
-        Schema::table('tagging_tags', function (Blueprint $table) {
-            $table->integer('priority')->unsigned()->default(0)->comment('排序優先級');
-        });
+        if (Schema::hasColumn('tagging_tags', 'priority')) {
+            Schema::table('tagging_tags', function (Blueprint $table) {
+                $table->integer('priority')->unsigned()->default(0)->comment('排序優先級');
+            });
+        }
     }
 
     /**

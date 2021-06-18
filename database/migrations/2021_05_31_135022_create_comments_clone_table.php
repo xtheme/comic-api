@@ -13,15 +13,17 @@ class CreateCommentsCloneTable extends Migration
      */
     public function up()
     {
-        Schema::create('comments_clone', function (Blueprint $table) {
-            $table->bigIncrements('id');
-            $table->integer('chapter_id')->index('chapter_id');
-            $table->integer('user_id')->index('user_id');
-            $table->text('content');
-            $table->tinyInteger('status')->comment('评论状态 [1:正常，-1:隐藏]');
-            $table->integer('likes')->comment('点赞数量');
-            $table->timestamps();
-        });
+        if (!Schema::hasTable('comments_clone')) {
+            Schema::create('comments_clone', function (Blueprint $table) {
+                $table->bigIncrements('id');
+                $table->integer('chapter_id')->index('chapter_id');
+                $table->integer('user_id')->index('user_id');
+                $table->text('content');
+                $table->tinyInteger('status')->comment('评论状态 [1:正常，-1:隐藏]');
+                $table->integer('likes')->comment('点赞数量');
+                $table->timestamps();
+            });
+        }
     }
 
     /**

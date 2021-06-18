@@ -13,13 +13,15 @@ class CreateBookFavoritesTable extends Migration
      */
     public function up()
     {
-        Schema::create('book_favorites', function (Blueprint $table) {
-            $table->id();
-            $table->integer('book_id')->index();
-            $table->integer('chapter_id')->index();
-            $table->integer('user_id')->index();
-            $table->timestamps();
-        });
+        if (!Schema::hasTable('book_favorites')) {
+            Schema::create('book_favorites', function (Blueprint $table) {
+                $table->id();
+                $table->integer('book_id')->index();
+                $table->integer('chapter_id')->index();
+                $table->integer('user_id')->index();
+                $table->timestamps();
+            });
+        }
     }
 
     /**

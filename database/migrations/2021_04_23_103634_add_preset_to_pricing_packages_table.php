@@ -13,9 +13,11 @@ class AddPresetToPricingPackagesTable extends Migration
      */
     public function up()
     {
-        Schema::table('pricing_packages', function (Blueprint $table) {
-            $table->tinyInteger('preset')->default(0)->comment('是否为预设套餐 [0=非预设  1=预设]')->after('sort');
-        });
+        if (Schema::hasColumn('pricing_packages', 'preset')) {
+            Schema::table('pricing_packages', function (Blueprint $table) {
+                $table->tinyInteger('preset')->default(0)->comment('是否为预设套餐 [0=非预设  1=预设]')->after('sort');
+            });
+        }
     }
 
     /**

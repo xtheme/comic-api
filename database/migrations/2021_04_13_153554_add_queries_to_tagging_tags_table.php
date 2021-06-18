@@ -13,9 +13,11 @@ class AddQueriesToTaggingTagsTable extends Migration
      */
     public function up()
     {
-        Schema::table('tagging_tags', function (Blueprint $table) {
-            $table->integer('queries')->unsigned()->default(0)->comment('被查詢次數');
-        });
+        if (Schema::hasColumn('tagging_tags', 'queries')) {
+            Schema::table('tagging_tags', function (Blueprint $table) {
+                $table->integer('queries')->unsigned()->default(0)->comment('被查詢次數');
+            });
+        }
     }
 
     /**

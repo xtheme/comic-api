@@ -13,9 +13,11 @@ class AddJumpIdToAdsTable extends Migration
      */
     public function up()
     {
-        Schema::table('ads', function (Blueprint $table) {
-            $table->integer('jump_id')->default(0)->comment('站内功能跳转id')->after('jump_type');
-        });
+        if (Schema::hasColumn('ads', 'jump_id')) {
+            Schema::table('ads', function (Blueprint $table) {
+                $table->integer('jump_id')->default(0)->comment('站内功能跳转id')->after('jump_type');
+            });
+        }
     }
 
     /**

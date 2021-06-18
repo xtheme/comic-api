@@ -13,11 +13,13 @@ class CreateSignsTable extends Migration
      */
     public function up()
     {
-        Schema::create('signs', function (Blueprint $table) {
-            $table->bigIncrements('id');
-            $table->integer('user_id')->index()->comment('用户id');
-            $table->timestamp('created_at')->useCurrent()->index()->comment('创建时间');
-        });
+        if (!Schema::hasTable('signs')) {
+            Schema::create('signs', function (Blueprint $table) {
+                $table->bigIncrements('id');
+                $table->integer('user_id')->index()->comment('用户id');
+                $table->timestamp('created_at')->useCurrent()->index()->comment('创建时间');
+            });
+        }
     }
 
     /**

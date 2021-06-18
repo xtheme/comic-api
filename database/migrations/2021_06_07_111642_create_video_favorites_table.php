@@ -13,13 +13,15 @@ class CreateVideoFavoritesTable extends Migration
      */
     public function up()
     {
-        Schema::create('video_favorites', function (Blueprint $table) {
-            $table->id();
-            $table->integer('video_id')->index();
-            $table->integer('series_id')->index();
-            $table->integer('user_id')->index();
-            $table->timestamps();
-        });
+        if (!Schema::hasTable('video_favorites')) {
+            Schema::create('video_favorites', function (Blueprint $table) {
+                $table->id();
+                $table->integer('video_id')->index();
+                $table->integer('series_id')->index();
+                $table->integer('user_id')->index();
+                $table->timestamps();
+            });
+        }
     }
 
     /**

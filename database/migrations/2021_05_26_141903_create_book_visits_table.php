@@ -13,17 +13,19 @@ class CreateBookVisitsTable extends Migration
      */
     public function up()
     {
-        Schema::create('book_visits', function (Blueprint $table) {
-            $table->id();
-            $table->integer('book_id');
-            $table->integer('chapter_id');
-            $table->integer('user_id');
-            $table->timestamps();
+        if (!Schema::hasTable('book_visits')) {
+            Schema::create('book_visits', function (Blueprint $table) {
+                $table->id();
+                $table->integer('book_id');
+                $table->integer('chapter_id');
+                $table->integer('user_id');
+                $table->timestamps();
 
-            $table->index('book_id');
-            $table->index('chapter_id');
-            $table->index('user_id');
-        });
+                $table->index('book_id');
+                $table->index('chapter_id');
+                $table->index('user_id');
+            });
+        }
     }
 
     /**

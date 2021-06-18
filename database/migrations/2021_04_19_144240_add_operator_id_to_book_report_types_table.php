@@ -13,9 +13,11 @@ class AddOperatorIdToBookReportTypesTable extends Migration
      */
     public function up()
     {
-        Schema::table('book_report_types', function (Blueprint $table) {
-            $table->integer('operator_id')->unsigned()->default(1)->comment('操作人id');
-        });
+        if (Schema::hasColumn('book_report_types', 'operator_id')) {
+            Schema::table('book_report_types', function (Blueprint $table) {
+                $table->integer('operator_id')->unsigned()->default(1)->comment('操作人id');
+            });
+        }
     }
 
     /**

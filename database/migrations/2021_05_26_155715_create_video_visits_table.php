@@ -13,17 +13,19 @@ class CreateVideoVisitsTable extends Migration
      */
     public function up()
     {
-        Schema::create('video_visits', function (Blueprint $table) {
-            $table->id();
-            $table->integer('video_id');
-            $table->integer('series_id');
-            $table->integer('user_id');
-            $table->timestamps();
+        if (!Schema::hasTable('video_visits')) {
+            Schema::create('video_visits', function (Blueprint $table) {
+                $table->id();
+                $table->integer('video_id');
+                $table->integer('series_id');
+                $table->integer('user_id');
+                $table->timestamps();
 
-            $table->index('video_id');
-            $table->index('series_id');
-            $table->index('user_id');
-        });
+                $table->index('video_id');
+                $table->index('series_id');
+                $table->index('user_id');
+            });
+        }
     }
 
     /**

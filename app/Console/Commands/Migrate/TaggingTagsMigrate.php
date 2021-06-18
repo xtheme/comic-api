@@ -42,9 +42,9 @@ class TaggingTagsMigrate extends Command
     {
         if ($this->confirm('请确认是否执行数据迁移？')) {
 
-            DB::table('tagging_tag_groups')->truncate();
-            DB::table('tagging_tags')->truncate();
-            DB::table('tagging_tagged')->truncate();
+            // DB::table('tagging_tag_groups')->truncate();
+            // DB::table('tagging_tags')->truncate();
+            // DB::table('tagging_tagged')->truncate();
 
             $categories = DB::table('category')->where('status', 1)->get();
 

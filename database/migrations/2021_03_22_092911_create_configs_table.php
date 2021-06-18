@@ -13,16 +13,18 @@ class CreateConfigsTable extends Migration
      */
     public function up()
     {
-        Schema::create('configs', function (Blueprint $table) {
-            $table->increments('id');
-            $table->string('group')->nullable();
-            $table->string('name')->nullable();
-            $table->string('type')->nullable();
-            $table->string('code')->nullable();
-            $table->string('old_code')->nullable();
-            $table->text('content');
-            $table->timestamps();
-        });
+        if (!Schema::hasTable('configs')) {
+            Schema::create('configs', function (Blueprint $table) {
+                $table->increments('id');
+                $table->string('group')->nullable();
+                $table->string('name')->nullable();
+                $table->string('type')->nullable();
+                $table->string('code')->nullable();
+                $table->string('old_code')->nullable();
+                $table->text('content');
+                $table->timestamps();
+            });
+        }
     }
 
     /**
