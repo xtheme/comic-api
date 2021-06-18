@@ -61,10 +61,10 @@
                 </div>
                 <div class="col-3">
                     <div class="form-group">
-                        <label>视频长度</label>
+                        <label>视频长度 (总秒数)</label>
                         <div class="controls">
                             <div class="input-group">
-                                <input type="text" class="form-control" name="length" placeholder="">
+                                <input type="number" class="form-control" name="length" placeholder="">
                                 <div class="input-group-append">
                                     <span class="input-group-text">秒</span>
                                 </div>

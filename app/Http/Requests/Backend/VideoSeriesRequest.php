@@ -15,6 +15,7 @@ class VideoSeriesRequest extends BaseRequest
             'status'          => 'required',
             'video_domain_id' => 'required',
             'link'            => 'required|starts_with:/|ends_with:m3u8',
+            'length'          => 'required|numeric',
         ];
     }
 
@@ -27,6 +28,7 @@ class VideoSeriesRequest extends BaseRequest
             'status'          => '状态',
             'video_domain_id' => '视频域名',
             'link'            => '视频链结',
+            'length'          => '视频长度',
         ];
     }
 }
