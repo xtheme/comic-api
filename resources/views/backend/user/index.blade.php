@@ -91,17 +91,14 @@
                                     </td>
                                     <td class="text-center">
                                         @if($user->subscribed_status)
-                                            <span data-toggle="tooltip" data-placement="top" data-original-title="{{ $user->subscribed_at }}"
-                                                  class="badge badge-pill badge-light-primary">VIP</span>
+                                            <span class="badge badge-pill badge-light-primary">VIP</span>
                                         @else
                                             <span class="badge badge-pill badge-light-light">普通</span>
                                         @endif
                                     </td>
                                     <td class="text-center">
                                         @if($user->subscribed_at)
-                                            <span data-toggle="tooltip" data-placement="top" data-original-title="{{ $user->subscribed_at }}">
-                                            {{ $user->subscribed_at->diffForHumans() }}
-                                            </span>
+                                            {{ $user->subscribed_at }}
                                         @else
                                             <span class="text-light">N/A</span>
                                         @endif
