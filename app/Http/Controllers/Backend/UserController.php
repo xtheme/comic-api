@@ -119,7 +119,7 @@ class UserController extends Controller
         $current_user = User::findOrFail($id);
         $transfer_user = User::findOrFail($request->post('user_id'));
 
-        if ($transfer_user->subscribed_at->greaterThan($current_user->subscribed_at)) {
+        if ($transfer_user->subscribed_at && $transfer_user->subscribed_at->greaterThan($current_user->subscribed_at)) {
             return Response::jsonError('目标的会员效期高于当前用户');
         }
 
