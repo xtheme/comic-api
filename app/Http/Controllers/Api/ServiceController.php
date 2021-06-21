@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Response;
 
 class ServiceController extends Controller
@@ -25,7 +26,7 @@ class ServiceController extends Controller
     /**
      * 查询廣告位底下的廣告列表
      */
-    public function url()
+    public function url(Request $request)
     {
         $data = [
             'url' => ''
@@ -41,13 +42,13 @@ class ServiceController extends Controller
         // todo change config
         $service_app_id = getOldConfig('web_config', 'service_app_id');
         $service_app_secret = getOldConfig('web_config', 'service_app_secret');
-        $service_open_id = getOldConfig('web_config', 'service_open_id');
+        // $service_open_id = getOldConfig('web_config', 'service_open_id');
         $service_api_url= getOldConfig('web_config', 'service_api_url');
 
         $params = [
             'app_id'     => $service_app_id,
             'app_secret' => $service_app_secret,
-            'open_id'    => $service_open_id,
+            'open_id'    => $request->user->id,
             'time'       => time(),
         ];
 
