@@ -38,7 +38,7 @@ data-open="click" data-menu="vertical-menu-modern" data-col="2-columns" data-fra
 style="overflow-x: hidden; padding-right: 0 !important;">
 
 <!-- BEGIN: Header-->
-{{--@include('panels.navbar')--}}
+@include('panels.navbar')
 <!-- END: Header-->
 
 <!-- BEGIN: Main Menu-->

@@ -48,4 +48,6 @@ return [
     "Administrator list" => "管理员列表",
     "Role List" => "角色列表",
     "Permission List" => "权限列表",
+
+    "logout" => "退出登录",
 ];

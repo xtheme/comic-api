@@ -15,7 +15,7 @@ return [
         //any custom class can be pass
         'navbarBgColor' => 'bg-white',
         //Options:bg-white(default for vertical-menu),bg-primary(default horizontal-menu), bg-success,bg-danger,bg-info,bg-warning,bg-dark.(Note:color only visible when you scroll down)
-        'navbarType' => 'hidden',
+        'navbarType' => 'fixed',
         // options:fixed,static,hidden (note: Horizontal-menu template only support fixed and static)
         'isMenuCollapsed' => false,
         // options:true or false(default)  Warning:this option is not applicable for horizontal-menu template

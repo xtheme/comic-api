@@ -143,21 +143,10 @@ class Helper
     // updatesPageConfig function override all configuration of custom.php file as page requirements.
     public static function updatePageConfig($pageConfigs)
     {
-        $demo = 'custom';
-        // $custom = 'custom';
-        // $fullURL = request()->fullurl();
-        // if (App()->environment() === 'production') {
-        //     for ($i = 1; $i < 7; $i++) {
-        //         $contains = Str::contains($fullURL, 'demo-' . $i);
-        //         if ($contains === true) {
-        //             $demo = 'demo-' . $i;
-        //         }
-        //     }
-        // }
         if (isset($pageConfigs)) {
             if (count($pageConfigs) > 0) {
                 foreach ($pageConfigs as $config => $val) {
-                    Config::set('custom.' . $demo . '.' . $config, $val);
+                    Config::set('custom.custom.' . $config, $val);
                 }
             }
         }
