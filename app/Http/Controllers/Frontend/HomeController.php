@@ -11,23 +11,7 @@ class HomeController extends Controller
     // index
     public function index()
     {
-        return redirect('login');
-        // $data = [
-        //     'locations' => Location::all(),
-        //     'shipments' => Shipment::all(),
-        // ];
-        //
-        // return view('frontend.home')->with($data);
-    }
-
-    // 試算運費
-    public function trialCalculation()
-    {
-    }
-
-    // 儲存委託單
-    public function storeRequisition()
-    {
+        return '<a href="http://zx9.app">zx9.app</a>';
     }
 
     public function noPermission()
