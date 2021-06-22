@@ -8,6 +8,7 @@ use App\Services\UserService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Response;
+use Sso;
 use Upload;
 
 class UserController extends BaseController
@@ -68,16 +69,14 @@ class UserController extends BaseController
             }
         }
 
-        $sso_key = sprintf('sso:%s-%s', $area, $mobile);
+        $phone = sprintf('%s-%s', $area, $mobile);
 
         if ($force) {
-            Cache::forget($sso_key);
-        } else {
-            $uuid = $request->header('uuid');
-            $device_id = Cache::get($sso_key);
-            if ($device_id && $device_id != $uuid) {
-                return Response::jsonError('请您先退出旧设备再登录！', 581);
-            }
+            Sso::destroy($phone);
+        }
+
+        if (!Sso::checkPhone($phone)) {
+            return Response::jsonError('请您先退出旧设备再登录！', 581);
         }
 
         // 检查手机号是否已被绑定
@@ -87,10 +86,6 @@ class UserController extends BaseController
             // 新建立一個手機號註冊帳號
             $mobile_user = $this->userService->registerMobile($request);
         }
-
-        // if (!$mobile_user->status) {
-        //     return Response::jsonError('很抱歉，您的账号已被禁止！', 500);
-        // }
 
         // 前任裝置帳號
         $device_user = $this->userService->getUserByDevice($request);
@@ -113,10 +108,6 @@ class UserController extends BaseController
         $cache_key = $this->getCacheKeyPrefix() . sprintf('user:mobile:%s-%s', $area, $mobile);
         Cache::forget($cache_key);
         $response = $this->userService->addDeviceCache($cache_key, $mobile_user);
-
-        // todo SSO
-        $sso_key = sprintf('sso:%s-%s', $area, $mobile);
-        Cache::forever($sso_key, $request->header('uuid'));
 
         return Response::jsonSuccess(__('api.success'), $response);
     }

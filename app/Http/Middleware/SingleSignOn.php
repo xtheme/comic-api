@@ -6,6 +6,7 @@ use Closure;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Response;
+use Sso;
 
 class SingleSignOn
 {
@@ -36,21 +37,8 @@ class SingleSignOn
             return $next($request);
         }
 
-        $uuid = $request->header('uuid');
-        $area = $request->user->area;
-        $mobile = $request->user->mobile;
-
-        if ($mobile) {
-            $sso_key = sprintf('sso:%s-%s', $area, $mobile);
-            $device_id = Cache::get($sso_key);
-
-            if ($device_id) {
-                if ($device_id != $uuid) {
-                    return Response::jsonError('请您先退出旧设备再登录！', 581);
-                }
-            } else {
-                Cache::forever($sso_key, $uuid);
-            }
+        if (!Sso::checkUser($request->user)) {
+            return Response::jsonError('请您先退出旧设备再登录！', 581);
         }
 
         return $next($request);

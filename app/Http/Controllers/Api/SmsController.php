@@ -7,6 +7,7 @@ use App\Services\SmsService;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\Validator;
+use Sso;
 
 class SmsController extends BaseController
 {
@@ -19,14 +20,11 @@ class SmsController extends BaseController
 
     public function verify(MobileRequest $request)
     {
-        $uuid = $request->header('uuid');
         $area = $request->input('area') ?? null;
         $mobile = $request->input('mobile') ?? null;
+        $phone = sprintf('%s-%s', $area, $mobile);
 
-        $sso_key = sprintf('sso:%s-%s', $area, $mobile);
-        $device_id = Cache::get($sso_key);
-
-        if ($device_id && $device_id != $uuid) {
+        if (!Sso::checkPhone($phone)) {
             return Response::jsonError('请您先退出旧设备再登录！', 581);
         }
 

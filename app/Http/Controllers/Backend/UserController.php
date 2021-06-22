@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Backend;
 
 use App\Http\Controllers\Controller;
+use Sso;
 use App\Models\User;
 use App\Repositories\Contracts\UserRepositoryInterface;
 use Illuminate\Http\Request;
@@ -135,7 +136,7 @@ class UserController extends Controller
         return Response::jsonSuccess(__('response.update.success'));
     }
 
-    public function unbindSso($id)
+    public function unbindSso(Request $request, $id)
     {
         $user = User::findOrFail($id);
 
@@ -143,13 +144,11 @@ class UserController extends Controller
             return Response::jsonError('非手机帐号不需解绑');
         }
 
-        $sso_key = sprintf('sso:%s-%s', $user->area, $user->mobile);
-
-        if (!Cache::has($sso_key)) {
+        if (!Sso::exist($user->phone)) {
             return Response::jsonError('绑定纪录并不存在！');
         }
 
-        Cache::forget($sso_key);
+        Sso::destroy($user->phone);
 
         activity()->useLog('后台')->causedBy(auth()->user())->performedOn($user)->log('解绑手机登录限制: ' . $user->phone);
 

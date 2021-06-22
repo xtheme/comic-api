@@ -13,6 +13,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Response;
+use Sso;
 
 class UserService
 {
@@ -301,8 +302,7 @@ class UserService
             Cache::forget($mobile_key);
 
             // SSO 单点登入
-            $sso_key = sprintf('sso:%s-%s', $area, $mobile);
-            Cache::forget($sso_key);
+            Sso::destroy($request->user->phone);
         }
     }
 
