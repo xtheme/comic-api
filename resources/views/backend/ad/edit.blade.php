@@ -63,33 +63,11 @@
                     </div>
                 </div>
 
-                <div class="col-6 jump_url @if($data->jump_type == 2){{'hidden'}}@endif">
+                <div class="col-6">
                     <div class="form-group">
                         <label>广告地址</label>
                         <div class="controls">
                             <input type="text" class="form-control" name="url"  value="{{$data->url}}" placeholder="请输入网址" @if($data->jump_type == 5){{'disabled'}}@endif  >
-                        </div>
-                    </div>
-                </div>
-
-                <div class="col-3 jump_id @if($data->jump_type != 2){{'hidden'}}@endif">
-                    <div class="form-group">
-                        <label>站內跳转种类</label>
-                        <div class="controls">
-                            <select id="url-type" class="form-control" name="url_type">
-                                @foreach ($url_type as $key => $val)
-                                    <option value="{{ $key }}"  @if($data->url == $key){{'selected'}}@endif>{{ $val }}</option>
-                                @endforeach
-                            </select>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="col-3 jump_id @if($data->jump_type != 2){{'hidden'}}@endif ">
-                    <div class="form-group">
-                        <label>跳转ID</label>
-                        <div class="controls">
-                            <input type="text" class="form-control" name="jump_id" value="{{$data->jump_id}}" placeholder="漫画或动漫ID"  @if($data->url == 'deposit'){{'disabled'}}@endif>
                         </div>
                     </div>
                 </div>
@@ -142,31 +120,9 @@
 		$(document).ready(function () {
 
 
-            $('#url-type').on('change', function () {
-                const $jump_id = $('input[name="jump_id"]');
-                
-                if ($(this).val() == 'deposit') {
-                    $jump_id.attr('disabled', true);
-                    $jump_id.attr('value', 0);
-                } else {
-                    $jump_id.attr('disabled', false);
-                }
-            });
-
             $('#jump-type').on('change', function () {
                 const $url = $('input[name="url"]');
-                const $jump_id = $('input[name="jump_id"]');
                 console.log($(this).val());
-
-                if ($(this).val() == 2) {
-                    $('.jump_id').removeClass('hidden');
-                    $('.jump_url').addClass('hidden');
-                    $jump_id.attr('disabled', true);
-                    $jump_id.attr('value', 0);
-                }else{
-                    $('.jump_id').addClass('hidden');
-                    $('.jump_url').removeClass('hidden');
-                }
 
                 if ($(this).val() == 5) {
                     $url.attr('disabled', true);

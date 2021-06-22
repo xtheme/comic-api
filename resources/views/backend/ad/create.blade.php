@@ -61,33 +61,11 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-6 jump_url">
+                <div class="col-6 ">
                     <div class="form-group">
                         <label>广告地址</label>
                         <div class="controls">
                             <input type="text" class="form-control" name="url" placeholder="请输入网址">
-                        </div>
-                    </div>
-                </div>
-
-                <div class="col-3 jump_id hidden">
-                    <div class="form-group">
-                        <label>站內跳转种类</label>
-                        <div class="controls">
-                            <select id="url-type" class="form-control" name="url_type">
-                                @foreach ($url_type as $key => $val)
-                                    <option value="{{ $key }}">{{ $val }}</option>
-                                @endforeach
-                            </select>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="col-3 jump_id hidden">
-                    <div class="form-group">
-                        <label>跳转ID</label>
-                        <div class="controls">
-                            <input type="text" class="form-control" name="jump_id" placeholder="漫画或动漫ID" disabled>
                         </div>
                     </div>
                 </div>
@@ -142,27 +120,8 @@
 		$(document).ready(function () {
 
 
-            $('#url-type').on('change', function () {
-                const $jump_id = $('input[name="jump_id"]');
-                
-                if ($(this).val() == 'deposit') {
-                    $jump_id.attr('disabled', true);
-                    $jump_id.attr('value', 0);
-                } else {
-                    $jump_id.attr('disabled', false);
-                }
-            });
-
             $('#jump-type').on('change', function () {
                 const $url = $('input[name="url"]');
-
-                if ($(this).val() == 2) {
-                    $('.jump_id').removeClass('hidden');
-                    $('.jump_url').addClass('hidden');
-                }else{
-                    $('.jump_id').addClass('hidden');
-                    $('.jump_url').removeClass('hidden');
-                }
                 
                 if ($(this).val() == 5) {
                     $url.attr('disabled', true);

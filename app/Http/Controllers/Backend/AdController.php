@@ -60,10 +60,6 @@ class AdController extends Controller
     public function store(AdRequest $request)
     {
         $video_ad = new Ad;
-        
-        $request->merge([
-            'url'   => ($request->input('jump_type') == 2) ? $request->input('url_type') : $request->input('url')
-        ]);
 
         $video_ad->fill($request->post())->save();
 
@@ -87,10 +83,6 @@ class AdController extends Controller
     public function update(AdRequest $request, $id)
     {
         $video_ad = Ad::findOrFail($id);
-
-        $request->merge([
-            'url'   => ($request->input('jump_type') == 2) ? $request->input('url_type') : $request->input('url')
-        ]);
 
         $video_ad->fill($request->post())->save();
 
