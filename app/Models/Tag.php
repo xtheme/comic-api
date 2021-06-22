@@ -6,11 +6,12 @@ use Conner\Tagging\Model\Tagged;
 
 class Tag extends \Conner\Tagging\Model\Tag
 {
-    public $fillable = ['name', 'description' , 'suggest' , 'priority'];
-    // public $appends = [
-    //     'related_book_count',
-    //     'related_video_count',
-    // ];
+    public $fillable = [
+        'name',
+        'description',
+        'suggest',
+        'priority',
+    ];
 
     protected static function boot()
     {
