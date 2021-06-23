@@ -48,6 +48,8 @@ class UpgradeSeeder extends Seeder
 
         $this->addAdSpace('漫画-详情间广告' , 'comics');
 
+        $this->addAdSpace('漫画-热门作品广告' , 'comics');
+
         // 升级 CDN 域名
         $this->addCdn();
 
