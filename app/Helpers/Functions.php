@@ -9,13 +9,16 @@ if (!function_exists('getConfig')) {
      *
      * @return string|array
      */
-    function getConfig($key)
+    function getConfig($group, $code)
     {
-        $cache_key = 'config:' . $key;
+        $cache_key = 'config:' . $group . ':' . $code;
 
-        return Cache::rememberForever($cache_key, function () use ($key) {
-            $config = Config::keyword($key)->firstOrFail();
-            return $config->content;
+        return Cache::remember($cache_key, 300, function () use ($group, $code) {
+            $config = Config::group($group)->code($code)->first();
+            if (!$config) {
+                Log::error('配置項: ' . $group . '.' . $code . ' 不存在');
+            }
+            return $config->content ?? '';
         });
     }
 }

@@ -21,6 +21,13 @@ class Config extends BaseModel
         });
     }
 
+    public function scopeCode(Builder $query, string $code = null)
+    {
+        return $query->when($code, function (Builder $query, $code) {
+            return $query->where('code', $code);
+        });
+    }
+
     public function scopeKeyword(Builder $query, string $keyword = null)
     {
         return $query->when($keyword, function (Builder $query, $keyword) {
