@@ -68,6 +68,13 @@ class UserObserver
      */
     public function forceDeleted(User $user)
     {
+        $user->orders()->delete();
+        $user->signs()->delete();
+        $user->book_visit_histories()->delete();
+        $user->video_visit_histories()->delete();
+        $user->video_play_histories()->delete();
+        // todo delete user comments
+
         $this->overrideCache($user);
     }
 }
