@@ -9,7 +9,7 @@ use Illuminate\Support\Facades\Hash;
 use Spatie\Permission\Traits\HasRoles;
 
 // todo Admin 重構
-class Admin extends Authenticatable
+class Admin2 extends Authenticatable
 {
     use HasFactory, Notifiable;
     use HasRoles;
