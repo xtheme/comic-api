@@ -41,14 +41,14 @@
                 <div class="card-body">
                     <!-- Nav tabs -->
                     <ul class="nav nav-tabs" role="tablist">
-                        @foreach($tags as $tag => $name)
-                            @if($tag == request()->input('group'))
+                        @foreach($groups as $group => $group_name)
+                            @if($group == request()->input('group'))
                                 <li class="nav-item current">
-                                    <a class="nav-link active" href="javascript:void(0)">{{$name}}</a>
+                                    <a class="nav-link active" href="{{route('backend.config.index', ['group' => $group])}}">{{ $group_name }}</a>
                                 </li>
                             @else
                                 <li class="nav-item">
-                                    <a class="nav-link" href="{{route('backend.config.index', ['group' => $tag])}}">{{$name}}</a>
+                                    <a class="nav-link" href="{{route('backend.config.index', ['group' => $group])}}">{{ $group_name }}</a>
                                 </li>
                             @endif
                         @endforeach
@@ -59,8 +59,8 @@
                             <thead>
                             <tr>
                                 <th>配置描述</th>
-                                <th>配置类型</th>
-                                <th>代码</th>
+                                <th>配置组</th>
+                                <th>配置键</th>
                                 <th>配置值</th>
                                 <th>创建时间</th>
                                 <th>更新时间</th>
@@ -83,10 +83,10 @@
                                             开关
                                             @break
                                             @case('text')
-                                            富文本
+                                            文本
                                             @break
-                                            @case('readonly')
-                                            唯读配置
+                                            @case('array')
+                                            数组
                                             @break
                                         @endswitch
                                     </td>
@@ -94,25 +94,23 @@
                                     <td>
                                         @switch($item->type)
                                             @case('image')
-                                            <div>
-                                                <img src="{{ $item->content }}" class="config-img" alt="">
-                                            </div>
-                                            @break
-
+                                                <div>
+                                                    <img src="{{ $item->value }}" class="config-img" alt="">
+                                                </div>
+                                                @break
                                             @case('switch')
-                                            @if ($item->code)
-                                                开启
-                                            @else
-                                                关闭
-                                            @endif
-                                            @break
-
-{{--                                            @case('text')--}}
-{{--                                            {!! nl2br(e($item->content )) !!}--}}
-{{--                                            @break--}}
-
+                                                @if ($item->value)
+                                                <span class="badge badge-pill badge-light-primary">启用</span>
+                                                @else
+                                                <span class="badge badge-pill badge-light-danger">关闭</span>
+                                                @endif
+                                                @break
+                                            @case('text')
+                                            @case('array')
+                                                {!! nl2br(e($item->content )) !!}
+                                                @break
                                             @default
-                                            {{ Str::limit($item->content, 50, '...') }}
+                                                {{ Str::limit($item->value, 50, '...') }}
                                         @endswitch
                                     </td>
                                     <td>@if($item->created_at){{ $item->created_at->diffForHumans()  }}@endif</td>

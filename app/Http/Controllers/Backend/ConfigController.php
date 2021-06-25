@@ -9,26 +9,27 @@ use Illuminate\Support\Facades\Response;
 
 class ConfigController extends Controller
 {
-    private $tags;
 
-    public function __construct()
-    {
-        $this->tags = [
-            'web' => '基础设置',
-            'service' => '客服配置',
-            'payment' => '支付配置',
-        ];
-    }
+    const GROUP_OPTIONS = [
+        'app' => '基础配置',
+        'service' => '客服配置',
+        'payment' => '支付配置',
+        'comment' => '评论配置',
+    ];
 
     public function index(Request $request)
     {
+        $request->merge([
+            'group' => $request->input('group') ?: 'app',
+        ]);
+
         $group = $request->input('group');
         $keyword = $request->input('keyword');
 
         $configs = Config::group($group)->keyword($keyword)->paginate();
 
         return view('backend.config.index', [
-            'tags' => $this->tags,
+            'groups' => self::GROUP_OPTIONS,
             'list' => $configs,
             'pageConfigs' => ['hasSearchForm' => true],
         ]);
@@ -37,7 +38,7 @@ class ConfigController extends Controller
     public function create()
     {
         return view('backend.config.create', [
-            'tags' => $this->tags
+            'groups' => self::GROUP_OPTIONS
         ]);
     }
 
@@ -64,7 +65,7 @@ class ConfigController extends Controller
 
         return view('backend.config.edit', [
             'config' => $config,
-            'tags'   => $this->tags,
+            'groups'   => self::GROUP_OPTIONS,
             'pageConfigs' => ['hasSearchForm' => false],
         ]);
     }

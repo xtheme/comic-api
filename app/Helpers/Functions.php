@@ -18,7 +18,7 @@ if (!function_exists('getConfig')) {
             if (!$config) {
                 Log::error('配置項: ' . $group . '.' . $code . ' 不存在');
             }
-            return $config->content ?? '';
+            return $config->value;
         });
     }
 }
