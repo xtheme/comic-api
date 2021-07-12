@@ -28,7 +28,7 @@ class TopicController extends BaseController
                         'tagged_tags'           => $item->tagged_tags,
                         'ribbon'                => $item->ribbon,
                         'visit_histories_count' => shortenNumber($item->visit_histories_count),
-                        'play_histories_count' => shortenNumber($item->play_histories_count),
+                        'play_histories_count'  => (request()->header('platform') == 1) ? $item->play_histories_count : shortenNumber($item->play_histories_count),
                     ];
                 })->toArray();
                 break;
@@ -99,7 +99,7 @@ class TopicController extends BaseController
                         'tagged_tags'           => $item->tagged_tags,
                         'ribbon'                => $item->ribbon,
                         'visit_histories_count' => shortenNumber($item->visit_histories_count),
-                        'play_histories_count' => shortenNumber($item->play_histories_count),
+                        'play_histories_count'  => (request()->header('platform') == 1) ? $item->play_histories_count : shortenNumber($item->play_histories_count),
                     ];
                 })->toArray();
                 break;
