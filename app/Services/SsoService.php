@@ -5,6 +5,7 @@ namespace App\Services;
 use App\Models\SsoLog;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 /**
  * Class SsoService
@@ -34,12 +35,14 @@ class SsoService
         $log = SsoLog::where('phone', $user->phone)->first();
 
         if (!$log) {
-            $data = [
-                'phone' => $user->phone,
-                'uuid'  => request()->header('uuid'),
-            ];
+            DB::transaction(function () use ($user) {
+                $data = [
+                    'phone' => $user->phone,
+                    'uuid'  => request()->header('uuid'),
+                ];
 
-            SsoLog::create($data);
+                SsoLog::create($data);
+            });
 
             return true;
         }
