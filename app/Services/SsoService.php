@@ -33,18 +33,22 @@ class SsoService
 
         $log = SsoLog::where('phone', $user->phone)->first();
 
-        if ($log && $log->uuid != request()->header('uuid')) {
-            return false;
+        if (!$log) {
+            $data = [
+                'phone' => $user->phone,
+                'uuid'  => request()->header('uuid'),
+            ];
+
+            SsoLog::create($data);
+
+            return true;
         }
 
-        $data = [
-            'phone' => $user->phone,
-            'uuid' => request()->header('uuid'),
-        ];
+        if ($log->uuid == request()->header('uuid')) {
+            return true;
+        }
 
-        SsoLog::updateOrCreate($data);
-
-        return true;
+        return false;
     }
 
     /**
@@ -56,18 +60,15 @@ class SsoService
     {
         $log = SsoLog::where('phone', $phone)->first();
 
-        if ($log && $log->uuid != request()->header('uuid')) {
-            return false;
+        if (!$log) {
+            return true;
         }
 
-        $data = [
-            'phone' => $phone,
-            'uuid' => request()->header('uuid'),
-        ];
+        if ($log->uuid == request()->header('uuid')) {
+            return true;
+        }
 
-        SsoLog::updateOrCreate($data);
-
-        return true;
+        return false;
     }
 
     public function exist($phone)

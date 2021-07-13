@@ -18,10 +18,13 @@ class SmsController extends BaseController
         $this->smsService = $smsService;
     }
 
+    /**
+     * 發送驗證碼前檢查使用的電話是否有 SSO
+     */
     public function verify(MobileRequest $request)
     {
-        $area = $request->input('area') ?? null;
-        $mobile = $request->input('mobile') ?? null;
+        $area = $request->input('area');
+        $mobile = $request->input('mobile');
         $phone = sprintf('%s-%s', $area, $mobile);
 
         if (!Sso::checkPhone($phone)) {
@@ -31,24 +34,13 @@ class SmsController extends BaseController
         return $this->send($request);
     }
 
+    /**
+     * 單純發送驗證碼
+     */
     public function send(MobileRequest $request)
     {
-        $area = $request->post('area') ? trim($request->post('area')) : '86';
-        $mobile = $request->post('mobile') ? trim($request->post('mobile')) : '';
-        $ip = $request->ip();
-
-        // 验证规则
-        $validator = Validator::make([
-            'area' => $area,
-            'mobile' => $mobile,
-        ], [
-            'area' => 'required|numeric',
-            'mobile'   => 'required|numeric',
-        ]);
-
-        if ($validator->fails()) {
-            return Response::jsonError($validator->errors()->first(), 500);
-        }
+        $area = $request->input('area');
+        $mobile = $request->input('mobile');
 
         // 限制每天发送次数
         if (!$this->smsService->limitTodayFrequency($area, $mobile)) {
@@ -61,6 +53,7 @@ class SmsController extends BaseController
         }
 
         // 限制IP发送频率
+        $ip = $request->ip();
         if (!$this->smsService->limitIpFrequency($ip)) {
             return Response::jsonError('发送频率过快，请稍后再试！');
         }
