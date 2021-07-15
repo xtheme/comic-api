@@ -119,6 +119,18 @@
         },
         {
             "url": "#",
+            "name": "Comments",
+            "slug": "comments",
+            "icon": "bx bxs-comment",
+            "submenu": [
+                {
+                    "url": "/backend/comment",
+                    "name": "Comment List"
+                }
+            ]
+        },
+        {
+            "url": "#",
             "name": "Systems",
             "slug": "systems",
             "icon": "bx bxs-cog",
