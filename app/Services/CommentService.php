@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\Models\CommentLike;
+use App\Models\User;
 use App\Traits\CacheTrait;
 use Illuminate\Support\Facades\Cache;
 
@@ -16,7 +17,7 @@ class CommentService
     public function check_cool_down()
     {
         // todo 錯字
-        $cool_down = getConfig('comment_colldown');
+        $cool_down = getConfig('comment' ,'colddown');
 
         $cache_key = $this->getCacheKeyPrefix() . sprintf('comment:cd-%s', request()->user->id);
 
@@ -35,7 +36,7 @@ class CommentService
     public function check_frequency()
     {
 
-        $comment_frequency = getConfig('comment_frequency');
+        $comment_frequency = getConfig('comment' ,'frequency');
 
         $cache_key = $this->getCacheKeyPrefix() . sprintf('comment:frequency-%s', request()->user->id);
         $today_request = Cache::get($cache_key);
@@ -80,4 +81,17 @@ class CommentService
 
         return true;
     }
+
+    /**
+     * 取得自己的评论
+     */
+    public function getMyComments($page)
+    {
+        $page_size = 20;
+        
+        return User::with(['comments' => function ($query) use ($page , $page_size) {
+            $query->skip(($page-1)*$page_size)->take($page_size)->orderBydesc('created_at');
+        }])->where('id' , request()->user->id )->get();
+    }
+
 }

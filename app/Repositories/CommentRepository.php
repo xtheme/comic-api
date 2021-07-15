@@ -72,4 +72,18 @@ class CommentRepository extends Repository implements CommentRepositoryInterface
                 return $query->where('chapter_id', $chapter_id);
             })->where('status', 1)->orderByDesc($order);
     }
+
+    /**
+     * @param  Request  $request
+     *
+     * @return Builder
+     */
+    public function find_my($request , $comment_id): Builder
+    {
+        return $this->model::where([
+            ['user_id' , $request->user->id],
+            ['id' , $comment_id]
+        ]);
+    }
+    
 }

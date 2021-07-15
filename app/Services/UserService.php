@@ -472,4 +472,16 @@ class UserService
     }
 
 
+    /**
+     * @param  Request  $request
+     *
+     * @return User
+     */
+    public function getMyComments(Request $request)
+    {
+        $uuid = $request->header('uuid');
+
+        return User::where('device_id', $uuid)->first();
+    }
+
 }

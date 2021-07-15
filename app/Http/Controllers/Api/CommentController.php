@@ -77,4 +77,28 @@ class CommentController extends Controller
         return Response::jsonSuccess(__('api.success'), []);
     }
 
+    public function comment($page = 1)
+    {
+
+        $data = $this->commentService->getMyComments($page);
+
+        return Response::jsonSuccess(__('api.success'), $data);
+    }
+
+    public function destroy(Request $request,$comment_id)
+    {
+
+        $data = $this->repository->find_my($request , $comment_id)->exists();
+
+        if(!$data){
+            return Response::jsonError('无法删除非本人评论！');
+        }
+
+        $this->repository->destroy($comment_id);
+
+        return Response::jsonSuccess(__('api.success'));
+    }
+
+    
+
 }

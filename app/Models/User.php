@@ -132,6 +132,11 @@ class User extends BaseModel
         return $this->hasMany('App\Models\Order');
     }
 
+    public function comments()
+    {
+        return $this->hasMany('App\Models\Comment', 'user_id', 'id');
+    }
+
     public function orders_count()
     {
         return $this->hasOne('App\Models\ViewsOrdersCount');

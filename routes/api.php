@@ -52,6 +52,7 @@ Route::as('api.')->group(function () {
 
                 // 歷史紀錄 (閱覽/ 播放/ 收藏)
                 Route::get('/{type}/visit/history', [Api\VisitHistoryController::class, 'list'])->name('visit.history');
+                Route::get('/comment/{page?}', [Api\CommentController::class, 'comment'])->name('comment');
             });
 
             // 歷史紀錄 (閱覽/ 播放/ 收藏)
@@ -122,6 +123,9 @@ Route::as('api.')->group(function () {
                 Route::get('/list/{chapter_id}/{order}', [Api\CommentController::class, 'list'])->name('list');
                 Route::post('/add', [Api\CommentController::class, 'add'])->name('add');
                 Route::post('/like/{comment_id}', [Api\CommentController::class, 'like'])->name('like');
+                Route::post('/destroy/{comment_id}', [Api\CommentController::class, 'destroy'])->name('destroy');
+
+                
             });
 
             // 客服
