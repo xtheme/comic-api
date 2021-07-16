@@ -32,20 +32,14 @@ class SsoService
             return true;
         }
 
-        $log = SsoLog::where('phone', $user->phone)->first();
+        $log = DB::transaction(function () use ($user) {
+            $data = [
+                'phone' => $user->phone,
+                'uuid'  => request()->header('uuid'),
+            ];
 
-        if (!$log) {
-            DB::transaction(function () use ($user) {
-                $data = [
-                    'phone' => $user->phone,
-                    'uuid'  => request()->header('uuid'),
-                ];
-
-                SsoLog::create($data);
-            });
-
-            return true;
-        }
+            return SsoLog::firstOrCreate($data, $data);
+        });
 
         if ($log->uuid == request()->header('uuid')) {
             return true;
