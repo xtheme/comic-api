@@ -18,7 +18,7 @@ class VisitHistoryController extends BaseController
     }
 
     private function getBookVisitHistories(Request $request) {
-        $histories = BookVisit::where('user_id', $request->user->id)->orderByDesc('updated_at')->get();
+        $histories = BookVisit::has('book')->where('user_id', $request->user->id)->orderByDesc('updated_at')->get();
 
         $histories = $histories->transform(function ($item) {
             return [
@@ -38,7 +38,7 @@ class VisitHistoryController extends BaseController
     }
 
     private function getVideoVisitHistories(Request $request) {
-        $histories = VideoVisit::where('user_id', $request->user->id)->orderByDesc('updated_at')->get();
+        $histories = VideoVisit::has('video')->where('user_id', $request->user->id)->orderByDesc('updated_at')->get();
 
         $histories = $histories->transform(function ($item) {
             return [
