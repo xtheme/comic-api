@@ -7,6 +7,12 @@
             "icon": "bx bxs-home"
         },
         {
+            "url": "/backend/config",
+            "name": "Configs",
+            "slug": "configs",
+            "icon": "bx bx-slider-alt"
+        },
+        {
             "url": "#",
             "name": "Customers",
             "slug": "customers",

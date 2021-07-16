@@ -47,6 +47,9 @@ class Config extends BaseModel
             case 'array':
                 $value = preg_split('/\r\n|\r|\n/', $this->content);
                 break;
+            case 'json':
+                $value = json_decode($this->content);
+                break;
             case 'image':
                 if (getConfig('app', 'encrypt_img')) {
                     $value = getConfig('app', 'encode_img_url') . $this->content;

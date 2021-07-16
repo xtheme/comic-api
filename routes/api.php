@@ -29,6 +29,12 @@ Route::as('api.')->group(function () {
         Route::get('/order', [Api\PaymentController::class, 'orderInfo'])->name('order_info');
     });
 
+    Route::prefix(config('api.version'))->middleware(['api.header', 'api.sign'])->group(function () {
+        Route::prefix('bootstrap')->as('bootstrap.')->group(function () {
+            Route::get('/configs', [Api\BootstrapController::class, 'configs'])->name('configs');
+        });
+    });
+
     Route::middleware(['api.header', 'api.sign', 'jwt.token', 'device.sso'])->group(function () {
 
         Route::get('/me', function (Request $request) {

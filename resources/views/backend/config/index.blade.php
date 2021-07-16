@@ -59,7 +59,7 @@
                             <thead>
                             <tr>
                                 <th>配置描述</th>
-                                <th>配置组</th>
+                                <th>配置型别</th>
                                 <th>配置键</th>
                                 <th>配置值</th>
                                 <th>创建时间</th>
@@ -88,6 +88,9 @@
                                             @case('array')
                                             数组
                                             @break
+                                            @case('json')
+                                            JSON
+                                            @break
                                         @endswitch
                                     </td>
                                     <td>{{ $item->code }}</td>
@@ -108,6 +111,9 @@
                                             @case('text')
                                             @case('array')
                                                 {!! nl2br(e($item->content )) !!}
+                                                @break
+                                            @case('json')
+                                                {!! $item->content !!}
                                                 @break
                                             @default
                                                 {{ Str::limit($item->value, 50, '...') }}

@@ -2,7 +2,6 @@
 
 {{-- page style --}}
 @section('page-styles')
-    <link rel="stylesheet" type="text/css" href="{{ asset('css/plugins/forms/validation/form-validation.css') }}">
 @endsection
 
 @section('content')
@@ -11,11 +10,11 @@
             <div class="row">
                 <div class="col-12">
                     <div class="form-group">
-                        <label for="input-name"><span class="danger">*</span> 配置分類</label>
+                        <label for="input-name"><span class="danger">*</span> 配置组</label>
                         <div class="controls">
                             <select id="select-type" class="form-control" name="group">
-                                @foreach($tags as $tag => $name)
-                                    <option value="{{$tag}}">{{$name}}</option>
+                                @foreach($groups as $group => $group_name)
+                                    <option value="{{ $group }}">{{ $group_name }}</option>
                                 @endforeach
                             </select>
                         </div>
@@ -23,34 +22,30 @@
                 </div>
                 <div class="col-12">
                     <div class="form-group">
-                        <label for="input-name"><span class="danger">*</span> 配置描述</label>
+                        <label><span class="danger">*</span> 配置键</label>
                         <div class="controls">
-                            <input type="text" id="input-name" class="form-control" name="name"
-                                   placeholder="配置描述"
-                                   required
-                                   data-validation-required-message="请填写配置描述">
+                            <input type="text" class="form-control" name="code">
                         </div>
                     </div>
                 </div>
                 <div class="col-12">
                     <div class="form-group">
-                        <label for="input-key"><span class="danger">*</span> 关键字(key)</label>
+                        <label>配置描述</label>
                         <div class="controls">
-                            <input type="text" id="input-key" class="form-control" name="code"
-                                   placeholder="key"
-                                   required
-                                   data-validation-required-message="请填写关键字">
+                            <input type="text" class="form-control" name="name" placeholder="配置描述">
                         </div>
                     </div>
                 </div>
                 <div class="col-12">
                     <div class="form-group">
-                        <label for="select-type">选择配置类型</label>
+                        <label>配置型别</label>
                         <div class="controls">
                             <select id="select-type" class="form-control" name="type">
                                 <option value="string" selected>字符串</option>
                                 <option value="switch">开关</option>
-                                <option value="text">富文本</option>
+                                <option value="text">文本</option>
+                                <option value="array">数组</option>
+                                <option value="json">JSON</option>
                                 <option value="image">图片</option>
                             </select>
                         </div>
@@ -58,14 +53,14 @@
                 </div>
                 <div class="col-12">
                     <div class="form-group">
-                        <label for="input-value"><span class="danger">*</span> 配置值(value)</label>
+                        <label><span class="danger">*</span> 配置值(value)</label>
                         <div class="controls">
                             <div id="input-value-string">
                                 <input type="text" class="form-control" name="content" placeholder="配置值">
                             </div>
                             <div id="input-value-switch" class="hidden">
                                 <select class="form-control">
-                                    <option value="1">开启</option>
+                                    <option value="1">启用</option>
                                     <option value="0">关闭</option>
                                 </select>
                             </div>
@@ -97,13 +92,11 @@
 
 {{-- vendor scripts --}}
 @section('vendor-scripts')
-    <script src="{{ asset('vendors/js/forms/validation/jqBootstrapValidation.js') }}"></script>
 {{--    <script src="{{ asset('vendors/js/editors/CKEditor/ckeditor.js') }}"></script>--}}
 @endsection
 
 {{-- page scripts --}}
 @section('page-scripts')
-    <script src="{{ asset('js/scripts/forms/validation/form-validation.js') }}"></script>
     <script>
 		$(document).ready(function () {
             // CKEditor
@@ -162,7 +155,7 @@
 				$('#input-value-image').addClass('hidden').children().children('input[type="text"]').attr('name', '');
 			}
 
-			if ($type == 'text') {
+			if ($type == 'text' || $type == 'array' || $type == 'json') {
 				$('#input-value-text').removeClass('hidden').children('textarea').attr('name', 'content');
 				$('#input-value-string').addClass('hidden').children('input[type="text"]').attr('name', '');
 				$('#input-value-image').addClass('hidden').children().children('input[type="text"]').attr('name', '');
