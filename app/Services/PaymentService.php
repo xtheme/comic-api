@@ -103,8 +103,17 @@ class PaymentService
     public function getEncryptString($param)
     {
         $str = http_build_query($param);
-        $aes = new AesService();
+
+        $method = 'AES-128-CBC';
+        // todo change config
+        $key = getOldConfig('web_config', 'pay_aes_key');
+        $iv = getOldConfig('web_config', 'pay_aes_iv');
+        // $key = getConfig('payment', 'aes_key');
+        // $iv = getConfig('payment', 'aes_iv');
+
+        $aes = new AesService($method, $key, $iv);
         $str = $aes->encrypt($str);
+
         return $str;
     }
 

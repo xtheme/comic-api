@@ -27,13 +27,12 @@ class AesService
     /**
      * 构造函数
      */
-    public function __construct()
+    public function __construct($method = null, $key = null, $iv = null, $options = null)
     {
-        $this->method = config('api.aes.method');
-        $this->secret_key = config('api.aes.key');
-        $this->options = config('api.aes.options');
-        $this->iv = config('api.aes.iv');
-
+        $this->method = $method ?? config('api.aes.method');
+        $this->secret_key = $key ?? config('api.aes.key');
+        $this->iv = $iv ?? config('api.aes.iv');
+        $this->options = $options ?? config('api.aes.options');
     }
 
     /**
