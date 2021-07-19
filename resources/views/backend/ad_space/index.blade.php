@@ -53,6 +53,7 @@
                                 <th>ID</th>
                                 <th>广告位名称</th>
                                 <th>广告位类型</th>
+                                <th>广告位显示方式</th>
 {{--                                <th>备注</th>--}}
                                 <th>状态</th>
                                 <th>接入广告SDK</th>
@@ -79,6 +80,7 @@
                                             <span class="badge badge-pill badge-light-danger">其他</span>
                                         @endif
                                     </td>
+                                    <td><span class="badge badge-pill">{{$display_type[$item->display]}}</span> </td>
 {{--                                    <td>{{ $item->remark }}</td>--}}
                                     <td>
                                         @if($item->status == 1)

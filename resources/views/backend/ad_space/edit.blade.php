@@ -85,6 +85,39 @@
                         </div>
                     </div>
                 </div>
+                <div class="col-4">
+                    <div class="form-group">
+                        <label for="select-type">广告位显示方式</label>
+                        <div class="controls">
+                            <ul class="list-unstyled mb-0">
+                                <li class="d-inline-block mr-2 mb-1">
+                                    <fieldset>
+                                        <div class="radio">
+                                            <input type="radio" name="display" id="display_active1" value="1" @if($data->display == 1){{'checked'}}@endif>
+                                            <label for="display_active1">{{$display_type[1]}}</label>
+                                        </div>
+                                    </fieldset>
+                                </li>
+                                <li class="d-inline-block mr-2 mb-1">
+                                    <fieldset>
+                                        <div class="radio">
+                                            <input type="radio" name="display" id="display_active2" value="2" @if($data->display == 2){{'checked'}}@endif>
+                                            <label for="display_active2">{{$display_type[2]}}</label>
+                                        </div>
+                                    </fieldset>
+                                </li>
+                                <li class="d-inline-block mr-2 mb-1">
+                                    <fieldset>
+                                        <div class="radio">
+                                            <input type="radio" name="display" id="display_active3" value="3" @if($data->display == 3){{'checked'}}@endif>
+                                            <label for="display_active3">{{$display_type[3]}}</label>
+                                        </div>
+                                    </fieldset>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
                 <div class="col-12">
                     <div class="form-group">
                         <label for="input-name">备注</label>

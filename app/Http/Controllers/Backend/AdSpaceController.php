@@ -18,6 +18,12 @@ class AdSpaceController extends Controller
         'other' => '其他'
     ];
 
+    const DISPLAY_TYPE = [
+        1 => '单图',
+        2 => '轮播',
+        3 => '跑马灯',
+    ];
+
     public function __construct(AdSpaceRepositoryInterface $repository)
     {
         $this->repository = $repository;
@@ -30,6 +36,7 @@ class AdSpaceController extends Controller
         return view('backend.ad_space.index', [
             'list' => $list,
             'class_type' => self::CLASS_TYPE,
+            'display_type' => self::DISPLAY_TYPE,
         ]);
     }
 
@@ -38,7 +45,8 @@ class AdSpaceController extends Controller
         $data = AdSpace::findOrFail($id);
 
         return view('backend.ad_space.edit', [
-            'data' => $data
+            'data' => $data,
+            'display_type' => self::DISPLAY_TYPE,
         ]);
     }
 

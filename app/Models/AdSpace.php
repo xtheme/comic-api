@@ -8,7 +8,8 @@ class AdSpace extends BaseModel
         'remark',
         'class',
         'status',
-        'sdk'
+        'sdk',
+        'display'
     ];
 
     public function ads()

@@ -23,9 +23,9 @@ class AdController extends Controller
     public function space(Request $request, $id)
     {
 
-        $spacies = $this->repository->ads($request, $id)->get();
+        $spaces = $this->repository->ads($request, $id)->get();
 
-        $data = $spacies->map(function($space) use ($request) {
+        $data = $spaces->map(function($space) use ($request) {
             $xad_id = null;
             if ($space->sdk == 1) {
                 $xad_id = ($request->header('platform') == 1) ? $space->xad_android_id : $space->xad_ios_id;
@@ -36,10 +36,11 @@ class AdController extends Controller
                 'remark' => $space->remark,
                 'status' => $space->status,
                 'sdk' => $space->sdk,
-                "xad_id" => $xad_id,
-                "class" => $space->class,
-                "created_at" => $space->created_at->format('Y-m-d H:i:s'),
-                "ads" => $space->ads 
+                'xad_id' => $xad_id,
+                'class' => $space->class,
+                'display' => $space->display,
+                'created_at' => $space->created_at->format('Y-m-d H:i:s'),
+                'ads' => $space->ads 
             ];
         })->toArray();
 

@@ -76,6 +76,7 @@ class UpgradeSeeder extends Seeder
                 'status' => 1,
                 'sdk' => -1,
                 'class' => $class,
+                'display' => 1,
                 'created_at' => date('Y-m-d H:i:s'),
             ];
 
