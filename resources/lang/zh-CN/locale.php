@@ -16,6 +16,10 @@ return [
     "Recommended Books" => "推荐漫画",
     "CDN Caching List" => "CDN 预热名单",
 
+    "Report" => "举报管理",
+    "Report Type" => "举报类型",
+    "Report List" => "举报列表",
+
     "Feedback" => "意見反饋",
 
     "Systems" => "系统设定",

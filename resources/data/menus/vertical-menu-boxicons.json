@@ -66,6 +66,22 @@
         },
         {
             "url": "#",
+            "name": "Report",
+            "slug": "Report",
+            "icon": "bx bxs-chat",
+            "submenu": [
+                {
+                    "url": "/backend/report_type",
+                    "name": "Report Type"
+                },
+                {
+                    "url": "/backend/report",
+                    "name": "Report List"
+                }
+            ]
+        },
+        {
+            "url": "#",
             "name": "Videos",
             "slug": "videos",
             "icon": "bx bxs-videos",

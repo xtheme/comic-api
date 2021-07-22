@@ -2,11 +2,12 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Http\Controllers\Controller;
 use App\Models\AdSpace;
-use App\Repositories\Contracts\AdSpaceRepositoryInterface;
 use Illuminate\Http\Request;
+use App\Models\BookReportType;
+use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Response;
+use App\Repositories\Contracts\AdSpaceRepositoryInterface;
 
 class BootstrapController extends Controller
 {
@@ -28,6 +29,7 @@ class BootstrapController extends Controller
             'ad_spaces' => $this->getAdSpaces(), // use_sdk_ads_type
             'api_domains' => getConfig('app', 'api_domains'), // use_sdk_ads_type
             'sign_config' => getConfig('app', 'sign_config'), // use_sdk_ads_type
+            'report_types' => $this->getReportTypes(), // use_sdk_ads_type
             // 'if_sdk_ads'       => $this->web_config['if_sdk_ads'] ?? 0,
             // 'use_sdk_ads_type' => $use_sdk_ads_type,
             // 'ca'               => 0,
@@ -52,5 +54,18 @@ class BootstrapController extends Controller
                 'xad_id' => $xad_id
             ];
         });
+    }
+
+    private function getReportTypes()
+    {
+        $report_types = BookReportType::where('status' , 0)->orderByDesc('sort')->get();
+
+        return $report_types->map(function ($report_type) {
+            return [
+                'id' => $report_type->id,
+                'sort' => $report_type->sort,
+                'name' => $report_type->name
+            ];
+        })->toArray();
     }
 }

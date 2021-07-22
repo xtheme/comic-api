@@ -111,6 +111,7 @@ Route::as('api.')->group(function () {
                 Route::get('/{id}/chapters', [Api\BookController::class, 'chapters'])->name('chapters');
                 Route::get('/{id}/chapter/{chapter_id}/{page?}', [Api\BookController::class, 'chapter'])->name('chapter');
                 Route::get('/recommend/{id?}', [Api\BookController::class, 'recommend'])->name('recommend');
+                Route::post('/report/{type_id}/{id}', [Api\ReportController::class, 'report'])->name('report');
             });
 
             // 會員套餐

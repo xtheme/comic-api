@@ -35,9 +35,13 @@
                                     <td>{{$item->id }}</td>
                                     <td>{{$item->user->id }}</td>
                                     <td>{{$item->book->id}}</td>
-                                    <td>{{$item->book->book_name}}</td>
+                                    <td>{{$item->book->title}}</td>
                                     <td>{{$item->report_type->name}}</td>
-                                    <td>{{$item->created_at}}</td>
+                                    <td>
+                                    <span data-toggle="tooltip" data-placement="top" data-original-title="{{ $item->created_at}}">
+                                        {{ $item->created_at->diffForHumans() }}
+                                    </span>
+                                    </td>
                                 </tr>
                             @endforeach
                             </tbody>
