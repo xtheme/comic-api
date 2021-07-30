@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateRanksTable extends Migration
+class CreateRankingsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,8 +13,8 @@ class CreateRanksTable extends Migration
      */
     public function up()
     {
-        if (!Schema::hasTable('ranks')) {
-            Schema::create('ranks', function (Blueprint $table) {
+        if (!Schema::hasTable('rankings')) {
+            Schema::create('rankings', function (Blueprint $table) {
                 $table->id();
                 $table->integer('book_id');
                 $table->integer('hits');
@@ -33,6 +33,6 @@ class CreateRanksTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('ranks');
+        Schema::dropIfExists('rankings');
     }
 }

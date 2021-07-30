@@ -3,7 +3,7 @@
 use Illuminate\Database\Migrations\Migration;
 use Staudenmeir\LaravelMigrationViews\Facades\Schema;
 
-class CreateViewsRankingTable extends Migration
+class CreateViewsRankingsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -12,7 +12,7 @@ class CreateViewsRankingTable extends Migration
      */
     public function up()
     {
-        $query = DB::table('ranks')
+        $query = DB::table('rankings')
                 ->selectRaw('book_id , sum(hits) as hits , date , YEAR(date) AS year , MONTH(date) AS month ,WEEK(date , 1) AS week')
                 ->where('book_id', '>', '0')
                 ->whereRaw('YEAR(date) = YEAR(CURTIME())')
@@ -20,7 +20,7 @@ class CreateViewsRankingTable extends Migration
                 ->orderByDesc('week')
                 ->orderByDesc('hits');
                 
-        Schema::createOrReplaceView('views_ranking', $query);
+        Schema::createOrReplaceView('views_rankings', $query);
     }
 
     /**
@@ -30,6 +30,6 @@ class CreateViewsRankingTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('views_ranking');
+        Schema::dropIfExists('views_rankings');
     }
 }
