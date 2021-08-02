@@ -12,6 +12,7 @@ class PaymentService
     {
         // todo change config
         $pay_game_id = getOldConfig('web_config', 'pay_game_id');
+        // $pay_game_id = getConfig('payment', 'game_id');
 
         $user = $request->user;
 
@@ -45,6 +46,7 @@ class PaymentService
     {
         // todo change config
         $pay_game_id = getOldConfig('web_config', 'pay_game_id');
+        // $pay_game_id = getConfig('payment', 'game_id');
 
         $data = [
             'gameId'  => $pay_game_id,
@@ -76,6 +78,7 @@ class PaymentService
     {
         // todo change config
         $pay_register_url = getOldConfig('web_config', 'pay_register_url');
+        // $pay_register_url = getConfig('payment', 'register_url');
 
         $data = $this->getAccountParams($request);
 

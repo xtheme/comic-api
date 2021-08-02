@@ -211,17 +211,18 @@ class UploadService
         Storage::deleteDirectory($this->path);
 
         // todo change config
-        $api_url = getOldConfig('web_config', 'api_url');
+        $img_url = getOldConfig('web_config', 'api_url');
+        // $img_url = getConfig('app', 'img_url');
 
-        if (Str::endsWith($api_url, '/')) {
-            $api_url = substr($api_url, 0, -1);
+        if (Str::endsWith($img_url, '/')) {
+            $img_url = substr($img_url, 0, -1);
         }
 
         $result = [
             'success' => true,
             'message' => __('response.upload.success'),
             'path' => $response['image_path'],
-            'domain' => $api_url, // todo 切换配置, CDN 域名 https://uatoriginalmanhuapic.ngxs9.app/
+            'domain' => $img_url, // todo 切换配置, CDN 域名 https://uatoriginalmanhuapic.ngxs9.app/
         ];
         return $result;
     }

@@ -100,6 +100,7 @@ class PaymentController extends Controller
 
         // todo change config
         $pay_game_id = getOldConfig('web_config', 'pay_game_id');
+        // $pay_game_id = getConfig('payment', 'game_id');
 
         if ($game_id != $pay_game_id) {
             return Response::jsonError('游戏错误！');

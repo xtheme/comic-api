@@ -55,17 +55,18 @@ class Video extends BaseModel
     {
         if (!$value) return '';
 
-        $api_url = getOldConfig('web_config', 'api_url') ;
+        $img_domain = getOldConfig('web_config', 'api_url') ;
+        // $img_domain = getConfig('app', 'img_url');
 
         if (true == config('api.encrypt.image')){
-            $api_url = getOldConfig('web_config', 'img_sync_url_password_webp') ;
+            $img_domain = getOldConfig('web_config', 'img_sync_url_password_webp') ;
+            // $img_domain = getConfig('app', 'webp_img_url') ;
+
         }
+
+        $img_domain = cleanDomain($img_domain);
     
-        if (Str::endsWith($api_url, '/')) {
-            $api_url = substr($api_url, 0, -1);
-        }
-    
-        return $api_url . $value;
+        return $img_domain . $value;
         
     }
 
@@ -76,13 +77,12 @@ class Video extends BaseModel
         if (!$cover) return '';
 
         // todo change config
-        $api_url = getOldConfig('web_config', 'api_url');
+        $img_domain = getOldConfig('web_config', 'api_url');
+        // $img_domain = getConfig('app', 'img_url');
 
-        if (Str::endsWith($api_url, '/')) {
-            $api_url = substr($api_url, 0, -1);
-        }
+        $img_domain = cleanDomain($img_domain);
 
-        return $api_url . $cover;
+        return $img_domain . $cover;
     }
 
     // public function getVisitCountAttribute()

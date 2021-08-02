@@ -2,6 +2,7 @@
 
 use App\Models\Config;
 use App\Repositories\TagRepository;
+use Illuminate\Support\Str;
 
 if (!function_exists('getConfig')) {
     /**
@@ -156,21 +157,22 @@ if (!function_exists('parseImgFromHtml')) {
         $width = 500;
         $height = 700;
         // todo change config
-        $base_url = getOldConfig('web_config', 'api_url');
+        $img_url = getOldConfig('web_config', 'api_url');
+        // $img_url = getConfig('app', 'img_url');
 
         for ($i = 0; $i < count($img_arr); $i++) {
             preg_match('/<img.+(width=\"?\d*\"?).+(height=\"?\d*\"?).+>/i', $img_arr[$i], $match); //匹配宽高
 
             if (!empty($match)) {
                 preg_match('/<\s*img\s+[^>]*?src\s*=\s*(\'|\")(.*?)\\1[^>]*?\/?\s*>/i', $match[0], $match2);
-                $match2[2] = str_replace($base_url, '', $match2[2]);
+                $match2[2] = str_replace($img_url, '', $match2[2]);
                 $img[$i]['url'] = $match2[2];
                 $img[$i]['width'] = (int) str_replace('"', '', substr($match[1], 6, strlen($match[1])));
                 $img[$i]['height'] = (int) str_replace('"', '', substr($match[2], 7, strlen($match[2])));
 
                 if ($img[$i]['width'] == 0 || $img[$i]['height'] == 0) {
                     try {
-                        $get_img_info = getimagesize($base_url . $img[$i]['url']);
+                        $get_img_info = getimagesize($img_url . $img[$i]['url']);
                         $img[$i]['width'] = (int) $get_img_info[0];
                         $img[$i]['height'] = (int) $get_img_info[1];
                     } catch (\Exception $exception) {
@@ -179,11 +181,11 @@ if (!function_exists('parseImgFromHtml')) {
                     }
                 }
             } else {
-                $matches[2][$i] = str_replace($base_url, '', $matches[2][$i]);
+                $matches[2][$i] = str_replace($img_url, '', $matches[2][$i]);
                 $img[$i]['url'] = $matches[2][$i];
 
                 try {
-                    $get_img_info = getimagesize($base_url . $img[$i]['url']);
+                    $get_img_info = getimagesize($img_url . $img[$i]['url']);
                     $img[$i]['width'] = (int) $get_img_info[0];
                     $img[$i]['height'] = (int) $get_img_info[1];
                 } catch (\Exception $exception) {
@@ -271,5 +273,22 @@ if (!function_exists('image_thumb')) {
         }
 
         return $api_url . $image;
+    }
+}
+
+if (!function_exists('cleanDomain')) {
+    /**
+     * @param $image
+     *
+     * @return string
+     */
+    function cleanDomain($domain)
+    {
+
+        if (Str::endsWith($domain, '/')) {
+            $domain = substr($domain, 0, -1);
+        }
+
+        return $domain;
     }
 }

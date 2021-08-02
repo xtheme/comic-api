@@ -116,22 +116,30 @@ class BookController extends BaseController
         $images = collect($chapter->json_images)->reject(function ($image) {
             return !$image['width'] || !$image['height'];
         })->map(function ($image) use ($chapter) {
-            if (getOldConfig('web_config', 'if_encode_pic') == 1) {
-                // todo change config
-                $domain = getOldConfig('web_config', 'img_sync_url_password_webp');
-                if (Str::endsWith($domain, '/')) {
-                    $domain = substr($domain, 0, -1);
+            // todo change config
+            $encrypt_img = getOldConfig('web_config', 'if_encode_pic');
+            $webp_domain = getOldConfig('web_config', 'img_sync_url_password_webp');
+            $webp_width = getOldConfig('web_config', 'pic_webp_width');
+            $img_domain = getOldConfig('web_config', 'api_url');
+            // $encrypt_img = getConfig('app', 'encrypt_img');
+            // $webp_domain = getConfig('app', 'webp_url');
+            // $webp_width = getConfig('app', 'webp_width');
+            // $img_domain = getConfig('app', 'img_url');
+
+            if ($encrypt_img == 1) {
+                if (Str::endsWith($webp_domain, '/')) {
+                    $webp_domain = substr($webp_domain, 0, -1);
                 }
-                $webp_width = getOldConfig('web_config', 'pic_webp_width');
-                $image['url'] = $domain . webp($image['url'], $webp_width);
+                $image['url'] = $webp_domain . webp($image['url'], $webp_width);
             } else {
                 // todo change config
-                $domain = ($chapter->operating == 1) ? getOldConfig('web_config', 'api_url') : getOldConfig('web_config', 'img_sync_url');
-                if (Str::endsWith($domain, '/')) {
-                    $domain = substr($domain, 0, -1);
+                // $domain = ($chapter->operating == 1) ? getOldConfig('web_config', 'api_url') : getOldConfig('web_config', 'img_sync_url');
+                if (Str::endsWith($img_domain, '/')) {
+                    $img_domain = substr($img_domain, 0, -1);
                 }
-                $image['url'] = $domain . $image['url'];
+                $image['url'] = $img_domain . $image['url'];
             }
+
             return [
                 'url' => $image['url'],
                 'width' => $image['width'],
