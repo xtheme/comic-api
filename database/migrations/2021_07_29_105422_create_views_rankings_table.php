@@ -30,6 +30,6 @@ class CreateViewsRankingsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('views_rankings');
+        Schema::dropViewIfExists('views_rankings');
     }
 }
