@@ -30,6 +30,7 @@ class BootstrapController extends Controller
             'api_domains' => getConfig('app', 'api_domains'), // use_sdk_ads_type
             'sign_config' => getConfig('app', 'sign_config'), // use_sdk_ads_type
             'report_types' => $this->getReportTypes(), // use_sdk_ads_type
+            'ranking' => getConfig('app', 'ranking'), //漫畫排行榜
             // 'if_sdk_ads'       => $this->web_config['if_sdk_ads'] ?? 0,
             // 'use_sdk_ads_type' => $use_sdk_ads_type,
             // 'ca'               => 0,
