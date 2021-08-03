@@ -24,7 +24,7 @@ class Book extends BaseModel
     ];
 
     protected $appends = [
-        'tagged_tags',
+        //'tagged_tags',
         // 'charge',
         // 'release_at',
     ];
@@ -40,7 +40,7 @@ class Book extends BaseModel
 
     public function latest_chapter()
     {
-        return $this->hasOne('App\Models\BookChapter')->where('status', 1)->latest();
+        return $this->hasOne('App\Models\BookChapter')->where('status', 1)->latest('episode');
     }
 
     /**
