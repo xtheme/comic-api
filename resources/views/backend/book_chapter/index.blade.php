@@ -7,7 +7,7 @@
 
 @section('content')
     <div class="float-left">
-        <a href="#" class="btn btn-primary" role="button" aria-pressed="true">添加章节</a>
+        <a href="{{ route('backend.book_chapter.create', $book_id) }}" class="btn btn-primary" role="button" aria-pressed="true">添加章节</a>
     </div>
     <div class="float-right">
         <form id="batch-action" class="form form-vertical" method="get" action="{{ route('backend.book_chapter.batch') }}" novalidate>
@@ -135,8 +135,8 @@
                             <span class="bx bx-dots-vertical-rounded font-medium-3 dropdown-toggle nav-hide-arrow cursor-pointer"
                                   id="dropdownMenuButton{{ $chapter->id }}" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></span>
                             <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuButton{{ $chapter->id }}">
-                                <a class="dropdown-item" data-modal href="" title="审核操作"><i class="bx bxs-check-shield mr-1"></i>审核操作</a>
-                                <a class="dropdown-item" data-modal href="" title="编辑章节"><i class="bx bx-edit-alt mr-1"></i>编辑章节</a>
+{{--                                <a class="dropdown-item" data-modal href="{{ route('backend.book_chapter.create', $book_id) }}" title="审核操作"><i class="bx bxs-check-shield mr-1"></i>审核操作</a>--}}
+                                <a class="dropdown-item" data-modal data-size="full" href="{{ route('backend.book_chapter.edit', ['book_id' => $book_id, 'chapter_id' => $chapter->id]) }}" title="编辑章节"><i class="bx bx-edit-alt mr-1"></i>编辑章节</a>
                             </div>
                         </div>
                     </td>

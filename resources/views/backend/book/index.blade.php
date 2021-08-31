@@ -105,14 +105,14 @@
                                     <td>{{ $book->author }}</td>
                                     <td>{{ $book->type }}</td>
                                     <td>
-                                        @if($book->charge_chapters_count == 0)
+                                        @if($book->latest_chapter->charge == -1)
                                             <span class="badge badge-pill badge-light-primary">免费</span>
                                         @else
                                             <span class="badge badge-pill badge-light-danger">收费</span>
                                         @endif
                                     </td>
                                     <td>{{ $book->chapters_count }}</td>
-                                    <td>{{ $book->release_at }}</td>
+                                    <td>{{ $book->latest_chapter->created_at }}</td>
                                     <td>
                                         <span class="badge badge-pill badge-light-{{ $book->release_status_style }}">{{ $book->release_status }}</span>
                                     </td>
@@ -154,7 +154,7 @@
                                                 <a class="dropdown-item" data-modal data-size="full" href="{{ route('backend.book_chapter.index', $book->id) }}" title="章节列表"><i class="bx bx-list-ol mr-1"></i>章节列表</a>
                                                 <a class="dropdown-item" data-modal href="{{ route('backend.book.edit', $book->id) }}" title="编辑漫画"><i class="bx bx-edit-alt mr-1"></i>编辑漫画</a>
                                                 <a class="dropdown-item" data-destroy href="{{ route('backend.book.destroy', $book->id) }}" title="删除漫画"><i class="bx bx-trash mr-1"></i>删除漫画</a>
-                                                <a class="dropdown-item" data-modal data-size="sm" data-height="30vh" href="{{ route('backend.book.review', $book->id) }}" title="漫画审核"><i class="bx bxs-check-shield mr-1"></i>漫画审核</a>
+                                                <a class="dropdown-item" data-modal data-size="sm" data-height="20vh" href="{{ route('backend.book.review', $book->id) }}" title="漫画审核"><i class="bx bxs-check-shield mr-1"></i>漫画审核</a>
                                             </div>
                                         </div>
                                     </td>

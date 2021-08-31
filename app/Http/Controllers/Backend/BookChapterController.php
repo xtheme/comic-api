@@ -2,7 +2,10 @@
 
 namespace App\Http\Controllers\Backend;
 
+use App\Enums\Options;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Backend\BookRequest;
+use App\Models\Book;
 use App\Models\BookChapter;
 use App\Repositories\Contracts\BookChapterRepositoryInterface;
 use Illuminate\Http\Request;
@@ -30,7 +33,6 @@ class BookChapterController extends Controller
 
         return view('backend.book_chapter.index')->with($data);
     }
-
 
     /**
      * 图片预览
@@ -108,5 +110,48 @@ class BookChapterController extends Controller
         $this->repository->editable($request->post('pk'), $field, $request->post('value'));
 
         return Response::jsonSuccess('数据已更新成功');
+    }
+
+    public function create($book_id)
+    {
+        $data = [
+            'status_options' => Options::STATUS_OPTIONS,
+            'tags' => getAllTags(),
+        ];
+
+        return view('backend.book_chapter.create')->with($data);
+    }
+
+    public function store(BookRequest $request)
+    {
+        $validated = $request->validated();
+
+        $book = $this->repository->create($validated);
+
+        $book->tag($validated['tag']);
+
+        return Response::jsonSuccess(__('response.create.success'));
+    }
+
+    public function edit($book_id)
+    {
+        $data = [
+            'book_id' => $book_id,
+        ];
+
+        return view('backend.book_chapter.edit')->with($data);
+    }
+
+    public function update(BookRequest $request, $id)
+    {
+        $validated = $request->validated();
+
+        $this->repository->update($id, $validated);
+
+        $book = $this->repository->find($id);
+
+        $book->tag($validated['tag']);
+
+        return Response::jsonSuccess(__('response.update.success'));
     }
 }
