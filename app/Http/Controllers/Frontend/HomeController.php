@@ -11,7 +11,7 @@ class HomeController extends Controller
     // index
     public function index()
     {
-        return '<a href="http://zx9.app">zx9.app</a>';
+        return '3.1415926';
     }
 
     public function noPermission()

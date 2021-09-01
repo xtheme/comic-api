@@ -59,7 +59,7 @@ class AdminController extends Controller
             if (!Hash::check($request->post('password'), $admin->getAuthPassword())) {
                 return Response::jsonError('原密码验证错误');
             }
-            
+
             $admin->password = $request->post('new_password');
         }
 
