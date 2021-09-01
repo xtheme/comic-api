@@ -17,7 +17,7 @@ class AdminUpdateRequest extends BaseRequest
             'new_password' => [
                 'nullable',
                 'required_with:password',
-                Password::min(6)->letters()->numbers(),
+                Password::min(6),
             ],
         ];
 

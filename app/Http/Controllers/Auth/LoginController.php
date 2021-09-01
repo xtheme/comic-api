@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Providers\RouteServiceProvider;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Illuminate\Http\Request;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Response;
 
@@ -109,10 +110,10 @@ class LoginController extends Controller
 
             activity()->useLog('后台')->causedBy($admin)->log('登录成功!');
 
-            // todo Admin 重構
+            // 更新管理員登入資訊
             $data = [
-                'logintime' => time(),
-                'loginip' => $request->ip(),
+                'login_at' => Carbon::now(),
+                'login_ip' => $request->ip(),
             ];
             $admin->update($data);
 

@@ -5,7 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
-use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Carbon;
 use Spatie\Permission\Traits\HasRoles;
 
 // todo Admin 重構
@@ -14,6 +14,11 @@ class Admin extends Authenticatable
     use HasFactory, Notifiable;
     use HasRoles;
 
+    // protected $table = 'admin';
+
+    // todo User 欄位調整
+    const CREATED_AT = 'create_time';
+    const UPDATED_AT = 'update_time';
 
     /**
      * The attributes that are mass assignable.
@@ -21,10 +26,10 @@ class Admin extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'nickname',
         'username',
         'password',
         'status',
+        'nickname',
     ];
 
     /**
@@ -34,10 +39,26 @@ class Admin extends Authenticatable
      */
     protected $hidden = [
         'password',
+        'salt',
+        'image',
+        'token',
     ];
 
-    public function setPasswordAttribute($value)
+    public function getLogintimeAttribute($value)
     {
-        $this->attributes['password'] = Hash::make($value);
+        if (!$value) return '';
+        return Carbon::createFromTimeStamp($value);
+    }
+
+    public function getCreateTimeAttribute($value)
+    {
+        if (!$value) return '';
+        return Carbon::createFromTimeStamp($value);
+    }
+
+    public function getUpdateTimeAttribute($value)
+    {
+        if (!$value) return '';
+        return Carbon::createFromTimeStamp($value);
     }
 }

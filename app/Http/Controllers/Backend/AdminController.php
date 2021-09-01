@@ -59,9 +59,8 @@ class AdminController extends Controller
             if (!Hash::check($request->post('password'), $admin->getAuthPassword())) {
                 return Response::jsonError('原密码验证错误');
             }
-            // todo Admin 重構
-            $admin->password = Hash::make($request->post('new_password'));
-            // $admin->password = $request->post('new_password');
+            
+            $admin->password = $request->post('new_password');
         }
 
         $admin->save();
