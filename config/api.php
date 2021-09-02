@@ -1,7 +1,7 @@
 <?php
 
 return [
-    'version' => env('API_VERSION', 'v5'),
+    'version' => env('API_VERSION', 'v1'),
 
     'account' => [
         'prefix' => env('ACCOUNT_PREFIX', '茄子漫画'),

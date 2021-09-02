@@ -25,21 +25,12 @@ Route::as('api.')->group(function () {
     });
 
     // 第三方金流
-    Route::as('payment.')->group(function () {
-        Route::post('/balance_transfer', [Api\PaymentController::class, 'balanceTransfer'])->name('balance_transfer');
-        Route::get('/order', [Api\PaymentController::class, 'orderInfo'])->name('order_info');
-    });
-
+    // Route::as('payment.')->group(function () {
+    //     Route::post('/balance_transfer', [Api\PaymentController::class, 'balanceTransfer'])->name('balance_transfer');
+    //     Route::get('/order', [Api\PaymentController::class, 'orderInfo'])->name('order_info');
+    // });
 
     Route::middleware(['api.header', 'api.sign', 'jwt.token'])->group(function () {
-
-        Route::get('/me', function (Request $request) {
-            return response()->json([
-                'code' => 200,
-                'msg'  => 'Hello World!',
-                'data'  => $request->user,
-            ]);
-        })->name('me');
 
         Route::prefix(config('api.version'))->group(function () {
             // 会员
@@ -65,8 +56,8 @@ Route::as('api.')->group(function () {
 
                 // 收藏 (最愛) 歷史紀錄
                 Route::get('/favorite/{type}', [Api\FavoriteHistoryController::class, 'list'])->name('favorite.history');
-                Route::post('favorite/{type}/save', [Api\FavoriteHistoryController::class, 'save'])->name('favorite.save');
-                Route::post('favorite/{type}/destroy', [Api\FavoriteHistoryController::class, 'destroy'])->name('favorite.history');
+                Route::post('/favorite/{type}/save', [Api\FavoriteHistoryController::class, 'save'])->name('favorite.save');
+                Route::post('/favorite/{type}/destroy', [Api\FavoriteHistoryController::class, 'destroy'])->name('favorite.history');
             });
 
             // 簡訊
@@ -150,6 +141,13 @@ Route::as('api.')->group(function () {
             Route::prefix('movie')->as('movie.')->group(function () {
                 Route::get('/list/{type}', [Api\MovieController::class, 'list'])->name('list'); // 最新 / 熱門 / (隨機)推薦
                 Route::get('/detail/{id}', [Api\MovieController::class, 'detail'])->name('detail');
+            });
+
+            // 履歷
+            Route::prefix('lady')->as('lady.')->group(function () {
+                Route::get('/cities', [Api\LadyController::class, 'cities'])->name('cities');
+                Route::get('/list/{city?}', [Api\LadyController::class, 'list'])->name('list');
+                Route::get('/detail/{id}', [Api\LadyController::class, 'detail'])->name('detail');
             });
         });
     });
