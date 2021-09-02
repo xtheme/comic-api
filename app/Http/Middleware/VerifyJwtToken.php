@@ -38,7 +38,7 @@ class VerifyJwtToken
 
         $validator = Validator::make($data, [
             'token' => 'required',
-            'uuid' => 'required',
+            // 'uuid' => 'required',
         ]);
 
         if ($validator->fails()) {
@@ -50,9 +50,9 @@ class VerifyJwtToken
             $decoded = $jwtService->tokenVerify($data['token']);
 
             // 检查 iss 与当前的 uuid 是否相符
-            if ($decoded->iss !== $data['uuid']) {
-                return Response::jsonError('设备异常！', 580);
-            }
+            // if ($decoded->iss !== $data['uuid']) {
+            //     return Response::jsonError('设备异常！', 580);
+            // }
 
             // 若 token 中能获取 uid, 在请求中注入 user 属性
             if (isset($decoded->uid)) {

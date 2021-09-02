@@ -128,8 +128,8 @@ class UserService
     public function genToken($uid): string
     {
         $data = [
-            'iss' => request()->header('uuid'), //该JWT的签发者
-            'uid' => $uid,
+            // 'iss' => request()->header('uuid'), //该JWT的签发者
+            'iss' => $uid,
             'ip' => request()->ip(),
             'iat' => time(), // 签发时间
             'exp' => time() + config('api.jwt.ttl'), // 过期时间
