@@ -22,20 +22,16 @@ Route::as('api.')->group(function () {
             'code' => 200,
             'msg'  => 'Hello World!',
         ]);
-    })->name('hello');
+    });
 
+    // 第三方金流
     Route::as('payment.')->group(function () {
         Route::post('/balance_transfer', [Api\PaymentController::class, 'balanceTransfer'])->name('balance_transfer');
         Route::get('/order', [Api\PaymentController::class, 'orderInfo'])->name('order_info');
     });
 
-    Route::prefix(config('api.version'))->middleware(['api.header', 'api.sign'])->group(function () {
-        Route::prefix('bootstrap')->as('bootstrap.')->group(function () {
-            Route::get('/configs', [Api\BootstrapController::class, 'configs'])->name('configs');
-        });
-    });
 
-    Route::middleware(['api.header', 'api.sign', 'jwt.token', 'device.sso'])->group(function () {
+    Route::middleware(['api.header', 'api.sign', 'jwt.token'])->group(function () {
 
         Route::get('/me', function (Request $request) {
             return response()->json([
@@ -143,8 +139,6 @@ Route::as('api.')->group(function () {
                 Route::post('/add', [Api\CommentController::class, 'add'])->name('add');
                 Route::post('/like/{comment_id}', [Api\CommentController::class, 'like'])->name('like');
                 Route::post('/destroy/{comment_id}', [Api\CommentController::class, 'destroy'])->name('destroy');
-
-                
             });
 
             // 客服
@@ -152,6 +146,11 @@ Route::as('api.')->group(function () {
                 Route::get('/url', [Api\ServiceController::class, 'url'])->name('url');
             });
 
+            // 電影
+            Route::prefix('movie')->as('movie.')->group(function () {
+                Route::get('/list/{type}', [Api\MovieController::class, 'list'])->name('list');
+                Route::get('/detail/{id}', [Api\MovieController::class, 'detail'])->name('detail');
+            });
         });
     });
 });
