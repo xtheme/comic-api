@@ -148,7 +148,7 @@ Route::as('api.')->group(function () {
 
             // 電影
             Route::prefix('movie')->as('movie.')->group(function () {
-                Route::get('/list/{type}', [Api\MovieController::class, 'list'])->name('list');
+                Route::get('/list/{type}', [Api\MovieController::class, 'list'])->name('list'); // 最新 / 熱門 / (隨機)推薦
                 Route::get('/detail/{id}', [Api\MovieController::class, 'detail'])->name('detail');
             });
         });

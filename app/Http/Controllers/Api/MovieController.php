@@ -21,7 +21,7 @@ class MovieController extends BaseController
         switch ($type) {
             // 最新
             case 'latest':
-                $request = $request->merge([
+                $request->merge([
                     'status' => 1,
                     'order' => 'created_at',
                     'sort' => 'desc',
@@ -29,10 +29,17 @@ class MovieController extends BaseController
                 break;
             // 熱門
             case 'popular':
-                $request = $request->merge([
+                $request->merge([
                     'status' => 1,
                     'order' => 'views',
                     'sort' => 'desc',
+                ]);
+                break;
+            // 隨機推薦
+            case 'recommend':
+                $request->merge([
+                    'status' => 1,
+                    'order' => 'random',
                 ]);
                 break;
         }
