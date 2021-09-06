@@ -11,6 +11,11 @@ use App\Repositories\Contracts\AdSpaceRepositoryInterface;
 
 class BootstrapController extends Controller
 {
+    public function token(Request $request)
+    {
+
+    }
+
     /**
      * 查询廣告位底下的廣告列表
      */

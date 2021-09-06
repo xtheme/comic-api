@@ -3,8 +3,6 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Requests\Api\MobileRequest;
-use App\Http\Requests\Api\RegisterRequest;
-use App\Models\User;
 use App\Services\SmsService;
 use App\Services\UserService;
 use Illuminate\Http\Request;
@@ -20,33 +18,6 @@ class UserController extends BaseController
     public function __construct(UserService $userService)
     {
         $this->userService = $userService;
-    }
-
-    public function register(RegisterRequest $request)
-    {
-        $data = [
-            'username' => $this->getUserNiceName(),
-            'device_id' => null, //device_id不重复key 原因 更改成null
-            'area' => $request->input('area'),
-            'mobile' => $request->input('mobile'),
-            'sex' => 0,
-            'status' => 1,
-            'signup_ip' => $request->header('ip'),
-            'platform' => $request->header('platform'),
-            'version' => $request->header('app-version'),
-            'subscribed_at' => null,
-            // 'userface' => '',
-            // 'create_time' => time(),
-            // 'role' => 3,
-            // 'mobile_bind' => 1,
-        ];
-
-        $user = User::create($data);
-    }
-
-    public function login(Request $request)
-    {
-
     }
 
     /**

@@ -24,19 +24,24 @@ Route::as('api.')->group(function () {
         ]);
     });
 
-    // 第三方金流
-    // Route::as('payment.')->group(function () {
-    //     Route::post('/balance_transfer', [Api\PaymentController::class, 'balanceTransfer'])->name('balance_transfer');
-    //     Route::get('/order', [Api\PaymentController::class, 'orderInfo'])->name('order_info');
-    // });
+    Route::prefix(config('api.version'))->middleware(['api.sign'])->group(function () {
+        Route::prefix('bootstrap')->as('bootstrap.')->group(function () {
+            Route::get('/configs', [Api\BootstrapController::class, 'configs'])->name('configs');
+        });
 
-    Route::prefix(config('api.version'))->middleware(['jwt.token'])->group(function () {
+        Route::prefix('user')->as('user.')->group(function () {
+            Route::get('/login', [Api\UserController::class, 'login'])->name('login');
+        });
+    });
+
+    Route::prefix(config('api.version'))->middleware(['api.token'])->group(function () {
 
         // 会员
         Route::prefix('user')->as('user.')->group(function () {
-            Route::get('/device', [Api\UserController::class, 'device'])->name('device');
+            // Route::get('/device', [Api\UserController::class, 'device'])->name('device');
             // Route::post('/mobile', [UserController::class, 'mobile'])->name('mobile')->middleware('sso');
-            Route::post('/mobile', [Api\UserController::class, 'mobile'])->name('mobile');
+            // Route::post('/mobile', [Api\UserController::class, 'mobile'])->name('mobile');
+            Route::get('/logout', [Api\UserController::class, 'logout'])->name('logout');
             Route::get('/logout', [Api\UserController::class, 'logout'])->name('logout');
             Route::post('/modify', [Api\UserController::class, 'modify'])->name('modify');
             Route::post('/avatar', [Api\UserController::class, 'avatar'])->name('avatar');

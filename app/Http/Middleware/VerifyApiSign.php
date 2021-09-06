@@ -5,6 +5,7 @@ namespace App\Http\Middleware;
 use Closure;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Response;
+use Illuminate\Support\Facades\Validator;
 
 class VerifyApiSign
 {
@@ -20,11 +21,18 @@ class VerifyApiSign
         $sign = $request->header('sign');
 
         $data = [
-            'uuid'      => $request->header('uuid'),
-            'ip'        => $request->header('ip'),
             'timestamp' => $request->header('timestamp'),
-            'platform'  => $request->header('platform'),
         ];
+
+        $validator = Validator::make($data, [
+            'timestamp' => [
+                'required',
+            ],
+        ]);
+
+        if ($validator->fails()) {
+            return Response::jsonError($validator->errors()->first(), 500);
+        }
 
         // 按键名升序排列
         ksort($data);
