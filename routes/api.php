@@ -15,29 +15,45 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::as('api.')->group(function () {
+Route::as('api.')->middleware(['api'])->group(function () {
 
-    Route::get('/', function () {
-        return response()->json([
-            'code' => 200,
-            'msg'  => 'Hello World!' . config('api.version'),
-        ]);
-    });
+    // Route::get('/', function () {
+    //     return response()->json([
+    //         'code' => 200,
+    //         'msg'  => 'Hello World!' . config('api.version'),
+    //     ]);
+    // });
 
     Route::prefix(config('api.version'))->middleware(['api.sign'])->group(function () {
         Route::prefix('bootstrap')->as('bootstrap.')->group(function () {
             Route::get('/configs', [Api\BootstrapController::class, 'configs'])->name('configs');
         });
+
+        Route::prefix('auth')->as('auth.')->group(function () {
+            Route::post('/login', [Api\AuthController::class, 'login'])->name('login');
+            Route::post('/register', [Api\AuthController::class, 'register'])->name('register');
+        });
+
+        // 電影
+        Route::prefix('movie')->as('movie.')->group(function () {
+            Route::get('/list/{type}', [Api\MovieController::class, 'list'])->name('list'); // 最新 / 熱門 / (隨機)推薦
+            Route::get('/detail/{id}', [Api\MovieController::class, 'detail'])->name('detail');
+        });
+
+        // 履歷
+        Route::prefix('lady')->as('lady.')->group(function () {
+            Route::get('/cities', [Api\LadyController::class, 'cities'])->name('cities');
+            Route::get('/list/{city?}', [Api\LadyController::class, 'list'])->name('list');
+            Route::get('/detail/{id}', [Api\LadyController::class, 'detail'])->name('detail');
+        });
     });
 
     Route::prefix(config('api.version'))->middleware(['api.token'])->group(function () {
         Route::prefix('auth')->as('auth.')->group(function () {
-            Route::post('/login', [Api\AuthController::class, 'login'])->name('login');
-            Route::post('/register', [Api\AuthController::class, 'register'])->name('register');
             Route::get('/logout', [Api\AuthController::class, 'logout'])->name('logout');
         });
 
-        Route::prefix('user')->as('user.')->group(function () {
+        /*Route::prefix('user')->as('user.')->group(function () {
             Route::get('/login', [Api\UserController::class, 'login'])->name('login');
         });
         // 会员
@@ -143,20 +159,8 @@ Route::as('api.')->group(function () {
         // 客服
         Route::prefix('service')->as('service.')->group(function () {
             Route::get('/url', [Api\ServiceController::class, 'url'])->name('url');
-        });
+        });*/
 
-        // 電影
-        Route::prefix('movie')->as('movie.')->group(function () {
-            Route::get('/list/{type}', [Api\MovieController::class, 'list'])->name('list'); // 最新 / 熱門 / (隨機)推薦
-            Route::get('/detail/{id}', [Api\MovieController::class, 'detail'])->name('detail');
-        });
-
-        // 履歷
-        Route::prefix('lady')->as('lady.')->group(function () {
-            Route::get('/cities', [Api\LadyController::class, 'cities'])->name('cities');
-            Route::get('/list/{city?}', [Api\LadyController::class, 'list'])->name('list');
-            Route::get('/detail/{id}', [Api\LadyController::class, 'detail'])->name('detail');
-        });
     });
 });
 

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Http\Requests\Api\LoginRequest;
 use App\Http\Requests\Api\MobileRequest;
 use App\Http\Requests\Api\RegisterRequest;
 use App\Models\User;
@@ -9,6 +10,7 @@ use App\Services\SmsService;
 use App\Services\UserService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Response;
 use Sso;
 use Upload;
@@ -24,154 +26,50 @@ class UserController extends BaseController
 
     public function register(RegisterRequest $request)
     {
-        $data = [
-            'username' => $this->getUserNiceName(),
-            'device_id' => null, //device_id不重复key 原因 更改成null
-            'area' => $request->input('area'),
-            'mobile' => $request->input('mobile'),
-            'sex' => 0,
-            'status' => 1,
-            'signup_ip' => $request->header('ip'),
-            'platform' => $request->header('platform'),
-            'version' => $request->header('app-version'),
-            'subscribed_at' => null,
-            // 'userface' => '',
-            // 'create_time' => time(),
-            // 'role' => 3,
-            // 'mobile_bind' => 1,
-        ];
+        $data = $request->validated();
+
+        $data['password'] = Hash::make($data['password']);
+
+        if ($this->userService->isNameExists($data['name'])) {
+            return Response::jsonError('很抱歉，账号已经被注册！');
+        }
 
         $user = User::create($data);
+
+        // 簽發 token
+        $user['token'] = $user->createToken('api')->plainTextToken;
+
+        return Response::jsonSuccess(__('api.success'), $user);
     }
 
-    public function login(Request $request)
+    public function login(LoginRequest $request)
     {
+        $data = $request->validated();
 
+        $loginField = filter_var($data['name'], FILTER_VALIDATE_EMAIL) ? 'email' : 'name';
+
+        $user = User::where($loginField, $data['name'])->first();
+
+        if (!Hash::check($data['password'], $user->password)) {
+            return Response::jsonError('密码错误！');
+        }
+
+        // 簽發 token
+        $user['token'] = $user->createToken('api')->plainTextToken;
+
+        return Response::jsonSuccess(__('api.success'), $user);
     }
 
-    /**
-     * 初始化接口
-     */
-    public function device(Request $request)
-    {
-        $uuid = $request->header('uuid');
-        $area = $request->user ? $request->user->area :  null;
-        $mobile = $request->user ? $request->user->mobile : null;
-
-        // 有绑定电话时, 使用电话账号登入
-        if (!empty($area) && !empty($mobile)) {
-            $user = $this->userService->getUserByMobile($area, $mobile); // return Model (Object)
-            $cache_key = $this->getCacheKeyPrefix() . sprintf('user:mobile:%s-%s', $area, $mobile);
-        } else {
-            // 使用设备账号登入 (访客)
-            $user = $this->userService->getUserByDevice($request); // return Model (Object)
-            $cache_key = $this->getCacheKeyPrefix() . sprintf('user:device:%s', $uuid);
-            if (!$request->hasHeader('token') || $request->header('token') == '') {
-                // 重新簽發 JWT
-                Cache::forget($cache_key);
-            }
-        }
-
-        if (!$user) {
-            // 针对此新设备生成用户数据
-            $user = $this->userService->registerDevice($request); // return Model (Object)
-        }
-
-        $response = $this->userService->addDeviceCache($cache_key, $user);
-
-        return Response::jsonSuccess(__('api.success'), $response);
-    }
-
-    /**
-     * 用户短信登录与注册 (手机绑定)
-     */
-    public function mobile(MobileRequest $request)
-    {
-        $area = $request->input('area') ?? 86;
-        $mobile = $request->input('mobile');
-        $sms_code = $request->input('sms_code');
-        $force = $request->input('force') ?? false; // force reset sso
-
-        if (config('api.sms.check')) {
-            if (!(new SmsService())->isVerifyCode($mobile, $area, $sms_code)) {
-                return Response::jsonError('很抱歉，短信验证码不正确！');
-            }
-        }
-
-        $phone = sprintf('%s-%s', $area, $mobile);
-
-        if ($force) {
-            Sso::destroy($phone);
-        }
-
-        if (!Sso::checkPhone($phone)) {
-            return Response::jsonError('请您先退出旧设备再登录！', 581);
-        }
-
-        // 检查手机号是否已被绑定
-        $mobile_user = $this->userService->getUserByMobile($area, $mobile);
-
-        if (!$mobile_user) {
-            // 新建立一個手機號註冊帳號
-            $mobile_user = $this->userService->registerMobile($request);
-        }
-
-        // 前任裝置帳號
-        $device_user = $this->userService->getUserByDevice($request);
-
-        // 關聯訂單到手機帳號
-        $this->userService->relationOrder($mobile_user, $device_user);
-
-        // 轉讓 VIP 訂閱到手機帳號
-        $this->userService->transferSubscribed($mobile_user, $device_user);
-
-        // 紀錄綁定歷史
-        $data = [
-            'mobile' => sprintf('%s-%s', $area, $mobile),
-            'device_user_id' => $device_user->id,
-            'action' => 1, // 綁定
-        ];
-        $this->userService->addBindLog($data);
-
-        // 清除可能在其他裝置登入的緩存, 強迫重新生成 token
-        $cache_key = $this->getCacheKeyPrefix() . sprintf('user:mobile:%s-%s', $area, $mobile);
-        Cache::forget($cache_key);
-        $response = $this->userService->addDeviceCache($cache_key, $mobile_user);
-
-        return Response::jsonSuccess(__('api.success'), $response);
-    }
-
-    /**
-     * 退出登录
-     */
     public function logout(Request $request)
     {
-        $uuid = $request->header('uuid');
+        $request->user()->currentAccessToken()->delete();
 
-        // 清除用戶緩存 && SSO
-        $this->userService->unsetUserCache($request);
-
-        if ($this->userService->isUnusualUser($request)) {
-            // 如果更新舊帳號成功則新建立設備帳號
-            $user = $this->userService->registerDevice($request);
-        } else {
-            // 手機帳號退出後使用 device id 取得設備帳號
-            $user = $this->userService->getUserByDevice($request);
-        }
-
-        // 紀錄綁定歷史
-        $data = [
-            'mobile' => sprintf('%s-%s', $request->user->area, $request->user->mobile),
-            'device_user_id' => $user->id,
-            'action' => 2, // 解綁
-        ];
-        $this->userService->addBindLog($data);
-
-        $cache_key = $this->getCacheKeyPrefix() . sprintf('user:device:%s', $uuid);
-        $response = $this->userService->addDeviceCache($cache_key, $user);
-
-        return Response::jsonSuccess(__('api.success'), $response);
+        return Response::jsonSuccess(__('api.success'), [], 204);
     }
+
+
+
+
 
     /**
      * 个人编辑

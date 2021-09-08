@@ -68,7 +68,7 @@ class Kernel extends HttpKernel
         'verified'         => \Illuminate\Auth\Middleware\EnsureEmailIsVerified::class,
         'api.header'       => Middleware\VerifyApiHeader::class,
         'api.sign'         => Middleware\VerifyApiSign::class,
-        'api.token'        => Middleware\VerifyApiToken::class,
+        // 'api.token'        => Middleware\VerifyApiToken::class,
         // 'device.sso'       => Middleware\SingleSignOn::class,
         'auth.route.role'  => Middleware\AuthRouteRole::class,
         'log.activity'     => Middleware\LogActivity::class,

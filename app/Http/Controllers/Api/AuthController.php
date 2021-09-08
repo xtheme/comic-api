@@ -2,8 +2,12 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Http\Requests\Api\LoginRequest;
+use App\Http\Requests\Api\RegisterRequest;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Response;
 use Validator;
 
 class AuthController extends BaseController
@@ -13,37 +17,36 @@ class AuthController extends BaseController
      *
      * @return void
      */
-    public function __construct()
-    {
-        $this->middleware('auth:api', [
-            'except' => [
-                'login',
-                'register',
-            ],
-        ]);
-    }
+    // public function __construct()
+    // {
+    //     $this->middleware('auth:api', [
+    //         'except' => [
+    //             'login',
+    //             'register',
+    //         ],
+    //     ]);
+    // }
 
     /**
      * Get a JWT via given credentials.
      *
      * @return \Illuminate\Http\JsonResponse
      */
-    public function login(Request $request)
+    public function login(LoginRequest $request)
     {
-        $validator = Validator::make($request->all(), [
-            'email'    => 'required|email',
-            'password' => 'required|string|min:6',
-        ]);
+        $data = $request->validated();
 
-        if ($validator->fails()) {
-            return response()->json($validator->errors(), 422);
+        $loginField = filter_var($data['name'], FILTER_VALIDATE_EMAIL) ? 'email' : 'name';
+
+        $user = User::where($loginField, $data['name'])->first();
+
+        if (!Hash::check($data['password'], $user->password)) {
+            return Response::jsonError('密码错误！');
         }
 
-        if (!$token = auth()->attempt($validator->validated())) {
-            return response()->json(['error' => 'Unauthorized'], 401);
-        }
+        // 簽發 personal token
 
-        return $this->createNewToken($token);
+        return Response::jsonSuccess(__('api.success'), $user);
     }
 
     /**
@@ -51,24 +54,13 @@ class AuthController extends BaseController
      *
      * @return \Illuminate\Http\JsonResponse
      */
-    public function register(Request $request)
+    public function register(RegisterRequest $request)
     {
-        $validator = Validator::make($request->all(), [
-            'name'     => 'required|string|between:2,100',
-            'email'    => 'required|string|email|max:100|unique:users',
-            'password' => 'required|string|confirmed|min:6',
-        ]);
+        $data = array_merge($request->validated(), ['password' => Hash::make($request->password)]);
 
-        if ($validator->fails()) {
-            return response()->json($validator->errors()->toJson(), 400);
-        }
+        $user = User::create($data);
 
-        $user = User::create(array_merge($validator->validated(), ['password' => bcrypt($request->password)]));
-
-        return response()->json([
-            'message' => 'User successfully registered',
-            'user'    => $user,
-        ], 201);
+        return Response::jsonSuccess(__('api.success'), $user);
     }
 
 
@@ -81,7 +73,7 @@ class AuthController extends BaseController
     {
         auth()->logout();
 
-        return response()->json(['message' => 'User successfully signed out']);
+        return Response::jsonSuccess(__('api.logout.success'), [], 204);
     }
 
     /**

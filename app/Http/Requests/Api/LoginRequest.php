@@ -2,14 +2,13 @@
 
 namespace App\Http\Requests\Api;
 
-class RegisterRequest extends BaseApiRequest
+class LoginRequest extends BaseApiRequest
 {
     public function rules()
     {
         return [
             'name' => 'required',
             'password' => 'required',
-            'password_confirmation' => 'required_with:password|same:password',
 
         ];
     }
@@ -19,7 +18,6 @@ class RegisterRequest extends BaseApiRequest
         return [
             'name' => '账号',
             'password' => '密码',
-            'password_confirmation' => '确认密码',
         ];
     }
 }
