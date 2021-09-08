@@ -45,6 +45,8 @@ class AuthController extends BaseController
         }
 
         // 簽發 personal token
+        $token = $user->createToken('personal_token');
+        $user->token = $token->plainTextToken;
 
         return Response::jsonSuccess(__('api.success'), $user);
     }
@@ -56,24 +58,40 @@ class AuthController extends BaseController
      */
     public function register(RegisterRequest $request)
     {
-        $data = array_merge($request->validated(), ['password' => Hash::make($request->password)]);
+        $data = $request->validated();
+
+        $loginField = filter_var($data['name'], FILTER_VALIDATE_EMAIL) ? 'email' : 'name';
+
+        // 檢查用戶名/信箱重複
+        if (true === User::where($loginField, $data['name'])->exists()) {
+            return Response::jsonError(__('api.register.name.exists'));
+        }
 
         $user = User::create($data);
 
         return Response::jsonSuccess(__('api.success'), $user);
     }
 
+    /**
+     * Log the user out (Invalidate the token).
+     *
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function logout(Request $request)
+    {
+        $request->user()->tokens()->delete();
+
+        return Response::jsonSuccess(__('api.logout.success'));
+    }
 
     /**
      * Log the user out (Invalidate the token).
      *
      * @return \Illuminate\Http\JsonResponse
      */
-    public function logout()
+    public function me(Request $request)
     {
-        auth()->logout();
-
-        return Response::jsonSuccess(__('api.logout.success'), [], 204);
+        return Response::jsonSuccess(__('api.success'), $request->user());
     }
 
     /**

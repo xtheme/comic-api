@@ -48,8 +48,9 @@ Route::as('api.')->middleware(['api'])->group(function () {
         });
     });
 
-    Route::prefix(config('api.version'))->middleware(['api.token'])->group(function () {
+    Route::prefix(config('api.version'))->middleware(['auth:sanctum'])->group(function () {
         Route::prefix('auth')->as('auth.')->group(function () {
+            Route::get('/me', [Api\AuthController::class, 'me'])->name('me');
             Route::get('/logout', [Api\AuthController::class, 'logout'])->name('logout');
         });
 
