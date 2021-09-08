@@ -18,7 +18,7 @@ class BootstrapController extends Controller
     public function configs(Request $request)
     {
         $data = [
-            'access_token' => JwtService::getToken($request->header('uuid')), // if_encode_pic
+            'token' => JwtService::getToken($request->header('uuid')), // if_encode_pic
             // 'encrypt_img' => getConfig('app', 'encrypt_img'), // if_encode_pic
             // 'encrypt_api' => getConfig('app', 'encrypt_api'), // encode_api_url
             // 'landing_page' => getConfig('app', 'landing_page'), // start_domain

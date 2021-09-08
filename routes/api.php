@@ -28,14 +28,18 @@ Route::as('api.')->group(function () {
         Route::prefix('bootstrap')->as('bootstrap.')->group(function () {
             Route::get('/configs', [Api\BootstrapController::class, 'configs'])->name('configs');
         });
+    });
+
+    Route::prefix(config('api.version'))->middleware(['api.token'])->group(function () {
+        Route::prefix('auth')->as('auth.')->group(function () {
+            Route::post('/login', [Api\AuthController::class, 'login'])->name('login');
+            Route::post('/register', [Api\AuthController::class, 'register'])->name('register');
+            Route::get('/logout', [Api\AuthController::class, 'logout'])->name('logout');
+        });
 
         Route::prefix('user')->as('user.')->group(function () {
             Route::get('/login', [Api\UserController::class, 'login'])->name('login');
         });
-    });
-
-    Route::prefix(config('api.version'))->middleware(['api.token'])->group(function () {
-
         // 会员
         Route::prefix('user')->as('user.')->group(function () {
             // Route::get('/device', [Api\UserController::class, 'device'])->name('device');
