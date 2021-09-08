@@ -28,7 +28,7 @@ class Lady extends Model
          $pictures = json_decode($value);
 
          return collect($pictures)->map(function ($pic) {
-             return config('lady.img_domain') . $pic;
+             return config('api.lady.img_domain') . $pic;
          });
     }
 }

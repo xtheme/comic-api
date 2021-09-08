@@ -63,4 +63,19 @@ return [
         'bid' => env('DUN_TEXT_BID'),
         'version' => env('DUN_TEXT_VERSION'),
     ],
+
+    /**
+     * Lady
+     */
+    'lady' => [
+        'img_domain' => 'http://lfimg.gs562.cn/',
+    ],
+
+    /**
+     * Video
+     */
+    'video' => [
+        'hls_domain' => 'https://1107newcdn.3r5ewowo.com',
+        'img_domain' => 'https://qqc.mnbvvbnm.com',
+    ],
 ];

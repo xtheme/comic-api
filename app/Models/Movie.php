@@ -33,14 +33,14 @@ class Movie extends Model
 
     public function getHlsUrlAttribute()
     {
-        return config('video.hls_domain') . $this->url;
+        return config('api.video.hls_domain') . $this->url;
     }
 
     public function getThumbAttribute()
     {
         if (!$this->preview_pics) return null;
 
-        return config('video.img_domain') . $this->preview_pics;
+        return config('api.video.img_domain') . $this->preview_pics;
     }
 
     public function getTagsAttribute($value)
