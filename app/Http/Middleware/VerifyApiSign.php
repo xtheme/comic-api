@@ -30,7 +30,7 @@ class VerifyApiSign
 
         // 值用.拼接成字符串
         $str = implode('.', array_values($data));
-        $str = hash('sha256', $str . config('api.jwt.secret'));
+        $str = hash('sha256', $str . config('api.secret'));
 
         if ($sign != $str) {
             return Response::jsonError('签名不正确, 授权失败!', 500);
