@@ -138,9 +138,7 @@ class UserService
             'jti' => md5(uniqid('JWT', true) . time()) // 该Token唯一标识
         ];
 
-        $JwtService = new JwtService();
-
-        return $JwtService->getToken($data);
+        return JwtService::getToken($data);
     }
 
     /**

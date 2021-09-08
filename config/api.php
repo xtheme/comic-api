@@ -37,7 +37,7 @@ return [
      */
     'jwt' => [
         'algorithm' => env('JWT_ALGORITHM', 'HS256'),
-        'key' => env('JWT_KEY', ''),
+        'secret' => env('JWT_SECRET', ''),
         'ttl' => env('JWT_TTL', 7776000),
         'leeway' => env('JWT_LEEWAY', 60),
     ],

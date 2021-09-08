@@ -3,23 +3,32 @@
 namespace App\Services;
 
 use Firebase\JWT\JWT;
+use Illuminate\Support\Str;
 
 class JwtService
 {
     /**
      * 获取Token
      *
-     * @param  array  $data
+     * @param  string  $iss
      *
      * @return string
      */
-    public function getToken(array $data)
+    public static function getToken(string $sub)
     {
-        $key = config('api.jwt.key');
-        if (is_array($data)) {
-            return JWT::encode($data, $key);
-        }
-        return '';
+        $secret = config('api.jwt.secret');
+
+        $payload = [
+            'iss' => request()->server('HTTP_HOST'), //该JWT的签发者
+            'sub' => $sub, // 面向的用户
+            'iat' => time(), // 签发时间
+            'exp' => time() + config('api.jwt.ttl'), // 过期时间
+            'nbf' => time() + 1, // 该时间之前不接收处理该Token
+            'jti' => Str::uuid(), // 该Token唯一标识
+            'ip'  => request()->ip(),
+        ];
+
+        return JWT::encode($payload, $secret);
     }
 
     /**
@@ -29,9 +38,9 @@ class JwtService
      *
      * @return object
      */
-    public function tokenVerify(string $token)
+    public static function tokenVerify(string $token)
     {
-        $key = config('api.jwt.key');
+        $key = config('api.jwt.secret');
         $leeway = config('api.jwt.leeway');
         $algorithm = config('api.jwt.algorithm');
 

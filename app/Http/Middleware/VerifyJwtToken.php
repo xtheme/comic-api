@@ -46,8 +46,8 @@ class VerifyJwtToken
         }
 
         try {
-            $jwtService = new JwtService;
-            $decoded = $jwtService->tokenVerify($data['token']);
+
+            $decoded = JwtService::tokenVerify($data['token']);
 
             // 检查 iss 与当前的 uuid 是否相符
             // if ($decoded->iss !== $data['uuid']) {
