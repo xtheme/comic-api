@@ -2,24 +2,24 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Models\LadyCity;
+use App\Models\ResumeCity;
 use App\Models\Movie;
-use App\Repositories\Contracts\LadyRepositoryInterface;
+use App\Repositories\Contracts\ResumeRepositoryInterface;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Response;
 
-class LadyController extends BaseController
+class ResumeController extends BaseController
 {
     private $repository;
 
-    public function __construct(LadyRepositoryInterface $repository)
+    public function __construct(ResumeRepositoryInterface $repository)
     {
         $this->repository = $repository;
     }
 
     public function cities(Request $request)
     {
-        $collect = LadyCity::with(['children', 'children.children'])->where('p_id', 0)->get();
+        $collect = ResumeCity::with(['children', 'children.children'])->where('p_id', 0)->get();
 
         return Response::jsonSuccess(__('api.success'), $collect);
     }

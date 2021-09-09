@@ -2,14 +2,14 @@
 
 namespace App\Repositories;
 
-use App\Models\Lady;
-use App\Repositories\Contracts\LadyRepositoryInterface;
+use App\Models\Resume;
+use App\Repositories\Contracts\ResumeRepositoryInterface;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
 
-class LadyRepository extends Repository implements LadyRepositoryInterface
+class ResumeRepository extends Repository implements ResumeRepositoryInterface
 {
     protected $cache_ttl = 60; // 缓存秒数
 
@@ -18,7 +18,7 @@ class LadyRepository extends Repository implements LadyRepositoryInterface
      */
     public function model(): string
     {
-        return Lady::class;
+        return Resume::class;
     }
 
     public function find($id): ?Model

@@ -5,7 +5,7 @@ namespace App\Repositories\Contracts;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Collection;
 
-interface LadyRepositoryInterface extends RepositoryInterface
+interface ResumeRepositoryInterface extends RepositoryInterface
 {
     public function format(Model $video): array;
 

@@ -27,9 +27,9 @@ return [
     ],
 
     /**
-     * Lady
+     * Resume
      */
-    'lady' => [
+    'resume' => [
         'img_domain' => 'http://lfimg.gs562.cn/',
     ],
 

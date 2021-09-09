@@ -5,7 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class LadyCity extends Model
+class ResumeCity extends Model
 {
     use HasFactory;
 
@@ -27,6 +27,6 @@ class LadyCity extends Model
 
     public function lady()
     {
-        return $this->belongsTo('App\Models\Lady');
+        return $this->belongsTo('App\Models\Resume');
     }
 }

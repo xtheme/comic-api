@@ -41,10 +41,10 @@ Route::as('api.')->middleware(['api'])->group(function () {
         });
 
         // 履歷
-        Route::prefix('lady')->as('lady.')->group(function () {
-            Route::get('/cities', [Api\LadyController::class, 'cities'])->name('cities');
-            Route::get('/list/{city?}', [Api\LadyController::class, 'list'])->name('list');
-            Route::get('/detail/{id}', [Api\LadyController::class, 'detail'])->name('detail');
+        Route::prefix('resume')->as('resume.')->group(function () {
+            Route::get('/cities', [Api\ResumeController::class, 'cities'])->name('cities');
+            Route::get('/list/{city?}', [Api\ResumeController::class, 'list'])->name('list');
+            Route::get('/detail/{id}', [Api\ResumeController::class, 'detail'])->name('detail');
         });
     });
 
