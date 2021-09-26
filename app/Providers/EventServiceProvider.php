@@ -13,7 +13,7 @@ use App\Observers\TagObserver;
 use App\Observers\UserObserver;
 use App\Observers\VideoObserver;
 use App\Observers\VideoSeriesObserver;
-use Conner\Tagging\Model\Tag;
+// use Conner\Tagging\Model\Tag;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Auth\Listeners\SendEmailVerificationNotification;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
@@ -40,7 +40,7 @@ class EventServiceProvider extends ServiceProvider
     public function boot()
     {
         Config::observe(ConfigObserver::class);
-        Tag::observe(TagObserver::class);
+        // Tag::observe(TagObserver::class);
         User::observe(UserObserver::class);
         Book::observe(BookObserver::class);
         Video::observe(VideoObserver::class);

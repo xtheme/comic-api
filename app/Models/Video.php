@@ -2,12 +2,12 @@
 
 namespace App\Models;
 
-use Conner\Tagging\Taggable;
+// use Conner\Tagging\Taggable;
 use Illuminate\Support\Str;
 
 class Video extends BaseModel
 {
-    use Taggable;
+    // use Taggable;
 
     protected $fillable = [
         'title',

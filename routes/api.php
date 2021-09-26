@@ -46,6 +46,33 @@ Route::as('api.')->middleware(['api'])->group(function () {
             Route::get('/list/{city?}', [Api\ResumeController::class, 'list'])->name('list');
             Route::get('/detail/{id}', [Api\ResumeController::class, 'detail'])->name('detail');
         });
+
+        // 主题区块
+        Route::prefix('topic')->as('topic.')->group(function () {
+            Route::get('/{causer}', [Api\TopicController::class, 'list'])->name('list');
+            Route::get('/more/{topic}/{page?}', [Api\TopicController::class, 'more'])->name('more');
+        });
+
+        // 漫畫
+        Route::prefix('book')->as('book.')->group(function () {
+            Route::get('/{id}', [Api\BookController::class, 'detail'])->name('detail');
+            Route::get('/{id}/chapters', [Api\BookController::class, 'chapters'])->name('chapters');
+            Route::get('/{id}/chapter/{chapter_id}/{page?}', [Api\BookController::class, 'chapter'])->name('chapter');
+            Route::get('/recommend/{id?}', [Api\BookController::class, 'recommend'])->name('recommend');
+            Route::post('/report/{type_id}/{id}', [Api\ReportController::class, 'report'])->name('report');
+
+            // 排行榜
+            Route::prefix('ranking')->as('ranking.')->group(function () {
+                Route::get('/day', [Api\RankingController::class, 'day'])->name('day');
+                Route::get('/week', [Api\RankingController::class, 'week'])->name('week');
+                Route::get('/moon', [Api\RankingController::class, 'moon'])->name('moon');
+                Route::get('/year', [Api\RankingController::class, 'year'])->name('year');
+                Route::get('/japen', [Api\RankingController::class, 'japen'])->name('japen');
+                Route::get('/korea', [Api\RankingController::class, 'korea'])->name('korea');
+                Route::get('/new', [Api\RankingController::class, 'new'])->name('new');
+
+            });
+        });
     });
 
     Route::prefix(config('api.version'))->middleware(['auth:sanctum'])->group(function () {
@@ -96,11 +123,6 @@ Route::as('api.')->middleware(['api'])->group(function () {
             Route::get('/space/{id}', [Api\AdController::class, 'space'])->name('space');
         });
 
-        // 主题区块
-        Route::prefix('topic')->as('topic.')->group(function () {
-            Route::get('/{causer}', [Api\TopicController::class, 'list'])->name('list');
-            Route::get('/more/{topic}/{page?}', [Api\TopicController::class, 'more'])->name('more');
-        });
 
         // 分類標籤
         Route::prefix('tag')->as('tag.')->group(function () {
@@ -117,26 +139,6 @@ Route::as('api.')->middleware(['api'])->group(function () {
             Route::post('/play/{id}/{series_id}', [Api\VideoController::class, 'play'])->name('play');
         });
 
-        // 漫畫
-        Route::prefix('book')->as('book.')->group(function () {
-            Route::get('/{id}', [Api\BookController::class, 'detail'])->name('detail');
-            Route::get('/{id}/chapters', [Api\BookController::class, 'chapters'])->name('chapters');
-            Route::get('/{id}/chapter/{chapter_id}/{page?}', [Api\BookController::class, 'chapter'])->name('chapter');
-            Route::get('/recommend/{id?}', [Api\BookController::class, 'recommend'])->name('recommend');
-            Route::post('/report/{type_id}/{id}', [Api\ReportController::class, 'report'])->name('report');
-
-            // 排行榜
-            Route::prefix('ranking')->as('ranking.')->group(function () {
-                Route::get('/day', [Api\RankingController::class, 'day'])->name('day');
-                Route::get('/week', [Api\RankingController::class, 'week'])->name('week');
-                Route::get('/moon', [Api\RankingController::class, 'moon'])->name('moon');
-                Route::get('/year', [Api\RankingController::class, 'year'])->name('year');
-                Route::get('/japen', [Api\RankingController::class, 'japen'])->name('japen');
-                Route::get('/korea', [Api\RankingController::class, 'korea'])->name('korea');
-                Route::get('/new', [Api\RankingController::class, 'new'])->name('new');
-
-            });
-        });
 
         // 會員套餐
         Route::prefix('pricing')->as('pricing.')->group(function () {

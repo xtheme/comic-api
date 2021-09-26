@@ -3,12 +3,12 @@
 namespace App\Models;
 
 use App\Traits\CacheTrait;
-use Conner\Tagging\Taggable;
+// use Conner\Tagging\Taggable;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Book extends BaseModel
 {
-    use CacheTrait, Taggable, SoftDeletes;
+    use CacheTrait, SoftDeletes;
 
     protected $fillable = [
         'title',
