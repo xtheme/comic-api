@@ -57,12 +57,16 @@ class VideoController extends Controller
         $video = $this->repository->find($id);
 
         $data = [
+            'mosaic_options' => Options::MOSAIC_OPTIONS,
+            'style_options' => Options::STYLE_OPTIONS,
+            'subtitle_options' => Options::SUBTITLE_OPTIONS,
             'status_options' => Options::STATUS_OPTIONS,
             'ribbon_options' => Options::RIBBON_OPTIONS,
             // 'tags' => getAllTags(),
             'tags' => [],
             'video' => $video,
-            'tagged' => $video->tagged->pluck('tag_name')->toArray(),
+            // 'tagged' => $video->tagged->pluck('tag_name')->toArray(),
+            'tagged' => [],
         ];
 
         return view('backend.video.edit')->with($data);

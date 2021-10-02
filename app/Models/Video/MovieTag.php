@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Models;
+namespace App\Models\Video;
 
-use App\Enums\MovieOptions;
+use App\Enums\VideoOptions;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 

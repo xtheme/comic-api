@@ -24,7 +24,8 @@ class VideoRepository extends Repository implements VideoRepositoryInterface
 
     public function find($id): ?Model
     {
-        return $this->model->with(['series', 'series.cdn', 'series.play_histories'])->findOrFail($id);
+        return $this->model->findOrFail($id);
+        // return $this->model->with(['series', 'series.cdn', 'series.play_histories'])->findOrFail($id);
     }
 
     /**
@@ -50,7 +51,8 @@ class VideoRepository extends Repository implements VideoRepositoryInterface
         $perPage = $request->input('perPage') ?? 10;
 
         // return $this->model::with(['series', 'series.cdn'])->withCount(['series' , 'visit_histories' , 'play_histories'])->when($title, function (Builder $query, $title) {
-        return $this->model::withCount(['series' , 'visit_histories' , 'play_histories'])->when($title, function (Builder $query, $title) {
+        // return $this->model::withCount(['series' , 'visit_histories' , 'play_histories'])->when($title, function (Builder $query, $title) {
+        return $this->model::when($title, function (Builder $query, $title) {
             return $query->whereLike('title', $title);
         })->when($author, function (Builder $query, $author) {
             return $query->whereLike('author', $author);

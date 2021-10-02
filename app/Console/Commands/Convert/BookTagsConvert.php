@@ -1,27 +1,27 @@
 <?php
 
-namespace App\Console\Commands\Migrate;
+namespace App\Console\Commands\Convert;
 
 use App\Models\Book;
 use Conner\Tagging\Model\Tag;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\DB;
 
-class TaggingTagsMigrate extends Command
+class BookTagsConvert extends Command
 {
     /**
      * The name and signature of the console command.
      *
      * @var string
      */
-    protected $signature = 'migrate:tagging_tags';
+    protected $signature = 'convert:books';
 
     /**
      * The console command description.
      *
      * @var string
      */
-    protected $description = '將数据表 category 数据将迁移至新表 tagging_tags!';
+    protected $description = '轉換漫畫數據!';
 
     /**
      * Create a new command instance.
@@ -42,13 +42,9 @@ class TaggingTagsMigrate extends Command
     {
         if ($this->confirm('请确认是否执行数据迁移？')) {
 
-            // DB::table('tagging_tag_groups')->truncate();
-            // DB::table('tagging_tags')->truncate();
-            // DB::table('tagging_tagged')->truncate();
+            $tagged = DB::table('tp_tagging_tagged')->where('taggable_type', 'App\Models\Book')->get();
 
-            $categories = DB::table('category')->where('status', 1)->get();
-
-            $bulk = $categories->reject(function ($item) {
+            $bulk = $tagged->reject(function ($item) {
                 return $item->name === '';
             })->map(function ($item) {
                 return [

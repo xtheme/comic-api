@@ -13,7 +13,7 @@
             <div class="row">
                 <div class="col-12">
                     <div class="form-group">
-                        <label><span class="danger">*</span> 作品名称</label>
+                        <label><span class="danger">*</span> 名称</label>
                         <div class="controls">
                             <input type="text" class="form-control" name="title" value="{{ $video->title }}" placeholder="">
                         </div>
@@ -21,9 +21,69 @@
                 </div>
                 <div class="col-4">
                     <div class="form-group">
-                        <label>作者</label>
+                        <label>番号</label>
                         <div class="controls">
-                            <input type="text" class="form-control" name="author" value="{{ $video->author }}" placeholder="">
+                            <input type="text" class="form-control" name="number" value="{{ $video->number }}" placeholder="">
+                        </div>
+                    </div>
+                </div>
+                <div class="col-4">
+                    <div class="form-group">
+                        <label>片商</label>
+                        <div class="controls">
+                            <input type="text" class="form-control" name="producer" value="{{ $video->producer }}" placeholder="">
+                        </div>
+                    </div>
+                </div>
+                <div class="col-4">
+                    <div class="form-group">
+                        <label>女優</label>
+                        <div class="controls">
+                            <input type="text" class="form-control" name="actor" value="{{ $video->actor }}" placeholder="">
+                        </div>
+                    </div>
+                </div>
+                <div class="col-4">
+                    <div class="form-group">
+                        <label>影片长度</label>
+                        <div class="controls">
+                            <input type="text" class="form-control" name="length" value="{{ $video->length }}" placeholder="">
+                        </div>
+                    </div>
+                </div>
+                <div class="col-4">
+                    <div class="form-group">
+                        <label>马赛克</label>
+                        <div class="controls">
+                            <select class="form-control" name="mosaic">
+                                @foreach ($mosaic_options as $key => $val)
+                                    <option value="{{ $key }}" @if($key == $video->mosaic){{'selected'}}@endif>{{ $val }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-4">
+                    <div class="form-group">
+                        <label>类型</label>
+                        <div class="controls">
+                            <select class="form-control" name="style">
+                                @foreach ($style_options as $key => $val)
+                                    <option value="{{ $key }}" @if($key == $video->style){{'selected'}}@endif>{{ $val }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-4">
+                    <div class="form-group">
+                        <label>字幕</label>
+                        <div class="controls">
+                            <select class="form-control" name="subtitle">
+                                @foreach ($subtitle_options as $key => $val)
+                                    <option value="{{ $key }}" @if($key == $video->subtitle){{'selected'}}@endif>{{ $val }}</option>
+                                @endforeach
+                            </select>
                         </div>
                     </div>
                 </div>
@@ -32,7 +92,6 @@
                         <label>角标</label>
                         <div class="controls">
                             <select class="form-control" name="ribbon">
-                                <option value="0">无</option>
                                 @foreach ($ribbon_options as $key => $val)
                                     <option value="{{ $key }}" @if($key == $video->ribbon){{'selected'}}@endif>{{ $val }}</option>
                                 @endforeach
@@ -64,7 +123,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-12">
+                {{--<div class="col-12">
                     <div class="form-group">
                         <span class="float-right font-size-small text-light">(图片尺寸比例请保持 16:9)</span>
                         <label><span class="danger">*</span> 封面图</label>
@@ -76,10 +135,22 @@
                                     <button class="btn btn-primary upload-image" type="button">上传</button>
                                 </div>
                             </div>
-{{--                            <div class="custom-file">--}}
-{{--                                <input type="file" class="custom-file-input" id="vertical-thumb" name="cover" value="{{ $video->cover }}">--}}
-{{--                                <label class="custom-file-label" for="vertical-thumb">请选择文件</label>--}}
-{{--                            </div>--}}
+                        </div>
+                    </div>
+                </div>--}}
+                <div class="col-12">
+                    <div class="form-group">
+                        <label>封面图路徑</label>
+                        <div class="controls">
+                            <input type="text" class="form-control" name="cover" value="{{ $video->getRawOriginal('cover') }}" placeholder="">
+                        </div>
+                    </div>
+                </div>
+                <div class="col-12">
+                    <div class="form-group">
+                        <label>串流路徑</label>
+                        <div class="controls">
+                            <input type="text" class="form-control" name="url" value="{{ $video->getRawOriginal('url') }}" placeholder="">
                         </div>
                     </div>
                 </div>

@@ -1,29 +1,43 @@
 <?php
 
-namespace App\Console\Commands\Migrate;
+namespace App\Console\Commands\Convert;
 
 ini_set('memory_limit', '-1');
 
 use App\Models\Book;
+use App\Models\Video;
+use App\Models\Video\Movie;
 use Illuminate\Console\Command;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
 
-class VideoMigrate extends Command
+class VideoConvert extends Command
 {
     /**
      * The name and signature of the console command.
      *
      * @var string
      */
-    protected $signature = 'migrate:videos';
+    protected $signature = 'convert:videos';
 
     /**
      * The console command description.
      *
      * @var string
      */
-    protected $description = '將数据表 book 数据将迁移至新表 books!';
+    protected $description = '轉換視頻數據!';
+
+    // 国家
+    public static $countries = [
+        '0' => '日本',
+        '1' => '韩国',
+        '2' => '印度',
+        '5' => '中国大陆',
+        '6' => '中国台湾',
+        '7' => '俄罗斯',
+        '8' => '欧美',
+        '9' => '其他地区',
+    ];
 
     /**
      * Create a new command instance.
@@ -48,43 +62,47 @@ class VideoMigrate extends Command
         // 每多少筆切割一次操作
         $chunk_num = 500;
 
-        // 新舊數據表名稱
-        $old_table = 'book';
-        $new_table = 'books';
+        // 動畫源最新視頻 id
+        $old_primary_id = DB::connection('mysql_video')->table('movies')->orderByDesc('id')->first()->id;
 
-        // 目前用戶表最後 uid
-        $old_primary_id = DB::table($old_table)->orderByDesc('id')->first()->id;
-
-        // 新表最後 uid
-        $new_primary_id = DB::table($new_table)->orderByDesc('id')->first()->id;
+        // 本地最新視頻 id
+        $new_primary_id = DB::table('videos')->orderByDesc('id')->first()->id;
 
         if ($old_primary_id > $new_primary_id) {
             // 分割集合
-            $data = DB::table($old_table)->where('id', '>', $new_primary_id)->limit($batch_num)->get()->chunk($chunk_num);
+            $data = DB::connection('mysql_video')->table('movies')->where('id', '>', $new_primary_id)->limit($batch_num)->get()->chunk($chunk_num);
 
             $this->line(sprintf('為了避免腳本超時，本次操作將轉移 %s 筆數據，共拆分為 %s 批数据進行迁移！', $batch_num, ceil($batch_num / $chunk_num)));
 
-            $data->each(function($items, $key) use ($new_table) {
-                $insert = $items->map(function($item) use ($new_table) {
+            $data->each(function($items, $key) {
+                $insert = $items->map(function($item) {
+                    // 標籤 tags
+                    // 女優 actor
                     return [
                         'id' => $item->id,
-                        'title' => $item->book_name,
-                        'author' => $item->pen_name,
-                        'description' => $item->book_desc,
-                        'end' => $item->book_isend == 1 ? 1 : -1,
-                        'vertical_cover' => $item->book_thumb,
-                        'horizontal_cover' => $item->book_thumb2,
-                        'type' => $item->cartoon_type,
-                        'visits' => $item->view,
-                        'status' => $item->book_status ? 1 : -1,
-                        'review' => $item->check_status + 1,
-                        'operating' => $item->operating,
-                        'created_at' => $item->book_addtime ? Carbon::createFromTimestamp($item->book_addtime) : null,
-                        'updated_at' => $item->book_updatetime ? Carbon::createFromTimestamp($item->book_updatetime) : null,
+                        'title' => $item->video_name,
+                        'description' => $item->description,
+                        'url' => $item->url,
+                        'cover' => $item->preview_pics,
+                        'length' => $item->movie_length,
+                        'ribbon' => 0,
+                        'country' => self::$countries[$item->country],
+                        'status' => $item->status,
+                        'mosaic' => $item->video_type,
+                        'style' => $item->shooting_type,
+                        'subtitle' => $item->subtitle_type,
+                        'views' => 0,
+                        'heat' => 0,
+                        'number' => strtoupper($item->number),
+                        'producer' => $item->producer,
+                        'actor' => $item->actor,
+                        'published_at' => $item->publish_time,
+                        'created_at' => $item->created_at,
+                        'updated_at' => null,
                     ];
                 })->toArray();
 
-                DB::table($new_table)->insert($insert);
+                DB::table('videos')->insert($insert);
 
                 $this->line('第 ' . ($key + 1) . ' 批数据迁移完成...');
             });

@@ -2,96 +2,67 @@
 
 namespace App\Models;
 
-// use Conner\Tagging\Taggable;
-use Illuminate\Support\Str;
+use App\Enums\VideoOptions;
+use Spatie\Tags\HasTags;
 
 class Video extends BaseModel
 {
-    // use Taggable;
+    use HasTags;
 
     protected $fillable = [
         'title',
-        'author',
         'description',
+        'url',
+        'video_cdn_id',
         'cover',
+        'length',
         'ribbon',
         'status',
+        'mosaic',
+        'style',
+        'subtitle',
+        'number',
+        'producer',
+        'actor',
+        'published_at',
     ];
 
     protected $appends = [
-        'tagged_tags',
+        // 'tagged_tags',
         // 'visit_count',
         // 'play_count',
     ];
 
     protected $hidden = [
-        'tagged',
-        'visit_histories',
-        'play_histories',
+        // 'tagged',
+        // 'visit_histories',
+        // 'play_histories',
     ];
 
-    public function series()
+    // public function series()
+    // {
+    //     return $this->hasMany('App\Models\VideoSeries');
+    // }
+
+    public function getCountryAttribute($value)
     {
-        return $this->hasMany('App\Models\VideoSeries');
+        return VideoOptions::COUNTRIES[$value];
     }
 
-    public function visit_histories()
+    public function getSubtitleAttribute($value)
     {
-        return $this->hasMany('App\Models\VideoVisit', 'video_id', 'id');
+        return VideoOptions::SUBTITLE[$value];
     }
 
-    public function play_histories()
+    public function getUrlAttribute($value)
     {
-        return $this->hasMany('App\Models\VideoPlayLog', 'video_id', 'id');
-    }
-
-    public function getTaggedTagsAttribute()
-    {
-        // return $this->tagged->pluck('tag_name')->toArray();
-        return $this->tags->where('suggest', 1)->sortByDesc('priority')->take(3)->pluck('name')->toArray();
+        return config('api.video.hls_domain') . $value;
     }
 
     public function getCoverAttribute($value)
     {
-        if (!$value) return '';
+        if (!$value) return null;
 
-        $img_domain = getOldConfig('web_config', 'api_url') ;
-        // $img_domain = getConfig('app', 'img_url');
-
-        if (true == config('api.encrypt.image')){
-            $img_domain = getOldConfig('web_config', 'img_sync_url_password_webp') ;
-            // $img_domain = getConfig('app', 'webp_img_url') ;
-
-        }
-
-        $img_domain = cleanDomain($img_domain);
-    
-        return $img_domain . $value;
-        
+        return config('api.video.img_domain') . $value;
     }
-
-    public function getCoverThumbAttribute()
-    {
-        $cover = $this->getRawOriginal('cover');
-
-        if (!$cover) return '';
-
-        // todo change config
-        $img_domain = getOldConfig('web_config', 'api_url');
-        // $img_domain = getConfig('app', 'img_url');
-
-        $img_domain = cleanDomain($img_domain);
-
-        return $img_domain . $cover;
-    }
-
-    // public function getVisitCountAttribute()
-    // {
-    //     return $this->visit_histories->count();
-    // }
-    //
-    // public function getPlayCountAttribute()
-    // {
-    //     return $this->play_histories->count();
-    // }
 }

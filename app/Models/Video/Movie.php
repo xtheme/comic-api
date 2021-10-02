@@ -1,14 +1,16 @@
 <?php
 
-namespace App\Models;
+namespace App\Models\Video;
 
-use App\Enums\MovieOptions;
+use App\Enums\VideoOptions;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class Movie extends Model
 {
     use HasFactory;
+
+    protected $connection = 'mysql_video';
 
     public function getTitleAttribute()
     {
@@ -23,12 +25,12 @@ class Movie extends Model
 
     public function getCountryAttribute($value)
     {
-        return MovieOptions::COUNTRIES[$value];
+        return VideoOptions::COUNTRIES[$value];
     }
 
     public function getSubtitleAttribute()
     {
-        return MovieOptions::SUBTITLE[$this->subtitle_type];
+        return VideoOptions::SUBTITLE[$this->subtitle_type];
     }
 
     public function getHlsUrlAttribute()

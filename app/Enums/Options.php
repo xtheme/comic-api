@@ -4,12 +4,39 @@ namespace App\Enums;
 
 final class Options
 {
+    const MOSAIC_OPTIONS = [
+        0 => '有码',
+        1 => '无码',
+    ];
+
+    const SWITCH_OPTIONS = [
+        1 => '是',
+        -1 => '否',
+    ];
+
+    const STYLE_OPTIONS = [
+        0 => '专业拍摄',
+        1 => '偷拍',
+        2 => '自拍',
+        3 => '业务拍摄',
+    ];
+
+    const SUBTITLE_OPTIONS = [
+        0 => '无',
+        1 => '中文',
+        2 => '英文',
+        3 => '中英文',
+        4 => '其他',
+    ];
+
     const STATUS_OPTIONS = [
-        1  => '上架',
-        -1 => '下架',
+        0 => '待审核',
+        1 => '上架',
+        2 => '下架',
     ];
 
     const RIBBON_OPTIONS = [
+        0 => '无',
         1 => '限时免费',
         2 => '会员抢先',
     ];

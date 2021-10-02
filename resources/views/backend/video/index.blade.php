@@ -51,10 +51,11 @@
                                     </div>
                                 </th>
                                 <th>ID</th>
-                                <th>作品名称</th>
+                                <th>作品</th>
                                 <th>封面图</th>
-                                <th>作者</th>
-                                <th>集数</th>
+                                <th>番号</th>
+                                <th>马赛克</th>
+                                <th>类型</th>
                                 <th>角标</th>
                                 <th>状态</th>
                                 <th>更新时间</th>
@@ -83,10 +84,11 @@
                                         @endif
                                     </td>
                                     <td>
-                                        @if($video->cover_thumb )<img src="{{ $video->cover_thumb }}" alt="" class="cursor-pointer" height="60px" data-lightbox title="点击查看大图">@endif
+                                        @if($video->cover )<img src="{{ $video->cover }}" alt="" class="cursor-pointer" height="60px" data-lightbox title="点击查看大图">@endif
                                     </td>
-                                    <td>{{ $video->author }}</td>
-                                    <td>{{ $video->series_count }}</td>
+                                    <td>{{ $video->number }}</td>
+                                    <td>{{ $video->mosaic }}</td>
+                                    <td>{{ $video->style }}</td>
                                     <td>@if($video->ribbon)<span class="badge badge-pill badge-light-primary">{{ $ribbon_options[$video->ribbon] ?? '' }}</span>@endif</td>
                                     <td>
                                         @if($video->status == 1)
@@ -109,8 +111,6 @@
                                             <span class="bx bx-dots-vertical-rounded font-medium-3 dropdown-toggle nav-hide-arrow cursor-pointer"
                                                   id="dropdownMenuButton{{ $video->id }}" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></span>
                                             <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuButton{{ $video->id }}">
-                                                <a class="dropdown-item" data-modal data-size="full" href="{{ route('backend.video_series.index', $video->id) }}" title="影集列表"><i class="bx
-bxs-videos mr-1"></i>影集列表</a>
                                                 <a class="dropdown-item" data-modal href="{{ route('backend.video.edit', $video->id) }}" title="编辑动画"><i class="bx bx-edit-alt mr-1"></i>编辑动画</a>
                                                 <a class="dropdown-item" data-destroy href="{{ route('backend.video.destroy', $video->id) }}" title="刪除动画"><i class="bx bx-trash mr-1"></i>刪除动画</a>
                                             </div>

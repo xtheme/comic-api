@@ -63,18 +63,18 @@ return [
             ]) : [],
         ],
 
-        'source' => [
+        'mysql_video' => [
             'driver' => 'mysql',
             'url' => env('DATABASE_URL'),
-            'host' => env('SOURCE_HOST', '127.0.0.1'),
-            'port' => env('SOURCE_PORT', '3306'),
-            'database' => env('SOURCE_DATABASE', 'forge'),
-            'username' => env('SOURCE_USERNAME', 'forge'),
-            'password' => env('SOURCE_PASSWORD', ''),
-            'unix_socket' => env('SOURCE_SOCKET', ''),
+            'host' => env('DB_VIDEO_HOST', '127.0.0.1'),
+            'port' => env('DB_VIDEO_PORT', '3306'),
+            'database' => env('DB_VIDEO_DATABASE', 'forge'),
+            'username' => env('DB_VIDEO_USERNAME', 'forge'),
+            'password' => env('DB_VIDEO_PASSWORD', ''),
+            'unix_socket' => env('DB_VIDEO_SOCKET', ''),
             'charset' => 'utf8mb4',
             'collation' => 'utf8mb4_unicode_ci',
-            'prefix' => env('SOURCE_PREFIX', ''),
+            'prefix' => env('DB_VIDEO_PREFIX', ''),
             'prefix_indexes' => true,
             'strict' => false,
             'engine' => null,
@@ -82,6 +82,27 @@ return [
                 PDO::MYSQL_ATTR_SSL_CA => env('MYSQL_ATTR_SSL_CA'),
             ]) : [],
         ],
+
+        'mysql_comic' => [
+            'driver' => 'mysql',
+            'url' => env('DATABASE_URL'),
+            'host' => env('DB_COMIC_HOST', '127.0.0.1'),
+            'port' => env('DB_COMIC_PORT', '3306'),
+            'database' => env('DB_COMIC_DATABASE', 'forge'),
+            'username' => env('DB_COMIC_USERNAME', 'forge'),
+            'password' => env('DB_COMIC_PASSWORD', ''),
+            'unix_socket' => env('DB_COMIC_SOCKET', ''),
+            'charset' => 'utf8mb4',
+            'collation' => 'utf8mb4_unicode_ci',
+            'prefix' => env('DB_COMIC_PREFIX', ''),
+            'prefix_indexes' => true,
+            'strict' => false,
+            'engine' => null,
+            'options' => extension_loaded('pdo_mysql') ? array_filter([
+                PDO::MYSQL_ATTR_SSL_CA => env('MYSQL_ATTR_SSL_CA'),
+            ]) : [],
+        ],
+
 
         'pgsql' => [
             'driver' => 'pgsql',

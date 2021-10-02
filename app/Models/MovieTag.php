@@ -2,7 +2,7 @@
 
 namespace App\Models;
 
-use App\Enums\MovieOptions;
+use App\Enums\VideoOptions;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 

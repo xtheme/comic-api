@@ -12,7 +12,7 @@ return [
     "Order List" => "订单列表",
 
     "Books" => "漫画管理",
-    "Books List" => "漫画列表 (未完成)",
+    "Books List" => "漫画列表",
     "Recommended Books" => "推荐漫画",
     "CDN Caching List" => "CDN 预热名单",
 
@@ -46,7 +46,6 @@ return [
 
     "Book Report" => "漫画举报管理",
     "ReportType List" => "举报类型设置",
-    "Report List" => "用户举报列表",
 
     "Permission Manage" => "权限管理",
     "Administrator list" => "管理员列表",

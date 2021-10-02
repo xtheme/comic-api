@@ -2,7 +2,7 @@
 
 namespace App\Enums;
 
-final class MovieOptions
+final class VideoOptions
 {
     // 国家
     const COUNTRIES = [
