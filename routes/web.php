@@ -114,8 +114,8 @@ Route::middleware(['auth', 'auth.route.role', 'log.activity'])->prefix('backend'
         Route::get('preview/{id}', [Backend\BookChapterController::class, 'preview'])->name('preview'); // 章節預覽
         Route::get('create/{book_id}', [Backend\BookChapterController::class , 'create'])->name('create'); // 添加章節
         Route::post('store/{book_id}', [Backend\BookChapterController::class , 'store'])->name('store');
-        Route::get('edit/{book_id}/{chapter_id}', [Backend\BookChapterController::class , 'edit'])->name('edit');
-        Route::put('update/{book_id}/{chapter_id}', [Backend\BookChapterController::class , 'update'])->name('update');
+        Route::get('edit/{chapter_id}', [Backend\BookChapterController::class , 'edit'])->name('edit');
+        Route::put('update/{chapter_id}', [Backend\BookChapterController::class , 'update'])->name('update');
         Route::put('batch/{action?}', [Backend\BookChapterController::class, 'batch'])->name('batch'); // 批量操作
         Route::put('editable/{field}', [Backend\BookChapterController::class, 'editable'])->name('editable');
     });
