@@ -7,9 +7,11 @@ use App\Models\BookChapter;
 // use App\Repositories\Contracts\BookRepositoryInterface;
 // use App\Repositories\HistoryRepository;
 use App\Services\AdService;
+use App\Services\RankingService;
 use App\Traits\CacheTrait;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Redis;
 use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Str;
 use Record;
@@ -45,9 +47,10 @@ class BookController extends BaseController
             'type' => $book->type,
             'release_at' => $book->release_at,
             'latest_chapter_title' => $book->chapters_count ? $book->chapters->first()->title : '',
-            'tagged_tags' => $book->tagged_tags,
+            // 'tagged_tags' => $book->tagged_tags,
+            'tags' => $book->tags()->pluck('name'),
             'visit_histories_count' => shortenNumber($book->visit_histories_count),
-            // 'favorite_histories_count' => shortenNumber($book->favorite_histories_count),
+            'favorite_histories_count' => shortenNumber($book->favorite_histories_count),
             'chapters' => $book->chapters->map(function ($chapter) {
                 return [
                     'book_id' => $chapter->book_id,
@@ -59,7 +62,7 @@ class BookController extends BaseController
             })->toArray(),
         ];
 
-        // todo 訪問數+1
+        // 訪問數+1
         Record::from('book')->visit($id);
 
         return Response::jsonSuccess(__('api.success'), $data);
@@ -113,37 +116,31 @@ class BookController extends BaseController
             $chapter->update(['json_images' => $json_images]);
         }
 
-        $images = collect($chapter->json_images)->reject(function ($image) {
-            return !$image['width'] || !$image['height'];
-        })->map(function ($image) use ($chapter) {
+        $images = collect($chapter->json_images)->map(function ($image) use ($chapter) {
             // todo change config
-            $encrypt_img = getOldConfig('web_config', 'if_encode_pic');
-            $webp_domain = getOldConfig('web_config', 'img_sync_url_password_webp');
-            $webp_width = getOldConfig('web_config', 'pic_webp_width');
-            $img_domain = getOldConfig('web_config', 'api_url');
-            // $encrypt_img = getConfig('app', 'encrypt_img');
-            // $webp_domain = getConfig('app', 'webp_url');
-            // $webp_width = getConfig('app', 'webp_width');
-            // $img_domain = getConfig('app', 'img_url');
+            // $encrypt_img = getOldConfig('web_config', 'if_encode_pic');
+            // $webp_domain = getOldConfig('web_config', 'img_sync_url_password_webp');
+            // $webp_width = getOldConfig('web_config', 'pic_webp_width');
+            // $img_domain = getOldConfig('web_config', 'api_url');
+            $encrypt_img = config('api.encrypt.image');
+            $webp_domain = getConfig('app', 'webp_url');
+            $webp_width = getConfig('app', 'webp_width');
+            $img_domain = getConfig('app', 'img_url');
 
             if ($encrypt_img == 1) {
                 if (Str::endsWith($webp_domain, '/')) {
                     $webp_domain = substr($webp_domain, 0, -1);
                 }
-                $image['url'] = $webp_domain . webp($image['url'], $webp_width);
+                $image = $webp_domain . webp($image, $webp_width);
             } else {
-                // todo change config
-                // $domain = ($chapter->operating == 1) ? getOldConfig('web_config', 'api_url') : getOldConfig('web_config', 'img_sync_url');
                 if (Str::endsWith($img_domain, '/')) {
                     $img_domain = substr($img_domain, 0, -1);
                 }
-                $image['url'] = $img_domain . $image['url'];
+                $image = $img_domain . $image;
             }
 
             return [
-                'url' => $image['url'],
-                'width' => $image['width'],
-                'height' => $image['height'],
+                'url' => $image
             ];
         })->toArray();
 

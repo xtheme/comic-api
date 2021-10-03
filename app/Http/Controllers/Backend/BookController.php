@@ -193,7 +193,7 @@ class BookController extends Controller
     {
         $books = $this->repository->filter($request)->take(20)->get();
 
-        $domain = getOldConfig('web_config', 'img_sync_url_password_webp');
+        $domain = getConfig('app', 'webp_url');
 
         $images = $books->reject(function ($book) {
             return $book->chapters_count === 0;
@@ -204,7 +204,7 @@ class BookController extends Controller
                 return $chapter->json_images === '';
             })->map(function ($chapter) use ($domain) {
                 return collect($chapter->json_images)->map(function ($image) use ($domain)  {
-                    return $domain . webp($image['url']);
+                    return $domain . webp($image);
                 });
             })->flatten()->toArray();
 
@@ -217,9 +217,9 @@ class BookController extends Controller
         }
 
         return response($txt)->withHeaders([
-                'Content-Type'        => 'text/plain',
-                'Cache-Control'       => 'no-store, no-cache',
-                'Content-Disposition' => 'attachment; filename="CDN预热名单_' . date('Y-m-d') . '.txt',
-            ]);
+            'Content-Type'        => 'text/plain',
+            'Cache-Control'       => 'no-store, no-cache',
+            'Content-Disposition' => 'attachment; filename="CDN预热名单_' . date('Y-m-d') . '.txt',
+        ]);
     }
 }

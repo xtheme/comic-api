@@ -7,7 +7,7 @@
 
 @section('content')
     <div class="float-left">
-        <a href="{{ route('backend.book_chapter.create', $book_id) }}" class="btn btn-primary" role="button" aria-pressed="true">添加章节</a>
+        <a href="{{ route('backend.book_chapter.create' , $book_id) }}" title="新增章节" class="btn btn-primary" data-modal >添加章节</a>
     </div>
     <div class="float-right">
         <form id="batch-action" class="form form-vertical" method="get" action="{{ route('backend.book_chapter.batch') }}" novalidate>
@@ -15,8 +15,8 @@
                 <div class="d-flex align-items-center">
                     <div class="form-group mr-1">
                         <select class="form-control" name="action">
-                            <option value="enable">启用</option>
-                            <option value="disable">封禁</option>
+                            <option value="enable">显示</option>
+                            <option value="disable">隐藏</option>
                             <option value="charge">收费</option>
                             <option value="free">免费</option>
                         </select>
@@ -46,11 +46,9 @@
                 <th>发布时间</th>
                 <th>更新时间</th>
                 <th>章节详情</th>
-                <th>审核状态</th>
-                <th>脚本状态</th>
+                <!-- <th>审核状态</th> -->
                 <th>采集</th>
                 <th>显示/隐藏</th>
-                <th>删除状态</th>
                 <th>操作</th>
             </tr>
             </thead>
@@ -79,7 +77,7 @@
                     <td>
                         <a href="{{ route('backend.book_chapter.preview', $chapter->id) }}" title="章节详情" target="_blank">查看</a>
                     </td>
-                    <td>
+                    <!-- <td>
                         @switch($chapter->check_status )
                             @case(0)
                             <span class="badge badge-pill badge-light-secondary">待审核</span>
@@ -97,20 +95,7 @@
                                 <span class="badge badge-pill badge-light-secondary">待上架</span>
                                 @break
                         @endswitch
-                    </td>
-                    <td>
-                        @switch($chapter->shell_status )
-                            @case(1)
-                            <span class="text-danger">图片没有</span>
-                                @break
-                            @case(2)
-                            <span class="text-danger">只有一张图</span>
-                                @break
-                            @case(3)
-                            <span class="text-danger">修改了内容</span>
-                                @break
-                        @endswitch
-                    </td>
+                    </td> -->
                     <td>
                         @if($chapter->operating == 1)
                             人工
@@ -125,18 +110,12 @@
                             <span class="badge badge-pill badge-light-danger">隐藏</span>
                         @endif
                     </td>
-                    <td>
-                        @if($chapter->chapter_status == 0)
-                            <span class="badge badge-pill badge-light-danger">删除</span>
-                        @endif
-                    </td>
                     <td @if($loop->count == 1)style="position: fixed;"@endif>
                         <div class="@if(($loop->count - $loop->iteration) < 3){{'dropup'}}@else{{'dropdown'}}@endif">
                             <span class="bx bx-dots-vertical-rounded font-medium-3 dropdown-toggle nav-hide-arrow cursor-pointer"
                                   id="dropdownMenuButton{{ $chapter->id }}" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></span>
                             <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuButton{{ $chapter->id }}">
-{{--                                <a class="dropdown-item" data-modal href="{{ route('backend.book_chapter.create', $book_id) }}" title="审核操作"><i class="bx bxs-check-shield mr-1"></i>审核操作</a>--}}
-                                <a class="dropdown-item" data-modal data-size="full" href="{{ route('backend.book_chapter.edit', ['book_id' => $book_id, 'chapter_id' => $chapter->id]) }}" title="编辑章节"><i class="bx bx-edit-alt mr-1"></i>编辑章节</a>
+                                <a class="dropdown-item" data-modal href="{{ route('backend.book_chapter.edit' , $chapter->id) }}" title="编辑章节"><i class="bx bx-edit-alt mr-1"></i>编辑章节</a>
                             </div>
                         </div>
                     </td>

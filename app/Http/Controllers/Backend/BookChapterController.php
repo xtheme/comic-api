@@ -2,10 +2,7 @@
 
 namespace App\Http\Controllers\Backend;
 
-use App\Enums\Options;
 use App\Http\Controllers\Controller;
-use App\Http\Requests\Backend\BookRequest;
-use App\Models\Book;
 use App\Models\BookChapter;
 use App\Repositories\Contracts\BookChapterRepositoryInterface;
 use Illuminate\Http\Request;
@@ -34,6 +31,7 @@ class BookChapterController extends Controller
         return view('backend.book_chapter.index')->with($data);
     }
 
+
     /**
      * 图片预览
      */
@@ -41,19 +39,9 @@ class BookChapterController extends Controller
     {
         $chapter = BookChapter::findOrFail($id);
 
-        $json_images = $chapter->json_images;
-
-        $domain = ($chapter->operating == 1) ? getOldConfig('web_config', 'api_url') : getOldConfig('web_config', 'img_sync_url');
-
-        $images = [];
-
-        foreach ($json_images as $image) {
-            $images[] = $domain . $image['url'];
-        }
-
         $data = [
             'title' => $chapter->title,
-            'images' => $images,
+            'images' => $chapter->json_image_thumb,
         ];
 
         return view('backend.book_chapter.preview')->with($data);
@@ -69,20 +57,20 @@ class BookChapterController extends Controller
         switch ($action) {
             case 'enable':
                 $text = '批量启用';
-                $data = ['chapter_status' => 1];
+                $data = ['status' => 1];
                 break;
             case 'disable':
                 $text = '批量封禁';
-                $data = ['chapter_status' => 0];
+                $data = ['status' => -1];
                 break;
             case 'charge':
                 $text = '批量收费';
-                $data = ['isvip' => 1];
+                $data = ['charge' => 1];
                 break;
             default:
             case 'free':
                 $text = '批量免费';
-                $data = ['isvip' => 0];
+                $data = ['charge' => -1];
                 break;
         }
 
@@ -115,43 +103,39 @@ class BookChapterController extends Controller
     public function create($book_id)
     {
         $data = [
-            'status_options' => Options::STATUS_OPTIONS,
-            'tags' => getAllTags(),
+            'book_id'           => $book_id,
         ];
 
         return view('backend.book_chapter.create')->with($data);
     }
 
-    public function store(BookRequest $request)
+
+    public function store(Request $request , $book_id)
     {
-        $validated = $request->validated();
+        $post = $request->post();
+        $post['book_id'] = $book_id;
 
-        $book = $this->repository->create($validated);
-
-        $book->tag($validated['tag']);
+        $this->repository->create($post);
 
         return Response::jsonSuccess(__('response.create.success'));
     }
 
-    public function edit($book_id)
+    public function edit($id)
     {
         $data = [
-            'book_id' => $book_id,
+            'data'        => $this->repository->find($id)
         ];
+
 
         return view('backend.book_chapter.edit')->with($data);
     }
 
-    public function update(BookRequest $request, $id)
+    public function update(Request $request, $id)
     {
-        $validated = $request->validated();
 
-        $this->repository->update($id, $validated);
-
-        $book = $this->repository->find($id);
-
-        $book->tag($validated['tag']);
+        $this->repository->update($id , $request->post());
 
         return Response::jsonSuccess(__('response.update.success'));
     }
+
 }

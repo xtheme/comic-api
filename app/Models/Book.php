@@ -88,16 +88,13 @@ class Book extends BaseModel
     {
         if ($this->operating == 1) {
             if (true == config('api.encrypt.image')) {
-                return webp(getOldConfig('web_config', 'img_sync_url_password_webp') . $this->vertical_cover, 0);
-                // return webp(getConfig('app', 'webp_img_url') . $this->vertical_cover, 0);
+                return webp(getConfig('app', 'webp_url') . $this->vertical_cover, 0);
             }
 
-            return getOldConfig('web_config', 'api_url') . $this->vertical_cover;
-            // return getConfig('app', 'img_url') . $this->vertical_cover;
+            return getConfig('app', 'img_url') . $this->vertical_cover;
         }
 
-        return getOldConfig('web_config', 'img_sync_url') . $this->vertical_cover;
-        // return getConfig('app', 'img_url') . $this->vertical_cover;
+        return getConfig('app', 'img_url') . $this->vertical_cover;
     }
 
     /**
@@ -107,16 +104,13 @@ class Book extends BaseModel
     {
         if ($this->operating == 1) {
             if (true == config('api.encrypt.image')) {
-                return webp(getOldConfig('web_config', 'img_sync_url_password_webp') . $this->horizontal_cover, 0);
-                // return webp(getConfig('app', 'webp_img_url') . $this->horizontal_cover, 0);
+                return webp(getConfig('app', 'webp_url') . $this->horizontal_cover, 0);
             }
 
-            return getOldConfig('web_config', 'api_url') . $this->horizontal_cover;
-            // return getConfig('app', 'img_url') . $this->horizontal_cover;
+            return getConfig('app', 'img_url') . $this->horizontal_cover;
         }
 
-        return getOldConfig('web_config', 'img_sync_url') . $this->horizontal_cover;
-        // return getConfig('app', 'img_url') . $this->horizontal_cover;
+        return getConfig('app', 'img_url') . $this->horizontal_cover;
     }
 
     public function getVisitAttribute($value)

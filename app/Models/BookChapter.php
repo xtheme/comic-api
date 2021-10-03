@@ -22,11 +22,22 @@ class BookChapter extends BaseModel
 
     protected $casts = [
         'json_images' => 'array',
-        // 'charge' => BooleanCast::class,
     ];
 
     public function book()
     {
         return $this->belongsTo('App\Models\Book');
+    }
+
+    //組織json_images 完整路徑
+    public function getJsonImageThumbAttribute()
+    {
+        $images = $this->json_images;
+        
+        foreach ($images as $key => $image) {
+            $images[$key] = getConfig('app', 'img_url') . $image;
+        }
+
+        return $images;
     }
 }
