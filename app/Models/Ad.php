@@ -26,10 +26,10 @@ class Ad extends BaseModel
 
     public function getImageAttribute($value)
     {
-        $api_url = getOldConfig('web_config', 'api_url') ;
+        $api_url = getConfig('app', 'img_url');
 
         if (true == config('api.encrypt.image')){
-            $api_url = getOldConfig('web_config', 'img_sync_url_password_webp') ;
+            $api_url = getConfig('app', 'webp_url');
         }
     
         if (Str::endsWith($api_url, '/')) {
@@ -44,9 +44,7 @@ class Ad extends BaseModel
 
     public function getImageThumbAttribute()
     {
-        // todo change config
-        $api_url = getOldConfig('web_config', 'api_url') ;
-
+        $api_url = getConfig('app', 'img_url');
 
         if (Str::endsWith($api_url, '/')) {
             $api_url = substr($api_url, 0, -1);
