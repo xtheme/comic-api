@@ -43,6 +43,9 @@ class RecordService
                 }
                 break;
         }
+
+        // 排行榜
+        app(RankingService::class)->from($this->type)->record($target_id);
     }
 
     public static function play($video_id, $series_id)

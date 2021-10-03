@@ -189,6 +189,17 @@ return [
             'timeout' => 60,
         ],
 
+        'readonly' => [
+            'url' => env('REDIS_URL'),
+            'host' => env('REDIS_HOST', '127.0.0.1'),
+            'password' => env('REDIS_PASSWORD', null),
+            'port' => env('REDIS_PORT', '6379'),
+            'database' => env('REDIS_READONLY_DB', '2'),
+            'prefix' => env('REDIS_READONLY_PREFIX', ''),
+            'read_timeout' => 60,
+            'timeout' => 60,
+        ],
+
     ],
 
 ];

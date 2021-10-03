@@ -166,32 +166,33 @@ if (!function_exists('parseImgFromHtml')) {
             if (!empty($match)) {
                 preg_match('/<\s*img\s+[^>]*?src\s*=\s*(\'|\")(.*?)\\1[^>]*?\/?\s*>/i', $match[0], $match2);
                 $match2[2] = str_replace($img_url, '', $match2[2]);
-                $img[$i]['url'] = $match2[2];
-                $img[$i]['width'] = (int) str_replace('"', '', substr($match[1], 6, strlen($match[1])));
-                $img[$i]['height'] = (int) str_replace('"', '', substr($match[2], 7, strlen($match[2])));
-
-                if ($img[$i]['width'] == 0 || $img[$i]['height'] == 0) {
-                    try {
-                        $get_img_info = getimagesize($img_url . $img[$i]['url']);
-                        $img[$i]['width'] = (int) $get_img_info[0];
-                        $img[$i]['height'] = (int) $get_img_info[1];
-                    } catch (\Exception $exception) {
-                        $img[$i]['width'] = $width;
-                        $img[$i]['height'] = $height;
-                    }
-                }
+                $img[$i] = $match2[2];
+                // $img[$i]['url'] = $match2[2];
+                // $img[$i]['width'] = (int) str_replace('"', '', substr($match[1], 6, strlen($match[1])));
+                // $img[$i]['height'] = (int) str_replace('"', '', substr($match[2], 7, strlen($match[2])));
+                //
+                // if ($img[$i]['width'] == 0 || $img[$i]['height'] == 0) {
+                //     try {
+                //         $get_img_info = getimagesize($img_url . $img[$i]['url']);
+                //         $img[$i]['width'] = (int) $get_img_info[0];
+                //         $img[$i]['height'] = (int) $get_img_info[1];
+                //     } catch (\Exception $exception) {
+                //         $img[$i]['width'] = $width;
+                //         $img[$i]['height'] = $height;
+                //     }
+                // }
             } else {
                 $matches[2][$i] = str_replace($img_url, '', $matches[2][$i]);
-                $img[$i]['url'] = $matches[2][$i];
-
-                try {
-                    $get_img_info = getimagesize($img_url . $img[$i]['url']);
-                    $img[$i]['width'] = (int) $get_img_info[0];
-                    $img[$i]['height'] = (int) $get_img_info[1];
-                } catch (\Exception $exception) {
-                    $img[$i]['width'] = $width;
-                    $img[$i]['height'] = $height;
-                }
+                $img[$i] = $matches[2][$i];
+                // $img[$i]['url'] = $matches[2][$i];
+                // try {
+                //     $get_img_info = getimagesize($img_url . $img[$i]['url']);
+                //     $img[$i]['width'] = (int) $get_img_info[0];
+                //     $img[$i]['height'] = (int) $get_img_info[1];
+                // } catch (\Exception $exception) {
+                //     $img[$i]['width'] = $width;
+                //     $img[$i]['height'] = $height;
+                // }
             }
         }
 
@@ -261,7 +262,7 @@ if (!function_exists('image_thumb')) {
      */
     function image_thumb($image)
     {
-        
+
         $api_url = getOldConfig('web_config', 'api_url') ;
 
         if (true == config('api.encrypt.image')){
