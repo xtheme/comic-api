@@ -153,18 +153,6 @@ Route::middleware(['auth', 'auth.route.role', 'log.activity'])->prefix('backend'
         Route::delete('destroy/{id}', [Backend\NoticeController::class , 'destroy'])->name('destroy');
     });
 
-    // 漫画首頁模塊
-    /*Route::prefix('comic_block')->as('comic_block.')->group(function () {
-        Route::get('/', [ComicBlockController::class , 'index'])->name('index');
-        Route::get('create', [ComicBlockController::class , 'create'])->name('create');
-        Route::post('store', [ComicBlockController::class , 'store'])->name('store');
-        Route::get('edit/{id}', [ComicBlockController::class , 'edit'])->name('edit');
-        Route::put('update/{id}', [ComicBlockController::class , 'update'])->name('update');
-        Route::delete('destroy/{id}', [ComicBlockController::class , 'destroy'])->name('destroy');
-        Route::put('sort', [ComicBlockController::class , 'sort'])->name('sort');
-        Route::post('batch/destroy/{ids?}', [ComicBlockController::class, 'batchDestroy'])->name('batch_destroy');
-    });*/
-
     // 举报类型
     Route::prefix('report_type')->as('report_type.')->group(function () {
         Route::get('/', [Backend\ReportTypeController::class , 'index'])->name('index');
