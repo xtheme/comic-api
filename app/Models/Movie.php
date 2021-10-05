@@ -10,8 +10,6 @@ class Movie extends Model
 {
     use HasFactory;
 
-    protected $connection = 'mysql_video';
-
     public function getTitleAttribute()
     {
         $title = $this->video_name;

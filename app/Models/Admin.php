@@ -14,7 +14,6 @@ class Admin extends Authenticatable
     use HasFactory, Notifiable;
     use HasRoles;
 
-
     /**
      * The attributes that are mass assignable.
      *
