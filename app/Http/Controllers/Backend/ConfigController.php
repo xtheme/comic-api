@@ -15,6 +15,7 @@ class ConfigController extends Controller
         'service' => '客服配置',
         'payment' => '支付配置',
         'comment' => '评论配置',
+        'ad' => '广告配置'
     ];
 
     public function index(Request $request)

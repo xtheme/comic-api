@@ -86,7 +86,7 @@ class UserService
                 $sign_days = $user->sign_days;
             }
 
-            $score_list = $this->scoreList();
+            $score_list = getConfig('app', 'sign_config');
 
             $user->sign_days  = $sign_days;
             $user->today_sign = $today_sign;
@@ -128,8 +128,8 @@ class UserService
     public function genToken($uid): string
     {
         $data = [
-            // 'iss' => request()->header('uuid'), //该JWT的签发者
-            'iss' => $uid,
+            'iss' => request()->header('uuid'), //该JWT的签发者
+            'uid' => $uid,
             'ip' => request()->ip(),
             'iat' => time(), // 签发时间
             'exp' => time() + config('api.jwt.ttl'), // 过期时间
@@ -138,7 +138,9 @@ class UserService
             'jti' => md5(uniqid('JWT', true) . time()) // 该Token唯一标识
         ];
 
-        return JwtService::getToken($data);
+        $JwtService = new JwtService();
+
+        return $JwtService->getToken($data);
     }
 
     /**
@@ -399,16 +401,17 @@ class UserService
     public function scoreList()
     {
         // todo change config
-        $configs = explode(';', getOldConfig('user_config', 'sign'));
-
-        $score_list = [];
-
-        foreach ($configs as $k => $v) {
-            $arr = explode("|", $v);
-            $score_list[$k] = $arr[1];
-        }
-
-        return $score_list;
+        // $configs = explode(';',  getConfig('app', 'sign_config'));
+        //
+        // $score_list = [];
+        //
+        // foreach ($configs as $k => $v) {
+        //     $arr = explode("|", $v);
+        //     $score_list[$k] = $arr[1];
+        // }
+        //
+        // return $score_list;
+        return getConfig('app', 'sign_config');
     }
 
     /**
@@ -456,10 +459,9 @@ class UserService
      */
     public function score_get($day)
     {
-        $scoreList = $this->scoreList();
+        $scoreList = getConfig('app', 'sign_config');
 
         $score = 0;
-        $day--;
         foreach ($scoreList as $k => $v) {
             if ($k == $day) {
                 $score = $v;

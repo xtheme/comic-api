@@ -4,9 +4,6 @@ namespace App\Models;
 
 class Comment extends BaseModel
 {
-
-    protected $table = 'comments_clone';
-
     protected $fillable = [
         'chapter_id',
         'user_id',
