@@ -6,13 +6,13 @@ use App\Http\Controllers\Controller;
 use App\Models\Book;
 use App\Models\Ranking;
 use App\Traits\CacheTrait;
-use Cache;
 use Illuminate\Support\Facades\Redis;
 use Illuminate\Support\Facades\Response;
 
 class RankingController extends Controller
 {
     const LIMIT = 19;
+    const CACHE_TTL = 3600;
 
     use CacheTrait;
 
@@ -80,7 +80,7 @@ class RankingController extends Controller
     {
         $redis = Redis::connection('readonly');
 
-        $redis_key = 'ranking:month:' . date('Y-m');
+        $redis_key = 'book:ranking:month:' . date('Y-m');
 
         $cache = $redis->get($redis_key);
 
@@ -105,8 +105,8 @@ class RankingController extends Controller
                 ];
             })->toArray();
 
-            $redis->set($redis_key, json_encode($data));
-            $redis->expire($redis_key, 1440);
+            $redis->set($redis_key, json_encode($data, JSON_UNESCAPED_UNICODE));
+            $redis->expire($redis_key, self::CACHE_TTL);
         } else {
             $data = json_decode($cache, true);
         }
@@ -118,7 +118,7 @@ class RankingController extends Controller
     {
         $redis = Redis::connection('readonly');
 
-        $redis_key = 'ranking:year:' . date('Y');
+        $redis_key = 'book:ranking:year:' . date('Y');
 
         $cache = $redis->get($redis_key);
 
@@ -142,8 +142,43 @@ class RankingController extends Controller
                 ];
             })->toArray();
 
-            $redis->set($redis_key, json_encode($data));
-            $redis->expire($redis_key, 1440);
+            $redis->set($redis_key, json_encode($data, JSON_UNESCAPED_UNICODE));
+            $redis->expire($redis_key, self::CACHE_TTL);
+        } else {
+            $data = json_decode($cache, true);
+        }
+
+        return Response::jsonSuccess(__('api.success'), $data);
+    }
+
+    private function typeRanking($type)
+    {
+        $redis = Redis::connection('readonly');
+
+        $redis_key = 'book:ranking:' . $type;
+
+        $cache = $redis->get($redis_key);
+
+        if (!$cache) {
+            $books = Book::where(function ($query) use ($type) {
+                $type = ($type == 'japan') ? 1 : 2;
+                $query->where('status', 1)->where('type', $type);
+            })->orderByDesc('view_counts')->limit(self::LIMIT)->get();
+
+            $data = $books->map(function ($book) {
+                return [
+                    'id' => $book->id,
+                    'title' => $book->title,
+                    'description' => $book->description,
+                    'cover' => $book->vertical_thumb,
+                    'tags' => $book->tags->pluck('name'),
+                    'views' => $book->view_counts,
+                    'updated_at' => $book->updated_at->format('Y-m-d'),
+                ];
+            })->toArray();
+
+            $redis->set($redis_key, json_encode($data, JSON_UNESCAPED_UNICODE));
+            $redis->expire($redis_key, self::CACHE_TTL);
         } else {
             $data = json_decode($cache, true);
         }
@@ -153,95 +188,42 @@ class RankingController extends Controller
 
     public function japan()
     {
-        $cache_key = $this->getCacheKeyPrefix() . 'ranking:japan:' . date('Y-m-d');
-
-        // 一日
-        $cache_ttl = 86400;
-
-        $data = Cache::remember($cache_key, $cache_ttl, function () {
-            $rankings = Book::with(['latest_chapter'])->where([
-                ['status', '1'],
-                ['review', '1'],
-                ['type', '1'],
-            ])->orderByDesc('visits')->limit(100)->get();
-
-            return $rankings->map(function ($ranking, $idx) {
-                return [
-                    'book_id' => $ranking->id,
-                    'ranking' => $idx + 1,
-                    'hits' => $ranking->visits,
-                    'episode' => $ranking->latest_chapter->episode,
-                    'title' => $ranking->title,
-                    'description' => $ranking->description,
-                    'end' => $ranking->end,
-                    'vertical_cover' => $ranking->vertical_cover,
-                    'horizontal_cover' => $ranking->horizontal_cover,
-                ];
-            })->values()->toArray();
-        });
-
-        return Response::jsonSuccess(__('api.success'), $data);
+        return $this->typeRanking('japan');
     }
 
     public function korea()
     {
-        $cache_key = $this->getCacheKeyPrefix() . 'ranking:korea:' . date('Y-m-d');
-
-        // 一日
-        $cache_ttl = 86400;
-
-        $data = Cache::remember($cache_key, $cache_ttl, function () {
-            $rankings = Book::with(['latest_chapter'])->where([
-                ['status', '1'],
-                ['review', '1'],
-                ['type', '2'],
-            ])->orderByDesc('visits')->limit(100)->get();
-
-            return $rankings->map(function ($ranking, $idx) {
-                return [
-                    'book_id' => $ranking->id,
-                    'ranking' => $idx + 1,
-                    'hits' => $ranking->visits,
-                    'episode' => $ranking->latest_chapter->episode,
-                    'title' => $ranking->title,
-                    'description' => $ranking->description,
-                    'end' => $ranking->end,
-                    'vertical_cover' => $ranking->vertical_cover,
-                    'horizontal_cover' => $ranking->horizontal_cover,
-                ];
-            })->values()->toArray();
-        });
-
-        return Response::jsonSuccess(__('api.success'), $data);
+        return $this->typeRanking('korea');
     }
 
-    public function new()
+    public function latest()
     {
-        $cache_key = $this->getCacheKeyPrefix() . 'ranking:new:' . date('Y-m-d');
+        $redis = Redis::connection('readonly');
 
-        // 一日
-        $cache_ttl = 86400;
+        $redis_key = 'book:ranking:latest';
 
-        $data = Cache::remember($cache_key, $cache_ttl, function () {
-            $rankings = Book::with(['latest_chapter'])->where([
-                ['status', '1'],
-                ['review', '1'],
-            ])->orderByDesc('created_at')->limit(100)->get();
+        $cache = $redis->get($redis_key);
 
-            return $rankings->map(function ($ranking, $idx) {
+        if (!$cache) {
+            $books = Book::where('status', 1)->latest('updated_at')->limit(self::LIMIT)->get();
+
+            $data = $books->map(function ($book) {
                 return [
-                    'book_id' => $ranking->id,
-                    'ranking' => $idx + 1,
-                    'hits' => $ranking->visits,
-                    'episode' => $ranking->latest_chapter->episode,
-                    'title' => $ranking->title,
-                    'description' => $ranking->description,
-                    'end' => $ranking->end,
-                    'vertical_cover' => $ranking->vertical_cover,
-                    'horizontal_cover' => $ranking->horizontal_cover,
+                    'id' => $book->id,
+                    'title' => $book->title,
+                    'description' => $book->description,
+                    'cover' => $book->vertical_thumb,
+                    'tags' => $book->tags->pluck('name'),
+                    'views' => $book->view_counts,
+                    'updated_at' => $book->updated_at->format('Y-m-d'),
                 ];
-            })->values()->toArray();
-        });
+            })->toArray();
+
+            $redis->set($redis_key, json_encode($data, JSON_UNESCAPED_UNICODE));
+            $redis->expire($redis_key, self::CACHE_TTL);
+        } else {
+            $data = json_decode($cache, true);
+        }
 
         return Response::jsonSuccess(__('api.success'), $data);
     }
