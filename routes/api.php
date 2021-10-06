@@ -34,6 +34,11 @@ Route::as('api.')->middleware(['api'])->group(function () {
             Route::post('/register', [Api\AuthController::class, 'register'])->name('register');
         });
 
+        // 導航列
+        Route::prefix('navigation')->as('navigation.')->group(function () {
+            Route::get('/list', [Api\NavigationController::class , 'list'])->name('list');
+        });
+
         // 電影
         Route::prefix('movie')->as('movie.')->group(function () {
             Route::get('/list/{type}', [Api\MovieController::class, 'list'])->name('list'); // 最新 / 熱門 / (隨機)推薦
@@ -60,18 +65,18 @@ Route::as('api.')->middleware(['api'])->group(function () {
             Route::get('/{id}/chapter/{chapter_id}/{page?}', [Api\BookController::class, 'chapter'])->name('chapter');
             Route::get('/recommend/{id?}', [Api\BookController::class, 'recommend'])->name('recommend');
             Route::post('/report/{type_id}/{id}', [Api\ReportController::class, 'report'])->name('report');
+        });
 
-            // 排行榜
-            Route::prefix('ranking')->as('ranking.')->group(function () {
-                Route::get('/day', [Api\RankingController::class, 'day'])->name('day');
-                Route::get('/week', [Api\RankingController::class, 'week'])->name('week');
-                Route::get('/month', [Api\RankingController::class, 'month'])->name('month');
-                Route::get('/year', [Api\RankingController::class, 'year'])->name('year');
-                Route::get('/japan', [Api\RankingController::class, 'japan'])->name('japan');
-                Route::get('/korea', [Api\RankingController::class, 'korea'])->name('korea');
-                Route::get('/new', [Api\RankingController::class, 'new'])->name('new');
+        // 排行榜
+        Route::prefix('ranking')->as('ranking.')->group(function () {
+            Route::get('/day', [Api\RankingController::class, 'day'])->name('day');
+            Route::get('/week', [Api\RankingController::class, 'week'])->name('week');
+            Route::get('/month', [Api\RankingController::class, 'month'])->name('month');
+            Route::get('/year', [Api\RankingController::class, 'year'])->name('year');
+            Route::get('/japan', [Api\RankingController::class, 'japan'])->name('japan');
+            Route::get('/korea', [Api\RankingController::class, 'korea'])->name('korea');
+            Route::get('/latest', [Api\RankingController::class, 'latest'])->name('latest');
 
-            });
         });
     });
 
