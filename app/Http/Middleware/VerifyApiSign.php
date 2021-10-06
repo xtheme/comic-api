@@ -21,8 +21,9 @@ class VerifyApiSign
         $sign = $request->header('sign');
 
         $data = [
-            'uuid'      => $request->header('uuid'),
+            'uuid' => $request->header('uuid'),
             'timestamp' => $request->header('timestamp'),
+            'platform' => $request->header('platform'),
         ];
 
         // 按键名升序排列

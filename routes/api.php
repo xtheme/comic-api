@@ -80,7 +80,7 @@ Route::as('api.')->middleware(['api'])->group(function () {
         });
     });
 
-    Route::prefix(config('api.version'))->middleware(['auth:sanctum'])->group(function () {
+    Route::prefix(config('api.version'))->middleware(['api.sign', 'auth:sanctum'])->group(function () {
         // 会员
         Route::prefix('auth')->as('auth.')->group(function () {
             Route::get('/me', [Api\AuthController::class, 'me'])->name('me');
@@ -112,64 +112,6 @@ Route::as('api.')->middleware(['api'])->group(function () {
             Route::get('/video/{tag}/{page?}', [Api\TagController::class, 'video'])->name('video');
         });
 
-        /*Route::prefix('user')->as('user.')->group(function () {
-            Route::get('/login', [Api\UserController::class, 'login'])->name('login');
-        });
-
-        // 会员
-        Route::prefix('user')->as('user.')->group(function () {
-            // Route::get('/device', [Api\UserController::class, 'device'])->name('device');
-            // Route::post('/mobile', [UserController::class, 'mobile'])->name('mobile')->middleware('sso');
-            // Route::post('/mobile', [Api\UserController::class, 'mobile'])->name('mobile');
-            // Route::get('/logout', [Api\UserController::class, 'logout'])->name('logout');
-            // Route::get('/logout', [Api\UserController::class, 'logout'])->name('logout');
-            // Route::post('/modify', [Api\UserController::class, 'modify'])->name('modify');
-            // Route::post('/avatar', [Api\UserController::class, 'avatar'])->name('avatar');
-            // Route::post('/sign', [Api\UserController::class, 'sign'])->name('sign');
-
-            // 歷史紀錄 (閱覽/ 播放/ 收藏)
-            Route::get('/{type}/visit/history', [Api\VisitHistoryController::class, 'list'])->name('visit.history');
-            Route::get('/comment/{page?}', [Api\CommentController::class, 'comment'])->name('comment');
-        });
-
-
-        // 簡訊
-        Route::prefix('sms')->as('sms.')->group(function () {
-            Route::post('/verify', [Api\SmsController::class, 'verify'])->name('verify'); // 校验SSO
-            Route::post('/send', [Api\SmsController::class, 'send'])->name('send');
-        });
-
-        // 广告
-        Route::prefix('ad')->as('ad.')->group(function () {
-            Route::get('/space/{id}', [Api\AdController::class, 'space'])->name('space');
-        });
-
-        // 动画
-        Route::prefix('video')->as('video.')->group(function () {
-            Route::get('/list/{page?}', [Api\VideoController::class, 'list'])->name('list');
-            Route::get('/detail/{id}', [Api\VideoController::class, 'detail'])->name('detail');
-            Route::get('/recommend/{id?}', [Api\VideoController::class, 'recommend'])->name('recommend');
-            Route::post('/play/{id}/{series_id}', [Api\VideoController::class, 'play'])->name('play');
-        });
-
-        Route::prefix('test')->group(function () {
-            Route::get('/create/account', [Api\PricingController::class, 'testCreateAccount']);
-            Route::post('/balance/transfer', [Api\PricingController::class, 'testBalanceTransfer']);
-        });
-
-        // 评论
-        Route::prefix('comment')->as('comment.')->group(function () {
-            Route::get('/list/{chapter_id}/{order}', [Api\CommentController::class, 'list'])->name('list');
-            Route::post('/add', [Api\CommentController::class, 'add'])->name('add');
-            Route::post('/like/{comment_id}', [Api\CommentController::class, 'like'])->name('like');
-            Route::post('/destroy/{comment_id}', [Api\CommentController::class, 'destroy'])->name('destroy');
-        });
-
-        // 客服
-        Route::prefix('service')->as('service.')->group(function () {
-            Route::get('/url', [Api\ServiceController::class, 'url'])->name('url');
-        });*/
-
     });
 });
 
@@ -180,3 +122,61 @@ Route::fallback(function () {
         'msg'  => 'Route Not Found!',
     ], 404);
 });
+
+/*Route::prefix('user')->as('user.')->group(function () {
+    Route::get('/login', [Api\UserController::class, 'login'])->name('login');
+});
+
+// 会员
+Route::prefix('user')->as('user.')->group(function () {
+    // Route::get('/device', [Api\UserController::class, 'device'])->name('device');
+    // Route::post('/mobile', [UserController::class, 'mobile'])->name('mobile')->middleware('sso');
+    // Route::post('/mobile', [Api\UserController::class, 'mobile'])->name('mobile');
+    // Route::get('/logout', [Api\UserController::class, 'logout'])->name('logout');
+    // Route::get('/logout', [Api\UserController::class, 'logout'])->name('logout');
+    // Route::post('/modify', [Api\UserController::class, 'modify'])->name('modify');
+    // Route::post('/avatar', [Api\UserController::class, 'avatar'])->name('avatar');
+    // Route::post('/sign', [Api\UserController::class, 'sign'])->name('sign');
+
+    // 歷史紀錄 (閱覽/ 播放/ 收藏)
+    Route::get('/{type}/visit/history', [Api\VisitHistoryController::class, 'list'])->name('visit.history');
+    Route::get('/comment/{page?}', [Api\CommentController::class, 'comment'])->name('comment');
+});
+
+
+// 簡訊
+Route::prefix('sms')->as('sms.')->group(function () {
+    Route::post('/verify', [Api\SmsController::class, 'verify'])->name('verify'); // 校验SSO
+    Route::post('/send', [Api\SmsController::class, 'send'])->name('send');
+});
+
+// 广告
+Route::prefix('ad')->as('ad.')->group(function () {
+    Route::get('/space/{id}', [Api\AdController::class, 'space'])->name('space');
+});
+
+// 动画
+Route::prefix('video')->as('video.')->group(function () {
+    Route::get('/list/{page?}', [Api\VideoController::class, 'list'])->name('list');
+    Route::get('/detail/{id}', [Api\VideoController::class, 'detail'])->name('detail');
+    Route::get('/recommend/{id?}', [Api\VideoController::class, 'recommend'])->name('recommend');
+    Route::post('/play/{id}/{series_id}', [Api\VideoController::class, 'play'])->name('play');
+});
+
+Route::prefix('test')->group(function () {
+    Route::get('/create/account', [Api\PricingController::class, 'testCreateAccount']);
+    Route::post('/balance/transfer', [Api\PricingController::class, 'testBalanceTransfer']);
+});
+
+// 评论
+Route::prefix('comment')->as('comment.')->group(function () {
+    Route::get('/list/{chapter_id}/{order}', [Api\CommentController::class, 'list'])->name('list');
+    Route::post('/add', [Api\CommentController::class, 'add'])->name('add');
+    Route::post('/like/{comment_id}', [Api\CommentController::class, 'like'])->name('like');
+    Route::post('/destroy/{comment_id}', [Api\CommentController::class, 'destroy'])->name('destroy');
+});
+
+// 客服
+Route::prefix('service')->as('service.')->group(function () {
+    Route::get('/url', [Api\ServiceController::class, 'url'])->name('url');
+});*/
