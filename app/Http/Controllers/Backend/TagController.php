@@ -85,55 +85,55 @@ class TagController extends Controller
             return Response::jsonError($validator->errors()->first(), 500);
         }
 
-        switch ($field) {
-            case 'name':
-                $tag = Tag::find($request->post('pk'));
+        $tag = Tag::findFromString($request->post('pk'));
 
-                // QZMHS-1110 新增标签限制4哥汉字
-                if ($tag->suggest == 1) {
-                    if (Str::length($request->post('value')) > $this->front_length_limit) {
-                        return Response::jsonError('前端显示的标签请勿超过 ' . $this->front_length_limit . ' 个字');
-                    }
-                }
-
-                $data = [
-                    'slug' => mb_strtolower($request->post('value'), 'UTF-8'),
-                    'name' => $request->post('value'),
-                ];
-
-                $tag->update($data);
-                break;
-            default:
-                $this->repository->editable($request->post('pk'), $field, $request->post('value'));
+        // QZMHS-1110 新增标签限制4哥汉字
+        if ($field == 'name') {
+            if (Str::length($request->post('value')) > $this->front_length_limit) {
+                return Response::jsonError('前端显示的标签请勿超过 ' . $this->front_length_limit . ' 个字');
+            }
         }
+
+        $tag->$field = $request->post('value');
+        $tag->save();
 
         return Response::jsonSuccess(__('response.update.success'));
     }
 
     public function batch(Request $request, $action)
     {
-        $ids = explode(',', $request->input('ids'));
+        $tags = explode(',', $request->input('ids'));
 
         switch ($action) {
             case 'dismiss_book':
                 $text = '解除关联的漫画';
-                Tag::whereIn('id', $ids)->each(function ($tag) {
+                collect($tags)->each(function ($string) {
+                    $tag = Tag::findFromString($string);
                     $tag->tagged_book()->delete();
                 });
                 break;
             case 'dismiss_video':
                 $text = '解除关联的动画';
-                Tag::whereIn('id', $ids)->each(function ($tag) {
+                collect($tags)->each(function ($string) {
+                    $tag = Tag::findFromString($string);
                     $tag->tagged_video()->delete();
                 });
                 break;
             case 'disable':
                 $text = '在前端隐藏';
-                Tag::whereIn('id', $ids)->update(['suggest' => 0]);
+                collect($tags)->each(function ($string) {
+                    $tag = Tag::findFromString($string);
+                    $tag->suggest = 0;
+                    $tag->save();
+                });
                 break;
             case 'enable':
                 $text = '在前端显示';
-                Tag::whereIn('id', $ids)->whereRaw('CHAR_LENGTH(name) <= 4')->update(['suggest' => 1]);
+                collect($tags)->each(function ($string) {
+                    $tag = Tag::findFromString($string);
+                    $tag->suggest = 1;
+                    $tag->save();
+                });
                 break;
             default:
                 return Response::jsonError(__('response.error.unknown'));
@@ -142,9 +142,12 @@ class TagController extends Controller
         return Response::jsonSuccess(__('response.success.complete', ['action' => $text]));
     }
 
-    public function destroy($id)
+    public function destroy($name)
     {
-        $this->repository->destroy($id);
+        $tag = Tag::findFromString($name);
+        $tag->tagged_book()->delete();
+        $tag->tagged_video()->delete();
+        $tag->delete();
 
         return Response::jsonSuccess(__('response.destroy.success'));
     }

@@ -2,8 +2,6 @@
 
 namespace App\Services;
 
-use App\Models\Book;
-use App\Models\User;
 use CURLFile;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\App;
@@ -76,17 +74,15 @@ class UploadService
         if (!$id) {
             // 新增时尚无 id, 找出最后一笔 id +1
             switch ($dir) {
-                case 'avatar':
-                    $id = User::latest()->first()->id + 1;
-                    break;
-                case 'book':
-                    $id = Book::latest()->first()->id + 1;
+                case 'navigation':
+                    $latest_id = DB::table($dir)->latest()->first()->id ?? 0;
                     break;
                 default:
                     $latest_id = DB::table(Str::plural($dir))->latest()->first()->id ?? 0;
-                    $id = $latest_id + 1;
                     break;
             }
+
+            $id = $latest_id + 1;
         }
 
         $path .= '/' . $id;
@@ -210,19 +206,11 @@ class UploadService
         // Storage::delete($path);
         Storage::deleteDirectory($this->path);
 
-        // todo change config
-        $img_url = getOldConfig('web_config', 'api_url');
-        // $img_url = getConfig('app', 'img_url');
-
-        if (Str::endsWith($img_url, '/')) {
-            $img_url = substr($img_url, 0, -1);
-        }
-
         $result = [
             'success' => true,
             'message' => __('response.upload.success'),
             'path' => $response['image_path'],
-            'domain' => $img_url, // todo 切换配置, CDN 域名 https://uatoriginalmanhuapic.ngxs9.app/
+            'domain' => getImageDomain(),
         ];
         return $result;
     }

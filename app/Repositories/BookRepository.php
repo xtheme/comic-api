@@ -42,9 +42,9 @@ class BookRepository extends Repository implements BookRepositoryInterface
                 return $query->where('id', $id);
             })->when($title, function (Builder $query, $title) {
                 return $query->where('title', 'like', '%' . $title . '%');
-            })->when($tag, function (Builder $query, $tag) {
-                /** @noinspection PhpUndefinedMethodInspection */
-                return $query->withAnyTag($tag);
+            // })->when($tag, function (Builder $query, $tag) {
+            //     /** @noinspection PhpUndefinedMethodInspection */
+            //     return $query->withAnyTag($tag);
             })->when($review, function (Builder $query, $review) {
                 return $query->where('review', $review);
             })->when($status, function (Builder $query, $status) {

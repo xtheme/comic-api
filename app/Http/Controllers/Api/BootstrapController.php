@@ -3,7 +3,6 @@
 namespace App\Http\Controllers\Api;
 
 use App\Models\AdSpace;
-use App\Services\JwtService;
 use Illuminate\Http\Request;
 use App\Models\BookReportType;
 use App\Http\Controllers\Controller;
@@ -15,24 +14,27 @@ class BootstrapController extends Controller
     /**
      * 查询廣告位底下的廣告列表
      */
-    public function configs(Request $request)
+    public function configs()
     {
         $data = [
-            'token' => JwtService::getToken($request->header('uuid')), // if_encode_pic
-            // 'encrypt_img' => getConfig('app', 'encrypt_img'), // if_encode_pic
-            // 'encrypt_api' => getConfig('app', 'encrypt_api'), // encode_api_url
-            // 'landing_page' => getConfig('app', 'landing_page'), // start_domain
-            // 'share_url' => getConfig('share', 'url'), // share_url
-            // 'share_title' => getConfig('share', 'title'), // app_share_url
-            // 'share_qrcode' => asset('qrcode.png'), // qrcode_url
-            // 'contact_email' => getConfig('service', 'email'), // contact_email
-            // 'contact_phone' => getConfig('service', 'phone'), // contact_phone
-            // 'ad_sdk' => getConfig('app', 'ad_sdk'), // if_sdk_ads
-            // 'ad_spaces' => $this->getAdSpaces(), // use_sdk_ads_type
-            // 'api_domains' => getConfig('app', 'api_domains'), // use_sdk_ads_type
-            // 'sign_config' => getConfig('app', 'sign_config'), // use_sdk_ads_type
-            // 'report_types' => $this->getReportTypes(), // use_sdk_ads_type
-            // 'ranking' => getConfig('app', 'ranking'), //漫畫排行榜
+            'encrypt_img' => config('api.encrypt.image'), // 圖片是否使用加密資源 if_encode_pic
+            // 'encrypt_api' => config('api.encrypt.response'), // 返回數據是否加密 encode_api_url
+            'landing_page' => getConfig('app', 'landing_page'), // 落地頁 start_domain
+            'share_url' => getConfig('share', 'url'), // share_url
+            'share_title' => getConfig('share', 'title'), // app_share_url
+            'share_qrcode' => asset('qrcode.png'), // qrcode_url
+            'contact_email' => getConfig('service', 'email'), // contact_email
+            'contact_phone' => getConfig('service', 'phone'), // contact_phone
+            //'ad_sdk' => getConfig('app', 'ad_sdk'), // if_sdk_ads
+            'ad_hotup' => (int) getConfig('ad', 'ad_hotup'), // ad_hotup
+            'ad_spaces' => $this->getAdSpaces(), // ad_spaces
+            'api_domains' => getConfig('app', 'api_domains'), // 網關域名 api_domains
+            'sign_config' => getConfig('app', 'sign_config'), // sign_config
+            'report_types' => $this->getReportTypes(), // use_sdk_ads_type
+            'ranking' => getConfig('app', 'ranking'), //漫畫排行榜
+            // 'if_sdk_ads'       => $this->web_config['if_sdk_ads'] ?? 0,
+            // 'use_sdk_ads_type' => $use_sdk_ads_type,
+            // 'ca'               => 0,
         ];
 
         return Response::jsonSuccess('返回成功', $data);

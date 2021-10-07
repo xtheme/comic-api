@@ -53,7 +53,6 @@
                                 </th>
                                 <th>排序</th>
                                 <th>分类名称</th>
-                                <th>描述</th>
                                 <th class="text-right">查询次数</th>
                                 <th class="text-center">前端显示</th>
                                 <th class="text-center">关联漫画数</th>
@@ -66,27 +65,25 @@
                                 <tr>
                                     <td>
                                         <div class="checkbox">
-                                            <input type="checkbox" class="checkbox-input check-opt" id="check-{{ $tag->id }}" name="ids[]" value="{{ $tag->id }}">
+                                            <input type="checkbox" class="checkbox-input check-opt" id="check-{{ $tag->id }}" name="ids[]" value="{{ $tag->name }}">
                                             <label for="check-{{ $tag->id }}"></label>
                                         </div>
                                     </td>
                                     <td>
-                                        <span data-type="text" data-pk="{{ $tag->id }}" data-title="修改排序" class="editable editable-click" data-url="{{ route('backend.tag.editable', 'priority') }}">{{ $tag->priority }}</span>
+                                        <span data-type="text" data-pk="{{ $tag->name }}" data-title="修改排序" class="editable editable-click" data-url="{{ route('backend.tag.editable', 'order_column') }}">{{ $tag->order_column }}</span>
                                     </td>
                                     <td>
-                                        <span data-type="text" data-pk="{{ $tag->id }}" data-title="修改名称" class="editable editable-click" data-url="{{ route('backend.tag.editable', 'name') }}">{{ $tag->name }}</span>
+                                        <span data-type="text" data-pk="{{ $tag->name }}" data-title="修改名称" class="editable editable-click" data-url="{{ route('backend.tag.editable', 'name') }}">{{ $tag->name }}</span>
                                     </td>
-                                    <td>
-                                        <span data-type="text" data-pk="{{ $tag->id }}" data-title="修改描述" class="editable editable-click" data-url="{{ route('backend.tag.editable', 'description') }}">{{ $tag->description }}</span>
-                                    </td>
+
                                     <td class="text-right">{{ shortenNumber($tag->queries) }}</td>
                                     <td class="text-center">
                                         @switch($tag->suggest)
                                             @case(1)
-                                                <a class="badge badge-pill badge-light-primary" data-confirm href="{{ route('backend.tag.batch', ['action'=>'disable', 'ids' => $tag->id]) }}" title="在前端隐藏">显示</a>
+                                                <a class="badge badge-pill badge-light-primary" data-confirm href="{{ route('backend.tag.batch', ['action'=>'disable', 'ids' => $tag->name]) }}" title="在前端隐藏">显示</a>
                                             @break
                                             @case(0)
-                                                <a class="badge badge-pill badge-light-danger" data-confirm href="{{ route('backend.tag.batch', ['action'=>'enable', 'ids' => $tag->id]) }}" title="在前端显示">隐藏</a>
+                                                <a class="badge badge-pill badge-light-danger" data-confirm href="{{ route('backend.tag.batch', ['action'=>'enable', 'ids' => $tag->name]) }}" title="在前端显示">隐藏</a>
                                             @break
                                         @endswitch
                                     </td>
@@ -111,7 +108,7 @@
                                             <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuButton{{ $tag->id }}">
                                                 <a class="dropdown-item" href="{{ route('backend.book.index', ['tag[]' => $tag->name]) }}"><i class="bx bx-book mr-1"></i>查看关联漫画</a>
                                                 <a class="dropdown-item" href="{{ route('backend.video.index', ['tag[]' => $tag->name]) }}"><i class="bx bx-movie mr-1"></i>查看关联动画</a>
-                                                <a class="dropdown-item" data-destroy href="{{ route('backend.tag.destroy', $tag->id) }}" title="删除标签"><i class="bx bx-trash mr-1"></i> 删除标签</a>
+                                                <a class="dropdown-item" data-destroy href="{{ route('backend.tag.destroy', $tag->name) }}" title="删除标签"><i class="bx bx-trash mr-1"></i> 删除标签</a>
                                             </div>
                                         </div>
                                     </td>

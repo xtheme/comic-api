@@ -24,7 +24,8 @@ class RecordService
                 $history = VideoVisit::firstOrCreate([
                     'video_id' => $target_id,
                     'series_id' => 0,
-                    'user_id' => request()->user->id,
+                    // 'user_id' => request()->user->id,
+                    'user_id' => 1,
                 ]);
 
                 if (!$history->wasRecentlyCreated) {
@@ -35,7 +36,8 @@ class RecordService
                 $history = BookVisit::firstOrCreate([
                     'book_id' => $target_id,
                     'chapter_id' => 0,
-                    'user_id' => request()->user->id,
+                    // 'user_id' => request()->user->id,
+                    'user_id' => 1,
                 ]);
 
                 if (!$history->wasRecentlyCreated) {
@@ -45,7 +47,7 @@ class RecordService
         }
 
         // 排行榜
-        app(RankingService::class)->from($this->type)->record($target_id);
+        // app(RankingService::class)->from($this->type)->record($target_id);
     }
 
     public static function play($video_id, $series_id)

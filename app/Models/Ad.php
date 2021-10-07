@@ -26,32 +26,9 @@ class Ad extends BaseModel
 
     public function getImageAttribute($value)
     {
-        $api_url = getConfig('app', 'img_url');
+        if (!$value) return '';
 
-        if (true == config('api.encrypt.image')){
-            $api_url = getConfig('app', 'webp_url');
-        }
-    
-        if (Str::endsWith($api_url, '/')) {
-            $api_url = substr($api_url, 0, -1);
-        }
-    
-        return $api_url . $value;
-        
-    }
-
-
-
-    public function getImageThumbAttribute()
-    {
-        $api_url = getConfig('app', 'img_url');
-
-        if (Str::endsWith($api_url, '/')) {
-            $api_url = substr($api_url, 0, -1);
-        }
-
-        return $api_url . $this->getRawOriginal('image');
-        
+        return getImageDomain() . $value;
     }
 
 }

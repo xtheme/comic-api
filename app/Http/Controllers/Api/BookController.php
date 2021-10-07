@@ -4,17 +4,15 @@ namespace App\Http\Controllers\Api;
 
 use App\Models\Book;
 use App\Models\BookChapter;
-// use App\Repositories\Contracts\BookRepositoryInterface;
-// use App\Repositories\HistoryRepository;
-use App\Services\AdService;
-use App\Services\RankingService;
 use App\Traits\CacheTrait;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
-use Illuminate\Support\Facades\Redis;
 use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Str;
 use Record;
+
+// use App\Repositories\Contracts\BookRepositoryInterface;
+// use App\Repositories\HistoryRepository;
 
 class BookController extends BaseController
 {
@@ -116,31 +114,10 @@ class BookController extends BaseController
             $chapter->update(['json_images' => $json_images]);
         }
 
+        // 將 json_images 字段中的圖片路徑加上資源域名, 如果使用加密資源則指定圖片寬度
         $images = collect($chapter->json_images)->map(function ($image) use ($chapter) {
-            // todo change config
-            // $encrypt_img = getOldConfig('web_config', 'if_encode_pic');
-            // $webp_domain = getOldConfig('web_config', 'img_sync_url_password_webp');
-            // $webp_width = getOldConfig('web_config', 'pic_webp_width');
-            // $img_domain = getOldConfig('web_config', 'api_url');
-            $encrypt_img = config('api.encrypt.image');
-            $webp_domain = getConfig('app', 'webp_url');
-            $webp_width = getConfig('app', 'webp_width');
-            $img_domain = getConfig('app', 'img_url');
-
-            if ($encrypt_img == 1) {
-                if (Str::endsWith($webp_domain, '/')) {
-                    $webp_domain = substr($webp_domain, 0, -1);
-                }
-                $image = $webp_domain . webp($image, $webp_width);
-            } else {
-                if (Str::endsWith($img_domain, '/')) {
-                    $img_domain = substr($img_domain, 0, -1);
-                }
-                $image = $img_domain . $image;
-            }
-
             return [
-                'url' => $image
+                'url' => getImageDomain() . webpWidth($image, getConfig('app', 'webp_width')),
             ];
         })->toArray();
 
@@ -155,19 +132,19 @@ class BookController extends BaseController
         // 针对每一页生成缓存
         $pages = [];
         for ($i = 1; $i <= $total_pages; $i++) {
-            $start = ($i -1) * $page_size;
+            $start = ($i - 1) * $page_size;
             $slice = array_slice($images, $start, $page_size); // 分页切片
 
             // 针对每一页插入广告
-            $ad_type_id = 25; // 警告: 这里是写死的
-            $adService = new AdService();
-            $slice = $adService->insertAd($ad_type_id, $slice);
+            // $ad_type_id = 16; // 警告: 这里是写死的
+            // $adService = new AdService();
+            // $slice = $adService->insertAd($ad_type_id, $slice);
 
             $data = [
-                'list'    => $slice,
+                'list' => $slice,
                 'extends' => [
                     'current_page' => $i,
-                    'total_page'   => $total_pages,
+                    'total_page' => $total_pages,
                 ],
             ];
 
@@ -195,12 +172,13 @@ class BookController extends BaseController
         }
 
         if ($tags) {
-            $books = Book::select(['id', 'title', 'vertical_cover'])->withCount(['visit_histories'])->withAnyTag($tags)->where('id', '!=', $id)->inRandomOrder()->limit($limit)->get();
+            $books =
+                Book::select(['id', 'title', 'vertical_cover'])->withCount(['visit_histories'])->withAnyTag($tags)->where('id', '!=', $id)->inRandomOrder()->limit($limit)->get();
         } else {
             $books = Book::select(['id', 'title', 'vertical_cover'])->withCount(['visit_histories'])->inRandomOrder()->limit($limit)->get();
         }
 
-        $data = $books->map(function($book) {
+        $data = $books->map(function ($book) {
             return [
                 'id' => $book->id,
                 'title' => $book->title,

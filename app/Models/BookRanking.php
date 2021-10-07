@@ -2,7 +2,7 @@
 
 namespace App\Models;
 
-class Ranking extends BaseModel
+class BookRanking extends BaseModel
 {
     public $timestamps = false;
 

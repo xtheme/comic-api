@@ -27,8 +27,7 @@ class BookController extends Controller
             'review_options' => Options::REVIEW_OPTIONS,
             'charge_options' => Options::CHARGE_OPTIONS,
             'list' => $this->repository->filter($request)->paginate(),
-            // 'tags' => getAllTags(),
-            'tags' => [],
+            'tags' => getAllTags(),
             'pageConfigs' => ['hasSearchForm' => true],
         ];
 
@@ -39,8 +38,7 @@ class BookController extends Controller
     {
         $data = [
             'status_options' => Options::STATUS_OPTIONS,
-            // 'tags' => getAllTags(),
-            'tags' => [],
+            'tags' => getAllTags(),
         ];
 
         return view('backend.book.create')->with($data);
@@ -61,8 +59,7 @@ class BookController extends Controller
     {
         $data = [
             'status_options' => Options::STATUS_OPTIONS,
-            // 'tags' => getAllTags(),
-            'tags' => [],
+            'tags' => getAllTags(),
             'book' => Book::findOrFail($id),
         ];
 
@@ -189,22 +186,21 @@ class BookController extends Controller
         return Response::jsonSuccess('数据已更新成功');
     }
 
+    // CDN 預熱清單
     public function caching(Request $request)
     {
         $books = $this->repository->filter($request)->take(20)->get();
 
-        $domain = getConfig('app', 'webp_url');
-
         $images = $books->reject(function ($book) {
             return $book->chapters_count === 0;
-        })->map(function ($book) use ($domain) {
+        })->map(function ($book) {
             $chapters = $book->chapters;
 
             return $chapters->reject(function ($chapter)  {
                 return $chapter->json_images === '';
-            })->map(function ($chapter) use ($domain) {
-                return collect($chapter->json_images)->map(function ($image) use ($domain)  {
-                    return $domain . webp($image);
+            })->map(function ($chapter) {
+                return collect($chapter->json_images)->map(function ($image) {
+                    return getImageDomain() . webpWidth($image, getConfig('app', 'webp_width'));
                 });
             })->flatten()->toArray();
 
@@ -217,9 +213,9 @@ class BookController extends Controller
         }
 
         return response($txt)->withHeaders([
-            'Content-Type'        => 'text/plain',
-            'Cache-Control'       => 'no-store, no-cache',
-            'Content-Disposition' => 'attachment; filename="CDN预热名单_' . date('Y-m-d') . '.txt',
-        ]);
+                'Content-Type'        => 'text/plain',
+                'Cache-Control'       => 'no-store, no-cache',
+                'Content-Disposition' => 'attachment; filename="CDN预热名单_' . date('Y-m-d') . '.txt',
+            ]);
     }
 }

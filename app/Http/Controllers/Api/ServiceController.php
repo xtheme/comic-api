@@ -17,8 +17,8 @@ class ServiceController extends Controller
     {
         ksort($params);
 
-        // todo change config
-        $service_sign_secret = getOldConfig('web_config', 'service_sign_secret');
+        $service_sign_secret = getConfig('service', 'sign_secret');
+
 
         return md5(implode('', $params) . $service_sign_secret);
     }
@@ -32,18 +32,15 @@ class ServiceController extends Controller
             'url' => ''
         ];
 
-        // todo change config
-        $service_switch = getOldConfig('web_config', 'service_switch');
+        $service_switch = getConfig('service', 'switch');
 
         if (!$service_switch) {
             return $this->jsonSuccess('客服开关关闭！', $data);
         }
 
-        // todo change config
-        $service_app_id = getOldConfig('web_config', 'service_app_id');
-        $service_app_secret = getOldConfig('web_config', 'service_app_secret');
-        // $service_open_id = getOldConfig('web_config', 'service_open_id');
-        $service_api_url= getOldConfig('web_config', 'service_api_url');
+        $service_app_id = getConfig('service', 'app_id');
+        $service_app_secret = getConfig('service', 'app_secret');
+        $service_api_url= getConfig('service', 'api_url');
 
         $params = [
             'app_id'     => $service_app_id,

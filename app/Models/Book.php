@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\Traits\CacheTrait;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Str;
 use Spatie\Tags\HasTags;
 
 class Book extends BaseModel
@@ -30,7 +31,7 @@ class Book extends BaseModel
     ];
 
     protected $hidden = [
-        // 'tagged',
+        'tagged',
     ];
 
     public function chapters()
@@ -82,35 +83,23 @@ class Book extends BaseModel
     }
 
     /**
-     * 直幅封面 / 竖向封面
+     * 直幅封面
      */
-    public function getVerticalThumbAttribute()
+    public function getVerticaCoverAttribute($value)
     {
-        if ($this->operating == 1) {
-            if (true == config('api.encrypt.image')) {
-                return webp(getConfig('app', 'webp_url') . $this->vertical_cover, 0);
-            }
+        if (!$value) return '';
 
-            return getConfig('app', 'img_url') . $this->vertical_cover;
-        }
-
-        return getConfig('app', 'img_url') . $this->vertical_cover;
+        return getImageDomain() . $value;
     }
 
     /**
-     * 橫幅封面 / 横向封面
+     * 横向封面
      */
-    public function getHorizontalThumbAttribute()
+    public function getHorizontalCoverAttribute($value)
     {
-        if ($this->operating == 1) {
-            if (true == config('api.encrypt.image')) {
-                return webp(getConfig('app', 'webp_url') . $this->horizontal_cover, 0);
-            }
+        if (!$value) return '';
 
-            return getConfig('app', 'img_url') . $this->horizontal_cover;
-        }
-
-        return getConfig('app', 'img_url') . $this->horizontal_cover;
+        return getImageDomain() . $value;
     }
 
     public function getVisitAttribute($value)

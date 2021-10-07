@@ -51,11 +51,7 @@ class Config extends BaseModel
                 $value = json_decode($this->content);
                 break;
             case 'image':
-                if (config('api.encrypt.image')) {
-                    $value = getConfig('app', 'encode_img_url') . $this->content;
-                } else {
-                    $value = getConfig('app', 'img_url') . $this->content;
-                }
+                $value = getImageDomain() . $this->content;
                 break;
             default:
                 $value = $this->content ?? '';

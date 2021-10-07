@@ -29,13 +29,13 @@ class BookChapter extends BaseModel
         return $this->belongsTo('App\Models\Book');
     }
 
-    //組織json_images 完整路徑
+    // 將 json_images 字段中的圖片路徑加上資源域名, 如果使用加密資源則指定圖片寬度
     public function getJsonImageThumbAttribute()
     {
         $images = $this->json_images;
-        
+
         foreach ($images as $key => $image) {
-            $images[$key] = getConfig('app', 'img_url') . $image;
+            $images[$key] = getImageDomain() . $image;
         }
 
         return $images;

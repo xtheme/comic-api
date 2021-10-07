@@ -13,6 +13,8 @@ class CreateTagTables extends Migration
             $table->json('name');
             $table->json('slug');
             $table->string('type')->nullable();
+            $table->boolean('suggest')->default(false)->comment('前端是否顯示');
+            $table->integer('queries')->unsigned()->default(0)->comment('前端查詢次數');
             $table->integer('order_column')->nullable();
             $table->timestamps();
         });

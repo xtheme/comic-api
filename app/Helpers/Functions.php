@@ -154,11 +154,8 @@ if (!function_exists('parseImgFromHtml')) {
 
         $img_arr = $matches[0];
         $img = [];
-        $width = 500;
-        $height = 700;
-        // todo change config
-        $img_url = getOldConfig('web_config', 'api_url');
-        // $img_url = getConfig('app', 'img_url');
+
+        $img_url = getConfig('app', 'img_url');
 
         for ($i = 0; $i < count($img_arr); $i++) {
             preg_match('/<img.+(width=\"?\d*\"?).+(height=\"?\d*\"?).+>/i', $img_arr[$i], $match); //匹配宽高
@@ -167,32 +164,9 @@ if (!function_exists('parseImgFromHtml')) {
                 preg_match('/<\s*img\s+[^>]*?src\s*=\s*(\'|\")(.*?)\\1[^>]*?\/?\s*>/i', $match[0], $match2);
                 $match2[2] = str_replace($img_url, '', $match2[2]);
                 $img[$i] = $match2[2];
-                // $img[$i]['url'] = $match2[2];
-                // $img[$i]['width'] = (int) str_replace('"', '', substr($match[1], 6, strlen($match[1])));
-                // $img[$i]['height'] = (int) str_replace('"', '', substr($match[2], 7, strlen($match[2])));
-                //
-                // if ($img[$i]['width'] == 0 || $img[$i]['height'] == 0) {
-                //     try {
-                //         $get_img_info = getimagesize($img_url . $img[$i]['url']);
-                //         $img[$i]['width'] = (int) $get_img_info[0];
-                //         $img[$i]['height'] = (int) $get_img_info[1];
-                //     } catch (\Exception $exception) {
-                //         $img[$i]['width'] = $width;
-                //         $img[$i]['height'] = $height;
-                //     }
-                // }
             } else {
                 $matches[2][$i] = str_replace($img_url, '', $matches[2][$i]);
                 $img[$i] = $matches[2][$i];
-                // $img[$i]['url'] = $matches[2][$i];
-                // try {
-                //     $get_img_info = getimagesize($img_url . $img[$i]['url']);
-                //     $img[$i]['width'] = (int) $get_img_info[0];
-                //     $img[$i]['height'] = (int) $get_img_info[1];
-                // } catch (\Exception $exception) {
-                //     $img[$i]['width'] = $width;
-                //     $img[$i]['height'] = $height;
-                // }
             }
         }
 
@@ -200,20 +174,24 @@ if (!function_exists('parseImgFromHtml')) {
     }
 }
 
-if (!function_exists('webp')) {
+if (!function_exists('webpWidth')) {
     /**
-     * webp 图片规格
+     * 指定 webp 寬度, 僅適用加密資源域名
      *
      * @param  string  $file_path
-     * @param  string  $webp_width
+     * @param  string  $width
      *
      * @return string
      */
-    function webp(string $file_path, string $webp_width = '$w540')
+    function webpWidth(string $file_path, string $width = '')
     {
+        if (true == config('api.encrypt.image')) {
+            return $file_path;
+        }
+
         $extension = strrchr($file_path, '.');
         $file_name = explode($extension, $file_path)[0];
-        return $file_name . $webp_width . $extension;
+        return $file_name . $width . $extension;
     }
 }
 
@@ -254,29 +232,6 @@ if (!function_exists('insertArray')) {
     }
 }
 
-if (!function_exists('image_thumb')) {
-    /**
-     * @param $image
-     *
-     * @return string
-     */
-    function image_thumb($image)
-    {
-
-        $api_url = getOldConfig('web_config', 'api_url') ;
-
-        if (true == config('api.encrypt.image')){
-            $api_url = getOldConfig('web_config', 'img_sync_url_password_webp') ;
-        }
-
-        if (Str::endsWith($api_url, '/')) {
-            $api_url = substr($api_url, 0, -1);
-        }
-
-        return $api_url . $image;
-    }
-}
-
 if (!function_exists('cleanDomain')) {
     /**
      * @param $image
@@ -285,6 +240,28 @@ if (!function_exists('cleanDomain')) {
      */
     function cleanDomain($domain)
     {
+
+        if (Str::endsWith($domain, '/')) {
+            $domain = substr($domain, 0, -1);
+        }
+
+        return $domain;
+    }
+}
+
+if (!function_exists('getImageDomain')) {
+    /**
+     * @return string
+     */
+    function getImageDomain()
+    {
+        if (true == config('api.encrypt.image')) {
+            // 加密資源域名
+            $domain = getConfig('app', 'webp_url');
+        } else {
+            // 未加密資源域名
+            $domain = getConfig('app', 'img_url');
+        }
 
         if (Str::endsWith($domain, '/')) {
             $domain = substr($domain, 0, -1);

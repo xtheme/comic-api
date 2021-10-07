@@ -90,7 +90,7 @@ Route::middleware(['auth', 'auth.route.role', 'log.activity'])->prefix('backend'
         Route::post('store', [Backend\TagController::class , 'store'])->name('store');
         Route::put('batch/{action?}', [Backend\TagController::class, 'batch'])->name('batch');
         Route::put('editable/{field}', [Backend\TagController::class, 'editable'])->name('editable');
-        Route::delete('destroy/{id}', [Backend\TagController::class , 'destroy'])->name('destroy');
+        Route::delete('destroy/{name}', [Backend\TagController::class , 'destroy'])->name('destroy');
     });
 
     // 漫画
