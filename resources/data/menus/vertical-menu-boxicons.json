@@ -33,6 +33,12 @@
             ]
         },
         {
+            "url": "/backend/navigation",
+            "name": "Navigation",
+            "slug": "navigation",
+            "icon": "bx bxs-navigation"
+        },
+        {
             "url": "#",
             "name": "Categories",
             "slug": "categories",

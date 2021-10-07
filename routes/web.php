@@ -153,6 +153,16 @@ Route::middleware(['auth', 'auth.route.role', 'log.activity'])->prefix('backend'
         Route::delete('destroy/{id}', [Backend\NoticeController::class , 'destroy'])->name('destroy');
     });
 
+    // 導航列
+    Route::prefix('navigation')->as('navigation.')->group(function () {
+        Route::get('/', [Backend\NavigationController::class , 'index'])->name('index');
+        Route::get('create', [Backend\NavigationController::class , 'create'])->name('create');
+        Route::post('store', [Backend\NavigationController::class , 'store'])->name('store');
+        Route::get('edit/{id}', [Backend\NavigationController::class , 'edit'])->name('edit');
+        Route::put('update/{id}', [Backend\NavigationController::class , 'update'])->name('update');
+        Route::delete('destroy/{id}', [Backend\NavigationController::class , 'destroy'])->name('destroy');
+    });
+
     // 举报类型
     Route::prefix('report_type')->as('report_type.')->group(function () {
         Route::get('/', [Backend\ReportTypeController::class , 'index'])->name('index');

@@ -12,7 +12,7 @@ return [
     "Order List" => "订单列表",
 
     "Books" => "漫画管理",
-    "Books List" => "漫画列表 (未完成)",
+    "Books List" => "漫画列表",
     "Recommended Books" => "推荐漫画",
     "CDN Caching List" => "CDN 预热名单",
 
@@ -40,6 +40,8 @@ return [
     "AdPlace List" => "广告位列表",
     "Ad List" => "广告列表",
     "Notice List" => "公告列表",
+
+    "Navigation" => "导航推荐",
 
     "Comments" => "評論管理",
     "Comment List" => "漫画评论",
