@@ -111,7 +111,7 @@
     }
 
     // 更新確認彈窗
-    // <a data-confirm href="{{ route('backend.user.block', $item->id) }}" title="封禁该账号">封禁该账号</a>
+    // <a data-confirm href="{{ route('backend.user.topic', $item->id) }}" title="封禁该账号">封禁该账号</a>
     $('[data-confirm]').on('click', function (e) {
         e.preventDefault();
 
@@ -120,7 +120,7 @@
     });
 
     // 删除確認彈窗
-    // <a data-destroy href="{{ route('backend.user.block', $item->id) }}" title="封禁该账号">封禁该账号</a>
+    // <a data-destroy href="{{ route('backend.user.topic', $item->id) }}" title="封禁该账号">封禁该账号</a>
     $('[data-destroy]').on('click', function (e) {
         e.preventDefault();
 

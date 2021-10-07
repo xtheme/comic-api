@@ -5,17 +5,17 @@ namespace App\Http\Controllers\Backend;
 use App\Enums\Options;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Backend\BlockRequest;
-use App\Models\Block;
-use App\Repositories\Contracts\BlockRepositoryInterface;
+use App\Models\Topic;
+use App\Repositories\Contracts\TopicRepositoryInterface;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Response;
 
-class BlockController extends Controller
+class TopicController extends Controller
 {
     private $repository;
     private $causer;
 
-    public function __construct(BlockRepositoryInterface $repository)
+    public function __construct(TopicRepositoryInterface $repository)
     {
         $this->repository = $repository;
 
@@ -34,7 +34,7 @@ class BlockController extends Controller
             'list' => $this->repository->filter($request)->paginate(),
         ];
 
-        return view('backend.block.index')->with($data);
+        return view('backend.topic.index')->with($data);
     }
 
     public function create()
@@ -46,7 +46,7 @@ class BlockController extends Controller
             'ribbon_options' => Options::RIBBON_OPTIONS,
         ];
 
-        return view('backend.block.create')->with($data);
+        return view('backend.topic.create')->with($data);
     }
 
     public function store(BlockRequest $request)
@@ -69,7 +69,7 @@ class BlockController extends Controller
             'ribbon_options' => Options::RIBBON_OPTIONS,
         ];
 
-        return view('backend.block.edit')->with($data);
+        return view('backend.topic.edit')->with($data);
     }
 
     public function update(BlockRequest $request, $id)
@@ -81,7 +81,7 @@ class BlockController extends Controller
 
     public function destroy($id)
     {
-        $block = Block::findOrFail($id);
+        $block = Topic::findOrFail($id);
 
         $block->delete();
 
@@ -92,7 +92,7 @@ class BlockController extends Controller
     {
         $post = $request->post();
 
-        Block::where('id', $post['pk'])->update(['sort' => $post['value']]);
+        Topic::where('id', $post['pk'])->update(['sort' => $post['value']]);
 
         return Response::jsonSuccess('更新资料成功！');
     }
@@ -107,15 +107,15 @@ class BlockController extends Controller
         switch ($action) {
             case 'enable':
                 $text = '启用';
-                Block::whereIn('id', $ids)->update(['status' => 1]);
+                Topic::whereIn('id', $ids)->update(['status' => 1]);
                 break;
             case 'disable':
                 $text = '隐藏';
-                Block::whereIn('id', $ids)->update(['status' => -1]);
+                Topic::whereIn('id', $ids)->update(['status' => -1]);
                 break;
             case 'destroy':
                 $text = '删除';
-                Block::destroy($ids);
+                Topic::destroy($ids);
                 break;
             default:
                 return Response::jsonError(__('response.error.unknown'));

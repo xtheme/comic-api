@@ -52,7 +52,7 @@ Route::as('api.')->middleware(['api'])->group(function () {
             Route::get('/detail/{id}', [Api\ResumeController::class, 'detail'])->name('detail');
         });
 
-        // 主题区块
+        // 主题模块
         Route::prefix('topic')->as('topic.')->group(function () {
             Route::get('/{causer}', [Api\TopicController::class, 'list'])->name('list');
             Route::get('/more/{topic}/{page?}', [Api\TopicController::class, 'more'])->name('more');

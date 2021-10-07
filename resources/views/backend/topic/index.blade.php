@@ -11,7 +11,7 @@
 @section('content')
     <section id="config-list">
         <div class="mb-1">
-            <a href="{{ route('backend.block.create') }}" data-modal class="btn btn-primary" title="添加主题模块" role="button" aria-pressed="true">添加主题模块</a>
+            <a href="{{ route('backend.topic.create') }}" data-modal class="btn btn-primary" title="添加主题模块" role="button" aria-pressed="true">添加主题模块</a>
         </div>
         <div class="card">
             <div class="card-header">
@@ -19,7 +19,7 @@
                     <h4 class="card-title">@yield('title')</h4>
                 </div>
                 <div class="float-right d-flex flex-wrap">
-                    <form id="batch-action" class="form form-vertical" method="get" action="{{ route('backend.block.batch') }}" novalidate>
+                    <form id="batch-action" class="form form-vertical" method="get" action="{{ route('backend.topic.batch') }}" novalidate>
                         <div class="form-body">
                             <div class="d-flex align-items-center">
                                 <div class="form-group mr-1">
@@ -122,9 +122,9 @@
                                     <td>{{ $item->created_at->diffForHumans()  }}</td>
                                     <td>
                                         @if($item->status == 1)
-                                            <a class="badge badge-pill badge-light-success" data-confirm href="{{ route('backend.block.batch', ['action'=>'disable', 'ids' => $item->id]) }}" title="隐藏该模块">启用</a>
+                                            <a class="badge badge-pill badge-light-success" data-confirm href="{{ route('backend.topic.batch', ['action'=>'disable', 'ids' => $item->id]) }}" title="隐藏该模块">启用</a>
                                         @else
-                                            <a class="badge badge-pill badge-light-danger" data-confirm href="{{ route('backend.block.batch', ['action'=>'enable', 'ids' => $item->id]) }}" title="启用该模块">隐藏</a>
+                                            <a class="badge badge-pill badge-light-danger" data-confirm href="{{ route('backend.topic.batch', ['action'=>'enable', 'ids' => $item->id]) }}" title="启用该模块">隐藏</a>
                                         @endif
                                     </td>
                                     <td>{{ $item->query_count }}</td>
@@ -134,8 +134,8 @@
                                                   id="dropdownMenuButton{{ $item->id }}" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></span>
                                             <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuButton{{ $item->id }}">
                                                 <a class="dropdown-item" href="{{ $item->query_url }}" target="_blank"><i class="bx bx-link-external mr-1"></i>查看匹配</a>
-                                                <a class="dropdown-item" data-modal href="{{ route('backend.block.edit', $item->id) }}" title="修改首页模块"><i class="bx bx-edit-alt mr-1"></i>修改</a>
-                                                <a class="dropdown-item" data-destroy href="{{ route('backend.block.destroy', $item->id) }}" title="刪除首页模块"><i class="bx bx-trash mr-1"></i>刪除</a>
+                                                <a class="dropdown-item" data-modal href="{{ route('backend.topic.edit', $item->id) }}" title="修改首页模块"><i class="bx bx-edit-alt mr-1"></i>修改</a>
+                                                <a class="dropdown-item" data-destroy href="{{ route('backend.topic.destroy', $item->id) }}" title="刪除首页模块"><i class="bx bx-trash mr-1"></i>刪除</a>
                                             </div>
                                         </div>
                                     </td>
@@ -177,7 +177,7 @@
                 emptyclass: 'text-light',
                 emptytext: 'N/A',
                 placeholder: '数字需大于0',
-                url: '{{ route('backend.block.sort') }}',
+                url: '{{ route('backend.topic.sort') }}',
                 success: function (res, newValue) {
                     console.log(res);
                     $.toast({

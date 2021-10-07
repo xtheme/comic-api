@@ -2,12 +2,12 @@
 
 namespace App\Repositories;
 
-use App\Models\Block;
-use App\Repositories\Contracts\BlockRepositoryInterface;
+use App\Models\Topic;
+use App\Repositories\Contracts\TopicRepositoryInterface;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 
-class BlockRepository extends Repository implements BlockRepositoryInterface
+class TopicRepository extends Repository implements TopicRepositoryInterface
 {
     protected $cache_ttl = 60; // 缓存秒数
 
@@ -16,7 +16,7 @@ class BlockRepository extends Repository implements BlockRepositoryInterface
      */
     public function model(): string
     {
-        return Block::class;
+        return Topic::class;
     }
 
     /**

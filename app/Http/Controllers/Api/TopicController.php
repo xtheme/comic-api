@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Repositories\Contracts\BlockRepositoryInterface;
+use App\Repositories\Contracts\TopicRepositoryInterface;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Response;
 
@@ -10,7 +10,7 @@ class TopicController extends BaseController
 {
     protected $repository;
 
-    public function __construct(BlockRepositoryInterface $repository)
+    public function __construct(TopicRepositoryInterface $repository)
     {
         $this->repository = $repository;
     }

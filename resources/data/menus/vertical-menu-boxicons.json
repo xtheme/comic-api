@@ -49,8 +49,8 @@
                     "name": "Tags"
                 },
                 {
-                    "url": "/backend/block",
-                    "name": "Block List"
+                    "url": "/backend/topic",
+                    "name": "Topic List"
                 }
             ]
         },

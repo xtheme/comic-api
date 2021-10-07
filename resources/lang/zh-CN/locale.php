@@ -29,7 +29,7 @@ return [
 
     "Categories" => "分类管理",
     "Tags" => "标签分类",
-    "Block List" => "主题模块",
+    "Topic List" => "主题模块",
 
     "Videos" => "动画管理",
     "Video List" => "动画列表",

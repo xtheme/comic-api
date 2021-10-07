@@ -191,17 +191,17 @@ Route::middleware(['auth', 'auth.route.role', 'log.activity'])->prefix('backend'
         Route::put('editable/{field}', [Backend\VideoController::class, 'editable'])->name('editable');
     });
 
-    Route::prefix('video_series')->as('video_series.')->group(function () {
-        Route::get('/{video_id}', [Backend\VideoSeriesController::class , 'index'])->name('index');
-        Route::get('create/{video_id}', [Backend\VideoSeriesController::class , 'create'])->name('create');
-        Route::post('store/{video_id}', [Backend\VideoSeriesController::class , 'store'])->name('store');
-        Route::get('edit/{video_id}/{id}', [Backend\VideoSeriesController::class , 'edit'])->name('edit');
-        Route::post('update/{video_id}/{id}', [Backend\VideoSeriesController::class , 'update'])->name('update');
-        Route::delete('destroy/{id}', [Backend\VideoSeriesController::class , 'destroy'])->name('destroy');
-        Route::put('batch/{action?}', [Backend\VideoSeriesController::class, 'batch'])->name('batch');
-        Route::put('editable/{field}', [Backend\VideoSeriesController::class, 'editable'])->name('editable');
-        Route::any('preview/{id}', [Backend\VideoSeriesController::class, 'preview'])->name('preview');
-    });
+    // Route::prefix('video_series')->as('video_series.')->group(function () {
+    //     Route::get('/{video_id}', [Backend\VideoSeriesController::class , 'index'])->name('index');
+    //     Route::get('create/{video_id}', [Backend\VideoSeriesController::class , 'create'])->name('create');
+    //     Route::post('store/{video_id}', [Backend\VideoSeriesController::class , 'store'])->name('store');
+    //     Route::get('edit/{video_id}/{id}', [Backend\VideoSeriesController::class , 'edit'])->name('edit');
+    //     Route::post('update/{video_id}/{id}', [Backend\VideoSeriesController::class , 'update'])->name('update');
+    //     Route::delete('destroy/{id}', [Backend\VideoSeriesController::class , 'destroy'])->name('destroy');
+    //     Route::put('batch/{action?}', [Backend\VideoSeriesController::class, 'batch'])->name('batch');
+    //     Route::put('editable/{field}', [Backend\VideoSeriesController::class, 'editable'])->name('editable');
+    //     Route::any('preview/{id}', [Backend\VideoSeriesController::class, 'preview'])->name('preview');
+    // });
 
     Route::prefix('video_domain')->as('video_domain.')->group(function () {
         Route::get('/', [Backend\VideoDomainController::class , 'index'])->name('index');
@@ -235,16 +235,16 @@ Route::middleware(['auth', 'auth.route.role', 'log.activity'])->prefix('backend'
         Route::put('batch/{action?}', [Backend\AdController::class, 'batch'])->name('batch'); // 批量操作
     });
 
-    // 首頁模塊
-    Route::prefix('block')->as('block.')->group(function () {
-        Route::get('/', [Backend\BlockController::class , 'index'])->name('index');
-        Route::get('create', [Backend\BlockController::class , 'create'])->name('create');
-        Route::post('store', [Backend\BlockController::class , 'store'])->name('store');
-        Route::get('edit/{id}', [Backend\BlockController::class , 'edit'])->name('edit');
-        Route::put('update/{id}', [Backend\BlockController::class , 'update'])->name('update');
-        Route::delete('destroy/{id}', [Backend\BlockController::class , 'destroy'])->name('destroy');
-        Route::put('sort', [Backend\BlockController::class , 'sort'])->name('sort');
-        Route::put('batch/{action?}', [Backend\BlockController::class, 'batch'])->name('batch');
+    // 主题模块
+    Route::prefix('topic')->as('topic.')->group(function () {
+        Route::get('/', [Backend\TopicController::class , 'index'])->name('index');
+        Route::get('create', [Backend\TopicController::class , 'create'])->name('create');
+        Route::post('store', [Backend\TopicController::class , 'store'])->name('store');
+        Route::get('edit/{id}', [Backend\TopicController::class , 'edit'])->name('edit');
+        Route::put('update/{id}', [Backend\TopicController::class , 'update'])->name('update');
+        Route::delete('destroy/{id}', [Backend\TopicController::class , 'destroy'])->name('destroy');
+        Route::put('sort', [Backend\TopicController::class , 'sort'])->name('sort');
+        Route::put('batch/{action?}', [Backend\TopicController::class, 'batch'])->name('batch');
     });
 
     // 数据统计

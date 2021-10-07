@@ -26,7 +26,7 @@ class RepositoryServiceProvider extends ServiceProvider
         $this->app->bind(Contracts\VideoSeriesRepositoryInterface::class, Repositories\VideoSeriesRepository::class);
         $this->app->bind(Contracts\AdSpaceRepositoryInterface::class, Repositories\AdSpaceRepository::class);
         $this->app->bind(Contracts\AdRepositoryInterface::class, Repositories\AdRepository::class);
-        $this->app->bind(Contracts\BlockRepositoryInterface::class, Repositories\BlockRepository::class);
+        $this->app->bind(Contracts\TopicRepositoryInterface::class, Repositories\TopicRepository::class);
         $this->app->bind(Contracts\HistoryRepositoryInterface::class, Repositories\HistoryRepository::class);
         $this->app->bind(Contracts\MovieRepositoryInterface::class, Repositories\MovieRepository::class);
         $this->app->bind(Contracts\ResumeRepositoryInterface::class, Repositories\ResumeRepository::class);

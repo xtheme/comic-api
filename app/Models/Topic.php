@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Str;
 
-class Block extends BaseModel
+class Topic extends BaseModel
 {
     protected $unlimited = false;
 

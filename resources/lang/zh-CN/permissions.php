@@ -38,9 +38,10 @@ return [
     'video_domain' => '动画域名',
     'ad_space' => '广告位',
     'ad' => '广告',
-    'block' => '主题模块',
+    'topic' => '主题模块',
     'statistics' => '播放统计',
     'activity' => '操作日志',
     'admin' => '管理员',
     'role' => '角色',
+    'navigation' => '导航推荐',
 ];
