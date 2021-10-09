@@ -82,32 +82,40 @@ class VideoRepository extends Repository implements VideoRepositoryInterface
         });
     }
 
+    /**
+     * @param  array  $input
+     *
+     * @return Model|null
+     */
     public function create(array $input = []): ?Model
     {
-        $model = Video::create($input);
+        $model = $this->model::create($input);
 
-        $model->tag($input['tag']);
+        $model->attachTags($input['tag']);
 
         return $model;
     }
 
     /**
      * @param $id
-     * @param array $input
+     * @param  array  $input
      *
      * @return bool
      */
     public function update($id, array $input = []): bool
     {
-        $model = Video::findOrFail($id);
+        $model = $this->model::findOrFail($id);
+
         $model->fill($input);
-        $model->retag($input['tag']);
+
+        $model->syncTags($input['tag']);
+
         return $model->save();
     }
 
     public function random(int $limit): Collection
     {
-        return Video::inRandomOrder()->limit($limit)->get();
+        return $this->model::inRandomOrder()->limit($limit)->get();
     }
 
     public function destroy($id): bool

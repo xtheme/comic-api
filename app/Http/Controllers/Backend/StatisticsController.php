@@ -34,8 +34,7 @@ class StatisticsController extends Controller
             'status_options'   => self::STATUS_OPTIONS,
             'order_by_options' => self::ORDER_BY_OPTIONS,
             'data'             => $this->video_repository->filter($request)->paginate(),
-            // 'tags'             => getAllTags(),
-            'tags'             => [],
+            'tags'             => getAllTags(),
             'pageConfigs'      => ['hasSearchForm' => true],
         ];
 

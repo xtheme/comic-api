@@ -39,7 +39,7 @@ class RankingController extends Controller
                 'id' => $book->id,
                 'title' => $book->title,
                 'description' => $book->description,
-                'cover' => $book->vertical_thumb,
+                'cover' => $book->vertical_cover,
                 'tags' => $book->tags->pluck('name'),
                 'views' => $raw_data[$book->id],
             ];
@@ -67,7 +67,7 @@ class RankingController extends Controller
                 'id' => $book->id,
                 'title' => $book->title,
                 'description' => $book->description,
-                'cover' => $book->vertical_thumb,
+                'cover' => $book->vertical_cover,
                 'tags' => $book->tags->pluck('name'),
                 'views' => $raw_data[$book->id],
             ];
@@ -97,7 +97,7 @@ class RankingController extends Controller
                     'id' => $rank->book->id,
                     'title' => $rank->book->title,
                     'description' => $rank->book->description,
-                    'cover' => $rank->book->vertical_thumb,
+                    'cover' => $rank->book->vertical_cover,
                     'tags' => $rank->book->tags->pluck('name'),
                     'views' => $rank->views,
                 ];
@@ -132,7 +132,7 @@ class RankingController extends Controller
                     'id' => $rank->book->id,
                     'title' => $rank->book->title,
                     'description' => $rank->book->description,
-                    'cover' => $rank->book->vertical_thumb,
+                    'cover' => $rank->book->vertical_cover,
                     'tags' => $rank->book->tags->pluck('name'),
                     'views' => $rank->views,
                 ];
@@ -164,7 +164,7 @@ class RankingController extends Controller
                     'id' => $book->id,
                     'title' => $book->title,
                     'description' => $book->description,
-                    'cover' => $book->vertical_thumb,
+                    'cover' => $book->vertical_cover,
                     'tags' => $book->tags->pluck('name'),
                     'views' => $book->view_counts,
                     'updated_at' => $book->updated_at->format('Y-m-d'),
@@ -204,7 +204,7 @@ class RankingController extends Controller
                     'id' => $book->id,
                     'title' => $book->title,
                     'description' => $book->description,
-                    'cover' => $book->vertical_thumb,
+                    'cover' => $book->vertical_cover,
                     'tags' => $book->tags->pluck('name'),
                     'views' => $book->view_counts,
                     'updated_at' => $book->updated_at->format('Y-m-d'),

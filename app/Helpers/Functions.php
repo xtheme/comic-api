@@ -1,7 +1,6 @@
 <?php
 
 use App\Models\Config;
-use App\Repositories\TagRepository;
 use Illuminate\Support\Str;
 
 if (!function_exists('getConfig')) {
@@ -19,6 +18,7 @@ if (!function_exists('getConfig')) {
             if (!$config) {
                 Log::error('配置項: ' . $group . '.' . $code . ' 不存在');
             }
+
             return $config->value ?? '';
         });
     }
@@ -38,6 +38,7 @@ if (!function_exists('getOldConfig')) {
         return Cache::remember($cache_key, 300, function () use ($type, $key) {
             $config = DB::table('config')->where('config_type', $type)->first();
             $configs = json_decode($config->config_content);
+
             return $configs->$key;
         });
     }
@@ -120,30 +121,35 @@ if (!function_exists('checkHex')) {
                 $hexCode = bin2hex(fread($resource, $fileSize));
             }
             fclose($resource);
-            /* 匹配16進制中的 <% ( ) %> */
-            /* 匹配16進制中的 <? ( ) ?> */
+            /* 匹配16進制中的 <% ( ) %> */ /* 匹配16進制中的 <? ( ) ?> */
             /* 匹配16進制中的 <script | /script> 大小寫亦可 */
             if (preg_match("/(3c25)|(3c3f.*?706870)|(3C534352495054)|(2F5343524950543E)|(3C736372697074)|(2F7363726970743E)/is", $hexCode)) {
                 return false;
             }
         }
+
         return true;
     }
 }
 if (!function_exists('watchDog')) {
     function watchDog($user)
     {
-        if ($user->id == 1)  return true;
+        if ($user->id == 1) {
+            return true;
+        }
 
         return null;
     }
 }
 
 if (!function_exists('getAllTags')) {
-
     function getAllTags()
     {
-        return app(TagRepository::class)->all();
+        $cache_key = 'tags';
+
+        return Cache::remember($cache_key, 300, function () {
+            return Tag::orderByDesc('order_column')->pluck('name')->toArray();
+        });
     }
 }
 
@@ -191,6 +197,7 @@ if (!function_exists('webpWidth')) {
 
         $extension = strrchr($file_path, '.');
         $file_name = explode($extension, $file_path)[0];
+
         return $file_name . $width . $extension;
     }
 }
@@ -240,7 +247,6 @@ if (!function_exists('cleanDomain')) {
      */
     function cleanDomain($domain)
     {
-
         if (Str::endsWith($domain, '/')) {
             $domain = substr($domain, 0, -1);
         }

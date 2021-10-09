@@ -163,7 +163,7 @@
                         <div class="controls">
                             <select id="tags-selector" class="form-control" name="properties[tag][]" multiple="multiple">
                                 @foreach($tags as $tag)
-                                    <option value="{{ $tag->name }}" @if(isset($data->properties['tag']) && in_array($tag->name, $data->properties['tag'])){{'selected'}}@endif>{{ $tag->name }}</option>
+                                    <option value="{{ $tag }}" @if(isset($data->properties['tag']) && in_array($tag, $data->properties['tag'])){{'selected'}}@endif>{{ $tag }}</option>
                                 @endforeach
                             </select>
                         </div>

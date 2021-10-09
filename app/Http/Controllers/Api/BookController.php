@@ -38,7 +38,7 @@ class BookController extends BaseController
             'id' => $book->id,
             'title' => $book->title,
             'author' => $book->author,
-            'cover' => $book->horizontal_thumb,
+            'cover' => $book->horizontal_cover,
             'description' => $book->description,
             'charge' => $book->charge,
             'end' => $book->end,
@@ -184,7 +184,7 @@ class BookController extends BaseController
                 'title' => $book->title,
                 // 'author' => $book->author,
                 // 'description' => $book->description,
-                'cover' => $book->vertical_thumb,
+                'cover' => $book->vertical_cover,
                 'tagged_tags' => $book->tagged_tags,
                 'visit_histories_count' => shortenNumber($book->visit_histories_count),
             ];

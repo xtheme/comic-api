@@ -34,7 +34,7 @@ class TagController extends BaseController
                 'id'                    => $book->id,
                 'title'                 => $book->title,
                 'author'                => $book->author,
-                'cover'                 => $book->vertical_thumb,
+                'cover'                 => $book->vertical_cover,
                 'tagged_tags'           => $book->tagged_tags,
                 'visit_histories_count' => shortenNumber($book->visit_histories_count),
                 'updated_at'            => $book->updated_at->format('Y-m-d'),

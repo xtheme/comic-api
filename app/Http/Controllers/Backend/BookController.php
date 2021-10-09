@@ -46,11 +46,7 @@ class BookController extends Controller
 
     public function store(BookRequest $request)
     {
-        $validated = $request->validated();
-
-        $book = $this->repository->create($validated);
-
-        $book->tag($validated['tag']);
+        $this->repository->create($request->post());
 
         return Response::jsonSuccess(__('response.create.success'));
     }
@@ -68,13 +64,7 @@ class BookController extends Controller
 
     public function update(BookRequest $request, $id)
     {
-        $validated = $request->validated();
-
-        $this->repository->update($id, $validated);
-
-        $book = $this->repository->find($id);
-
-        $book->tag($validated['tag']);
+        $this->repository->update($id, $request->post());
 
         return Response::jsonSuccess(__('response.update.success'));
     }

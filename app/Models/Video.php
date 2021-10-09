@@ -27,22 +27,20 @@ class Video extends BaseModel
         'published_at',
     ];
 
-    protected $appends = [
-        // 'tagged_tags',
-        // 'visit_count',
-        // 'play_count',
-    ];
+    /*public function visit_histories()
+    {
+        return $this->hasMany('App\Models\VideoVisit', 'video_id', 'id');
+    }
 
-    protected $hidden = [
-        // 'tagged',
-        // 'visit_histories',
-        // 'play_histories',
-    ];
+    public function play_histories()
+    {
+        return $this->hasMany('App\Models\VideoPlayLog', 'video_id', 'id');
+    }*/
 
-    // public function series()
-    // {
-    //     return $this->hasMany('App\Models\VideoSeries');
-    // }
+    public function getTaggedTagsAttribute()
+    {
+        return $this->tags->where('suggest', 1)->sortByDesc('order_column')->take(3)->pluck('name')->toArray();
+    }
 
     public function getCountryAttribute($value)
     {
@@ -61,7 +59,7 @@ class Video extends BaseModel
 
     public function getCoverAttribute($value)
     {
-        if (!$value) return null;
+        if (!$value) return '';
 
         return config('api.video.img_domain') . $value;
     }

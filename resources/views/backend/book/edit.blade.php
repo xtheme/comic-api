@@ -18,7 +18,7 @@
                         <div class="controls">
                             <select id="tags-selector" class="form-control" name="tag[]" multiple="multiple">
                                 @foreach($tags as $tag)
-                                    <option value="{{ $tag->name }} "@if(in_array($tag->name, $book->tagged->pluck('tag_name')->toArray())){{'selected'}}@endif>{{ $tag->name }}</option>
+                                    <option value="{{ $tag }} "@if(in_array($tag, $book->tagged_tags)){{'selected'}}@endif>{{ $tag }}</option>
                                 @endforeach
                             </select>
                         </div>

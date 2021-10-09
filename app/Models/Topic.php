@@ -58,10 +58,10 @@ class Topic extends BaseModel
 
         switch ($this->causer) {
             case 'video':
-                $query->with(['tagged'])->withCount(['visit_histories' , 'play_histories'])->where('status', 1);
+                $query->withCount(['visit_histories' , 'play_histories'])->where('status', 1);
                 break;
             case 'book':
-                $query->with(['tagged'])->withCount(['visit_histories', 'favorite_histories'])->where('status', 1);
+                $query->withCount(['visit_histories', 'favorite_histories'])->where('status', 1);
                 break;
         }
 

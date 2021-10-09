@@ -159,7 +159,7 @@
                         <label>标签分类</label>
                         <select id="tags-selector" class="form-control" name="tag[]" multiple="multiple">
                             @foreach($tags as $tag)
-                                <option value="{{ $tag->name }}" @if(in_array($tag->name, request()->get('tag') ?? [])){{'selected'}}@endif>{{ $tag->name }}</option>
+                                <option value="{{ $tag }}" @if(in_array($tag, request()->get('tag') ?? [])){{'selected'}}@endif>{{ $tag }}</option>
                             @endforeach
                         </select>
                     </div>
