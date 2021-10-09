@@ -3,59 +3,49 @@
 namespace App\Http\Controllers\Backend;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Backend\ConfigRequest;
 use App\Models\Config;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Response;
 
 class ConfigController extends Controller
 {
-
-    const GROUP_OPTIONS = [
-        'app' => '基础配置',
-        'service' => '客服配置',
-        'payment' => '支付配置',
-        'comment' => '评论配置',
-        'ad' => '广告配置'
-    ];
-
     public function index(Request $request)
     {
-        $request->merge([
-            'group' => $request->input('group') ?: 'app',
-        ]);
-
-        $group = $request->input('group');
         $keyword = $request->input('keyword');
 
-        $configs = Config::group($group)->keyword($keyword)->paginate();
-
-        return view('backend.config.index', [
-            'groups' => self::GROUP_OPTIONS,
-            'list' => $configs,
+        $data = [
+            'list' => Config::keyword($keyword)->paginate(),
             'pageConfigs' => ['hasSearchForm' => true],
-        ]);
+        ];
+
+        return view('backend.config.index')->with($data);
     }
 
     public function create()
     {
-        return view('backend.config.create', [
-            'groups' => self::GROUP_OPTIONS
-        ]);
+        return view('backend.config.create');
     }
 
-    public function store(Request $request)
+    public function store(ConfigRequest $request)
     {
-        $post = $request->post();
+        $exists = Config::code($request->post('code'))->exists();
 
-        $code_exist = Config::where('code', $post['code'])->count();
-
-        if ($code_exist) {
+        if ($exists) {
             return Response::jsonError('配置代码冲突，请变更配置代码！');
         }
 
-        $config = new Config;
+        $options = collect($request->post('options'))->reject(function ($item) {
+            return $item['key'] == '';
+        })->flatMap(function ($item) {
+            return [$item['key'] => $item['value']];
+        })->toArray();
 
-        $config->fill($post)->save();
+        $config = new Config;
+        $config->name = $request->post('name');
+        $config->code = $request->post('code');
+        $config->options = $options;
+        $config->save();
 
         return Response::jsonSuccess(__('response.create.success'));
     }
@@ -66,24 +56,29 @@ class ConfigController extends Controller
 
         return view('backend.config.edit', [
             'config' => $config,
-            'groups'   => self::GROUP_OPTIONS,
             'pageConfigs' => ['hasSearchForm' => false],
         ]);
     }
 
-    public function update(Request $request, $id)
+    public function update(ConfigRequest $request, $id)
     {
-        $post = $request->post();
+        $exists = Config::where('id', '!=', $id)->code($request->post('code'))->exists();
 
-        $code_exist = Config::where('id', '!=', $id)->where('code', $post['code'])->count();
-
-        if ($code_exist) {
+        if ($exists) {
             return Response::jsonError('配置代码冲突，请变更配置代码！');
         }
 
-        $config = Config::findOrFail($id);
+        $options = collect($request->post('options'))->reject(function ($item) {
+            return $item['key'] == '';
+        })->flatMap(function ($item) {
+            return [$item['key'] => $item['value']];
+        })->toArray();
 
-        $config->fill($post)->save();
+        $config = Config::findOrFail($id);
+        $config->name = $request->post('name');
+        $config->code = $request->post('code');
+        $config->options = $options;
+        $config->save();
 
         return Response::jsonSuccess(__('response.create.success'));
     }

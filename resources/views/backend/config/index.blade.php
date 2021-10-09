@@ -39,28 +39,13 @@
             </div>
             <div class="card-content">
                 <div class="card-body">
-                    <!-- Nav tabs -->
-                    <ul class="nav nav-tabs" role="tablist">
-                        @foreach($groups as $group => $group_name)
-                            @if($group == request()->input('group'))
-                                <li class="nav-item current">
-                                    <a class="nav-link active" href="{{route('backend.config.index', ['group' => $group])}}">{{ $group_name }}</a>
-                                </li>
-                            @else
-                                <li class="nav-item">
-                                    <a class="nav-link" href="{{route('backend.config.index', ['group' => $group])}}">{{ $group_name }}</a>
-                                </li>
-                            @endif
-                        @endforeach
-                    </ul>
                     <!-- Table with outer spacing -->
                     <div class="table-responsive">
                         <table class="table table-striped table-hover">
                             <thead>
                             <tr>
                                 <th>配置描述</th>
-                                <th>配置型别</th>
-                                <th>配置键</th>
+                                <th>配置代号</th>
                                 <th>配置值</th>
                                 <th>创建时间</th>
                                 <th>更新时间</th>
@@ -71,53 +56,14 @@
                             @foreach ($list as $item)
                                 <tr>
                                     <td>{{ $item->name }}</td>
-                                    <td>
-                                        @switch($item->type )
-                                            @case('string')
-                                            字符串
-                                            @break
-                                            @case('image')
-                                            图片
-                                            @break
-                                            @case('switch')
-                                            开关
-                                            @break
-                                            @case('text')
-                                            文本
-                                            @break
-                                            @case('array')
-                                            数组
-                                            @break
-                                            @case('json')
-                                            JSON
-                                            @break
-                                        @endswitch
-                                    </td>
                                     <td>{{ $item->code }}</td>
                                     <td>
-                                        @switch($item->type)
-                                            @case('image')
-                                                <div>
-                                                    <img src="{{ $item->value }}" class="config-img" alt="">
-                                                </div>
-                                                @break
-                                            @case('switch')
-                                                @if ($item->value)
-                                                <span class="badge badge-pill badge-light-primary">启用</span>
-                                                @else
-                                                <span class="badge badge-pill badge-light-danger">关闭</span>
-                                                @endif
-                                                @break
-                                            @case('text')
-                                            @case('array')
-                                                {!! nl2br(e($item->content )) !!}
-                                                @break
-                                            @case('json')
-                                                {!! $item->content !!}
-                                                @break
-                                            @default
-                                                {{ Str::limit($item->value, 50, '...') }}
-                                        @endswitch
+                                        @foreach($item->options as $key => $value)
+                                            <dl class="row mb-0">
+                                                <dt class="col-sm-3">{{ $key }}</dt>
+                                                <dd class="col-sm-9">{{ $value }}</dd>
+                                            </dl>
+                                        @endforeach
                                     </td>
                                     <td>@if($item->created_at){{ $item->created_at->diffForHumans()  }}@endif</td>
                                     <td>@if($item->updated_at){{ $item->updated_at->diffForHumans()  }}@endif</td>

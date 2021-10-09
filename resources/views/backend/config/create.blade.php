@@ -10,27 +10,7 @@
             <div class="row">
                 <div class="col-12">
                     <div class="form-group">
-                        <label for="input-name"><span class="danger">*</span> 配置组</label>
-                        <div class="controls">
-                            <select id="select-type" class="form-control" name="group">
-                                @foreach($groups as $group => $group_name)
-                                    <option value="{{ $group }}">{{ $group_name }}</option>
-                                @endforeach
-                            </select>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-12">
-                    <div class="form-group">
-                        <label><span class="danger">*</span> 配置键</label>
-                        <div class="controls">
-                            <input type="text" class="form-control" name="code">
-                        </div>
-                    </div>
-                </div>
-                <div class="col-12">
-                    <div class="form-group">
-                        <label>配置描述</label>
+                        <label><span class="danger">*</span> 配置描述</label>
                         <div class="controls">
                             <input type="text" class="form-control" name="name" placeholder="配置描述">
                         </div>
@@ -38,46 +18,36 @@
                 </div>
                 <div class="col-12">
                     <div class="form-group">
-                        <label>配置型别</label>
+                        <label><span class="danger">*</span> 配置代号</label>
                         <div class="controls">
-                            <select id="select-type" class="form-control" name="type">
-                                <option value="string" selected>字符串</option>
-                                <option value="switch">开关</option>
-                                <option value="text">文本</option>
-                                <option value="array">数组</option>
-                                <option value="json">JSON</option>
-                                <option value="image">图片</option>
-                            </select>
+                            <input type="text" class="form-control" name="code" placeholder="配置代号">
                         </div>
                     </div>
                 </div>
                 <div class="col-12">
                     <div class="form-group">
-                        <label><span class="danger">*</span> 配置值(value)</label>
-                        <div class="controls">
-                            <div id="input-value-string">
-                                <input type="text" class="form-control" name="content" placeholder="配置值">
-                            </div>
-                            <div id="input-value-switch" class="hidden">
-                                <select class="form-control">
-                                    <option value="1">启用</option>
-                                    <option value="0">关闭</option>
-                                </select>
-                            </div>
-                            <div id="input-value-text" class="hidden">
-{{--                                <textarea id="editor"></textarea>--}}
-                                <textarea class="form-control"  rows="5"></textarea>
-                            </div>
-                            <div id="input-value-image" class="hidden">
-                                <div class="input-group">
-                                    <input type="file" class="hidden-file-upload" data-path="config">
-                                    <input type="text" class="form-control" name="image-path" autocomplete="off" aria-describedby="input-file-addon">
-                                    <div class="input-group-append" id="input-file-addon">
-                                        <button class="btn btn-primary upload-image" type="button">上传</button>
+                        <label><span class="danger">*</span> 配置項</label>
+                        <div class="controls repeater">
+                            <div data-repeater-list="options">
+                                <div data-repeater-item>
+                                    <div class="row">
+                                        <div class="col-3 form-group">
+                                            <input type="text" class="form-control" name="key" placeholder="配置键">
+                                        </div>
+                                        <div class="col-8 form-group">
+                                            <input type="text" class="form-control" name="value" placeholder="配置值">
+                                        </div>
+                                        <div class="col-1 form-group">
+                                            <button class="btn btn-danger text-nowrap px-1" data-repeater-delete type="button">
+                                                <i class="bx bx-x"></i>
+                                            </button>
+                                        </div>
                                     </div>
                                 </div>
-                                <div class="upload-image-callback"></div>
                             </div>
+                            <button class="btn btn-primary" data-repeater-create type="button"><i class="bx bx-plus"></i>
+                                添加配置项
+                            </button>
                         </div>
                     </div>
                 </div>
@@ -92,21 +62,22 @@
 
 {{-- vendor scripts --}}
 @section('vendor-scripts')
-{{--    <script src="{{ asset('vendors/js/editors/CKEditor/ckeditor.js') }}"></script>--}}
+    <script src="{{asset('vendors/js/forms/repeater/jquery.repeater.min.js')}}"></script>
 @endsection
 
 {{-- page scripts --}}
 @section('page-scripts')
     <script>
 		$(document).ready(function () {
-            // CKEditor
-            {{--$.editor({--}}
-            {{--    target: document.querySelector('#editor'),--}}
-            {{--    uploadUrl: '{{ route('editor.upload', ['common']) }}'--}}
-            {{--});--}}
-
-			$('#select-type').on('change', function () {
-				switchType($(this).val());
+			$('.repeater').repeater({
+				show: function () {
+					$(this).slideDown();
+				},
+				hide: function (deleteElement) {
+					if (confirm('是否确定要删除此配置项？')) {
+						$(this).slideUp(deleteElement);
+					}
+				}
 			});
 
 			$('#form').submit(function (e) {
@@ -118,56 +89,25 @@
 					data    : $('#form').serialize(),
 					// debug: true,
 					callback: function (res) {
-                        if (res.code == 200) {
-                            // iframe.blade.php
-                            parent.$.hideModal();
+						if (res.code === 200) {
+							// iframe.blade.php
+							parent.$.hideModal();
 
-                            // iframeLayoutMaster.blade.php
-                            parent.$.reloadIFrame({
-                                title  : '提交成功',
-                                message: '请稍后数据刷新'
-                            });
-                        } else {
-                            $.toast({
-                                type: 'error',
-                                title: '提交失败',
-                                message: res.msg
-                            });
-                        }
+							// iframeLayoutMaster.blade.php
+							parent.$.reloadIFrame({
+								title  : '提交成功',
+								message: '请稍后数据刷新'
+							});
+						} else {
+							$.toast({
+								type: 'error',
+								title: '提交失败',
+								message: res.msg
+							});
+						}
 					}
 				});
 			});
 		});
-
-		function switchType($type) {
-			console.log($type);
-			if ($type == 'string') {
-				$('#input-value-string').removeClass('hidden').children('input[type="text"]').attr('name', 'content');
-				$('#input-value-text').addClass('hidden').children('textarea').attr('name', '');
-				$('#input-value-image').addClass('hidden').children().children('input[type="text"]').attr('name', '');
-				$('#input-value-switch').addClass('hidden').children('select').attr('name', '');
-			}
-
-			if ($type == 'switch') {
-				$('#input-value-switch').removeClass('hidden').children('select').attr('name', 'content');
-				$('#input-value-text').addClass('hidden').children('textarea').attr('name', '');
-				$('#input-value-string').addClass('hidden').children('input[type="text"]').attr('name', '');
-				$('#input-value-image').addClass('hidden').children().children('input[type="text"]').attr('name', '');
-			}
-
-			if ($type == 'text' || $type == 'array' || $type == 'json') {
-				$('#input-value-text').removeClass('hidden').children('textarea').attr('name', 'content');
-				$('#input-value-string').addClass('hidden').children('input[type="text"]').attr('name', '');
-				$('#input-value-image').addClass('hidden').children().children('input[type="text"]').attr('name', '');
-				$('#input-value-switch').addClass('hidden').children('select').attr('name', '');
-			}
-
-			if ($type == 'image') {
-				$('#input-value-image').removeClass('hidden').children().children('input[type="text"]').attr('name', 'content');
-				$('#input-value-string').addClass('hidden').children('input[type="text"]').attr('name', '');
-				$('#input-value-text').addClass('hidden').children('textarea').attr('name', '');
-				$('#input-value-switch').addClass('hidden').children('select').attr('name', '');
-			}
-		}
     </script>
 @endsection

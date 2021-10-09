@@ -3,44 +3,48 @@
 use App\Models\Config;
 use Illuminate\Support\Str;
 
+if (!function_exists('getConfigs')) {
+    /**
+     * @param $key
+     *
+     * @return string|array
+     */
+    function getConfigs($code)
+    {
+        $cache_key = 'config:' . $code;
+
+        if (Cache::has($cache_key)) {
+            return Cache::get($cache_key);
+        }
+
+        $config = Config::code($code)->first();
+
+        if (!$config) {
+            Log::error('配置代号: ' . $code . ' 不存在');
+            return '';
+        }
+
+        Cache::set($cache_key, $config->options, 300);
+
+        return $config->options ?? [];
+    }
+}
+
 if (!function_exists('getConfig')) {
     /**
      * @param $key
      *
      * @return string|array
      */
-    function getConfig($group, $code)
+    function getConfig($code, $key)
     {
-        $cache_key = 'config:' . $group . ':' . $code;
+        $options = getConfigs($code);
 
-        return Cache::remember($cache_key, 300, function () use ($group, $code) {
-            $config = Config::group($group)->code($code)->first();
-            if (!$config) {
-                Log::error('配置項: ' . $group . '.' . $code . ' 不存在');
-            }
+        if (!$options[$key]) {
+            Log::error('配置項: ' . $code . '.' . $key . ' 不存在');
+        }
 
-            return $config->value ?? '';
-        });
-    }
-}
-
-if (!function_exists('getOldConfig')) {
-    /**
-     * @param $type
-     * @param $key
-     *
-     * @return string|array
-     */
-    function getOldConfig($type, $key)
-    {
-        $cache_key = 'old_config:' . $type . ':' . $key;
-
-        return Cache::remember($cache_key, 300, function () use ($type, $key) {
-            $config = DB::table('config')->where('config_type', $type)->first();
-            $configs = json_decode($config->config_content);
-
-            return $configs->$key;
-        });
+        return $options[$key] ?? '';
     }
 }
 

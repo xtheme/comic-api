@@ -6,20 +6,9 @@ use Illuminate\Database\Eloquent\Builder;
 
 class Config extends BaseModel
 {
-    protected $fillable = [
-        'group',
-        'name',
-        'type',
-        'code',
-        'content',
+    protected $casts = [
+        'options' => 'array',
     ];
-
-    public function scopeGroup(Builder $query, string $group = null)
-    {
-        return $query->when($group, function (Builder $query, $group) {
-            return $query->where('group', $group);
-        });
-    }
 
     public function scopeCode(Builder $query, string $code = null)
     {
@@ -33,31 +22,5 @@ class Config extends BaseModel
         return $query->when($keyword, function (Builder $query, $keyword) {
             return $query->where('code', 'like', '%' . $keyword . '%')->orWhere('name', 'like', '%' . $keyword . '%');
         });
-    }
-
-    public function getValueAttribute()
-    {
-        switch ($this->type) {
-            case 'switch':
-                $value = $this->content == 1;
-                break;
-            case 'text':
-                $value = nl2br($this->content);
-                break;
-            case 'array':
-                $value = preg_split('/\r\n|\r|\n/', $this->content);
-                break;
-            case 'json':
-                $value = json_decode($this->content);
-                break;
-            case 'image':
-                $value = getImageDomain() . $this->content;
-                break;
-            default:
-                $value = $this->content ?? '';
-                break;
-        }
-
-        return $value;
     }
 }
