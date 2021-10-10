@@ -41,7 +41,7 @@
                     "name": "Pricing List"
                 },
                 {
-                    "url": "#",
+                    "url": "/backend/payment",
                     "name": "Payment Gateway"
                 }
             ]

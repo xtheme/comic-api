@@ -127,7 +127,7 @@ Route::middleware(['auth', 'auth.route.role', 'log.activity'])->prefix('backend'
         Route::post('batch/destroy', [Backend\FeedbackController::class, 'batchDestroy'])->name('batch_destroy');
     });
 
-    // 會員套餐
+    // 支付方案
     Route::prefix('pricing')->as('pricing.')->group(function () {
         Route::get('/', [Backend\PricingController::class , 'index'])->name('index');
         Route::get('create', [Backend\PricingController::class , 'create'])->name('create');
@@ -137,6 +137,17 @@ Route::middleware(['auth', 'auth.route.role', 'log.activity'])->prefix('backend'
         Route::delete('destroy/{id}', [Backend\PricingController::class , 'destroy'])->name('destroy');
     });
 
+    // 支付渠道
+    Route::prefix('payment')->as('payment.')->group(function () {
+        Route::get('/', [Backend\PaymentController::class , 'index'])->name('index');
+        Route::get('create', [Backend\PaymentController::class , 'create'])->name('create');
+        Route::post('store', [Backend\PaymentController::class , 'store'])->name('store');
+        Route::get('edit/{id}', [Backend\PaymentController::class , 'edit'])->name('edit');
+        Route::put('update/{id}', [Backend\PaymentController::class , 'update'])->name('update');
+        Route::delete('destroy/{id}', [Backend\PaymentController::class , 'destroy'])->name('destroy');
+    });
+
+    // 評論
     Route::prefix('comment')->as('comment.')->group(function () {
         Route::get('/', [Backend\CommentController::class , 'index'])->name('index');
         Route::delete('destroy/{id}', [Backend\CommentController::class , 'destroy'])->name('destroy');
