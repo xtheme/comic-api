@@ -4,10 +4,6 @@ return [
     'version' => env('API_VERSION', 'v1'),
     'secret' => env('API_SECRET', ''),
 
-    'account' => [
-        'prefix' => env('ACCOUNT_PREFIX', '茄子漫画'),
-    ],
-
     /**
      * 數據加密
      */
@@ -27,10 +23,18 @@ return [
     ],
 
     /**
+     * 漫畫
+     */
+    'comic' => [
+        'image_domain' => 'http://pic.honganll.com',
+        'encrypt_image_domain' => 'http://pic.honganll.com',
+    ],
+
+    /**
      * Resume
      */
     'resume' => [
-        'img_domain' => 'http://lfimg.gs562.cn/',
+        'image_domain' => 'http://lfimg.gs562.cn',
     ],
 
     /**
@@ -38,6 +42,7 @@ return [
      */
     'video' => [
         'hls_domain' => 'https://1107newcdn.3r5ewowo.com',
-        'img_domain' => 'https://pic.vip88991.com',
+        'image_domain' => 'https://pic.vip88991.com',
+        'encrypt_image_domain' => 'https://pic.vip88991.com',
     ],
 ];

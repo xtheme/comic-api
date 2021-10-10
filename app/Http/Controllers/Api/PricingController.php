@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Models\Order;
-use App\Models\PricingPackage;
+use App\Models\Pricing;
 use App\Services\PaymentService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
@@ -17,7 +17,7 @@ class PricingController extends Controller
     {
         $status = $request->user->orders->where('status', 1)->count() ? 2 : 1;
 
-        $data = PricingPackage::whereIn('status', [0 , $status])->orderByDesc('sort')->get();
+        $data = Pricing::whereIn('status', [0 , $status])->orderByDesc('sort')->get();
 
         return Response::jsonSuccess(__('api.success'), $data);
     }
@@ -46,7 +46,7 @@ class PricingController extends Controller
         }
 
         // 查询会员套餐
-        $package = PricingPackage::find($id);
+        $package = Pricing::find($id);
 
         if (!$package) {
             return Response::jsonError('会员套餐不存在！');

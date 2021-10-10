@@ -1,7 +1,7 @@
 @extends('layouts.iframePage')
 
 {{-- page Title --}}
-@section('title','會員套餐')
+@section('title','支付方案')
 
 {{-- vendor style --}}
 @section('vendor-styles')
@@ -11,7 +11,7 @@
 @section('content')
     <section id="config-list">
         <div class="mb-1">
-            <a href="{{ route('backend.pricing.create') }}" class="btn btn-primary glow" data-modal title="添加套餐" role="button" aria-pressed="true">添加套餐</a>
+            <a href="{{ route('backend.pricing.create') }}" class="btn btn-primary glow" data-modal title="添加方案" role="button" aria-pressed="true">添加方案</a>
         </div>
         <div class="card">
             <div class="card-header">
@@ -20,19 +20,21 @@
             <div class="card-content">
                 <div class="card-body">
                     <!-- Table with outer spacing -->
-                    <div class="table-responsive">
+                    <p class="table-responsive">
                         <table class="table table-striped table-hover">
                             <thead>
                             <tr>
-                                <th>套餐ID</th>
-                                <th>套餐名称</th>
-                                <th>天数</th>
-                                <th>小标题</th>
-                                <th>会员支付价/元</th>
-                                <th>会员原价/元</th>
+                                <th>ID</th>
+                                <th>方案类型</th>
+                                <th>方案名称</th>
+                                <th>方案描述</th>
                                 <th>标签</th>
-                                <th>用户状态</th>
-                                <th>显示顺序</th>
+                                <th>充值金额</th>
+                                <th>VIP天数</th>
+                                <th>金币</th>
+                                <th>目标客群</th>
+                                <th>状态</th>
+                                <th>排序</th>
                                 <th>操作</th>
                             </tr>
                             </thead>
@@ -40,18 +42,30 @@
                             @foreach ($list as $item)
                                 <tr>
                                     <td>{{ $item->id }}</td>
-                                    <td>{{ $item->type }}
-                                        @if($item->preset == 1)
-                                        <span class="badge badge-pill badge-light-primary ml-1">预设</span>
+                                    <td>
+                                        @if($item->type == 'charge')充值金币@endif
+                                        @if($item->type == 'vip')VIP方案@endif
+                                    </td>
+                                    <td>{{ $item->name }}</td>
+                                    <td>{{ $item->description }}</td>
+                                    <td>{{ $item->label }}</td>
+                                    <td>@if($item->list_price)<del>{{ $item->list_price }}</del> @endif<span class="text-primary">{{ $item->price }}</span></td>
+                                    <td>{{ $item->days }}@if($item->gift_days) (+{{ $item->gift_days }})@endif</td>
+                                    <td>{{ $item->coin }}@if($item->gift_coin) (+{{ $item->gift_coin }})@endif</td>
+                                    <td>{{ $item->target }}</td>
+                                    <td>
+                                        @if($item->target == 0)全用户@endif
+                                        @if($item->target == 1)首存用戶@endif
+                                        @if($item->target == 2)续约用户@endif
+                                    </td>
+                                    <td>
+                                        @if(!$item->status)
+                                            <span class="badge badge-pill badge-light-danger">禁用</span>
+                                        @else
+                                            <span class="badge badge-pill badge-light-primary">啟用</span>
                                         @endif
                                     </td>
-                                    <td>{{ $item->days }}</td>
-                                    <td>{{ $item->name }}</td>
-                                    <td>{{ $item->price }}</td>
-                                    <td>{{ $item->list_price}}</td>
-                                    <td>{{ $item->label }}</td>
-                                    <td>{{ $item->pack_status}}</td>
-                                    <td>{{ $item->sort}}</td>
+                                    <td>{{ $item->sort }}</td>
                                     <td @if($loop->count == 1)style="position: fixed;"@endif>
                                         <div class="@if(($loop->count - $loop->iteration) < 3){{'dropup'}}@else{{'dropdown'}}@endif">
                                             <span class="bx bx-dots-vertical-rounded font-medium-3 dropdown-toggle nav-hide-arrow cursor-pointer"

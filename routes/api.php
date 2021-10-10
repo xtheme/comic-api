@@ -76,7 +76,6 @@ Route::as('api.')->middleware(['api'])->group(function () {
             Route::get('/japan', [Api\RankingController::class, 'japan'])->name('japan');
             Route::get('/korea', [Api\RankingController::class, 'korea'])->name('korea');
             Route::get('/latest', [Api\RankingController::class, 'latest'])->name('latest');
-
         });
     });
 

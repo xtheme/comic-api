@@ -2,9 +2,10 @@
 
 namespace App\Http\Controllers\Backend;
 
+use App\Enums\PricingOptions;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Backend\PricingRequest;
-use App\Models\PricingPackage;
+use App\Models\Pricing;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Response;
 
@@ -12,62 +13,64 @@ class PricingController extends Controller
 {
     public function index()
     {
-        $list = PricingPackage::paginate();
+        $data = [
+            'list' => Pricing::paginate()
+        ];
 
-        return view('backend.pricing.index', [
-            'list' => $list
-        ]);
+        return view('backend.pricing.index')->with($data);
     }
 
     public function create()
     {
-        return view('backend.pricing.create');
+        $data = [
+            'type_options' => PricingOptions::TYPE_OPTIONS,
+            'target_options' => PricingOptions::TARGET_OPTIONS,
+            'status_options' => PricingOptions::STATUS_OPTIONS,
+        ];
+
+        return view('backend.pricing.create')->with($data);
     }
 
     public function store(PricingRequest $request)
     {
-        $request->merge([
-            'preset' => $request->has('preset') ? 1 : 0,
-        ]);
-
         $post = $request->post();
 
-        $pricingPackage = new PricingPackage;
+        $pack = new Pricing;
 
-        $pricingPackage->fill($post)->save();
+        $pack->fill($post)->save();
 
         return Response::jsonSuccess(__('response.create.success'));
     }
 
     public function edit($id)
     {
-        $data = PricingPackage::findOrFail($id);
+        $data = [
+            'pack' => Pricing::findOrFail($id),
+            'type_options' => PricingOptions::TYPE_OPTIONS,
+            'target_options' => PricingOptions::TARGET_OPTIONS,
+            'status_options' => PricingOptions::STATUS_OPTIONS,
+        ];
 
-        return view('backend.pricing.edit', [
-            'data' => $data
-        ]);
+        return view('backend.pricing.edit')->with($data);
     }
 
     public function update(Request $request, $id)
     {
-        $pricingPackage = PricingPackage::findOrFail($id);
-
-        $request->merge([
-            'preset' => $request->has('preset') ? 1 : 0,
-        ]);
 
         $post = $request->post();
 
-        $pricingPackage->fill($post)->save();
+        $pack = Pricing::findOrFail($id);
+
+        $pack->fill($post)->save();
 
         return Response::jsonSuccess(__('response.update.success'));
     }
 
     public function destroy($id)
     {
-        $pricingPackage = PricingPackage::findOrFail($id);
+        $pack = Pricing::findOrFail($id);
 
-        $pricingPackage->delete();
+        $pack->delete();
 
         return Response::jsonSuccess(__('response.destroy.success'));
     }

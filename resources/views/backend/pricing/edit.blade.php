@@ -5,111 +5,127 @@
 @endsection
 
 @section('content')
-    <form id="form" class="form" method="post" action="{{ route('backend.pricing.update', $data->id) }}" novalidate>
+    <form id="form" class="form" method="post" action="{{ route('backend.pricing.update', $pack->id) }}" novalidate>
         @method('put')
         <div class="form-body">
             <div class="row">
-                <div class="col-6">
+                <div class="col-4">
                     <div class="form-group">
-                        <label>套餐名称</label>
+                        <label>方案类型</label>
                         <div class="controls">
-                            <input type="text" class="form-control" name="type" placeholder="请输入套餐名称" value="{{ $data->type }}">
-                        </div>
-                    </div>
-                </div>
-                <div class="col-2">
-                    <div class="form-group">
-                        <label></label>
-                        <div class="controls">
-                            <div class="checkbox">
-                                <input type="checkbox" class="checkbox-input" id="checkbox-preset" name="preset" value="1" @if($data->preset == 1){{'checked'}}@endif>
-                                <label for="checkbox-preset">预设</label>
-                            </div>
+                            <select class="form-control" name="type">
+                                @foreach ($type_options as $key => $val)
+                                    <option value="{{ $key }}" @if($pack->type == $key){{'selected'}}@endif>{{ $val }}</option>
+                                @endforeach
+                            </select>
                         </div>
                     </div>
                 </div>
                 <div class="col-4">
                     <div class="form-group">
-                        <label>显示顺序</label>
+                        <label>方案名称</label>
                         <div class="controls">
-                            <input type="text" class="form-control" name="sort" placeholder="数字由大到小排序" value="{{ $data->sort }}">
+                            <input type="text" class="form-control" name="name" value="{{ $pack->name }}">
                         </div>
                     </div>
                 </div>
-                <div class="col-6">
-                    <div class="form-group">
-                        <label>小标题</label>
-                        <div class="controls">
-                            <input type="text" class="form-control" name="name" placeholder="请输入小标题" value="{{ $data->name }}">
-                        </div>
-                    </div>
-                </div>
-                <div class="col-6">
-                    <div class="form-group">
-                        <label>会员支付价</label>
-                        <div class="controls">
-                            <input type="text" class="form-control" name="price" placeholder="请输入会员支付价" value="{{ $data->price }}">
-                        </div>
-                    </div>
-                </div>
-                <div class="col-6">
-                    <div class="form-group">
-                        <label>会员原价</label>
-                        <div class="controls">
-                            <input type="text" class="form-control" name="list_price" placeholder="请输入会员原价" value="{{ $data->list_price }}">
-                        </div>
-                    </div>
-                </div>
-                <div class="col-6">
-                    <div class="form-group">
-                        <label>天数</label>
-                        <div class="controls">
-                            <input type="text" class="form-control" name="days" placeholder="请输入天数" value="{{ $data->days }}">
-                        </div>
-                    </div>
-                </div>
-                <div class="col-6">
+                <div class="col-4">
                     <div class="form-group">
                         <label>标签</label>
                         <div class="controls">
-                            <input type="text" class="form-control" name="label" placeholder="标签长度请介于2~6字" value="{{ $data->label }}">
+                            <input type="text" class="form-control" name="label" value="{{ $pack->label }}">
                         </div>
                     </div>
                 </div>
-                <div class="col-6">
+                <div class="col-12">
                     <div class="form-group">
-                        <label>用户状态</label>
+                        <label>方案描述</label>
                         <div class="controls">
-                            <ul class="list-unstyled mb-0">
-                                <li class="d-inline-block mr-2 mb-1">
-                                    <fieldset>
-                                        <div class="radio radio-shadow">
-                                            <input type="radio" id="radio-status-0" name="status" value="0" @if($data->status == 0){{'checked'}}@endif>
-                                            <label for="radio-status-0">全部用户</label>
-                                        </div>
-                                    </fieldset>
-                                </li>
-                                <li class="d-inline-block mr-2 mb-1">
-                                    <fieldset>
-                                        <div class="radio radio-shadow">
-                                            <input type="radio" id="radio-status-1" name="status" value="1" @if($data->status == 1){{'checked'}}@endif>
-                                            <label for="radio-status-1">新用户</label>
-                                        </div>
-                                    </fieldset>
-                                </li>
-                                <li class="d-inline-block mr-2 mb-1">
-                                    <fieldset>
-                                        <div class="radio radio-shadow">
-                                            <input type="radio" id="radio-status-2" name="status" value="2" @if($data->status == 2){{'checked'}}@endif>
-                                            <label for="radio-status-2">老用户</label>
-                                        </div>
-                                    </fieldset>
-                                </li>
-                            </ul>
+                            <textarea class="form-control" name="description" rows="3">{{ $pack->description }}</textarea>
                         </div>
                     </div>
                 </div>
-                <div class="col-12 justify-content-end">
+                <div class="col-4">
+                    <div class="form-group">
+                        <label>充值金额</label>
+                        <div class="controls">
+                            <input type="text" class="form-control" name="price" value="{{ $pack->price }}">
+                        </div>
+                    </div>
+                </div>
+                <div class="col-4">
+                    <div class="form-group">
+                        <label>VIP天数</label>
+                        <div class="controls">
+                            <input type="text" class="form-control" name="days" value="{{ $pack->days }}">
+                        </div>
+                    </div>
+                </div>
+                <div class="col-4">
+                    <div class="form-group">
+                        <label>金币</label>
+                        <div class="controls">
+                            <input type="text" class="form-control" name="coin" value="{{ $pack->coin }}">
+                        </div>
+                    </div>
+                </div>
+                <div class="col-4">
+                    <div class="form-group">
+                        <label>原价</label>
+                        <div class="controls">
+                            <input type="text" class="form-control" name="list_price" value="{{ $pack->list_price }}">
+                        </div>
+                    </div>
+                </div>
+                <div class="col-4">
+                    <div class="form-group">
+                        <label>加赠IP天数</label>
+                        <div class="controls">
+                            <input type="text" class="form-control" name="gift_days" value="{{ $pack->gift_days }}">
+                        </div>
+                    </div>
+                </div>
+                <div class="col-4">
+                    <div class="form-group">
+                        <label>加赠金币</label>
+                        <div class="controls">
+                            <input type="text" class="form-control" name="gift_coin" value="{{ $pack->gift_coin }}">
+                        </div>
+                    </div>
+                </div>
+                <div class="col-4">
+                    <div class="form-group">
+                        <label>目标客群</label>
+                        <div class="controls">
+                            <select class="form-control" name="target">
+                                @foreach ($target_options as $key => $val)
+                                    <option value="{{ $key }}" @if($pack->target == $key){{'selected'}}@endif>{{ $val }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-4">
+                    <div class="form-group">
+                        <label>状态</label>
+                        <div class="controls">
+                            <select class="form-control" name="status">
+                                @foreach ($status_options as $key => $val)
+                                    <option value="{{ $key }}" @if($pack->status == $key){{'selected'}}@endif>{{ $val }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-4">
+                    <div class="form-group">
+                        <label>排序</label>
+                        <div class="controls">
+                            <input type="text" class="form-control" name="sort" placeholder="数字由大到小排序">
+                        </div>
+                    </div>
+                </div>
+                <div class="col-12 d-flex justify-content-end">
                     <button type="submit" class="btn btn-primary mr-1 mb-1">提交</button>
                     <button type="reset" class="btn btn-light-secondary mr-1 mb-1">还原</button>
                 </div>
@@ -135,7 +151,7 @@
 					data    : $(this).serialize(),
 					// debug: true,
 					callback: function (res) {
-                        if (res.code == 200) {
+                        if (res.code === 200) {
                             // iframe.blade.php
                             parent.$.hideModal();
 
