@@ -4,11 +4,21 @@ return [
     "Site Title" => "茄子漫画社",
 
     "Dashboard" => "控制台",
+
+    "Systems" => "系统设定",
     "Configs" => "配置项",
+    "Navigation" => "导航推荐",
+    "Activity Log" => "操作日志",
+    "System Log" => "系统日志",
 
     "Customers" => "会员管理",
     "Customer List" => "会员列表",
-    "Pricing List" => "会员套餐",
+
+    "Payment" => "支付管理",
+    "Pricing List" => "支付方案",
+    "Payment Gateway" => "支付渠道",
+
+    "Orders" => "订单管理",
     "Order List" => "订单列表",
 
     "Books" => "漫画管理",
@@ -21,11 +31,6 @@ return [
     "Report List" => "举报列表",
 
     "Feedback" => "意見反饋",
-
-    "Systems" => "系统设定",
-    "Terminal" => "命令模式",
-    "Activity Log" => "操作日志",
-    "System Log" => "系统日志",
 
     "Categories" => "分类管理",
     "Tags" => "标签分类",
@@ -40,8 +45,6 @@ return [
     "AdPlace List" => "广告位列表",
     "Ad List" => "广告列表",
     "Notice List" => "公告列表",
-
-    "Navigation" => "导航推荐",
 
     "Comments" => "評論管理",
     "Comment List" => "漫画评论",
