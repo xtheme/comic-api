@@ -2,8 +2,6 @@
 
 namespace App\Models;
 
-use App\Enums\PricingOptions;
-
 class Pricing extends BaseModel
 {
     protected $fillable = [

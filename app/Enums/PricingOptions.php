@@ -17,6 +17,6 @@ final class PricingOptions
 
     const STATUS_OPTIONS = [
         1 => '啟用',
-        0 => '禁用',
+        0 => '停用',
     ];
 }

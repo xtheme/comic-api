@@ -6,7 +6,6 @@ use App\Enums\PricingOptions;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Backend\PricingRequest;
 use App\Models\Pricing;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Response;
 
 class PricingController extends Controller
@@ -14,7 +13,7 @@ class PricingController extends Controller
     public function index()
     {
         $data = [
-            'list' => Pricing::paginate()
+            'list' => Pricing::latest('sort')->paginate()
         ];
 
         return view('backend.pricing.index')->with($data);
@@ -54,9 +53,8 @@ class PricingController extends Controller
         return view('backend.pricing.edit')->with($data);
     }
 
-    public function update(Request $request, $id)
+    public function update(PricingRequest $request, $id)
     {
-
         $post = $request->post();
 
         $pack = Pricing::findOrFail($id);

@@ -15,11 +15,17 @@ class PricingController extends Controller
 {
     public function list(Request $request)
     {
-        $status = $request->user->orders->where('status', 1)->count() ? 2 : 1;
+        // todo 用戶是否為首存, 檢查當前用戶是否有支付成功的訂單
+        // $newcomer = $request->user->orders->where('status', 1)->exists();
 
-        $data = Pricing::whereIn('status', [0 , $status])->orderByDesc('sort')->get();
+        // 所有啟用的支付方案
+        $pricing = Pricing::where('status', 1)->orderBy('type')->orderByDesc('sort')->get();
 
-        return Response::jsonSuccess(__('api.success'), $data);
+        $pricing = $pricing->mapToGroups(function($pack) {
+            return [$pack->type => $pack];
+        });
+
+        return Response::jsonSuccess(__('api.success'), $pricing);
     }
 
     public function testCreateAccount(Request $request)

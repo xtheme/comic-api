@@ -9,12 +9,16 @@ class PricingRequest extends BaseRequest
     public function rules()
     {
         return [
-            'type' => 'required|between:2,6',
+            'type' => 'required',
             'name' => 'required|between:2,6',
+            'label' => 'between:2,6',
             'price' => 'required|numeric',
-            'list_price' => 'required|numeric',
-            'days' => 'required|numeric',
-            'label' => 'required|between:2,6',
+            'list_price' => 'numeric',
+            'coin' => 'numeric',
+            'gift_coin' => 'numeric',
+            'days' => 'numeric',
+            'gift_days' => 'numeric',
+            'target' => 'required',
             'status' => 'required',
             'sort' => 'required|numeric',
         ];
@@ -23,12 +27,16 @@ class PricingRequest extends BaseRequest
     public function attributes()
     {
         return [
-            'type' => '套餐名称',
-            'name' => '小标题',
-            'price' => '支付价格',
-            'list_price' => '原价',
-            'days' => '天数',
+            'type' => '方案类型',
+            'name' => '方案名稱',
             'label' => '标签',
+            'price' => '充值金额',
+            'list_price' => '原价',
+            'coin' => '金币',
+            'gift_coin' => '加赠金币',
+            'days' => 'VIP天数',
+            'gift_days' => '加赠IP天数',
+            'target' => '目标客群',
             'status' => '状态',
             'sort' => '排序',
         ];

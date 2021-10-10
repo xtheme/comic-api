@@ -5,7 +5,6 @@
 
 {{-- vendor style --}}
 @section('vendor-styles')
-    <link rel="stylesheet" type="text/css" href="{{ asset('vendors/css/pickers/daterange/daterangepicker.css') }}">
 @endsection
 
 @section('content')
@@ -20,7 +19,7 @@
             <div class="card-content">
                 <div class="card-body">
                     <!-- Table with outer spacing -->
-                    <p class="table-responsive">
+                    <div class="table-responsive">
                         <table class="table table-striped table-hover">
                             <thead>
                             <tr>
@@ -52,7 +51,6 @@
                                     <td>@if($item->list_price)<del>{{ $item->list_price }}</del> @endif<span class="text-primary">{{ $item->price }}</span></td>
                                     <td>{{ $item->days }}@if($item->gift_days) (+{{ $item->gift_days }})@endif</td>
                                     <td>{{ $item->coin }}@if($item->gift_coin) (+{{ $item->gift_coin }})@endif</td>
-                                    <td>{{ $item->target }}</td>
                                     <td>
                                         @if($item->target == 0)全用户@endif
                                         @if($item->target == 1)首存用戶@endif
@@ -94,65 +92,9 @@
 
 {{-- vendor scripts --}}
 @section('vendor-scripts')
-    <script src="{{ asset('vendors/js/extensions/moment.min.js') }}"></script>
-    <script src="{{ asset('vendors/js/extensions/locale/zh-cn.js') }}"></script>
 @endsection
 
 {{-- page scripts --}}
 @section('page-scripts')
-    <script>
-        $('[data-confirm-feeback]').on('click', function (e) {
-            e.preventDefault();
-
-            let flag = $(this).data('flag');
-            let type = $(this).data('type');
-            let href = $(this).attr('href');
-
-            let data = '';
-            if (flag == 'batch') {
-                msg          = '是否确认删除所勾选的评论？';
-                var $checked = $('.check-opt:checked');
-
-                if ($checked.length == 0) {
-                    $.toast({
-                        type: 'error',
-                        title: '提交失败',
-                        message: '请选择要删除的评论'
-                    });
-                    return false;
-                }
-
-                data = $checked.serialize();
-            }
-
-            msg = '删除操作不可逆, 确定是否继续?';
-
-            $.confirm({
-                text: msg,
-                callback: function () {
-                    $.request({
-                        url: href,
-                        type: type,
-                        data: data,
-                        // debug: true,
-                        callback: function (res) {
-                            if (res.code == 200) {
-                                $.reloadIFrame({
-                                    title: '提交成功',
-                                    message: '请稍后数据刷新'
-                                });
-                            } else {
-                                $.toast({
-                                    type: 'error',
-                                    title: '提交失败',
-                                    message: res.msg
-                                });
-                            }
-                        }
-                    });
-                }
-            });
-        });
-    </script>
 @endsection
 

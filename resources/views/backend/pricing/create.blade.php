@@ -120,7 +120,7 @@
                     <div class="form-group">
                         <label>排序</label>
                         <div class="controls">
-                            <input type="text" class="form-control" name="sort" placeholder="数字由大到小排序">
+                            <input type="text" class="form-control" name="sort" placeholder="数字由大到小排序" value="0">
                         </div>
                     </div>
                 </div>
