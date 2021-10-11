@@ -182,6 +182,7 @@ return [
         App\Providers\ResponseMacroServiceProvider::class,
         App\Providers\MenuServiceProvider::class,
         App\Providers\RepositoryServiceProvider::class,
+        App\Providers\PayServiceProvider::class,
     ],
 
     /*
