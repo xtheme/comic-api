@@ -98,10 +98,11 @@ Route::as('api.')->middleware(['api'])->group(function () {
             Route::post('/favorite/{type}/destroy', [Api\FavoriteHistoryController::class, 'destroy'])->name('favorite.history');
         });
 
-        // 會員套餐
-        Route::prefix('pricing')->as('pricing.')->group(function () {
-            Route::get('/', [Api\PricingController::class, 'list'])->name('list');
-            Route::get('/{id}', [Api\PricingController::class, 'url'])->name('url');
+        // 支付中心
+        Route::prefix('payment')->as('payment.')->group(function () {
+            Route::get('/pricing', [Api\PaymentController::class, 'pricing'])->name('pricing'); // 支付方案
+            Route::get('/gateway/{pricing_id}', [Api\PaymentController::class, 'gateway'])->name('gateway'); // 支付渠道
+            Route::get('/pay/{gateway_id}', [Api\PaymentController::class, 'pay'])->name('pay'); // 調用渠道支付
         });
 
         // 分類標籤
