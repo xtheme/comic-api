@@ -4,9 +4,9 @@ namespace App\Models;
 
 class Tag extends \Spatie\Tags\Tag
 {
-    public $fillable = [
-        'suggest',
-    ];
+    // public $fillable = [
+    //     'suggest',
+    // ];
 
     public function tagged_book()
     {

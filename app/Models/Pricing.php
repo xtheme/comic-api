@@ -18,4 +18,15 @@ class Pricing extends BaseModel
         'target',
         'sort',
     ];
+
+    // 支付渠道
+    public function gateways()
+    {
+        return $this->belongsToMany(Payment::class);
+    }
+
+    public function getGatewayIdsAttribute()
+    {
+        return $this->gateways()->get()->pluck('id')->toArray();
+    }
 }

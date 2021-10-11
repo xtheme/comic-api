@@ -3,13 +3,13 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Api\PayRequest;
 use App\Models\Order;
 use App\Models\Payment;
 use App\Models\Pricing;
-use App\Models\User;
 use App\Services\PaymentService;
 use Illuminate\Http\Request;
-use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Response;
@@ -25,8 +25,21 @@ class PaymentController extends Controller
         // 所有啟用的支付方案
         $pricing = Pricing::where('status', 1)->orderBy('type')->orderByDesc('sort')->get();
 
-        $pricing = $pricing->mapToGroups(function($pack) {
-            return [$pack->type => $pack];
+        $pricing = $pricing->mapToGroups(function($plan) {
+            return [$plan->type => [
+                'plan_id' => $plan->id,
+                'type' => $plan->type,
+                'name' => $plan->name,
+                'description' => $plan->description,
+                'label' => $plan->label,
+                'price' => $plan->price,
+                'list_price' => $plan->list_price,
+                'coin' => $plan->coin,
+                'gift_coin' => $plan->gift_coin,
+                'days' => $plan->days,
+                'gift_days' => $plan->gift_days,
+                'target' => $plan->target,
+            ]];
         });
 
         return Response::jsonSuccess(__('api.success'), $pricing);
@@ -42,19 +55,17 @@ class PaymentController extends Controller
             return $gateway->status == 0;
         })->reject(function ($gateway) {
             // 排除每日限額已達上限
-            $redis_key = 'payment:gateway:' . $gateway->id;
+            $daily_total = $this->getGatewayDaily($gateway->id);
 
-            $cache_limit = 0;
-
-            if (Cache::has($redis_key)) {
-                $cache_limit = Cache::get($redis_key);
-            }
-
-            return $cache_limit >= $gateway->daily_limit;
+            return $daily_total >= $gateway->daily_limit;
         })->map(function ($gateway) {
             return [
                 'gateway_id' => $gateway->id,
-                'button' => $gateway->button,
+                'button' => [
+                    'text' => $gateway->button_text,
+                    'icon' => !empty($gateway->button_icon) ? asset($gateway->button_icon) : '',
+                    // 'target' => $gateway->button_target,
+                ],
             ];
         });
 
@@ -62,18 +73,81 @@ class PaymentController extends Controller
     }
 
     // 調用支付
-    public function pay(Request $request, $gateway_id)
+    public function pay(PayRequest $request)
     {
-        $payment = Payment::where('status', 1)->findOrFail($gateway_id);
+        $post = $request->validated();
 
-        $payment_service = app(PaymentService::class)->set($payment);
+        try {
+            $plan = Pricing::where('status', 1)->findOrFail($post['plan_id']);
+        } catch (\Exception $e) {
+            Log::warning(sprintf('用戶 %s 嘗試調用未開放的支付方案', Auth::user()->id));
+            return Response::jsonError('很抱歉，支付方案维护中！');
+        }
 
-        return Response::jsonSuccess(__('api.success'), $payment_service->pay());
+        // 檢查方案是否允許使用以下支付渠道
+        if (!in_array($post['gateway_id'], $plan->gateway_ids)) {
+            Log::warning(sprintf('用戶 %s 嘗試調用支付方案不支援的渠道', Auth::user()->id));
+            return Response::jsonError('很抱歉，支付渠道维护中！');
+        }
+
+        try {
+            $gateway = Payment::where('status', 1)->findOrFail($post['gateway_id']);
+        } catch (\Exception $e) {
+            Log::warning(sprintf('用戶 %s 嘗試調用未開放的支付渠道', Auth::user()->id));
+            return Response::jsonError('很抱歉，支付渠道维护中！');
+        }
+
+        // 檢查渠道今日限額
+        $daily_total = $this->getGatewayDaily($post['gateway_id']);
+        $estimated_amount = $plan->price + $daily_total;
+        if ($estimated_amount > $gateway->daily_limit) {
+            Log::notice(sprintf('渠道 %s 已臨界每日限額', $post['gateway_id']));
+            return Response::jsonError('很抱歉，支付渠道维护中！');
+        }
+
+        // 請求支付
+        try {
+            $payment_service = app(PaymentService::class);
+            $response = $payment_service->init($gateway)->pay($plan);
+        } catch (\Exception $e) {
+            Log::error(sprintf('調用 %s (%s) 支付接口錯誤：%s', $gateway->name, $gateway->id, $e->getMessage()));
+            return Response::jsonError('很抱歉，支付渠道维护中！');
+        }
+
+        return Response::jsonSuccess(__('api.success'), $response);
     }
 
     // 支付結果回調
-    public function callback(Request $request, $gateway_id)
+    public function callback(Request $request)
     {
+        $order_no = $request->get('order_no') ?? '';
+
+        try {
+            // status=0 不允許重複回調
+            $order = Order::orderNo($order_no)->where('status', 0)->firstOrFail();
+        } catch (\Exception $e) {
+            Log::warning(sprintf('異常回調訂單 %s', $order_no));
+            return 'error';
+        }
+
+        // 不同渠道返回格式不同
+        $gateway = $order->gateway;
+        $payment_service = app(PaymentService::class);
+        return $payment_service->init($gateway)->callback($request->post());
+    }
+
+    // 獲取渠道限額
+    public function getGatewayDaily($gateway_id)
+    {
+        $redis_key = sprintf('payment:gateway:%s:%s', $gateway_id, date('Y-m-d'));
+
+        $cache_limit = 0;
+
+        if (Cache::has($redis_key)) {
+            $cache_limit = Cache::get($redis_key);
+        }
+
+        return $cache_limit;
     }
 
     /**

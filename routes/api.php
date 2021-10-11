@@ -102,7 +102,7 @@ Route::as('api.')->middleware(['api'])->group(function () {
         Route::prefix('payment')->as('payment.')->group(function () {
             Route::get('/pricing', [Api\PaymentController::class, 'pricing'])->name('pricing'); // 支付方案
             Route::get('/gateway/{pricing_id}', [Api\PaymentController::class, 'gateway'])->name('gateway'); // 支付渠道
-            Route::get('/pay/{gateway_id}', [Api\PaymentController::class, 'pay'])->name('pay'); // 調用渠道支付
+            Route::post('/pay', [Api\PaymentController::class, 'pay'])->name('pay'); // 調用渠道支付
         });
 
         // 分類標籤
@@ -111,7 +111,11 @@ Route::as('api.')->middleware(['api'])->group(function () {
             Route::get('/book/{tag}/{page?}', [Api\TagController::class, 'book'])->name('book');
             Route::get('/video/{tag}/{page?}', [Api\TagController::class, 'video'])->name('video');
         });
+    });
 
+    // 第三方支付回調
+    Route::prefix('payment')->as('payment.')->group(function () {
+        Route::any('/callback', [Api\PaymentController::class, 'callback'])->name('callback'); // 支付結果回調
     });
 });
 
