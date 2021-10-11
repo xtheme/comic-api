@@ -39,6 +39,15 @@
                 </div>
                 <div class="col-4">
                     <div class="form-group">
+                        <span class="float-right font-size-small text-light">(达到当日限额将自动停用)</span>
+                        <label>每日限額</label>
+                        <div class="controls">
+                            <input type="text" class="form-control" name="daily_limit" value="0">
+                        </div>
+                    </div>
+                </div>
+                <div class="col-8">
+                    <div class="form-group">
                         <label>渠道網址</label>
                         <div class="controls">
                             <input type="text" class="form-control" name="url">
@@ -47,18 +56,53 @@
                 </div>
                 <div class="col-4">
                     <div class="form-group">
-                        <span class="float-right font-size-small text-light">(达到当日限额将自动停用)</span>
-                        <label>每日限額</label>
+                        <label><span class="danger">*</span> 按钮文字</label>
                         <div class="controls">
-                            <input type="text" class="form-control" name="daily_limit" value="0">
+                            <input type="text" class="form-control" name="button_text">
                         </div>
                     </div>
                 </div>
                 <div class="col-4">
                     <div class="form-group">
-                        <label>函式庫</label>
+                        <label><span class="danger">*</span> 按钮图标</label>
                         <div class="controls">
-                            <input type="text" class="form-control" name="library">
+                            <input type="text" class="form-control" name="button_icon">
+                        </div>
+                    </div>
+                </div>
+                <div class="col-4">
+                    <div class="form-group">
+                        <label><span class="danger">*</span> 按钮开启方式</label>
+                        <div class="controls">
+                            <select class="form-control" name="button_target">
+                                @foreach ($target_options as $key => $val)
+                                    <option value="{{ $key }}">{{ $val }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-4">
+                    <div class="form-group">
+                        <label>SDK</label>
+                        <div class="controls">
+                            <input type="text" class="form-control" name="sdk">
+                        </div>
+                    </div>
+                </div>
+                <div class="col-4">
+                    <div class="form-group">
+                        <label><span class="danger">*</span> 渠道商户号</label>
+                        <div class="controls">
+                            <input type="text" class="form-control" name="app_id">
+                        </div>
+                    </div>
+                </div>
+                <div class="col-4">
+                    <div class="form-group">
+                        <label><span class="danger">*</span> 渠道金钥</label>
+                        <div class="controls">
+                            <input type="text" class="form-control" name="app_key">
                         </div>
                     </div>
                 </div>

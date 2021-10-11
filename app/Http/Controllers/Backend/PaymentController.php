@@ -7,7 +7,6 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Backend\PaymentRequest;
 use App\Models\Payment;
 use App\Models\Pricing;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Response;
 
 class PaymentController extends Controller
@@ -15,7 +14,7 @@ class PaymentController extends Controller
     public function index()
     {
         $data = [
-            'list' => Payment::with('packages')->paginate()
+            'list' => Payment::with('packages')->paginate(),
         ];
 
         return view('backend.payment.index')->with($data);
@@ -26,6 +25,7 @@ class PaymentController extends Controller
         $data = [
             'pricing' => Pricing::where('status', 1)->orderByDesc('sort')->get(),
             'status_options' => PaymentOptions::STATUS_OPTIONS,
+            'target_options' => PaymentOptions::TARGET_OPTIONS,
         ];
 
         return view('backend.payment.create')->with($data);
@@ -48,8 +48,13 @@ class PaymentController extends Controller
         $payment = new Payment;
         $payment->name = $request->post('name');
         $payment->url = $request->post('url');
+        $payment->app_id = $request->post('app_id');
+        $payment->app_key = $request->post('app_key');
+        $payment->button_text = $request->post('button_text');
+        $payment->button_icon = $request->post('button_icon');
+        $payment->button_target = $request->post('button_target');
         $payment->fee_percentage = $request->post('fee_percentage');
-        $payment->library = $request->post('library');
+        $payment->sdk = $request->post('sdk');
         $payment->daily_limit = $request->post('daily_limit');
         $payment->pay_options = $pay_options;
         $payment->order_options = $order_options;
@@ -67,6 +72,7 @@ class PaymentController extends Controller
             'payment' => Payment::findOrFail($id),
             'pricing' => Pricing::where('status', 1)->orderByDesc('sort')->get(),
             'status_options' => PaymentOptions::STATUS_OPTIONS,
+            'target_options' => PaymentOptions::TARGET_OPTIONS,
         ];
 
         return view('backend.payment.edit')->with($data);
@@ -89,8 +95,13 @@ class PaymentController extends Controller
         $payment = Payment::findOrFail($id);
         $payment->name = $request->post('name');
         $payment->url = $request->post('url');
+        $payment->app_id = $request->post('app_id');
+        $payment->app_key = $request->post('app_key');
+        $payment->button_text = $request->post('button_text');
+        $payment->button_icon = $request->post('button_icon');
+        $payment->button_target = $request->post('button_target');
         $payment->fee_percentage = $request->post('fee_percentage');
-        $payment->library = $request->post('library');
+        $payment->sdk = $request->post('sdk');
         $payment->daily_limit = $request->post('daily_limit');
         $payment->pay_options = $pay_options;
         $payment->order_options = $order_options;

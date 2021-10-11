@@ -27,8 +27,9 @@
                                 <th>渠道名稱</th>
                                 <th>手續費%</th>
                                 <th>每日限額</th>
+                                <th>按钮文字</th>
                                 <th>支付方案</th>
-                                <th>函式庫</th>
+                                <th>SDK</th>
                                 <th>状态</th>
                                 <th>操作</th>
                             </tr>
@@ -40,12 +41,13 @@
                                     <td>{{ $item->name }}</td>
                                     <td>{{ $item->fee_percentage }}</td>
                                     <td>{{ $item->daily_limit }}</td>
+                                    <td>{{ $item->button_text }}</td>
                                     <td>
                                         @foreach($item->packages as $package)
                                             <span class="badge badge-light-primary p-50">￥{{ floatval($package->price) }}</span>
                                         @endforeach
                                     </td>
-                                    <td>{{ $item->library }}</td>
+                                    <td>{{ $item->sdk }}</td>
                                     <td>
                                         @if(!$item->status)
                                             <span class="badge badge-pill badge-light-danger">禁用</span>
