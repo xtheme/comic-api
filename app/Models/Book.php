@@ -100,7 +100,7 @@ class Book extends BaseModel
     /**
      * 直幅封面
      */
-    public function getVerticaCoverAttribute($value)
+    public function getVerticalCoverAttribute($value)
     {
         if (!$value) return '';
 

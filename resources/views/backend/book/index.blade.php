@@ -105,14 +105,14 @@
                                     <td>{{ $book->author }}</td>
                                     <td>{{ $book->type }}</td>
                                     <td>
-                                        @if($book->latest_chapter->charge == -1)
-                                            <span class="badge badge-pill badge-light-primary">免费</span>
-                                        @else
+                                        @if(optional($book->latest_chapter)->charge == 1)
                                             <span class="badge badge-pill badge-light-danger">收费</span>
+                                        @else
+                                            <span class="badge badge-pill badge-light-primary">免费</span>
                                         @endif
                                     </td>
                                     <td>{{ $book->chapters_count }}</td>
-                                    <td>{{ $book->latest_chapter->created_at }}</td>
+                                    <td>{{ optional($book->latest_chapter)->created_at }}</td>
                                     <td>
                                         <span class="badge badge-pill badge-light-{{ $book->release_status_style }}">{{ $book->release_status }}</span>
                                     </td>

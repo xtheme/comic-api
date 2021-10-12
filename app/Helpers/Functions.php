@@ -268,10 +268,10 @@ if (!function_exists('getImageDomain')) {
     {
         if (true == config('api.encrypt.image')) {
             // 加密資源域名
-            $domain = getConfig('app', 'webp_url');
+            $domain = getConfig('comic', 'image_domain');
         } else {
             // 未加密資源域名
-            $domain = getConfig('app', 'img_url');
+            $domain = getConfig('comic', 'image_domain');
         }
 
         if (Str::endsWith($domain, '/')) {
