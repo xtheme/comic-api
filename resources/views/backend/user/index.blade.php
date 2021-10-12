@@ -97,8 +97,8 @@
                                         @endif
                                     </td>
                                     <td class="text-center">
-                                        @if($user->subscribed_at)
-                                            {{ $user->subscribed_at }}
+                                        @if($user->subscribed_until)
+                                            {{ $user->subscribed_until }}
                                         @else
                                             <span class="text-light">N/A</span>
                                         @endif

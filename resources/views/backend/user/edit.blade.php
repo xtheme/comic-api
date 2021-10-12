@@ -108,7 +108,7 @@
                     <div class="form-group">
                         <label for="input-score">VIP到期时间</label>
                         <div class="controls">
-                            <input type="text" class="form-control" name="subscribed_at" value="{{$user->subscribed_at}}">
+                            <input type="text" class="form-control" name="subscribed_until" value="{{$user->subscribed_until}}">
                         </div>
                     </div>
                 </div>--}}
@@ -166,7 +166,7 @@
             // 日期時間選擇
             // moment.locale('zh-cn');
             //
-            // let $created = $('input[name="subscribed_at"]');
+            // let $created = $('input[name="subscribed_until"]');
             //
             // $created.daterangepicker({
             //     drops: 'up',

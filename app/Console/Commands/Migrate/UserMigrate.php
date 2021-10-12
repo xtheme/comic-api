@@ -77,7 +77,7 @@ class UserMigrate extends Command
                         'status' => $item->status,
                         'platform' => $item->platform,
                         'version' => $item->version,
-                        'subscribed_at' => $item->subscribed_at,
+                        'subscribed_until' => $item->subscribed_until,
                         'sign_days' => $item->sign_days,
                         'signup_ip' => $item->signup_ip,
                         'last_login_ip' => $item->last_login_ip,

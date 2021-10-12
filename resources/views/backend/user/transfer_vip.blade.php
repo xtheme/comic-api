@@ -12,7 +12,7 @@
                 <div class="col-12">
                     <div class="form-group">
                         <p class="font-small-3">将用戶 <span class="text-primary">{{ $user->id }}</span></p>
-                        <p class="font-small-3">VIP 效期 <span class="text-primary">{{ $user->subscribed_at }}</span></p>
+                        <p class="font-small-3">VIP 效期 <span class="text-primary">{{ $user->subscribed_until }}</span></p>
                         <div class="divider">
                             <div class="divider-text font-small-3">转移到以下用户 ID</div>
                         </div>

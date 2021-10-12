@@ -93,10 +93,10 @@ class UserController extends Controller
     {
         $user = User::findOrFail($id);
 
-        if ($user->subscribed_at && $user->subscribed_at->greaterThan(Carbon::now())) {
-            $user->subscribed_at = $user->subscribed_at->addDays($request->input('day'));
+        if ($user->subscribed_until && $user->subscribed_until->greaterThan(Carbon::now())) {
+            $user->subscribed_until = $user->subscribed_until->addDays($request->input('day'));
         } else {
-            $user->subscribed_at = Carbon::now()->addDays($request->input('day'));
+            $user->subscribed_until = Carbon::now()->addDays($request->input('day'));
         }
 
         $user->save();
@@ -120,17 +120,17 @@ class UserController extends Controller
         $current_user = User::findOrFail($id);
         $transfer_user = User::findOrFail($request->post('user_id'));
 
-        if ($transfer_user->subscribed_at && $transfer_user->subscribed_at->greaterThan($current_user->subscribed_at)) {
+        if ($transfer_user->subscribed_until && $transfer_user->subscribed_until->greaterThan($current_user->subscribed_until)) {
             return Response::jsonError('目标的会员效期高于当前用户');
         }
 
-        $transfer_user->subscribed_at = $current_user->subscribed_at;
+        $transfer_user->subscribed_until = $current_user->subscribed_until;
         $transfer_user->save();
 
-        $current_user->subscribed_at = null;
+        $current_user->subscribed_until = null;
         $current_user->save();
 
-        $text = sprintf('将 #%s 的 VIP 效期 %s 转移到 #%s', $current_user->id, $transfer_user->subscribed_at, $transfer_user->id);
+        $text = sprintf('将 #%s 的 VIP 效期 %s 转移到 #%s', $current_user->id, $transfer_user->subscribed_until, $transfer_user->id);
         activity()->useLog('后台')->causedBy(auth()->user())->performedOn($transfer_user)->withProperties($transfer_user->getChanges())->log($text);
 
         return Response::jsonSuccess(__('response.update.success'));

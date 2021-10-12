@@ -58,9 +58,9 @@ class UserRepository extends Repository implements UserRepositoryInterface
             return $query->where('platform', $platform);
         })->when($subscribed, function (Builder $query, $subscribed) {
             if ($subscribed == 2) {
-                return $query->whereDate('subscribed_at', '>=', Carbon::now());
+                return $query->whereDate('subscribed_until', '>=', Carbon::now());
             } else {
-                return $query->whereDate('subscribed_at', '<', Carbon::now())->orWhereNull('subscribed_at');
+                return $query->whereDate('subscribed_until', '<', Carbon::now())->orWhereNull('subscribed_until');
             }
         })->when($date_register, function (Builder $query, $date_register) {
             $date = explode(' - ', $date_register);

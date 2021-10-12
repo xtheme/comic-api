@@ -60,14 +60,14 @@ class OrderController extends Controller
 
         activity()->useLog('后台')->causedBy(auth()->user())->performedOn($order)->withProperties($order->getChanges())->log('回调订单为已付款');
 
-        // 更新用户 subscribed_at
+        // 更新用户 subscribed_until
         $user = User::find($order->user_id);
 
         if ($user) {
-            if ($user->subscribed_at && $user->subscribed_at->greaterThan(Carbon::now())) {
-                $user->subscribed_at = $user->subscribed_at->addDays($order->days);
+            if ($user->subscribed_until && $user->subscribed_until->greaterThan(Carbon::now())) {
+                $user->subscribed_until = $user->subscribed_until->addDays($order->days);
             } else {
-                $user->subscribed_at = Carbon::now()->addDays($order->days);
+                $user->subscribed_until = Carbon::now()->addDays($order->days);
             }
 
             $user->save();
