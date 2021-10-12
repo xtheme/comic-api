@@ -57,7 +57,7 @@ class Book extends BaseModel
      */
     public function visit_histories()
     {
-        return $this->hasMany('App\Models\BookVisit');
+        return $this->hasMany('App\Models\UserVisitBook');
     }
 
     /**
@@ -65,7 +65,7 @@ class Book extends BaseModel
      */
     public function favorite_histories()
     {
-        return $this->hasMany('App\Models\BookFavorite');
+        return $this->hasMany('App\Models\UserFavoriteBook');
     }
 
     /**

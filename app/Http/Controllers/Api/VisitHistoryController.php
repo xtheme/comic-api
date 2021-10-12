@@ -2,23 +2,16 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Models\BookVisit;
+use App\Models\UserVisitBook;
 use App\Models\VideoVisit;
-use App\Services\UserService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Response;
 
 class VisitHistoryController extends BaseController
 {
-    protected $userService;
-
-    public function __construct(UserService $userService)
+    private function getBookVisitHistories(Request $request)
     {
-        $this->userService = $userService;
-    }
-
-    private function getBookVisitHistories(Request $request) {
-        $histories = BookVisit::has('book')->where('user_id', $request->user->id)->orderByDesc('updated_at')->get();
+        $histories = UserVisitBook::has('book')->where('user_id', $request->user->id)->orderByDesc('updated_at')->get();
 
         $histories = $histories->transform(function ($item) {
             return [
@@ -37,7 +30,8 @@ class VisitHistoryController extends BaseController
         return $histories;
     }
 
-    private function getVideoVisitHistories(Request $request) {
+    private function getVideoVisitHistories(Request $request)
+    {
         $histories = VideoVisit::has('video')->where('user_id', $request->user->id)->orderByDesc('updated_at')->get();
 
         $histories = $histories->transform(function ($item) {
@@ -78,7 +72,7 @@ class VisitHistoryController extends BaseController
 
         switch ($type) {
             case 'book':
-                BookVisit::whereIn('id', $ids)->where('user_id', $request->user->id)->delete();
+                UserVisitBook::whereIn('id', $ids)->where('user_id', $request->user->id)->delete();
 
                 $histories = $this->getBookVisitHistories($request);
                 break;

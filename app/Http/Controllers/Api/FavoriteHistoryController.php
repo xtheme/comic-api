@@ -2,23 +2,16 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Models\BookFavorite;
+use App\Models\UserFavoriteBook;
 use App\Models\VideoFavorite;
-use App\Services\UserService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Response;
 
 class FavoriteHistoryController extends BaseController
 {
-    protected $userService;
-
-    public function __construct(UserService $userService)
+    private function getBookFavoriteHistories(Request $request)
     {
-        $this->userService = $userService;
-    }
-
-    private function getBookFavoriteHistories(Request $request) {
-        $histories = BookFavorite::where('user_id', $request->user->id)->orderByDesc('updated_at')->get();
+        $histories = UserFavoriteBook::where('user_id', $request->user->id)->orderByDesc('updated_at')->get();
 
         $histories = $histories->transform(function ($item) {
             return [
@@ -37,7 +30,8 @@ class FavoriteHistoryController extends BaseController
         return $histories;
     }
 
-    private function getVideoFavoriteHistories(Request $request) {
+    private function getVideoFavoriteHistories(Request $request)
+    {
         $histories = VideoFavorite::where('user_id', $request->user->id)->orderByDesc('updated_at')->get();
 
         $histories = $histories->transform(function ($item) {
@@ -76,7 +70,7 @@ class FavoriteHistoryController extends BaseController
     {
         switch ($type) {
             case 'book':
-                $history = BookFavorite::firstOrCreate([
+                $history = UserFavoriteBook::firstOrCreate([
                     'book_id' => $request->input('book_id'),
                     'chapter_id' => $request->input('chapter_id') ?? 0,
                     'user_id' => $request->user->id,
@@ -112,7 +106,7 @@ class FavoriteHistoryController extends BaseController
 
         switch ($type) {
             case 'book':
-                BookFavorite::whereIn('id', $ids)->where('user_id', $request->user->id)->delete();
+                UserFavoriteBook::whereIn('id', $ids)->where('user_id', $request->user->id)->delete();
 
                 $histories = $this->getBookFavoriteHistories($request);
                 break;

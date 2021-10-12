@@ -2,7 +2,7 @@
 
 namespace App\Services;
 
-use App\Models\BookVisit;
+use App\Models\UserVisitBook;
 use App\Models\VideoPlayLog;
 use App\Models\VideoVisit;
 
@@ -33,7 +33,7 @@ class RecordService
                 }
                 break;
             case 'book':
-                $history = BookVisit::firstOrCreate([
+                $history = UserVisitBook::firstOrCreate([
                     'book_id' => $target_id,
                     'chapter_id' => 0,
                     // 'user_id' => request()->user->id,

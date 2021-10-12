@@ -2,7 +2,7 @@
 
 namespace App\Models;
 
-class BookVisit extends BaseModel
+class UserVisitBook extends BaseModel
 {
     protected $fillable = [
         'book_id',

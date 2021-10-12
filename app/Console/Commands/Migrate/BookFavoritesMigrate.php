@@ -4,7 +4,7 @@ namespace App\Console\Commands\Migrate;
 
 ini_set('memory_limit', '-1');
 
-use App\Models\BookFavorite;
+use App\Models\UserFavoriteBook;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\DB;
 
@@ -55,7 +55,7 @@ class BookFavoritesMigrate extends Command
                         'chapter_id' => $log->charter_id,
                         'user_id' => $log->fromid,
                     ];
-                    $exists = BookFavorite::where($where)->exists();
+                    $exists = UserFavoriteBook::where($where)->exists();
 
                     if ($exists) return;
 
@@ -66,7 +66,7 @@ class BookFavoritesMigrate extends Command
                         'created_at' => date('Y-m-d H:i:S', $log->gz_time),
                     ];
 
-                    BookFavorite::insert($insert);
+                    UserFavoriteBook::insert($insert);
                 });
 
                 $this->line('第' . ($key + 1) . '批数据迁移完成');
