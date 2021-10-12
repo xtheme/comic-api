@@ -2,11 +2,12 @@
 
 namespace App\Gateways;
 
-use App\Models\Payment;
+use App\Models\Order;
 use App\Models\Pricing;
 use App\Services\PaymentService;
+use App\Services\UserService;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Http;
-use Illuminate\Support\Facades\Log;
 
 class GoddessGateway implements GatewayInterface
 {
@@ -16,6 +17,7 @@ class GoddessGateway implements GatewayInterface
 
     const PAY_URL = 'http://47.75.109.3:8081/gate/take_order.do?';
 
+    // todo 抽離到 BaseGateway
     public function init(array $params)
     {
         $this->gateway_id = $params['gateway_id'];
@@ -24,6 +26,7 @@ class GoddessGateway implements GatewayInterface
         $this->pay_options = $params['pay_options'];
     }
 
+    // todo 定義到 GatewayInterface
     public function pay(Pricing $plan)
     {
         $payment_service = app(PaymentService::class);
@@ -59,6 +62,7 @@ class GoddessGateway implements GatewayInterface
         ];
     }
 
+    // todo 定義到 GatewayInterface
     public function getSign(array $params)
     {
         foreach($params as $key => $value) {
@@ -73,6 +77,7 @@ class GoddessGateway implements GatewayInterface
     }
 
     // 第三方回調上分時驗證簽名
+    // todo 定義到 GatewayInterface
     public function checkSign($params)
     {
         $callback_sign = $params['sign'];
@@ -86,6 +91,23 @@ class GoddessGateway implements GatewayInterface
         return false;
     }
 
+    // 回調成功更新訂單
+    // todo 定義到 GatewayInterface
+    public function updateOrder(Order $order, array $params)
+    {
+        // 獲取渠道訂單號
+        // todo 字段名稱配置到 const
+        $transaction_id = $params['th_orderno'];
+
+        DB::transaction(function () use ($order, $transaction_id) {
+            app(UserService::class)->updateOrder($order, $transaction_id);
+        });
+
+        // 返回三方指定格式
+        return 'success';
+    }
+
+    // todo 抽離到 BaseGateway
     public function requestApi($url, $data)
     {
         $response = Http::acceptJson()->post($url, $data);

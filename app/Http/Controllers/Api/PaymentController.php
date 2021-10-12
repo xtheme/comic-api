@@ -8,6 +8,7 @@ use App\Models\Order;
 use App\Models\Payment;
 use App\Models\Pricing;
 use App\Services\PaymentService;
+use App\Services\UserService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cache;
@@ -20,10 +21,14 @@ class PaymentController extends Controller
     public function pricing(Request $request)
     {
         // todo 用戶是否為首存, 檢查當前用戶是否有支付成功的訂單
-        // $newcomer = $request->user->orders->where('status', 1)->exists();
+        $status = [0, 1];
+
+        if (!app(UserService::class)->isFirstOrder()) {
+            $status = [0, 2];
+        }
 
         // 所有啟用的支付方案
-        $pricing = Pricing::where('status', 1)->orderBy('type')->orderByDesc('sort')->get();
+        $pricing = Pricing::whereIn('status', $status)->orderBy('type')->orderByDesc('sort')->get();
 
         $pricing = $pricing->mapToGroups(function($plan) {
             return [$plan->type => [
@@ -123,20 +128,25 @@ class PaymentController extends Controller
         $order_no = $request->get('order_no') ?? '';
 
         try {
-            // status=0 不允許重複回調
-            $order = Order::orderNo($order_no)->where('status', 0)->firstOrFail();
+            // 查詢訂單是否存在
+            $order = Order::orderNo($order_no)->firstOrFail();
         } catch (\Exception $e) {
-            Log::warning(sprintf('異常回調訂單 %s', $order_no));
-            return 'error';
+            Log::warning(sprintf('渠道试图回调不存在的订单 %s, 请求源 %s', $order_no, $request->url()));
+            return Response::jsonError('订单已回调或不存在！');
+        }
+
+        // 不允許重複回調
+        if ($order->status != 0) {
+            Log::warning(sprintf('渠道试图重複回调订单 %s, 请求源 %s', $order_no, $request->url()));
+            return Response::jsonError('订单已回调或不存在！');
         }
 
         // 不同渠道返回格式不同
-        $gateway = $order->gateway;
-        $payment_service = app(PaymentService::class);
-        return $payment_service->init($gateway)->callback($request->post());
+        return app(PaymentService::class)->init($order->gateway)->callback($order, $request->post());
     }
 
     // 獲取渠道限額
+    // todo 可抽離到 Helpers/Functions
     public function getGatewayDaily($gateway_id)
     {
         $redis_key = sprintf('payment:gateway:%s:%s', $gateway_id, date('Y-m-d'));
@@ -150,131 +160,8 @@ class PaymentController extends Controller
         return $cache_limit;
     }
 
-    /**
-     * 存款成功回调接口 /api/balance_transfer
-     */
-    // public function balanceTransfer(Request $request)
-    // {
-    //     $params = [
-    //         'customerId' => $request->input('param.customerId'),
-    //         'referenceId' => $request->input('param.referenceId'),
-    //         'gameId' => $request->input('param.gameId'),
-    //         'amount' => $request->input('param.amount'),
-    //         'opType' => $request->input('param.opType'),
-    //         'timestamp' => $request->input('param.timestamp'),
-    //     ];
-    //     // return Response::jsonSuccess(__('api.success'), $params);
-    //     $sign = $request->input('sign');
-    //
-    //     // 校验签名
-    //     $paymentService = new PaymentService();
-    //     $valid_sign = $paymentService->getSign($params);
-    //     if ($valid_sign != $sign) {
-    //         return Response::jsonError('签名不合法！');
-    //     }
-    //
-    //     $order = Order::findOrFail($params['referenceId']);
-    //
-    //     $response = [
-    //         'customerId' => $order->user_id,
-    //         'balance' => 0,
-    //     ];
-    //
-    //     $error = false;
-    //
-    //     // 校验订单数据
-    //     if ($order->status != 0) {
-    //         Log::debug('订单已回调，请勿重复操作，status=' . $order->status);
-    //         $error = true;
-    //     }
-    //
-    //     if ($params['customerId'] != $order->user_id) {
-    //         Log::debug('订单号与用户无法匹配，customerId=' . $params['customerId'] . '，user_id=' . $params['customerId']);
-    //         $error = true;
-    //     }
-    //
-    //     if ($params['opType'] != '0') {
-    //         Log::debug('操作类型只允许转入，opType=' . $params['opType']);
-    //         $error = true;
-    //     }
-    //
-    //     if (!$error) {
-    //         // 更新订单数据
-    //         $update = [
-    //             'status' => 1,
-    //             'transaction_at' => date('Y-m-d H:i:s'),
-    //         ];
-    //
-    //         $order->update($update);
-    //
-    //         // 更新用户 subscribed_at
-    //         $user = User::find($order->user_id);
-    //
-    //         if ($user) {
-    //             if ($user->subscribed_at && $user->subscribed_at->greaterThan(Carbon::now())) {
-    //                 $user->subscribed_at = $user->subscribed_at->addDays($order->days);
-    //             } else {
-    //                 $user->subscribed_at = Carbon::now()->addDays($order->days);
-    //             }
-    //
-    //             $user->save();
-    //
-    //             activity()->useLog('API')->performedOn($user)->withProperties($user->getChanges())->log('充值成功回调');
-    //         }
-    //     }
-    //
-    //     return Response::jsonSuccess('请求成功！', $response);
-    // }
+    public function mockCallback($order_id)
+    {
 
-    /**
-     * 查询未支付订单接口 /api/order
-     */
-    // public function orderInfo(Request $request)
-    // {
-    //     $game_id = $request->input('gameId');
-    //     $order_id = $request->input('orderNo');
-    //
-    //     // todo change config
-    //     $pay_game_id = getOldConfig('web_config', 'pay_game_id');
-    //     // $pay_game_id = getConfig('payment', 'game_id');
-    //
-    //     if ($game_id != $pay_game_id) {
-    //         return Response::jsonError('游戏错误！');
-    //     }
-    //
-    //     $order = Order::find($order_id);
-    //
-    //     if ($order) {
-    //         if ($order->status == 1) {
-    //             return response()->json([
-    //                 'code' => 404,
-    //                 'name' => 'Not Found',
-    //                 'message' => '订单已支付',
-    //                 'data' => new \stdClass,
-    //             ]);
-    //         }
-    //
-    //         return response()->json([
-    //             'code' => 200,
-    //             'name' => 'OK',
-    //             'message' => 'success',
-    //             'data' => [
-    //                 'name' => $order->user->username,
-    //                 'userId' => $order->user_id,
-    //                 'price' => $order->amount,
-    //                 'orderId' => $order->id,
-    //                 'desc' => sprintf('%s (%s)', $order->type, $order->name),
-    //                 'userAgent' => '',
-    //                 'gameId' => $pay_game_id,
-    //             ],
-    //         ]);
-    //     }
-    //
-    //     return response()->json([
-    //         'code' => 404,
-    //         'name' => 'Not Found',
-    //         'message' => '订单不存在',
-    //         'data' => new \stdClass,
-    //     ]);
-    // }
+    }
 }

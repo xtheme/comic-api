@@ -5,8 +5,10 @@ namespace App\Services;
 use App\Models\Order;
 use App\Models\Payment;
 use App\Models\Pricing;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Response;
 
 class PaymentService
 {
@@ -36,26 +38,15 @@ class PaymentService
         return $this->third_party->pay($plan);
     }
 
-    public function callback(array $params)
+    public function callback(Order $order, array $params)
     {
         $valid = $this->third_party->checkSign($params);
 
         if (!$valid) {
-            return 'error';
+            return Response::jsonError('签名验证失败！');
         }
 
-        // todo 是否首儲
-        // todo 更新訂單
-        // todo 添加每日限額
-        $redis_key = sprintf('payment:gateway:%s:%s', $this->payment->id, date('Y-m-d'));
-
-        if (Cache::has($redis_key)) {
-            $cache_limit = Cache::get($redis_key);
-        }
-
-        // todo 上分
-
-        return 'success';
+        return $this->third_party->updateOrder($order, $params);
     }
 
     public function createOrder(Pricing $plan, $payment_id)
