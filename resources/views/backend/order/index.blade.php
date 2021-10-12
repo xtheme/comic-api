@@ -10,47 +10,43 @@
 
 @section('content')
     <section id="config-list">
-        <div class="mb-1">
-            <a href="{{ route('backend.order.export', request()->input()) }}" class="btn btn-primary glow" role="button">导出表格</a>
-        </div>
+{{--        <div class="mb-1">--}}
+{{--            <a href="{{ route('backend.order.export', request()->input()) }}" class="btn btn-primary glow" role="button">导出表格</a>--}}
+{{--        </div>--}}
         <div class="card">
             <div class="card-header">
                 <h4 class="card-title">@yield('title')</h4>
             </div>
             <div class="card-content">
                 <div class="card-body">
-                    <div class="row bg-primary bg-lighten-5 rounded mb-2 mx-25 text-center text-lg-left">
-                        <div class="col-12 col-sm-2 p-1">
-                            <h6 class="text-primary mb-0">总订单数：<span class="font-medium-3 align-middle">{{ $orders_count }}</span></h6>
-                        </div>
-                        <div class="col-12 col-sm-2 p-1">
-                            <h6 class="text-primary mb-0">总金额：<span class="font-medium-3 align-middle">{{ $orders_amount }}</span></h6>
-                        </div>
-                        <div class="col-12 col-sm-2 p-1">
-                            <h6 class="text-primary mb-0">续费订单数：<span class="font-medium-3 align-middle">{{ $renew_orders_count }}</span></h6>
-                        </div>
-                        <div class="col-12 col-sm-2 p-1">
-                            <h6 class="text-primary mb-0">续费总金额：<span class="font-medium-3 align-middle">{{ $renew_orders_amount }}</span></h6>
-                        </div>
-                    </div>
+{{--                    <div class="row bg-primary bg-lighten-5 rounded mb-2 mx-25 text-center text-lg-left">--}}
+{{--                        <div class="col-12 col-sm-2 p-1">--}}
+{{--                            <h6 class="text-primary mb-0">总订单数：<span class="font-medium-3 align-middle">{{ $orders_count }}</span></h6>--}}
+{{--                        </div>--}}
+{{--                        <div class="col-12 col-sm-2 p-1">--}}
+{{--                            <h6 class="text-primary mb-0">总金额：<span class="font-medium-3 align-middle">{{ $orders_amount }}</span></h6>--}}
+{{--                        </div>--}}
+{{--                        <div class="col-12 col-sm-2 p-1">--}}
+{{--                            <h6 class="text-primary mb-0">续费订单数：<span class="font-medium-3 align-middle">{{ $renew_orders_count }}</span></h6>--}}
+{{--                        </div>--}}
+{{--                        <div class="col-12 col-sm-2 p-1">--}}
+{{--                            <h6 class="text-primary mb-0">续费总金额：<span class="font-medium-3 align-middle">{{ $renew_orders_amount }}</span></h6>--}}
+{{--                        </div>--}}
+{{--                    </div>--}}
                     <!-- Table with outer spacing -->
                     <div class="table-responsive">
                         <table class="table table-striped table-hover">
                             <thead>
                             <tr>
                                 <th>订单号</th>
-                                <th>付款金额</th>
-                                <th>套餐类型</th>
-                                <th>套餐标题</th>
-                                <th>用户</th>
-                                <th>IP</th>
-                                <th>购买次数</th>
-                                <th>充值成功次数</th>
-                                <th>手机系统</th>
-                                <th>版本号</th>
-                                <th>注册时间</th>
+                                <th>方案类型</th>
+                                <th>平台</th>
+                                <th>订单金额</th>
+                                <th>用户ID</th>
                                 <th>订单创建时间</th>
-                                <th>更新时间</th>
+                                <th>支付渠道</th>
+                                <th>渠道訂單號</th>
+                                <th>渠道回調时间</th>
                                 <th>状态</th>
                                 <th>操作</th>
                             </tr>
@@ -58,23 +54,31 @@
                             <tbody>
                             @foreach ($list as $order)
                                 <tr>
-                                    <td>{{ $order->id }}</td>
-                                    <td>{{ $order->amount }}</td>
-                                    <td>{{ $order->type }}</td>
-                                    <td>{{ $order->name }}</td>
-                                    <td><a data-modal href="{{ route('backend.user.edit', $order->user_id) }}" title="修改用户信息">{{ $order->user_id }}</a></td>
-                                    <td>{{ $order->ip }}</td>
-                                    <td>{{ $order->user->orders_count->count ?? 0 }}</td>
-                                    <td>{{ $order->user->orders_success_count->count ?? 0 }}</td>
-                                    <td>@if($order->platform == 1)<label class="badge badge-primary badge-pill">安卓</label>@else<label class="badge badge-danger badge-pill">苹果</label>@endif</td>
-                                    <td>{{ $order->app_version }}</td>
-                                    <td>{{ optional($order->user->created_at)->diffForHumans() ?? '' }}</td>
-                                    <td>{{ optional($order->created_at)->diffForHumans() ?? '' }}</td>
-                                    <td>{{ optional($order->updated_at)->diffForHumans() ?? '' }}</td>
-                                    <td>@if($order->status == 1)<label class="badge badge-success badge-pill">已付款</label>@else<label class="badge badge-light badge-pill">未付款</label>@endif</td>
+                                    <td>{{ $order->order_no }}</td>
                                     <td>
-                                        @if($order->status != 1)
-                                        <a class="btn btn-warning btn-sm" data-confirm href="{{ route('backend.order.callback', $order->id) }}" title="回调订单为已付款">回調</a>
+                                        @if($order->type == 'vip')
+                                            <label class="badge badge-light-primary badge-pill">{{ $type_options[$order->type] }}</label>
+                                        @else
+                                            <label class="badge badge-light-secondary badge-pill">{{ $type_options[$order->type] }}</label>
+                                        @endif
+                                    </td>
+                                    <td>{{ $platform_options[$order->platform] }}</td>
+                                    <td>{{ $order->amount }}</td>
+                                    <td>{{ $order->user_id }}</td>
+                                    <td>{{ optional($order->created_at)->diffForHumans() ?? '' }}</td>
+                                    <td>{{ $order->payment->name }}</td>
+                                    <td>{{ $order->transaction_id }}</td>
+                                    <td>{{ $order->transaction_at }}</td>
+                                    <td>
+                                        @if($order->status == 1)
+                                            <label class="badge badge-light-success badge-pill">支付成功</label>
+                                        @else
+                                            <label class="badge badge-light-secondary badge-pill">待支付</label>
+                                        @endif
+                                    </td>
+                                    <td>
+                                        @if($order->status == 0)
+                                        <a class="btn btn-warning btn-sm" data-confirm href="{{ route('backend.order.callback', $order->id) }}" title="回调订单为已付款">補單</a>
                                         @endif
                                     </td>
                                 </tr>
@@ -101,32 +105,44 @@
             <div class="row">
                 <div class="col-12">
                     <div class="form-group">
-                        <label>订单ID</label>
+                        <label>订单号</label>
                         <div class="controls">
                             <input type="text" class="form-control"
-                                   name="id" value="{{ request()->get('id') }}"
+                                   name="order_no" value="{{ request()->get('order_no') }}"
                                    placeholder="">
                         </div>
                     </div>
                 </div>
                 <div class="col-12">
                     <div class="form-group">
-                        <label>手机系统</label>
-                        <select class="form-control" name="platform">
+                        <label>渠道訂單號	</label>
+                        <div class="controls">
+                            <input type="text" class="form-control"
+                                   name="transaction_id" value="{{ request()->get('transaction_id') }}"
+                                   placeholder="">
+                        </div>
+                    </div>
+                </div>
+                <div class="col-12">
+                    <div class="form-group">
+                        <label>方案类型</label>
+                        <select class="form-control" name="type">
                             <option value="">全部</option>
-                            <option value="1" @if(request()->get('platform') == 1){{'selected'}}@endif>Android</option>
-                            <option value="2" @if(request()->get('platform') == 2){{'selected'}}@endif>iOS</option>
+                            @foreach ($type_options as $key => $value)
+                                <option value="{{ $key }}" @if(request()->get('platform') == $key){{'selected'}}@endif>{{ $value }}</option>
+                            @endforeach
                         </select>
                     </div>
                 </div>
                 <div class="col-12">
                     <div class="form-group">
-                        <label>APP版本号</label>
-                        <div class="controls">
-                            <input type="text" class="form-control"
-                                   name="app_version" value="{{ request()->get('app_version') }}"
-                                   placeholder="1.3.0">
-                        </div>
+                        <label>平台</label>
+                        <select class="form-control" name="platform">
+                            <option value="">全部</option>
+                            @foreach ($platform_options as $key => $value)
+                            <option value="{{ $key }}" @if(request()->get('platform') == $key){{'selected'}}@endif>{{ $value }}</option>
+                            @endforeach
+                        </select>
                     </div>
                 </div>
                 <div class="col-12">
@@ -157,13 +173,9 @@
                         <label>订单状态</label>
                         <select class="form-control" name="status">
                             <option value="">全部</option>
-                            @foreach ($status_options as $key => $val)
-                                @if (request()->get('status') == $key)
-                                    <option value="{{ $key }}" selected>{{ $val }}</option>
-                                @else
-                                    <option value="{{ $key }}">{{ $val }}</option>
-                                @endif
-                            @endforeach
+                            <option value="1" @if(request()->get('status') == 1){{'selected'}}@endif>支付成功</option>
+                            <option value="2" @if(request()->get('status') == 2){{'selected'}}@endif>支付失敗</option>
+                            <option value="3" @if(request()->get('status') == 3){{'selected'}}@endif>補單</option>
                         </select>
                     </div>
                 </div>

@@ -28,28 +28,31 @@ class OrderRepository extends Repository implements OrderRepositoryInterface
      */
     public function filter(Request $request): Builder
     {
-        $id = $request->get('id') ?? '';
+        $order_no = $request->get('order_no') ?? '';
+        $transaction_id = $request->get('transaction_id') ?? '';
         $user_id = $request->get('user_id') ?? '';
         $status = $request->get('status') ?? '';
         $platform = $request->get('platform') ?? 0;
-        $app_version = $request->get('app_version') ?? 0;
+        $version = $request->get('version') ?? 0;
         $created_at = $request->get('created_at') ?? '';
 
-        return $this->model::has('user')->with(['user', 'user.orders_count', 'user.orders_success_count'])
-            ->when($id, function (Builder $query, $id) {
-                return $query->where('id', $id);
+        return $this->model::has('user')->with(['user', 'payment'])->when($order_no, function (Builder $query, $order_no) {
+                return $query->where('order_no', $order_no);
+            })->when($transaction_id, function (Builder $query, $transaction_id) {
+                return $query->where('transaction_id', $transaction_id);
             })->when($user_id, function (Builder $query, $user_id) {
                 return $query->where('user_id', $user_id);
             })->when($status, function (Builder $query, $status) {
-                return $query->where('status', $status - 1);
+                return $query->where('status', $status);
             })->when($platform, function (Builder $query, $platform) {
                 return $query->where('platform', $platform);
-            })->when($app_version, function (Builder $query, $app_version) {
-                return $query->where('app_version', $app_version);
+            })->when($version, function (Builder $query, $version) {
+                return $query->where('version', $version);
             })->when($created_at, function (Builder $query, $created_at) {
                 $date = explode(' - ', $created_at);
                 $start_date = $date[0];
                 $end_date = $date[1];
+
                 return $query->whereBetween('created_at', [
                     $start_date,
                     $end_date,
@@ -72,6 +75,7 @@ class OrderRepository extends Repository implements OrderRepositoryInterface
     public function orders_amount(Request $request): string
     {
         $amount = $this->filter($request)->sum('amount');
+
         // $amount = Order::whereStatus(1)->sum('amount');
         return number_format($amount);
     }
@@ -86,6 +90,7 @@ class OrderRepository extends Repository implements OrderRepositoryInterface
     public function renew_orders_amount(Request $request): string
     {
         $amount = $this->filter($request)->where('first', 0)->sum('amount');
+
         // $amount = Order::whereStatus(1)->whereFirst(0)->sum('amount');
         return number_format($amount);
     }
