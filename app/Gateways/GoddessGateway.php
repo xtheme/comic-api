@@ -42,26 +42,21 @@ class GoddessGateway implements GatewayInterface
 
         $data['sign'] = $this->getSign($data);
 
-        return $data;
+        // return $data;
 
-        // $response = $this->requestApi(self::PAY_URL, $data);
-        //
-        // if (!$response['result']) {
-        //     throw new \Exception($response['message']);
-        // }
-        //
-        // // 判斷要返回哪個網址
-        // $pay_url = $response['data']['pay_url'];
-        //
-        // if ($this->payment->button_target == 'iframe') {
-        //     $pay_url = $response['data']['qr_url'];
-        // }
-        //
-        // return [
-        //     'order_no' => $order->order_no,
-        //     'target' => $this->payment->button_target,
-        //     'pay_url' => $pay_url,
-        // ];
+        $response = $this->requestApi(self::PAY_URL, $data);
+
+        if (!$response['result']) {
+            throw new \Exception($response['message']);
+        }
+
+        // 判斷要返回哪個網址
+        $pay_url = $response['data']['pay_url'];
+
+        return [
+            'order_no' => $order->order_no,
+            'pay_url' => $pay_url,
+        ];
     }
 
     public function getSign(array $params)

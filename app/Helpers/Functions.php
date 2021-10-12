@@ -268,7 +268,7 @@ if (!function_exists('getImageDomain')) {
     {
         if (true == config('api.encrypt.image')) {
             // 加密資源域名
-            $domain = getConfig('comic', 'image_domain');
+            $domain = getConfig('comic', 'encrypt_image_domain');
         } else {
             // 未加密資源域名
             $domain = getConfig('comic', 'image_domain');

@@ -64,7 +64,7 @@ class PaymentController extends Controller
                 'button' => [
                     'text' => $gateway->button_text,
                     'icon' => !empty($gateway->button_icon) ? asset($gateway->button_icon) : '',
-                    // 'target' => $gateway->button_target,
+                    'target' => $gateway->button_target,
                 ],
             ];
         });
