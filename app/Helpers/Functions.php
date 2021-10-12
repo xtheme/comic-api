@@ -1,6 +1,7 @@
 <?php
 
 use App\Models\Config;
+use App\Models\Tag;
 use Illuminate\Support\Str;
 
 if (!function_exists('getConfigs')) {
