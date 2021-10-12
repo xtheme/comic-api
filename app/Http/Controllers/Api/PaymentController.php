@@ -23,7 +23,7 @@ class PaymentController extends Controller
         // todo 用戶是否為首存, 檢查當前用戶是否有支付成功的訂單
         $status = [0, 1];
 
-        if (!app(UserService::class)->isFirstOrder()) {
+        if (!app(UserService::class)->isFirstOrder(Auth::user()->id)) {
             $status = [0, 2];
         }
 

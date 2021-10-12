@@ -29,9 +29,9 @@ class UserService
     /**
      * 查詢用戶使否為首儲
      */
-    public function isFirstOrder(): bool
+    public function isFirstOrder($user_id): bool
     {
-        return !Order::where('user_id', Auth::user()->id)->where('status', 1)->exists();
+        return !Order::where('user_id', $user_id)->where('status', 1)->exists();
     }
 
     /**
@@ -40,10 +40,10 @@ class UserService
     private function updateUserPlan(User $user, $plan)
     {
         $coin = $days = 0;
-        $coin += $plan->coin;
-        $coin += $plan->gift_coin;
-        $days += $plan->days;
-        $days += $plan->gift_days;
+        $coin += $plan['coin'];
+        $coin += $plan['gift_coin'];
+        $days += $plan['days'];
+        $days += $plan['gift_days'];
 
         $user->wallet = $user->wallet + $coin;
 
@@ -66,10 +66,10 @@ class UserService
         $log->user_id = $order->user_id;
         $log->order_id = $order->order_id;
         $log->order_no = $order->order_no;
-        $log->coin = $order->plan_options->coin;
-        $log->gift_coin = $order->plan_options->gift_coin;
-        $log->days = $order->plan_options->days;
-        $log->gift_days = $order->plan_options->gift_days;
+        $log->coin = $order->plan_options['coin'];
+        $log->gift_coin = $order->plan_options['gift_coin'];
+        $log->days = $order->plan_options['days'];
+        $log->gift_days = $order->plan_options['gift_days'];
         $log->save();
     }
 
@@ -83,7 +83,7 @@ class UserService
         // todo 更新订单数据
         $update = [
             'channel_id' => $user->channel_id, // 財務報表用
-            'first' => $this->isFirstOrder() ? 1 : 0,
+            'first' => $this->isFirstOrder($order->user_id) ? 1 : 0,
             'status' => 1,
             'transaction_id' => $transaction_id,
             'transaction_at' => date('Y-m-d H:i:s'),

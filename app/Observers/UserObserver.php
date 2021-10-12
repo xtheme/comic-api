@@ -13,7 +13,8 @@ class UserObserver
 
     private function overrideCache(User $user)
     {
-        app(UserService::class)->updateUserCache($user);
+        // todo 未決定建立緩存時機
+        // app(UserService::class)->updateUserCache($user);
     }
 
     /**
