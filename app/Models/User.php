@@ -30,7 +30,9 @@ class User extends Authenticatable
      */
     protected $hidden = [
         'password',
+        'email_verified_at',
         'remember_token',
+        'updated_at',
     ];
 
     /**
@@ -41,6 +43,39 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
+    // 訂單記錄
+    public function orders()
+    {
+        return $this->hasMany('App\Models\Order');
+    }
+
+    // 充值紀錄
+    public function recharge_logs()
+    {
+        return $this->hasMany('App\Models\UserRechargeLog');
+    }
+
+    // 漫畫購買記錄
+    public function purchase_books()
+    {
+        return $this->hasMany('App\Models\UserPurchaseBook');
+    }
+
+    // public function getOrdersCountAttribute()
+    // {
+    //     return $this->orders()->count();
+    // }
+
+    // public function getSuccessOrdersCountAttribute()
+    // {
+    //     return $this->orders()->where('status', 1)->count();
+    // }
+
+    // public function comments()
+    // {
+    //     return $this->hasMany('App\Models\Comment', 'user_id', 'id');
+    // }
 
     public function setPasswordAttribute($password)
     {
