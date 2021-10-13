@@ -40,7 +40,7 @@ class TopicController extends BaseController
                         'id'                    => $item->id,
                         'title'                 => $item->title,
                         'author'                => $item->author,
-                        'cover'                 => ($row > 2) ? $item->horizontal_thumb : $item->vertical_thumb,
+                        'cover'                 => ($row > 2) ? $item->horizontal_cover : $item->vertical_cover,
                         'tagged_tags'           => $item->tagged_tags,
                         'visit_histories_count' => shortenNumber($item->visit_histories_count),
                     ];
