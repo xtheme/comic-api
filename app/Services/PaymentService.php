@@ -78,4 +78,9 @@ class PaymentService
 
         return $order;
     }
+
+    public function mockCallback(Order $order)
+    {
+        return $this->third_party->mockCallback($order);
+    }
 }

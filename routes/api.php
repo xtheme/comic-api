@@ -116,6 +116,7 @@ Route::as('api.')->middleware(['api'])->group(function () {
     // 第三方支付回調
     Route::prefix('payment')->as('payment.')->group(function () {
         Route::any('/callback', [Api\PaymentController::class, 'callback'])->name('callback'); // 支付結果回調
+        Route::any('/mockCallback', [Api\PaymentController::class, 'mockCallback']); // 支付結果回調
     });
 });
 

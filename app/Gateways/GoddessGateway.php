@@ -115,4 +115,21 @@ class GoddessGateway implements GatewayInterface
         return $response->json();
     }
 
+    // todo 抽離到 BaseGateway
+    public function mockCallback(Order $order)
+    {
+        $data = [
+            'channel' => $this->app_id,
+            'orderno' => $order->order_no,
+            'th_orderno' => $order->order_no,
+            'order_money' => $order->amount * 100,
+            'payed_money' => $order->amount * 100,
+            'notifyurl' => route('api.payment.callback', ['order_no' => $order->order_no]),
+        ];
+
+        $data['sign'] = $this->getSign($data);
+
+        return $data;
+    }
+
 }
