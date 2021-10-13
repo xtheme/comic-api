@@ -42,7 +42,7 @@
                                     <td>{{ $item->sort }}</td>
                                     <td><img src="{{ $item->icon }}" class="rounded-circle" width="60" height="60"></td>
                                     <td>{{ $item->type }}</td>
-                                    <td>{{ $item->uri }}</td>
+                                    <td>{{ $item->link }}</td>
                                     <td>{{ $item->target }}</td>
                                     <td>{{ $item->active }}</td>
                                     <td @if($loop->count == 1)style="position: fixed;"@endif>
