@@ -7,26 +7,14 @@ use App\Models\Pricing;
 use App\Services\PaymentService;
 use App\Services\UserService;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Http;
 
-class GoddessGateway implements GatewayInterface
+class GoddessGateway extends BaseGateway implements Contracts\GatewayInterface
 {
-    public $app_id;
-    public $app_key;
-    public $pay_options;
-
+    const ID_FIELD = 'th_orderno';
     const PAY_URL = 'http://47.75.109.3:8081/gate/take_order.do?';
+    // const QUERY_URL = 'http://47.75.109.3:8081/gate/take_order.do?';
 
-    // todo 抽離到 BaseGateway
-    public function init(array $params)
-    {
-        $this->gateway_id = $params['gateway_id'];
-        $this->app_id = $params['app_id'];
-        $this->app_key = $params['app_key'];
-        $this->pay_options = $params['pay_options'];
-    }
-
-    // todo 定義到 GatewayInterface
+    // 獲取支付網址
     public function pay(Pricing $plan)
     {
         $payment_service = app(PaymentService::class);
@@ -47,7 +35,7 @@ class GoddessGateway implements GatewayInterface
 
         // return $data;
 
-        $response = $this->requestApi(self::PAY_URL, $data);
+        $response = $this->postJson(self::PAY_URL, $data);
 
         if (!$response['result']) {
             throw new \Exception($response['message']);
@@ -62,11 +50,13 @@ class GoddessGateway implements GatewayInterface
         ];
     }
 
-    // todo 定義到 GatewayInterface
+    // 簽名公式
     public function getSign(array $params)
     {
-        foreach($params as $key => $value) {
-            if (!$value) unset($params[$key]);
+        foreach ($params as $key => $value) {
+            if (!$value) {
+                unset($params[$key]);
+            }
         }
         ksort($params);
         $str = urldecode(http_build_query($params));
@@ -77,7 +67,6 @@ class GoddessGateway implements GatewayInterface
     }
 
     // 第三方回調上分時驗證簽名
-    // todo 定義到 GatewayInterface
     public function checkSign($params)
     {
         $callback_sign = $params['sign'];
@@ -92,12 +81,10 @@ class GoddessGateway implements GatewayInterface
     }
 
     // 回調成功更新訂單
-    // todo 定義到 GatewayInterface
     public function updateOrder(Order $order, array $params)
     {
         // 獲取渠道訂單號
-        // todo 字段名稱配置到 const
-        $transaction_id = $params['th_orderno'];
+        $transaction_id = $params[self::ID_FIELD];
 
         DB::transaction(function () use ($order, $transaction_id) {
             app(UserService::class)->updateOrder($order, $transaction_id);
@@ -107,15 +94,8 @@ class GoddessGateway implements GatewayInterface
         return 'success';
     }
 
-    // todo 抽離到 BaseGateway
-    public function requestApi($url, $data)
-    {
-        $response = Http::acceptJson()->post($url, $data);
 
-        return $response->json();
-    }
-
-    // todo 抽離到 BaseGateway
+    // 模擬回調數據
     public function mockCallback(Order $order)
     {
         $data = [
@@ -131,5 +111,4 @@ class GoddessGateway implements GatewayInterface
 
         return $data;
     }
-
 }
