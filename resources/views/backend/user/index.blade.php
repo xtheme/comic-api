@@ -52,18 +52,14 @@
                                     </div>
                                 </th>
                                 <th>ID</th>
-                                <th>昵称</th>
-                                <th class="text-center">帐号类型</th>
-                                <th class="text-center">VIP</th>
-                                <th class="text-center">VIP到期时间</th>
-                                <th class="text-center">版本号</th>
-                                <th class="text-center">平台</th>
-                                <th class="text-center">性别</th>
-                                <th class="text-center">积分</th>
-{{--                                <th>手机号/UUID</th>--}}
+                                <th>帐号</th>
+                                <th>手机号</th>
+                                <th>VIP</th>
+                                <th>VIP到期时间</th>
+                                <th>钱包</th>
+                                <th>渠道ID</th>
                                 <th>状态</th>
                                 <th>注册时间</th>
-                                <th>最近登陆</th>
                                 <th>操作</th>
                             </tr>
                             </thead>
@@ -77,61 +73,29 @@
                                         </div>
                                     </td>
                                     <td>{{ $user->id }}</td>
-                                    <td>{{ $user->username }}</td>
-                                    <td class="text-center">
+                                    <td>{{ $user->name }}</td>
+                                    <td>
                                         @if($user->mobile)
-                                            <span data-toggle="tooltip" data-placement="top" data-original-title="{{ $user->phone }}">
-                                                <a data-confirm href="{{ route('backend.user.unbind', $user->id) }}" title="解绑手机登录限制" class="badge badge-pill badge-light-primary">电话</a>
-                                            </span>
+                                            {{ $user->area }} {{ $user->mobile }}
                                         @else
-                                            <span data-toggle="tooltip" data-placement="top" data-original-title="{{ $user->device_id }}">
-                                                <span class="badge badge-pill badge-light-light">设备</span>
-                                            </span>
-                                        @endif
-                                    </td>
-                                    <td class="text-center">
+                                            <span class="text-light">N/A</span>
+                                        @endif</td>
+                                    <td>
                                         @if($user->subscribed_status)
                                             <span class="badge badge-pill badge-light-primary">VIP</span>
                                         @else
                                             <span class="badge badge-pill badge-light-light">普通</span>
                                         @endif
                                     </td>
-                                    <td class="text-center">
+                                    <td>
                                         @if($user->subscribed_until)
                                             {{ $user->subscribed_until }}
                                         @else
                                             <span class="text-light">N/A</span>
                                         @endif
                                     </td>
-                                    <td class="text-center">{{ $user->version }}</td>
-                                    <td class="text-center">
-                                        @if($user->platform == 1)
-                                            安卓
-                                        @else
-                                            iOS
-                                        @endif
-                                    </td>
-                                    <td class="text-center">
-                                        @switch($user->sex)
-                                            @case(1)
-                                            男
-                                            @break
-                                            @case(2)
-                                            女
-                                            @break
-                                            @default
-                                            未知
-                                            @break
-                                        @endswitch
-                                    </td>
-                                    <td class="text-right">{{ $user->score }}</td>
-                                    {{--<td>
-                                        @if(!$user->mobile)
-                                            {{ $user->device_id }}
-                                        @else
-                                            {{ $user->phone }}
-                                        @endif
-                                    </td>--}}
+                                    <td>{{ $user->wallet }}</td>
+                                    <td>{{ $user->channel_id }}</td>
                                     <td>
                                         @if(!$user->status)
                                             <span class="badge badge-pill badge-light-danger">禁用</span>
@@ -143,15 +107,6 @@
                                         @if($user->created_at)
                                             <span data-toggle="tooltip" data-placement="top" data-original-title="{{ $user->created_at}}">
                                             {{ $user->created_at->diffForHumans() }}
-                                            </span>
-                                        @else
-                                            <span class="text-light">N/A</span>
-                                        @endif
-                                    </td>
-                                    <td>
-                                        @if($user->last_login_at)
-                                            <span data-toggle="tooltip" data-placement="top" data-original-title="{{ $user->last_login_at}}">
-                                            {{ $user->last_login_at->diffForHumans() }}
                                             </span>
                                         @else
                                             <span class="text-light">N/A</span>
