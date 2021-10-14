@@ -46,8 +46,8 @@ class BookController extends BaseController
             'latest_chapter_title' => $book->chapters_count ? $book->chapters->first()->title : '',
             // 'tagged_tags' => $book->tagged_tags,
             'tags' => $book->tags()->pluck('name'),
-            'visit_histories_count' => shortenNumber($book->visit_histories_count),
-            'favorite_histories_count' => shortenNumber($book->favorite_histories_count),
+            'visit_counts' => shortenNumber($book->visit_histories_count),
+            'favorite_counts' => shortenNumber($book->favorite_histories_count),
             'chapters' => $book->chapters->map(function ($chapter) {
                 return [
                     'book_id' => $chapter->book_id,
@@ -185,7 +185,7 @@ class BookController extends BaseController
                 // 'description' => $book->description,
                 'cover' => $book->vertical_cover,
                 'tagged_tags' => $book->tagged_tags,
-                'visit_histories_count' => shortenNumber($book->visit_histories_count),
+                'visit_counts' => shortenNumber($book->visit_histories_count),
             ];
         })->toArray();
 

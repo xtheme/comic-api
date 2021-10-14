@@ -41,8 +41,8 @@ class VideoController extends BaseController
         }])->withCount(['visit_histories', 'play_histories'])->find($id)->toArray();
 
         // 數字格式化
-        $data['visit_histories_count'] = shortenNumber($data['visit_histories_count'] );
-        $data['play_histories_count'] = (request()->header('platform') == 1) ? $data['play_histories_count'] : shortenNumber($data['play_histories_count']);
+        $data['visit_counts'] = shortenNumber($data['visit_histories_count'] );
+        $data['play_counts'] = (request()->header('platform') == 1) ? $data['play_histories_count'] : shortenNumber($data['play_histories_count']);
 
         // todo 訪問數+1
         Record::from('video')->visit($id);
@@ -84,7 +84,7 @@ class VideoController extends BaseController
                 // 'description' => $video->description,
                 'cover' => $video->cover,
                 'tagged_tags' => $video->tagged_tags,
-                'visit_histories_count' => shortenNumber($video->visit_histories_count),
+                'visit_counts' => shortenNumber($video->visit_histories_count),
             ];
         })->toArray();
 

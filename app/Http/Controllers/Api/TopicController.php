@@ -27,8 +27,8 @@ class TopicController extends BaseController
                         'cover'                 => $item->cover,
                         'tagged_tags'           => $item->tagged_tags,
                         'ribbon'                => $item->ribbon,
-                        'visit_histories_count' => shortenNumber($item->visit_histories_count),
-                        'play_histories_count'  => (request()->header('platform') == 1) ? $item->play_histories_count : shortenNumber($item->play_histories_count),
+                        'visit_counts' => shortenNumber($item->visit_histories_count),
+                        'play_counts'  => (request()->header('platform') == 1) ? $item->play_histories_count : shortenNumber($item->play_histories_count),
                     ];
                 })->toArray();
                 break;
@@ -42,7 +42,7 @@ class TopicController extends BaseController
                         'author'                => $item->author,
                         'cover'                 => ($row > 2) ? $item->horizontal_cover : $item->vertical_cover,
                         'tagged_tags'           => $item->tagged_tags,
-                        'visit_histories_count' => shortenNumber($item->visit_histories_count),
+                        'visit_counts' => shortenNumber($item->visit_histories_count),
                     ];
                 })->toArray();
                 break;
@@ -98,8 +98,8 @@ class TopicController extends BaseController
                         'cover'                 => $item->cover,
                         'tagged_tags'           => $item->tagged_tags,
                         'ribbon'                => $item->ribbon,
-                        'visit_histories_count' => shortenNumber($item->visit_histories_count),
-                        'play_histories_count'  => (request()->header('platform') == 1) ? $item->play_histories_count : shortenNumber($item->play_histories_count),
+                        'visit_counts' => shortenNumber($item->visit_histories_count),
+                        'play_counts'  => (request()->header('platform') == 1) ? $item->play_histories_count : shortenNumber($item->play_histories_count),
                     ];
                 })->toArray();
                 break;
@@ -113,7 +113,7 @@ class TopicController extends BaseController
                         'author'                => $item->author,
                         'cover'                 => ($row > 2) ? $item->horizontal_thumb : $item->vertical_thumb,
                         'tagged_tags'           => $item->tagged_tags,
-                        'visit_histories_count' => shortenNumber($item->visit_histories_count),
+                        'visit_counts' => shortenNumber($item->visit_histories_count),
                     ];
                 })->toArray();
                 break;

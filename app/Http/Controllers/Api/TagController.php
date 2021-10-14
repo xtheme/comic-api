@@ -26,13 +26,13 @@ class TagController extends BaseController
 
         $data = $books->map(function ($book) {
             return [
-                'id'                    => $book->id,
-                'title'                 => $book->title,
-                'author'                => $book->author,
-                'cover'                 => $book->vertical_cover,
-                'tagged_tags'           => $book->tagged_tags,
-                'visit_histories_count' => shortenNumber($book->visit_histories_count),
-                'created_at'            => $book->created_at->format('Y-m-d'),
+                'id' => $book->id,
+                'title' => $book->title,
+                'author' => $book->author,
+                'cover' => $book->vertical_cover,
+                'tagged_tags' => $book->tagged_tags,
+                'visit_counts' => shortenNumber($book->visit_histories_count),
+                'created_at' => $book->created_at->format('Y-m-d'),
             ];
         })->toArray();
 
@@ -45,14 +45,14 @@ class TagController extends BaseController
 
         $data = $videos->map(function ($video) {
             return [
-                'id'                    => $video->id,
-                'title'                 => $video->title,
-                'author'                => $video->author,
-                'ribbon'                => $video->ribbon,
-                'cover'                 => $video->cover,
-                'tagged_tags'           => $video->tagged_tags,
-                'visit_histories_count' => shortenNumber($video->visit_histories_count),
-                'created_at'            => $video->created_at->format('Y-m-d'),
+                'id' => $video->id,
+                'title' => $video->title,
+                'author' => $video->author,
+                'ribbon' => $video->ribbon,
+                'cover' => $video->cover,
+                'tagged_tags' => $video->tagged_tags,
+                'visit_counts' => shortenNumber($video->visit_histories_count),
+                'created_at' => $video->created_at->format('Y-m-d'),
             ];
         })->toArray();
 
