@@ -45,13 +45,13 @@ Route::as('api.')->middleware(['api'])->group(function () {
             Route::get('/more/{topic}/{page?}', [Api\TopicController::class, 'more'])->name('more');
         });
 
-        // 電影
+        // 視頻
         Route::prefix('movie')->as('movie.')->group(function () {
             Route::get('/list/{type}', [Api\MovieController::class, 'list'])->name('list'); // 最新 / 熱門 / (隨機)推薦
             Route::get('/detail/{id}', [Api\MovieController::class, 'detail'])->name('detail');
         });
 
-        // 履歷
+        // 樓鳳履歷
         Route::prefix('resume')->as('resume.')->group(function () {
             Route::get('/cities', [Api\ResumeController::class, 'cities'])->name('cities');
             Route::get('/list/{city?}', [Api\ResumeController::class, 'list'])->name('list');
@@ -83,6 +83,11 @@ Route::as('api.')->middleware(['api'])->group(function () {
             Route::get('/japan', [Api\RankingController::class, 'japan'])->name('japan');
             Route::get('/korea', [Api\RankingController::class, 'korea'])->name('korea');
             Route::get('/latest', [Api\RankingController::class, 'latest'])->name('latest');
+        });
+
+        // 客服
+        Route::prefix('service')->as('service.')->group(function () {
+            Route::get('/url', [Api\ServiceController::class, 'url'])->name('url');
         });
     });
 
@@ -181,7 +186,4 @@ Route::prefix('comment')->as('comment.')->group(function () {
     Route::post('/destroy/{comment_id}', [Api\CommentController::class, 'destroy'])->name('destroy');
 });
 
-// 客服
-Route::prefix('service')->as('service.')->group(function () {
-    Route::get('/url', [Api\ServiceController::class, 'url'])->name('url');
-});*/
+*/
