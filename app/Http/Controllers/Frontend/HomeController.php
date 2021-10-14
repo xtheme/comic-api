@@ -3,15 +3,14 @@
 namespace App\Http\Controllers\Frontend;
 
 use App\Http\Controllers\Controller;
-use App\Models\Location;
-use App\Models\Shipment;
+use Gateway;
 
 class HomeController extends Controller
 {
     // index
     public function index()
     {
-        return '3.1415926';
+        return '';
     }
 
     public function noPermission()

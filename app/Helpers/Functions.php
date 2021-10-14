@@ -2,6 +2,8 @@
 
 use App\Models\Config;
 use App\Models\Tag;
+use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
 
 if (!function_exists('getConfigs')) {
@@ -274,9 +276,7 @@ if (!function_exists('getImageDomain')) {
             $domain = getConfig('comic', 'image_domain');
         }
 
-        if (Str::endsWith($domain, '/')) {
-            $domain = substr($domain, 0, -1);
-        }
+        $domain = cleanDomain($domain);
 
         return $domain;
     }

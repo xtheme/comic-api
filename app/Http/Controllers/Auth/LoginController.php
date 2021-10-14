@@ -55,13 +55,19 @@ class LoginController extends Controller
     }
 
     // Login
-    public function showLoginForm()
+    public function showLoginForm(Request $request)
     {
-        $pageConfigs = ['bodyCustomClass' => 'bg-full-screen-image blank-page', 'navbarType' => 'hidden'];
+        $secret = $request->input('s');
 
-        return view('/auth/login', [
-            'pageConfigs' => $pageConfigs,
-        ]);
+        if ($secret != config('custom.login_secret')) {
+            return redirect('/');
+        }
+
+        $data = [
+            'pageConfigs' => ['bodyCustomClass' => 'bg-full-screen-image blank-page', 'navbarType' => 'hidden'],
+        ];
+
+        return view('/auth/login')->with($data);
     }
 
     /**
@@ -108,7 +114,7 @@ class LoginController extends Controller
                 return Response::jsonError('账号被封禁!', 500);
             }
 
-            activity()->useLog('后台')->causedBy($admin)->log('登录成功!');
+            activity()->useLog('后台')->causedBy($admin)->log('登录后台!');
 
             // 更新管理員登入資訊
             $data = [
@@ -131,7 +137,7 @@ class LoginController extends Controller
      */
     public function logout(Request $request)
     {
-        activity()->useLog('后台')->causedBy(auth()->user())->log('登出成功!');
+        activity()->useLog('后台')->causedBy(auth()->user())->log('登出后台!');
 
         return $this->traitLogout($request);
     }
