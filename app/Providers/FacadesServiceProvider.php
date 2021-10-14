@@ -23,16 +23,20 @@ class FacadesServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        $this->app->bind('UploadService',function(){
+        $this->app->bind('UploadService', function () {
             return new Services\UploadService();
         });
 
-        $this->app->bind('RecordService',function(){
+        $this->app->bind('RecordService', function () {
             return new Services\RecordService();
         });
 
-        $this->app->bind('SsoService',function(){
+        $this->app->bind('SsoService', function () {
             return new Services\SsoService();
+        });
+
+        $this->app->bind('GatewayService', function () {
+            return new Services\GatewayService();
         });
     }
 }

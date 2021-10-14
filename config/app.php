@@ -243,6 +243,7 @@ return [
         'Upload' => App\Facades\UploadFacade::class,
         'Record' => App\Facades\RecordFacade::class,
         'Sso' => App\Facades\SsoFacade::class,
+        'Gateway' => App\Facades\GatewayFacade::class,
     ],
 
 ];
