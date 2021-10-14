@@ -8,7 +8,6 @@ use App\Traits\CacheTrait;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Response;
-use Illuminate\Support\Str;
 use Record;
 
 // use App\Repositories\Contracts\BookRepositoryInterface;

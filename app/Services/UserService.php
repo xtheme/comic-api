@@ -6,7 +6,7 @@ use App\Models\Order;
 use App\Models\User;
 use App\Models\UserRechargeLog;
 use App\Traits\CacheTrait;
-use Facades\App\Contracts\Gateway;
+use Gateway;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;

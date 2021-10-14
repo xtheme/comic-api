@@ -3,17 +3,25 @@
 namespace App\Services;
 
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Redis;
 
 class GatewayService
 {
+    public $redis;
+
+    public function __construct()
+    {
+        $this->redis = Redis::connection('readonly');
+    }
+
     public function getDailyLimit($payment_id)
     {
         $redis_key = sprintf('payment:gateway:%s:%s', $payment_id, date('Y-m-d'));
 
         $cache_limit = 0;
 
-        if (Cache::has($redis_key)) {
-            $cache_limit = Cache::get($redis_key);
+        if ($this->redis->exists($redis_key)) {
+            $cache_limit = $this->redis->get($redis_key);
         }
 
         return $cache_limit;
@@ -25,7 +33,7 @@ class GatewayService
     public function incDailyLimit($payment_id, $amount)
     {
         $cache_key = sprintf('payment:gateway:%s:%s', $payment_id, date('Y-m-d'));
-        Cache::increment($cache_key, $amount);
+        $this->redis->incr($cache_key, $amount);
     }
 
 }
