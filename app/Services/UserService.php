@@ -9,6 +9,7 @@ use App\Traits\CacheTrait;
 use Facades\App\Contracts\Gateway;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\Auth;
 
 class UserService
 {
@@ -55,18 +56,9 @@ class UserService
     /**
      * 建立用戶充值紀錄
      */
-    private function addUseRechargeLog(Order $order)
+    private function addUseRechargeLog(array $data)
     {
-        $log = new UserRechargeLog;
-        $log->type = $order->type;
-        $log->user_id = $order->user_id;
-        $log->order_id = $order->order_id;
-        $log->order_no = $order->order_no;
-        $log->coin = $order->plan_options['coin'];
-        $log->gift_coin = $order->plan_options['gift_coin'];
-        $log->days = $order->plan_options['days'];
-        $log->gift_days = $order->plan_options['gift_days'];
-        $log->save();
+        UserRechargeLog::create($data);
     }
 
     /**
@@ -84,17 +76,63 @@ class UserService
             'transaction_id' => $transaction_id,
             'transaction_at' => date('Y-m-d H:i:s'),
         ];
-
         $order->update($update);
 
         // 更新用戶錢包或VIP時效
         $this->updateUserPlan($user, $order->plan_options);
 
         // 建立用戶充值紀錄
-        $this->addUseRechargeLog($order);
+        $data = [
+            'channel_id' => $user->channel_id,
+            'user_id' => $order->user_id,
+            'type' => $order->type,
+            'order_id' => $order->order_id,
+            'order_no' => $order->order_no,
+            'coin' => $order->plan_options['coin'],
+            'gift_coin' => $order->plan_options['gift_coin'],
+            'days' => $order->plan_options['days'],
+            'gift_days' => $order->plan_options['gift_days'],
+        ];
+        $this->addUseRechargeLog($data);
 
         // 添加每日限額
         Gateway::incDailyLimit($order->payment_id, $order->amount);
+    }
+
+    /**
+     * 後台手動上分
+     */
+    public function manualUpdateOrder(Order $order)
+    {
+        $user = User::findOrFail($order->user_id);
+
+        // todo 更新订单数据
+        $update = [
+            'channel_id' => $user->channel_id, // 財務報表用
+            'first' => $this->isFirstOrder($order->user_id) ? 1 : 0,
+            'status' => 1,
+        ];
+        $order->update($update);
+
+        // 更新用戶錢包或VIP時效
+        $this->updateUserPlan($user, $order->plan_options);
+
+        // 建立用戶充值紀錄
+        $data = [
+            'channel_id' => $user->channel_id,
+            'user_id' => $order->user_id,
+            'type' => $order->type,
+            'admin_id' => Auth::id(),
+            'order_id' => $order->order_id,
+            'order_no' => $order->order_no,
+            'coin' => $order->plan_options['coin'],
+            'gift_coin' => $order->plan_options['gift_coin'],
+            'days' => $order->plan_options['days'],
+            'gift_days' => $order->plan_options['gift_days'],
+        ];
+        $this->addUseRechargeLog($data);
+
+        activity()->useLog('后台')->causedBy(auth()->user())->performedOn($order)->withProperties($order->getChanges())->log('手动回调订单');
     }
 
     /**
