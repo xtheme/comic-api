@@ -24,7 +24,7 @@ if (!function_exists('getConfigs')) {
 
         if (!$config) {
             Log::error('配置代号: ' . $code . ' 不存在');
-            return '';
+            throw new Exception('配置代号: ' . $code . ' 不存在');
         }
 
         Cache::set($cache_key, $config->options, 300);
@@ -43,8 +43,9 @@ if (!function_exists('getConfig')) {
     {
         $options = getConfigs($code);
 
-        if (!$options[$key]) {
+        if (!isset($options[$key])) {
             Log::error('配置項: ' . $code . '.' . $key . ' 不存在');
+            throw new Exception('配置項: ' . $code . '.' . $key . ' 不存在');
         }
 
         return $options[$key] ?? '';
