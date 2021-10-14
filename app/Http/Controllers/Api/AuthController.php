@@ -89,7 +89,7 @@ class AuthController extends BaseController
      *
      * @return \Illuminate\Http\JsonResponse
      */
-    public function me(Request $request)
+    public function profile(Request $request)
     {
         return Response::jsonSuccess(__('api.success'), $request->user());
     }

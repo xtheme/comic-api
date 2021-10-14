@@ -82,7 +82,7 @@ Route::as('api.')->middleware(['api'])->group(function () {
     Route::prefix(config('api.version'))->middleware(['api.sign', 'auth:sanctum'])->group(function () {
         // 会员
         Route::prefix('auth')->as('auth.')->group(function () {
-            Route::get('/me', [Api\AuthController::class, 'me'])->name('me');
+            Route::get('/profile', [Api\AuthController::class, 'profile'])->name('profile');
             Route::get('/logout', [Api\AuthController::class, 'logout'])->name('logout');
         });
 
