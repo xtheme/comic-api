@@ -58,6 +58,13 @@ Route::as('api.')->middleware(['api'])->group(function () {
             Route::get('/detail/{id}', [Api\ResumeController::class, 'detail'])->name('detail');
         });
 
+        // 分類標籤
+        Route::prefix('tag')->as('tag.')->group(function () {
+            Route::get('/', [Api\TagController::class, 'list'])->name('list');
+            Route::get('/book/{tag}/{page?}', [Api\TagController::class, 'book'])->name('book');
+            Route::get('/video/{tag}/{page?}', [Api\TagController::class, 'video'])->name('video');
+        });
+
         // 漫畫
         Route::prefix('book')->as('book.')->group(function () {
             Route::get('/{id}', [Api\BookController::class, 'detail'])->name('detail');
@@ -103,13 +110,6 @@ Route::as('api.')->middleware(['api'])->group(function () {
             Route::get('/pricing', [Api\PaymentController::class, 'pricing'])->name('pricing'); // 支付方案
             Route::get('/gateway/{pricing_id}', [Api\PaymentController::class, 'gateway'])->name('gateway'); // 支付渠道
             Route::post('/pay', [Api\PaymentController::class, 'pay'])->name('pay'); // 調用渠道支付
-        });
-
-        // 分類標籤
-        Route::prefix('tag')->as('tag.')->group(function () {
-            Route::get('/', [Api\TagController::class, 'list'])->name('list');
-            Route::get('/book/{tag}/{page?}', [Api\TagController::class, 'book'])->name('book');
-            Route::get('/video/{tag}/{page?}', [Api\TagController::class, 'video'])->name('video');
         });
     });
 

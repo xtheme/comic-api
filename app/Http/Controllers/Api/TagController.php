@@ -11,15 +11,10 @@ class TagController extends BaseController
 {
     public function list()
     {
-        $tags = Tag::where('suggest', 1)->orderByDesc('priority')->get();
+        $tags = Tag::where('suggest', 1)->latest('order_column')->take(100)->get();
 
         $data = $tags->map(function ($tag) {
-            return [
-                'id'          => $tag->id,
-                'name'        => $tag->name,
-                'priority'    => $tag->priority,
-                'description' => $tag->description,
-            ];
+            return $tag->name;
         })->toArray();
 
         return Response::jsonSuccess(__('api.success'), $data);
@@ -27,7 +22,7 @@ class TagController extends BaseController
 
     public function book($tag, $page = 1)
     {
-        $books = Book::with(['tagged'])->withCount(['visit_histories'])->withAnyTag([$tag])->forPage($page)->get();
+        $books = Book::withCount(['visit_histories'])->withAllTags([$tag])->forPage($page)->get();
 
         $data = $books->map(function ($book) {
             return [
@@ -37,7 +32,7 @@ class TagController extends BaseController
                 'cover'                 => $book->vertical_cover,
                 'tagged_tags'           => $book->tagged_tags,
                 'visit_histories_count' => shortenNumber($book->visit_histories_count),
-                'updated_at'            => $book->updated_at->format('Y-m-d'),
+                'created_at'            => $book->created_at->format('Y-m-d'),
             ];
         })->toArray();
 
@@ -46,7 +41,7 @@ class TagController extends BaseController
 
     public function video($tag, $page = 1)
     {
-        $videos = Video::with(['tagged'])->withCount(['visit_histories'])->withAnyTag([$tag])->forPage($page)->get();
+        $videos = Video::withCount(['visit_histories'])->withAllTags([$tag])->forPage($page)->get();
 
         $data = $videos->map(function ($video) {
             return [
@@ -57,7 +52,7 @@ class TagController extends BaseController
                 'cover'                 => $video->cover,
                 'tagged_tags'           => $video->tagged_tags,
                 'visit_histories_count' => shortenNumber($video->visit_histories_count),
-                'updated_at'            => $video->updated_at->format('Y-m-d'),
+                'created_at'            => $video->created_at->format('Y-m-d'),
             ];
         })->toArray();
 
