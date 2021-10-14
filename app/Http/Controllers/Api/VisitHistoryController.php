@@ -19,11 +19,11 @@ class VisitHistoryController extends BaseController
                 'book_id' => $item->book_id,
                 'title' => $item->book->title,
                 'author' => $item->book->author,
-                'cover' => $item->book->cover,
+                'cover' => $item->book->vertical_cover,
                 // 'ribbon' => $item->video->ribbon,
                 'tagged_tags' => $item->book->tagged_tags,
-                'created_at' => $item->created_at->format('Y-m-d H:i:s'),
-                'updated_at' => $item->updated_at->format('Y-m-d H:i:s'),
+                'created_at' => $item->created_at->format('Y-m-d'),
+                'updated_at' => $item->updated_at->format('Y-m-d'),
             ];
         })->toArray();
 
@@ -43,8 +43,8 @@ class VisitHistoryController extends BaseController
                 'cover' => $item->video->cover,
                 'ribbon' => $item->video->ribbon,
                 'tagged_tags' => $item->video->tagged_tags,
-                'created_at' => $item->created_at->format('Y-m-d H:i:s'),
-                'updated_at' => $item->updated_at->format('Y-m-d H:i:s'),
+                'created_at' => $item->created_at->format('Y-m-d'),
+                'updated_at' => $item->updated_at->format('Y-m-d'),
             ];
         })->toArray();
 
