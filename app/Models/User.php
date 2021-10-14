@@ -69,6 +69,11 @@ class User extends Authenticatable
     //     return $this->hasMany('App\Models\Comment', 'user_id', 'id');
     // }
 
+    public function setEmailAttribute($email)
+    {
+        $this->attributes['email'] = strtolower($email);
+    }
+
     public function setPasswordAttribute($password)
     {
         $this->attributes['password'] = Hash::make($password);

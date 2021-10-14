@@ -63,7 +63,7 @@ class AuthController extends BaseController
         $loginField = filter_var($data['name'], FILTER_VALIDATE_EMAIL) ? 'email' : 'name';
 
         // 檢查用戶名/信箱重複
-        if (true === User::where($loginField, $data['name'])->exists()) {
+        if (true === User::where($loginField, strtolower($data['name']))->exists()) {
             return Response::jsonError(__('api.register.name.exists'));
         }
 
