@@ -11,17 +11,6 @@ use Illuminate\Support\ServiceProvider;
 class AppServiceProvider extends ServiceProvider
 {
     /**
-     * 设定所有的单例模式容器绑定的对应关系
-     *
-     * @var array
-     */
-    public $singletons = [
-        'UploadService' => \App\Services\UploadService::class,
-        'RecordService' => \App\Services\RecordService::class,
-        'SsoService' => \App\Services\SsoService::class,
-    ];
-
-    /**
      * Register any application services.
      *
      * @return void
