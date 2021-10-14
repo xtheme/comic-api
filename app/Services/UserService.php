@@ -6,13 +6,9 @@ use App\Models\Order;
 use App\Models\User;
 use App\Models\UserRechargeLog;
 use App\Traits\CacheTrait;
-// use Cache;
+use Facades\App\Contracts\Gateway;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Cache;
-
-// use Sso;
 
 class UserService
 {
@@ -98,9 +94,7 @@ class UserService
         $this->addUseRechargeLog($order);
 
         // 添加每日限額
-        // todo 可抽離到 Helpers/Functions
-        $cache_key = sprintf('payment:gateway:%s:%s', $order->payment_id, date('Y-m-d'));
-        Cache::increment($cache_key, $order->amount);
+        Gateway::incDailyLimit($order->payment_id, $order->amount);
     }
 
     /**

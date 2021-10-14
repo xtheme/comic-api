@@ -94,7 +94,6 @@ class GoddessGateway extends BaseGateway implements Contracts\GatewayInterface
         return 'success';
     }
 
-
     // 模擬回調數據
     public function mockCallback(Order $order)
     {

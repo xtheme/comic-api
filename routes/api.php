@@ -34,9 +34,15 @@ Route::as('api.')->middleware(['api'])->group(function () {
             Route::post('/register', [Api\AuthController::class, 'register'])->name('register');
         });
 
-        // 導航列
+        // 首頁:導航列
         Route::prefix('navigation')->as('navigation.')->group(function () {
             Route::get('/list', [Api\NavigationController::class , 'list'])->name('list');
+        });
+
+        // 首頁:主题
+        Route::prefix('topic')->as('topic.')->group(function () {
+            Route::get('/{causer}', [Api\TopicController::class, 'list'])->name('list');
+            Route::get('/more/{topic}/{page?}', [Api\TopicController::class, 'more'])->name('more');
         });
 
         // 電影
@@ -50,12 +56,6 @@ Route::as('api.')->middleware(['api'])->group(function () {
             Route::get('/cities', [Api\ResumeController::class, 'cities'])->name('cities');
             Route::get('/list/{city?}', [Api\ResumeController::class, 'list'])->name('list');
             Route::get('/detail/{id}', [Api\ResumeController::class, 'detail'])->name('detail');
-        });
-
-        // 主题模块
-        Route::prefix('topic')->as('topic.')->group(function () {
-            Route::get('/{causer}', [Api\TopicController::class, 'list'])->name('list');
-            Route::get('/more/{topic}/{page?}', [Api\TopicController::class, 'more'])->name('more');
         });
 
         // 漫畫

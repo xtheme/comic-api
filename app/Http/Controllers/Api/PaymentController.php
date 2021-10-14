@@ -9,6 +9,7 @@ use App\Models\Payment;
 use App\Models\Pricing;
 use App\Services\PaymentService;
 use App\Services\UserService;
+use Facades\App\Contracts\Gateway;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cache;
@@ -60,7 +61,7 @@ class PaymentController extends Controller
             return $gateway->status == 0;
         })->reject(function ($gateway) {
             // 排除每日限額已達上限
-            $daily_total = $this->getGatewayDaily($gateway->id);
+            $daily_total = Gateway::getDailyLimit($gateway->id);
 
             return $daily_total >= $gateway->daily_limit;
         })->map(function ($gateway) {
@@ -81,32 +82,36 @@ class PaymentController extends Controller
     public function pay(PayRequest $request)
     {
         $post = $request->validated();
+        $plan_id = $post['plan_id'];
+        $gateway_id = $post['gateway_id'];
 
         try {
-            $plan = Pricing::where('status', 1)->findOrFail($post['plan_id']);
+            $plan = Pricing::where('status', 1)->findOrFail($plan_id);
         } catch (\Exception $e) {
             Log::warning(sprintf('用戶 %s 嘗試調用未開放的支付方案', Auth::user()->id));
             return Response::jsonError('很抱歉，支付方案维护中！');
         }
 
         // 檢查方案是否允許使用以下支付渠道
-        if (!in_array($post['gateway_id'], $plan->gateway_ids)) {
+        if (!in_array($gateway_id, $plan->gateway_ids)) {
             Log::warning(sprintf('用戶 %s 嘗試調用支付方案不支援的渠道', Auth::user()->id));
             return Response::jsonError('很抱歉，支付渠道维护中！');
         }
 
         try {
-            $gateway = Payment::where('status', 1)->findOrFail($post['gateway_id']);
+            $gateway = Payment::where('status', 1)->findOrFail($gateway_id);
         } catch (\Exception $e) {
             Log::warning(sprintf('用戶 %s 嘗試調用未開放的支付渠道', Auth::user()->id));
             return Response::jsonError('很抱歉，支付渠道维护中！');
         }
 
-        // 檢查渠道今日限額
-        $daily_total = $this->getGatewayDaily($post['gateway_id']);
+        // 獲取渠道限額
+        $daily_total = Gateway::getDailyLimit($gateway_id);
         $estimated_amount = $plan->price + $daily_total;
+
+        // 檢查渠道今日限額
         if ($estimated_amount > $gateway->daily_limit) {
-            Log::notice(sprintf('渠道 %s 已臨界每日限額', $post['gateway_id']));
+            Log::notice(sprintf('渠道 %s 已臨界每日限額', $gateway_id));
             return Response::jsonError('很抱歉，支付渠道维护中！');
         }
 
@@ -143,21 +148,6 @@ class PaymentController extends Controller
 
         // 不同渠道返回格式不同
         return app(PaymentService::class)->init($order->gateway)->callback($order, $request->post());
-    }
-
-    // 獲取渠道限額
-    // todo 可抽離到 Helpers/Functions
-    public function getGatewayDaily($gateway_id)
-    {
-        $redis_key = sprintf('payment:gateway:%s:%s', $gateway_id, date('Y-m-d'));
-
-        $cache_limit = 0;
-
-        if (Cache::has($redis_key)) {
-            $cache_limit = Cache::get($redis_key);
-        }
-
-        return $cache_limit;
     }
 
     public function mockCallback(Request $request)
