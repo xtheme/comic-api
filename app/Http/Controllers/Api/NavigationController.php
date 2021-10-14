@@ -17,8 +17,8 @@ class NavigationController extends Controller
             return [
                 'id' => $nav->id,
                 'title' => $nav->title,
-                'icon' => $nav->icon,
-                'uri' => $nav->uri,
+                'icon' => asset($nav->icon),
+                'link' => $nav->link,
                 'target' => $nav->getRawOriginal('target'),
             ];
         })->toArray();

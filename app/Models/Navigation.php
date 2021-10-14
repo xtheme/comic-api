@@ -21,10 +21,10 @@ class Navigation extends Model
         'status',
     ];
 
-    public function getIconAttribute($value)
-    {
-        return getImageDomain() . $value;
-    }
+    // public function getIconAttribute($value)
+    // {
+    //     return getImageDomain() . $value;
+    // }
 
     public function getTypeAttribute()
     {

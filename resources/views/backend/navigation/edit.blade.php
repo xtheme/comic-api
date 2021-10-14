@@ -41,7 +41,7 @@
                 </div>
                 <div class="col-12">
                     <div class="form-group">
-                        <span class="float-right font-size-small text-light">(类型仅作为 Uri 快捷选项, 实际转跳以 Uri 为主)</span>
+                        <span class="float-right font-size-small text-light">(类型仅作为链接快捷选项, 实际转跳以链接为主)</span>
                         <label>类型</label>
                         <div class="controls">
                             <select class="form-control" name="type">
@@ -56,7 +56,7 @@
                     <div class="form-group">
                         <label><span class="danger">*</span> 链接</label>
                         <div class="controls">
-                            <input type="text" class="form-control" name="uri" placeholder="请填写前端链接" value="{{ $data->uri }}">
+                            <input type="text" class="form-control" name="link" placeholder="请填写前端链接" value="{{ $data->link }}">
                         </div>
                     </div>
                 </div>
@@ -104,7 +104,7 @@
         $(document).ready(function () {
             $('select[name="type"]').on('change', function (e) {
                 console.log($(this).val())
-                $('input[name="uri"]').val($(this).val())
+                $('input[name="link"]').val($(this).val())
             });
 
             $('#form').submit(function (e) {

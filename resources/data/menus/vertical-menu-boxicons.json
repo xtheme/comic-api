@@ -8,30 +8,6 @@
         },
         {
             "url": "#",
-            "name": "Systems",
-            "slug": "systems",
-            "icon": "bx bxs-cog",
-            "submenu": [
-                {
-                    "url": "/backend/config",
-                    "name": "Configs"
-                },
-                {
-                    "url": "/backend/navigation",
-                    "name": "Navigation"
-                },
-                {
-                    "url": "/backend/activity",
-                    "name": "Activity Log"
-                },
-                {
-                    "url": "/log-viewer/logs",
-                    "name": "System Log"
-                }
-            ]
-        },
-        {
-            "url": "#",
             "name": "Payment",
             "slug": "payment",
             "icon": "bx bxs-package",
@@ -67,26 +43,26 @@
                 {
                     "url": "/backend/user",
                     "name": "Customer List"
-                },
-                {
-                    "url": "/backend/order?status=2",
-                    "name": "Order List"
                 }
             ]
         },
         {
             "url": "#",
-            "name": "Categories",
-            "slug": "categories",
+            "name": "Homepage",
+            "slug": "homepage",
             "icon": "bx bxs-purchase-tag",
             "submenu": [
+                {
+                    "url": "/backend/navigation",
+                    "name": "Navigation"
+                },
                 {
                     "url": "/backend/tag",
                     "name": "Tags"
                 },
                 {
                     "url": "/backend/topic",
-                    "name": "Topic List"
+                    "name": "Topics"
                 }
             ]
         },
@@ -99,26 +75,6 @@
                 {
                     "url": "/backend/book",
                     "name": "Books List"
-                },
-                {
-                    "url": "/backend/book/caching",
-                    "name": "CDN Caching List"
-                }
-            ]
-        },
-        {
-            "url": "#",
-            "name": "Report",
-            "slug": "Report",
-            "icon": "bx bxs-chat",
-            "submenu": [
-                {
-                    "url": "/backend/report_type",
-                    "name": "Report Type"
-                },
-                {
-                    "url": "/backend/report",
-                    "name": "Report List"
                 }
             ]
         },
@@ -142,6 +98,26 @@
                     "url": "/backend/statistics",
                     "name": "Play Statistics",
                     "icon": "bx bx-right-arrow-alt"
+                },
+                {
+                    "url": "/backend/comment",
+                    "name": "Comment List"
+                }
+            ]
+        },
+        {
+            "url": "#",
+            "name": "Report",
+            "slug": "Report",
+            "icon": "bx bxs-chat",
+            "submenu": [
+                {
+                    "url": "/backend/report_type",
+                    "name": "Report Type"
+                },
+                {
+                    "url": "/backend/report",
+                    "name": "Report List"
                 }
             ]
         },
@@ -158,10 +134,6 @@
                 {
                     "url": "/backend/ad",
                     "name": "Ad List"
-                },
-                {
-                    "url": "/backend/notice",
-                    "name": "Notice List"
                 }
             ]
         },
@@ -183,13 +155,25 @@
         },
         {
             "url": "#",
-            "name": "Comments",
-            "slug": "comments",
-            "icon": "bx bxs-comment",
+            "name": "Systems",
+            "slug": "systems",
+            "icon": "bx bxs-cog",
             "submenu": [
                 {
-                    "url": "/backend/comment",
-                    "name": "Comment List"
+                    "url": "/backend/config",
+                    "name": "Configs"
+                },
+                {
+                    "url": "/backend/notice",
+                    "name": "Notice List"
+                },
+                {
+                    "url": "/backend/activity",
+                    "name": "Activity Log"
+                },
+                {
+                    "url": "/log-viewer/logs",
+                    "name": "System Log"
                 }
             ]
         }
