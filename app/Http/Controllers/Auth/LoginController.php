@@ -55,12 +55,10 @@ class LoginController extends Controller
     }
 
     // Login
-    public function showLoginForm(Request $request)
+    public function showLoginForm(Request $request, $secret = '')
     {
-        $secret = $request->input('s');
-
         if ($secret != config('custom.login_secret')) {
-            return redirect('/');
+            return '';
         }
 
         $data = [

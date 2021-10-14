@@ -22,9 +22,10 @@ use Illuminate\Support\Facades\Route;
 Route::get('lang/{locale}', [LanguageController::class, 'swap'])->name('language');
 
 // Login / Logout
-Auth::routes(['verify' => true]);
+// Auth::routes(['verify' => true]);
+Route::get('login/{secret?}', [LoginController::class, 'showLoginForm'])->name('login');
 Route::post('login', [LoginController::class, 'login']);
-Route::get('logout', [LoginController::class, 'logout']);
+Route::get('logout', [LoginController::class, 'logout'])->name('logout');
 
 // Homepage
 Route::get('/', [Frontend\HomeController::class, 'index']);
