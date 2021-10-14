@@ -29,7 +29,7 @@ class ReportController extends Controller
         }
         
         $data = [
-            'user_id' => $request->user->id,
+            'user_id' => $request->user()->id,
             'book_id' => $id,
             'book_report_type_id' => $type_id,
             'created_at' => Carbon::now(),

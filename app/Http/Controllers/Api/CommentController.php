@@ -51,7 +51,7 @@ class CommentController extends Controller
 
 
         $request->merge([
-            'user_id' => $request->user->id,
+            'user_id' => $request->user()->id,
             'status'    => 1,
             'likes' => 0
         ]);

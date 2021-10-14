@@ -45,7 +45,7 @@ class ServiceController extends Controller
         $params = [
             'app_id'     => $service_app_id,
             'app_secret' => $service_app_secret,
-            'open_id'    => $request->user->id,
+            'open_id'    => $request->user()->id,
             'time'       => time(),
         ];
 

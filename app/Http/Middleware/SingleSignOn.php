@@ -32,11 +32,11 @@ class SingleSignOn
         }
 
         // 第一次請求 user/device 不帶 token 狀況下 $request->user 不存在
-        if (!$request->user) {
+        if (!$request->user()) {
             return $next($request);
         }
 
-        if (!Sso::checkUser($request->user)) {
+        if (!Sso::checkUser($request->user())) {
             return Response::jsonError('请您先退出旧设备再登录！', 581);
         }
 

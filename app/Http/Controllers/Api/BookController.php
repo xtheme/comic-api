@@ -104,7 +104,7 @@ class BookController extends BaseController
             return Response::jsonError('该漫画不存在或已下架！');
         }
 
-        if (!$request->user->subscribed_status && $chapter->charge == 1) {
+        if (!$request->user()->subscribed_status && $chapter->charge == 1) {
             return Response::jsonError('请先开通 VIP！');
         }
 

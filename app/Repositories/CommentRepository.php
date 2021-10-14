@@ -81,7 +81,7 @@ class CommentRepository extends Repository implements CommentRepositoryInterface
     public function find_my($request , $comment_id): Builder
     {
         return $this->model::where([
-            ['user_id' , $request->user->id],
+            ['user_id' , $request->user()->id],
             ['id' , $comment_id]
         ]);
     }

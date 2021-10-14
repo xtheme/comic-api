@@ -11,7 +11,7 @@ class FavoriteHistoryController extends BaseController
 {
     private function getBookFavoriteHistories(Request $request)
     {
-        $histories = UserFavoriteBook::where('user_id', $request->user->id)->orderByDesc('updated_at')->get();
+        $histories = UserFavoriteBook::where('user_id', $request->user()->id)->orderByDesc('updated_at')->get();
 
         $histories = $histories->transform(function ($item) {
             return [
@@ -32,7 +32,7 @@ class FavoriteHistoryController extends BaseController
 
     private function getVideoFavoriteHistories(Request $request)
     {
-        $histories = VideoFavorite::where('user_id', $request->user->id)->orderByDesc('updated_at')->get();
+        $histories = VideoFavorite::where('user_id', $request->user()->id)->orderByDesc('updated_at')->get();
 
         $histories = $histories->transform(function ($item) {
             return [
@@ -73,7 +73,7 @@ class FavoriteHistoryController extends BaseController
                 $history = UserFavoriteBook::firstOrCreate([
                     'book_id' => $request->input('book_id'),
                     'chapter_id' => $request->input('chapter_id') ?? 0,
-                    'user_id' => $request->user->id,
+                    'user_id' => $request->user()->id,
                 ]);
 
                 if (!$history->wasRecentlyCreated) {
@@ -86,7 +86,7 @@ class FavoriteHistoryController extends BaseController
                 $history = VideoFavorite::firstOrCreate([
                     'video_id' => $request->input('video_id'),
                     'series_id' => $request->input('series_id') ?? 0,
-                    'user_id' => $request->user->id,
+                    'user_id' => $request->user()->id,
                 ]);
 
                 if (!$history->wasRecentlyCreated) {
@@ -106,12 +106,12 @@ class FavoriteHistoryController extends BaseController
 
         switch ($type) {
             case 'book':
-                UserFavoriteBook::whereIn('id', $ids)->where('user_id', $request->user->id)->delete();
+                UserFavoriteBook::whereIn('id', $ids)->where('user_id', $request->user()->id)->delete();
 
                 $histories = $this->getBookFavoriteHistories($request);
                 break;
             case 'video':
-                VideoFavorite::whereIn('id', $ids)->where('user_id', $request->user->id)->delete();
+                VideoFavorite::whereIn('id', $ids)->where('user_id', $request->user()->id)->delete();
 
                 $histories = $this->getVideoFavoriteHistories($request);
                 break;

@@ -11,7 +11,7 @@ class VisitHistoryController extends BaseController
 {
     private function getBookVisitHistories(Request $request)
     {
-        $histories = UserVisitBook::has('book')->where('user_id', $request->user->id)->orderByDesc('updated_at')->get();
+        $histories = UserVisitBook::has('book')->where('user_id', $request->user()->id)->orderByDesc('updated_at')->get();
 
         $histories = $histories->transform(function ($item) {
             return [
@@ -32,7 +32,7 @@ class VisitHistoryController extends BaseController
 
     private function getVideoVisitHistories(Request $request)
     {
-        $histories = VideoVisit::has('video')->where('user_id', $request->user->id)->orderByDesc('updated_at')->get();
+        $histories = VideoVisit::has('video')->where('user_id', $request->user()->id)->orderByDesc('updated_at')->get();
 
         $histories = $histories->transform(function ($item) {
             return [
@@ -72,12 +72,12 @@ class VisitHistoryController extends BaseController
 
         switch ($type) {
             case 'book':
-                UserVisitBook::whereIn('id', $ids)->where('user_id', $request->user->id)->delete();
+                UserVisitBook::whereIn('id', $ids)->where('user_id', $request->user()->id)->delete();
 
                 $histories = $this->getBookVisitHistories($request);
                 break;
             case 'video':
-                VideoVisit::whereIn('id', $ids)->where('user_id', $request->user->id)->delete();
+                VideoVisit::whereIn('id', $ids)->where('user_id', $request->user()->id)->delete();
 
                 $histories = $this->getVideoVisitHistories($request);
                 break;
