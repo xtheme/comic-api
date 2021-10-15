@@ -87,7 +87,12 @@ class PaymentController extends Controller
         // 限制用戶每小時訂單數
         $user = $request->user();
         $cache_key = 'hourly_orders:' . $user->id;
-        $hourly_orders = Cache::get($cache_key, 0);
+        if (Cache::has($cache_key)) {
+            $hourly_orders = Cache::get($cache_key);
+        } else {
+            $hourly_orders = 0;
+            Cache::set($cache_key, 0, 3600);
+        }
         if ($hourly_orders >= getConfig('app', 'hourly_order_limit')) {
             return Response::jsonError('支付渠道冷却中，请稍后在试！');
         }
