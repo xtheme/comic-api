@@ -11,6 +11,7 @@ use App\Services\PaymentService;
 use App\Services\UserService;
 use Gateway;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Response;
 
@@ -79,12 +80,17 @@ class PaymentController extends Controller
     // 調用支付
     public function pay(PayRequest $request)
     {
-        $user = $request->user();
-        $post = $request->validated();
-        $plan_id = $post['plan_id'];
-        $gateway_id = $post['gateway_id'];
+        $input = $request->validated();
+        $plan_id = $input['plan_id'];
+        $gateway_id = $input['gateway_id'];
 
         // 限制用戶每小時訂單數
+        $user = $request->user();
+        $cache_key = 'hourly_orders:' . $user->id;
+        $hourly_orders = Cache::get($cache_key, 0);
+        if ($hourly_orders >= getConfig('app', 'hourly_order_limit')) {
+            return Response::jsonError('支付渠道冷却中，请稍后在试！');
+        }
 
         try {
             $plan = Pricing::where('status', 1)->findOrFail($plan_id);
@@ -120,6 +126,7 @@ class PaymentController extends Controller
         try {
             $payment_service = app(PaymentService::class);
             $response = $payment_service->init($gateway)->pay($plan);
+            Cache::increment($cache_key);
         } catch (\Exception $e) {
             Log::error(sprintf('調用 %s (%s) 支付接口錯誤：%s', $gateway->name, $gateway->id, $e->getMessage()));
             return Response::jsonError('很抱歉，支付渠道维护中！');
