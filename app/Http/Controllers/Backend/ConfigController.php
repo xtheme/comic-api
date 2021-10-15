@@ -7,6 +7,7 @@ use App\Http\Requests\Backend\ConfigRequest;
 use App\Models\Config;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Response;
 
 class ConfigController extends Controller
@@ -53,12 +54,12 @@ class ConfigController extends Controller
 
     public function edit($id)
     {
-        $config = Config::findOrFail($id);
-
-        return view('backend.config.edit', [
-            'config' => $config,
+        $data = [
+            'config' => Config::findOrFail($id),
             'pageConfigs' => ['hasSearchForm' => false],
-        ]);
+        ];
+
+        return view('backend.config.edit')->with($data);
     }
 
     public function update(ConfigRequest $request, $id)
@@ -73,7 +74,7 @@ class ConfigController extends Controller
             return $item['key'] == '';
         })->flatMap(function ($item) {
             return [$item['key'] => $item['value']];
-        })->toArray();
+        });
 
         $config = Config::findOrFail($id);
         $config->name = $request->post('name');

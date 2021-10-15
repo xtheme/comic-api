@@ -6,10 +6,6 @@ use Illuminate\Database\Eloquent\Builder;
 
 class Config extends BaseModel
 {
-    protected $casts = [
-        'options' => 'array',
-    ];
-
     public function scopeCode(Builder $query, string $code = null)
     {
         return $query->when($code, function (Builder $query, $code) {
@@ -22,5 +18,14 @@ class Config extends BaseModel
         return $query->when($keyword, function (Builder $query, $keyword) {
             return $query->where('code', 'like', '%' . $keyword . '%')->orWhere('name', 'like', '%' . $keyword . '%');
         });
+    }
+
+    public function getOptionsAttribute($value)
+    {
+        $value = json_decode($value, true);
+
+        ksort($value);
+
+        return $value;
     }
 }
