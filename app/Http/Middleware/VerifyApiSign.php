@@ -34,7 +34,7 @@ class VerifyApiSign
         $str = hash('sha256', $str . config('api.secret'));
 
         if ($sign != $str) {
-            return Response::jsonError('签名不正确, 授权失败!', 500);
+            return Response::jsonError('签名错误!', 500);
         }
 
         return $next($request);
