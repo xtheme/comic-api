@@ -9,7 +9,7 @@ class RegisterRequest extends BaseApiRequest
     public function rules()
     {
         return [
-            'name' => 'required|min:3',
+            'name' => 'required|min:3|string|regex:/^[A-Za-z0-9_]+$/',
             'password' => [
                 'required',
                 Password::min(8)->mixedCase()->letters()->numbers(),
@@ -22,7 +22,7 @@ class RegisterRequest extends BaseApiRequest
     public function attributes()
     {
         return [
-            'name' => '账号',
+            'name' => '帐号',
             'password' => '密码',
             'password_confirmation' => '确认密码',
         ];

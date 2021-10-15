@@ -97,7 +97,7 @@ class LoginController extends Controller
         $this->incrementLoginAttempts($request);
 
         if (empty($request->post('username'))) {
-            return Response::jsonError('请输入账号!', 500);
+            return Response::jsonError('请输入帐号!', 500);
         }
 
         if (empty($request->post('password'))) {
@@ -109,7 +109,7 @@ class LoginController extends Controller
 
             if ($admin->status != 1) {
                 Auth::logout();
-                return Response::jsonError('账号被封禁!', 500);
+                return Response::jsonError('帐号被封禁!', 500);
             }
 
             activity()->useLog('后台')->causedBy($admin)->log('登录后台!');

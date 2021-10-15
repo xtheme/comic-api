@@ -124,9 +124,9 @@
                                                     @if($user->subscribed_status)
                                                     <a class="dropdown-item" data-modal data-size="sm" data-height="20vh" href="{{ route('backend.vip.transfer', $user->id) }}" title="转让 VIP"><i class="bx bx-transfer mr-1"></i>转让 VIP</a>
                                                     @endif
-                                                    <a class="dropdown-item" data-confirm href="{{ route('backend.user.block', $user->id) }}" title="封禁该账号"><i class="bx bx-lock mr-1"></i>封禁</a>
+                                                    <a class="dropdown-item" data-confirm href="{{ route('backend.user.block', $user->id) }}" title="封禁该帐号"><i class="bx bx-lock mr-1"></i>封禁</a>
                                                 @else
-                                                    <a class="dropdown-item" data-confirm href="{{ route('backend.user.block', $user->id) }}" title="启用该账号"><i class="bx bx-lock-open mr-1"></i>启用</a>
+                                                    <a class="dropdown-item" data-confirm href="{{ route('backend.user.block', $user->id) }}" title="启用该帐号"><i class="bx bx-lock-open mr-1"></i>启用</a>
                                                 @endif
                                             </div>
                                         </div>

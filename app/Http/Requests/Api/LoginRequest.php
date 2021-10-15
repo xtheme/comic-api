@@ -16,7 +16,7 @@ class LoginRequest extends BaseApiRequest
     public function attributes()
     {
         return [
-            'name' => '账号',
+            'name' => '帐号',
             'password' => '密码',
         ];
     }

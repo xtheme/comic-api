@@ -21,7 +21,7 @@
                                     <form id="login-form" class="form form-vertical" action="{{ route('login') }}" novalidate>
                                         <div class="form-group mb-2">
                                             <div class="controls">
-                                                <input type="text" class="form-control" name="username" placeholder="请输入账号">
+                                                <input type="text" class="form-control" name="username" placeholder="请输入帐号">
                                             </div>
                                         </div>
                                         <div class="form-group mb-2">
