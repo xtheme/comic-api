@@ -94,8 +94,9 @@ Route::as('api.')->middleware(['api'])->group(function () {
     Route::prefix(config('api.version'))->middleware(['api.header', 'api.sign', 'auth:sanctum'])->group(function () {
         // 会员
         Route::prefix('auth')->as('auth.')->group(function () {
-            Route::get('/profile', [Api\AuthController::class, 'profile'])->name('profile');
-            Route::get('/logout', [Api\AuthController::class, 'logout'])->name('logout');
+            Route::any('/profile', [Api\AuthController::class, 'profile'])->name('profile');
+            Route::any('/logout', [Api\AuthController::class, 'logout'])->name('logout');
+            Route::any('/refresh', [Api\AuthController::class, 'refresh'])->name('refresh');
         });
 
         // 歷史紀錄 (閱覽/ 播放/ 收藏)

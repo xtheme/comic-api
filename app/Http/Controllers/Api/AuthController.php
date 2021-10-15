@@ -5,34 +5,17 @@ namespace App\Http\Controllers\Api;
 use App\Http\Requests\Api\LoginRequest;
 use App\Http\Requests\Api\RegisterRequest;
 use App\Models\User;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Response;
-use Validator;
 
 class AuthController extends BaseController
 {
     /**
-     * Create a new AuthController instance.
-     *
-     * @return void
+     * 登入帳號
      */
-    // public function __construct()
-    // {
-    //     $this->middleware('auth:api', [
-    //         'except' => [
-    //             'login',
-    //             'register',
-    //         ],
-    //     ]);
-    // }
-
-    /**
-     * Get a JWT via given credentials.
-     *
-     * @return \Illuminate\Http\JsonResponse
-     */
-    public function login(LoginRequest $request)
+    public function login(LoginRequest $request): JsonResponse
     {
         $data = $request->validated();
 
@@ -45,24 +28,21 @@ class AuthController extends BaseController
         }
 
         // 簽發 personal token
-        $token = $user->createToken('personal_token');
-        $user->token = $token->plainTextToken;
+        $user->token = $user->createToken($user->name)->plainTextToken;
 
         return Response::jsonSuccess(__('api.success'), $user);
     }
 
     /**
-     * Register a User.
-     *
-     * @return \Illuminate\Http\JsonResponse
+     * 註冊帳號
      */
-    public function register(RegisterRequest $request)
+    public function register(RegisterRequest $request): JsonResponse
     {
         $data = $request->validated();
 
         $loginField = filter_var($data['name'], FILTER_VALIDATE_EMAIL) ? 'email' : 'name';
 
-        // 檢查用戶名/信箱重複
+        // 檢查用戶名(信箱)是否已被使用
         if (true === User::where($loginField, strtolower($data['name']))->exists()) {
             return Response::jsonError(__('api.register.name.exists'));
         }
@@ -73,9 +53,7 @@ class AuthController extends BaseController
     }
 
     /**
-     * Log the user out (Invalidate the token).
-     *
-     * @return \Illuminate\Http\JsonResponse
+     * 登出帳號, 清除所有 token
      */
     public function logout(Request $request)
     {
@@ -85,50 +63,28 @@ class AuthController extends BaseController
     }
 
     /**
-     * Log the user out (Invalidate the token).
-     *
-     * @return \Illuminate\Http\JsonResponse
+     * 用戶信息
      */
-    public function profile(Request $request)
+    public function profile(Request $request): JsonResponse
     {
         return Response::jsonSuccess(__('api.success'), $request->user());
     }
 
     /**
-     * Refresh a token.
-     *
-     * @return \Illuminate\Http\JsonResponse
+     * 重新簽發 token
      */
-    public function refresh()
+    public function refresh(Request $request): JsonResponse
     {
-        return $this->createNewToken(auth()->refresh());
-    }
+        $user = $request->user();
 
-    /**
-     * Get the authenticated User.
-     *
-     * @return \Illuminate\Http\JsonResponse
-     */
-    public function userProfile()
-    {
-        return response()->json(auth()->user());
-    }
+        // 清除所有 token
+        $user->tokens()->delete();
 
-    /**
-     * Get the token array structure.
-     *
-     * @param  string  $token
-     *
-     * @return \Illuminate\Http\JsonResponse
-     */
-    protected function createNewToken($token)
-    {
-        return response()->json([
-            'access_token' => $token,
-            'token_type'   => 'bearer',
-            'expires_in'   => auth()->factory()->getTTL() * 60,
-            'user'         => auth()->user(),
-        ]);
-    }
+        // 簽發 personal token
+        $data = [
+            'token' => $user->createToken($user->name)->plainTextToken,
+        ];
 
+        return Response::jsonSuccess(__('api.success'), $data);
+    }
 }
