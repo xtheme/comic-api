@@ -40,11 +40,11 @@ class AdController extends Controller
                 'class' => $space->class,
                 'display' => $space->display,
                 'created_at' => $space->created_at->format('Y-m-d H:i:s'),
-                'ads' => $space->ads 
+                'ads' => $space->ads
             ];
         })->toArray();
 
 
-        return Response::jsonSuccess('返回成功', $data);
+        return Response::jsonSuccess(__('api.success'), $data);
     }
 }

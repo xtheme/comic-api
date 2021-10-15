@@ -22,6 +22,6 @@ class ServiceController extends Controller
 
         $data['url'] = getConfig('service', 'url');
 
-        return Response::jsonSuccess('返回成功', $data);
+        return Response::jsonSuccess(__('api.success'), $data);
     }
 }

@@ -16,11 +16,9 @@ class BootstrapController extends Controller
      */
     public function configs()
     {
-        $data = [
-            'app' => getConfigs('app'),
-        ];
+        $data = getConfigs('frontend');
 
-        return Response::jsonSuccess('返回成功', $data);
+        return Response::jsonSuccess(__('api.success'), $data);
     }
 
     private function getAdSpaces()

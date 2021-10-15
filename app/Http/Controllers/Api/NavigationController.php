@@ -23,6 +23,6 @@ class NavigationController extends Controller
             ];
         })->toArray();
 
-        return Response::jsonSuccess('返回成功', $data);
+        return Response::jsonSuccess(__('api.success'), $data);
     }
 }

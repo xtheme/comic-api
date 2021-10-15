@@ -11,7 +11,6 @@ use App\Services\PaymentService;
 use App\Services\UserService;
 use Gateway;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Response;
 
@@ -23,7 +22,7 @@ class PaymentController extends Controller
         // todo 用戶是否為首存, 檢查當前用戶是否有支付成功的訂單
         $status = [0, 1];
 
-        if (!app(UserService::class)->isFirstOrder(Auth::user()->id)) {
+        if (!app(UserService::class)->isFirstOrder($request->user()->id)) {
             $status = [0, 2];
         }
 
@@ -80,27 +79,30 @@ class PaymentController extends Controller
     // 調用支付
     public function pay(PayRequest $request)
     {
+        $user = $request->user();
         $post = $request->validated();
         $plan_id = $post['plan_id'];
         $gateway_id = $post['gateway_id'];
 
+        // 限制用戶每小時訂單數
+
         try {
             $plan = Pricing::where('status', 1)->findOrFail($plan_id);
         } catch (\Exception $e) {
-            Log::warning(sprintf('用戶 %s 嘗試調用未開放的支付方案', Auth::user()->id));
+            Log::warning(sprintf('用戶 %s 嘗試調用未開放的支付方案', $request->user()->id));
             return Response::jsonError('很抱歉，支付方案维护中！');
         }
 
         // 檢查方案是否允許使用以下支付渠道
         if (!in_array($gateway_id, $plan->gateway_ids)) {
-            Log::warning(sprintf('用戶 %s 嘗試調用支付方案不支援的渠道', Auth::user()->id));
+            Log::warning(sprintf('用戶 %s 嘗試調用支付方案不支援的渠道', $request->user()->id));
             return Response::jsonError('很抱歉，支付渠道维护中！');
         }
 
         try {
             $gateway = Payment::where('status', 1)->findOrFail($gateway_id);
         } catch (\Exception $e) {
-            Log::warning(sprintf('用戶 %s 嘗試調用未開放的支付渠道', Auth::user()->id));
+            Log::warning(sprintf('用戶 %s 嘗試調用未開放的支付渠道', $request->user()->id));
             return Response::jsonError('很抱歉，支付渠道维护中！');
         }
 
