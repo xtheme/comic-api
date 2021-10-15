@@ -6,12 +6,15 @@ return [
     'register' => [
         'name' => [
             // 'exists' => '您所使用的帐号或信箱已被注册！',
-            'exists' => '你所输入的帐号已被使用！',
+            'exists' => '你输入的帐号已被使用！',
         ],
     ],
     'login' => [
         'password' => [
             'wrong' => '密码错误！',
+        ],
+        'status' => [
+            'ban' => '帐号已封禁！',
         ],
     ],
     'logout' => [

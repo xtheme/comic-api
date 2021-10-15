@@ -24,7 +24,11 @@ class AuthController extends BaseController
         $user = User::where($loginField, $data['name'])->first();
 
         if (!Hash::check($data['password'], $user->password)) {
-            return Response::jsonError('密码错误！');
+            return Response::jsonError(__('api.login.password.wrong'));
+        }
+
+        if (!$user->status) {
+            return Response::jsonError(__('api.login.status.ban'));
         }
 
         // 簽發 personal token
@@ -86,6 +90,10 @@ class AuthController extends BaseController
     public function refresh(Request $request): JsonResponse
     {
         $user = $request->user();
+
+        if (!$user->status) {
+            return Response::jsonError(__('api.login.status.ban'));
+        }
 
         // 清除所有 token
         $user->tokens()->delete();
