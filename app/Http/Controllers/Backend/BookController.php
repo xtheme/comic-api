@@ -76,23 +76,6 @@ class BookController extends Controller
         return Response::jsonSuccess(__('response.destroy.success'));
     }
 
-    public function review($id)
-    {
-        $data = [
-            'review_options' => Options::REVIEW_OPTIONS,
-            'book' => Book::findOrFail($id),
-        ];
-
-        return view('backend.book.review')->with($data);
-    }
-
-    public function updateReview(Request $request, $id)
-    {
-        $this->repository->update($id, $request->input());
-
-        return Response::jsonSuccess(__('response.update.success'));
-    }
-
     /**
      * 批次更新
      */
@@ -101,22 +84,13 @@ class BookController extends Controller
         $ids = explode(',', $request->input('ids'));
 
         switch ($action) {
-            case 'review-1':
-            case 'review-2':
-            case 'review-3':
-            case 'review-4':
-            case 'review-5':
-                $text = '审核状态';
-                $check_status = (int) explode('-', $action)[1];
-                $data = ['review' => $check_status];
-                break;
             case 'enable':
                 $text = '批量上架';
                 $data = ['status' => 1];
                 break;
             case 'disable':
                 $text = '批量下架';
-                $data = ['status' => -1];
+                $data = ['status' => 0];
                 break;
             case 'charge':
                 $text = '批量收费';
@@ -133,6 +107,7 @@ class BookController extends Controller
 
         switch ($action) {
             case 'charge':
+                // todo 批量收费
                 $books = Book::whereIn('id', $ids)->get();
                 foreach ($books as $book) {
                     $book->chapters()->where('episode', '>', 10)->update(['charge' => 1]);
@@ -141,7 +116,7 @@ class BookController extends Controller
             case 'free':
                 $books = Book::whereIn('id', $ids)->get();
                 foreach ($books as $book) {
-                    $book->chapters()->update(['charge' => -1]);
+                    $book->chapters()->update(['price' => 0]);
                 }
                 break;
             case 'destroy':
@@ -186,14 +161,13 @@ class BookController extends Controller
         })->map(function ($book) {
             $chapters = $book->chapters;
 
-            return $chapters->reject(function ($chapter)  {
+            return $chapters->reject(function ($chapter) {
                 return $chapter->json_images === '';
             })->map(function ($chapter) {
                 return collect($chapter->json_images)->map(function ($image) {
                     return getImageDomain() . webpWidth($image, getConfig('app', 'webp_width'));
                 });
             })->flatten()->toArray();
-
         })->flatten()->toArray();
 
         $txt = '';
@@ -203,9 +177,9 @@ class BookController extends Controller
         }
 
         return response($txt)->withHeaders([
-                'Content-Type'        => 'text/plain',
-                'Cache-Control'       => 'no-store, no-cache',
-                'Content-Disposition' => 'attachment; filename="CDN预热名单_' . date('Y-m-d') . '.txt',
-            ]);
+            'Content-Type' => 'text/plain',
+            'Cache-Control' => 'no-store, no-cache',
+            'Content-Disposition' => 'attachment; filename="CDN预热名单_' . date('Y-m-d') . '.txt',
+        ]);
     }
 }

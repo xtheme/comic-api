@@ -2,8 +2,6 @@
 
 namespace App\Models;
 
-use App\Casts\BooleanCast;
-
 class BookChapter extends BaseModel
 {
     protected $perPage = 10;
@@ -16,7 +14,7 @@ class BookChapter extends BaseModel
         'json_images',
         'status',
         'charge',
-        'review',
+        'price',
         'operating',
     ];
 

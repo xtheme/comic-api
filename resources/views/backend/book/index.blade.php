@@ -65,13 +65,13 @@
                                 <th>封面图</th>
                                 <th>作者</th>
                                 <th>类型</th>
-                                <th>是否收费</th>
-                                <th>章节数</th>
+                                <th>收费</th>
+                                <th class="text-center">章节数</th>
                                 <th>发布时间</th>
-                                <th>连载状态</th>
-                                <th>采集</th>
-                                <th>阅读数</th>
-                                <th>收藏数</th>
+                                <th class="text-center">连载状态</th>
+                                <th class="text-center">采集</th>
+                                <th class="text-center">阅读数</th>
+                                <th class="text-center">收藏数</th>
 {{--                                <th>审核状态</th>--}}
                                 <th>上架状态</th>
                                 <th>操作</th>
@@ -105,39 +105,20 @@
                                     <td>{{ $book->author }}</td>
                                     <td>{{ $book->type }}</td>
                                     <td>
-                                        @if(optional($book->latest_chapter)->charge == 1)
+                                        @if($book->charge)
                                             <span class="badge badge-pill badge-light-danger">收费</span>
                                         @else
                                             <span class="badge badge-pill badge-light-primary">免费</span>
                                         @endif
                                     </td>
-                                    <td>{{ $book->chapters_count }}</td>
+                                    <td class="text-center">{{ $book->chapters_count }}</td>
                                     <td>{{ optional($book->latest_chapter)->created_at }}</td>
-                                    <td>
+                                    <td class="text-center">
                                         <span class="badge badge-pill badge-light-{{ $book->release_status_style }}">{{ $book->release_status }}</span>
                                     </td>
-                                    <td>@if($book->operating == 1){{'人工'}}@else{{'自动'}}@endif</td>
-                                    <td>{{ shortenNumber($book->visits) }}</td>
-                                    <td>{{ $book->favorite_histories_count }}</td>
-{{--                                    <td>--}}
-{{--                                        @switch($book->review)--}}
-{{--                                            @case(1)--}}
-{{--                                            <span class="badge badge-pill badge-light-secondary">待审核</span>--}}
-{{--                                            @break--}}
-{{--                                            @case(2)--}}
-{{--                                            <span class="badge badge-pill badge-light-success">审核成功</span>--}}
-{{--                                            @break--}}
-{{--                                            @case(3)--}}
-{{--                                            <span class="badge badge-pill badge-light-warning">审核未通过</span>--}}
-{{--                                            @break--}}
-{{--                                            @case(4)--}}
-{{--                                            <span class="badge badge-pill badge-light-danger">屏蔽</span>--}}
-{{--                                            @break--}}
-{{--                                            @case(5)--}}
-{{--                                            <span class="badge badge-pill badge-light-secondary">未审核</span>--}}
-{{--                                            @break--}}
-{{--                                        @endswitch--}}
-{{--                                    </td>--}}
+                                    <td class="text-center">@if($book->operating == 1){{'人工'}}@else{{'爬虫'}}@endif</td>
+                                    <td class="text-center">{{ shortenNumber($book->view_counts) }}</td>
+                                    <td class="text-center">{{ shortenNumber($book->collect_counts) }}</td>
                                     <td>
                                         @if($book->status == 1)
                                             <a class="badge badge-pill badge-light-success" data-confirm href="{{ route('backend.book.batch', ['action'=>'disable', 'ids' => $book->id]) }}" title="下架该作品">上架</a>
@@ -154,7 +135,6 @@
                                                 <a class="dropdown-item" data-modal data-size="full" href="{{ route('backend.book_chapter.index', $book->id) }}" title="章节列表"><i class="bx bx-list-ol mr-1"></i>章节列表</a>
                                                 <a class="dropdown-item" data-modal href="{{ route('backend.book.edit', $book->id) }}" title="编辑漫画"><i class="bx bx-edit-alt mr-1"></i>编辑漫画</a>
                                                 <a class="dropdown-item" data-destroy href="{{ route('backend.book.destroy', $book->id) }}" title="删除漫画"><i class="bx bx-trash mr-1"></i>删除漫画</a>
-                                                <a class="dropdown-item" data-modal data-size="sm" data-height="20vh" href="{{ route('backend.book.review', $book->id) }}" title="漫画审核"><i class="bx bxs-check-shield mr-1"></i>漫画审核</a>
                                             </div>
                                         </div>
                                     </td>

@@ -30,9 +30,8 @@ final class Options
     ];
 
     const STATUS_OPTIONS = [
-        0 => '待审核',
+        0 => '下架',
         1 => '上架',
-        2 => '下架',
     ];
 
     const RIBBON_OPTIONS = [
@@ -60,7 +59,7 @@ final class Options
     ];
 
     const CHARGE_OPTIONS = [
-        '-1' => '免费',
-        '1' => '付费',
+        0 => '免费',
+        1 => '付费',
     ];
 }

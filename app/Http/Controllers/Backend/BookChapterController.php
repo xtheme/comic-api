@@ -31,7 +31,6 @@ class BookChapterController extends Controller
         return view('backend.book_chapter.index')->with($data);
     }
 
-
     /**
      * 图片预览
      */
@@ -61,7 +60,7 @@ class BookChapterController extends Controller
                 break;
             case 'disable':
                 $text = '批量封禁';
-                $data = ['status' => -1];
+                $data = ['status' => 0];
                 break;
             case 'charge':
                 $text = '批量收费';
@@ -70,7 +69,7 @@ class BookChapterController extends Controller
             default:
             case 'free':
                 $text = '批量免费';
-                $data = ['charge' => -1];
+                $data = ['charge' => 0];
                 break;
         }
 
@@ -103,14 +102,13 @@ class BookChapterController extends Controller
     public function create($book_id)
     {
         $data = [
-            'book_id'           => $book_id,
+            'book_id' => $book_id,
         ];
 
         return view('backend.book_chapter.create')->with($data);
     }
 
-
-    public function store(Request $request , $book_id)
+    public function store(Request $request, $book_id)
     {
         $post = $request->post();
         $post['book_id'] = $book_id;
@@ -123,17 +121,15 @@ class BookChapterController extends Controller
     public function edit($id)
     {
         $data = [
-            'data'        => $this->repository->find($id)
+            'data' => $this->repository->find($id),
         ];
-
 
         return view('backend.book_chapter.edit')->with($data);
     }
 
     public function update(Request $request, $id)
     {
-
-        $this->repository->update($id , $request->post());
+        $this->repository->update($id, $request->post());
 
         return Response::jsonSuccess(__('response.update.success'));
     }

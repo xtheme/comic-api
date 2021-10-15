@@ -67,7 +67,7 @@
                         <div class="controls">
                             <div id="myDropzone" class="btn btn-primary glow">多图上传</div>
                         </div>
-                        <ul id="sortable" class="visualizacao sortable dropzone-previews"></ul>
+                        <ul id="sortable" class="visualization sortable dropzone-previews"></ul>
                     </div>
                 </div>
 
@@ -92,7 +92,7 @@
         </div>
         <input data-multiple type="hidden"  /></div>
     </div>
-  </li>  
+  </li>
 </div>
 @endsection
 
@@ -124,13 +124,13 @@
                 dictRemoveFile: '删除图片',
                 dictCancelUpload: '取消上传',
                 url: "{{ route('upload' , 'book') }}",
-                previewsContainer: '.visualizacao', 
+                previewsContainer: '.visualization',
                 previewTemplate       : $('.preview').html(),
                 sending: function(file, xhr, formData) {
                     formData.append("_token", "{{ csrf_token() }}");
                 },
                 init: function () {
-                    
+
                     this.on("addedfile", function (file) {
 
                     });
@@ -139,7 +139,7 @@
                         this.removeFile(file);
                     });
 
-                    
+
                     this.on("success", function (response, xhr) {
                         console.log('上传成功')
                         console.log(response)

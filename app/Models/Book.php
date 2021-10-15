@@ -4,7 +4,6 @@ namespace App\Models;
 
 use App\Traits\CacheTrait;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use Illuminate\Support\Str;
 use Spatie\Tags\HasTags;
 
 class Book extends BaseModel
@@ -22,16 +21,6 @@ class Book extends BaseModel
         'status',
         'review',
         'operating',
-    ];
-
-    protected $appends = [
-        //'tagged_tags',
-        // 'charge',
-        // 'release_at',
-    ];
-
-    protected $hidden = [
-        'tagged',
     ];
 
     public function chapters()
@@ -82,7 +71,7 @@ class Book extends BaseModel
      */
     public function getChargeAttribute()
     {
-        return $this->chapters->where('charge', 1)->count() ? 1 : -1;
+        return $this->chapters->where('price', '>', 0)->count() > 0;
     }
 
     /**
@@ -102,7 +91,9 @@ class Book extends BaseModel
      */
     public function getVerticalCoverAttribute($value)
     {
-        if (!$value) return '';
+        if (!$value) {
+            return '';
+        }
 
         return getImageDomain() . $value;
     }
@@ -112,7 +103,9 @@ class Book extends BaseModel
      */
     public function getHorizontalCoverAttribute($value)
     {
-        if (!$value) return '';
+        if (!$value) {
+            return '';
+        }
 
         return getImageDomain() . $value;
     }
@@ -130,6 +123,7 @@ class Book extends BaseModel
         $types = [
             1 => '日漫',
             2 => '韩漫',
+            3 => '写真',
         ];
 
         return $types[$value];
@@ -139,7 +133,7 @@ class Book extends BaseModel
     {
         $types = [
             1 => 'success',
-            -1 => 'primary',
+            0 => 'primary',
         ];
 
         return $types[$this->end];
@@ -149,7 +143,7 @@ class Book extends BaseModel
     {
         $types = [
             1 => '已完结',
-            -1 => '连载中',
+            0 => '连载中',
         ];
 
         return $types[$this->end];

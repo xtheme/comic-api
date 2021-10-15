@@ -60,26 +60,6 @@
                                 <option value="2">韩漫</option>
                             </select>
                         </div>
-{{--                        <div class="controls">--}}
-{{--                            <ul class="list-unstyled mb-0">--}}
-{{--                                <li class="d-inline-block mr-2 mb-1">--}}
-{{--                                    <fieldset>--}}
-{{--                                        <div class="radio">--}}
-{{--                                            <input type="radio" name="type" id="cartoon-type-1" value="1" checked>--}}
-{{--                                            <label for="cartoon-type-1">日漫</label>--}}
-{{--                                        </div>--}}
-{{--                                    </fieldset>--}}
-{{--                                </li>--}}
-{{--                                <li class="d-inline-block mr-2 mb-1">--}}
-{{--                                    <fieldset>--}}
-{{--                                        <div class="radio">--}}
-{{--                                            <input type="radio" name="type" id="cartoon-type-2" value="2">--}}
-{{--                                            <label for="cartoon-type-2">韩漫</label>--}}
-{{--                                        </div>--}}
-{{--                                    </fieldset>--}}
-{{--                                </li>--}}
-{{--                            </ul>--}}
-{{--                        </div>--}}
                     </div>
                 </div>
                 <div class="col-4">
@@ -87,30 +67,10 @@
                         <label for="input-email">连载状态</label>
                         <div class="controls">
                             <select class="form-control" name="end">
-                                <option value="-1">连载中</option>
+                                <option value="0">连载中</option>
                                 <option value="1">已完结</option>
                             </select>
                         </div>
-{{--                        <div class="controls">--}}
-{{--                            <ul class="list-unstyled mb-0">--}}
-{{--                                <li class="d-inline-block mr-2 mb-1">--}}
-{{--                                    <fieldset>--}}
-{{--                                        <div class="radio">--}}
-{{--                                            <input type="radio" name="end" id="end-1" value="-1" checked>--}}
-{{--                                            <label for="end-1">连载中</label>--}}
-{{--                                        </div>--}}
-{{--                                    </fieldset>--}}
-{{--                                </li>--}}
-{{--                                <li class="d-inline-block mr-2 mb-1">--}}
-{{--                                    <fieldset>--}}
-{{--                                        <div class="radio">--}}
-{{--                                            <input type="radio" name="type" id="end-2" value="1">--}}
-{{--                                            <label for="end-2">已完结</label>--}}
-{{--                                        </div>--}}
-{{--                                    </fieldset>--}}
-{{--                                </li>--}}
-{{--                            </ul>--}}
-{{--                        </div>--}}
                     </div>
                 </div>
                 <div class="col-12">
@@ -119,22 +79,6 @@
                         <textarea name="description" class="form-control" rows="3" placeholder="内容简介"></textarea>
                     </div>
                 </div>
-{{--                <div class="col-4">--}}
-{{--                    <div class="form-group">--}}
-{{--                        <label>阅读数</label>--}}
-{{--                        <div class="controls">--}}
-{{--                            <input type="text" class="form-control" name="view" value="" placeholder="0">--}}
-{{--                        </div>--}}
-{{--                    </div>--}}
-{{--                </div>--}}
-{{--                <div class="col-4">--}}
-{{--                    <div class="form-group">--}}
-{{--                        <label>收藏数</label>--}}
-{{--                        <div class="controls">--}}
-{{--                            <input type="text" class="form-control" name="collect" value="" placeholder="0">--}}
-{{--                        </div>--}}
-{{--                    </div>--}}
-{{--                </div>--}}
                 <div class="col-12">
                     <div class="form-group">
                         <label>竖向封面</label>
@@ -145,12 +89,6 @@
                                 <button class="btn btn-primary upload-image" type="button">上传</button>
                             </div>
                         </div>
-{{--                        <div class="input-group">--}}
-{{--                            <div class="custom-file">--}}
-{{--                                <input type="file" class="custom-file-input" id="vertical-thumb" name="vertical_cover">--}}
-{{--                                <label class="custom-file-label" for="vertical-thumb">请选择文件</label>--}}
-{{--                            </div>--}}
-{{--                        </div>--}}
                     </div>
                 </div>
                 <div class="col-12">
@@ -163,10 +101,6 @@
                                 <button class="btn btn-primary upload-image" type="button">上传</button>
                             </div>
                         </div>
-{{--                        <div class="custom-file">--}}
-{{--                            <input type="file" class="custom-file-input" id="horizontal-thumb" name="horizontal_cover">--}}
-{{--                            <label class="custom-file-label" for="horizontal-thumb">请选择文件</label>--}}
-{{--                        </div>--}}
                     </div>
                 </div>
                 <div class="col-12 d-flex justify-content-end">

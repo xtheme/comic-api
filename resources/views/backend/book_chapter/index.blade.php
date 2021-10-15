@@ -42,11 +42,10 @@
                 <th>章节顺序</th>
                 <th>章节标题</th>
                 <th>章节封面</th>
-                <th>是否收费</th>
+                <th>售价</th>
                 <th>发布时间</th>
                 <th>更新时间</th>
                 <th>章节详情</th>
-                <!-- <th>审核状态</th> -->
                 <th>采集</th>
                 <th>显示/隐藏</th>
                 <th>操作</th>
@@ -67,42 +66,13 @@
                     </td>
                     <td>{{ $chapter->title }}</td>
                     <td>章节封面</td>
-                    <td>@if($chapter->charge == -1)
-                            <span class="badge badge-pill badge-light-primary">免费</span>
-                        @else
-                            <span class="badge badge-pill badge-light-danger">收费</span>
-                        @endif</td>
+                    <td>{{ $chapter->price }}</td>
                     <td>{{ $chapter->created_at }}</td>
                     <td>{{ $chapter->updated_at }}</td>
                     <td>
                         <a href="{{ route('backend.book_chapter.preview', $chapter->id) }}" title="章节详情" target="_blank">查看</a>
                     </td>
-                    <!-- <td>
-                        @switch($chapter->check_status )
-                            @case(0)
-                            <span class="badge badge-pill badge-light-secondary">待审核</span>
-                                @break
-                            @case(1)
-                                <span class="badge badge-pill badge-light-success">已通过</span>
-                                @break
-                            @case(2)
-                                <span class="badge badge-pill badge-light-warning">未通过</span>
-                                @break
-                            @case(3)
-                                <span class="badge badge-pill badge-light-danger">已屏蔽</span>
-                                @break
-                            @case(4)
-                                <span class="badge badge-pill badge-light-secondary">待上架</span>
-                                @break
-                        @endswitch
-                    </td> -->
-                    <td>
-                        @if($chapter->operating == 1)
-                            人工
-                        @else
-                            自动
-                        @endif
-                    </td>
+                    <td>@if($chapter->operating == 1){{'人工'}}@else{{'爬虫'}}@endif</td>
                     <td>
                         @if($chapter->status == 1)
                             <span class="badge badge-pill badge-light-success">显示</span>

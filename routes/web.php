@@ -101,8 +101,6 @@ Route::middleware(['auth', 'auth.route.role', 'log.activity'])->prefix('backend'
         Route::get('edit/{id}', [Backend\BookController::class , 'edit'])->name('edit');
         Route::put('update/{id}', [Backend\BookController::class , 'update'])->name('update');
         Route::delete('destroy/{id}', [Backend\BookController::class , 'destroy'])->name('destroy'); // 軟刪除
-        Route::get('review/{id}', [Backend\BookController::class , 'review'])->name('review');
-        Route::put('update/review/{id}', [Backend\BookController::class , 'updateReview'])->name('review_update');
         Route::put('batch/{action?}', [Backend\BookController::class, 'batch'])->name('batch');
         Route::put('editable/{field}', [Backend\BookController::class, 'editable'])->name('editable');
         Route::get('caching', [Backend\BookController::class, 'caching'])->name('caching'); // 下載CDN緩存文件

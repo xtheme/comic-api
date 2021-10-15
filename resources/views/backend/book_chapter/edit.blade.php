@@ -9,9 +9,9 @@
 @endsection
 
 @section('content')
-    <form id="form" class="form" method="post" action="{{ route('backend.book_chapter.update' , $data->id) }}" >
-    @method('PUT')
-    <div class="form-body">
+    <form id="form" class="form" method="post" action="{{ route('backend.book_chapter.update' , $data->id) }}">
+        @method('PUT')
+        <div class="form-body">
             <div class="row">
                 <div class="col-4">
                     <div class="form-group">
@@ -68,7 +68,7 @@
                         <div class="controls">
                             <div id="myDropzone" class="btn btn-primary glow">多图上传</div>
                         </div>
-                        <ul id="sortable" class="visualizacao sortable dropzone-previews"></ul>
+                        <ul id="sortable" class="visualization sortable dropzone-previews"></ul>
                     </div>
                 </div>
 
@@ -80,22 +80,20 @@
         </div>
     </form>
 
-
-
-<div class="preview" style="display:none;">
-  <li>
-    <div>
-        <div class="dz-preview dz-file-preview">
-            <div class="dz-details">
-                <img data-dz-thumbnail />
+    <div class="preview" style="display:none;">
+        <li>
+            <div>
+                <div class="dz-preview dz-file-preview">
+                    <div class="dz-details">
+                        <img data-dz-thumbnail/>
+                    </div>
+                    <div class="dz-progress"><span class="dz-upload" data-dz-uploadprogress></span></div>
+                    <div class="dz-error-message"><span data-dz-errormessage></span></div>
+                </div>
+                <input data-multiple type="hidden"/></div>
             </div>
-            <div class="dz-progress"><span class="dz-upload" data-dz-uploadprogress></span></div>
-            <div class="dz-error-message"><span data-dz-errormessage></span></div>
-        </div>
-        <input data-multiple type="hidden"  /></div>
+        </li>
     </div>
-  </li>  
-</div>
 @endsection
 
 {{-- vendor scripts --}}
@@ -116,10 +114,6 @@
         });
 
         $(document).ready(function () {
-
-
-
-
             $("#myDropzone").dropzone({
                 paramName: 'image',
                 maxFilesize: 1, // MB
@@ -127,33 +121,32 @@
                 addRemoveLinks: true,
                 dictRemoveFile: '删除图片',
                 dictCancelUpload: '取消上传',
-                url: "{{ route('upload' , 'book') }}",
-                previewsContainer: '.visualizacao', 
-                previewTemplate       : $('.preview').html(),
-                sending: function(file, xhr, formData) {
+                url: "{{ route('upload', 'book') }}",
+                previewsContainer: '.visualization',
+                previewTemplate: $('.preview').html(),
+                sending: function (file, xhr, formData) {
                     formData.append("_token", "{{ csrf_token() }}");
                 },
                 init: function () {
-                    
-                    json_images  = '@json($data->json_image_thumb)';
+                    json_images = '@json($data->json_image_thumb)';
 
-                    files = $.parseJSON(json_images);
+                    files     = $.parseJSON(json_images);
                     var _this = this;
-                    $.each(files, function(idx, val){
+                    $.each(files, function (idx, val) {
                         let file = {
-                            name : '',
-                            accepted : true,
-                            status : 'success',
-                            processing : true,
-                            multiple : val
+                            name: '',
+                            accepted: true,
+                            status: 'success',
+                            processing: true,
+                            multiple: val
                         }
-                        
+
                         _this.emit("addedfile", file);
                         _this.emit("thumbnail", file, file.multiple);
                         _this.emit("complete", file);
-                        _ref = file.previewTemplate.querySelector('[data-multiple]');
+                        _ref       = file.previewTemplate.querySelector('[data-multiple]');
                         _ref.value = file.multiple;
-                        _ref.name = 'json_images['+idx+']';
+                        _ref.name  = 'json_images[' + idx + ']';
                     });
 
                     this.on("addedfile", function (file) {
@@ -164,34 +157,30 @@
                         this.removeFile(file);
                     });
 
-                    
                     this.on("success", function (response, xhr) {
                         console.log('上传成功')
                         console.log(response)
-                        _ref = response.previewTemplate.querySelector('[data-multiple]');
+                        _ref       = response.previewTemplate.querySelector('[data-multiple]');
                         _ref.value = xhr.data.path;
                         $('#form').find('input[data-multiple]').each(function (idx) {
-                            $(this).attr('name' , 'json_images['+idx+']');
+                            $(this).attr('name', 'json_images[' + idx + ']');
                         });
-
                     });
-
                 }
             });
-
 
             $('#form').submit(function (e) {
                 e.preventDefault();
 
-                //圖片順序 重新排序
+                // 圖片順序 重新排序
                 $('#form').find('input[data-multiple]').each(function (idx) {
-                    $(this).attr('name' , 'json_images['+idx+']');
+                    $(this).attr('name', 'json_images[' + idx + ']');
                 });
 
                 $.request({
-                    url     : $(this).attr('action'),
-                    type    : $(this).attr('method'),
-                    data    : $(this).serialize(),
+                    url: $(this).attr('action'),
+                    type: $(this).attr('method'),
+                    data: $(this).serialize(),
                     debug: true,
                     callback: function (res) {
                         if (res.code == 200) {
@@ -200,7 +189,7 @@
 
                             // iframeLayoutMaster.blade.php
                             parent.$.reloadIFrame({
-                                title  : '提交成功',
+                                title: '提交成功',
                                 message: '请稍后数据刷新'
                             });
                         } else {

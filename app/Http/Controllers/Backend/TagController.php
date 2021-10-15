@@ -89,6 +89,10 @@ class TagController extends Controller
 
         // QZMHS-1110 新增标签限制4哥汉字
         if ($field == 'name') {
+            if ($tag->name == $request->post('value')) {
+                return Response::jsonError('已有相同标签');
+            }
+
             if (Str::length($request->post('value')) > $this->front_length_limit) {
                 return Response::jsonError('前端显示的标签请勿超过 ' . $this->front_length_limit . ' 个字');
             }
