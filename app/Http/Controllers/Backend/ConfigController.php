@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Backend\ConfigRequest;
 use App\Models\Config;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Response;
 
 class ConfigController extends Controller
@@ -79,6 +80,10 @@ class ConfigController extends Controller
         $config->code = $request->post('code');
         $config->options = $options;
         $config->save();
+
+        // todo Observer 清除緩存
+        $cache_key = 'config:' . $config->code;
+        Cache::delete($cache_key);
 
         return Response::jsonSuccess(__('response.create.success'));
     }
