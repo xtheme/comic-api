@@ -38,14 +38,24 @@ class AuthController extends BaseController
      */
     public function register(RegisterRequest $request): JsonResponse
     {
-        $data = $request->validated();
+        $input = $request->validated();
 
-        $loginField = filter_var($data['name'], FILTER_VALIDATE_EMAIL) ? 'email' : 'name';
+        $loginField = filter_var($input['name'], FILTER_VALIDATE_EMAIL) ? 'email' : 'name';
 
         // 檢查用戶名(信箱)是否已被使用
-        if (true === User::where($loginField, strtolower($data['name']))->exists()) {
+        if (true === User::where($loginField, strtolower($input['name']))->exists()) {
             return Response::jsonError(__('api.register.name.exists'));
         }
+
+        $data = [
+            'channel_id' => $request->input('ch'),
+            'name' => ($loginField == 'name') ? $request->input('name') : '',
+            'area' => '',
+            'mobile' => '',
+            'email' => ($loginField == 'email') ? $request->input('name') : '',
+            'password' => $request->input('password'),
+            'wallet' => getConfig('app', 'register_coin'),
+        ];
 
         $user = User::create($data);
 
