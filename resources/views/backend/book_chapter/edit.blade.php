@@ -27,7 +27,7 @@
                         <div class="controls">
                             <select class="form-control" id="select-charge" name="charge">
                                 <option value="1" @if(1 == $data->charge){{'selected'}}@endif >是</option>
-                                <option value="-1" @if(-1 == $data->charge){{'selected'}}@endif >否</option>
+                                <option value="0" @if(-1 == $data->charge){{'selected'}}@endif >否</option>
                             </select>
                         </div>
                     </div>
@@ -38,7 +38,7 @@
                         <div class="controls">
                             <select class="form-control" id="select-status" name="status">
                                 <option value="1" @if(1 == $data->status){{'selected'}}@endif >上架</option>
-                                <option value="-1" @if(-1 == $data->status){{'selected'}}@endif >下架</option>
+                                <option value="0" @if(-1 == $data->status){{'selected'}}@endif >下架</option>
                             </select>
                         </div>
                     </div>

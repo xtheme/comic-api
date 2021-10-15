@@ -11,7 +11,7 @@ final class Options
 
     const SWITCH_OPTIONS = [
         1 => '是',
-        -1 => '否',
+        0 => '否',
     ];
 
     const STYLE_OPTIONS = [

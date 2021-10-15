@@ -108,7 +108,7 @@ class TopicController extends Controller
                 break;
             case 'disable':
                 $text = '隐藏';
-                Topic::whereIn('id', $ids)->update(['status' => -1]);
+                Topic::whereIn('id', $ids)->update(['status' => 0]);
                 break;
             case 'destroy':
                 $text = '删除';

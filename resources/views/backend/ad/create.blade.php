@@ -41,7 +41,7 @@
                         <label><span class="danger">*</span> 所属平台</label>
                         <div class="controls">
                             <select class="form-control" name="platform">
-                                <option value="-1">平台共用</option>
+                                <option value="0">平台共用</option>
                                 <option value="1">安卓</option>
                                 <option value="2">IOS</option>
                             </select>
@@ -83,7 +83,7 @@
                         <div class="controls">
                             <select class="form-control" name="status">
                                 <option value="1">上架</option>
-                                <option value="-1">下架</option>
+                                <option value="0">下架</option>
                             </select>
                         </div>
                     </div>
@@ -100,7 +100,7 @@
                         </div>
                     </div>
                 </div>
-                
+
                 <div class="col-12 justify-content-end">
                     <button type="submit" class="btn btn-primary mr-1 mb-1">提交</button>
                     <button type="reset" class="btn btn-light-secondary mr-1 mb-1">还原</button>
@@ -122,7 +122,7 @@
 
             $('#jump-type').on('change', function () {
                 const $url = $('input[name="url"]');
-                
+
                 if ($(this).val() == 5) {
                     $url.attr('disabled', true);
                 } else {
@@ -136,7 +136,7 @@
                 if ($('.btn-primary').hasClass('disabled')){
                     return false;
                 }
-                
+
                 $('.btn-primary').addClass('disabled');
                 $.ajax({
                     url: $(this).attr('action'),

@@ -26,7 +26,7 @@
                         <div class="controls">
                             <select class="form-control" id="select-charge" name="charge">
                                 <option value="1">是</option>
-                                <option value="-1">否</option>
+                                <option value="0">否</option>
                             </select>
                         </div>
                     </div>
@@ -37,7 +37,7 @@
                         <div class="controls">
                             <select class="form-control" id="select-status" name="status">
                                 <option value="1">上架</option>
-                                <option value="-1">下架</option>
+                                <option value="0">下架</option>
                             </select>
                         </div>
                     </div>
