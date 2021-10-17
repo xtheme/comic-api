@@ -86,6 +86,19 @@ class PaymentController extends Controller
 
         // 限制用戶每小時訂單數
         $user = $request->user();
+
+        // 黑名單用戶不允許建立訂單
+        if ($user->is_ban) {
+            return Response::jsonError('很抱歉，支付方案维护中！');
+        }
+
+        // 即時檢查用戶是否封禁
+        if (!$user->is_active) {
+            // 登出用戶
+            $user->tokens()->delete();
+            return Response::jsonError('请先登入您的帐号！');
+        }
+
         $cache_key = 'hourly_orders:' . $user->id;
         if (Cache::has($cache_key)) {
             $hourly_orders = Cache::get($cache_key);
@@ -93,6 +106,7 @@ class PaymentController extends Controller
             $hourly_orders = 0;
             Cache::set($cache_key, 0, 3600);
         }
+
         if ($hourly_orders >= getConfig('app', 'hourly_order_limit')) {
             return Response::jsonError('支付渠道冷却中，请稍后在试！');
         }
