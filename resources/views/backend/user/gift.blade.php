@@ -5,20 +5,28 @@
 @endsection
 
 @section('content')
-    <form id="form" class="form" method="post" action="{{ route('backend.vip.update', $user->id) }}" novalidate>
+    <form id="form" class="form" method="post" action="{{ route('backend.user.update.gift', $user->id) }}" novalidate>
         @method('put')
         <div class="form-body">
             <div class="row">
                 <div class="col-12">
                     <div class="form-group">
-                        <label>开通 VIP 天數</label>
+                        <label>赠送金币</label>
                         <div class="controls">
-                            <input type="number" class="form-control" name="day">
+                            <input type="number" class="form-control" name="gift_coin" value="0">
+                        </div>
+                    </div>
+                </div>
+                <div class="col-12">
+                    <div class="form-group">
+                        <label>赠送 VIP 天數</label>
+                        <div class="controls">
+                            <input type="number" class="form-control" name="gift_days" value="0">
                         </div>
                     </div>
                 </div>
                 <div class="col-12 d-flex justify-content-end">
-                    <button type="submit" class="btn btn-primary mr-1">提交</button>
+                    <button type="submit" class="btn btn-primary">提交</button>
                 </div>
             </div>
         </div>

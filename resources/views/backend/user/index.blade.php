@@ -126,9 +126,9 @@
                                                   id="dropdownMenuButton{{ $user->id }}" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></span>
                                             <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuButton{{ $user->id }}">
                                                 <a class="dropdown-item" data-modal href="{{ route('backend.user.edit', $user->id) }}" title="查看用户信息"><i class="bx bx-edit-alt mr-1"></i>用户信息</a>
-                                                <a class="dropdown-item" href="{{ route('backend.order.index') }}?user_id={{ $user->id }}" target="_blank"><i class="bx bxs-cart mr-1"></i>订单记录</a>
+                                                <a class="dropdown-item" data-modal data-size="full" data-height="60vh" href="{{ route('backend.user.order', $user->id) }}" title="订单记录"><i class="bx bxs-cart mr-1"></i>订单记录</a>
                                                 @if ($user->is_active)
-                                                    <a class="dropdown-item" data-modal data-size="sm" data-height="10vh" href="{{ route('backend.user.gift', $user->id) }}" title="赠送用户"><i class="bx bxs-gift mr-1"></i>赠送</a>
+                                                    <a class="dropdown-item" data-modal data-size="sm" data-height="20vh" href="{{ route('backend.user.gift', $user->id) }}" title="赠送用户"><i class="bx bxs-gift mr-1"></i>赠送</a>
                                                 @endif
                                             </div>
                                         </div>

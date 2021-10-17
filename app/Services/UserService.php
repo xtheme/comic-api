@@ -34,13 +34,13 @@ class UserService
     /**
      * 更新用戶錢包或VIP時效
      */
-    private function updateUserPlan(User $user, $plan)
+    public function updateUserPlan(User $user, $plan)
     {
         $coin = $days = 0;
-        $coin += $plan['coin'];
-        $coin += $plan['gift_coin'];
-        $days += $plan['days'];
-        $days += $plan['gift_days'];
+        $coin += $plan['coin'] ?? 0;
+        $coin += $plan['gift_coin'] ?? 0;
+        $days += $plan['days'] ?? 0;
+        $days += $plan['gift_days'] ?? 0;
 
         $user->wallet = $user->wallet + $coin;
 
@@ -56,7 +56,7 @@ class UserService
     /**
      * 建立用戶充值紀錄
      */
-    private function addUseRechargeLog(array $data)
+    public function addUseRechargeLog(array $data)
     {
         UserRechargeLog::create($data);
     }

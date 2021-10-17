@@ -65,6 +65,7 @@ Route::middleware(['auth', 'auth.route.role', 'log.activity'])->prefix('backend'
 
         Route::get('gift/{id}', [Backend\UserController::class , 'gift'])->name('gift');
         Route::put('updateGift/{id}', [Backend\UserController::class , 'updateGift'])->name('update.gift');
+        Route::get('order/{id}', [Backend\UserController::class , 'order'])->name('order');
     });
 
     // 订单

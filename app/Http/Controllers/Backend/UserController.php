@@ -2,8 +2,12 @@
 
 namespace App\Http\Controllers\Backend;
 
+use App\Enums\OrderOptions;
 use App\Enums\UserOptions;
 use App\Http\Controllers\Controller;
+use App\Services\UserService;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Sso;
 use App\Models\User;
 use App\Repositories\Contracts\UserRepositoryInterface;
@@ -54,59 +58,56 @@ class UserController extends Controller
         return Response::jsonSuccess(__('response.update.success'));
     }
 
+    public function order($id)
+    {
+        $data = [
+            'list' => User::findOrFail($id)->orders()->paginate(),
+            'type_options' => OrderOptions::TYPE_OPTIONS,
+            'platform_options' => OrderOptions::PLATFORM_OPTIONS,
+            'status_options' => OrderOptions::STATUS_OPTIONS,
+        ];
+
+        return view('backend.user.order')->with($data);
+    }
+
     // 贈送 VIP 或金幣
     public function gift($id)
     {
         $data = [
-            'user' => User::findOrFail($id)
+            'user' => User::findOrFail($id),
         ];
 
-        return view('backend.user.edit_vip')->with($data);
+        return view('backend.user.gift')->with($data);
     }
 
     public function updateGift(Request $request, $id)
     {
         $user = User::findOrFail($id);
 
-        if ($user->subscribed_until && $user->subscribed_until->greaterThan(Carbon::now())) {
-            $user->subscribed_until = $user->subscribed_until->addDays($request->input('day'));
-        } else {
-            $user->subscribed_until = Carbon::now()->addDays($request->input('day'));
-        }
-
-        $user->save();
-
-        activity()->useLog('后台')->causedBy(auth()->user())->performedOn($user)->withProperties($user->getChanges())->log('开通 VIP');
-
-        return Response::jsonSuccess(__('response.update.success'));
-    }
-
-    public function transferVip($id)
-    {
-        $data = [
-            'user' => User::findOrFail($id)
+        $plan = [
+            'gift_coin' => (int) $request->input('gift_coin') ?? 0,
+            'gift_days' => (int) $request->input('gift_days') ?? 0,
         ];
 
-        return view('backend.user.transfer_vip')->with($data);
-    }
-
-    public function transferUpdate(Request $request, $id)
-    {
-        $current_user = User::findOrFail($id);
-        $transfer_user = User::findOrFail($request->post('user_id'));
-
-        if ($transfer_user->subscribed_until && $transfer_user->subscribed_until->greaterThan($current_user->subscribed_until)) {
-            return Response::jsonError('目标的会员效期高于当前用户');
+        if (!$plan['gift_coin'] && !$plan['gift_days']) {
+            return Response::jsonError('请输入有效的数字');
         }
 
-        $transfer_user->subscribed_until = $current_user->subscribed_until;
-        $transfer_user->save();
+        // 更新用戶錢包或VIP時效
+        app(UserService::class)->updateUserPlan($user, $plan);
 
-        $current_user->subscribed_until = null;
-        $current_user->save();
+        // 建立用戶充值紀錄
+        $data = [
+            'channel_id' => $user->channel_id,
+            'user_id' => $user->id,
+            'type' => 'gift',
+            'admin_id' => Auth::user()->id,
+            'gift_coin' => $plan['gift_coin'],
+            'gift_days' => $plan['gift_days'],
+        ];
+        app(UserService::class)->addUseRechargeLog($data);
 
-        $text = sprintf('将 #%s 的 VIP 效期 %s 转移到 #%s', $current_user->id, $transfer_user->subscribed_until, $transfer_user->id);
-        activity()->useLog('后台')->causedBy(auth()->user())->performedOn($transfer_user)->withProperties($transfer_user->getChanges())->log($text);
+        activity()->useLog('后台')->causedBy(Auth::user())->performedOn($user)->withProperties($plan)->log(sprintf('赠送用户 %s 金币, VIP %s 天', $plan['gift_coin'], $plan['gift_days']));
 
         return Response::jsonSuccess(__('response.update.success'));
     }
