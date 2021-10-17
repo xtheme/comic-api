@@ -66,9 +66,9 @@ class User extends Authenticatable
     }
 
     // 漫畫購買記錄
-    public function purchase_books()
+    public function purchase_logs()
     {
-        return $this->hasMany('App\Models\UserPurchaseBook');
+        return $this->hasMany('App\Models\UserPurchaseLog');
     }
 
     // 累計充值金額
@@ -78,9 +78,9 @@ class User extends Authenticatable
     }
 
     // 累计漫画消费金币
-    public function getPurchaseBooksTotalAttribute()
+    public function getPurchaseTotalAttribute()
     {
-        return $this->purchase_books()->sum('coin');
+        return $this->purchase_logs()->sum('coin');
     }
 
     /**

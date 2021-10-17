@@ -39,7 +39,7 @@ class UserController extends Controller
     public function edit($id)
     {
         $data = [
-            'user' => User::withCount(['orders', 'success_orders', 'purchase_books'])->findOrFail($id),
+            'user' => User::withCount(['orders', 'success_orders', 'purchase_logs'])->findOrFail($id),
             'active_options' => UserOptions::ACTIVE_OPTIONS,
             'ban_options' => UserOptions::BAN_OPTIONS,
         ];
@@ -58,16 +58,39 @@ class UserController extends Controller
         return Response::jsonSuccess(__('response.update.success'));
     }
 
+    // 訂單記錄
     public function order($id)
     {
         $data = [
-            'list' => User::findOrFail($id)->orders()->paginate(),
+            'list' => User::findOrFail($id)->success_orders()->paginate(),
             'type_options' => OrderOptions::TYPE_OPTIONS,
             'platform_options' => OrderOptions::PLATFORM_OPTIONS,
             'status_options' => OrderOptions::STATUS_OPTIONS,
         ];
 
         return view('backend.user.order')->with($data);
+    }
+
+    // 充值紀錄
+    public function recharge($id)
+    {
+        $data = [
+            'list' => User::findOrFail($id)->recharge_logs()->paginate(),
+            'type_options' => OrderOptions::TYPE_OPTIONS,
+        ];
+
+        return view('backend.user.recharge')->with($data);
+    }
+
+    // 消費紀錄
+    public function purchase($id)
+    {
+        $data = [
+            'list' => User::findOrFail($id)->purchase_logs()->paginate(),
+            'type_options' => OrderOptions::TYPE_OPTIONS,
+        ];
+
+        return view('backend.user.purchase')->with($data);
     }
 
     // 贈送 VIP 或金幣

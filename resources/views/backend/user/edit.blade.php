@@ -117,17 +117,17 @@
                 </div>
                 <div class="col-3">
                     <div class="form-group">
-                        <label>漫画购买次数</label>
+                        <label>购买次数</label>
                         <div class="controls">
-                            <input type="text" class="form-control" value="{{ $user->purchase_books_count }}" readonly>
+                            <input type="text" class="form-control" value="{{ $user->purchase_logs_count }}" readonly>
                         </div>
                     </div>
                 </div>
                 <div class="col-3">
                     <div class="form-group">
-                        <label>累计漫画消费金币</label>
+                        <label>累计消费金币</label>
                         <div class="controls">
-                            <input type="text" class="form-control" value="{{ $user->purchase_books_total }}" readonly>
+                            <input type="text" class="form-control" value="{{ $user->purchase_total }}" readonly>
                         </div>
                     </div>
                 </div>

@@ -7,6 +7,7 @@ final class OrderOptions
     const TYPE_OPTIONS = [
         'charge' => '充值金币',
         'vip' => 'VIP方案',
+        'gift' => '赠送',
     ];
 
     const PLATFORM_OPTIONS = [
