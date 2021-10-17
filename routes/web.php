@@ -37,6 +37,7 @@ Route::get('500', [Frontend\HomeController::class, 'internalError'])->name('500'
 Route::middleware(['auth'])->group(function () {
     Route::get('backend', [Backend\DashboardController::class, 'index']);
     Route::post('upload/{dir?}/{id?}', [UploadController::class, 'upload'])->name('upload'); // 單檔案上傳
+    Route::post('unlink', [UploadController::class, 'unlink'])->name('unlink'); // 單檔案刪除
     // Route::post('editor/upload/{dir?}/{id?}', [UploadController::class, 'editorUpload'])->name('editor.upload'); // CKEditor
 });
 

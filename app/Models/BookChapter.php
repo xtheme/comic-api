@@ -38,4 +38,16 @@ class BookChapter extends BaseModel
 
         return $images;
     }
+
+    public function setJsonImagesAttribute($images)
+    {
+        foreach ($images as $key => $image) {
+            if (!parse_url($image)['path']) {
+                continue;
+            }
+            $array[] = parse_url($image)['path'];
+        }
+
+        $this->attributes['json_images'] = json_encode($array);
+    }
 }

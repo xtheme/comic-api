@@ -15,6 +15,7 @@ return [
     ],
     'upload' => [
         'success' => '文件上传成功',
+        'removes' => '文件刪除成功',
         'fail'    => [
             'too_big'     => '文件不能大于 :size kb！',
             'mime_type'   => '文件类型不支持！',

@@ -189,7 +189,7 @@ class UploadService
         }
 
         // 本地真实路径
-        $local_path = Storage::path($path);
+        $local_path =  Storage::path($path);
 
         // 同步本地文件到文件服务器
         $response = $this->syncToFileServer($local_path);

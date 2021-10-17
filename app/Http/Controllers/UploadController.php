@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Response;
+use Illuminate\Support\Facades\Storage;
 use Upload;
 
 /**
@@ -33,5 +34,15 @@ class UploadController extends Controller
         }
 
         return Response::jsonSuccess(__('response.upload.success'), $response);
+    }
+
+    public function unlink(Request $request)
+    {
+        $path = $request->input('path');
+        $path = substr($path, 8); // remove "/storage"
+
+        Storage::delete($path);
+
+        return Response::jsonSuccess(__('response.upload.success'), ['path' => $path]);
     }
 }
