@@ -11,110 +11,144 @@
         @method('put')
         <div class="form-body">
             <div class="row">
-                <div class="col-12">
-                    <div class="form-group">
-                        <label>头像</label>
-                        <div class="input-group">
-                            <input type="file" class="hidden-file-upload" data-path="avatar/{{ $user->id }}">
-                            <input type="text" class="form-control image-path" name="avatar" value="{{ $user->getRawOriginal('avatar') ?? '' }}" autocomplete="off" aria-describedby="input-file-addon">
-                            <div class="input-group-append" id="input-file-addon">
-                                <button class="btn btn-primary upload-image" type="button">上传</button>
-                            </div>
-                        </div>
-                        <div class="upload-image-callback">@if($user->getRawOriginal('avatar'))<img src="{{ $user->avatar }}">@endif</div>
-                    </div>
-                </div>
                 <div class="col-6">
                     <div class="form-group">
-                        <label><span class="danger">*</span> 昵称</label>
+                        <label><span class="danger">*</span> 帐号</label>
                         <div class="controls">
-                            <input type="text" class="form-control" name="username"
-                                   placeholder="请填写用户昵称"
-                                   value="{{ $user->username }}">
+                            <input type="text" class="form-control" name="name" placeholder="请填写用户帐号" value="{{ $user->name }}">
                         </div>
                     </div>
                 </div>
                 <div class="col-6">
                     <div class="form-group">
-                        <label for="select-sex">性别</label>
+                        <label>Email</label>
                         <div class="controls">
-                            <select id="select-sex" class="form-control" name="sex">
-                                <option value="1" @if($user->sex == 1){{'selected'}}@endif>男</option>
-                                <option value="2" @if($user->sex == 2){{'selected'}}@endif>女</option>
+                            <input type="text" class="form-control" name="email" value="{{$user->email}}">
+                        </div>
+                    </div>
+                </div>
+                <div class="col-3">
+                    <div class="form-group">
+                        <label>区码</label>
+                        <div class="controls">
+                            <input type="text" class="form-control" name="area" value="{{ $user->area }}">
+                        </div>
+                    </div>
+                </div>
+                <div class="col-3">
+                    <div class="form-group">
+                        <label>手机号</label>
+                        <div class="controls">
+                            <input type="text" class="form-control" name="mobile" value="{{ $user->mobile }}">
+                        </div>
+                    </div>
+                </div>
+                <div class="col-3">
+                    <div class="form-group">
+                        <label>封禁</label>
+                        <div class="controls">
+                            <select class="form-control" name="subtitle">
+                                @foreach ($active_options as $key => $val)
+                                    <option value="{{ $key }}" @if($key == $user->status){{'selected'}}@endif>{{ $val }}</option>
+                                @endforeach
                             </select>
                         </div>
                     </div>
                 </div>
-                <div class="col-6">
+                <div class="col-3">
                     <div class="form-group">
-                        <label>手机号</label>
+                        <label>黑名單</label>
                         <div class="controls">
-                            <input type="text" class="form-control" name="mobile"
-                                   value="{{ $user->phone }}"
-                                   readonly="readonly">
+                            <select class="form-control" name="subtitle">
+                                @foreach ($ban_options as $key => $val)
+                                    <option value="{{ $key }}" @if($key == $user->status){{'selected'}}@endif>{{ $val }}</option>
+                                @endforeach
+                            </select>
                         </div>
                     </div>
                 </div>
-                <div class="col-6">
+                <div class="col-3">
                     <div class="form-group">
-                        <label>设备号</label>
+                        <label>注册渠道</label>
                         <div class="controls">
-                            <input type="text" class="form-control" name="device_id"
-                                   value="{{$user->device_id}}"
-                                   readonly="readonly">
+                            <input type="text" class="form-control" value="{{ $user->channel_id }}" readonly>
                         </div>
                     </div>
                 </div>
-                <div class="col-6">
+                <div class="col-3">
                     <div class="form-group">
-                        <label>状态</label>
+                        <label>订单数</label>
                         <div class="controls">
-                            <ul class="list-unstyled mb-0">
-                                <li class="d-inline-block mr-2 mb-1">
-                                    <fieldset>
-                                        <div class="radio">
-                                            <input type="radio" name="status" id="status-active" value="1" @if($user->status == 1){{'checked'}}@endif>
-                                            <label for="status-active">启用</label>
-                                        </div>
-                                    </fieldset>
-                                </li>
-                                <li class="d-inline-block mr-2 mb-1">
-                                    <fieldset>
-                                        <div class="radio">
-                                            <input type="radio" name="status" id="status-inactive" value="0" @if($user->status == 0){{'checked'}}@endif>
-                                            <label for="status-inactive">封禁</label>
-                                        </div>
-                                    </fieldset>
-                                </li>
-                            </ul>
+                            <input type="text" class="form-control" value="{{ $user->orders_count }}" readonly>
                         </div>
                     </div>
                 </div>
-                <div class="col-6">
+                <div class="col-3">
                     <div class="form-group">
-                        <label>积分</label>
+                        <label>有效订单数</label>
                         <div class="controls">
-                            <input type="text" class="form-control" name="score" value="{{$user->score ?? 0}}">
+                            <input type="text" class="form-control" value="{{ $user->success_orders_count }}" readonly>
                         </div>
                     </div>
                 </div>
-                <div class="col-12">
+                <div class="col-3">
                     <div class="form-group">
-                        <label>用户简介</label>
-                        <textarea name="sign" class="form-control" rows="3" placeholder="请输入用户简介，最长255个字符">{{$user->sign}}</textarea>
-                    </div>
-                </div>
-                {{--<div class="col-6">
-                    <div class="form-group">
-                        <label for="input-score">VIP到期时间</label>
+                        <label>累计充值金额</label>
                         <div class="controls">
-                            <input type="text" class="form-control" name="subscribed_until" value="{{$user->subscribed_until}}">
+                            <input type="text" class="form-control" value="{{ $user->charge_total }}" readonly>
                         </div>
                     </div>
-                </div>--}}
+                </div>
+                <div class="col-3">
+                    <div class="form-group">
+                        <label>VIP到期时间</label>
+                        <div class="controls">
+                            <input type="text" class="form-control" value="{{ $user->subscribed_until }}" readonly>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-3">
+                    <div class="form-group">
+                        <label>钱包</label>
+                        <div class="controls">
+                            <input type="text" class="form-control" value="{{ $user->wallet }}" readonly>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-3">
+                    <div class="form-group">
+                        <label>漫画购买次数</label>
+                        <div class="controls">
+                            <input type="text" class="form-control" value="{{ $user->purchase_books_count }}" readonly>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-3">
+                    <div class="form-group">
+                        <label>累计漫画消费金币</label>
+                        <div class="controls">
+                            <input type="text" class="form-control" value="{{ $user->purchase_books_total }}" readonly>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-3">
+                    <div class="form-group">
+                        <label>注册时间</label>
+                        <div class="controls">
+                            <input type="text" class="form-control" value="{{ $user->created_at }}" readonly>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-3">
+                    <div class="form-group">
+                        <label>最近登入时间</label>
+                        <div class="controls">
+                            <input type="text" class="form-control" value="{{ $user->logged_at }}" readonly>
+                        </div>
+                    </div>
+                </div>
                 <div class="col-12 d-flex justify-content-end">
-                    <button type="submit" class="btn btn-primary mr-1">提交</button>
-                    <button type="reset" class="btn btn-light-secondary mr-1">还原</button>
+                    <button type="submit" class="btn btn-primary">提交</button>
                 </div>
             </div>
         </div>

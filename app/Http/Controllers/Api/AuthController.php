@@ -7,6 +7,7 @@ use App\Http\Requests\Api\RegisterRequest;
 use App\Models\User;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Response;
 
@@ -27,9 +28,13 @@ class AuthController extends BaseController
             return Response::jsonError(__('api.login.password.wrong'));
         }
 
-        if (!$user->status) {
+        if (!$user->is_active) {
             return Response::jsonError(__('api.login.status.ban'));
         }
+
+        // 更新登入時間
+        $user->logged_at = Carbon::now();
+        $user->save();
 
         // 簽發 personal token
         $user->token = $user->createToken($user->name)->plainTextToken;

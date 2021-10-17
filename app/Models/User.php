@@ -30,16 +30,33 @@ class User extends Authenticatable
         'created_at',
         'updated_at',
         'subscribed_until',
+        'logged_at',
     ];
 
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
 
+    public function setEmailAttribute($email)
+    {
+        $this->attributes['email'] = strtolower($email);
+    }
+
+    public function setPasswordAttribute($password)
+    {
+        $this->attributes['password'] = Hash::make($password);
+    }
+
     // 訂單記錄
     public function orders()
     {
         return $this->hasMany('App\Models\Order');
+    }
+
+    // 有效訂單
+    public function success_orders()
+    {
+        return $this->hasMany('App\Models\Order')->where('status', 1);
     }
 
     // 充值紀錄
@@ -54,35 +71,22 @@ class User extends Authenticatable
         return $this->hasMany('App\Models\UserPurchaseBook');
     }
 
-    // public function getOrdersCountAttribute()
-    // {
-    //     return $this->orders()->count();
-    // }
-
-    // public function getSuccessOrdersCountAttribute()
-    // {
-    //     return $this->orders()->where('status', 1)->count();
-    // }
-
-    // public function comments()
-    // {
-    //     return $this->hasMany('App\Models\Comment', 'user_id', 'id');
-    // }
-
-    public function setEmailAttribute($email)
+    // 累計充值金額
+    public function getChargeTotalAttribute()
     {
-        $this->attributes['email'] = strtolower($email);
+        return $this->success_orders()->sum('amount');
     }
 
-    public function setPasswordAttribute($password)
+    // 累计漫画消费金币
+    public function getPurchaseBooksTotalAttribute()
     {
-        $this->attributes['password'] = Hash::make($password);
+        return $this->purchase_books()->sum('coin');
     }
 
     /**
-     * 訂閱狀態
+     * VIP狀態
      */
-    public function getSubscribedStatusAttribute(): bool
+    public function getIsVipAttribute(): bool
     {
         return Carbon::now()->lt($this->subscribed_until);
     }

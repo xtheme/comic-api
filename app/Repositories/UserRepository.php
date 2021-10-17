@@ -30,12 +30,12 @@ class UserRepository extends Repository implements UserRepositoryInterface
     public function filter(Request $request): Builder
     {
         $id = $request->get('id') ?? '';
-        $username = $request->get('username') ?? '';
-        $uuid = $request->get('uuid') ?? '';
+        $name = $request->get('name') ?? '';
+        $channel_id = $request->get('channel_id') ?? '';
         $mobile = $request->get('mobile') ?? '';
-        $status = $request->get('status') ?? '';
-        $version = $request->get('version') ?? '';
-        $platform = $request->get('platform') ?? '';
+        $is_active = $request->get('is_active') ?? '';
+        $is_ban = $request->get('is_ban') ?? '';
+
         $subscribed = $request->get('subscribed') ?? '';
         $date_register = $request->get('date_register') ?? '';
 
@@ -44,20 +44,18 @@ class UserRepository extends Repository implements UserRepositoryInterface
 
         return $this->model::with([])->withCount([])->when($id, function (Builder $query, $id) {
             return $query->where('id', $id);
-        })->when($username, function (Builder $query, $username) {
-            return $query->where('username', 'like', '%' . $username . '%');
-        })->when($uuid, function (Builder $query, $uuid) {
-            return $query->where('device_id', 'like', '%' . $uuid . '%');
+        })->when($name, function (Builder $query, $name) {
+            return $query->where('name', 'like', '%' . $name . '%');
+        })->when($channel_id, function (Builder $query, $channel_id) {
+            return $query->where('channel_id', $channel_id);
         })->when($mobile, function (Builder $query, $mobile) {
             return $query->where('mobile', 'like', '%' . $mobile . '%');
-        })->when($status, function (Builder $query, $status) {
-            return $query->where('status', $status - 1);
-        })->when($version, function (Builder $query, $version) {
-            return $query->where('version', $version );
-        })->when($platform, function (Builder $query, $platform) {
-            return $query->where('platform', $platform);
+        })->when($is_active, function (Builder $query, $is_active) {
+            return $query->where('is_active', $is_active - 1);
+        })->when($is_ban, function (Builder $query, $is_ban) {
+            return $query->where('is_ban', $is_ban -1);
         })->when($subscribed, function (Builder $query, $subscribed) {
-            if ($subscribed == 2) {
+            if ($subscribed == 1) {
                 return $query->whereDate('subscribed_until', '>=', Carbon::now());
             } else {
                 return $query->whereDate('subscribed_until', '<', Carbon::now())->orWhereNull('subscribed_until');

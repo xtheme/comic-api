@@ -26,8 +26,8 @@
                             <div class="d-flex align-items-center">
                                 <div class="form-group mr-1">
                                     <select class="form-control" name="action">
-                                        <option value="enable">启用</option>
-                                        <option value="disable">封禁</option>
+                                        <option value="active">启用</option>
+                                        <option value="inactive">封禁</option>
                                     </select>
                                 </div>
                                 <div class="form-group">
@@ -54,13 +54,14 @@
                                 <th>ID</th>
                                 <th>帐号</th>
                                 <th>手机号</th>
-                                <th>VIP</th>
+                                <th class="text-center">VIP</th>
                                 <th>VIP到期时间</th>
                                 <th>钱包</th>
-                                <th>渠道ID</th>
-                                <th>状态</th>
-                                <th>注册时间</th>
-                                <th>操作</th>
+                                <th class="text-center">渠道ID</th>
+                                <th class="text-center">状态</th>
+                                <th class="text-center">黑名单</th>
+                                <th class="text-center">注册时间</th>
+                                <th class="text-center">操作</th>
                             </tr>
                             </thead>
                             <tbody>
@@ -80,8 +81,8 @@
                                         @else
                                             <span class="text-light">N/A</span>
                                         @endif</td>
-                                    <td>
-                                        @if($user->subscribed_status)
+                                    <td class="text-center">
+                                        @if($user->is_vip)
                                             <span class="badge badge-pill badge-light-primary">VIP</span>
                                         @else
                                             <span class="badge badge-pill badge-light-light">普通</span>
@@ -95,15 +96,22 @@
                                         @endif
                                     </td>
                                     <td>{{ $user->wallet }}</td>
-                                    <td>{{ $user->channel_id }}</td>
-                                    <td>
-                                        @if(!$user->status)
-                                            <span class="badge badge-pill badge-light-danger">禁用</span>
+                                    <td class="text-center">{{ $user->channel_id }}</td>
+                                    <td class="text-center">
+                                        @if(!$user->is_active)
+                                            <a class="badge badge-pill badge-light-danger" data-confirm href="{{ route('backend.user.batch', ['action'=>'active', 'ids' => $user->id]) }}" title="启用">禁用</a>
                                         @else
-                                            <span class="badge badge-pill badge-light-primary">正常</span>
+                                            <a class="badge badge-pill badge-light-primary" data-confirm href="{{ route('backend.user.batch', ['action'=>'inactive', 'ids' => $user->id]) }}" title="禁用">正常</a>
                                         @endif
                                     </td>
-                                    <td>
+                                    <td class="text-center">
+                                        @if($user->is_ban)
+                                            <a class="badge badge-pill badge-light-danger" data-confirm href="{{ route('backend.user.batch', ['action'=>'unblock', 'ids' => $user->id]) }}" title="解除黑单">黑名单</a>
+                                        @else
+                                            <a class="badge badge-pill badge-light-primary" data-confirm href="{{ route('backend.user.batch', ['action'=>'block', 'ids' => $user->id]) }}" title="标记黑单">正常</a>
+                                        @endif
+                                    </td>
+                                    <td class="text-center">
                                         @if($user->created_at)
                                             <span data-toggle="tooltip" data-placement="top" data-original-title="{{ $user->created_at}}">
                                             {{ $user->created_at->diffForHumans() }}
@@ -112,21 +120,15 @@
                                             <span class="text-light">N/A</span>
                                         @endif
                                     </td>
-                                    <td @if($loop->count == 1)style="position: fixed;"@endif>
+                                    <td class="text-center" @if($loop->count == 1)style="position: fixed;"@endif>
                                         <div class="@if(($loop->count - $loop->iteration) < 3){{'dropup'}}@else{{'dropdown'}}@endif">
                                             <span class="bx bx-dots-vertical-rounded font-medium-3 dropdown-toggle nav-hide-arrow cursor-pointer"
                                                   id="dropdownMenuButton{{ $user->id }}" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></span>
                                             <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuButton{{ $user->id }}">
-                                                <a class="dropdown-item" data-modal href="{{ route('backend.user.edit', $user->id) }}" title="修改用户信息"><i class="bx bx-edit-alt mr-1"></i>修改</a>
-                                                <a class="dropdown-item" href="{{ route('backend.order.index') }}?user_id={{ $user->id }}" target="_blank"><i class="bx bxs-cart mr-1"></i>查看订单</a>
-                                                @if ($user->status == '1')
-                                                    <a class="dropdown-item" data-modal data-size="sm" data-height="10vh" href="{{ route('backend.vip.edit', $user->id) }}" title="开通 VIP"><i class="bx bxs-gift mr-1"></i>开通 VIP</a>
-                                                    @if($user->subscribed_status)
-                                                    <a class="dropdown-item" data-modal data-size="sm" data-height="20vh" href="{{ route('backend.vip.transfer', $user->id) }}" title="转让 VIP"><i class="bx bx-transfer mr-1"></i>转让 VIP</a>
-                                                    @endif
-                                                    <a class="dropdown-item" data-confirm href="{{ route('backend.user.block', $user->id) }}" title="封禁该帐号"><i class="bx bx-lock mr-1"></i>封禁</a>
-                                                @else
-                                                    <a class="dropdown-item" data-confirm href="{{ route('backend.user.block', $user->id) }}" title="启用该帐号"><i class="bx bx-lock-open mr-1"></i>启用</a>
+                                                <a class="dropdown-item" data-modal href="{{ route('backend.user.edit', $user->id) }}" title="查看用户信息"><i class="bx bx-edit-alt mr-1"></i>用户信息</a>
+                                                <a class="dropdown-item" href="{{ route('backend.order.index') }}?user_id={{ $user->id }}" target="_blank"><i class="bx bxs-cart mr-1"></i>订单记录</a>
+                                                @if ($user->is_active)
+                                                    <a class="dropdown-item" data-modal data-size="sm" data-height="10vh" href="{{ route('backend.user.gift', $user->id) }}" title="赠送用户"><i class="bx bxs-gift mr-1"></i>赠送</a>
                                                 @endif
                                             </div>
                                         </div>
@@ -168,17 +170,17 @@
                         <label>昵称</label>
                         <div class="controls">
                             <input type="text" class="form-control"
-                                   name="nickname" value="{{ request()->get('nickname') }}"
+                                   name="name" value="{{ request()->get('name') }}"
                                    placeholder="">
                         </div>
                     </div>
                 </div>
                 <div class="col-12">
                     <div class="form-group">
-                        <label>装置 UUID</label>
+                        <label>渠道ID</label>
                         <div class="controls">
                             <input type="text" class="form-control"
-                                   name="uuid" value="{{ request()->get('uuid') }}"
+                                   name="channel_id" value="{{ request()->get('channel_id') }}"
                                    placeholder="">
                         </div>
                     </div>
@@ -198,38 +200,28 @@
                         <label>VIP</label>
                         <select class="form-control" name="subscribed">
                             <option value="">全部</option>
-                            <option value="2" @if(request()->get('status') == 2){{'selected'}}@endif>是</option>
-                            <option value="1" @if(request()->get('subscribed') == 1){{'selected'}}@endif>否</option>
+                            <option value="1" @if(request()->get('subscribed') == 1){{'selected'}}@endif>是</option>
+                            <option value="2" @if(request()->get('subscribed') == 2){{'selected'}}@endif>否</option>
                         </select>
                     </div>
                 </div>
                 <div class="col-12">
                     <div class="form-group">
                         <label>状态</label>
-                        <select class="form-control" name="status">
+                        <select class="form-control" name="is_active">
                             <option value="">全部</option>
-                            <option value="1" @if(request()->get('status') == 1){{'selected'}}@endif>禁用</option>
-                            <option value="2" @if(request()->get('status') == 2){{'selected'}}@endif>正常</option>
+                            <option value="1" @if(request()->get('is_active') == 1){{'selected'}}@endif>禁用</option>
+                            <option value="2" @if(request()->get('is_active') == 2){{'selected'}}@endif>正常</option>
                         </select>
                     </div>
                 </div>
                 <div class="col-12">
                     <div class="form-group">
-                        <label>版本号</label>
-                        <div class="controls">
-                            <input type="text" class="form-control"
-                                   name="version" value="{{ request()->get('version') }}"
-                                   placeholder="1.3.0">
-                        </div>
-                    </div>
-                </div>
-                <div class="col-12">
-                    <div class="form-group">
-                        <label>平台类型</label>
-                        <select class="form-control" name="platform">
+                        <label>黑名单</label>
+                        <select class="form-control" name="is_ban">
                             <option value="">全部</option>
-                            <option value="1" @if(request()->get('platform') == 1){{'selected'}}@endif>安卓</option>
-                            <option value="2" @if(request()->get('platform') == 2){{'selected'}}@endif>iOS</option>
+                            <option value="2" @if(request()->get('is_ban') == 2){{'selected'}}@endif>禁用</option>
+                            <option value="1" @if(request()->get('is_ban') == 1){{'selected'}}@endif>正常</option>
                         </select>
                     </div>
                 </div>
@@ -243,7 +235,6 @@
                         </div>
                     </div>
                 </div>
-
                 <div class="col-12 d-flex justify-content-end">
                     <button type="submit" class="btn btn-primary mr-1 mb-1">搜索</button>
                     <button type="reset" class="btn btn-light-secondary mr-1 mb-1">重置</button>

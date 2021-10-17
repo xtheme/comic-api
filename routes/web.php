@@ -57,23 +57,14 @@ Route::middleware(['auth', 'auth.route.role', 'log.activity'])->prefix('backend'
     // 用户管理
     Route::prefix('user')->as('user.')->group(function () {
         Route::get('/', [Backend\UserController::class, 'index'])->name('index');
-        // Route::get('create', [Backend\UserController::class , 'create'])->name('create');
-        // Route::post('store', [Backend\UserController::class , 'store'])->name('store');
         Route::get('edit/{id}', [Backend\UserController::class , 'edit'])->name('edit');
         Route::put('update/{id}', [Backend\UserController::class , 'update'])->name('update');
         Route::delete('destroy/{id}', [Backend\UserController::class , 'destroy'])->name('destroy'); // 軟刪除
-        Route::put('block/{id}', [Backend\UserController::class, 'block'])->name('block');
         Route::put('batch/{action?}', [Backend\UserController::class, 'batch'])->name('batch'); // 批量操作
         Route::put('editable/{field}', [Backend\UserController::class, 'editable'])->name('editable');
-        // 特殊
-        Route::put('unbind/{id}', [Backend\UserController::class , 'unbindSso'])->name('unbind');
-    });
 
-    Route::prefix('vip')->as('vip.')->group(function () {
-        Route::get('edit/vip/{id}', [Backend\UserController::class , 'editVip'])->name('edit');
-        Route::put('update/vip/{id}', [Backend\UserController::class , 'updateVip'])->name('update');
-        Route::get('transfer/vip/{id}', [Backend\UserController::class , 'transferVip'])->name('transfer');
-        Route::put('transfer/vip/{id}', [Backend\UserController::class , 'transferUpdate'])->name('transfer_update');
+        Route::get('gift/{id}', [Backend\UserController::class , 'gift'])->name('gift');
+        Route::put('updateGift/{id}', [Backend\UserController::class , 'updateGift'])->name('update.gift');
     });
 
     // 订单

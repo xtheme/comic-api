@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Backend;
 
+use App\Enums\UserOptions;
 use App\Http\Controllers\Controller;
 use Sso;
 use App\Models\User;
@@ -31,39 +32,12 @@ class UserController extends Controller
         return view('backend.user.index')->with($data);
     }
 
-    /*public function create()
-    {
-        $username = '茄子漫画' . substr(str_shuffle('abcdefghijklmnopqrstuvwxyz'), 0, 5);
-
-        return view('backend.user.create', [
-            'username' => $username,
-        ]);
-    }
-
-    public function store(Request $request)
-    {
-        $validated = $request->validated();
-
-        $isUsernameExist = User::where('username', $validated['username'])->count();
-        if ($isUsernameExist) {
-            return Response::jsonError('用户名已存在！');
-        }
-
-        $isMobileExist = User::where('mobile', $validated['mobile'])->count();
-        if ($isMobileExist) {
-            return Response::jsonError('相同手机号的用户已存在！');
-        }
-
-        User::create($validated);
-
-        return Response::jsonSuccess('新增用户成功！');
-    }*/
-
-
     public function edit($id)
     {
         $data = [
-            'user' => User::findOrFail($id)
+            'user' => User::withCount(['orders', 'success_orders', 'purchase_books'])->findOrFail($id),
+            'active_options' => UserOptions::ACTIVE_OPTIONS,
+            'ban_options' => UserOptions::BAN_OPTIONS,
         ];
 
         return view('backend.user.edit')->with($data);
@@ -77,10 +51,11 @@ class UserController extends Controller
 
         $model->fill($request->input())->save();
 
-        return Response::jsonSuccess('資料已更新！');
+        return Response::jsonSuccess(__('response.update.success'));
     }
 
-    public function editVip($id)
+    // 贈送 VIP 或金幣
+    public function gift($id)
     {
         $data = [
             'user' => User::findOrFail($id)
@@ -89,7 +64,7 @@ class UserController extends Controller
         return view('backend.user.edit_vip')->with($data);
     }
 
-    public function updateVip(Request $request, $id)
+    public function updateGift(Request $request, $id)
     {
         $user = User::findOrFail($id);
 
@@ -136,25 +111,6 @@ class UserController extends Controller
         return Response::jsonSuccess(__('response.update.success'));
     }
 
-    public function unbindSso(Request $request, $id)
-    {
-        $user = User::findOrFail($id);
-
-        if (!$user->mobile) {
-            return Response::jsonError('非手机帐号不需解绑');
-        }
-
-        if (!Sso::exist($user->phone)) {
-            return Response::jsonError('绑定纪录并不存在！');
-        }
-
-        Sso::destroy($user->phone);
-
-        activity()->useLog('后台')->causedBy(auth()->user())->performedOn($user)->log('解绑手机登录限制: ' . $user->phone);
-
-        return Response::jsonSuccess('已解绑该手机登录限制！');
-    }
-
     public function destroy($id)
     {
         $model = User::findOrFail($id);
@@ -162,17 +118,6 @@ class UserController extends Controller
         $model->delete();
 
         return Response::jsonSuccess(__('response.destroy.success'));
-    }
-
-    public function block($id)
-    {
-        $model = User::findOrFail($id);
-
-        $model->status = $model->status != 1 ? 1 : 2;
-
-        $model->save();
-
-        return Response::jsonSuccess(__('response.update.success'));
     }
 
     /**
@@ -183,13 +128,21 @@ class UserController extends Controller
         $ids = explode(',', $request->input('ids'));
 
         switch ($action) {
-            case 'enable':
+            case 'active':
                 $text = '批量启用';
-                $data = ['status' => 1];
+                $data = ['is_active' => 1];
                 break;
-            case 'disable':
+            case 'inactive':
                 $text = '批量封禁';
-                $data = ['status' => 0];
+                $data = ['is_active' => 0];
+                break;
+            case 'unblock':
+                $text = '解除黑单';
+                $data = ['is_ban' => 0];
+                break;
+            case 'block':
+                $text = '标记黑单';
+                $data = ['is_ban' => 1];
                 break;
         }
 
