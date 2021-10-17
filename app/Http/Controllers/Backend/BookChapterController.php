@@ -46,59 +46,6 @@ class BookChapterController extends Controller
         return view('backend.book_chapter.preview')->with($data);
     }
 
-    /**
-     * 批次更新
-     */
-    public function batch(Request $request, $action)
-    {
-        $ids = explode(',', $request->input('ids'));
-
-        switch ($action) {
-            case 'enable':
-                $text = '批量启用';
-                $data = ['status' => 1];
-                break;
-            case 'disable':
-                $text = '批量封禁';
-                $data = ['status' => 0];
-                break;
-            case 'charge':
-                $text = '批量收费';
-                $data = ['charge' => 1];
-                break;
-            default:
-            case 'free':
-                $text = '批量免费';
-                $data = ['charge' => 0];
-                break;
-        }
-
-        BookChapter::whereIn('id', $ids)->update($data);
-
-        return Response::jsonSuccess($text . '成功！');
-    }
-
-    public function editable(Request $request, $field)
-    {
-        $data = [
-            'pk' => $request->post('pk'),
-            'value' => $request->post('value'),
-        ];
-
-        $validator = Validator::make($data, [
-            'pk' => 'required',
-            'value' => 'required',
-        ]);
-
-        if ($validator->fails()) {
-            return Response::jsonError($validator->errors()->first(), 500);
-        }
-
-        $this->repository->editable($request->post('pk'), $field, $request->post('value'));
-
-        return Response::jsonSuccess('数据已更新成功');
-    }
-
     public function create($book_id)
     {
         $data = [
@@ -129,9 +76,54 @@ class BookChapterController extends Controller
 
     public function update(Request $request, $id)
     {
+        // dd($request->post());
         $this->repository->update($id, $request->post());
 
         return Response::jsonSuccess(__('response.update.success'));
+    }
+
+    /**
+     * 批次更新
+     */
+    public function batch(Request $request, $action)
+    {
+        $ids = explode(',', $request->input('ids'));
+
+        switch ($action) {
+            case 'enable':
+                $text = '批量启用';
+                $data = ['status' => 1];
+                break;
+            case 'disable':
+                $text = '批量封禁';
+                $data = ['status' => 0];
+                break;
+        }
+
+        BookChapter::whereIn('id', $ids)->update($data);
+
+        return Response::jsonSuccess($text . '成功！');
+    }
+
+    public function editable(Request $request, $field)
+    {
+        $data = [
+            'pk' => $request->post('pk'),
+            'value' => $request->post('value'),
+        ];
+
+        $validator = Validator::make($data, [
+            'pk' => 'required',
+            'value' => 'required',
+        ]);
+
+        if ($validator->fails()) {
+            return Response::jsonError($validator->errors()->first(), 500);
+        }
+
+        $this->repository->editable($request->post('pk'), $field, $request->post('value'));
+
+        return Response::jsonSuccess('数据已更新成功');
     }
 
 }

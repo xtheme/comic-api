@@ -17,8 +17,6 @@
                         <select class="form-control" name="action">
                             <option value="enable">显示</option>
                             <option value="disable">隐藏</option>
-                            <option value="charge">收费</option>
-                            <option value="free">免费</option>
                         </select>
                     </div>
                     <div class="form-group">
@@ -39,15 +37,14 @@
                     </div>
                 </th>
                 <th>ID</th>
-                <th>章节顺序</th>
-                <th>章节标题</th>
-                <th>章节封面</th>
+                <th>章节</th>
+                <th>标题</th>
                 <th>售价</th>
                 <th>发布时间</th>
                 <th>更新时间</th>
-                <th>章节详情</th>
+                <th>预览</th>
                 <th>采集</th>
-                <th>显示/隐藏</th>
+                <th>上架状态</th>
                 <th>操作</th>
             </tr>
             </thead>
@@ -65,7 +62,6 @@
                         <span data-type="text" data-pk="{{ $chapter->id }}" data-title="修改章节顺序" class="editable editable-click" data-url="{{ route('backend.book_chapter.editable', 'episode') }}">{{ $chapter->episode }}</span>
                     </td>
                     <td>{{ $chapter->title }}</td>
-                    <td>章节封面</td>
                     <td>{{ $chapter->price }}</td>
                     <td>{{ $chapter->created_at }}</td>
                     <td>{{ $chapter->updated_at }}</td>
@@ -75,9 +71,9 @@
                     <td>@if($chapter->operating == 1){{'人工'}}@else{{'爬虫'}}@endif</td>
                     <td>
                         @if($chapter->status == 1)
-                            <span class="badge badge-pill badge-light-success">显示</span>
+                            <a class="badge badge-pill badge-light-success" data-confirm href="{{ route('backend.book_chapter.batch', ['action'=>'disable', 'ids' => $chapter->id]) }}" title="下架该作品">上架</a>
                         @else
-                            <span class="badge badge-pill badge-light-danger">隐藏</span>
+                            <a class="badge badge-pill badge-light-danger" data-confirm href="{{ route('backend.book_chapter.batch', ['action'=>'enable', 'ids' => $chapter->id]) }}" title="上架该作品">下架</a>
                         @endif
                     </td>
                     <td @if($loop->count == 1)style="position: fixed;"@endif>
@@ -85,7 +81,7 @@
                             <span class="bx bx-dots-vertical-rounded font-medium-3 dropdown-toggle nav-hide-arrow cursor-pointer"
                                   id="dropdownMenuButton{{ $chapter->id }}" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></span>
                             <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuButton{{ $chapter->id }}">
-                                <a class="dropdown-item" data-modal href="{{ route('backend.book_chapter.edit' , $chapter->id) }}" title="编辑章节"><i class="bx bx-edit-alt mr-1"></i>编辑章节</a>
+                                <a class="dropdown-item" data-modal data-size="full" href="{{ route('backend.book_chapter.edit' , $chapter->id) }}" title="编辑章节"><i class="bx bx-edit-alt mr-1"></i>编辑章节</a>
                             </div>
                         </div>
                     </td>
