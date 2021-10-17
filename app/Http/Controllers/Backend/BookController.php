@@ -5,7 +5,9 @@ namespace App\Http\Controllers\Backend;
 use App\Enums\Options;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Backend\BookRequest;
+use App\Http\Requests\Backend\UpdatePriceRequest;
 use App\Models\Book;
+use App\Models\BookChapter;
 use App\Repositories\Contracts\BookRepositoryInterface;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Response;
@@ -32,6 +34,23 @@ class BookController extends Controller
         ];
 
         return view('backend.book.index')->with($data);
+    }
+
+    public function price()
+    {
+        $data = [
+            'default_charge_chapter' => getConfig('comic', 'default_charge_chapter'),
+            'default_charge_price' => getConfig('comic', 'default_charge_price'),
+        ];
+
+        return view('backend.book.price')->with($data);
+    }
+
+    public function revisePrice(UpdatePriceRequest $request)
+    {
+        BookChapter::where('episode', '>=', $request->input('charge_chapter'))->update(['price' => $request->input('charge_price')]);
+
+        return Response::jsonSuccess(__('response.update.success'));
     }
 
     public function create()
@@ -92,11 +111,8 @@ class BookController extends Controller
                 $text = '批量下架';
                 $data = ['status' => 0];
                 break;
-            case 'charge':
-                $text = '批量收费';
-                break;
-            case 'free':
-                $text = '批量免费';
+            case 'syncPrice':
+                $text = '套用预设收费设置';
                 break;
             case 'destroy':
                 $text = '批量删除';
@@ -106,17 +122,13 @@ class BookController extends Controller
         }
 
         switch ($action) {
-            case 'charge':
+            case 'syncPrice':
                 // todo 批量收费
                 $books = Book::whereIn('id', $ids)->get();
                 foreach ($books as $book) {
-                    $book->chapters()->where('episode', '>', 10)->update(['charge' => 1]);
-                }
-                break;
-            case 'free':
-                $books = Book::whereIn('id', $ids)->get();
-                foreach ($books as $book) {
-                    $book->chapters()->update(['price' => 0]);
+                    $book->chapters()
+                         ->where('episode', '>',  getConfig('comic', 'default_charge_chapter'))
+                         ->update(['price' =>  getConfig('comic', 'default_charge_price')]);
                 }
                 break;
             case 'destroy':

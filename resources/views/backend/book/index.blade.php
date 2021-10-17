@@ -13,6 +13,7 @@
     <section>
         <div class="mb-1">
             <a href="{{ route('backend.book.create') }}" class="btn btn-primary" data-modal title="添加漫画" data-height="55vh" role="button" aria-pressed="true">添加漫画</a>
+            <a href="{{ route('backend.book.price') }}" class="btn btn-success" data-modal data-size="sm" data-height="20vh" title="收费设置" role="button" aria-pressed="true">收费设置</a>
 {{--            <a href="{{ route('rbac.content.tag.add', request()->input()) }}" class="btn btn-primary glow" data-modal title="添加标签" data-size="full" data-height="70vh" role="button" aria-pressed="true">添加标签</a>--}}
 {{--            <a href="{{ route('rbac.content.tag.remove', request()->input()) }}" class="btn btn-danger glow" data-modal title="移除标签" data-size="full" data-height="70vh" role="button" aria-pressed="true">移除标签</a>--}}
         </div>
@@ -27,16 +28,10 @@
                             <div class="d-flex align-items-center">
                                 <div class="form-group mr-1">
                                     <select class="form-control" name="action">
-{{--                                        <option value="review-1">待审核</option>--}}
-{{--                                        <option value="review-2">审核成功</option>--}}
-{{--                                        <option value="review-3">审核未通过</option>--}}
-{{--                                        <option value="review-4">屏蔽</option>--}}
-{{--                                        <option value="review-5">未审核</option>--}}
-                                        <option value="charge">章节收费</option>
-                                        <option value="free">章节免费</option>
                                         <option value="enable">上架</option>
                                         <option value="disable">下架</option>
                                         <option value="destroy">删除</option>
+                                        <option value="syncPrice">套用预设收费设置</option>
                                     </select>
                                 </div>
                                 <div class="form-group">
