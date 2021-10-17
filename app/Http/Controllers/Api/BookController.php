@@ -4,25 +4,16 @@ namespace App\Http\Controllers\Api;
 
 use App\Models\Book;
 use App\Models\BookChapter;
+use App\Models\UserPurchaseLog;
 use App\Traits\CacheTrait;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Response;
 use Record;
 
-// use App\Repositories\Contracts\BookRepositoryInterface;
-// use App\Repositories\HistoryRepository;
-
 class BookController extends BaseController
 {
     use CacheTrait;
-
-    // protected $repository;
-    //
-    // public function __construct(BookRepositoryInterface $repository)
-    // {
-    //     $this->repository = $repository;
-    // }
 
     public function detail($id)
     {
@@ -39,13 +30,12 @@ class BookController extends BaseController
             'author' => $book->author,
             'cover' => $book->horizontal_cover,
             'description' => $book->description,
-            'charge' => $book->charge,
+            // 'charge' => $book->charge,
             'end' => $book->end,
             'type' => $book->type,
             'release_at' => $book->release_at,
             'latest_chapter_title' => $book->chapters_count ? $book->chapters->first()->title : '',
-            // 'tagged_tags' => $book->tagged_tags,
-            'tags' => $book->tags()->pluck('name'),
+            'tagged_tags' => $book->tagged_tags,
             'visit_counts' => shortenNumber($book->visit_histories_count),
             'favorite_counts' => shortenNumber($book->favorite_histories_count),
             'chapters' => $book->chapters->map(function ($chapter) {
@@ -53,7 +43,7 @@ class BookController extends BaseController
                     'book_id' => $chapter->book_id,
                     'chapter_id' => $chapter->id,
                     'title' => $chapter->title,
-                    'charge' => $chapter->charge,
+                    'price' => $chapter->price,
                     'created_at' => $chapter->created_at->format('Y-m-d'),
                 ];
             })->toArray(),
@@ -78,7 +68,7 @@ class BookController extends BaseController
                 'book_id' => $chapter->book_id,
                 'chapter_id' => $chapter->id,
                 'title' => $chapter->title,
-                'charge' => $chapter->charge,
+                'price' => $chapter->price,
                 'created_at' => $chapter->created_at->format('Y-m-d'),
             ];
         })->toArray();
@@ -86,78 +76,60 @@ class BookController extends BaseController
         return Response::jsonSuccess(__('api.success'), $data);
     }
 
-    public function chapter(Request $request, $book_id, $chapter_id, $page = 1)
+    public function chapter(Request $request, $book_id, $chapter_id)
     {
-        // 返回页面缓存
-        $cache_key = $this->getCacheKeyPrefix() . sprintf('book:%s:chapter:%s:page:%s', $book_id, $chapter_id, $page);
-
-        $cache_data = Cache::get($cache_key);
-
-        if ($cache_data) {
-            return Response::jsonSuccess(__('api.success'), $cache_data);
-        }
-
-        $page_size = 10;
         $chapter = BookChapter::where('book_id', $book_id)->find($chapter_id);
 
         if (!$chapter) {
             return Response::jsonError('该漫画不存在或已下架！');
         }
 
-        if (!$request->user()->subscribed_status && $chapter->charge == 1) {
-            return Response::jsonError('请先开通 VIP！');
+        // 收費章節
+        $protect = true;
+
+        if ($chapter->price == 0) {
+            $protect = false;
         }
 
-        if (!$chapter->json_images) {
-            $json_images = parseImgFromHtml($chapter->content);
-            $chapter->update(['json_images' => $json_images]);
+        // 是否登入
+        $user = auth('sanctum')->user() ?? null;
+
+        if ($user) {
+            $is_purchase = $user->purchase_logs()->where('type', 'book_chapter')->where('item_id', $chapter_id)->exists();
+
+            if ($is_purchase) {
+                $protect = false;
+            }
+
+            if ($user->is_vip) {
+                $protect = false;
+            }
         }
 
-        // 將 json_images 字段中的圖片路徑加上資源域名, 如果使用加密資源則指定圖片寬度
-        $images = collect($chapter->json_images)->map(function ($image) use ($chapter) {
-            return [
-                'url' => getImageDomain() . webpWidth($image, getConfig('app', 'webp_width')),
-            ];
-        })->toArray();
+        $images = $chapter->content;
 
-        // 分页
-        $image_count = count($images);                  // 图片数
-        $total_pages = ceil($image_count / $page_size); // 页数
-
-        if ($page > $total_pages) {
-            return Response::jsonError('已经是最后一页！');
+        if ($protect) {
+            $images = [$images[0]];
         }
 
-        // 针对每一页生成缓存
-        $pages = [];
-        for ($i = 1; $i <= $total_pages; $i++) {
-            $start = ($i - 1) * $page_size;
-            $slice = array_slice($images, $start, $page_size); // 分页切片
+        // $images = collect($images)->map(function ($image) {
+        //     $file = file_get_contents($image);
+        //     $base64 = 'data:image/jpg;base64,' . base64_encode($file);
+        //     return [$base64];
+        // })->toArray();
 
-            // 针对每一页插入广告
-            // $ad_type_id = 16; // 警告: 这里是写死的
-            // $adService = new AdService();
-            // $slice = $adService->insertAd($ad_type_id, $slice);
-
-            $data = [
-                'list' => $slice,
-                'extends' => [
-                    'current_page' => $i,
-                    'total_page' => $total_pages,
-                ],
-            ];
-
-            // 分页缓存
-            $cache_key = $this->getCacheKeyPrefix() . sprintf('book:%s:chapter:%s:page:%s', $book_id, $chapter_id, $i);
-            Cache::set($cache_key, $data, $this->getRandomTtl());
-
-            $pages[$i] = $data;
-        }
+        $data = [
+            'charge' => $protect,
+            'episode' => $chapter->episode,
+            'title' => $chapter->title,
+            'price' => $chapter->price,
+            'content' => $images,
+        ];
 
         // 记录访问
-        // $this->logVisit($book_id);
+        // Record::from('book')->visit($book_id);
 
-        return Response::jsonSuccess(__('api.success'), $pages[$page]);
+        return Response::jsonSuccess(__('api.success'), $data);
     }
 
     public function recommend($id = null)

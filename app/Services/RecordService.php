@@ -19,35 +19,37 @@ class RecordService
 
     public function visit($target_id)
     {
-        switch ($this->type) {
-            case 'video':
-                $history = VideoVisit::firstOrCreate([
-                    'video_id' => $target_id,
-                    'series_id' => 0,
-                    // 'user_id' => request()->user->id,
-                    'user_id' => 1,
-                ]);
+        $user = auth('sanctum')->user() ?? null;
 
-                if (!$history->wasRecentlyCreated) {
-                    $history->touch();
-                }
-                break;
-            case 'book':
-                $history = UserVisitBook::firstOrCreate([
-                    'book_id' => $target_id,
-                    'chapter_id' => 0,
-                    // 'user_id' => request()->user->id,
-                    'user_id' => 1,
-                ]);
+        if ($user) {
+            switch ($this->type) {
+                case 'video':
+                    $history = VideoVisit::firstOrCreate([
+                        'video_id' => $target_id,
+                        'series_id' => 0,
+                        'user_id' => $user->id,
+                    ]);
 
-                if (!$history->wasRecentlyCreated) {
-                    $history->touch();
-                }
-                break;
+                    if (!$history->wasRecentlyCreated) {
+                        $history->touch();
+                    }
+                    break;
+                case 'book':
+                    $history = UserVisitBook::firstOrCreate([
+                        'book_id' => $target_id,
+                        'chapter_id' => 0,
+                        'user_id' => $user->id,
+                    ]);
+
+                    if (!$history->wasRecentlyCreated) {
+                        $history->touch();
+                    }
+                    break;
+            }
         }
 
         // 排行榜
-        // app(RankingService::class)->from($this->type)->record($target_id);
+        app(RankingService::class)->from($this->type)->record($target_id);
     }
 
     public static function play($video_id, $series_id)
@@ -55,8 +57,8 @@ class RecordService
         $history = VideoPlayLog::firstOrCreate([
             'video_id'  => $video_id,
             'series_id' => $series_id,
-            'user_id'   => request()->user->id,
-            'vip'       => request()->user->subscribed_status ? 1 : -1,
+            'user_id'   => request()->user()->id,
+            'vip'       => request()->user()->is_vip ? 1 : -1,
         ]);
 
         if (!$history->wasRecentlyCreated) {

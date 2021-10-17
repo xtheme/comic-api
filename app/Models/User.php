@@ -65,7 +65,7 @@ class User extends Authenticatable
         return $this->hasMany('App\Models\UserRechargeLog');
     }
 
-    // 漫畫購買記錄
+    // 購買記錄
     public function purchase_logs()
     {
         return $this->hasMany('App\Models\UserPurchaseLog');
