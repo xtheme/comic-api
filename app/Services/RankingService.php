@@ -2,7 +2,7 @@
 
 namespace App\Services;
 
-use App\Models\Ranking;
+use App\Models\BookRanking;
 use Illuminate\Support\Facades\Redis;
 
 class RankingService
@@ -60,7 +60,7 @@ class RankingService
     // 月排行
     private function month($id)
     {
-        $record = Ranking::firstOrCreate([
+        $record = BookRanking::firstOrCreate([
             'book_id' => $id,
             'month' => date('Y-m'),
         ]);

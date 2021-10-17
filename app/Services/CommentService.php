@@ -19,7 +19,7 @@ class CommentService
         // todo 錯字
         $cool_down = getConfig('comment' ,'colddown');
 
-        $cache_key = $this->getCacheKeyPrefix() . sprintf('comment:cd-%s', request()->user->id);
+        $cache_key = $this->getCacheKeyPrefix() . sprintf('comment:cd-%s', request()->user()->id);
 
         $cache_time = Cache::get($cache_key);
 
@@ -38,7 +38,7 @@ class CommentService
 
         $comment_frequency = getConfig('comment' ,'frequency');
 
-        $cache_key = $this->getCacheKeyPrefix() . sprintf('comment:frequency-%s', request()->user->id);
+        $cache_key = $this->getCacheKeyPrefix() . sprintf('comment:frequency-%s', request()->user()->id);
         $today_request = Cache::get($cache_key);
 
         if (!$today_request) {
@@ -58,10 +58,10 @@ class CommentService
      */
     public function update_cache()
     {
-        $cache_key = $this->getCacheKeyPrefix() . sprintf('comment:cd-%s', request()->user->id);
+        $cache_key = $this->getCacheKeyPrefix() . sprintf('comment:cd-%s', request()->user()->id);
         Cache::set($cache_key , time());
 
-        $cache_key = $this->getCacheKeyPrefix() . sprintf('comment:frequency-%s', request()->user->id);
+        $cache_key = $this->getCacheKeyPrefix() . sprintf('comment:frequency-%s', request()->user()->id);
         Cache::increment($cache_key);
     }
 
@@ -71,7 +71,7 @@ class CommentService
     public function like($comment_id)
     {
         $like = CommentLike::firstOrCreate([
-            'user_id'    => request()->user->id,
+            'user_id'    => request()->user()->id,
             'comment_id' => $comment_id,
         ]);
 
@@ -91,7 +91,7 @@ class CommentService
         
         return User::with(['comments' => function ($query) use ($page , $page_size) {
             $query->skip(($page-1)*$page_size)->take($page_size)->orderBydesc('created_at');
-        }])->where('id' , request()->user->id )->get();
+        }])->where('id' , request()->user()->id )->get();
     }
 
 }

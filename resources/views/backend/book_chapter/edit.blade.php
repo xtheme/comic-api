@@ -89,7 +89,7 @@
 		    },
 		    init: function () {
 			    myDropzone = this;
-			    json_images = '@json($data->json_image_thumb)';
+			    json_images = '@json($data->content)';
 			    images     = $.parseJSON(json_images);
 			    $.each(images, function (idx, val) {
 				    let file = {

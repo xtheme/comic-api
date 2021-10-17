@@ -28,7 +28,7 @@ class BookChapter extends BaseModel
     }
 
     // 將 json_images 字段中的圖片路徑加上資源域名, 如果使用加密資源則指定圖片寬度
-    public function getJsonImageThumbAttribute()
+    public function getContentAttribute()
     {
         $images = $this->json_images;
 

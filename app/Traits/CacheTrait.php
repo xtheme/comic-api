@@ -27,8 +27,9 @@ trait CacheTrait
      */
     public function getCacheKeyPrefix($version = null)
     {
-        $version = $version ?? request()->header('app-version');
+        // $version = $version ?? request()->header('app-version');
+        // return sprintf('v%s:', $version);
 
-        return sprintf('v%s:', $version);
+        return '';
     }
 }

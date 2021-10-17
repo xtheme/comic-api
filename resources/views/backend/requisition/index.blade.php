@@ -67,7 +67,7 @@
                                     <td class="text-center">{!! $item->gender !!}</td>
                                     <td class="text-right">{{ $item->score }}</td>
                                     <td>{{ $item->phone }}</td>
-                                    <td>@if($item->subscribed_status)<span class="text-success">VIP</span>@else<span class="text-muted">普通</span>@endif</td>
+                                    <td>@if($item->is_vip)<span class="text-success">VIP</span>@else<span class="text-muted">普通</span>@endif</td>
                                     <td class="text-center">@if($item->subscribed_until){{ $item->subscribed_until->diffForHumans() }}@else<span class="text-light">N/A</span>@endif</td>
                                     <td>{!! $item->identity !!}</td>
                                     <td>{{ $item->created_at->diffForHumans() }}</td>
