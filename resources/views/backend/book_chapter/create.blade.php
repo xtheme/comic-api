@@ -1,37 +1,42 @@
 @extends('layouts.modal')
 
 @section('vendor-styles')
-    <link rel="stylesheet" type="text/css" href="{{ asset('vendors/css/bootstrap-multiselect/bootstrap-multiselect.css') }}">
-    <link rel="stylesheet" type="text/css" href="{{asset('vendors/css/file-uploaders/dropzone.min.css')}}">
+    <link rel="stylesheet" type="text/css" href="{{ asset('vendors/css/file-uploader/dropzone.min.css') }}">
 @endsection
 
 @section('page-styles')
+    <link rel="stylesheet" type="text/css" href="{{ asset('css/plugins/file-uploader/dropzone.css') }}">
 @endsection
 
 @section('content')
-    <form id="form" class="form" method="post" action="{{ route('backend.book_chapter.store' , $book_id) }}">
+    <form id="form" class="form" method="post" action="{{ route('backend.book_chapter.store', $book_id) }}">
         <div class="form-body">
             <div class="row">
-                <div class="col-4">
+                <div class="col-6">
                     <div class="form-group">
-                        <label><span class="danger">*</span> 章节名称</label>
+                        <label><span class="danger">*</span> 章节</label>
                         <div class="controls">
-                            <input type="text" class="form-control" name="title">
+                            <input type="text" class="form-control" name="episode" value="{{ $chapters }}">
                         </div>
                     </div>
                 </div>
-                <div class="col-4">
+                <div class="col-6">
                     <div class="form-group">
-                        <label><span class="danger">*</span> 是否收费</label>
+                        <label>章节标题</label>
                         <div class="controls">
-                            <select class="form-control" id="select-charge" name="charge">
-                                <option value="1">是</option>
-                                <option value="0">否</option>
-                            </select>
+                            <input type="text" class="form-control" name="title" value="">
                         </div>
                     </div>
                 </div>
-                <div class="col-4">
+                <div class="col-6">
+                    <div class="form-group">
+                        <label><span class="danger">*</span> 售价</label>
+                        <div class="controls">
+                            <input type="text" class="form-control" name="price" value="{{ $price }}">
+                        </div>
+                    </div>
+                </div>
+                <div class="col-6">
                     <div class="form-group">
                         <label>上架状态</label>
                         <div class="controls">
@@ -42,147 +47,115 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-6">
-                    <div class="form-group">
-                        <label><span class="danger">*</span> 章节顺序</label>
-                        <div class="controls">
-                            <input type="text" class="form-control" name="episode">
-                        </div>
-                    </div>
-                </div>
-                <div class="col-6">
-                    <div class="form-group">
-                        <label><span class="danger">*</span> 添加方式</label>
-                        <div class="controls">
-                            <select class="form-control" id="select-operating" name="operating">
-                                <option value="1">手动</option>
-                                <option value="2">自动</option>
-                            </select>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-6">
+                <div class="col-12">
                     <div class="form-group">
                         <label><span class="danger">*</span> 章节详情</label>
                         <div class="controls">
-                            <div id="myDropzone" class="btn btn-primary glow">多图上传</div>
+                            <div id="dpz-multiple-files" class="dropzone sortable dropzone-area">
+                                <div class="dz-message">请拖拉图片到此上传</div>
+                            </div>
                         </div>
-                        <ul id="sortable" class="visualization sortable dropzone-previews"></ul>
                     </div>
                 </div>
-
                 <div class="col-12 d-flex justify-content-end">
-                    <button type="submit" class="btn btn-primary mr-1">提交</button>
-                    <button type="reset" class="btn btn-light-secondary">还原</button>
+                    <input type="hidden" name="book_id" value="{{ $book_id }}">
+                    <input type="hidden" name="operating" value="1">
+                    <button type="submit" class="btn btn-primary">提交</button>
                 </div>
             </div>
         </div>
     </form>
-
-
-<div class="preview" style="display:none;">
-  <li>
-    <div>
-        <div class="dz-preview dz-file-preview">
-            <div class="dz-details">
-                <img data-dz-thumbnail />
-            </div>
-            <div class="dz-progress"><span class="dz-upload" data-dz-uploadprogress></span></div>
-            <div class="dz-error-message"><span data-dz-errormessage></span></div>
-        </div>
-        <input data-multiple type="hidden"  /></div>
-    </div>
-  </li>
-</div>
 @endsection
 
 {{-- vendor scripts --}}
 @section('vendor-scripts')
-    <script src="{{ asset('vendors/js/bootstrap-multiselect/bootstrap-multiselect.js') }}"></script>
-    <script src="{{asset('vendors/js/extensions/dropzone.min.js')}}"></script>
-    <script src="{{asset('vendors/js/sortable.js')}}"></script>
+    <script src="{{ asset('vendors/js/file-uploader/dropzone.min.js') }}"></script>
+    <script src="{{ asset('vendors/js/sortable.js') }}"></script>
 @endsection
 
 {{-- page scripts --}}
 @section('page-scripts')
     <script>
+        Dropzone.options.dpzMultipleFiles = {
+            paramName: 'image',
+            maxFilesize: 1, // MB
+            parallelUploads: 1, //一次上一個文件
+            addRemoveLinks: true,
+            dictRemoveFile: '删除图片',
+            dictCancelUpload: '取消上传',
+            url: '{{ route('upload', 'book_chapter') }}',
+            headers: {
+                'X-CSRF-Token': '{{ csrf_token() }}'
+            },
+            error: function (file, response) {
+                // this.removeFile(file);
+            },
+            success: function (file, response) {
+                console.log('上传成功');
+                console.log(file);
+                console.log(response);
+                // 隱藏字段
+                var input = '<input type="hidden" name="json_images[]" value="' + response.data.path + '">';
+                $(file.previewTemplate).append(input);
+                // 移除 size
+                $(file.previewTemplate).find('.dz-size').remove();
+            },
+            removedfile: function (file) {
+                console.log(file);
+                var fileName = $(file.previewTemplate).children('input[name="json_images[]"]').val();
+                console.log(fileName);
+                $.ajax({
+                    type: 'POST',
+                    headers: {
+                        'X-CSRF-Token': '{{ csrf_token() }}'
+                    },
+                    url: '{{ route('unlink') }}',
+                    data: {path: fileName},
+                    sucess: function (data) {
+                        console.log('success: ' + data);
+                    }
+                });
 
-        Dropzone.autoDiscover = false;
-        new Sortable(sortable, {
-            animation: 150,
-            ghostClass: 'blue-background-class'
+                var _ref;
+                return (_ref = file.previewElement) != null ? _ref.parentNode.removeChild(file.previewElement) : void 0;
+            }
+        };
+
+        // 排序
+        var el = document.getElementById('dpz-multiple-files');
+        new Sortable(el, {
+            draggable: '.dz-preview'
         });
 
-		$(document).ready(function () {
+        $(document).ready(function () {
+            $('#form').submit(function (e) {
+                e.preventDefault();
 
+                $.request({
+                    url: $(this).attr('action'),
+                    type: $(this).attr('method'),
+                    data: $(this).serialize(),
+                    debug: true,
+                    callback: function (res) {
+                        if (res.code == 200) {
+                            // iframe.blade.php
+                            parent.$.hideModal();
 
-            $("#myDropzone").dropzone({
-                paramName: 'image',
-                maxFilesize: 1, // MB
-                parallelUploads: 1, //一次上一個文件
-                addRemoveLinks: true,
-                dictRemoveFile: '删除图片',
-                dictCancelUpload: '取消上传',
-                url: "{{ route('upload' , 'book') }}",
-                previewsContainer: '.visualization',
-                previewTemplate       : $('.preview').html(),
-                sending: function(file, xhr, formData) {
-                    formData.append("_token", "{{ csrf_token() }}");
-                },
-                init: function () {
-
-                    this.on("addedfile", function (file) {
-
-                    });
-
-                    this.on("error", function (file) {
-                        this.removeFile(file);
-                    });
-
-
-                    this.on("success", function (response, xhr) {
-                        console.log('上传成功')
-                        console.log(response)
-                        _ref = response.previewTemplate.querySelector('[data-multiple]');
-                        _ref.value = xhr.data.path;
-                        $('#form').find('input[data-multiple]').each(function (idx) {
-                            $(this).attr('name' , 'json_images['+idx+']');
-                        });
-
-                    });
-
-                }
+                            // iframeLayoutMaster.blade.php
+                            parent.$.reloadIFrame({
+                                title: '提交成功',
+                                message: '请稍后数据刷新'
+                            });
+                        } else {
+                            $.toast({
+                                type: 'error',
+                                title: '提交失败',
+                                message: res.msg
+                            });
+                        }
+                    }
+                });
             });
-
-
-			$('#form').submit(function (e) {
-				e.preventDefault();
-
-				$.request({
-					url     : $(this).attr('action'),
-					type    : $(this).attr('method'),
-					data    : $(this).serialize(),
-					debug: true,
-					callback: function (res) {
-						if (res.code == 200) {
-							// iframe.blade.php
-							parent.$.hideModal();
-
-							// iframeLayoutMaster.blade.php
-							parent.$.reloadIFrame({
-								title  : '提交成功',
-								message: '请稍后数据刷新'
-							});
-						} else {
-							$.toast({
-								type: 'error',
-								title: '提交失败',
-								message: res.msg
-							});
-						}
-					}
-				});
-			});
-		});
+        });
     </script>
 @endsection

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Backend;
 
 use App\Http\Controllers\Controller;
+use App\Models\Book;
 use App\Models\BookChapter;
 use App\Repositories\Contracts\BookChapterRepositoryInterface;
 use Illuminate\Http\Request;
@@ -48,17 +49,21 @@ class BookChapterController extends Controller
 
     public function create($book_id)
     {
+        // 建議章節
+        $chapters = BookChapter::where('book_id', $book_id)->count() + 1;
+
         $data = [
             'book_id' => $book_id,
+            'chapters' => $chapters,
+            'price' => $chapters >= getConfig('comic', 'default_charge_chapter') ? getConfig('comic', 'default_charge_price') : 0,
         ];
 
         return view('backend.book_chapter.create')->with($data);
     }
 
-    public function store(Request $request, $book_id)
+    public function store(Request $request)
     {
         $post = $request->post();
-        $post['book_id'] = $book_id;
 
         $this->repository->create($post);
 

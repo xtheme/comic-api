@@ -7,7 +7,7 @@
 
 @section('content')
     <div class="float-left">
-        <a href="{{ route('backend.book_chapter.create' , $book_id) }}" title="新增章节" class="btn btn-primary" data-modal >添加章节</a>
+        <a data-modal data-size="full" href="{{ route('backend.book_chapter.create' , $book_id) }}" title="新增章节" class="btn btn-primary">添加章节</a>
     </div>
     <div class="float-right">
         <form id="batch-action" class="form form-vertical" method="get" action="{{ route('backend.book_chapter.batch') }}" novalidate>

@@ -10,10 +10,8 @@ class BookChapter extends BaseModel
         'book_id',
         'episode',
         'title',
-        'content',
         'json_images',
         'status',
-        'charge',
         'price',
         'operating',
     ];

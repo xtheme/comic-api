@@ -2,7 +2,7 @@
 
 return [
     'success' => '请求成功！',
-    'unauthenticated' => '未认证的身份！', // 请先登录会员
+    'unauthenticated' => '请先登入您的帐号！', // 请先登录会员
     'register' => [
         'name' => [
             // 'exists' => '您所使用的帐号或信箱已被注册！',

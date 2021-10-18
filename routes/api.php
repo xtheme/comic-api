@@ -17,13 +17,6 @@ use Illuminate\Support\Facades\Route;
 
 Route::as('api.')->middleware(['api'])->group(function () {
 
-    // Route::get('/', function () {
-    //     return response()->json([
-    //         'code' => 200,
-    //         'msg'  => 'Hello World!' . config('api.version'),
-    //     ]);
-    // });
-
     Route::prefix(config('api.version'))->middleware(['api.header', 'api.sign'])->group(function () {
         Route::prefix('bootstrap')->as('bootstrap.')->group(function () {
             Route::get('/configs', [Api\BootstrapController::class, 'configs'])->name('configs');
@@ -91,6 +84,7 @@ Route::as('api.')->middleware(['api'])->group(function () {
         });
     });
 
+    // 需要 Bearer Token (sanctum 簽發)
     Route::prefix(config('api.version'))->middleware(['api.header', 'api.sign', 'auth:sanctum'])->group(function () {
         // 会员
         Route::prefix('auth')->as('auth.')->group(function () {
@@ -117,6 +111,10 @@ Route::as('api.')->middleware(['api'])->group(function () {
             Route::get('/gateway/{pricing_id}', [Api\PaymentController::class, 'gateway'])->name('gateway'); // 支付渠道
             Route::post('/pay', [Api\PaymentController::class, 'pay'])->name('pay'); // 調用渠道支付
         });
+
+        // 購買
+        Route::post('/purchase', [Api\PurchaseController::class, 'purchase'])->name('purchase');
+
     });
 
     // 第三方支付回調
@@ -124,6 +122,7 @@ Route::as('api.')->middleware(['api'])->group(function () {
         Route::any('/callback', [Api\PaymentController::class, 'callback'])->name('callback'); // 支付結果回調
         Route::any('/mockCallback', [Api\PaymentController::class, 'mockCallback']); // 支付結果回調
     });
+
 });
 
 // 路由不存在时返回 json error

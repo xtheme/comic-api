@@ -15,13 +15,7 @@ use Upload;
 class UploadController extends Controller
 {
     /**
-     * 后台图片上传
-     *
-     * @param Request $request
-     * @param string|null $dir
-     * @param string|null $id
-     *
-     * @return Response
+     * 上傳文件
      */
     public function upload(Request $request, string $dir = null, string $id = null)
     {
@@ -36,6 +30,9 @@ class UploadController extends Controller
         return Response::jsonSuccess(__('response.upload.success'), $response);
     }
 
+    /**
+     * 刪除文件
+     */
     public function unlink(Request $request)
     {
         $path = $request->input('path');

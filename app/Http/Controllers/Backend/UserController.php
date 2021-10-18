@@ -128,7 +128,7 @@ class UserController extends Controller
             'gift_coin' => $plan['gift_coin'],
             'gift_days' => $plan['gift_days'],
         ];
-        app(UserService::class)->addUseRechargeLog($data);
+        app(UserService::class)->logUserRecharge($data);
 
         activity()->useLog('后台')->causedBy(Auth::user())->performedOn($user)->withProperties($plan)->log(sprintf('赠送用户 %s 金币, VIP %s 天', $plan['gift_coin'], $plan['gift_days']));
 
