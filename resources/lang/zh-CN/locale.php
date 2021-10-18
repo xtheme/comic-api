@@ -54,5 +54,5 @@ return [
     "Activity Log" => "操作日志",
     "System Log" => "系统日志",
 
-    "logout" => "退出登录",
+    "Logout" => "退出登录",
 ];

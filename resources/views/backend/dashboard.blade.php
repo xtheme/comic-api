@@ -5,7 +5,6 @@
 
 {{-- vendor css --}}
 @section('vendor-styles')
-
 @endsection
 
 @section('content')

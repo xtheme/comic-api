@@ -1,6 +1,6 @@
 {{-- vertical-menu --}}
 @if($configData['mainLayoutType'] == 'vertical-menu')
-    <div class="main-menu menu-fixed @if($configData['theme'] === 'light') {{"menu-light"}} @else {{'menu-dark'}} @endif menu-accordion menu-shadow" data-scroll-to-active="true">
+    <div class="main-menu menu-fixed @if($configData['theme'] === 'light'){{"menu-light"}}@else{{'menu-dark'}}@endif menu-accordion menu-shadow" data-scroll-to-active="true">
         <div class="navbar-header">
             <ul class="nav navbar-nav flex-row">
                 <li class="nav-item mr-auto">
@@ -40,12 +40,6 @@
                                 {{ __('locale.Site Title') }}
                             @endif
                         </h2>
-                    </a>
-                </li>
-                <li class="nav-item nav-toggle">
-                    <a class="nav-link modern-nav-toggle pr-0" data-toggle="collapse">
-                        <i class="bx bx-x d-block d-xl-none font-medium-4 primary"></i>
-                        <i class="toggle-icon bx bx-disc font-medium-4 d-none d-xl-block primary" data-ticon="bx-disc"></i>
                     </a>
                 </li>
             </ul>
@@ -101,11 +95,6 @@
                         </h2>
                     </a>
                 </li>
-                <li class="nav-item nav-toggle">
-                    <a class="nav-link modern-nav-toggle pr-0" data-toggle="collapse">
-                        <i class="bx bx-x d-block d-xl-none font-medium-4 primary toggle-icon"></i>
-                    </a>
-                </li>
             </ul>
         </div>
         <div class="shadow-bottom"></div>
@@ -134,13 +123,13 @@
 
 {{-- vertical-box-menu --}}
 @if($configData['mainLayoutType'] == 'vertical-menu-boxicons')
-    <div class="main-menu menu-fixed @if($configData['theme'] === 'light') {{"menu-light"}} @else {{'menu-dark'}} @endif menu-accordion menu-shadow" data-scroll-to-active="true">
+    <div class="main-menu menu-fixed @if($configData['theme'] === 'light'){{"menu-light"}}@else{{'menu-dark'}}@endif menu-accordion menu-shadow" data-scroll-to-active="true">
         <div class="navbar-header">
             <ul class="nav navbar-nav flex-row">
                 <li class="nav-item mr-auto">
                     <a class="navbar-brand" href="{{asset('/')}}">
                         <div class="brand-logo">
-                            <img src="{{asset('images/logo/logo.svg')}}" class="logo" alt="">
+                            <span class="bx bxs-dashboard" style="font-size: 1.8rem;"></span>
                         </div>
                         <h2 class="brand-text mb-0">
                             @if(!empty($configData['templateTitle']) && isset($configData['templateTitle']))
@@ -149,12 +138,6 @@
                                 {{ __('locale.Site Title') }}
                             @endif
                         </h2>
-                    </a>
-                </li>
-                <li class="nav-item nav-toggle">
-                    <a class="nav-link modern-nav-toggle pr-0" data-toggle="collapse">
-                        <i class="bx bx-x d-block d-xl-none font-medium-4 primary toggle-icon"></i>
-                        <i class="toggle-icon bx bx-disc font-medium-4 d-none d-xl-block collapse-toggle-icon primary" data-ticon="bx-disc"></i>
                     </a>
                 </li>
             </ul>

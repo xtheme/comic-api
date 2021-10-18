@@ -176,6 +176,12 @@
                     "name": "System Log"
                 }
             ]
+        },
+        {
+            "url": "/logout",
+            "name": "Logout",
+            "slug": "logout",
+            "icon": "bx bxs-log-out"
         }
     ]
 }
