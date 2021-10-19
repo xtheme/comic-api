@@ -45,13 +45,7 @@ class AdSpaceRepository extends Repository implements AdSpaceRepositoryInterface
      */
     public function ads(Request $request, $id): Builder
     {
-        $platform = $request->header('platform');
-
-        return $this->model::with([
-            'ads' => function ($query) use ($platform) {
-                return $query->whereIn('platform', [$platform , '-1'])->orderByDesc('sort');
-            },
-        ])->when($id, function (Builder $query, $id) {
+        return $this->model::when($id, function (Builder $query, $id) {
             return $query->where('id', $id)->orWhere('name', $id);
         })->where('status', 1);
     }

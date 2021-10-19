@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Backend;
 
+use App\Enums\Options;
 use App\Http\Controllers\Controller;
 use App\Models\AdSpace;
 use App\Repositories\Contracts\AdSpaceRepositoryInterface;
@@ -37,6 +38,7 @@ class AdSpaceController extends Controller
             'list' => $list,
             'class_type' => self::CLASS_TYPE,
             'display_type' => self::DISPLAY_TYPE,
+            'status_options' => Options::STATUS_OPTIONS,
         ];
 
         return view('backend.ad_space.index')->with($data);
@@ -46,7 +48,9 @@ class AdSpaceController extends Controller
     {
         $data = [
             'space' => AdSpace::findOrFail($id),
+            'class_type' => self::CLASS_TYPE,
             'display_type' => self::DISPLAY_TYPE,
+            'status_options' => Options::STATUS_OPTIONS,
         ];
 
         return view('backend.ad_space.edit')->with($data);

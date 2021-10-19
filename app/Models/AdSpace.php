@@ -8,12 +8,12 @@ class AdSpace extends BaseModel
         'remark',
         'class',
         'status',
-        'sdk',
+        // 'sdk',
         'display'
     ];
 
     public function ads()
     {
-        return $this->hasMany('App\Models\Ad', 'space_id', 'id')->where('status' , 1);
+        return $this->hasMany('App\Models\Ad', 'space_id', 'id')->where('status' , 1)->latest('sort');
     }
 }

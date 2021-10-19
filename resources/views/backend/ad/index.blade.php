@@ -53,11 +53,8 @@
                                 <th>ID</th>
                                 <th>广告位</th>
                                 <th>排序</th>
-                                <th>名称</th>
-                                <th>平台</th>
                                 <th>广告图片</th>
                                 <th>广告地址</th>
-                                <th>显示时间</th>
                                 <th>修改时间</th>
                                 <th>状态</th>
                                 <th>操作</th>
@@ -75,19 +72,8 @@
                                     <td>{{ $item->id }}</td>
                                     <td>{{ $item->space->name }}</td>
                                     <td><span class="jeditable" data-pk="{{ $item->id }}" data-value="" > {{ $item->sort }}</td>
-                                    <td>{{ $item->name }}</td>
-                                    <td>
-                                        @if($item->platform == 1)
-                                            <i class="bx bxl-android font-medium-2"></i>
-                                        @elseif($item->platform == 2)
-                                            <i class="bx bxl-apple font-medium-2"></i>
-                                        @else
-                                            平台共用
-                                        @endif
-                                    </td>
                                     <td><img src="{{ $item->image_thumb }}" class="cursor-pointer" width="50px" data-lightbox alt="点击查看大图"></td>
                                     <td>{{ $item->url }}</td>
-                                    <td>{{ $item->show_time }}</td>
                                     <td>@if($item->updated_at){{ $item->updated_at->diffForHumans()  }}@endif</td>
                                     <td>
                                         @if($item->status == 1)

@@ -8,7 +8,7 @@
     <form id="form" class="form" method="post" enctype="multipart/form-data" action="{{ route('backend.ad.store') }}">
         <div class="form-body">
             <div class="row">
-                <div class="col-6">
+                <div class="col-4">
                     <div class="form-group">
                         <label><span class="danger">*</span> 广告位</label>
                         <div class="controls">
@@ -20,15 +20,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-6">
-                    <div class="form-group">
-                        <label><span class="danger">*</span> 广告名称</label>
-                        <div class="controls">
-                            <input type="text" class="form-control" name="name" placeholder="请输入广告名称">
-                        </div>
-                    </div>
-                </div>
-                <div class="col-6">
+                <div class="col-4">
                     <div class="form-group">
                         <label><span class="danger">*</span> 排序</label>
                         <div class="controls">
@@ -36,48 +28,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-6">
-                    <div class="form-group">
-                        <label><span class="danger">*</span> 所属平台</label>
-                        <div class="controls">
-                            <select class="form-control" name="platform">
-                                <option value="0">平台共用</option>
-                                <option value="1">安卓</option>
-                                <option value="2">IOS</option>
-                            </select>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-6">
-                    <div class="form-group">
-                        <label><span class="danger">*</span> 跳转类型</label>
-                        <div class="controls">
-                            <select id="jump-type" class="form-control" name="jump_type">
-                                <option value="">请选择跳转类型</option>
-                                @foreach ($jump_type as $key => $val)
-                                    <option value="{{ $key }}">{{ $val }}</option>
-                                @endforeach
-                            </select>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-6 ">
-                    <div class="form-group">
-                        <label>广告地址</label>
-                        <div class="controls">
-                            <input type="text" class="form-control" name="url" placeholder="请输入网址">
-                        </div>
-                    </div>
-                </div>
-                <div class="col-6">
-                    <div class="form-group">
-                        <label>显示时间</label>
-                        <div class="controls">
-                            <input type="text" class="form-control" name="show_time" placeholder="秒" value="0">
-                        </div>
-                    </div>
-                </div>
-                <div class="col-6">
+                <div class="col-4">
                     <div class="form-group">
                         <label>状态</label>
                         <div class="controls">
@@ -90,9 +41,17 @@
                 </div>
                 <div class="col-12">
                     <div class="form-group">
+                        <label>广告网址</label>
+                        <div class="controls">
+                            <input type="text" class="form-control" name="url" placeholder="请输入网址">
+                        </div>
+                    </div>
+                </div>
+                <div class="col-12">
+                    <div class="form-group">
                         <label><span class="danger">*</span> 广告图</label>
                         <div class="input-group">
-                            <input type="text" class="form-control image-path" name="image" autocomplete="off">
+                            <input type="text" class="form-control image-path" name="banner" autocomplete="off">
                             <input type="file" class="hidden-file-upload" data-path="ad">
                             <div class="input-group-append" id="input-file-addon">
                                 <button class="btn btn-primary upload-image" type="button">上传</button>
@@ -116,64 +75,31 @@
 @section('page-scripts')
     <script>
 		$(document).ready(function () {
-
-
-            $('#jump-type').on('change', function () {
-                const $url = $('input[name="url"]');
-
-                if ($(this).val() == 5) {
-                    $url.attr('disabled', true);
-                } else {
-                    $url.attr('disabled', false);
-                }
-            });
-
 			$('#form').submit(function (e) {
-                e.preventDefault();
+				e.preventDefault();
+				$.request({
+					url     : $(this).attr('action'),
+					type    : $(this).attr('method'),
+					data    : $('#form').serialize(),
+					debug: true,
+					callback: function (res) {
+						if (res.code === 200) {
+							// iframe.blade.php
+							parent.$.hideModal();
 
-                if ($('.btn-primary').hasClass('disabled')){
-                    return false;
-                }
-
-                $('.btn-primary').addClass('disabled');
-                $.ajax({
-                    url: $(this).attr('action'),
-                    type: $(this).attr('method'),
-                    data: new FormData(this),
-                    headers: {
-                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                    },
-                    contentType: false,
-                    processData: false,
-                    dataType: 'json',
-                    success: function (res) {
-                        console.log(res);
-
-                        if (res.code == 200) {
-                            // iframe.blade.php
-                            parent.$.hideModal();
-
-                            // iframeLayoutMaster.blade.php
-                            parent.$.reloadIFrame({
-                                title: '提交成功',
-                                message: '请稍后数据刷新'
-                            });
-                        } else {
-                            $('.btn-primary').removeClass('disabled');
-                            $.toast({
-                                type: 'error',
-                                title: '提交失败',
-                                message: res.msg
-                            });
-                        }
-                    },
-                    error: function (xhr, textStatus, errorThrown) {
-                        if (settings.debug == true) {
-                            console.log(xhr);
-                            console.log(textStatus);
-                            console.log(errorThrown)
-                        }
-                    }
+							// iframeLayoutMaster.blade.php
+							parent.$.reloadIFrame({
+								title  : '提交成功',
+								message: '请稍后数据刷新'
+							});
+						} else {
+							$.toast({
+								type: 'error',
+								title: '提交失败',
+								message: res.msg
+							});
+						}
+					}
 				});
 			});
 		});

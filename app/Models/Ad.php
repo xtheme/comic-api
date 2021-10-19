@@ -2,21 +2,22 @@
 
 namespace App\Models;
 
-use Illuminate\Support\Str;
-
 class Ad extends BaseModel
 {
     protected $fillable = [
         'space_id',
-        'name',
         'sort',
-        'platform',
-        'jump_type',
-        //'jump_id',
         'url',
-        'show_time',
-        'image',
+        'banner',
         'status'
+    ];
+
+    protected $hidden = [
+        'space_id',
+        'sort',
+        'status',
+        'created_at',
+        'updated_at',
     ];
 
     public function space()
@@ -24,7 +25,7 @@ class Ad extends BaseModel
         return $this->hasOne('App\Models\AdSpace', 'id', 'space_id');
     }
 
-    public function getImageAttribute($value)
+    public function getBannerAttribute($value)
     {
         if (!$value) return '';
 
