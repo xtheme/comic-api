@@ -2,46 +2,33 @@
 
 namespace App\Http\Controllers\Api;
 
-use Record;
 use App\Models\Video;
-// use App\Repositories\Contracts\VideoRepositoryInterface;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Response;
+use Record;
 
 class VideoController extends BaseController
 {
-    // protected $repository;
-    //
-    // public function __construct(VideoRepositoryInterface $repository)
-    // {
-    //     $this->repository = $repository;
-    // }
-
-    /**
-     * @deprecated
-     */
-    // public function list(Request $request, $page = 1)
-    // {
-    //     $request->merge([
-    //         'page' => $request->has('page') ? $request->input('page') : $page,
-    //         'status' => 1, // 強制查詢上架的視頻
-    //     ]);
-    //
-    //     $data = $this->repository->filter($request)->get();
-    //
-    //     return Response::jsonSuccess(__('api.success'), $data);
-    // }
+    public function __construct(Request $request)
+    {
+        if ($request->bearerToken()) {
+            $this->middleware('auth:sanctum');
+        }
+    }
 
     public function detail($id)
     {
-        $data = Video::with(['series' => function ($query) {
-            return $query->where('status', 1)->orderBy('episode');
-        }, 'series.cdn' => function ($query) {
-            return $query->where('status', 1);
-        }])->withCount(['visit_histories', 'play_histories'])->find($id)->toArray();
+        $data = Video::with([
+            'series' => function ($query) {
+                return $query->where('status', 1)->orderBy('episode');
+            },
+            'series.cdn' => function ($query) {
+                return $query->where('status', 1);
+            },
+        ])->withCount(['visit_histories', 'play_histories'])->find($id)->toArray();
 
         // 數字格式化
-        $data['visit_counts'] = shortenNumber($data['visit_histories_count'] );
+        $data['visit_counts'] = shortenNumber($data['visit_histories_count']);
         $data['play_counts'] = (request()->header('platform') == 1) ? $data['play_histories_count'] : shortenNumber($data['play_histories_count']);
 
         // todo 訪問數+1
@@ -76,7 +63,7 @@ class VideoController extends BaseController
             $videos = Video::select(['id', 'title', 'cover'])->withCount(['visit_histories'])->inRandomOrder()->limit($limit)->get();
         }
 
-        $data = $videos->map(function($video) {
+        $data = $videos->map(function ($video) {
             return [
                 'id' => $video->id,
                 'title' => $video->title,

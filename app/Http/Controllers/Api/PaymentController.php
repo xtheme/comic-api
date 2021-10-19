@@ -179,12 +179,16 @@ class PaymentController extends Controller
 
     public function mockCallback(Request $request)
     {
-        $order_no = $request->get('order_no') ?? '';
-        $order = Order::orderNo($order_no)->firstOrFail();
+        if (config('app.env') == 'local') {
+            $order_no = $request->get('order_no') ?? '';
+            $order = Order::orderNo($order_no)->firstOrFail();
 
-        $payment_service = app(PaymentService::class);
-        $response = $payment_service->init($order->gateway)->mockCallback($order);
+            $payment_service = app(PaymentService::class);
+            $response = $payment_service->init($order->gateway)->mockCallback($order);
 
-        return $response;
+            return $response;
+        }
+
+        return '';
     }
 }
