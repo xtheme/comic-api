@@ -4,10 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Models\Book;
 use App\Models\BookChapter;
-use App\Models\UserPurchaseLog;
-use App\Traits\CacheTrait;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Response;
 use Record;
 

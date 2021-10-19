@@ -3,14 +3,9 @@
 namespace App\Observers;
 
 use App\Models\User;
-use App\Services\UserService;
-use App\Traits\CacheTrait;
-use Illuminate\Support\Facades\Cache;
 
 class UserObserver
 {
-    use CacheTrait;
-
     private function overrideCache(User $user)
     {
         // todo 未決定建立緩存時機
@@ -20,7 +15,8 @@ class UserObserver
     /**
      * Handle the User "created" event.
      *
-     * @param  User $user
+     * @param  User  $user
+     *
      * @return void
      */
     public function created(User $user)
@@ -31,7 +27,8 @@ class UserObserver
     /**
      * Handle the User "updated" event.
      *
-     * @param  User $user
+     * @param  User  $user
+     *
      * @return void
      */
     public function updated(User $user)
@@ -42,7 +39,8 @@ class UserObserver
     /**
      * Handle the User "deleted" event.
      *
-     * @param  User $user
+     * @param  User  $user
+     *
      * @return void
      */
     public function deleted(User $user)
@@ -53,7 +51,8 @@ class UserObserver
     /**
      * Handle the User "restored" event.
      *
-     * @param  User $user
+     * @param  User  $user
+     *
      * @return void
      */
     public function restored(User $user)
@@ -64,7 +63,8 @@ class UserObserver
     /**
      * Handle the User "force deleted" event.
      *
-     * @param  User $user
+     * @param  User  $user
+     *
      * @return void
      */
     public function forceDeleted(User $user)

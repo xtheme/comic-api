@@ -3,13 +3,10 @@
 namespace App\Services;
 
 use App\Models\Ad;
-use App\Traits\CacheTrait;
 use Illuminate\Support\Facades\Cache;
 
 class AdService
 {
-    use CacheTrait;
-
     // 插入广告
     public function insertAd($space_id, array $list = [])
     {
@@ -26,12 +23,12 @@ class AdService
     {
         $platform = request()->header('platform');
 
-        $key = $this->getCacheKeyPrefix() . sprintf('ad:type:%s-%s', $space_id, $platform);
+        $key = sprintf('ad:type:%s-%s', $space_id, $platform);
 
-        return Cache::remember($key, $this->getRandomTtl(), function () use ($space_id, $platform) {
+        return Cache::remember($key, 300, function () use ($space_id, $platform) {
             $where = [
-                'space_id'  => $space_id,
-                'status'   => 1,
+                'space_id' => $space_id,
+                'status' => 1,
                 'platform' => $platform,
             ];
 

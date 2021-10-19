@@ -2,14 +2,11 @@
 
 namespace App\Services;
 
-use App\Traits\CacheTrait;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Log;
 
 class SmsService
 {
-    use CacheTrait;
-
     /**
      * 发送验证码
      *
@@ -37,7 +34,7 @@ class SmsService
             'areaCode' => $area,
             'mobile' => $mobile,
             'msg' => $content,
-            'token' => md5($time . $token. $area . $mobile . $content),
+            'token' => md5($time . $token . $area . $mobile . $content),
             'timestamp' => time(),
             'proCode' => $product,
         ];
@@ -58,7 +55,6 @@ class SmsService
             curl_setopt($curl, CURLOPT_POSTFIELDS, http_build_query($params));
             $result = curl_exec($curl);
             curl_close($curl);
-
         } catch (\Exception $e) {
             return sprintf('短信发送失败：短信平台无回应，手机号：%s-%s, %s', $params['areaCode'], $params['mobile'], $e->getMessage());
         }
@@ -68,7 +64,7 @@ class SmsService
         $result = json_decode($result, true);
 
         if ($result['code'] != 200) {
-            return sprintf('短信发送失败：%s，手机号：%s-%s', $result['msg'] , $params['areaCode'], $params['mobile']);
+            return sprintf('短信发送失败：%s，手机号：%s-%s', $result['msg'], $params['areaCode'], $params['mobile']);
         }
 
         return '';
@@ -83,7 +79,7 @@ class SmsService
      */
     public function saveVerifyCode($mobile, $area, $code)
     {
-        $cache_key = $this->getCacheKeyPrefix() . sprintf('sms:%s-%s:code', $area, $mobile);
+        $cache_key = sprintf('sms:%s-%s:code', $area, $mobile);
 
         Cache::put($cache_key, $code);
     }
@@ -99,7 +95,7 @@ class SmsService
      */
     public function isVerifyCode($mobile, $area, $code): bool
     {
-        $cache_key = $this->getCacheKeyPrefix() . sprintf('sms:%s-%s:code', $area, $mobile);
+        $cache_key = sprintf('sms:%s-%s:code', $area, $mobile);
 
         $cache_code = Cache::get($cache_key);
 
@@ -120,18 +116,20 @@ class SmsService
      */
     public function limitTodayFrequency($area, $mobile): bool
     {
-        $cache_key = $this->getCacheKeyPrefix() . sprintf('sms:%s-%s:today', $area, $mobile);
+        $cache_key = sprintf('sms:%s-%s:today', $area, $mobile);
 
         $today_request = Cache::get($cache_key);
 
         if (!$today_request) {
-            $cache_ttl = mktime(24,0,0) - time(); // 今天结束前秒数
+            $cache_ttl = mktime(24, 0, 0) - time(); // 今天结束前秒数
             Cache::put($cache_key, 1, $cache_ttl);
+
             return true;
         }
 
         if ($today_request <= 15) {
             Cache::increment($cache_key);
+
             return true;
         }
 
@@ -149,12 +147,13 @@ class SmsService
      */
     public function limitMobileFrequency($area, $mobile): bool
     {
-        $cache_key = $this->getCacheKeyPrefix() . sprintf('sms:%s-%s:protect', $area, $mobile);
+        $cache_key = sprintf('sms:%s-%s:protect', $area, $mobile);
 
         $protect = Cache::get($cache_key);
 
         if (!$protect) {
             Cache::put($cache_key, true, 30);
+
             return true;
         }
 
@@ -171,12 +170,13 @@ class SmsService
      */
     public function limitIpFrequency($ip): bool
     {
-        $cache_key = $this->getCacheKeyPrefix() . sprintf('sms:ip:%s', $ip);
+        $cache_key = sprintf('sms:ip:%s', $ip);
 
         $protect = Cache::get($cache_key);
 
         if (!$protect) {
             Cache::put($cache_key, true, 30);
+
             return true;
         }
 

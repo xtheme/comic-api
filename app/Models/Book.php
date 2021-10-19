@@ -2,13 +2,12 @@
 
 namespace App\Models;
 
-use App\Traits\CacheTrait;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Spatie\Tags\HasTags;
 
 class Book extends BaseModel
 {
-    use CacheTrait, SoftDeletes, HasTags;
+    use SoftDeletes, HasTags;
 
     protected $fillable = [
         'title',
