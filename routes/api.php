@@ -99,9 +99,9 @@ Route::as('api.')->middleware(['api'])->group(function () {
 
         // 用戶紀錄
         Route::prefix('user')->as('user.')->group(function () {
-            Route::any('/order', [Api\UserController::class, 'order'])->name('order');
-            Route::any('/recharge', [Api\UserController::class, 'recharge'])->name('recharge');
-            Route::any('/purchase', [Api\UserController::class, 'purchase'])->name('purchase');
+            Route::get('/order/{page?}', [Api\UserController::class, 'order'])->name('order');
+            Route::get('/recharge/{page?}', [Api\UserController::class, 'recharge'])->name('recharge');
+            Route::get('/purchase/{page?}', [Api\UserController::class, 'purchase'])->name('purchase');
         });
 
         // 歷史紀錄 (閱覽/ 播放/ 收藏)
