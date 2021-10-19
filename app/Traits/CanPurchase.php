@@ -47,6 +47,8 @@ trait CanPurchase
         // 建立用戶消費(購買)紀錄
         $log = new UserPurchaseLog;
         $log->user_id = $user->id;
+        $log->app_id = $user->app_id;
+        $log->channel_id = $user->channel_id;
         $log->type = $type;
         $log->item_model = $class;
         $log->item_id = $item_id;

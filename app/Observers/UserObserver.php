@@ -6,12 +6,6 @@ use App\Models\User;
 
 class UserObserver
 {
-    private function overrideCache(User $user)
-    {
-        // todo 未決定建立緩存時機
-        // app(UserService::class)->updateUserCache($user);
-    }
-
     /**
      * Handle the User "created" event.
      *
@@ -33,7 +27,7 @@ class UserObserver
      */
     public function updated(User $user)
     {
-        $this->overrideCache($user);
+
     }
 
     /**
@@ -45,7 +39,7 @@ class UserObserver
      */
     public function deleted(User $user)
     {
-        $this->overrideCache($user);
+
     }
 
     /**
@@ -57,7 +51,7 @@ class UserObserver
      */
     public function restored(User $user)
     {
-        $this->overrideCache($user);
+
     }
 
     /**
@@ -70,12 +64,8 @@ class UserObserver
     public function forceDeleted(User $user)
     {
         $user->orders()->delete();
-        $user->signs()->delete();
-        $user->book_visit_histories()->delete();
-        $user->video_visit_histories()->delete();
-        $user->video_play_histories()->delete();
-        // todo delete user comments
-
-        $this->overrideCache($user);
+        $user->recharge_logs()->delete();
+        $user->purchase_logs()->delete();
+        $user->visit_books()->delete();
     }
 }

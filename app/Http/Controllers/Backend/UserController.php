@@ -106,28 +106,17 @@ class UserController extends Controller
     {
         $user = User::findOrFail($id);
 
-        $plan = [
+        $gift = [
             'gift_coin' => (int) $request->input('gift_coin') ?? 0,
             'gift_days' => (int) $request->input('gift_days') ?? 0,
         ];
 
-        if (!$plan['gift_coin'] && !$plan['gift_days']) {
+        if (!$gift['gift_coin'] && !$gift['gift_days']) {
             return Response::jsonError('请输入有效的数字');
         }
 
-        // 更新用戶錢包或VIP時效
-        app(UserService::class)->updateUserPlan($user, $plan);
-
-        // 建立用戶充值紀錄
-        $data = [
-            'channel_id' => $user->channel_id,
-            'user_id' => $user->id,
-            'type' => 'gift',
-            'admin_id' => Auth::user()->id,
-            'gift_coin' => $plan['gift_coin'],
-            'gift_days' => $plan['gift_days'],
-        ];
-        app(UserService::class)->logUserRecharge($data);
+        // 更新用戶錢包或VIP時效 && 建立用戶充值紀錄
+        $user->saveGift($gift);
 
         activity()->useLog('后台')->causedBy(Auth::user())->performedOn($user)->withProperties($plan)->log(sprintf('赠送用户 %s 金币, VIP %s 天', $plan['gift_coin'], $plan['gift_days']));
 

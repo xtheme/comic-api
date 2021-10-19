@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Laravel\Sanctum\HasApiTokens;
 
@@ -71,6 +72,12 @@ class User extends Authenticatable
         return $this->hasMany('App\Models\UserPurchaseLog');
     }
 
+    // 購買記錄
+    public function visit_books()
+    {
+        return $this->hasMany('App\Models\UserVisitBook');
+    }
+
     // 累計充值金額
     public function getChargeTotalAttribute()
     {
@@ -83,11 +90,86 @@ class User extends Authenticatable
         return $this->purchase_logs()->sum('coin');
     }
 
-    /**
-     * VIP狀態
-     */
+    // VIP狀態
     public function getIsVipAttribute(): bool
     {
         return Carbon::now()->lt($this->subscribed_until);
+    }
+
+    // 更新用戶錢包或VIP時效
+    public function saveRecharge(Order $order)
+    {
+        $coin = $days = 0;
+        $coin += $order->plan_options['coin'] ?? 0;
+        $coin += $order->plan_options['gift_coin'] ?? 0;
+        $days += $order->plan_options['days'] ?? 0;
+        $days += $order->plan_options['gift_days'] ?? 0;
+
+        $this->wallet = $this->wallet + $coin;
+
+        if ($this->subscribed_until && $this->subscribed_until->greaterThan(Carbon::now())) {
+            $this->subscribed_until = $this->subscribed_until->addDays($days);
+        } else {
+            $this->subscribed_until = Carbon::now()->addDays($days);
+        }
+
+        $this->save();
+
+        $this->logRecharge($order);
+    }
+
+    // 建立用戶充值紀錄
+    public function logRecharge(Order $order)
+    {
+        $data = [
+            'app_id' => $this->app_id,
+            'channel_id' => $this->channel_id,
+            'user_id' => $this->id,
+            'type' => $order->type,
+            'order_id' => $order->order_id,
+            'order_no' => $order->order_no,
+            'coin' => $order->plan_options['coin'],
+            'gift_coin' => $order->plan_options['gift_coin'],
+            'days' => $order->plan_options['days'],
+            'gift_days' => $order->plan_options['gift_days'],
+        ];
+
+        UserRechargeLog::create($data);
+    }
+
+    // 後台贈送
+    public function saveGift(array $gift)
+    {
+        $coin = $days = 0;
+        $coin += $gift['gift_coin'] ?? 0;
+        $days += $gift['gift_days'] ?? 0;
+
+        $this->wallet = $this->wallet + $coin;
+
+        if ($this->subscribed_until && $this->subscribed_until->greaterThan(Carbon::now())) {
+            $this->subscribed_until = $this->subscribed_until->addDays($days);
+        } else {
+            $this->subscribed_until = Carbon::now()->addDays($days);
+        }
+
+        $this->save();
+
+        $this->logGift($gift);
+    }
+
+    // 建立贈送紀錄
+    public function logGift(array $gift)
+    {
+        $data = [
+            'app_id' => $this->app_id,
+            'channel_id' => $this->channel_id,
+            'user_id' => $this->id,
+            'type' => 'gift',
+            'admin_id' => Auth::user()->id,
+            'gift_coin' => $gift['gift_coin'],
+            'gift_days' => $gift['gift_days'],
+        ];
+
+        UserRechargeLog::create($data);
     }
 }

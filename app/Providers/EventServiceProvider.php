@@ -2,22 +2,11 @@
 
 namespace App\Providers;
 
-use App\Models\Book;
-use App\Models\Config;
-use App\Models\User;
-use App\Models\Video;
-use App\Models\VideoSeries;
-use App\Observers\BookObserver;
-use App\Observers\ConfigObserver;
-use App\Observers\TagObserver;
-use App\Observers\UserObserver;
-use App\Observers\VideoObserver;
-use App\Observers\VideoSeriesObserver;
-// use Conner\Tagging\Model\Tag;
+use App\Models;
+use App\Observers;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Auth\Listeners\SendEmailVerificationNotification;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
-use Illuminate\Support\Facades\Event;
 
 class EventServiceProvider extends ServiceProvider
 {
@@ -39,11 +28,11 @@ class EventServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        Config::observe(ConfigObserver::class);
-        // Tag::observe(TagObserver::class);
-        User::observe(UserObserver::class);
-        Book::observe(BookObserver::class);
-        Video::observe(VideoObserver::class);
-        VideoSeries::observe(VideoSeriesObserver::class);
+        Models\Book::observe(Observers\BookObserver::class);
+        Models\Config::observe(Observers\ConfigObserver::class);
+        Models\Order::observe(Observers\OrderObserver::class);
+        Models\User::observe(Observers\UserObserver::class);
+        Models\Video::observe(Observers\VideoObserver::class);
+        Models\VideoSeries::observe(Observers\VideoSeriesObserver::class);
     }
 }
