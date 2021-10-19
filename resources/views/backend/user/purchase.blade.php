@@ -10,10 +10,10 @@
             <thead>
             <tr>
                 <th>ID</th>
-                <th>购买ID</th>
-                <th>事件</th>
-                <th>购买项目</th>
-                <th>消费金币</th>
+                <th>商品类别</th>
+                <th>商品ID</th>
+                <th>商品名称</th>
+                <th>售价 (金币)</th>
                 <th>时间</th>
             </tr>
             </thead>
@@ -21,10 +21,10 @@
             @foreach ($list as $log)
                 <tr>
                     <td>{{ $log->id }}</td>
+                    <td>{{ $log->event }}</td>
                     <td>{{ $log->item_id }}</td>
-                    <td>购买{{ $log->event }}</td>
-                    <td>{{ $log->title }}</td>
-                    <td>{{ $log->coin }}</td>
+                    <td>{{ $log->item_title }}</td>
+                    <td>{{ $log->item_price }}</td>
                     <td>{{ $log->created_at }}</td>
                 </tr>
             @endforeach

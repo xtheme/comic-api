@@ -87,7 +87,6 @@ class UserController extends Controller
     {
         $data = [
             'list' => User::findOrFail($id)->purchase_logs()->paginate(),
-            'type_options' => OrderOptions::TYPE_OPTIONS,
         ];
 
         return view('backend.user.purchase')->with($data);
