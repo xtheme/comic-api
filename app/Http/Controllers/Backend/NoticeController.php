@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Backend;
 
+use App\Enums\Options;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Backend\NoticeRequest;
 use App\Models\Notice;
@@ -11,25 +12,28 @@ class NoticeController extends Controller
 {
     public function index()
     {
-        $list = Notice::orderByDesc('id')->paginate();
+        $data = [
+            'status_options' => Options::STATUS_OPTIONS,
+            'list' => Notice::latest('sort')->paginate(),
+        ];
 
-        return view('backend.notice.index', [
-            'list' => $list
-        ]);
+        return view('backend.notice.index')->with($data);
     }
 
     public function create()
     {
-        return view('backend.notice.create');
+        $data = [
+            'status_options' => Options::STATUS_OPTIONS,
+        ];
+
+        return view('backend.notice.create')->with($data);
     }
 
     public function store(NoticeRequest $request)
     {
-        $notice = new Notice;
-
         $post = $request->post();
 
-        $post['time'] = time();
+        $notice = new Notice;
 
         $notice->fill($post)->save();
 
@@ -38,18 +42,19 @@ class NoticeController extends Controller
 
     public function edit($id)
     {
-        $notice = Notice::findOrFail($id);
+        $data = [
+            'status_options' => Options::STATUS_OPTIONS,
+            'notice' => Notice::findOrFail($id),
+        ];
 
-        return view('backend.notice.edit', [
-            'data' => $notice
-        ]);
+        return view('backend.notice.edit')->with($data);
     }
 
     public function update(NoticeRequest $request, $id)
     {
-        $notice = Notice::findOrFail($id);
-
         $post = $request->post();
+
+        $notice = Notice::findOrFail($id);
 
         $notice->fill($post)->save();
 

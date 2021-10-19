@@ -26,7 +26,10 @@
                             <tr>
                                 <th>ID</th>
                                 <th>公告标题</th>
-                                <th>公告内容</th>
+                                <th>图片</th>
+                                <th style="width: 50%;">公告内容</th>
+                                <th>排序</th>
+                                <th>狀態</th>
                                 <th>发布时间</th>
                                 <th>操作</th>
                             </tr>
@@ -36,7 +39,10 @@
                                 <tr>
                                     <td>{{ $item->id }}</td>
                                     <td>{{ $item->title }}</td>
+                                    <td>@if($item->image)<img src="{{ $item->image }}" alt="" class="cursor-pointer" height="60px" data-lightbox title="点击查看大图">@endif</td>
                                     <td>{{ $item->content }}</td>
+                                    <td>{{ $item->sort }}</td>
+                                    <td>{{ $status_options[$item->status] }}</td>
                                     <td>{{ $item->created_at }}</td>
                                     <td @if($loop->count == 1)style="position: fixed;"@endif>
                                         <div class="@if(($loop->count - $loop->iteration) < 3){{'dropup'}}@else{{'dropdown'}}@endif">

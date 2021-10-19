@@ -5,7 +5,7 @@
 @endsection
 
 @section('content')
-    <form id="form" class="form" method="post" action="{{ route('backend.notice.update', $data->id) }}" novalidate>
+    <form id="form" class="form" method="post" action="{{ route('backend.notice.update', $notice->id) }}" novalidate>
         @method('put')
         <div class="form-body">
             <div class="row">
@@ -15,7 +15,7 @@
                         <div class="controls">
                             <input type="text" class="form-control" name="title"
                                    placeholder="请输入公告标题"
-                                   value="{{ $data->title }}">
+                                   value="{{ $notice->title }}">
                         </div>
                     </div>
                 </div>
@@ -23,7 +23,7 @@
                     <div class="form-group">
                         <label>图片路径</label>
                         <div class="controls">
-                            <input type="text" class="form-control" name="image" value="{{ $data->image }}" placeholder="">
+                            <input type="text" class="form-control" name="image" value="{{ $notice->image }}" placeholder="">
                         </div>
                     </div>
                 </div>
@@ -31,17 +31,25 @@
                     <div class="form-group">
                         <label>公告內容</label>
                         <div class="controls">
-                            <textarea name="content" class="form-control" placeholder="请输入内容">{{ $data->content }}</textarea>
+                            <textarea name="content" class="form-control" placeholder="请输入内容">{{ $notice->content }}</textarea>
                         </div>
                     </div>
                 </div>
-                <div class="col-12">
+                <div class="col-6">
+                    <div class="form-group">
+                        <label>排序</label>
+                        <div class="controls">
+                            <input type="text" class="form-control" name="sort" value="{{ $notice->sort }}" placeholder="">
+                        </div>
+                    </div>
+                </div>
+                <div class="col-6">
                     <div class="form-group">
                         <label>状态</label>
                         <div class="controls">
                             <select class="form-control" name="status">
                                 @foreach ($status_options as $key => $val)
-                                    <option value="{{ $key }}" @if($domain->status == $key){{'selected'}}@endif>{{ $val }}</option>
+                                    <option value="{{ $key }}" @if($notice->status == $key){{'selected'}}@endif>{{ $val }}</option>
                                 @endforeach
                             </select>
                         </div>

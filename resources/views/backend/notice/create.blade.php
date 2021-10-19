@@ -34,7 +34,15 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-12">
+                <div class="col-6">
+                    <div class="form-group">
+                        <label>排序</label>
+                        <div class="controls">
+                            <input type="text" class="form-control" name="sort" value="0" placeholder="">
+                        </div>
+                    </div>
+                </div>
+                <div class="col-6">
                     <div class="form-group">
                         <label>状态</label>
                         <div class="controls">

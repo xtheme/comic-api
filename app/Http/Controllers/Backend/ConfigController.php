@@ -18,7 +18,7 @@ class ConfigController extends Controller
 
         $data = [
             'list' => Config::keyword($keyword)->paginate(),
-            'pageConfigs' => ['hasSearchForm' => true],
+            'pageConfigs' => ['hasSearchForm' => false],
         ];
 
         return view('backend.config.index')->with($data);
