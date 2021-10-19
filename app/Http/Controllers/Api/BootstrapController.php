@@ -2,18 +2,13 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Models\AdSpace;
-use Illuminate\Http\Request;
-use App\Models\BookReportType;
 use App\Http\Controllers\Controller;
+use App\Models\Notice;
 use Illuminate\Support\Facades\Response;
-use App\Repositories\Contracts\AdSpaceRepositoryInterface;
 
 class BootstrapController extends Controller
 {
-    /**
-     * 查询廣告位底下的廣告列表
-     */
+    // 前端配置
     public function configs()
     {
         $data = getConfigs('frontend');
@@ -21,34 +16,11 @@ class BootstrapController extends Controller
         return Response::jsonSuccess(__('api.success'), $data);
     }
 
-    private function getAdSpaces()
+    // 公告
+    public function notices()
     {
-        $ad_spaces = AdSpace::all();
+        $data = Notice::whereStatus(1)->get()->toArray();
 
-        return $ad_spaces->map(function ($space) {
-            $xad_id = null;
-            if ($space->sdk == 1) {
-                $xad_id = (request()->header('platform') == 1) ? $space->xad_android_id : $space->xad_ios_id;
-            }
-            return [
-                'id' => $space->id,
-                'status' => $space->status,
-                'sdk' => $space->sdk,
-                'xad_id' => $xad_id
-            ];
-        });
-    }
-
-    private function getReportTypes()
-    {
-        $report_types = BookReportType::where('status' , 0)->orderByDesc('sort')->get();
-
-        return $report_types->map(function ($report_type) {
-            return [
-                'id' => $report_type->id,
-                'sort' => $report_type->sort,
-                'name' => $report_type->name
-            ];
-        })->toArray();
+        return Response::jsonSuccess(__('api.success'), $data);
     }
 }

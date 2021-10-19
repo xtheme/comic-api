@@ -19,6 +19,7 @@ Route::as('api.')->middleware(['api'])->group(function () {
     Route::prefix(config('api.version'))->middleware(['api.header', 'api.sign'])->group(function () {
         Route::prefix('bootstrap')->as('bootstrap.')->group(function () {
             Route::get('/configs', [Api\BootstrapController::class, 'configs'])->name('configs');
+            Route::get('/notices', [Api\BootstrapController::class, 'notices'])->name('notices');
         });
 
         Route::prefix('auth')->as('auth.')->group(function () {
