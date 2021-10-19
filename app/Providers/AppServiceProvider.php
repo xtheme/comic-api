@@ -2,7 +2,6 @@
 
 namespace App\Providers;
 
-use Barryvdh\LaravelIdeHelper\IdeHelperServiceProvider;
 use Illuminate\Pagination\Paginator;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Facades\URL;
@@ -17,9 +16,6 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        if ($this->app->environment() === 'local') {
-            $this->app->register(IdeHelperServiceProvider::class);
-        }
     }
 
     /**
@@ -36,7 +32,7 @@ class AppServiceProvider extends ServiceProvider
         // redirect http to https
         if ($this->app->environment('production')) {
             Url::forceScheme('https');
-            $this->app['request']->server->set('HTTPS','on');
+            $this->app['request']->server->set('HTTPS', 'on');
         }
     }
 }
