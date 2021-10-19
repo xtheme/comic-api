@@ -45,7 +45,11 @@ class PaymentController extends Controller
                 'gift_days' => $plan->gift_days,
                 'target' => $plan->target,
             ]];
-        });
+        })->toArray();
+
+        if (!$pricing) {
+            return Response::jsonError('很抱歉，暂时没有任何支付方案！');
+        }
 
         return Response::jsonSuccess(__('api.success'), $pricing);
     }
@@ -55,7 +59,7 @@ class PaymentController extends Controller
     {
         $gateways = Pricing::findOrFail($pricing_id)->gateways()->get();
 
-        $data = $gateways->reject(function ($gateway) {
+        $gateways = $gateways->reject(function ($gateway) {
             // 排除停用渠道
             return $gateway->status == 0;
         })->reject(function ($gateway) {
@@ -72,9 +76,13 @@ class PaymentController extends Controller
                     'target' => $gateway->button_target,
                 ],
             ];
-        });
+        })->toArray();
 
-        return Response::jsonSuccess(__('api.success'), $data);
+        if (!$gateways) {
+            return Response::jsonError('很抱歉，此方案暂时没有配置支付渠道！');
+        }
+
+        return Response::jsonSuccess(__('api.success'), $gateways);
     }
 
     // 調用支付
