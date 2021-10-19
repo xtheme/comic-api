@@ -9,14 +9,6 @@ use Gateway;
 class UserService
 {
     /**
-     * 查詢用戶使否為首儲
-     */
-    public function isFirstOrder($user_id): bool
-    {
-        return !Order::where('user_id', $user_id)->where('status', 1)->exists();
-    }
-
-    /**
      * 訂單回調成功, 上分
      */
     public function updateOrder(Order $order, $transaction_id)
@@ -27,7 +19,7 @@ class UserService
         $update = [
             'app_id' => $user->app_id, // 財務報表用
             'channel_id' => $user->channel_id, // 財務報表用
-            'first' => $this->isFirstOrder($order->user_id) ? 1 : 0,
+            'first' => $user->isRenew() ? 0 : 1,
             'status' => 1,
             'transaction_id' => $transaction_id,
             'transaction_at' => date('Y-m-d H:i:s'),
@@ -52,7 +44,7 @@ class UserService
         $update = [
             'app_id' => $user->app_id, // 財務報表用
             'channel_id' => $user->channel_id, // 財務報表用
-            'first' => $this->isFirstOrder($order->user_id) ? 1 : 0,
+            'first' => $user->isRenew() ? 0 : 1,
             'status' => 1,
         ];
         $order->update($update);

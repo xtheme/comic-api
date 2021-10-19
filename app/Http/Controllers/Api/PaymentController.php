@@ -8,7 +8,6 @@ use App\Models\Order;
 use App\Models\Payment;
 use App\Models\Pricing;
 use App\Services\PaymentService;
-use App\Services\UserService;
 use Gateway;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
@@ -20,31 +19,33 @@ class PaymentController extends Controller
     // 支付方案
     public function pricing(Request $request)
     {
-        // todo 用戶是否為首存, 檢查當前用戶是否有支付成功的訂單
-        $status = [0, 1];
+        // 用戶是否為首存, 檢查當前用戶是否有支付成功的訂單
+        $target = [0, 1];
 
-        if (!app(UserService::class)->isFirstOrder($request->user()->id)) {
-            $status = [0, 2];
+        if ($request->user()->isRenew()) {
+            $target = [0, 2];
         }
 
         // 所有啟用的支付方案
-        $pricing = Pricing::whereIn('status', $status)->orderBy('type')->orderByDesc('sort')->get();
+        $pricing = Pricing::where('status', 1)->whereIn('target', $target)->orderBy('type')->orderByDesc('sort')->get();
 
-        $pricing = $pricing->mapToGroups(function($plan) {
-            return [$plan->type => [
-                'plan_id' => $plan->id,
-                'type' => $plan->type,
-                'name' => $plan->name,
-                'description' => $plan->description,
-                'label' => $plan->label,
-                'price' => $plan->price,
-                'list_price' => $plan->list_price,
-                'coin' => $plan->coin,
-                'gift_coin' => $plan->gift_coin,
-                'days' => $plan->days,
-                'gift_days' => $plan->gift_days,
-                'target' => $plan->target,
-            ]];
+        $pricing = $pricing->mapToGroups(function ($plan) {
+            return [
+                $plan->type => [
+                    'plan_id' => $plan->id,
+                    'type' => $plan->type,
+                    'name' => $plan->name,
+                    'description' => $plan->description,
+                    'label' => $plan->label,
+                    'price' => $plan->price,
+                    'list_price' => $plan->list_price,
+                    'coin' => $plan->coin,
+                    'gift_coin' => $plan->gift_coin,
+                    'days' => $plan->days,
+                    'gift_days' => $plan->gift_days,
+                    'target' => $plan->target,
+                ],
+            ];
         })->toArray();
 
         if (!$pricing) {
@@ -104,6 +105,7 @@ class PaymentController extends Controller
         if (!$user->is_active) {
             // 登出用戶
             $user->tokens()->delete();
+
             return Response::jsonError('请先登入您的帐号！');
         }
 
@@ -123,12 +125,14 @@ class PaymentController extends Controller
             $plan = Pricing::where('status', 1)->findOrFail($plan_id);
         } catch (\Exception $e) {
             Log::warning(sprintf('用戶 %s 嘗試調用未開放的支付方案', $request->user()->id));
+
             return Response::jsonError('很抱歉，支付方案维护中！');
         }
 
         // 檢查方案是否允許使用以下支付渠道
         if (!in_array($gateway_id, $plan->gateway_ids)) {
             Log::warning(sprintf('用戶 %s 嘗試調用支付方案不支援的渠道', $request->user()->id));
+
             return Response::jsonError('很抱歉，支付渠道维护中！');
         }
 
@@ -136,6 +140,7 @@ class PaymentController extends Controller
             $gateway = Payment::where('status', 1)->findOrFail($gateway_id);
         } catch (\Exception $e) {
             Log::warning(sprintf('用戶 %s 嘗試調用未開放的支付渠道', $request->user()->id));
+
             return Response::jsonError('很抱歉，支付渠道维护中！');
         }
 
@@ -146,6 +151,7 @@ class PaymentController extends Controller
         // 檢查渠道今日限額
         if ($estimated_amount > $gateway->daily_limit) {
             Log::notice(sprintf('渠道 %s 已臨界每日限額', $gateway_id));
+
             return Response::jsonError('很抱歉，支付渠道维护中！');
         }
 
@@ -156,6 +162,7 @@ class PaymentController extends Controller
             Cache::increment($cache_key);
         } catch (\Exception $e) {
             Log::error(sprintf('調用 %s (%s) 支付接口錯誤：%s', $gateway->name, $gateway->id, $e->getMessage()));
+
             return Response::jsonError('很抱歉，支付渠道维护中！');
         }
 
@@ -172,12 +179,14 @@ class PaymentController extends Controller
             $order = Order::orderNo($order_no)->firstOrFail();
         } catch (\Exception $e) {
             Log::warning(sprintf('渠道试图回调不存在的订单 %s, 请求源 %s', $order_no, $request->url()));
+
             return Response::jsonError('订单已回调或不存在！');
         }
 
         // 不允許重複回調
         if ($order->status != 0) {
             Log::warning(sprintf('渠道试图重複回调订单 %s, 请求源 %s', $order_no, $request->url()));
+
             return Response::jsonError('订单已回调或不存在！');
         }
 

@@ -96,6 +96,12 @@ class User extends Authenticatable
         return Carbon::now()->lt($this->subscribed_until);
     }
 
+    // 查詢用戶使否為首儲
+    public function isRenew(): bool
+    {
+        return !Order::where('user_id', $this->id)->where('status', 1)->exists();
+    }
+
     // 更新用戶錢包或VIP時效
     public function saveRecharge(Order $order)
     {
