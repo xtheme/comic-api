@@ -12,23 +12,23 @@
     <form id="form" class="form" method="post" action="{{ route('backend.book_chapter.store', $book_id) }}">
         <div class="form-body">
             <div class="row">
-                <div class="col-6">
+                <div class="col-3">
                     <div class="form-group">
                         <label><span class="danger">*</span> 章节</label>
                         <div class="controls">
-                            <input type="text" class="form-control" name="episode" value="{{ $chapters }}">
+                            <input type="text" class="form-control" name="episode" value="{{ $episode }}">
                         </div>
                     </div>
                 </div>
-                <div class="col-6">
+                <div class="col-3">
                     <div class="form-group">
                         <label>章节标题</label>
                         <div class="controls">
-                            <input type="text" class="form-control" name="title" value="">
+                            <input type="text" class="form-control" name="title" value="{{ $title }}">
                         </div>
                     </div>
                 </div>
-                <div class="col-6">
+                <div class="col-3">
                     <div class="form-group">
                         <label><span class="danger">*</span> 售价</label>
                         <div class="controls">
@@ -36,7 +36,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-6">
+                <div class="col-3">
                     <div class="form-group">
                         <label>上架状态</label>
                         <div class="controls">

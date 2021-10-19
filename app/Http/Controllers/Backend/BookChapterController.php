@@ -54,7 +54,8 @@ class BookChapterController extends Controller
 
         $data = [
             'book_id' => $book_id,
-            'chapters' => $chapters,
+            'episode' => $chapters,
+            'title' => sprintf('第%s话', $chapters),
             'price' => $chapters >= getConfig('comic', 'default_charge_chapter') ? getConfig('comic', 'default_charge_price') : 0,
         ];
 
@@ -63,9 +64,11 @@ class BookChapterController extends Controller
 
     public function store(Request $request)
     {
-        $post = $request->post();
+        $request->merge([
+            'title' => $request->input('title') ?? sprintf('第%s话', $request->input('episode')),
+        ]);
 
-        $this->repository->create($post);
+        $this->repository->create($request->post());
 
         return Response::jsonSuccess(__('response.create.success'));
     }
@@ -81,7 +84,10 @@ class BookChapterController extends Controller
 
     public function update(Request $request, $id)
     {
-        // dd($request->post());
+        $request->merge([
+            'title' => $request->input('title') ?? sprintf('第 %s 章', $request->input('episode')),
+        ]);
+
         $this->repository->update($id, $request->post());
 
         return Response::jsonSuccess(__('response.update.success'));
