@@ -25,7 +25,7 @@ class Book extends BaseModel
 
     public function chapters()
     {
-        return $this->hasMany('App\Models\BookChapter')->where('status', 1)->latest();
+        return $this->hasMany('App\Models\BookChapter')->where('status', 1)->latest('episode');
     }
 
     public function latest_chapter()
@@ -38,7 +38,7 @@ class Book extends BaseModel
      */
     public function charge_chapters()
     {
-        return $this->hasMany('App\Models\BookChapter')->where('status', 1)->where('charge', 1);
+        return $this->hasMany('App\Models\BookChapter')->where('status', 1)->where('price', '>', 0);
     }
 
     /**
@@ -62,8 +62,7 @@ class Book extends BaseModel
      */
     public function getTaggedTagsAttribute()
     {
-        // return $this->tagged->pluck('tag_name')->toArray();
-        return $this->tags->where('suggest', 1)->sortByDesc('priority')->take(3)->pluck('name')->toArray();
+        return $this->tags->pluck('name')->toArray();
     }
 
     /**

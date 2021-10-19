@@ -16,7 +16,6 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::as('api.')->middleware(['api'])->group(function () {
-
     Route::prefix(config('api.version'))->middleware(['api.header', 'api.sign'])->group(function () {
         Route::prefix('bootstrap')->as('bootstrap.')->group(function () {
             Route::get('/configs', [Api\BootstrapController::class, 'configs'])->name('configs');
@@ -61,8 +60,8 @@ Route::as('api.')->middleware(['api'])->group(function () {
         // 漫畫
         Route::prefix('book')->as('book.')->group(function () {
             Route::get('/{id}', [Api\BookController::class, 'detail'])->name('detail');
-            Route::get('/{id}/chapters', [Api\BookController::class, 'chapters'])->name('chapters');
-            Route::get('/{id}/chapter/{chapter_id}', [Api\BookController::class, 'chapter'])->name('chapter');
+            // Route::get('/{id}/chapters', [Api\BookController::class, 'chapters'])->name('chapters');
+            Route::get('/chapter/{chapter_id}', [Api\BookController::class, 'chapter'])->name('chapter');
             Route::get('/recommend/{id?}', [Api\BookController::class, 'recommend'])->name('recommend');
             Route::post('/report/{type_id}/{id}', [Api\ReportController::class, 'report'])->name('report');
         });
@@ -114,7 +113,6 @@ Route::as('api.')->middleware(['api'])->group(function () {
 
         // 購買
         Route::post('/purchase', [Api\PurchaseController::class, 'purchase'])->name('purchase');
-
     });
 
     // 第三方支付回調
@@ -122,7 +120,6 @@ Route::as('api.')->middleware(['api'])->group(function () {
         Route::any('/callback', [Api\PaymentController::class, 'callback'])->name('callback'); // 支付結果回調
         Route::any('/mockCallback', [Api\PaymentController::class, 'mockCallback']); // 支付結果回調
     });
-
 });
 
 // 路由不存在时返回 json error

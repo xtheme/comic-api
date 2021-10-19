@@ -13,12 +13,16 @@ use Record;
 
 class BookController extends BaseController
 {
-    use CacheTrait;
-
-    public function detail($id)
+    public function __construct(Request $request)
     {
-        // $book = Book::with(['chapters'])->withCount(['chapters', 'visit_histories', 'favorite_histories'])->find($id);
-        $book = Book::with(['chapters'])->withCount(['chapters', 'visit_histories'])->find($id);
+        if ($request->bearerToken()) {
+            $this->middleware('auth:sanctum');
+        }
+    }
+
+    public function detail(Request $request, $id)
+    {
+        $book = Book::with(['chapters'])->withCount(['chapters'])->find($id);
 
         if (!$book) {
             return Response::jsonError('该漫画不存在或已下架！');
@@ -28,20 +32,19 @@ class BookController extends BaseController
             'id' => $book->id,
             'title' => $book->title,
             'author' => $book->author,
-            'cover' => $book->horizontal_cover,
+            'cover' => $book->vertical_cover,
             'description' => $book->description,
-            // 'charge' => $book->charge,
             'end' => $book->end,
             'type' => $book->type,
-            'release_at' => $book->release_at,
-            'latest_chapter_title' => $book->chapters_count ? $book->chapters->first()->title : '',
             'tagged_tags' => $book->tagged_tags,
-            'visit_counts' => shortenNumber($book->visit_histories_count),
-            'favorite_counts' => shortenNumber($book->favorite_histories_count),
+            'view_counts' => shortenNumber($book->view_counts),
+            'collect_counts' => shortenNumber($book->collect_counts),
+            'chapters_count' => $book->chapters_count,
             'chapters' => $book->chapters->map(function ($chapter) {
                 return [
-                    'book_id' => $chapter->book_id,
+                    // 'book_id' => $chapter->book_id,
                     'chapter_id' => $chapter->id,
+                    'episode' => $chapter->episode,
                     'title' => $chapter->title,
                     'price' => $chapter->price,
                     'created_at' => $chapter->created_at->format('Y-m-d'),
@@ -50,12 +53,17 @@ class BookController extends BaseController
         ];
 
         // 訪問數+1
-        Record::from('book')->visit($id);
+        $book->increment('view_counts');
+
+        // 記錄用戶訪問
+        if ($request->user()) {
+            Record::from('book')->visit($id);
+        }
 
         return Response::jsonSuccess(__('api.success'), $data);
     }
 
-    public function chapters($book_id)
+    /*public function chapters($book_id)
     {
         $book = Book::find($book_id);
 
@@ -67,6 +75,7 @@ class BookController extends BaseController
             return [
                 'book_id' => $chapter->book_id,
                 'chapter_id' => $chapter->id,
+                'episode' => $chapter->episode,
                 'title' => $chapter->title,
                 'price' => $chapter->price,
                 'created_at' => $chapter->created_at->format('Y-m-d'),
@@ -74,11 +83,11 @@ class BookController extends BaseController
         })->toArray();
 
         return Response::jsonSuccess(__('api.success'), $data);
-    }
+    }*/
 
-    public function chapter(Request $request, $book_id, $chapter_id)
+    public function chapter(Request $request, $chapter_id)
     {
-        $chapter = BookChapter::where('book_id', $book_id)->find($chapter_id);
+        $chapter = BookChapter::find($chapter_id);
 
         if (!$chapter) {
             return Response::jsonError('该漫画不存在或已下架！');
@@ -87,14 +96,15 @@ class BookController extends BaseController
         // 收費章節
         $protect = true;
 
+        // 如果章節免費
         if ($chapter->price == 0) {
             $protect = false;
         }
 
         // 是否登入
-        $user = auth('sanctum')->user() ?? null;
+        if ($request->user()) {
+            $user = $request->user();
 
-        if ($user) {
             $is_purchase = $user->purchase_logs()->where('type', 'book_chapter')->where('item_id', $chapter_id)->exists();
 
             if ($is_purchase) {
