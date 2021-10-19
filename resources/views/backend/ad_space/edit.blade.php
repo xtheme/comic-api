@@ -6,7 +6,7 @@
 @endsection
 
 @section('content')
-    <form id="form" class="form" method="post" action="{{ route('backend.ad_space.update', $data->id) }}" novalidate>
+    <form id="form" class="form" method="post" action="{{ route('backend.ad_space.update', $space->id) }}" novalidate>
         @method('PUT')
         <div class="form-body">
             <div class="row">
@@ -18,7 +18,7 @@
                                 <li class="d-inline-block mr-2 mb-1">
                                     <fieldset>
                                         <div class="radio">
-                                            <input type="radio" name="class" id="class_active_1" value="video" @if($data->class == 'video'){{'checked'}}@endif>
+                                            <input type="radio" name="class" id="class_active_1" value="video" @if($space->class == 'video'){{'checked'}}@endif>
                                             <label for="class_active_1">动画</label>
                                         </div>
                                     </fieldset>
@@ -26,7 +26,7 @@
                                 <li class="d-inline-block mr-2 mb-1">
                                     <fieldset>
                                         <div class="radio">
-                                            <input type="radio" name="class" id="class_active_2" value="comic" @if($data->class == 'comic'){{'checked'}}@endif>
+                                            <input type="radio" name="class" id="class_active_2" value="comic" @if($space->class == 'comic'){{'checked'}}@endif>
                                             <label for="class_active_2">漫画</label>
                                         </div>
                                     </fieldset>
@@ -43,7 +43,7 @@
                                 <li class="d-inline-block mr-2 mb-1">
                                     <fieldset>
                                         <div class="radio">
-                                            <input type="radio" name="status" id="status_active_1" value="1" @if($data->status == 1){{'checked'}}@endif>
+                                            <input type="radio" name="status" id="status_active_1" value="1" @if($space->status == 1){{'checked'}}@endif>
                                             <label for="status_active_1">上架</label>
                                         </div>
                                     </fieldset>
@@ -51,7 +51,7 @@
                                 <li class="d-inline-block mr-2 mb-1">
                                     <fieldset>
                                         <div class="radio">
-                                            <input type="radio" name="status" id="status_active_2" value="-1" @if($data->status == -1){{'checked'}}@endif>
+                                            <input type="radio" name="status" id="status_active_2" value="-1" @if($space->status == -1){{'checked'}}@endif>
                                             <label for="status_active_2">下架</label>
                                         </div>
                                     </fieldset>
@@ -68,7 +68,7 @@
                                 <li class="d-inline-block mr-2 mb-1">
                                     <fieldset>
                                         <div class="radio">
-                                            <input type="radio" name="sdk" id="sdk_active1" value="1" @if($data->sdk == 1){{'checked'}}@endif>
+                                            <input type="radio" name="sdk" id="sdk_active1" value="1" @if($space->sdk == 1){{'checked'}}@endif>
                                             <label for="sdk_active1">开启</label>
                                         </div>
                                     </fieldset>
@@ -76,7 +76,7 @@
                                 <li class="d-inline-block mr-2 mb-1">
                                     <fieldset>
                                         <div class="radio">
-                                            <input type="radio" name="sdk" id="sdk_active2" value="-1" @if($data->sdk == -1){{'checked'}}@endif>
+                                            <input type="radio" name="sdk" id="sdk_active2" value="-1" @if($space->sdk == -1){{'checked'}}@endif>
                                             <label for="sdk_active2">关闭</label>
                                         </div>
                                     </fieldset>
@@ -93,7 +93,7 @@
                                 <li class="d-inline-block mr-2 mb-1">
                                     <fieldset>
                                         <div class="radio">
-                                            <input type="radio" name="display" id="display_active1" value="1" @if($data->display == 1){{'checked'}}@endif>
+                                            <input type="radio" name="display" id="display_active1" value="1" @if($space->display == 1){{'checked'}}@endif>
                                             <label for="display_active1">{{$display_type[1]}}</label>
                                         </div>
                                     </fieldset>
@@ -101,7 +101,7 @@
                                 <li class="d-inline-block mr-2 mb-1">
                                     <fieldset>
                                         <div class="radio">
-                                            <input type="radio" name="display" id="display_active2" value="2" @if($data->display == 2){{'checked'}}@endif>
+                                            <input type="radio" name="display" id="display_active2" value="2" @if($space->display == 2){{'checked'}}@endif>
                                             <label for="display_active2">{{$display_type[2]}}</label>
                                         </div>
                                     </fieldset>
@@ -109,7 +109,7 @@
                                 <li class="d-inline-block mr-2 mb-1">
                                     <fieldset>
                                         <div class="radio">
-                                            <input type="radio" name="display" id="display_active3" value="3" @if($data->display == 3){{'checked'}}@endif>
+                                            <input type="radio" name="display" id="display_active3" value="3" @if($space->display == 3){{'checked'}}@endif>
                                             <label for="display_active3">{{$display_type[3]}}</label>
                                         </div>
                                     </fieldset>
@@ -122,7 +122,7 @@
                     <div class="form-group">
                         <label for="input-name">备注</label>
                         <div class="controls">
-                            <textarea class="form-control" name="remark" rows="3" placeholder="请输入备注">{{$data->remark}}</textarea>
+                            <textarea class="form-control" name="remark" rows="3" placeholder="请输入备注">{{$space->remark}}</textarea>
                         </div>
                     </div>
                 </div>

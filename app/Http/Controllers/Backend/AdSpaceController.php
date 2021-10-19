@@ -14,7 +14,7 @@ class AdSpaceController extends Controller
 
     const CLASS_TYPE = [
         'video' => '动画',
-        'comics' => '漫画',
+        'comic' => '漫画',
         'other' => '其他'
     ];
 
@@ -33,21 +33,23 @@ class AdSpaceController extends Controller
     {
         $list = $this->repository->filter($request)->paginate();
 
-        return view('backend.ad_space.index', [
+        $data = [
             'list' => $list,
             'class_type' => self::CLASS_TYPE,
             'display_type' => self::DISPLAY_TYPE,
-        ]);
+        ];
+
+        return view('backend.ad_space.index')->with($data);
     }
 
     public function edit($id)
     {
-        $data = AdSpace::findOrFail($id);
-
-        return view('backend.ad_space.edit', [
-            'data' => $data,
+        $data = [
+            'space' => AdSpace::findOrFail($id),
             'display_type' => self::DISPLAY_TYPE,
-        ]);
+        ];
+
+        return view('backend.ad_space.edit')->with($data);
     }
 
     public function update(Request $request, $id)

@@ -56,7 +56,7 @@
                                 <th>广告位显示方式</th>
 {{--                                <th>备注</th>--}}
                                 <th>状态</th>
-                                <th>接入广告SDK</th>
+{{--                                <th>接入广告SDK</th>--}}
                                 <th>更新时间</th>
                                 <th>操作</th>
                             </tr>
@@ -71,17 +71,8 @@
                                             {{ $item->remark }}
                                         </em>
                                     </td>
-                                    <td>
-                                        @if($item->class == 'video')
-                                            <span class="badge badge-pill badge-primary">动画</span>
-                                        @elseif($item->class == 'comics')
-                                            <span class="badge badge-pill badge-success">漫画</span>
-                                        @else
-                                            <span class="badge badge-pill badge-light-danger">其他</span>
-                                        @endif
-                                    </td>
-                                    <td><span class="badge badge-pill">{{$display_type[$item->display]}}</span> </td>
-{{--                                    <td>{{ $item->remark }}</td>--}}
+                                    <td>{{ $class_type[$item->class] }}</td>
+                                    <td>{{ $display_type[$item->display] }}</td>
                                     <td>
                                         @if($item->status == 1)
                                             <span class="badge badge-pill badge-light-primary">上架</span>
@@ -89,13 +80,13 @@
                                             <span class="badge badge-pill badge-light-danger">下架</span>
                                         @endif
                                     </td>
-                                    <td>
-                                        @if($item->sdk == 1)
-                                            <span class="badge badge-pill badge-light-primary">开启</span>
-                                        @else
-                                            <span class="badge badge-pill badge-light-secondary">关闭</span>
-                                        @endif
-                                    </td>
+{{--                                    <td>--}}
+{{--                                        @if($item->sdk == 1)--}}
+{{--                                            <span class="badge badge-pill badge-light-primary">开启</span>--}}
+{{--                                        @else--}}
+{{--                                            <span class="badge badge-pill badge-light-secondary">关闭</span>--}}
+{{--                                        @endif--}}
+{{--                                    </td>--}}
                                     <td>@if($item->updated_at){{ $item->updated_at->diffForHumans()  }}@endif</td>
                                     <td @if($loop->count == 1)style="position: fixed;"@endif>
                                         <div class="@if(($loop->count - $loop->iteration) < 3){{'dropup'}}@else{{'dropdown'}}@endif">
