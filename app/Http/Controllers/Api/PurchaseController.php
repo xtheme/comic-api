@@ -37,6 +37,10 @@ class PurchaseController extends Controller
             return Response::jsonError($e->getMessage());
         }
 
-        return Response::jsonSuccess(__('api.success'));
+        $response = [
+            'wallet' => $request->user()->wallet,
+        ];
+
+        return Response::jsonSuccess(__('api.success'), $response);
     }
 }
