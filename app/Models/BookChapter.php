@@ -2,8 +2,12 @@
 
 namespace App\Models;
 
+use App\Traits\CanPurchase;
+
 class BookChapter extends BaseModel
 {
+    use CanPurchase;
+
     protected $perPage = 10;
 
     protected $fillable = [

@@ -111,7 +111,7 @@ Route::as('api.')->middleware(['api'])->group(function () {
             Route::post('/pay', [Api\PaymentController::class, 'pay'])->name('pay'); // 調用渠道支付
         });
 
-        // 購買
+        // 購買商品
         Route::post('/purchase', [Api\PurchaseController::class, 'purchase'])->name('purchase');
     });
 

@@ -4,14 +4,9 @@ namespace App\Models;
 
 class UserPurchaseLog extends BaseModel
 {
-    public function user()
+    public function getProduct()
     {
-        return $this->belongsTo('App\Models\User');
-    }
-
-    public function book_chappter()
-    {
-        return $this->hasOne('App\Models\BookChapter', 'id', 'item_id');
+        return app($this->item_model)->findOrFail($this->item_id);
     }
 
     public function getEventAttribute()
@@ -28,14 +23,16 @@ class UserPurchaseLog extends BaseModel
         return $event;
     }
 
-    public function getTitleAttribute()
+    public function getItemTitleAttribute()
     {
+        $product = $this->getProduct();
+
         switch ($this->type) {
             case 'book_chapter':
-                $title = $this->book_chappter->book->title . ' (第 ' .$this->book_chappter->episode . ' 話)';
+                $title = $product->book->title . ' (第 ' . $product->episode . ' 話)';
                 break;
             case 'video':
-                $title = '视频';
+                $title = $product->title;
                 break;
         }
 

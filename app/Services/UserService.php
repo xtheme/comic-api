@@ -123,26 +123,4 @@ class UserService
 
         activity()->useLog('后台')->causedBy(auth()->user())->performedOn($order)->withProperties($order->getChanges())->log('手动回调订单');
     }
-
-    /**
-     * 建立用戶消費(購買)紀錄
-     */
-    public function purchase($type, $item_id, $coin)
-    {
-        $hasBought = UserPurchaseLog::where(function ($query) use ($type, $item_id) {
-            $query->where('user_id', request()->user()->id)
-                  ->where('type', $type)
-                  ->where('item_id', $item_id);
-        })->first();
-
-        // 建立用戶消費(購買)紀錄
-        $data = [
-            'user_id' => request()->user()->id,
-            'type' => $type,
-            'item_id' => $item_id,
-            'coin' => $coin,
-        ];
-
-        UserPurchaseLog::firstOrCreate($data);
-    }
 }
