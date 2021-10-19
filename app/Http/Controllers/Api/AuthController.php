@@ -37,9 +37,20 @@ class AuthController extends BaseController
         $user->save();
 
         // 簽發 personal token
-        $user->token = $user->createToken($user->name)->plainTextToken;
+        $token = $user->createToken($user->name)->plainTextToken;
 
-        return Response::jsonSuccess(__('api.success'), $user);
+        $response = [
+            'id' => $user->id,
+            'name' => $user->name,
+            'area' => $user->area,
+            'mobile' => $user->mobile,
+            'wallet' => $user->wallet,
+            'subscribed_until' => optional($user->subscribed_until)->format('Y-m-d H:i:s'),
+            'logged_at' => optional($user->logged_at)->format('Y-m-d H:i:s'),
+            'token' => $token,
+        ];
+
+        return Response::jsonSuccess(__('api.success'), $response);
     }
 
     /**
@@ -86,7 +97,19 @@ class AuthController extends BaseController
      */
     public function profile(Request $request): JsonResponse
     {
-        return Response::jsonSuccess(__('api.success'), $request->user());
+        $user = $request->user();
+
+        $response = [
+            'id' => $user->id,
+            'name' => $user->name,
+            'area' => $user->area,
+            'mobile' => $user->mobile,
+            'wallet' => $user->wallet,
+            'subscribed_until' => optional($user->subscribed_until)->format('Y-m-d H:i:s'),
+            'logged_at' => optional($user->logged_at)->format('Y-m-d H:i:s'),
+        ];
+
+        return Response::jsonSuccess(__('api.success'), $response);
     }
 
     /**
