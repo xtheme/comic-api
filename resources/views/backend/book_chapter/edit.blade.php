@@ -41,7 +41,7 @@
                     <div class="form-group">
                         <label>上架状态</label>
                         <div class="controls">
-                            <select class="form-control" id="select-status" name="status">
+                            <select class="form-control" name="status">
                                 <option value="1" @if(1 == $data->status){{'selected'}}@endif>上架</option>
                                 <option value="0" @if(0 == $data->status){{'selected'}}@endif>下架</option>
                             </select>

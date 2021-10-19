@@ -11,80 +11,43 @@
             <div class="row">
                 <div class="col-12">
                     <div class="form-group">
-                        <label for="input-username"><span class="danger">*</span>公告标题</label>
+                        <label><span class="danger">*</span> 公告标题</label>
                         <div class="controls">
-                            <input type="text" id="input-username" class="form-control" name="notice_title"
-                                   placeholder="请输入公告标题"
-                                   required
-                                   data-validation-required-message="请输入公告标题">
+                            <input type="text" class="form-control" name="title"
+                                   placeholder="请输入公告标题">
                         </div>
                     </div>
                 </div>
                 <div class="col-12">
                     <div class="form-group">
-                        <label for="input-username"><span class="danger">*</span>公告详情</label>
+                        <label>图片路径</label>
                         <div class="controls">
-                            <textarea name="notice_content"  class="form-control" style="width:100%;height:160px;" placeholder="请输入内容"></textarea>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-6">
-                    <div class="form-group">
-                        <label for="input-username">公告关键词</label>
-                        <div class="controls">
-                            <input type="text" id="input-username" class="form-control" name="notice_keyword"
-                                   placeholder="请输入公告关键词"
-                                   required
-                                   data-validation-required-message="请输入公告关键词">
-                        </div>
-                    </div>
-                </div>
-                <div class="col-6">
-                    <div class="form-group">
-                        <label for="input-username">字体颜色</label>
-                        <div class="controls">
-                            <input type="text" name="dyestuff" class="form-control" placeholder="字体颜色：格式#4e6ef2" value="#4e6ef2">
+                            <input type="text" class="form-control" name="image" value="" placeholder="">
                         </div>
                     </div>
                 </div>
                 <div class="col-12">
                     <div class="form-group">
-                        <label for="input-username"><span class="danger">*</span>复制内容</label>
+                        <label>公告內容</label>
                         <div class="controls">
-                            <textarea name="copy_content"  class="form-control" style="width:100%;height:160px;" placeholder="请输入内容"></textarea>
+                            <textarea name="content" class="form-control" placeholder="请输入内容"></textarea>
                         </div>
                     </div>
                 </div>
                 <div class="col-12">
                     <div class="form-group">
-                        <label for="input-username"><span class="danger">*</span>新旧版本</label>
+                        <label>状态</label>
                         <div class="controls">
-                            <ul class="list-unstyled mb-0">
-                                <li class="d-inline-block mr-2 mb-1">
-                                    <fieldset>
-                                        <div class="radio radio-shadow">
-                                            <input type="radio" id="radioshadow2"  name="edition_type" value="2" checked>
-                                            <label for="radioshadow2">新版</label>
-                                        </div>
-                                    </fieldset>
-                                </li>
-                                <li class="d-inline-block mr-2 mb-1">
-                                    <fieldset>
-                                        <div class="radio radio-shadow">
-                                            <input type="radio" id="radioshadow1" name="edition_type" value="1" >
-                                            <label for="radioshadow1">旧版</label>
-                                        </div>
-                                    </fieldset>
-                                </li>
-                            </ul>
+                            <select class="form-control" name="status">
+                                @foreach ($status_options as $key => $val)
+                                    <option value="{{ $key }}">{{ $val }}</option>
+                                @endforeach
+                            </select>
                         </div>
                     </div>
                 </div>
-
-
-                <div class="col-12 justify-content-end">
-                    <button type="submit" class="btn btn-primary mr-1 mb-1">提交</button>
-                    <button type="reset" class="btn btn-light-secondary mr-1 mb-1">还原</button>
+                <div class="col-12 d-flex justify-content-end">
+                    <button type="submit" class="btn btn-primary">提交</button>
                 </div>
             </div>
         </div>

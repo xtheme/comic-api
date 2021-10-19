@@ -52,7 +52,7 @@
                     <div class="form-group">
                         <label>状态</label>
                         <div class="controls">
-                            <select class="form-control" id="select-status" name="status">
+                            <select class="form-control" name="status">
                                 @foreach ($status_options as $key => $val)
                                     <option value="{{ $key }}">{{ $val }}</option>
                                 @endforeach
@@ -61,8 +61,7 @@
                     </div>
                 </div>
                 <div class="col-12 d-flex justify-content-end">
-                    <button type="submit" class="btn btn-primary mr-1">提交</button>
-                    <button type="reset" class="btn btn-light-secondary">还原</button>
+                    <button type="submit" class="btn btn-primary">提交</button>
                 </div>
             </div>
         </div>

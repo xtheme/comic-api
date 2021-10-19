@@ -24,10 +24,8 @@
                         <table class="table table-striped table-hover">
                             <thead>
                             <tr>
-                                <th>编号</th>
+                                <th>ID</th>
                                 <th>公告标题</th>
-                                <th>公告关键字</th>
-                                <th>新旧版</th>
                                 <th>公告内容</th>
                                 <th>发布时间</th>
                                 <th>操作</th>
@@ -37,13 +35,9 @@
                             @foreach ($list as $item)
                                 <tr>
                                     <td>{{ $item->id }}</td>
-                                    <td>{{ $item->notice_title }}</td>
-                                    <td>{{ $item->notice_keyword }}</td>
-                                    <td>{!! $item->type !!}</td>
-                                    <td>
-                                        <a data-toggle="modal" data-content="{{$item->notice_content}}" data-copy_content="{{$item->copy_content}}"  class="onshowbtn" data-target="#primary" href="javascript:return;">查看公告</a>
-                                    </td>
-                                    <td>{{ date('Y-m-d H:i:s',$item->time)}}</td>
+                                    <td>{{ $item->title }}</td>
+                                    <td>{{ $item->content }}</td>
+                                    <td>{{ $item->created_at }}</td>
                                     <td @if($loop->count == 1)style="position: fixed;"@endif>
                                         <div class="@if(($loop->count - $loop->iteration) < 3){{'dropup'}}@else{{'dropdown'}}@endif">
                                             <span class="bx bx-dots-vertical-rounded font-medium-3 dropdown-toggle nav-hide-arrow cursor-pointer"
@@ -69,46 +63,12 @@
     </section>
 @endsection
 
-<div class="modal fade text-left" id="primary" tabindex="-1" role="dialog"
-     aria-labelledby="myModalLabel160" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable" role="document">
-        <div class="modal-content">
-            <div class="modal-body"></div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-light-secondary" data-dismiss="modal">
-                    <i class="bx bx-x d-block d-sm-none"></i>
-                    <span class="d-none d-sm-block">關閉</span>
-                </button>
-            </div>
-        </div>
-    </div>
-</div>
-
-
 
 {{-- vendor scripts --}}
 @section('vendor-scripts')
-    <script src="{{ asset('vendors/js/extensions/moment.min.js') }}"></script>
-    <script src="{{ asset('vendors/js/extensions/locale/zh-cn.js') }}"></script>
 @endsection
 
 {{-- page scripts --}}
 @section('page-scripts')
-    <script>
-
-        // onShow event
-        $('.onshowbtn').on('click', function () {
-            var content = $(this).data('content')
-            var copy_content = $(this).data('copy_content')
-
-            var data = '';
-            data = '<h4 class="card-title">公告內容</h4>' + content;
-            if (copy_content && copy_content != '' ){
-                data += '<br><br><h4 class="card-title">复制内容</h4>' + copy_content;
-            }
-            $("#primary .modal-body").html(data);
-        });
-
-    </script>
 @endsection
 

@@ -40,7 +40,7 @@
                     <div class="form-group">
                         <label>上架状态</label>
                         <div class="controls">
-                            <select class="form-control" id="select-status" name="status">
+                            <select class="form-control" name="status">
                                 <option value="1">上架</option>
                                 <option value="0">下架</option>
                             </select>

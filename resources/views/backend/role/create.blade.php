@@ -34,8 +34,7 @@
                     </div>
                 @endforeach
                 <div class="col-12 d-flex justify-content-end">
-                    <button type="submit" class="btn btn-primary mr-1 mb-1">提交</button>
-                    <button type="reset" class="btn btn-light-secondary mr-1 mb-1">还原</button>
+                    <button type="submit" class="btn btn-primary">提交</button>
                 </div>
             </div>
         </div>

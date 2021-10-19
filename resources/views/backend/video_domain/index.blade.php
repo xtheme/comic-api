@@ -113,7 +113,7 @@
                 <div class="col-12">
                     <div class="form-group">
                         <label for="select-status">状态</label>
-                        <select class="form-control" id="select-status" name="status">
+                        <select class="form-control" name="status">
                             <option value="">全部</option>
                             @foreach ($status_options as $key => $val)
                                 @if (request()->get('status') == $key)
@@ -126,8 +126,7 @@
                     </div>
                 </div>
                 <div class="col-12 d-flex justify-content-end">
-                    <button type="submit" class="btn btn-primary mr-1 mb-1">搜索</button>
-                    <button type="reset" class="btn btn-light-secondary mr-1 mb-1">重置</button>
+                    <button type="submit" class="btn btn-primary">搜索</button>
                 </div>
             </div>
         </div>

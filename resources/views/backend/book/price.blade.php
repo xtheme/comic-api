@@ -28,12 +28,12 @@
                     </div>
                 </div>
                 <div class="col-12">
-                <div class="alert bg-rgba-warning font-small-3" role="alert">
-                    注意：所有的漫画都会套用此配置
-                </div>
+                    <div class="alert bg-rgba-warning font-small-3" role="alert">
+                        注意：所有的漫画都会套用此配置
+                    </div>
                 </div>
                 <div class="col-12 d-flex justify-content-end">
-                    <button type="submit" class="btn btn-primary mr-1">提交</button>
+                    <button type="submit" class="btn btn-primary">提交</button>
                 </div>
             </div>
         </div>

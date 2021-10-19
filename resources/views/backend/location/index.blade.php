@@ -111,7 +111,7 @@
                 <div class="col-12">
                     <div class="form-group">
                         <label for="select-status">状态</label>
-                        <select class="form-control" id="select-status" name="status">
+                        <select class="form-control" name="status">
                             <option value="">全部</option>
                             {{--                            @foreach ($status_options as $key => $val)--}}
                             {{--                                @if (request()->get('status') == $key)--}}

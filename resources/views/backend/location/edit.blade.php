@@ -73,8 +73,7 @@
                     </div>
                 </div>
                 <div class="col-12 d-flex justify-content-end">
-                    <button type="submit" class="btn btn-primary mr-1">更新</button>
-                    <button type="reset" class="btn btn-light-secondary mr-1">重置</button>
+                    <button type="submit" class="btn btn-primary">更新</button>
                 </div>
             </div>
         </div>
