@@ -69,13 +69,13 @@ Route::as('api.')->middleware(['api'])->group(function () {
 
         // 排行榜
         Route::prefix('ranking')->as('ranking.')->group(function () {
-            Route::get('/day', [Api\RankingController::class, 'day'])->name('day');
-            Route::get('/week', [Api\RankingController::class, 'week'])->name('week');
-            Route::get('/month', [Api\RankingController::class, 'month'])->name('month');
-            Route::get('/year', [Api\RankingController::class, 'year'])->name('year');
-            Route::get('/japan', [Api\RankingController::class, 'japan'])->name('japan');
-            Route::get('/korea', [Api\RankingController::class, 'korea'])->name('korea');
-            Route::get('/latest', [Api\RankingController::class, 'latest'])->name('latest');
+            Route::get('/day/{type?}', [Api\RankingController::class, 'day'])->name('day');
+            Route::get('/week/{type?}', [Api\RankingController::class, 'week'])->name('week');
+            Route::get('/month/{type?}', [Api\RankingController::class, 'month'])->name('month');
+            Route::get('/year/{type?}', [Api\RankingController::class, 'year'])->name('year');
+            Route::get('/japan/{type?}', [Api\RankingController::class, 'japan'])->name('japan');
+            Route::get('/korea/{type?}', [Api\RankingController::class, 'korea'])->name('korea');
+            Route::get('/latest/{type?}', [Api\RankingController::class, 'latest'])->name('latest');
         });
 
         // 客服

@@ -5,7 +5,6 @@ namespace App\Http\Controllers\Api;
 use App\Models\Video;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Response;
-use Record;
 
 class VideoController extends BaseController
 {
@@ -25,25 +24,19 @@ class VideoController extends BaseController
             'series.cdn' => function ($query) {
                 return $query->where('status', 1);
             },
-        ])->withCount(['visit_histories', 'play_histories'])->find($id)->toArray();
+        ])->withCount(['visit_histories', 'play_histories'])->find($id);
 
-        // 數字格式化
+        // todo 數字格式化
         $data['visit_counts'] = shortenNumber($data['visit_histories_count']);
         $data['play_counts'] = (request()->header('platform') == 1) ? $data['play_histories_count'] : shortenNumber($data['play_histories_count']);
 
         // todo 訪問數+1
-        Record::from('video')->visit($id);
+        // $video->increment('view_counts');
+
+        // todo 添加到排行榜
+
 
         return Response::jsonSuccess(__('api.success'), $data);
-    }
-
-    // 紀錄點擊播放
-    public function play($id, $series_id)
-    {
-        // todo 訪問數+1
-        Record::from('video')->play($id, $series_id);
-
-        return Response::jsonSuccess(__('api.success'));
     }
 
     // 猜你喜歡

@@ -2,12 +2,13 @@
 
 namespace App\Models;
 
+use App\Traits\HasRanking;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Spatie\Tags\HasTags;
 
 class Book extends BaseModel
 {
-    use SoftDeletes, HasTags;
+    use SoftDeletes, HasTags, HasRanking;
 
     protected $fillable = [
         'title',

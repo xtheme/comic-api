@@ -27,10 +27,6 @@ class FacadesServiceProvider extends ServiceProvider
             return new Services\UploadService();
         });
 
-        $this->app->bind('RecordService', function () {
-            return new Services\RecordService();
-        });
-
         $this->app->bind('SsoService', function () {
             return new Services\SsoService();
         });

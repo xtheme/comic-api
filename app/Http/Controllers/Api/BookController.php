@@ -6,7 +6,6 @@ use App\Models\Book;
 use App\Models\BookChapter;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Response;
-use Record;
 
 class BookController extends BaseController
 {
@@ -49,7 +48,11 @@ class BookController extends BaseController
         ];
 
         // 訪問數+1
+        // todo 抽離主表, 方便主表緩存, 但不利於查詢排序
         $book->increment('view_counts');
+
+        // 添加到排行榜
+        $book->logRanking();
 
         // 記錄用戶訪問
         if ($request->user()) {
@@ -131,9 +134,6 @@ class BookController extends BaseController
             'price' => $chapter->price,
             'content' => $images,
         ];
-
-        // 记录访问
-        // Record::from('book')->visit($book_id);
 
         return Response::jsonSuccess(__('api.success'), $data);
     }

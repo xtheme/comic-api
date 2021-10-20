@@ -2,18 +2,21 @@
 
 namespace App\Models;
 
-class BookRanking extends BaseModel
+class RankingLog extends BaseModel
 {
     public $timestamps = false;
 
     protected $fillable = [
-        'book_id',
+        'type',
+        'item_model',
+        'item_id',
         'views',
+        'year',
         'month',
     ];
 
     public function book()
     {
-        return $this->hasOne('App\Models\Book', 'id', 'book_id');
+        return $this->hasOne('App\Models\Book', 'id', 'item_id');
     }
 }

@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Models\Book;
-use App\Models\BookRanking;
+use App\Models\RankingLog;
 use Illuminate\Support\Facades\Redis;
 use Illuminate\Support\Facades\Response;
 
@@ -17,91 +17,107 @@ class RankingController extends Controller
 
     public function __construct()
     {
+        // 不過期的數據庫
         $this->redis = Redis::connection('readonly');
     }
 
-    public function day()
+    private function redisTransformation($type, $ids, $raw_data)
     {
-        $redis_key = 'book:ranking:day:' . date('Y:m-d', strtotime('yesterday'));
+        switch ($type) {
+            case 'book':
+            default:
+                $books = Book::with(['tags'])->whereIn('id', $ids)->get();
+
+                $data = $books->map(function($book) use ($raw_data) {
+                    return [
+                        'id' => $book->id,
+                        'title' => $book->title,
+                        'description' => $book->description,
+                        'cover' => $book->vertical_cover,
+                        'tagged_tags' => $book->tagged_tags,
+                        'views' => $raw_data[$book->id],
+                    ];
+                });
+                break;
+        }
+
+        return $data;
+    }
+
+    private function dataTransformation($type, $rankings)
+    {
+        switch ($type) {
+            case 'book':
+            default:
+                $data = $rankings->map(function ($rank) {
+                    return [
+                        'id' => $rank->book->id,
+                        'title' => $rank->book->title,
+                        'description' => $rank->book->description,
+                        'cover' => $rank->book->vertical_cover,
+                        'tagged_tags' => $rank->book->tagged_tags,
+                        'views' => $rank->views,
+                    ];
+                })->toArray();
+                break;
+        }
+
+        return $data;
+    }
+
+    public function day($type = 'book')
+    {
+        // 優先給昨天數據
+        $redis_key = $type . ':ranking:day:' . date('Y:m-d', strtotime('yesterday'));
 
         if (!$this->redis->exists($redis_key)) {
-            $redis_key = 'book:ranking:day:' . date('Y:m-d');
+            $redis_key = $type . ':ranking:day:' . date('Y:m-d');
         }
 
         $raw_data = $this->redis->zrevrange($redis_key, 0, self::LIMIT, ['withscores' => true]);
 
-        $book_ids = collect($raw_data)->keys();
+        $ids = collect($raw_data)->keys();
 
-        $books = Book::with(['tags'])->whereIn('id', $book_ids)->get();
-
-        $data = $books->map(function($book) use ($raw_data) {
-            return [
-                'id' => $book->id,
-                'title' => $book->title,
-                'description' => $book->description,
-                'cover' => $book->vertical_cover,
-                'tags' => $book->tags->pluck('name'),
-                'views' => $raw_data[$book->id],
-            ];
-        });
+        $data = $this->redisTransformation($type, $ids, $raw_data);
 
         return Response::jsonSuccess(__('api.success'), $data);
     }
 
-    public function week()
+    public function week($type = 'book')
     {
-        $redis_key = 'book:ranking:week:' . date('Y:W', strtotime('last week'));
+        // 優先給上週數據
+        $redis_key = $type . ':ranking:week:' . date('Y:W', strtotime('last week'));
 
         if (!$this->redis->exists($redis_key)) {
-            $redis_key = 'book:ranking:week:' . date('Y:W');
+            $redis_key = $type . ':ranking:week:' . date('Y:W');
         }
 
         $raw_data = $this->redis->zrevrange($redis_key, 0, self::LIMIT, ['withscores' => true]);
 
-        $book_ids = collect($raw_data)->keys();
+        $ids = collect($raw_data)->keys();
 
-        $books = Book::with(['tags'])->whereIn('id', $book_ids)->get();
-
-        $data = $books->map(function($book) use ($raw_data) {
-            return [
-                'id' => $book->id,
-                'title' => $book->title,
-                'description' => $book->description,
-                'cover' => $book->vertical_cover,
-                'tags' => $book->tags->pluck('name'),
-                'views' => $raw_data[$book->id],
-            ];
-        });
+        $data = $this->redisTransformation($type, $ids, $raw_data);
 
         return Response::jsonSuccess(__('api.success'), $data);
     }
 
-    public function month()
+    public function month($type = 'book')
     {
-        $redis_key = 'book:ranking:month:' . date('Y-m');
+        $redis_key = $type . ':ranking:month:' . date('Y-m');
 
         $cache = $this->redis->get($redis_key);
 
         if (!$cache) {
-            $rankings = BookRanking::with(['book', 'book.tags'])
-                                   ->selectRaw('book_id, sum(views) as views')
-                                   ->where('year', date('Y'))
-                                   ->where('month', date('m'))
-                                   ->groupBy('book_id')
-                                   ->orderByDesc('views')
-                                   ->limit(self::LIMIT)
-                                   ->get();
+            $rankings = RankingLog::with([$type])
+                                  ->selectRaw('item_id, sum(views) as views')
+                                  ->where('year', date('Y'))
+                                  ->where('month', date('m'))
+                                  ->groupBy('item_id')
+                                  ->orderByDesc('views')
+                                  ->limit(self::LIMIT)
+                                  ->get();
 
-            $data = $rankings->map(function ($rank) {
-                return [
-                    'id' => $rank->book->id,
-                    'title' => $rank->book->title,
-                    'description' => $rank->book->description,
-                    'cover' => $rank->book->vertical_cover,
-                    'tags' => $rank->book->tags->pluck('name'),
-                    'views' => $rank->views,
-                ];
-            })->toArray();
+            $data = $this->dataTransformation($type, $rankings);
 
             $this->redis->set($redis_key, json_encode($data, JSON_UNESCAPED_UNICODE));
             $this->redis->expire($redis_key, self::CACHE_TTL);
@@ -112,31 +128,22 @@ class RankingController extends Controller
         return Response::jsonSuccess(__('api.success'), $data);
     }
 
-    public function year()
+    public function year($type = 'book')
     {
-        $redis_key = 'book:ranking:year:' . date('Y');
+        $redis_key = $type . ':ranking:year:' . date('Y');
 
         $cache = $this->redis->get($redis_key);
 
         if (!$cache) {
-            $rankings = BookRanking::with(['book', 'book.tags'])
-                                   ->selectRaw('book_id, sum(views) as views')
-                                   ->where('year', date('Y'))
-                                   ->groupBy('book_id')
-                                   ->orderByDesc('views')
-                                   ->limit(self::LIMIT)
-                                   ->get();
+            $rankings = RankingLog::with([$type])
+                                  ->selectRaw('item_id, sum(views) as views')
+                                  ->where('year', date('Y'))
+                                  ->groupBy('item_id')
+                                  ->orderByDesc('views')
+                                  ->limit(self::LIMIT)
+                                  ->get();
 
-            $data = $rankings->map(function ($rank) {
-                return [
-                    'id' => $rank->book->id,
-                    'title' => $rank->book->title,
-                    'description' => $rank->book->description,
-                    'cover' => $rank->book->vertical_cover,
-                    'tags' => $rank->book->tags->pluck('name'),
-                    'views' => $rank->views,
-                ];
-            })->toArray();
+            $data = $this->dataTransformation($type, $rankings);
 
             $this->redis->set($redis_key, json_encode($data, JSON_UNESCAPED_UNICODE));
             $this->redis->expire($redis_key, self::CACHE_TTL);
@@ -147,16 +154,16 @@ class RankingController extends Controller
         return Response::jsonSuccess(__('api.success'), $data);
     }
 
-    private function typeRanking($type)
+    private function filterCountry($type, $country)
     {
-        $redis_key = 'book:ranking:' . $type;
+        $redis_key = $type . ':ranking:' . $country;
 
         $cache = $this->redis->get($redis_key);
 
         if (!$cache) {
-            $books = Book::where(function ($query) use ($type) {
-                $type = ($type == 'japan') ? 1 : 2;
-                $query->where('status', 1)->where('type', $type);
+            $books = Book::where(function ($query) use ($country) {
+                $country = ($country == 'japan') ? 1 : 2;
+                $query->where('status', 1)->where('type', $country);
             })->orderByDesc('view_counts')->limit(self::LIMIT)->get();
 
             $data = $books->map(function ($book) {
@@ -165,7 +172,7 @@ class RankingController extends Controller
                     'title' => $book->title,
                     'description' => $book->description,
                     'cover' => $book->vertical_cover,
-                    'tags' => $book->tags->pluck('name'),
+                    'tagged_tags' => $book->tagged_tags,
                     'views' => $book->view_counts,
                     'updated_at' => $book->updated_at->format('Y-m-d'),
                 ];
@@ -180,19 +187,19 @@ class RankingController extends Controller
         return Response::jsonSuccess(__('api.success'), $data);
     }
 
-    public function japan()
+    public function japan($type = 'book')
     {
-        return $this->typeRanking('japan');
+        return $this->filterCountry($type, 'japan');
     }
 
-    public function korea()
+    public function korea($type = 'book')
     {
-        return $this->typeRanking('korea');
+        return $this->filterCountry($type, 'korea');
     }
 
-    public function latest()
+    public function latest($type = 'book')
     {
-        $redis_key = 'book:ranking:latest';
+        $redis_key = $type . ':ranking:latest';
 
         $cache = $this->redis->get($redis_key);
 
@@ -205,7 +212,7 @@ class RankingController extends Controller
                     'title' => $book->title,
                     'description' => $book->description,
                     'cover' => $book->vertical_cover,
-                    'tags' => $book->tags->pluck('name'),
+                    'tagged_tags' => $book->tagged_tags,
                     'views' => $book->view_counts,
                     'updated_at' => $book->updated_at->format('Y-m-d'),
                 ];
