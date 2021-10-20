@@ -39,7 +39,6 @@ class BookController extends BaseController
             'chapters_count' => $book->chapters_count,
             'chapters' => $book->chapters->map(function ($chapter) {
                 return [
-                    // 'book_id' => $chapter->book_id,
                     'chapter_id' => $chapter->id,
                     'episode' => $chapter->episode,
                     'title' => $chapter->title,
@@ -54,7 +53,7 @@ class BookController extends BaseController
 
         // 記錄用戶訪問
         if ($request->user()) {
-            Record::from('book')->visit($id);
+            $request->user()->visit($book);
         }
 
         return Response::jsonSuccess(__('api.success'), $data);
