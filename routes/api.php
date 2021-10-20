@@ -51,11 +51,12 @@ Route::as('api.')->middleware(['api'])->group(function () {
             Route::get('/detail/{id}', [Api\ResumeController::class, 'detail'])->name('detail');
         });
 
-        // 分類標籤
-        Route::prefix('tag')->as('tag.')->group(function () {
-            Route::get('/', [Api\TagController::class, 'list'])->name('list');
-            Route::get('/book/{tag}/{page?}', [Api\TagController::class, 'book'])->name('book');
-            Route::get('/video/{tag}/{page?}', [Api\TagController::class, 'video'])->name('video');
+        // 分類頁
+        Route::prefix('category')->as('category.')->group(function () {
+            Route::get('/tags', [Api\CategoryController::class, 'tags'])->name('tags');
+            Route::post('/search', [Api\CategoryController::class, 'search'])->name('search');
+            // Route::get('/book/{tag}/{page?}', [Api\CategoryController::class, 'book'])->name('book');
+            // Route::get('/video/{tag}/{page?}', [Api\CategoryController::class, 'video'])->name('video');
         });
 
         // 漫畫

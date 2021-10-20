@@ -7,9 +7,20 @@ use App\Models\Tag;
 use App\Models\Video;
 use Illuminate\Support\Facades\Response;
 
-class TagController extends BaseController
+class CategoryController extends BaseController
 {
-    public function list()
+    public function tags()
+    {
+        $tags = Tag::where('suggest', 1)->latest('order_column')->take(100)->get();
+
+        $data = $tags->map(function ($tag) {
+            return $tag->name;
+        })->toArray();
+
+        return Response::jsonSuccess(__('api.success'), $data);
+    }
+
+    public function search()
     {
         $tags = Tag::where('suggest', 1)->latest('order_column')->take(100)->get();
 
