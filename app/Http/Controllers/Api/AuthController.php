@@ -60,26 +60,21 @@ class AuthController extends BaseController
     {
         $input = $request->validated();
 
-        $loginField = filter_var($input['name'], FILTER_VALIDATE_EMAIL) ? 'email' : 'name';
-
         // 檢查用戶名(信箱)是否已被使用
-        if (true === User::where($loginField, strtolower($input['name']))->exists()) {
+        if (true === User::where('name', strtolower($input['name']))->exists()) {
             return Response::jsonError(__('api.register.name.exists'));
         }
 
         $data = [
-            'channel_id' => $request->input('ch'),
-            'name' => ($loginField == 'name') ? $request->input('name') : '',
-            'area' => '',
-            'mobile' => '',
-            'email' => ($loginField == 'email') ? $request->input('name') : '',
+            'channel_id' => $request->input('ch') ?? 0,
+            'name' => $request->input('name'),
             'password' => $request->input('password'),
             'wallet' => getConfig('app', 'register_coin'),
         ];
 
-        $user = User::create($data);
+        User::create($data);
 
-        return Response::jsonSuccess(__('api.success'), $user);
+        return Response::jsonSuccess(__('api.success'));
     }
 
     /**
