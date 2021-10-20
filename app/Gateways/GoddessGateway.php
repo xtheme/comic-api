@@ -4,7 +4,6 @@ namespace App\Gateways;
 
 use App\Models\Order;
 use App\Models\Pricing;
-use App\Services\PaymentService;
 use App\Services\UserService;
 use Illuminate\Support\Facades\DB;
 
@@ -17,9 +16,7 @@ class GoddessGateway extends BaseGateway implements Contracts\GatewayInterface
     // 獲取支付網址
     public function pay(Pricing $plan)
     {
-        $payment_service = app(PaymentService::class);
-
-        $order = $payment_service->createOrder($plan, $this->gateway_id);
+        $order = $this->createOrder($plan);
 
         $data = [
             'channel' => $this->app_id,

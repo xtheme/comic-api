@@ -7,7 +7,6 @@ use App\Http\Requests\Api\PayRequest;
 use App\Models\Order;
 use App\Models\Payment;
 use App\Models\Pricing;
-use App\Services\PaymentService;
 use Gateway;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
@@ -91,7 +90,7 @@ class PaymentController extends Controller
     {
         $input = $request->validated();
         $pricing_id = $input['pricing_id'];
-        $payment_id = $input['gateway_id'];
+        $payment_id = $input['payment_id'];
 
         // 限制用戶每小時訂單數
         $user = $request->user();
@@ -137,7 +136,7 @@ class PaymentController extends Controller
         }
 
         try {
-            $gateway = Payment::where('status', 1)->findOrFail($payment_id);
+            $payment = Payment::where('status', 1)->findOrFail($payment_id);
         } catch (\Exception $e) {
             Log::warning(sprintf('用戶 %s 嘗試調用未開放的支付渠道', $request->user()->id));
 
@@ -149,7 +148,7 @@ class PaymentController extends Controller
         $estimated_amount = $plan->price + $daily_total;
 
         // 檢查渠道今日限額
-        if ($estimated_amount > $gateway->daily_limit) {
+        if ($estimated_amount > $payment->daily_limit) {
             Log::notice(sprintf('渠道 %s 已臨界每日限額', $payment_id));
 
             return Response::jsonError('很抱歉，支付渠道维护中！');
@@ -157,11 +156,10 @@ class PaymentController extends Controller
 
         // 請求支付
         try {
-            $payment_service = app(PaymentService::class);
-            $response = $payment_service->init($gateway)->pay($plan);
+            $response = $payment->initGateway()->pay($plan);
             Cache::increment($cache_key);
         } catch (\Exception $e) {
-            Log::error(sprintf('調用 %s (%s) 支付接口錯誤：%s', $gateway->name, $gateway->id, $e->getMessage()));
+            Log::error(sprintf('調用 %s (%s) 支付接口錯誤：%s', $payment->name, $payment->id, $e->getMessage()));
 
             return Response::jsonError('很抱歉，支付渠道维护中！');
         }
@@ -190,18 +188,31 @@ class PaymentController extends Controller
             return Response::jsonError('订单已回调或不存在！');
         }
 
+        // 調用支付渠道 SDK
+        $gateway = $order->payment->initGateway();
+
+        // 驗證簽名
+        $valid = $gateway->checkSign($request->post());
+
+        if (!$valid) {
+            return Response::jsonError('签名验证失败！');
+        }
+
         // 不同渠道返回格式不同
-        return app(PaymentService::class)->init($order->gateway)->callback($order, $request->post());
+        return $gateway->updateOrder($order, $request->post());
     }
 
     public function mockCallback(Request $request)
     {
         if (config('app.env') == 'local') {
             $order_no = $request->get('order_no') ?? '';
+
             $order = Order::orderNo($order_no)->firstOrFail();
 
-            $payment_service = app(PaymentService::class);
-            $response = $payment_service->init($order->gateway)->mockCallback($order);
+            // 調用支付渠道 SDK
+            $gateway = $order->payment->initGateway();
+
+            $response = $gateway->mockCallback($order);
 
             return $response;
         }

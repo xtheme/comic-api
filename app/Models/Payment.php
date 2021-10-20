@@ -4,17 +4,10 @@ namespace App\Models;
 
 class Payment extends BaseModel
 {
-    protected $fillable = [
-        'name',
-        'url',
-        'fee_percentage',
-        'library',
-        'daily_limit',
-        'min_amount',
-        'max_amount',
-        'pay_options',
-        'order_options',
-        'status',
+    protected $guarded = [
+        'id',
+        'created_at',
+        'updated_at',
     ];
 
     protected $casts = [
@@ -27,13 +20,18 @@ class Payment extends BaseModel
         return $this->belongsToMany(Pricing::class);
     }
 
-    // public function getPriceAttribute($value)
-    // {
-    //     return floatval($value);
-    // }
+    // 調用 SDK
+    public function initGateway()
+    {
+        $sdk = app($this->sdk);
 
-    // public function getPriceAttribute($value)
-    // {
-    //     return floatval($value);
-    // }
+        $sdk->init([
+            'payment_id' => $this->id,
+            'app_id' => $this->app_id,
+            'app_key' => $this->app_key,
+            'pay_options' => $this->pay_options,
+        ]);
+
+        return $sdk;
+    }
 }
