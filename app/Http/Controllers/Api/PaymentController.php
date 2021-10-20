@@ -199,7 +199,12 @@ class PaymentController extends Controller
         }
 
         // 不同渠道返回格式不同
-        return $gateway->updateOrder($order, $request->post());
+        $response = $gateway->updateOrder($order, $request->post());
+
+        // todo 添加每日限額
+        Gateway::incDailyLimit($order->payment_id, $order->amount);
+
+        return  $response;
     }
 
     public function mockCallback(Request $request)
