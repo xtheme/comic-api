@@ -7,33 +7,9 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 
-trait HasRecord
+trait HasRanking
 {
-    public function makeRecord(Model $model) {
 
-    }
-
-    // 紀錄用戶訪問模型 (漫畫/視頻)
-    public function logVisit(Model $model)
-    {
-        $class = get_class($model);
-
-        $type = Str::snake(Str::singular(class_basename($class)));
-
-        $log = UserVisitLog::firstOrCreate([
-            'user_id' => $this->id,
-            'type' => $type,
-            'item_model' => $class,
-            'item_id' => $model->getKey(),
-        ]);
-
-        // 如果不是剛剛創建的則更新 updated_at (影響排序)
-        if (!$log->wasRecentlyCreated) {
-            $log->touch();
-        }
-    }
-
-    //
     // 日排行
     private function daily($id)
     {
