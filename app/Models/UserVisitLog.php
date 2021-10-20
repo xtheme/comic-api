@@ -4,16 +4,13 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Relations\HasOne;
 
-class UserPurchaseLog extends BaseModel
+class UserVisitLog extends BaseModel
 {
     protected $fillable = [
         'user_id',
-        'app_id',
-        'channel_id',
         'type',
         'item_model',
         'item_id',
-        'item_price',
     ];
 
     public function relation(): HasOne
@@ -31,7 +28,7 @@ class UserPurchaseLog extends BaseModel
         return __('model.' . $this->type);
     }
 
-    public function getItemTitleAttribute()
+    public function getItemTitleAttribute(): string
     {
         $item = $this->getItem();
 
@@ -43,7 +40,6 @@ class UserPurchaseLog extends BaseModel
             case 'book_chapter':
                 $title = $item->book->title . ' (第 ' . $item->episode . ' 話)';
                 break;
-
         }
 
         return $title;
