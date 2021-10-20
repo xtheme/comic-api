@@ -4,7 +4,17 @@ namespace App\Models;
 
 class UserPurchaseLog extends BaseModel
 {
-    public function getProduct()
+    protected $fillable = [
+        'user_id',
+        'app_id',
+        'channel_id',
+        'type',
+        'item_model',
+        'item_id',
+        'item_price',
+    ];
+
+    public function getItem()
     {
         return app($this->item_model)->findOrFail($this->item_id);
     }
@@ -12,6 +22,9 @@ class UserPurchaseLog extends BaseModel
     public function getEventAttribute()
     {
         switch ($this->type) {
+            case 'book':
+                $event = '漫画';
+                break;
             case 'book_chapter':
                 $event = '漫画章节';
                 break;
@@ -25,15 +38,17 @@ class UserPurchaseLog extends BaseModel
 
     public function getItemTitleAttribute()
     {
-        $product = $this->getProduct();
+        $item = $this->getItem();
 
         switch ($this->type) {
-            case 'book_chapter':
-                $title = $product->book->title . ' (第 ' . $product->episode . ' 話)';
-                break;
             case 'video':
-                $title = $product->title;
+            case 'book':
+                $title = $item->title;
                 break;
+            case 'book_chapter':
+                $title = $item->book->title . ' (第 ' . $item->episode . ' 話)';
+                break;
+
         }
 
         return $title;

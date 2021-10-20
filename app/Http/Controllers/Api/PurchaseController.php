@@ -7,6 +7,7 @@ use App\Models\BookChapter;
 use App\Models\Video;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Response;
+use Illuminate\Support\Str;
 
 class PurchaseController extends Controller
 {
@@ -22,23 +23,18 @@ class PurchaseController extends Controller
         $type = $request->input('type');
         $item_id = $request->input('item_id');
 
-        switch ($type) {
-            case 'book_chapter':
-                $product = BookChapter::findOrFail($item_id);
-                break;
-            case 'video':
-                $product = Video::findOrFail($item_id);
-                break;
-        }
+        $item_model = '\\App\\Models\\' . Str::studly($type);
+
+        $product = app($item_model)::findOrFail($item_id);
 
         try {
-            $product->purchase();
+            $request->user()->purchase($product);
         } catch (\Exception $e) {
             return Response::jsonError($e->getMessage());
         }
 
         $response = [
-            'wallet' => $request->user()->wallet,
+            'wallet' => $request->user()->getWallet(),
         ];
 
         return Response::jsonSuccess(__('api.success'), $response);
