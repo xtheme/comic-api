@@ -183,7 +183,7 @@ return [
         App\Providers\MenuServiceProvider::class,
         App\Providers\RepositoryServiceProvider::class,
         App\Providers\FacadesServiceProvider::class,
-        App\Providers\PayServiceProvider::class,
+        App\Providers\GatewayServiceProvider::class, // 註冊支付渠道 SDK
     ],
 
     /*

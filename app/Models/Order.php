@@ -54,13 +54,4 @@ class Order extends BaseModel
         return $this->payment()->first();
     }
 
-    // 判斷是否為首存
-    // public function setFirstAttribute()
-    // {
-    //     $count = self::whereDate('created_at', date('Y-m-d'))->count();
-    //
-    //     $order_no = date('ymd') . str_pad((string) ($count + 1), 5, '0', STR_PAD_LEFT) . rand(10, 99);
-    //
-    //     return $order_no;
-    // }
 }

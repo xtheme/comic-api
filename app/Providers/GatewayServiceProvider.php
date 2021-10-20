@@ -5,7 +5,7 @@ namespace App\Providers;
 use App\Gateways;
 use Illuminate\Support\ServiceProvider;
 
-class PayServiceProvider extends ServiceProvider
+class GatewayServiceProvider extends ServiceProvider
 {
     /**
      * Register services.

@@ -64,7 +64,7 @@ class PaymentController extends Controller
             // 排除停用渠道
             return $gateway->status == 0;
         })->reject(function ($gateway) {
-            // 排除每日限額已達上限
+            // todo 排除每日限額已達上限
             $daily_total = Gateway::getDailyLimit($gateway->id);
 
             return $daily_total >= $gateway->daily_limit;
@@ -90,8 +90,8 @@ class PaymentController extends Controller
     public function pay(PayRequest $request)
     {
         $input = $request->validated();
-        $plan_id = $input['plan_id'];
-        $gateway_id = $input['gateway_id'];
+        $pricing_id = $input['pricing_id'];
+        $payment_id = $input['gateway_id'];
 
         // 限制用戶每小時訂單數
         $user = $request->user();
@@ -122,7 +122,7 @@ class PaymentController extends Controller
         }
 
         try {
-            $plan = Pricing::where('status', 1)->findOrFail($plan_id);
+            $plan = Pricing::where('status', 1)->findOrFail($pricing_id);
         } catch (\Exception $e) {
             Log::warning(sprintf('用戶 %s 嘗試調用未開放的支付方案', $request->user()->id));
 
@@ -130,27 +130,27 @@ class PaymentController extends Controller
         }
 
         // 檢查方案是否允許使用以下支付渠道
-        if (!in_array($gateway_id, $plan->gateway_ids)) {
+        if (!in_array($payment_id, $plan->gateway_ids)) {
             Log::warning(sprintf('用戶 %s 嘗試調用支付方案不支援的渠道', $request->user()->id));
 
             return Response::jsonError('很抱歉，支付渠道维护中！');
         }
 
         try {
-            $gateway = Payment::where('status', 1)->findOrFail($gateway_id);
+            $gateway = Payment::where('status', 1)->findOrFail($payment_id);
         } catch (\Exception $e) {
             Log::warning(sprintf('用戶 %s 嘗試調用未開放的支付渠道', $request->user()->id));
 
             return Response::jsonError('很抱歉，支付渠道维护中！');
         }
 
-        // 獲取渠道限額
-        $daily_total = Gateway::getDailyLimit($gateway_id);
+        // todo 獲取渠道限額
+        $daily_total = Gateway::getDailyLimit($payment_id);
         $estimated_amount = $plan->price + $daily_total;
 
         // 檢查渠道今日限額
         if ($estimated_amount > $gateway->daily_limit) {
-            Log::notice(sprintf('渠道 %s 已臨界每日限額', $gateway_id));
+            Log::notice(sprintf('渠道 %s 已臨界每日限額', $payment_id));
 
             return Response::jsonError('很抱歉，支付渠道维护中！');
         }
