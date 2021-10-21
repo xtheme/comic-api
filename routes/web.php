@@ -94,6 +94,8 @@ Route::middleware(['auth', 'auth.route.role', 'log.activity'])->prefix('backend'
         Route::get('/', [Backend\TagController::class, 'index'])->name('index');
         Route::get('create', [Backend\TagController::class , 'create'])->name('create');
         Route::post('store', [Backend\TagController::class , 'store'])->name('store');
+        Route::get('edit/{id}', [Backend\TagController::class , 'edit'])->name('edit');
+        Route::put('update/{id}', [Backend\TagController::class , 'update'])->name('update');
         Route::put('batch/{action?}', [Backend\TagController::class, 'batch'])->name('batch');
         Route::put('editable/{field}', [Backend\TagController::class, 'editable'])->name('editable');
         Route::delete('destroy/{name}', [Backend\TagController::class , 'destroy'])->name('destroy');

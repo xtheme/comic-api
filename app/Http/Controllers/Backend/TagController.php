@@ -71,6 +71,31 @@ class TagController extends Controller
         return Response::jsonSuccess(__('response.create.success'));
     }
 
+    public function edit($id)
+    {
+        $data = [
+            'status_options' => self::STATUS_OPTIONS,
+            'categories' => Category::where('status', 1)->get(),
+        ];
+
+        return view('backend.category.edit')->with($data);
+    }
+
+    public function update(Request $request, $id)
+    {
+        $category = Category::findOrFail($id);
+
+        $is_duplicate = Category::where('id', '!=', $id)->where('type', $request->input('type'))->exists();
+
+        if ($is_duplicate) {
+            return Response::jsonError('标签分类代号已经存在！');
+        }
+
+        $category->update($request->input());
+
+        return Response::jsonSuccess(__('response.update.success'));
+    }
+
     public function editable(Request $request, $field)
     {
         $data = [
