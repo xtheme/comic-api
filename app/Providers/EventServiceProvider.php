@@ -33,6 +33,5 @@ class EventServiceProvider extends ServiceProvider
         Models\Order::observe(Observers\OrderObserver::class);
         Models\User::observe(Observers\UserObserver::class);
         Models\Video::observe(Observers\VideoObserver::class);
-        Models\VideoSeries::observe(Observers\VideoSeriesObserver::class);
     }
 }
