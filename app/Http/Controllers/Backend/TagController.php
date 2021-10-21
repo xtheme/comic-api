@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Backend;
 
+use App\Models\Category;
 use App\Models\Tag;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
@@ -42,6 +43,7 @@ class TagController extends Controller
     {
         $data = [
             'status_options' => self::STATUS_OPTIONS,
+            'categories' => Category::where('status', 1)->get(),
         ];
 
         return view('backend.tag.create')->with($data);

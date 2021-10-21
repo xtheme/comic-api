@@ -38,7 +38,6 @@
                                     <td>{{ $item->name }}</td>
                                     <td>{{ $item->type }}</td>
                                     <td>
-                                    <td>
                                         @if(!$item->status)
                                             <span class="badge badge-pill badge-light-danger">{{ $status_options[$item->status] }}</span>
                                         @else

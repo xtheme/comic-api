@@ -1,7 +1,6 @@
 @extends('layouts.modal')
 
 @section('vendor-styles')
-    <link rel="stylesheet" type="text/css" href="{{ asset('vendors/css/bootstrap-multiselect/bootstrap-multiselect.css') }}">
 @endsection
 
 @section('page-styles')
@@ -13,6 +12,18 @@
             <div class="row">
                 <div class="col-12">
                     <div class="form-group">
+                        <label>分类</label>
+                        <div class="controls">
+                            <select class="form-control" name="type">
+                                @foreach ($categories as $category)
+                                    <option value="{{ $category->type }}">{{ $category->name }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-12">
+                    <div class="form-group">
                         <label>添加标签</label>
                         <div class="controls">
                             <input type="text" class="form-control" name="name">
@@ -21,18 +32,10 @@
                 </div>
                 <div class="col-12">
                     <div class="form-group">
-                        <label>添加描述</label>
-                        <div class="controls">
-                            <input type="text" class="form-control" name="description">
-                        </div>
-                    </div>
-                </div>
-                <div class="col-12">
-                    <div class="form-group">
                         <span class="float-right font-size-small text-light">(数字由大到小排序)</span>
                         <label>排序</label>
                         <div class="controls">
-                            <input type="text" class="form-control" name="priority" placeholder="请输入排序">
+                            <input type="text" class="form-control" name="order_column" placeholder="请输入排序">
                         </div>
                     </div>
                 </div>
@@ -58,14 +61,12 @@
 
 {{-- vendor scripts --}}
 @section('vendor-scripts')
-    <script src="{{ asset('vendors/js/bootstrap-multiselect/bootstrap-multiselect.js') }}"></script>
 @endsection
 
 {{-- page scripts --}}
 @section('page-scripts')
     <script>
 		$(document).ready(function () {
-
 			$('#form').submit(function (e) {
 				e.preventDefault();
 
@@ -75,7 +76,7 @@
 					data    : $(this).serialize(),
 					debug: true,
 					callback: function (res) {
-						if (res.code == 200) {
+						if (res.code === 200) {
 							// iframe.blade.php
 							parent.$.hideModal();
 

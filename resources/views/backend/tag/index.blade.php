@@ -1,7 +1,7 @@
 @extends('layouts.iframePage')
 
 {{-- page Title --}}
-@section('title','标签分类')
+@section('title','标签设置')
 
 {{-- vendor style --}}
 @section('vendor-styles')
@@ -11,7 +11,7 @@
 @section('content')
     <section>
         <div class="mb-1">
-            <a href=" {{ route('backend.tag.create') }}" data-modal data-size="sm" data-height="30vh" title="添加标签" class="btn btn-primary glow">添加标签</a>
+            <a href=" {{ route('backend.tag.create') }}" data-modal data-size="sm" data-height="40vh" title="添加标签" class="btn btn-primary glow">添加标签</a>
         </div>
         <div class="card">
             <div class="card-header">
@@ -52,7 +52,8 @@
                                     </div>
                                 </th>
                                 <th>排序</th>
-                                <th>分类名称</th>
+                                <th>分类</th>
+                                <th>标签</th>
                                 <th class="text-right">查询次数</th>
                                 <th class="text-center">前端显示</th>
                                 <th class="text-center">关联漫画数</th>
@@ -73,9 +74,11 @@
                                         <span data-type="text" data-pk="{{ $tag->name }}" data-title="修改排序" class="editable editable-click" data-url="{{ route('backend.tag.editable', 'order_column') }}">{{ $tag->order_column }}</span>
                                     </td>
                                     <td>
+                                        {{ $tag->category_name }}
+                                    </td>
+                                    <td>
                                         <span data-type="text" data-pk="{{ $tag->name }}" data-title="修改名称" class="editable editable-click" data-url="{{ route('backend.tag.editable', 'name') }}">{{ $tag->name }}</span>
                                     </td>
-
                                     <td class="text-right">{{ shortenNumber($tag->queries) }}</td>
                                     <td class="text-center">
                                         @switch($tag->suggest)

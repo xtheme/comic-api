@@ -13,4 +13,14 @@ class Tag extends \Spatie\Tags\Tag
     {
         return $this->hasMany('App\Models\Taggable', 'tag_id', 'id')->where('taggable_type', 'App\Models\Video');
     }
+
+    public function category()
+    {
+        return $this->hasOne('App\Models\Category', 'type', 'type');
+    }
+
+    public function getCategoryNameAttribute()
+    {
+        return $this->category->name;
+    }
 }
