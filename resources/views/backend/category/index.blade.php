@@ -50,8 +50,9 @@
                                             <span class="bx bx-dots-vertical-rounded font-medium-3 dropdown-toggle nav-hide-arrow cursor-pointer"
                                                   id="dropdownMenuButton{{ $item->id }}" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></span>
                                             <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuButton{{ $item->id }}">
-                                                <a class="dropdown-item" data-modal data-size="sm" data-height="30vh" href="{{ route('backend.category.edit', $item->id) }}" title="修改公告"><i class="bx bx-edit-alt mr-1"></i> 修改</a>
-                                                <a class="dropdown-item" data-destroy type="delete" href="{{ route('backend.category.destroy', $item->id) }}" title="刪除公告"><i class="bx bx-trash mr-1"></i>刪除</a>
+                                                <a class="dropdown-item" data-modal data-size="full" href="{{ route('backend.category.editTags', $item->id) }}" title="修改标签"><i class="bx bx-edit-alt mr-1"></i> 标签</a>
+                                                <a class="dropdown-item" data-modal data-size="sm" data-height="30vh" href="{{ route('backend.category.edit', $item->id) }}" title="修改分类"><i class="bx bx-edit-alt mr-1"></i> 修改</a>
+                                                <a class="dropdown-item" data-destroy type="delete" href="{{ route('backend.category.destroy', $item->id) }}" title="刪除分类"><i class="bx bx-trash mr-1"></i>刪除</a>
                                             </div>
                                         </div>
                                     </td>

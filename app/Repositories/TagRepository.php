@@ -32,7 +32,7 @@ class TagRepository extends Repository implements TagRepositoryInterface
         $tagged_book = $request->get('tagged_book') ?? '';
         $tagged_video = $request->get('tagged_video') ?? '';
 
-        return $this->model::with(['tagged_book', 'tagged_video'])->withCount(['tagged_book', 'tagged_video'])->when($keyword, function (Builder $query, $keyword) {
+        return $this->model::with(['tagged_book', 'tagged_video', 'category'])->withCount(['tagged_book', 'tagged_video'])->when($keyword, function (Builder $query, $keyword) {
             return $query->where('name', 'like', '%' . $keyword . '%')
                 ->orWhere('slug', 'like', '%' . $keyword . '%');
         })->when($suggest, function (Builder $query, $suggest) {

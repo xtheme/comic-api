@@ -21,6 +21,6 @@ class Tag extends \Spatie\Tags\Tag
 
     public function getCategoryNameAttribute()
     {
-        return $this->category->name;
+        return $this->category->name ?? '';
     }
 }

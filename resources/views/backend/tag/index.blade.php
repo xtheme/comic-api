@@ -1,7 +1,7 @@
 @extends('layouts.iframePage')
 
 {{-- page Title --}}
-@section('title','标签设置')
+@section('title','标签统计')
 
 {{-- vendor style --}}
 @section('vendor-styles')
@@ -10,9 +10,9 @@
 
 @section('content')
     <section>
-        <div class="mb-1">
-            <a href=" {{ route('backend.tag.create') }}" data-modal data-size="sm" data-height="40vh" title="添加标签" class="btn btn-primary glow">添加标签</a>
-        </div>
+{{--        <div class="mb-1">--}}
+{{--            <a href=" {{ route('backend.tag.create') }}" data-modal data-size="sm" data-height="40vh" title="添加标签" class="btn btn-primary glow">添加标签</a>--}}
+{{--        </div>--}}
         <div class="card">
             <div class="card-header">
                 <div class="float-left">
@@ -71,13 +71,13 @@
                                         </div>
                                     </td>
                                     <td>
-                                        <span data-type="text" data-pk="{{ $tag->name }}" data-title="修改排序" class="editable editable-click" data-url="{{ route('backend.tag.editable', 'order_column') }}">{{ $tag->order_column }}</span>
+                                        <span data-type="text" data-pk="{{ $tag->name }}-{{ $tag->type }}" data-title="修改排序" class="editable editable-click" data-url="{{ route('backend.tag.editable', 'order_column') }}">{{ $tag->order_column }}</span>
                                     </td>
                                     <td>
                                         {{ $tag->category_name }}
                                     </td>
                                     <td>
-                                        <span data-type="text" data-pk="{{ $tag->name }}" data-title="修改名称" class="editable editable-click" data-url="{{ route('backend.tag.editable', 'name') }}">{{ $tag->name }}</span>
+                                        <span data-type="text" data-pk="{{ $tag->name }}-{{ $tag->type }}" data-title="修改名称" class="editable editable-click" data-url="{{ route('backend.tag.editable', 'name') }}">{{ $tag->name }}</span>
                                     </td>
                                     <td class="text-right">{{ shortenNumber($tag->queries) }}</td>
                                     <td class="text-center">

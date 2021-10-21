@@ -112,7 +112,14 @@ class TagController extends Controller
             return Response::jsonError($validator->errors()->first(), 500);
         }
 
-        $tag = Tag::findFromString($request->post('pk'));
+        list($tag_name, $tag_type) = explode('-', $request->post('pk'));
+
+        if ($tag_type) {
+            $tag = Tag::findFromString($tag_name, $tag_type);
+        } else {
+            $tag = Tag::findFromString($tag_name);
+        }
+
 
         // QZMHS-1110 新增标签限制4哥汉字
         if ($field == 'name') {

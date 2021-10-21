@@ -87,6 +87,8 @@ Route::middleware(['auth', 'auth.route.role', 'log.activity'])->prefix('backend'
         Route::get('edit/{id}', [Backend\CategoryController::class , 'edit'])->name('edit');
         Route::put('update/{id}', [Backend\CategoryController::class , 'update'])->name('update');
         Route::delete('destroy/{id}', [Backend\CategoryController::class , 'destroy'])->name('destroy');
+        Route::get('editTags/{id}', [Backend\CategoryController::class , 'editTags'])->name('editTags');
+        Route::put('updateTags/{id}', [Backend\CategoryController::class , 'updateTags'])->name('updateTags');
     });
 
     // 標籤

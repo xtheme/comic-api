@@ -5,41 +5,25 @@
 @endsection
 
 @section('content')
-    <form id="form" class="form" method="post" action="{{ route('backend.config.update', $config->id) }}" novalidate>
-        @method('PUT')
+    <form id="form" class="form" method="post" action="{{ route('backend.category.updateTags', $category->id) }}" novalidate>
+        @method('put')
         <div class="form-body">
             <div class="row">
                 <div class="col-12">
                     <div class="form-group">
-                        <label><span class="danger">*</span> 配置描述</label>
-                        <div class="controls">
-                            <input type="text" class="form-control" name="name" placeholder="配置描述" value="{{ $config->name }}">
-                        </div>
-                    </div>
-                </div>
-                <div class="col-12">
-                    <div class="form-group">
-                        <label><span class="danger">*</span> 配置代号</label>
-                        <div class="controls">
-                            <input type="text" class="form-control" name="code" placeholder="配置代号" value="{{ $config->code }}">
-                        </div>
-                    </div>
-                </div>
-                <div class="col-12">
-                    <div class="form-group">
-                        <label><span class="danger">*</span> 配置項</label>
+                        <label>标签</label>
                         <div class="controls repeater">
-                            <div data-repeater-list="options">
-                                @forelse ($config->options as $key => $value)
-                                    <div data-repeater-item>
+                            <div data-repeater-list="tags" class="row">
+                                @forelse ($tags as $tag)
+                                    <div data-repeater-item class="col-3">
                                         <div class="row">
-                                            <div class="col-3 form-group">
-                                                <input type="text" class="form-control" name="key" placeholder="配置键" value="{{ $key }}">
+                                            <div class="col-10">
+                                                <div class="form-group">
+                                                    <input type="hidden" name="name" value="{{ $tag->name }}">
+                                                    <input type="text" class="form-control" name="new_name" value="{{ $tag->name }}">
+                                                </div>
                                             </div>
-                                            <div class="col-8 form-group">
-                                                <input type="text" class="form-control" name="value" placeholder="配置值" value="{{ $value }}">
-                                            </div>
-                                            <div class="col-1 form-group">
+                                            <div class="col-2">
                                                 <button class="btn btn-danger text-nowrap px-1" data-repeater-delete type="button">
                                                     <i class="bx bx-x"></i>
                                                 </button>
@@ -47,15 +31,15 @@
                                         </div>
                                     </div>
                                 @empty
-                                    <div data-repeater-item>
+                                    <div data-repeater-item class="col-3">
                                         <div class="row">
-                                            <div class="col-3 form-group">
-                                                <input type="text" class="form-control" name="key" placeholder="配置键">
+                                            <div class="col-10">
+                                                <div class="form-group">
+                                                    <input type="hidden" name="name" value="">
+                                                    <input type="text" class="form-control" name="new_name" value="">
+                                                </div>
                                             </div>
-                                            <div class="col-8 form-group">
-                                                <input type="text" class="form-control" name="value" placeholder="配置值">
-                                            </div>
-                                            <div class="col-1 form-group">
+                                            <div class="col-2">
                                                 <button class="btn btn-danger text-nowrap px-1" data-repeater-delete type="button">
                                                     <i class="bx bx-x"></i>
                                                 </button>
@@ -65,7 +49,7 @@
                                 @endforelse
                             </div>
                             <button class="btn btn-primary" data-repeater-create type="button"><i class="bx bx-plus"></i>
-                                添加配置项
+                                添加标签
                             </button>
                         </div>
                     </div>
@@ -92,7 +76,7 @@
 					$(this).slideDown();
 				},
 				hide: function (deleteElement) {
-					if (confirm('是否确定要删除此配置项？')) {
+					if (confirm('是否确定要删除此标签？删除标签会同时从关联的项目中移除！')) {
 						$(this).slideUp(deleteElement);
 					}
 				}
@@ -100,13 +84,14 @@
 
 			$('#form').submit(function (e) {
 				e.preventDefault();
-                $.request({
+
+				$.request({
 					url     : $(this).attr('action'),
 					type    : $(this).attr('method'),
-					data    : $('#form').serialize(),
-					debug: true,
+					data    : $(this).serialize(),
+					// debug: true,
 					callback: function (res) {
-                        if (res.code == 200) {
+                        if (res.code === 200) {
                             // iframe.blade.php
                             parent.$.hideModal();
 
@@ -128,4 +113,3 @@
 		});
     </script>
 @endsection
-

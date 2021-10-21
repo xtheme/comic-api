@@ -9,4 +9,9 @@ class Category extends BaseModel
         'created_at',
         'updated_at',
     ];
+
+    public function tags()
+    {
+        return $this->hasMany('App\Models\Tag', 'type', 'type');
+    }
 }

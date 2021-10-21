@@ -95,7 +95,7 @@
                                         @endif
                                     </td>
                                     <td>
-                                        <img src="{{ $book->vertical_cover }}" alt="" width="38" height="50">
+                                        <img class="cursor-pointer" data-lightbox alt="点击查看大图" src="{{ $book->vertical_cover }}" width="38" height="50">
                                     </td>
                                     <td>{{ $book->author }}</td>
                                     <td>{{ $book->type }}</td>
