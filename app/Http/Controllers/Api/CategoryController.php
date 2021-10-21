@@ -3,9 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Models\Book;
-use App\Models\Pricing;
 use App\Models\Tag;
-use App\Models\Video;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Response;
@@ -23,6 +21,7 @@ class CategoryController extends BaseController
         return Response::jsonSuccess(__('api.success'), $data);
     }
 
+    // todo composer require protonemedia/laravel-cross-eloquent-search
     public function search(Request $request)
     {
         $type = $request->post('type') ?? 'book';
@@ -36,7 +35,6 @@ class CategoryController extends BaseController
                 $data = $this->searchBook($request);
                 break;
         }
-
 
         $data = $data->map(function ($item) {
             return [
@@ -67,6 +65,7 @@ class CategoryController extends BaseController
             return $query->where('title', 'like', '%' . $keyword . '%')->orWhere('author', 'like', '%' . $keyword . '%');
         })->when($tag, function (Builder $query, $tag) {
             $tag = explode(',', $tag);
+
             return $query->withAnyTags($tag);
         })->when($end, function (Builder $query, $end) {
             return $query->where('end', $end);

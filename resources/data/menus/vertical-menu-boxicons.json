@@ -57,6 +57,10 @@
                     "name": "Navigation"
                 },
                 {
+                    "url": "/backend/category",
+                    "name": "Categories"
+                },
+                {
                     "url": "/backend/tag",
                     "name": "Tags"
                 },

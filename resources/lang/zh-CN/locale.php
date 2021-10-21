@@ -28,6 +28,7 @@ return [
 
     "Homepage" => "首页配置",
     "Navigation" => "导航推荐",
+    "Categories" => "标签分类",
     "Tags" => "标签设定",
     "Topics" => "主题区块",
 

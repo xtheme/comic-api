@@ -79,7 +79,17 @@ Route::middleware(['auth', 'auth.route.role', 'log.activity'])->prefix('backend'
         Route::put('callback/{id}', [Backend\OrderController::class, 'callback'])->name('callback'); // 第三方更改訂單狀態失效時手動回調
     });
 
-    // 漫画分类
+    // 分类
+    Route::prefix('category')->as('category.')->group(function () {
+        Route::get('/', [Backend\CategoryController::class , 'index'])->name('index');
+        Route::get('create', [Backend\CategoryController::class , 'create'])->name('create');
+        Route::post('store', [Backend\CategoryController::class , 'store'])->name('store');
+        Route::get('edit/{id}', [Backend\CategoryController::class , 'edit'])->name('edit');
+        Route::put('update/{id}', [Backend\CategoryController::class , 'update'])->name('update');
+        Route::delete('destroy/{id}', [Backend\CategoryController::class , 'destroy'])->name('destroy');
+    });
+
+    // 標籤
     Route::prefix('tag')->as('tag.')->group(function () {
         Route::get('/', [Backend\TagController::class, 'index'])->name('index');
         Route::get('create', [Backend\TagController::class , 'create'])->name('create');
@@ -114,13 +124,6 @@ Route::middleware(['auth', 'auth.route.role', 'log.activity'])->prefix('backend'
         Route::put('update/{chapter_id}', [Backend\BookChapterController::class , 'update'])->name('update');
         Route::put('batch/{action?}', [Backend\BookChapterController::class, 'batch'])->name('batch'); // 批量操作
         Route::put('editable/{field}', [Backend\BookChapterController::class, 'editable'])->name('editable');
-    });
-
-    // 意見反饋
-    Route::prefix('feedback')->as('feedback.')->group(function () {
-        Route::get('/', [Backend\FeedbackController::class , 'index'])->name('index');
-        Route::delete('destroy/{id}', [Backend\FeedbackController::class , 'destroy'])->name('destroy');
-        Route::post('batch/destroy', [Backend\FeedbackController::class, 'batchDestroy'])->name('batch_destroy');
     });
 
     // 支付方案
