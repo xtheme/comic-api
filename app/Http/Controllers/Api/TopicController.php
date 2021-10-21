@@ -21,14 +21,14 @@ class TopicController extends BaseController
             case 'video':
                 $list = $topic->query_result->map(function ($item) {
                     return [
-                        'id'                    => $item->id,
-                        'title'                 => $item->title,
-                        'author'                => $item->author,
-                        'cover'                 => $item->cover,
-                        'tagged_tags'           => $item->tagged_tags,
-                        'ribbon'                => $item->ribbon,
-                        'visit_counts' => shortenNumber($item->visit_histories_count),
-                        'play_counts'  => (request()->header('platform') == 1) ? $item->play_histories_count : shortenNumber($item->play_histories_count),
+                        'id' => $item->id,
+                        'title' => $item->title,
+                        'author' => $item->author,
+                        'cover' => $item->cover,
+                        'tagged_tags' => $item->tagged_tags,
+                        // 'ribbon' => $item->ribbon,
+                        // 'visit_counts' => shortenNumber($item->visit_histories_count),
+                        // 'play_counts' => (request()->header('platform') == 1) ? $item->play_histories_count : shortenNumber($item->play_histories_count),
                     ];
                 })->toArray();
                 break;
@@ -37,12 +37,12 @@ class TopicController extends BaseController
                 $row = $topic->row;
                 $list = $topic->query_result->map(function ($item) use ($row) {
                     return [
-                        'id'                    => $item->id,
-                        'title'                 => $item->title,
-                        'author'                => $item->author,
-                        'cover'                 => ($row > 2) ? $item->horizontal_cover : $item->vertical_cover,
-                        'tagged_tags'           => $item->tagged_tags,
-                        'visit_counts' => shortenNumber($item->visit_histories_count),
+                        'id' => $item->id,
+                        'title' => $item->title,
+                        'author' => $item->author,
+                        'cover' => ($row > 2) ? $item->horizontal_cover : $item->vertical_cover,
+                        'tagged_tags' => $item->tagged_tags,
+                        // 'visit_counts' => shortenNumber($item->visit_histories_count),
                     ];
                 })->toArray();
                 break;
@@ -62,13 +62,13 @@ class TopicController extends BaseController
 
         $data = $topics->map(function ($topic) {
             return [
-                'topic'     => $topic->id,
-                'causer'    => $topic->causer,
-                'title'     => $topic->title,
-                'tags'      => $topic->properties['tag'] ?? [],
+                'topic' => $topic->id,
+                'causer' => $topic->causer,
+                'title' => $topic->title,
+                'tags' => $topic->properties['tag'] ?? [],
                 'spotlight' => $topic->spotlight,
-                'per_line'  => $topic->row,
-                'list'      => $this->arrangeData($topic),
+                'per_line' => $topic->row,
+                'list' => $this->arrangeData($topic),
                 // 'list'      => $topic->query_result,
             ];
         });
@@ -92,14 +92,14 @@ class TopicController extends BaseController
             case 'video':
                 $list = $list->map(function ($item) {
                     return [
-                        'id'                    => $item->id,
-                        'title'                 => $item->title,
-                        'author'                => $item->author,
-                        'cover'                 => $item->cover,
-                        'tagged_tags'           => $item->tagged_tags,
-                        'ribbon'                => $item->ribbon,
-                        'visit_counts' => shortenNumber($item->visit_histories_count),
-                        'play_counts'  => (request()->header('platform') == 1) ? $item->play_histories_count : shortenNumber($item->play_histories_count),
+                        'id' => $item->id,
+                        'title' => $item->title,
+                        'author' => $item->author,
+                        'cover' => $item->cover,
+                        'tagged_tags' => $item->tagged_tags,
+                        // 'ribbon' => $item->ribbon,
+                        // 'visit_counts' => shortenNumber($item->visit_histories_count),
+                        // 'play_counts' => (request()->header('platform') == 1) ? $item->play_histories_count : shortenNumber($item->play_histories_count),
                     ];
                 })->toArray();
                 break;
@@ -108,25 +108,25 @@ class TopicController extends BaseController
                 $row = $topic->row;
                 $list = $list->map(function ($item) use ($row) {
                     return [
-                        'id'                    => $item->id,
-                        'title'                 => $item->title,
-                        'author'                => $item->author,
-                        'cover'                 => ($row > 2) ? $item->horizontal_thumb : $item->vertical_thumb,
-                        'tagged_tags'           => $item->tagged_tags,
-                        'visit_counts' => shortenNumber($item->visit_histories_count),
+                        'id' => $item->id,
+                        'title' => $item->title,
+                        'author' => $item->author,
+                        'cover' => ($row > 2) ? $item->horizontal_thumb : $item->vertical_thumb,
+                        'tagged_tags' => $item->tagged_tags,
+                        // 'visit_counts' => shortenNumber($item->visit_histories_count),
                     ];
                 })->toArray();
                 break;
         }
 
         $data = [
-            'topic'      => $topic_id,
-            'title'      => $topic->title,
-            'tags'       => $topic->properties['tag'] ?? [],
-            'per_page'   => $per_page,
+            'topic' => $topic_id,
+            'title' => $topic->title,
+            'tags' => $topic->properties['tag'] ?? [],
+            'per_page' => $per_page,
             'total_page' => $total_page,
-            'page'       => $page,
-            'list'       => $list,
+            'page' => $page,
+            'list' => $list,
         ];
 
         return Response::jsonSuccess(__('api.success'), $data);

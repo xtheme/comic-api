@@ -204,6 +204,8 @@ class PaymentController extends Controller
         // todo 添加每日限額
         Gateway::incDailyLimit($order->payment_id, $order->amount);
 
+        // todo 建立財報紀錄
+
         return  $response;
     }
 

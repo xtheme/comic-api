@@ -44,9 +44,9 @@ class Book extends BaseModel
     /**
      * 訪問關聯
      */
-    public function visit_histories()
+    public function visit_logs()
     {
-        return $this->hasMany('App\Models\UserVisitBook');
+        return $this->hasMany('App\Models\UserVisitLog');
     }
 
     /**

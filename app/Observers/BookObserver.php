@@ -37,8 +37,8 @@ class BookObserver
     public function deleted(Book $book)
     {
         $book->chapters()->delete();
-        $book->visit_histories()->delete();
-        $book->favorite_histories()->delete();
+        $book->visit_logs()->delete();
+        // $book->favorite_histories()->delete();
     }
 
     /**
@@ -61,7 +61,7 @@ class BookObserver
     public function forceDeleted(Book $book)
     {
         $book->chapters()->delete();
-        $book->visit_histories()->delete();
-        $book->favorite_histories()->delete();
+        $book->visit_logs()->delete();
+        // $book->favorite_histories()->delete();
     }
 }

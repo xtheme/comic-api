@@ -148,22 +148,21 @@ class BookController extends BaseController
             $tags = $book->tagged_tags;
         }
 
-        if ($tags) {
-            $books =
-                Book::select(['id', 'title', 'vertical_cover'])->withCount(['visit_histories'])->withAnyTag($tags)->where('id', '!=', $id)->inRandomOrder()->limit($limit)->get();
-        } else {
-            $books = Book::select(['id', 'title', 'vertical_cover'])->withCount(['visit_histories'])->inRandomOrder()->limit($limit)->get();
-        }
+        $books = Book::select(['id', 'title', 'author', 'vertical_cover', 'view_counts'])
+                     ->withAnyTag($tags)
+                     ->where('id', '!=', $id)
+                     ->inRandomOrder()
+                     ->limit($limit)
+                     ->get();
 
         $data = $books->map(function ($book) {
             return [
                 'id' => $book->id,
                 'title' => $book->title,
-                // 'author' => $book->author,
-                // 'description' => $book->description,
+                'author' => $book->author,
                 'cover' => $book->vertical_cover,
                 'tagged_tags' => $book->tagged_tags,
-                'visit_counts' => shortenNumber($book->visit_histories_count),
+                'visit_counts' => shortenNumber($book->view_counts),
             ];
         })->toArray();
 

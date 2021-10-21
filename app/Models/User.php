@@ -75,9 +75,9 @@ class User extends Authenticatable
     }
 
     // 購買記錄
-    public function visit_books()
+    public function visit_logs()
     {
-        return $this->hasMany('App\Models\UserVisitBook');
+        return $this->hasMany('App\Models\UserVisitLog');
     }
 
     // 累計充值金額
