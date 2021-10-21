@@ -61,8 +61,7 @@ class Release extends Command
         $this->call('view:clear');      // 清除视图缓存
         $this->call('view:cache');      // 重建视图缓存
         $this->call('clear-compiled');  // Remove the compiled class file
-        // $this->call('version:absorb');  // 发布版本号
 
-        $this->info('目前处于上线模式下, 所有的配置已缓存, 并发布新的版本号');
+        $this->info('目前处于上线模式下, 所有的配置已缓存');
     }
 }

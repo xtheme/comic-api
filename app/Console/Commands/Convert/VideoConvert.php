@@ -109,9 +109,9 @@ class VideoConvert extends Command
 
             $this->line('本次數據已全數遷移！');
 
-            $latest_primary_id = DB::table($new_table)->orderByDesc('id')->first()->id;
+            $latest_primary_id = DB::table('movies')->orderByDesc('id')->first()->id;
 
-            $pending_num = DB::table($old_table)->where('id', '>', $latest_primary_id)->count();
+            $pending_num = DB::table('movies')->where('id', '>', $latest_primary_id)->count();
 
             if ($this->confirm('尚有' . $pending_num . '筆數據等待遷移，是否繼續執行此腳本？')) {
                 $this->call('migrate:books');
