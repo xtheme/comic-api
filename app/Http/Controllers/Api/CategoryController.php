@@ -3,8 +3,11 @@
 namespace App\Http\Controllers\Api;
 
 use App\Models\Book;
+use App\Models\Pricing;
 use App\Models\Tag;
 use App\Models\Video;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Response;
 
 class CategoryController extends BaseController
@@ -20,53 +23,60 @@ class CategoryController extends BaseController
         return Response::jsonSuccess(__('api.success'), $data);
     }
 
-    public function search()
+    public function search(Request $request)
     {
-        $tags = Tag::where('suggest', 1)->latest('order_column')->take(100)->get();
+        $type = $request->post('type') ?? 'book';
 
-        $data = $tags->map(function ($tag) {
-            return $tag->name;
-        })->toArray();
+        switch ($type) {
+            case 'video':
+                $data = $this->searchVideo($request);
+                break;
+            default:
+            case 'book':
+                $data = $this->searchBook($request);
+                break;
+        }
 
-        return Response::jsonSuccess(__('api.success'), $data);
-    }
 
-    public function book($tag, $page = 1)
-    {
-        $books = Book::withCount(['visit_histories'])->withAllTags([$tag])->forPage($page)->get();
-
-        $data = $books->map(function ($book) {
+        $data = $data->map(function ($item) {
             return [
-                'id' => $book->id,
-                'title' => $book->title,
-                'author' => $book->author,
-                'cover' => $book->vertical_cover,
-                'tagged_tags' => $book->tagged_tags,
-                'visit_counts' => shortenNumber($book->visit_histories_count),
-                'created_at' => $book->created_at->format('Y-m-d'),
+                'id' => $item->id,
+                'title' => $item->title,
+                'author' => $item->author,
+                'cover' => $item->vertical_cover,
+                'tagged_tags' => $item->tagged_tags,
+                'end' => $item->end,
+                'view_counts' => shortenNumber($item->view_counts),
+                'created_at' => optional($item->created_at)->format('Y-m-d'),
             ];
         })->toArray();
 
         return Response::jsonSuccess(__('api.success'), $data);
     }
 
-    public function video($tag, $page = 1)
+    private function searchBook(Request $request)
     {
-        $videos = Video::withCount(['visit_histories'])->withAllTags([$tag])->forPage($page)->get();
+        $keyword = $request->post('keyword') ?? null;
+        $tag = $request->post('tag') ?? null;
+        $end = $request->post('end') ?? null;
+        $sort = $request->post('sort') ?? 'created_at';
+        $page = $request->post('page') ?? 1;
+        $size = $request->post('page') ?? 20;
 
-        $data = $videos->map(function ($video) {
-            return [
-                'id' => $video->id,
-                'title' => $video->title,
-                'author' => $video->author,
-                'ribbon' => $video->ribbon,
-                'cover' => $video->cover,
-                'tagged_tags' => $video->tagged_tags,
-                'visit_counts' => shortenNumber($video->visit_histories_count),
-                'created_at' => $video->created_at->format('Y-m-d'),
-            ];
-        })->toArray();
+        $data = Book::when($keyword, function (Builder $query, $keyword) {
+            return $query->where('title', 'like', '%' . $keyword . '%')->orWhere('author', 'like', '%' . $keyword . '%');
+        })->when($tag, function (Builder $query, $tag) {
+            $tag = explode(',', $tag);
+            return $query->withAnyTags($tag);
+        })->when($end, function (Builder $query, $end) {
+            return $query->where('end', $end);
+        })->forPage($page, $size)->latest($sort)->get();
 
-        return Response::jsonSuccess(__('api.success'), $data);
+        return $data;
+    }
+
+    private function searchVideo(Request $request)
+    {
+        return [];
     }
 }

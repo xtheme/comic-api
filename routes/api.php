@@ -55,8 +55,6 @@ Route::as('api.')->middleware(['api'])->group(function () {
         Route::prefix('category')->as('category.')->group(function () {
             Route::get('/tags', [Api\CategoryController::class, 'tags'])->name('tags');
             Route::post('/search', [Api\CategoryController::class, 'search'])->name('search');
-            // Route::get('/book/{tag}/{page?}', [Api\CategoryController::class, 'book'])->name('book');
-            // Route::get('/video/{tag}/{page?}', [Api\CategoryController::class, 'video'])->name('video');
         });
 
         // 漫畫
