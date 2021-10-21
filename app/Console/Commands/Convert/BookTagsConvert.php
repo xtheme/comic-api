@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Console\Commands\Migrate;
+namespace App\Console\Commands\Convert;
 
 ini_set('memory_limit', '-1');
 
@@ -9,14 +9,14 @@ use Illuminate\Console\Command;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
 
-class BookTagsMigrate extends Command
+class BookTagsConvert extends Command
 {
     /**
      * The name and signature of the console command.
      *
      * @var string
      */
-    protected $signature = 'migrate:book_tags';
+    protected $signature = 'convert:book_tags';
 
     /**
      * The console command description.

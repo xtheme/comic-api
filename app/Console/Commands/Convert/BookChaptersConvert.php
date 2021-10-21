@@ -1,29 +1,29 @@
 <?php
 
-namespace App\Console\Commands\Migrate;
+namespace App\Console\Commands\Convert;
 
 ini_set('memory_limit', '-1');
 
-use App\Models\Book;
+use App\Models\BookChapter;
 use Illuminate\Console\Command;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
 
-class BooksMigrate extends Command
+class BookChaptersConvert extends Command
 {
     /**
      * The name and signature of the console command.
      *
      * @var string
      */
-    protected $signature = 'migrate:books';
+    protected $signature = 'convert:book_chapters';
 
     /**
      * The console command description.
      *
      * @var string
      */
-    protected $description = '將数据表 book 数据将迁移至新表 books!';
+    protected $description = '將数据表 chapterlist 数据将迁移至新表 book_chapters!';
 
     /**
      * Create a new command instance.
@@ -43,19 +43,19 @@ class BooksMigrate extends Command
     public function handle()
     {
         // 每次轉詞數據量
-        $batch_num = 10000;
+        $batch_num = 50000;
 
         // 每多少筆切割一次操作
         $chunk_num = 500;
 
         // 新舊數據表名稱
-        $old_table = 'book';
+        $old_table = 'chapterlist';
 
         // 目前用戶表最後 uid
         $old_primary_id = DB::table($old_table)->orderByDesc('id')->first()->id ?? 0;
 
         // 新表最後 uid
-        $new_primary_id = Book::orderByDesc('id')->first()->id ?? 0;
+        $new_primary_id = BookChapter::orderByDesc('id')->first()->id ?? 0;
 
         if ($old_primary_id > $new_primary_id) {
             // 分割集合
@@ -63,42 +63,45 @@ class BooksMigrate extends Command
 
             $this->line(sprintf('為了避免腳本超時，本次操作將轉移 %s 筆數據，共拆分為 %s 批数据進行迁移！', $batch_num, ceil($batch_num / $chunk_num)));
 
-            // 數據批次
             $data->each(function($items, $key) {
-                // 漫畫數據轉換
                 $insert = $items->map(function($item) {
+                    if ($item->json_images) {
+                        $json_images = json_decode($item->json_images);
+                        $json_images = collect($json_images)->map(function($img) {
+                            return $img->url;
+                        })->toArray();
+                    } else {
+                        $json_images = parseImgFromHtml($item->content);
+                    }
                     return [
                         'id' => $item->id,
-                        'title' => $item->book_name,
-                        'author' => $item->pen_name,
-                        'description' => $item->book_desc,
-                        'end' => $item->book_isend == 1 ? 1 : 0,
-                        'vertical_cover' => $item->book_thumb,
-                        'horizontal_cover' => $item->book_thumb2,
-                        'type' => $item->cartoon_type,
-                        'status' => $item->book_status ? 1 : 0,
+                        'book_id' => $item->book_id,
+                        'episode' => $item->idx,
+                        'title' => $item->title,
+                        'content' => '',
+                        'json_images' => json_encode($json_images),
+                        'status' => $item->status ? 1 : 0,
+                        'charge' => $item->isvip ? 1 : 0,
                         'review' => $item->check_status + 1,
                         'operating' => $item->operating,
-                        'view_counts' => $item->view,
-                        'collect_counts' => $item->collect,
-                        'created_at' => $item->book_addtime ? Carbon::createFromTimestamp($item->book_addtime) : null,
+                        'created_at' => $item->addtime ? Carbon::createFromTimestamp($item->addtime) : null,
                         'updated_at' => null,
                     ];
                 })->toArray();
 
-                Book::insert($insert);
+                BookChapter::insert($insert);
 
-                $this->line('第 ' . ($key + 1) . ' 批漫畫数据迁移完成...');
+                $this->line('第 ' . ($key + 1) . ' 批数据迁移完成...');
             });
 
             $this->line('本次數據已全數遷移！');
 
-            $latest_primary_id = Book::orderByDesc('id')->first()->id;
+            $latest_primary_id = BookChapter::orderByDesc('id')->first()->id;
 
             $pending_num = DB::table($old_table)->where('id', '>', $latest_primary_id)->count();
 
             if ($this->confirm('尚有' . $pending_num . '筆數據等待遷移，是否繼續執行此腳本？')) {
-                $this->call('migrate:books');
+                $this->call('migrate:book_chapters');
             } else {
                 $this->line('操作已結束');
             }
