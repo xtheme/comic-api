@@ -3,9 +3,9 @@
 namespace App\Http\Controllers\Api;
 
 use App\Models\Book;
-use App\Models\BookReport;
+use App\Models\Report;
 use Illuminate\Http\Request;
-use App\Models\BookReportType;
+use App\Models\ReportType;
 use Illuminate\Support\Carbon;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Response;
@@ -22,12 +22,12 @@ class ReportController extends Controller
             return Response::jsonError('该漫画不存在或已下架！');
         }
 
-        $report_type = BookReportType::find($type_id);
+        $report_type = ReportType::find($type_id);
 
         if (!$report_type) {
             return Response::jsonError('举报类型不存在或已下架！');
         }
-        
+
         $data = [
             'user_id' => $request->user()->id,
             'book_id' => $id,
@@ -35,7 +35,7 @@ class ReportController extends Controller
             'created_at' => Carbon::now(),
         ];
 
-        BookReport::insert($data);
+        Report::insert($data);
 
         return Response::jsonSuccess(__('api.success'), []);
     }

@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Backend;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Backend\ReportTypeRequest;
-use App\Models\BookReportType;
+use App\Models\ReportType;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Response;
@@ -13,7 +13,7 @@ class ReportTypeController extends Controller
 {
     public function index()
     {
-        $list = BookReportType::with('admin')->orderByDesc('id')->paginate();
+        $list = ReportType::with('admin')->orderByDesc('id')->paginate();
 
         return view('backend.report_type.index', [
             'list' => $list
@@ -29,7 +29,7 @@ class ReportTypeController extends Controller
     {
         $post = $request->post();
 
-        $bookReportType = new BookReportType;
+        $bookReportType = new ReportType;
 
         $post['operator_id'] = Auth::user()->id;
 
@@ -40,7 +40,7 @@ class ReportTypeController extends Controller
 
     public function edit($id)
     {
-        $data = BookReportType::findOrFail($id);
+        $data = ReportType::findOrFail($id);
 
         return view('backend.report_type.edit', [
             'data' => $data
@@ -51,7 +51,7 @@ class ReportTypeController extends Controller
     {
         $post = $request->post();
 
-        $bookReportType = BookReportType::findOrFail($id);
+        $bookReportType = ReportType::findOrFail($id);
 
         $post['operator_id'] = Auth::user()->id;
 
@@ -62,7 +62,7 @@ class ReportTypeController extends Controller
 
     public function destroy($id)
     {
-        $bookReportType = BookReportType::findOrFail($id);
+        $bookReportType = ReportType::findOrFail($id);
 
         $bookReportType->delete();
 
@@ -73,7 +73,7 @@ class ReportTypeController extends Controller
     {
         $post = $request->post();
 
-        BookReportType::where('id', $post['pk'])->update(['sort' => $post['value']]);
+        ReportType::where('id', $post['pk'])->update(['sort' => $post['value']]);
 
         return Response::jsonSuccess(__('response.update.success'));
     }
