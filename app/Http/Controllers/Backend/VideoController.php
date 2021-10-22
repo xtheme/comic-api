@@ -25,7 +25,7 @@ class VideoController extends Controller
             'status_options' => Options::STATUS_OPTIONS,
             'ribbon_options' => Options::RIBBON_OPTIONS,
             'videos' => $this->repository->filter($request)->paginate($request->get('limit')),
-            'tags' => getAllTags(),
+            'tags' => getAllTags('video'),
             'pageConfigs' => ['hasSearchForm' => true],
         ];
 
@@ -37,7 +37,7 @@ class VideoController extends Controller
         $data = [
             'status_options' => Options::STATUS_OPTIONS,
             'ribbon_options' => Options::RIBBON_OPTIONS,
-            'tags' => getAllTags(),
+            'tags' => getAllTags('video'),
         ];
 
         return view('backend.video.create')->with($data);
@@ -60,7 +60,7 @@ class VideoController extends Controller
             'subtitle_options' => Options::SUBTITLE_OPTIONS,
             'status_options' => Options::STATUS_OPTIONS,
             'ribbon_options' => Options::RIBBON_OPTIONS,
-            'tags' => getAllTags(),
+            'tags' => getAllTags('video'),
             'video' => $video,
             // 'tagged' => $video->tagged->pluck('tag_name')->toArray(),
             'tagged' => [],

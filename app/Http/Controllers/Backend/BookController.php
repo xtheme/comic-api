@@ -29,7 +29,7 @@ class BookController extends Controller
             'review_options' => Options::REVIEW_OPTIONS,
             'charge_options' => Options::CHARGE_OPTIONS,
             'list' => $this->repository->filter($request)->paginate(),
-            'tags' => getAllTags(),
+            'tags' => getAllTags('comic'),
             'pageConfigs' => ['hasSearchForm' => true],
         ];
 
@@ -57,7 +57,7 @@ class BookController extends Controller
     {
         $data = [
             'status_options' => Options::STATUS_OPTIONS,
-            'tags' => getAllTags(),
+            'tags' => getAllTags('comic'),
         ];
 
         return view('backend.book.create')->with($data);
@@ -74,7 +74,7 @@ class BookController extends Controller
     {
         $data = [
             'status_options' => Options::STATUS_OPTIONS,
-            'tags' => getAllTags(),
+            'tags' => getAllTags('comic'),
             'book' => Book::findOrFail($id),
         ];
 

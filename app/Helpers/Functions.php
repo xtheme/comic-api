@@ -151,12 +151,12 @@ if (!function_exists('watchDog')) {
 }
 
 if (!function_exists('getAllTags')) {
-    function getAllTags()
+    function getAllTags($type = 'comic')
     {
-        $cache_key = 'tags';
+        $cache_key = 'tags:' . $type;
 
-        return Cache::remember($cache_key, 300, function () {
-            return Tag::orderByDesc('order_column')->pluck('name')->toArray();
+        return Cache::remember($cache_key, 300, function () use ($type) {
+            return Tag::where('type', 'like', $type . '%')->orderByDesc('order_column')->pluck('name')->toArray();
         });
     }
 }

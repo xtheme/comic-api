@@ -28,7 +28,7 @@ class TopicController extends Controller
     public function index(Request $request)
     {
         $data = [
-            'tags' => getAllTags(),
+            'tags' => getAllTags($this->causer),
             'causer'=> $this->causer,
             'list' => $this->repository->filter($request)->paginate(),
         ];
@@ -39,7 +39,7 @@ class TopicController extends Controller
     public function create()
     {
         $data = [
-            'tags' => getAllTags(),
+            'tags' => getAllTags($this->causer),
             'causer_options' => Options::CAUSER_OPTIONS,
             'ribbon_options' => Options::RIBBON_OPTIONS,
         ];
@@ -61,7 +61,7 @@ class TopicController extends Controller
         $data = [
             'data'           => $this->repository->find($id),
             'causer'         => $this->causer,
-            'tags'           => getAllTags(),
+            'tags'           => getAllTags($this->causer),
             'causer_options' => Options::CAUSER_OPTIONS,
             'ribbon_options' => Options::RIBBON_OPTIONS,
         ];
