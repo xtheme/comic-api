@@ -38,7 +38,7 @@ class BookObserver
     {
         $book->chapters()->delete();
         $book->visit_logs()->delete();
-        // $book->favorite_histories()->delete();
+        // $book->favorite_logs()->delete();
     }
 
     /**
@@ -62,6 +62,6 @@ class BookObserver
     {
         $book->chapters()->delete();
         $book->visit_logs()->delete();
-        // $book->favorite_histories()->delete();
+        // $book->favorite_logs()->delete();
     }
 }

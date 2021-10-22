@@ -4,7 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Relations\HasOne;
 
-class UserVisitLog extends BaseModel
+class UserFavoriteLog extends BaseModel
 {
     protected $fillable = [
         'user_id',
@@ -20,7 +20,7 @@ class UserVisitLog extends BaseModel
 
     public function getItem()
     {
-        return $this->relation()->findOrFail($this->item_id);
+        return $this->relation->findOrFail($this->item_id);
     }
 
     public function getItemTypeAttribute()

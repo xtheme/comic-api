@@ -2,8 +2,7 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Models\UserFavoriteBook;
-use App\Models\VideoFavorite;
+use App\Models\UserFavoriteLog;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Response;
 
@@ -11,17 +10,17 @@ class FavoriteHistoryController extends BaseController
 {
     private function getBookFavoriteHistories(Request $request)
     {
-        $histories = UserFavoriteBook::where('user_id', $request->user()->id)->orderByDesc('updated_at')->get();
+        $histories = UserFavoriteLog::where('user_id', $request->user()->id)->orderByDesc('updated_at')->get();
 
         $histories = $histories->transform(function ($item) {
             return [
                 'id' => $item->id,
-                'book_id' => $item->book_id,
-                'title' => $item->book->title,
-                'author' => $item->book->author,
-                'cover' => $item->book->cover,
+                'book_id' => $item->item_id,
+                'title' => $item->relation->title,
+                'author' => $item->relation->author,
+                'cover' => $item->relation->cover,
                 // 'ribbon' => $item->video->ribbon,
-                'tagged_tags' => $item->book->tagged_tags,
+                'tagged_tags' => $item->relation->tagged_tags,
                 'created_at' => $item->created_at->format('Y-m-d H:i:s'),
                 'updated_at' => $item->updated_at->format('Y-m-d H:i:s'),
             ];
@@ -32,7 +31,7 @@ class FavoriteHistoryController extends BaseController
 
     private function getVideoFavoriteHistories(Request $request)
     {
-        $histories = VideoFavorite::where('user_id', $request->user()->id)->orderByDesc('updated_at')->get();
+        $histories = UserFavoriteLog::where('user_id', $request->user()->id)->orderByDesc('updated_at')->get();
 
         $histories = $histories->transform(function ($item) {
             return [
@@ -70,7 +69,7 @@ class FavoriteHistoryController extends BaseController
     {
         switch ($type) {
             case 'book':
-                $history = UserFavoriteBook::firstOrCreate([
+                $history = UserFavoriteLog::firstOrCreate([
                     'book_id' => $request->input('book_id'),
                     'chapter_id' => $request->input('chapter_id') ?? 0,
                     'user_id' => $request->user()->id,
@@ -106,7 +105,7 @@ class FavoriteHistoryController extends BaseController
 
         switch ($type) {
             case 'book':
-                UserFavoriteBook::whereIn('id', $ids)->where('user_id', $request->user()->id)->delete();
+                UserFavoriteLog::whereIn('id', $ids)->where('user_id', $request->user()->id)->delete();
 
                 $histories = $this->getBookFavoriteHistories($request);
                 break;

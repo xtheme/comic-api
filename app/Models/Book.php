@@ -44,9 +44,9 @@ class Book extends BaseModel
     /**
      * 收藏關聯
      */
-    public function favorite_histories()
+    public function favorite_logs()
     {
-        return $this->hasMany('App\Models\UserFavoriteBook');
+        return $this->hasMany('App\Models\UserFavoriteLog');
     }
 
     /**

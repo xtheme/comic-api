@@ -74,10 +74,16 @@ class User extends Authenticatable
         return $this->hasMany('App\Models\UserPurchaseLog');
     }
 
-    // 購買記錄
-    public function visit_logs()
+    // 訪問記錄
+    public function visit_books()
     {
-        return $this->hasMany('App\Models\UserVisitLog');
+        return $this->hasMany('App\Models\UserVisitLog')->where('type', 'book');
+    }
+
+    // 收藏記錄
+    public function favorite_books()
+    {
+        return $this->hasMany('App\Models\UserFavoriteLog')->where('type', 'book');
     }
 
     // 累計充值金額
