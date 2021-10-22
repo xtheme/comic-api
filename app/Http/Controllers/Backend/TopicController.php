@@ -13,23 +13,15 @@ use Illuminate\Support\Facades\Response;
 class TopicController extends Controller
 {
     private $repository;
-    private $causer;
 
     public function __construct(TopicRepositoryInterface $repository)
     {
         $this->repository = $repository;
-
-        $this->causer = [
-            'App\Models\Video' => 'video' ,
-            'App\Models\Book'  => 'comic' ,
-        ];
     }
 
     public function index(Request $request)
     {
         $data = [
-            'tags' => getAllTags($this->causer),
-            'causer'=> $this->causer,
             'list' => $this->repository->filter($request)->paginate(),
         ];
 
@@ -39,7 +31,7 @@ class TopicController extends Controller
     public function create()
     {
         $data = [
-            'tags' => getAllTags($this->causer),
+            'tags' => getAllTags(),
             'causer_options' => Options::CAUSER_OPTIONS,
             'ribbon_options' => Options::RIBBON_OPTIONS,
         ];
@@ -60,8 +52,7 @@ class TopicController extends Controller
     {
         $data = [
             'data'           => $this->repository->find($id),
-            'causer'         => $this->causer,
-            'tags'           => getAllTags($this->causer),
+            'tags'           => getAllTags(),
             'causer_options' => Options::CAUSER_OPTIONS,
             'ribbon_options' => Options::RIBBON_OPTIONS,
         ];
