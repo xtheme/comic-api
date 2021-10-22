@@ -18,7 +18,7 @@ class BookController extends BaseController
 
     public function detail(Request $request, $id)
     {
-        $book = Book::with(['chapters'])->withCount(['chapters'])->find($id);
+        $book = Book::with(['chapters', 'chapters.purchased'])->withCount(['chapters'])->find($id);
 
         if (!$book) {
             return Response::jsonError('该漫画不存在或已下架！');
@@ -43,6 +43,7 @@ class BookController extends BaseController
                     'title' => $chapter->title,
                     'price' => $chapter->price,
                     'created_at' => $chapter->created_at->format('Y-m-d'),
+                    'has_purchased' => $chapter->purchased()->exists(),
                 ];
             })->toArray(),
         ];
@@ -86,7 +87,7 @@ class BookController extends BaseController
 
     public function chapter(Request $request, $chapter_id)
     {
-        $chapter = BookChapter::find($chapter_id);
+        $chapter = BookChapter::with(['purchased'])->find($chapter_id);
 
         if (!$chapter) {
             return Response::jsonError('该漫画不存在或已下架！');
@@ -104,9 +105,9 @@ class BookController extends BaseController
         if ($request->user()) {
             $user = $request->user();
 
-            $is_purchase = $user->purchase_logs()->where('type', 'book_chapter')->where('item_id', $chapter_id)->exists();
+            $has_purchased = $chapter->purchased()->exists();
 
-            if ($is_purchase) {
+            if ($has_purchased) {
                 $protect = false;
             }
 
@@ -133,6 +134,9 @@ class BookController extends BaseController
             'title' => $chapter->title,
             'price' => $chapter->price,
             'content' => $images,
+            'prev_chapter_id' => $chapter->prev_chapter_id,
+            'next_chapter_id' => $chapter->next_chapter_id,
+            'has_purchased' => $has_purchased,
         ];
 
         return Response::jsonSuccess(__('api.success'), $data);

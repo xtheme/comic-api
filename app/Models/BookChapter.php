@@ -25,6 +25,11 @@ class BookChapter extends BaseModel
         return $this->belongsTo('App\Models\Book');
     }
 
+    public function purchased()
+    {
+        return $this->hasOne('App\Models\UserPurchaseLog', 'item_id', 'id')->where('item_model', get_class($this))->where('user_id', auth()->user()->id);
+    }
+
     // 將 json_images 字段中的圖片路徑加上資源域名, 如果使用加密資源則指定圖片寬度
     public function getContentAttribute()
     {
@@ -47,5 +52,19 @@ class BookChapter extends BaseModel
         }
 
         $this->attributes['json_images'] = json_encode($array);
+    }
+
+    public function getPrevChapterIdAttribute()
+    {
+        $chapter = self::where('book_id', $this->book_id)->where('episode', '<', $this->episode)->orderByDesc('episode')->first(['id']);
+
+        return $chapter->id ?? '';
+    }
+
+    public function getNextChapterIdAttribute()
+    {
+        $chapter = self::where('book_id', $this->book_id)->where('episode', '>', $this->episode)->orderBy('episode')->first(['id']);
+
+        return $chapter->id ?? '';
     }
 }
