@@ -13,18 +13,18 @@ class VisitHistoryController extends BaseController
         // $histories = UserVisitLog::has('relation')->where('user_id', $request->user()->id)->orderByDesc('updated_at')->get();
         $histories = $request->user()->visit_books()->get();
 
-        // $histories = $histories->transform(function ($item) {
-        //     return [
-        //         'id' => $item->id,
-        //         'book_id' => $item->item_id,
-        //         'title' => $item->relation->title,
-        //         'author' => $item->relation->author,
-        //         'cover' => $item->relation->vertical_cover,
-        //         'tagged_tags' => $item->relation->tagged_tags,
-        //         'created_at' => $item->created_at->format('Y-m-d'),
-        //         'updated_at' => $item->updated_at->format('Y-m-d'),
-        //     ];
-        // })->toArray();
+        $histories = $histories->transform(function ($item) {
+            return [
+                'id' => $item->id,
+                'book_id' => $item->item_id,
+                'title' => $item->book->title,
+                // 'author' => $item->book()->author,
+                // 'cover' => $item->book()->vertical_cover,
+                // 'tagged_tags' => $item->book()->tagged_tags,
+                'created_at' => $item->created_at->format('Y-m-d'),
+                'updated_at' => $item->updated_at->format('Y-m-d'),
+            ];
+        })->toArray();
 
         return $histories;
     }

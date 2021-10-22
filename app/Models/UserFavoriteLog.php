@@ -13,6 +13,11 @@ class UserFavoriteLog extends BaseModel
         'item_id',
     ];
 
+    public function book(): HasOne
+    {
+        return $this->hasOne('App\Models\Book', 'id', 'book_id');
+    }
+
     public function relation(): HasOne
     {
         return $this->hasOne($this->item_model);
