@@ -6,7 +6,7 @@
 
 @section('content')
     <form id="form" class="form" method="post" action="{{ route('backend.ad_space.update', $space->id) }}" novalidate>
-        @method('PUT')
+        @method('put')
         <div class="form-body">
             <div class="row">
                 <div class="col-4">

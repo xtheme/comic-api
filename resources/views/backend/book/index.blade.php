@@ -14,8 +14,8 @@
         <div class="mb-1">
             <a href="{{ route('backend.book.create') }}" class="btn btn-primary" data-modal title="添加漫画" data-height="55vh" role="button" aria-pressed="true">添加漫画</a>
             <a href="{{ route('backend.book.price') }}" class="btn btn-success" data-modal data-size="sm" data-height="20vh" title="收费设置" role="button" aria-pressed="true">收费设置</a>
-{{--            <a href="{{ route('rbac.content.tag.add', request()->input()) }}" class="btn btn-primary glow" data-modal title="添加标签" data-size="full" data-height="70vh" role="button" aria-pressed="true">添加标签</a>--}}
-{{--            <a href="{{ route('rbac.content.tag.remove', request()->input()) }}" class="btn btn-danger glow" data-modal title="移除标签" data-size="full" data-height="70vh" role="button" aria-pressed="true">移除标签</a>--}}
+            <a id="add-tag" href="{{ route('backend.book.modifyTag', 'add') }}" class="btn btn-warning" title="添加标签" role="button" aria-pressed="true">添加标签</a>
+            <a href="{{ route('backend.book.modifyTag', 'remove') }}" class="btn btn-danger" data-modal title="移除标签" role="button" aria-pressed="true">移除标签</a>
         </div>
         <div class="card">
             <div class="card-header">
@@ -107,7 +107,7 @@
                                         @endif
                                     </td>
                                     <td class="text-center">{{ $book->chapters_count }}</td>
-                                    <td>{{ optional($book->latest_chapter)->created_at->diffForHumans() }}</td>
+                                    <td>{{ optional($book->latest_chapter())->created_at->diffForHumans() }}</td>
                                     <td class="text-center">
                                         <span class="badge badge-pill badge-light-{{ $book->release_status_style }}">{{ $book->release_status }}</span>
                                     </td>
@@ -207,17 +207,6 @@
                         </select>
                     </div>
                 </div>
-                <div class="col-12">
-                    <div class="form-group">
-                        <label>收费状态</label>
-                        <select class="form-control" name="charge">
-                            <option value="">全部</option>
-                            @foreach ($charge_options as $key => $val)
-                                <option value="{{ $key }}" @if(request()->get('charge') == $key){{'selected'}}@endif>{{ $val }}</option>
-                            @endforeach
-                        </select>
-                    </div>
-                </div>
                 <div class="col-12 d-flex justify-content-end">
                     <button type="submit" class="btn btn-primary">搜索</button>
                 </div>
@@ -277,6 +266,31 @@
                         return labels.join(', ') + '';
                     }
                 }
+            });
+
+            $('#add-tag').on('click', function (e) {
+                e.preventDefault();
+
+                let $this = $(this);
+                let ids   = $.checkedIds();
+                let url   = $this.attr('href') + '?ids=' + ids;
+                console.log(url);
+
+                if (!ids) {
+                    $.toast({
+                        type: 'error',
+                        message: '请先选择要操作的数据'
+                    });
+                    return false;
+                }
+
+                $.openModal({
+                    size: 'lg',
+                    height: '50vh',
+                    title: $this.attr('title'),
+                    url: url
+                });
+
             });
 
             $('#batch-action').submit(function (e) {

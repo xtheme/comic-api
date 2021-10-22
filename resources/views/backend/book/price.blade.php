@@ -8,7 +8,7 @@
 
 @section('content')
     <form id="form" class="form" method="post" action="{{ route('backend.book.revise.price') }}">
-        @method('PUT')
+        @method('put')
         <div class="form-body">
             <div class="row">
                 <div class="col-6">
@@ -28,7 +28,7 @@
                     </div>
                 </div>
                 <div class="col-12">
-                    <div class="alert bg-rgba-warning font-small-3" role="alert">
+                    <div class="alert bg-rgba-warning font-small-3 mb-1" role="alert">
                         注意：所有的漫画都会套用此配置
                     </div>
                 </div>

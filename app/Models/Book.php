@@ -30,15 +30,7 @@ class Book extends BaseModel
 
     public function latest_chapter()
     {
-        return $this->hasOne('App\Models\BookChapter')->where('status', 1)->latest('episode');
-    }
-
-    /**
-     * 查询收费章节数量, 用来判定漫画是否收费
-     */
-    public function charge_chapters()
-    {
-        return $this->hasMany('App\Models\BookChapter')->where('status', 1)->where('price', '>', 0);
+        return $this->chapters->first();
     }
 
     /**

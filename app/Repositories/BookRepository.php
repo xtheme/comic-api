@@ -32,12 +32,11 @@ class BookRepository extends Repository implements BookRepositoryInterface
         $tag = $request->get('tag') ?? '';
         $review = $request->get('review') ?? '';
         $status = $request->get('status') ?? '';
-        $charge = $request->get('charge') ?? '';
 
         $order = $request->get('order') ?? 'id';
         $sort = $request->get('sort') ?? 'desc';
 
-        return $this->model::with(['latest_chapter'])->withCount(['chapters', 'charge_chapters'])->when($id, function (Builder $query, $id) {
+        return $this->model::with(['tags'])->withCount(['chapters'])->when($id, function (Builder $query, $id) {
             return $query->where('id', $id);
         })->when($title, function (Builder $query, $title) {
             return $query->where('title', 'like', '%' . $title . '%');
@@ -48,13 +47,6 @@ class BookRepository extends Repository implements BookRepositoryInterface
             return $query->where('review', $review);
         })->when($status, function (Builder $query, $status) {
             return $query->where('status', $status);
-        })->when($charge, function (Builder $query, $charge) {
-            // $charge = $charge - 1;
-            if (!$charge) {
-                return $query->having('charge_chapters_count', 0);
-            } else {
-                return $query->having('charge_chapters_count', '>=', 1);
-            }
         })->when($sort, function (Builder $query, $sort) use ($order) {
             if ($sort == 'desc') {
                 return $query->orderByDesc($order);

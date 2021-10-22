@@ -9,7 +9,7 @@
 
 @section('content')
     <form id="form" class="form" method="post" action="{{ route('backend.book.update', $book->id) }}">
-        @method('PUT')
+        @method('put')
         <div class="form-body">
             <div class="row">
                 <div class="col-12">
@@ -153,7 +153,7 @@
 					data    : $(this).serialize(),
 					debug: true,
 					callback: function (res) {
-						if (res.code == 200) {
+						if (res.code === 200) {
 							// iframe.blade.php
 							parent.$.hideModal();
 

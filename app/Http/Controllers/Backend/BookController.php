@@ -10,6 +10,7 @@ use App\Models\Book;
 use App\Models\BookChapter;
 use App\Repositories\Contracts\BookRepositoryInterface;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\Validator;
 
@@ -126,9 +127,7 @@ class BookController extends Controller
                 // todo 批量收费
                 $books = Book::whereIn('id', $ids)->get();
                 foreach ($books as $book) {
-                    $book->chapters()
-                         ->where('episode', '>',  getConfig('comic', 'default_charge_chapter'))
-                         ->update(['price' =>  getConfig('comic', 'default_charge_price')]);
+                    $book->chapters()->where('episode', '>', getConfig('comic', 'default_charge_chapter'))->update(['price' => getConfig('comic', 'default_charge_price')]);
                 }
                 break;
             case 'destroy':
@@ -161,6 +160,44 @@ class BookController extends Controller
         $this->repository->editable($request->post('pk'), $field, $request->post('value'));
 
         return Response::jsonSuccess('数据已更新成功');
+    }
+
+    // 批輛新增標籤
+    public function modifyTag(Request $request, $action)
+    {
+        $data = [
+            'url' => ($action == 'add') ? route('backend.book.addTag') : route('backend.book.deleteTag'),
+            'ids' => $request->input('ids'),
+            'tags' => getAllTags('comic'),
+        ];
+
+        return view('backend.book.modifyTag')->with($data);
+    }
+
+    public function addTag(Request $request)
+    {
+        $ids = explode(',', $request->post('ids'));
+        $tags = $request->post('tags');
+
+        foreach ($ids as $id) {
+            $book = Book::findOrFail($id);
+            $book->attachTags($tags, 'comic');
+        }
+
+        return Response::jsonSuccess('标签已更新');
+    }
+
+    public function deleteTag(Request $request)
+    {
+        $ids = explode(',', $request->post('ids'));
+        $tags = $request->post('tags');
+
+        foreach ($ids as $id) {
+            $book = Book::findOrFail($id);
+            $book->detachTags($tags, 'comic');
+        }
+
+        return Response::jsonSuccess('标签已更新');
     }
 
     // CDN 預熱清單
