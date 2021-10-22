@@ -25,7 +25,7 @@
                 @endforeach
                 <div class="col-12 d-flex justify-content-end">
                     <input type="hidden" name="ids" value="{{ $ids }}">
-                    <button type="submit" class="btn btn-primary">添加</button>
+                    <button type="submit" class="btn btn-primary">修改标签</button>
                 </div>
             </div>
         </div>

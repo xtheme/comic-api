@@ -15,7 +15,7 @@
             <a href="{{ route('backend.book.create') }}" class="btn btn-primary" data-modal title="添加漫画" data-height="55vh" role="button" aria-pressed="true">添加漫画</a>
             <a href="{{ route('backend.book.price') }}" class="btn btn-success" data-modal data-size="sm" data-height="20vh" title="收费设置" role="button" aria-pressed="true">收费设置</a>
             <a id="add-tag" href="{{ route('backend.book.modifyTag', 'add') }}" class="btn btn-warning" title="添加标签" role="button" aria-pressed="true">添加标签</a>
-            <a href="{{ route('backend.book.modifyTag', 'remove') }}" class="btn btn-danger" data-modal title="移除标签" role="button" aria-pressed="true">移除标签</a>
+            <a id="remove-tag" href="{{ route('backend.book.modifyTag', 'remove') }}" class="btn btn-danger" title="移除标签" role="button" aria-pressed="true">移除标签</a>
         </div>
         <div class="card">
             <div class="card-header">
@@ -268,7 +268,7 @@
                 }
             });
 
-            $('#add-tag').on('click', function (e) {
+            $('#add-tag, #remove-tag').on('click', function (e) {
                 e.preventDefault();
 
                 let $this = $(this);
