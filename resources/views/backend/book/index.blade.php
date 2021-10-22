@@ -58,7 +58,7 @@
                                 <th>ID</th>
                                 <th>名称</th>
                                 <th>封面图</th>
-                                <th>作者</th>
+{{--                                <th>作者</th>--}}
                                 <th>类型</th>
                                 <th>收费</th>
                                 <th class="text-center">章节数</th>
@@ -86,10 +86,10 @@
                                         <span data-toggle="tooltip" data-placement="top" data-original-title="{{ $book->title }}">
                                             {{ Str::limit($book->title, 50, '...') }}
                                         </span>
-                                        @if(!empty($book->tagged))
+                                        @if(!empty($book->tags))
                                         <div class="d-flex align-content-center flex-wrap" style="margin-top: 5px;">
-                                            @foreach($book->tagged as $tagged)
-                                                <span class="badge badge-pill badge-light-primary" style="margin-right: 3px; margin-bottom: 3px;">{{ $tagged->tag_name }}</span>
+                                            @foreach($book->tags as $tag)
+                                                <span class="badge badge-pill badge-light-primary" style="margin-right: 3px; margin-bottom: 3px;">{{ $tag->name }}</span>
                                             @endforeach
                                         </div>
                                         @endif
@@ -97,7 +97,7 @@
                                     <td>
                                         <img class="cursor-pointer" data-lightbox alt="点击查看大图" src="{{ $book->vertical_cover }}" width="38" height="50">
                                     </td>
-                                    <td>{{ $book->author }}</td>
+{{--                                    <td>{{ $book->author }}</td>--}}
                                     <td>{{ $book->type }}</td>
                                     <td>
                                         @if($book->charge)
@@ -107,7 +107,7 @@
                                         @endif
                                     </td>
                                     <td class="text-center">{{ $book->chapters_count }}</td>
-                                    <td>{{ optional($book->latest_chapter)->created_at }}</td>
+                                    <td>{{ optional($book->latest_chapter)->created_at->diffForHumans() }}</td>
                                     <td class="text-center">
                                         <span class="badge badge-pill badge-light-{{ $book->release_status_style }}">{{ $book->release_status }}</span>
                                     </td>
