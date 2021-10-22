@@ -55,7 +55,7 @@
                                             <span class="badge badge-pill badge-light-primary">啟用</span>
                                         @endif
                                     </td>
-                                    <td @if($loop->count == 1)style="position: fixed;"@endif>
+                                    <td>
                                         <div class="@if(($loop->count - $loop->iteration) < 3){{'dropup'}}@else{{'dropdown'}}@endif">
                                             <span class="bx bx-dots-vertical-rounded font-medium-3 dropdown-toggle nav-hide-arrow cursor-pointer"
                                                   id="dropdownMenuButton{{ $item->id }}" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></span>

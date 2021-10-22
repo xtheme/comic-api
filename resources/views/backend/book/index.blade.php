@@ -121,7 +121,7 @@
                                             <a class="badge badge-pill badge-light-danger" data-confirm href="{{ route('backend.book.batch', ['action'=>'enable', 'ids' => $book->id]) }}" title="上架该作品">下架</a>
                                         @endif
                                     </td>
-                                    <td @if($loop->count == 1)style="position: fixed;"@endif>
+                                    <td>
                                         <div class="@if(($loop->count - $loop->iteration) < 3){{'dropup'}}@else{{'dropdown'}}@endif">
                                             <span class="bx bx-dots-vertical-rounded font-medium-3 dropdown-toggle nav-hide-arrow cursor-pointer"
                                                   id="dropdownMenuButton{{ $book->id }}" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></span>
