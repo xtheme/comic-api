@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
 
 class Topic extends BaseModel
@@ -73,7 +74,15 @@ class Topic extends BaseModel
 
             switch ($key) {
                 case 'tag':
-                    $query->withAllTags($value);
+                    switch ($this->causer) {
+                        case 'video':
+                            $type = 'video';
+                            break;
+                        case 'book':
+                            $type = 'comic';
+                            break;
+                    }
+                    $query->withAllTags($value, $type);
                     break;
                 case 'limit':
                     if (!$this->unlimited) {
@@ -103,7 +112,7 @@ class Topic extends BaseModel
                     break;
             }
         }
-
+Log::debug($query->toSql());
         return $query;
     }
 
