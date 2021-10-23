@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Models\Book;
 use App\Models\BookChapter;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Response;
 
 class BookController extends BaseController
@@ -24,6 +25,8 @@ class BookController extends BaseController
             return Response::jsonError('该漫画不存在或已下架！');
         }
 
+        $user = $request->user() ?? null;
+
         $data = [
             'id' => $book->id,
             'title' => $book->title,
@@ -36,14 +39,24 @@ class BookController extends BaseController
             'view_counts' => shortenNumber($book->view_counts),
             'collect_counts' => shortenNumber($book->collect_counts),
             'chapters_count' => $book->chapters_count,
-            'chapters' => $book->chapters->map(function ($chapter) {
+            'chapters' => $book->chapters->map(function ($chapter) use ($user) {
+                if (!$user) {
+                    $has_purchased = false;
+                } else {
+                    Log::debug('is_vip=' . $user->is_vip);
+                    if ($user->is_vip) {
+                        $has_purchased = true;
+                    } else {
+                        $has_purchased = $chapter->purchased()->exists();
+                    }
+                }
                 return [
                     'chapter_id' => $chapter->id,
                     'episode' => $chapter->episode,
                     'title' => $chapter->title,
                     'price' => $chapter->price,
+                    'has_purchased' => $has_purchased,
                     'created_at' => $chapter->created_at->format('Y-m-d'),
-                    'has_purchased' => $chapter->purchased()->exists(),
                 ];
             })->toArray(),
         ];
@@ -95,6 +108,7 @@ class BookController extends BaseController
 
         // 收費章節
         $protect = true;
+        $has_purchased = false;
 
         // 如果章節免費
         if ($chapter->price == 0) {
@@ -102,18 +116,14 @@ class BookController extends BaseController
         }
 
         // 是否登入
-        if ($request->user()) {
-            $user = $request->user();
-
-            $has_purchased = $chapter->purchased()->exists();
-
-            if ($has_purchased) {
-                $protect = false;
-            }
-
+        $user = $request->user() ?? null;
+        if ($user) {
             if ($user->is_vip) {
-                $protect = false;
+                $has_purchased = true;
+            } else {
+                $has_purchased = $chapter->purchased()->exists();
             }
+            $protect = $has_purchased ? false : true;
         }
 
         $images = $chapter->content;
@@ -129,14 +139,14 @@ class BookController extends BaseController
         // })->toArray();
 
         $data = [
-            'charge' => $protect,
+            'protect' => $protect,
+            'has_purchased' => $has_purchased,
             'episode' => $chapter->episode,
             'title' => $chapter->title,
             'price' => $chapter->price,
             'content' => $images,
             'prev_chapter_id' => $chapter->prev_chapter_id,
             'next_chapter_id' => $chapter->next_chapter_id,
-            'has_purchased' => $has_purchased,
         ];
 
         return Response::jsonSuccess(__('api.success'), $data);
