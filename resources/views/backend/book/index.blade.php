@@ -28,9 +28,12 @@
                             <div class="d-flex align-items-center">
                                 <div class="form-group mr-1">
                                     <select class="form-control" name="action">
-                                        <option value="enable">上架</option>
-                                        <option value="disable">下架</option>
-                                        <option value="destroy">删除</option>
+                                        <option value="korea">标记为韩漫</option>
+                                        <option value="japan">标记为日漫</option>
+                                        <option value="end">标记为完结</option>
+                                        <option value="enable">批量上架</option>
+                                        <option value="disable">批量下架</option>
+                                        <option value="destroy">批量删除</option>
                                         <option value="syncPrice">套用预设收费设置</option>
                                     </select>
                                 </div>
@@ -95,7 +98,7 @@
                                         @endif
                                     </td>
                                     <td>
-                                        <img class="cursor-pointer" data-lightbox alt="点击查看大图" src="{{ $book->vertical_cover }}" width="38" height="50">
+                                        <img class="cursor-pointer" data-lightbox alt="点击查看大图" src="{{ $book->horizontal_cover }}" height="60px">
                                     </td>
 {{--                                    <td>{{ $book->author }}</td>--}}
                                     <td>{{ $book->type }}</td>

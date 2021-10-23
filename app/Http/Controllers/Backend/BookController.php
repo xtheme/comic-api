@@ -104,6 +104,22 @@ class BookController extends Controller
         $ids = explode(',', $request->input('ids'));
 
         switch ($action) {
+            case 'japan':
+                $text = '标记为日漫';
+                $data = ['type' => 1];
+                break;
+            case 'korea':
+                $text = '标记为韩漫';
+                $data = ['type' => 2];
+                break;
+            case 'end':
+                $text = '标记为完结';
+                $data = ['end' => 1];
+                break;
+            case 'choice':
+                $text = '标记为精选';
+                $data = null;
+                break;
             case 'enable':
                 $text = '批量上架';
                 $data = ['status' => 1];
@@ -123,6 +139,25 @@ class BookController extends Controller
         }
 
         switch ($action) {
+            case 'japan':
+            case 'korea':
+            case 'end':
+            case 'choice':
+                $tag = [
+                    'japan' => '日漫',
+                    'korea' => '韩漫',
+                    'end' => '完结',
+                    'choice' => '精选',
+                ];
+                $books = Book::whereIn('id', $ids)->get();
+                foreach ($books as $book) {
+                    $book->attachTag($tag[$action], 'comic');
+                }
+
+                if ($data) {
+                    Book::whereIn('id', $ids)->update($data);
+                }
+                break;
             case 'syncPrice':
                 // todo 批量收费
                 $books = Book::whereIn('id', $ids)->get();
