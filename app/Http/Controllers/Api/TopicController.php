@@ -15,6 +15,7 @@ class TopicController extends BaseController
         $this->repository = $repository;
     }
 
+    // 整理不同模型輸出的數據格式
     public function arrangeData($topic)
     {
         switch ($topic->causer) {
@@ -40,7 +41,7 @@ class TopicController extends BaseController
                         'id' => $item->id,
                         'title' => $item->title,
                         'author' => $item->author,
-                        'cover' => ($row > 2) ? $item->horizontal_cover : $item->vertical_cover,
+                        'cover' => ($row > 2) ? $item->vertical_cover : $item->horizontal_cover,
                         'tagged_tags' => $item->tagged_tags,
                         // 'visit_counts' => shortenNumber($item->visit_histories_count),
                     ];
@@ -80,13 +81,13 @@ class TopicController extends BaseController
     {
         $topic = $this->repository->find($topic_id);
 
-        $per_page = 10;
+        $per_page = 20;
 
-        $count = $topic->setUnlimited()->buildQuery()->count();
+        $count = $topic->buildQuery()->count();
 
         $total_page = ceil($count / $per_page);
 
-        $list = $topic->setUnlimited()->buildQuery()->forPage($page, $per_page)->get();
+        $list = $topic->buildQuery()->forPage($page, $per_page)->get();
 
         switch ($topic->causer) {
             case 'video':

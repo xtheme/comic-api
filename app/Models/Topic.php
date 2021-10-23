@@ -9,8 +9,6 @@ use Illuminate\Support\Str;
 
 class Topic extends BaseModel
 {
-    protected $unlimited = false;
-
     protected $fillable = [
         'title',
         'sort',
@@ -24,13 +22,6 @@ class Topic extends BaseModel
     protected $casts = [
         'properties' => 'array',
     ];
-
-    public function setUnlimited()
-    {
-        $this->unlimited = true;
-
-        return $this;
-    }
 
     public function getQueryUrlAttribute()
     {
@@ -85,9 +76,7 @@ class Topic extends BaseModel
                     $query->withAllTags($value, $type);
                     break;
                 case 'limit':
-                    if (!$this->unlimited) {
                         $query->limit($value);
-                    }
                     break;
                 case 'order':
                     // $query->orderByDesc($value);
@@ -112,7 +101,7 @@ class Topic extends BaseModel
                     break;
             }
         }
-Log::debug($query->toSql());
+        // Log::debug($query->toSql());
         return $query;
     }
 
