@@ -84,7 +84,7 @@
                         <div class="controls">
                             <select class="form-control" name="filter_id">
                                 @foreach($filters as $filter)
-                                    <option value="{{ $filter->id }}" @if($data->topic_rule_id == $filter->id ){{'selected'}}@endif>{{ $filter->title }}</option>
+                                    <option value="{{ $filter->id }}" @if($data->filter_id == $filter->id ){{'selected'}}@endif>{{ $filter->title }}</option>
                                 @endforeach
                             </select>
                         </div>
