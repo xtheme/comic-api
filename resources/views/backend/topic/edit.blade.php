@@ -80,7 +80,7 @@
                 </div>
                 <div class="col-6">
                     <div class="form-group">
-                        <label>筛选条件</label>
+                        <label>筛选器</label>
                         <div class="controls">
                             <select class="form-control" name="filter_id">
                                 @foreach($filters as $filter)

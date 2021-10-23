@@ -10,7 +10,7 @@ class NavigationOptions
     ];
 
     const TARGET_OPTIONS = [
-        1 => '筛选条件',
+        1 => '使用筛选器',
         2 => '另開浏览器',
     ];
 }

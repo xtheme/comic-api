@@ -14,7 +14,7 @@ class NavigationController extends Controller
     public function index()
     {
         $data = [
-            'list' => Navigation::orderByDesc('id')->paginate(),
+            'list' => Navigation::with(['filter'])->orderByDesc('id')->paginate(),
         ];
 
         return view('backend.navigation.index')->with($data);
@@ -36,6 +36,12 @@ class NavigationController extends Controller
         $post = $request->input();
 
         $model = new Navigation;
+
+        if ($post['target'] == 1) {
+            $post['link'] = '';
+        } else {
+            $post['filter_id'] = 0;
+        }
 
         $model->fill($post)->save();
 
@@ -59,6 +65,12 @@ class NavigationController extends Controller
         $post = $request->input();
 
         $model = Navigation::findOrFail($id);
+
+        if ($post['target'] == 1) {
+            $post['link'] = '';
+        } else {
+            $post['filter_id'] = 0;
+        }
 
         $model->fill($post)->save();
 

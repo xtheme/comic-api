@@ -41,7 +41,13 @@
                                     <td>{{ $item->sort }}</td>
                                     <td><img src="{{ $item->icon }}" class="rounded-circle" width="60" height="60" alt=""></td>
                                     <td>{{ $item->target }}</td>
-                                    <td>{{ $item->link }}</td>
+                                    <td>
+                                        @if($item->getRawOriginal('target') == 1)
+                                        {{ $item->filter->title }}
+                                        @else
+                                        {{ $item->link }}
+                                        @endif
+                                    </td>
                                     <td>{{ $item->active }}</td>
                                     <td>
                                         <div class="@if(($loop->count - $loop->iteration) < 3){{'dropup'}}@else{{'dropdown'}}@endif">

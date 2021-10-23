@@ -1,7 +1,7 @@
 @extends('layouts.iframePage')
 
 {{-- page Title --}}
-@section('title','筛选条件')
+@section('title','筛选器')
 
 {{-- vendor style --}}
 @section('vendor-styles')
@@ -11,8 +11,8 @@
 @section('content')
     <section id="config-list">
         <div class="mb-1">
-            <a href="{{ route('backend.filter.create', ['book']) }}" data-modal class="btn btn-primary" title="添加漫画筛选条件" role="button" aria-pressed="true">添加漫画筛选条件</a>
-            <a href="{{ route('backend.filter.create', ['video']) }}" data-modal class="btn btn-primary" title="添加视频筛选条件" role="button" aria-pressed="true">添加视频筛选条件</a>
+            <a href="{{ route('backend.filter.create', ['book']) }}" data-modal class="btn btn-primary" title="添加漫画筛选器" role="button" aria-pressed="true">添加漫画筛选器</a>
+            <a href="{{ route('backend.filter.create', ['video']) }}" data-modal class="btn btn-primary" title="添加视频筛选器" role="button" aria-pressed="true">添加视频筛选器</a>
         </div>
         <div class="card">
             <div class="card-header">
@@ -68,8 +68,8 @@
                                             <span class="bx bx-dots-vertical-rounded font-medium-3 dropdown-toggle nav-hide-arrow cursor-pointer"
                                                   id="dropdownMenuButton{{ $item->id }}" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></span>
                                             <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuButton{{ $item->id }}">
-                                                <a class="dropdown-item" data-modal href="{{ route('backend.filter.edit', [$item->type, $item->id]) }}" title="修改筛选条件"><i class="bx bx-edit-alt mr-1"></i>修改</a>
-                                                <a class="dropdown-item" data-destroy href="{{ route('backend.filter.destroy', $item->id) }}" title="刪除筛选条件"><i class="bx bx-trash mr-1"></i>刪除</a>
+                                                <a class="dropdown-item" data-modal href="{{ route('backend.filter.edit', [$item->type, $item->id]) }}" title="修改筛选器"><i class="bx bx-edit-alt mr-1"></i>修改</a>
+                                                <a class="dropdown-item" data-destroy href="{{ route('backend.filter.destroy', $item->id) }}" title="刪除筛选器"><i class="bx bx-trash mr-1"></i>刪除</a>
                                             </div>
                                         </div>
                                     </td>
