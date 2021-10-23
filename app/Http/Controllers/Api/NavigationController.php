@@ -15,12 +15,20 @@ class NavigationController extends Controller
 
         $data = $raw->map(function ($nav) use ($request) {
             $filter = [];
+
+            // 篩選器
             if ($nav->filter_id != 0) {
-                $filter = [
-                    'params' => $nav->filter->params,
-                    'tags' => $nav->filter->tags,
-                ];
+                $filter = $nav->filter->params;
+
+                foreach ($filter as $key => $val) {
+                    if (!$val) unset($filter[$key]);
+                }
+
+                foreach ($nav->filter->tags as $type => $tag_arr) {
+                    $filter['tags[' . $type . ']'] = implode(',', $tag_arr);
+                }
             }
+
             return [
                 'id' => $nav->id,
                 'title' => $nav->title,
