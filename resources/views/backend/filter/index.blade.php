@@ -30,6 +30,7 @@
                                 <th>条件备注</th>
                                 <th>查询标签</th>
                                 <th>查询条件</th>
+                                <th>匹配数</th>
                                 <th>操作</th>
                             </tr>
                             </thead>
@@ -61,6 +62,7 @@
                                         @empty
                                         @endforelse
                                     </td>
+                                    <td>{{ $item->query_count }}</td>
                                     <td>
                                         <div class="@if(($loop->count - $loop->iteration) < 3){{'dropup'}}@else{{'dropdown'}}@endif">
                                             <span class="bx bx-dots-vertical-rounded font-medium-3 dropdown-toggle nav-hide-arrow cursor-pointer"

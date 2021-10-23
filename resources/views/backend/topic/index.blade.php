@@ -89,7 +89,7 @@
                                             <a class="badge badge-pill badge-light-danger" data-confirm href="{{ route('backend.topic.batch', ['action'=>'enable', 'ids' => $item->id]) }}" title="启用该模块">隐藏</a>
                                         @endif
                                     </td>
-                                    <td>{{ $item->rule->query_count }}</td>
+                                    <td>{{ $item->filter->query_count }}</td>
                                     <td>
                                         <div class="@if(($loop->count - $loop->iteration) < 3){{'dropup'}}@else{{'dropdown'}}@endif">
                                             <span class="bx bx-dots-vertical-rounded font-medium-3 dropdown-toggle nav-hide-arrow cursor-pointer"

@@ -70,9 +70,4 @@ class Filter extends BaseModel
     {
         return $this->buildQuery()->count();
     }
-
-    public function getQueryResultAttribute(): Collection
-    {
-        return $this->buildQuery()->get();
-    }
 }

@@ -35,7 +35,7 @@ class TopicRepository extends Repository implements TopicRepositoryInterface
         $order = $request->input('order') ?? 'sort';
         $sort = $request->input('sort') ?? 'desc';
 
-        return $this->model::with(['rule'])->when($title, function (Builder $query, $title) {
+        return $this->model::with(['filter'])->when($title, function (Builder $query, $title) {
             return $query->where('title', 'like' , '%' . $title . '%' );
         })->when($type, function (Builder $query, $type) {
             return $query->where('type', $type);

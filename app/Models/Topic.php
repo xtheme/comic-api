@@ -21,7 +21,7 @@ class Topic extends BaseModel
     ];
 
     // 篩選規則
-    public function rule()
+    public function filter()
     {
         return $this->hasOne('App\Models\Filter', 'id', 'filter_id');
     }
