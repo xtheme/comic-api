@@ -27,9 +27,8 @@
                                 <th>导航名称</th>
                                 <th>排序</th>
                                 <th>图片</th>
-                                <th>跳转类型</th>
-                                <th>链接</th>
                                 <th>跳转方式</th>
+                                <th>链接</th>
                                 <th>状态</th>
                                 <th>操作</th>
                             </tr>
@@ -40,10 +39,9 @@
                                     <td>{{ $item->id }}</td>
                                     <td>{{ $item->title }}</td>
                                     <td>{{ $item->sort }}</td>
-                                    <td><img src="{{ $item->icon }}" class="rounded-circle" width="60" height="60"></td>
-                                    <td>{{ $item->type }}</td>
-                                    <td>{{ $item->link }}</td>
+                                    <td><img src="{{ $item->icon }}" class="rounded-circle" width="60" height="60" alt=""></td>
                                     <td>{{ $item->target }}</td>
+                                    <td>{{ $item->link }}</td>
                                     <td>{{ $item->active }}</td>
                                     <td>
                                         <div class="@if(($loop->count - $loop->iteration) < 3){{'dropup'}}@else{{'dropdown'}}@endif">

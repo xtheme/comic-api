@@ -19,7 +19,7 @@
                 </div>
                 <div class="col-12">
                     <div class="form-group">
-                        <label><span class="danger">*</span> 图标</label>
+                        <label>图标</label>
                         <div class="input-group">
                             <input type="text" class="form-control image-path" name="icon" value="{{ $data->getRawOriginal('icon') }}" autocomplete="off">
                             <input type="file" class="hidden-file-upload" data-path="navigation">
@@ -41,29 +41,8 @@
                 </div>
                 <div class="col-12">
                     <div class="form-group">
-                        <span class="float-right font-size-small text-light">(类型仅作为链接快捷选项, 实际转跳以链接为主)</span>
-                        <label>类型</label>
-                        <div class="controls">
-                            <select class="form-control" name="type">
-                                @foreach ($type_options as $key => $val)
-                                    <option value="{{ $val }}" @if($data->uri == $val){{'selected'}}@endif>{{ $key }}</option>
-                                @endforeach
-                            </select>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-12">
-                    <div class="form-group">
-                        <label><span class="danger">*</span> 链接</label>
-                        <div class="controls">
-                            <input type="text" class="form-control" name="link" placeholder="请填写前端链接" value="{{ $data->link }}">
-                        </div>
-                    </div>
-                </div>
-                <div class="col-12">
-                    <div class="form-group">
                         <span class="float-right font-size-small text-light">(仅支持自定义链接以 http 开头之链接)</span>
-                        <label><span class="danger">*</span> 跳转方式</label>
+                        <label>跳转方式</label>
                         <div class="controls">
                             <select class="form-control" name="target">
                                 @foreach ($target_options as $key => $val)
@@ -73,9 +52,30 @@
                         </div>
                     </div>
                 </div>
+                <div class="col-12" id="target-filter" @if($data->target == 1)style="display: none;"@endif>
+                    <div class="form-group">
+                        <label>筛选条件</label>
+                        <div class="controls">
+                            <select  class="form-control" name="filter_id">
+                                <option value="0">N/A</option>
+                                @foreach($filters as $filter)
+                                    <option value="{{ $filter->id }}">{{ $filter->title }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-12" id="target-link" @if($data->target == 1)style="display: none;"@endif>
+                    <div class="form-group">
+                        <label>链接</label>
+                        <div class="controls">
+                            <input type="text" class="form-control" name="link" placeholder="请填写前端链接" value="{{ $data->link }}">
+                        </div>
+                    </div>
+                </div>
                 <div class="col-12">
                     <div class="form-group">
-                        <label><span class="danger">*</span> 状态</label>
+                        <label>状态</label>
                         <div class="controls">
                             <select class="form-control" name="status">
                                 @foreach ($status_options as $key => $val)
@@ -101,10 +101,16 @@
 @section('page-scripts')
     <script>
         $(document).ready(function () {
-            $('select[name="type"]').on('change', function (e) {
-                console.log($(this).val())
-                $('input[name="link"]').val($(this).val())
-            });
+	        $('select[name="target"]').on('change', function (e) {
+		        $val = $(this).val();
+		        if ($val == 1) {
+			        $('#target-filter').show();
+			        $('#target-link').hide();
+		        } else {
+			        $('#target-filter').hide();
+			        $('#target-link').show();
+		        }
+	        });
 
             $('#form').submit(function (e) {
                 e.preventDefault();

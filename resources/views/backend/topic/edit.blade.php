@@ -82,9 +82,9 @@
                     <div class="form-group">
                         <label>筛选条件</label>
                         <div class="controls">
-                            <select id="tags-selector" class="form-control" name="topic_rule_id">
-                                @foreach($rules as $rule)
-                                    <option value="{{ $rule->id }}" @if($data->topic_rule_id == $rule->id ){{'selected'}}@endif>{{ $rule->title }}</option>
+                            <select class="form-control" name="filter_id">
+                                @foreach($filters as $filter)
+                                    <option value="{{ $filter->id }}" @if($data->topic_rule_id == $filter->id ){{'selected'}}@endif>{{ $filter->title }}</option>
                                 @endforeach
                             </select>
                         </div>

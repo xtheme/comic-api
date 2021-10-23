@@ -15,8 +15,9 @@ class Navigation extends Model
     protected $fillable = [
         'title',
         'icon',
-        'uri',
         'target',
+        'filter_id',
+        'link',
         'sort',
         'status',
     ];
@@ -26,15 +27,10 @@ class Navigation extends Model
     //     return getImageDomain() . $value;
     // }
 
-    public function getTypeAttribute()
+    // 篩選規則
+    public function filter()
     {
-        $type_options = NavigationOptions::TYPE_OPTIONS;
-
-        foreach($type_options as $key => $val) {
-            if ($val == $this->uri) return $key;
-        }
-
-        return '自定义链接';
+        return $this->hasOne('App\Models\Filter', 'id', 'filter_id');
     }
 
     public function getActiveAttribute()

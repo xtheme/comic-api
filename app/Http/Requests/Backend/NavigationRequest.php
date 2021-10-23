@@ -10,7 +10,6 @@ class NavigationRequest extends BaseRequest
     {
         return [
             'title' => 'required',
-            'link' => 'required',
         ];
     }
 
@@ -18,7 +17,6 @@ class NavigationRequest extends BaseRequest
     {
         return [
             'title' => '导航名称',
-            'link' => '链接',
         ];
     }
 }

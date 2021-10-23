@@ -32,7 +32,7 @@ class TopicController extends Controller
     public function create()
     {
         $data = [
-            'rules' => Filter::get(),
+            'filters' => Filter::get(),
             'causer_options' => Options::CAUSER_OPTIONS,
             'ribbon_options' => Options::RIBBON_OPTIONS,
         ];
@@ -53,7 +53,7 @@ class TopicController extends Controller
     {
         $data = [
             'data' => $this->repository->find($id),
-            'rules' => Filter::get(),
+            'filters' => Filter::get(),
             'causer_options' => Options::CAUSER_OPTIONS,
             'ribbon_options' => Options::RIBBON_OPTIONS,
         ];
