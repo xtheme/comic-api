@@ -84,33 +84,6 @@
         },
         {
             "url": "#",
-            "name": "Videos",
-            "slug": "videos",
-            "icon": "bx bxs-videos",
-            "submenu": [
-                {
-                    "url": "/backend/video",
-                    "name": "Video List",
-                    "icon": "bx bx-right-arrow-alt"
-                },
-                {
-                    "url": "/backend/video_domain",
-                    "name": "Video Domain",
-                    "icon": "bx bx-right-arrow-alt"
-                },
-                {
-                    "url": "/backend/statistics",
-                    "name": "Play Statistics",
-                    "icon": "bx bx-right-arrow-alt"
-                },
-                {
-                    "url": "/backend/comment",
-                    "name": "Comment List"
-                }
-            ]
-        },
-        {
-            "url": "#",
             "name": "Report",
             "slug": "Report",
             "icon": "bx bxs-chat",

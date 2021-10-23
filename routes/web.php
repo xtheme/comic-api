@@ -221,19 +221,6 @@ Route::middleware(['auth', 'auth.route.role', 'log.activity'])->prefix('backend'
     //     Route::any('preview/{id}', [Backend\VideoSeriesController::class, 'preview'])->name('preview');
     // });
 
-    Route::prefix('video_domain')->as('video_domain.')->group(function () {
-        Route::get('/', [Backend\VideoDomainController::class , 'index'])->name('index');
-        Route::get('create', [Backend\VideoDomainController::class , 'create'])->name('create');
-        Route::post('store', [Backend\VideoDomainController::class , 'store'])->name('store');
-        Route::get('edit/{id}', [Backend\VideoDomainController::class , 'edit'])->name('edit');
-        Route::post('update/{id}', [Backend\VideoDomainController::class , 'update'])->name('update');
-        Route::delete('destroy/{id}', [Backend\VideoDomainController::class , 'destroy'])->name('destroy');
-        Route::get('series/{id}', [Backend\VideoDomainController::class , 'series'])->name('series');
-        Route::put('change_domain', [Backend\VideoDomainController::class , 'change_domain'])->name('change_domain');
-        // Route::put('batch/{action?}', [Backend\VideoDomainController::class, 'batch'])->name('batch');
-        Route::put('editable/{field}', [Backend\VideoDomainController::class, 'editable'])->name('editable');
-    });
-
     // 广告位
     Route::prefix('ad_space')->as('ad_space.')->group(function () {
         Route::get('/', [Backend\AdSpaceController::class , 'index'])->name('index');
