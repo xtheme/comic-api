@@ -86,12 +86,12 @@ class CategoryController extends BaseController
         // $data = $query->forPage($page, $size)->toSql();
         $data = $query->forPage($page, $size)->get();
 
-        $data = $data->map(function ($item) {
+        $data = $data->map(function ($item) use ($type) {
             return [
                 'id' => $item->id,
                 'title' => $item->title,
                 'author' => $item->author,
-                'cover' => $item->horizontal_cover,
+                'cover' => ($type == 'book') ? $item->horizontal_cover :$item->cover,
                 'tagged_tags' => $item->tagged_tags,
                 'end' => $item->end,
                 'view_counts' => shortenNumber($item->view_counts),
