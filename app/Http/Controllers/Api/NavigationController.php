@@ -11,15 +11,23 @@ class NavigationController extends Controller
 {
     public function list(Request $request)
     {
-        $raw = Navigation::where('status', 1)->orderByDesc('sort')->get();
+        $raw = Navigation::with(['filter'])->where('status', 1)->orderByDesc('sort')->get();
 
         $data = $raw->map(function ($nav) use ($request) {
+            $filter = [];
+            if ($nav->filter_id != 0) {
+                $filter = [
+                    'params' => $nav->filter->params,
+                    'tags' => $nav->filter->tags,
+                ];
+            }
             return [
                 'id' => $nav->id,
                 'title' => $nav->title,
                 'icon' => asset($nav->icon),
-                'link' => $nav->link,
                 'target' => $nav->getRawOriginal('target'),
+                'link' => $nav->link,
+                'filter' => $filter,
             ];
         })->toArray();
 
