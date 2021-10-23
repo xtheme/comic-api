@@ -1,7 +1,7 @@
 @extends('layouts.iframePage')
 
 {{-- page Title --}}
-@section('title','主题模块')
+@section('title','筛选条件')
 
 {{-- vendor style --}}
 @section('vendor-styles')
@@ -11,31 +11,12 @@
 @section('content')
     <section id="config-list">
         <div class="mb-1">
-            <a href="{{ route('backend.topic.create') }}" data-modal data-height="35vh" class="btn btn-primary" title="添加主题模块" role="button" aria-pressed="true">添加主题模块</a>
+            <a href="{{ route('backend.filter.create', ['book']) }}" data-modal class="btn btn-primary" title="添加漫画筛选条件" role="button" aria-pressed="true">添加漫画筛选条件</a>
+            <a href="{{ route('backend.filter.create', ['video']) }}" data-modal class="btn btn-primary" title="添加视频筛选条件" role="button" aria-pressed="true">添加视频筛选条件</a>
         </div>
         <div class="card">
             <div class="card-header">
-                <div class="float-left">
-                    <h4 class="card-title">@yield('title')</h4>
-                </div>
-                <div class="float-right d-flex flex-wrap">
-                    <form id="batch-action" class="form form-vertical" method="get" action="{{ route('backend.topic.batch') }}" novalidate>
-                        <div class="form-body">
-                            <div class="d-flex align-items-center">
-                                <div class="form-group mr-1">
-                                    <select class="form-control" name="action">
-                                        <option value="enable">启用</option>
-                                        <option value="disable">隐藏</option>
-                                        <option value="destroy">删除</option>
-                                    </select>
-                                </div>
-                                <div class="form-group">
-                                    <button type="submit" class="btn btn-primary">批量操作</button>
-                                </div>
-                            </div>
-                        </div>
-                    </form>
-                </div>
+                <h4 class="card-title">@yield('title')</h4>
             </div>
             <div class="card-content">
                 <div class="card-body">
@@ -44,60 +25,49 @@
                         <table class="table table-striped table-hover">
                             <thead>
                             <tr>
-                                <th>
-                                    <div class="checkbox">
-                                        <input type="checkbox" class="checkbox-input check-all" id="check-all">
-                                        <label for="check-all"></label>
-                                    </div>
-                                </th>
-                                <th>ID</th>
+                                <th>#ID</th>
                                 <th>类型</th>
-                                <th>标题</th>
-                                <th>排序</th>
-                                <th>展示风格</th>
-                                <th>添加时间</th>
-                                <th>状态</th>
-                                <th>匹配数</th>
+                                <th>条件备注</th>
+                                <th>查询标签</th>
+                                <th>查询条件</th>
                                 <th>操作</th>
                             </tr>
                             </thead>
                             <tbody>
                             @foreach ($list as $item)
                                 <tr>
-                                    <td>
-                                        <div class="checkbox">
-                                            <input type="checkbox" class="checkbox-input check-opt" id="check-{{ $item->id }}" name="ids[]" value="{{ $item->id }}">
-                                            <label for="check-{{ $item->id }}"></label>
-                                        </div>
-                                    </td>
                                     <td>{{ $item->id }}</td>
-                                    <td>
-                                        @if($item->type == 'video')
-                                            <span class="badge badge-pill badge-primary">动画</span>
-                                        @else
-                                            <span class="badge badge-pill badge-success">漫画</span>
-                                        @endif
-                                    </td>
+                                    <td>{{ $item->type }}</td>
                                     <td>{{ $item->title }}</td>
-                                    <td><span class="jeditable" data-pk="{{ $item->id }}" data-value="" > {{ $item->sort }}</td>
-                                    <td>{{ $item->style_alias }}</td>
-                                    <td>{{ $item->created_at->diffForHumans()  }}</td>
                                     <td>
-                                        @if($item->status == 1)
-                                            <a class="badge badge-pill badge-light-success" data-confirm href="{{ route('backend.topic.batch', ['action'=>'disable', 'ids' => $item->id]) }}" title="隐藏该模块">启用</a>
-                                        @else
-                                            <a class="badge badge-pill badge-light-danger" data-confirm href="{{ route('backend.topic.batch', ['action'=>'enable', 'ids' => $item->id]) }}" title="启用该模块">隐藏</a>
-                                        @endif
+                                        @forelse($item->tags as $key => $value)
+                                            <dl class="row">
+                                                <dt class="col-sm-3">{{ $key }}</dt>
+                                                <dd class="col-sm-9">
+                                                    {{ implode(', ', $value) }}
+                                                </dd>
+                                            </dl>
+                                        @empty
+                                        @endforelse
                                     </td>
-                                    <td>{{ $item->rule->query_count }}</td>
+                                    <td>
+                                        @forelse($item->params as $key => $value)
+                                            @if($value)
+                                            <dl class="row">
+                                                <dt class="col-sm-4">{{ $key }}</dt>
+                                                <dd class="col-sm-8">{{ $value }}</dd>
+                                            </dl>
+                                            @endif
+                                        @empty
+                                        @endforelse
+                                    </td>
                                     <td>
                                         <div class="@if(($loop->count - $loop->iteration) < 3){{'dropup'}}@else{{'dropdown'}}@endif">
                                             <span class="bx bx-dots-vertical-rounded font-medium-3 dropdown-toggle nav-hide-arrow cursor-pointer"
                                                   id="dropdownMenuButton{{ $item->id }}" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></span>
                                             <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuButton{{ $item->id }}">
-                                                <a class="dropdown-item" href="{{ $item->query_url }}" target="_blank"><i class="bx bx-link-external mr-1"></i>查看匹配</a>
-                                                <a class="dropdown-item" data-modal data-height="35vh" href="{{ route('backend.topic.edit', $item->id) }}" title="修改首页模块"><i class="bx bx-edit-alt mr-1"></i>修改</a>
-                                                <a class="dropdown-item" data-destroy href="{{ route('backend.topic.destroy', $item->id) }}" title="刪除首页模块"><i class="bx bx-trash mr-1"></i>刪除</a>
+                                                <a class="dropdown-item" data-modal href="{{ route('backend.filter.edit', [$item->type, $item->id]) }}" title="修改筛选条件"><i class="bx bx-edit-alt mr-1"></i>修改</a>
+                                                <a class="dropdown-item" data-destroy href="{{ route('backend.filter.destroy', $item->id) }}" title="刪除筛选条件"><i class="bx bx-trash mr-1"></i>刪除</a>
                                             </div>
                                         </div>
                                     </td>

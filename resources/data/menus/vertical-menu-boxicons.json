@@ -67,6 +67,10 @@
                 {
                     "url": "/backend/topic",
                     "name": "Topics"
+                },
+                {
+                    "url": "/backend/filter",
+                    "name": "Filter"
                 }
             ]
         },

@@ -151,13 +151,29 @@ if (!function_exists('watchDog')) {
 }
 
 if (!function_exists('getAllTags')) {
-    function getAllTags($type = 'comic')
+    function getAllTags($type = 'book')
     {
         $cache_key = 'tags:' . $type;
 
         return Cache::remember($cache_key, 300, function () use ($type) {
             return Tag::where('type', 'like', $type . '%')->orderByDesc('order_column')->pluck('name')->toArray();
         });
+    }
+}
+
+if (!function_exists('getTagGroupByType')) {
+    function getTagGroupByType($type = 'book')
+    {
+        $tags = Tag::with(['category'])->where('type', 'like', $type . '%')->orderByDesc('order_column')->get();
+
+        return $tags->mapToGroups(function($tag) {
+           return [
+               $tag->category->name => [
+                   'type' => $tag->type,
+                   'name' => $tag->name,
+               ]
+           ];
+        })->toArray();
     }
 }
 

@@ -15,7 +15,7 @@ class AdSpaceController extends Controller
 
     const CLASS_TYPE = [
         'video' => '动画',
-        'comic' => '漫画',
+        'book' => '漫画',
         'other' => '其他'
     ];
 

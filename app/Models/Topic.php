@@ -11,116 +11,27 @@ class Topic extends BaseModel
 {
     protected $fillable = [
         'title',
+        'type',
+        'filter_id',
         'sort',
         'spotlight',
         'row',
-        'causer',
-        'properties',
+        'limit',
         'status',
     ];
 
-    protected $casts = [
-        'properties' => 'array',
-    ];
-
-    public function getQueryUrlAttribute()
+    // 篩選規則
+    public function rule()
     {
-        switch ($this->causer) {
-            case 'video':
-                $route = route('backend.video.index');
-                break;
-            case 'book':
-                $route = route('backend.book.index');
-                break;
-            default:
-                $route = '';
-                break;
-        }
-
-        return urldecode($route . '?' . http_build_query($this->properties));
-    }
-
-    public function buildQuery(): Builder
-    {
-        $causer = sprintf('App\Models\%s', Str::ucfirst($this->causer));
-
-        $model = new $causer;
-
-        $query = $model::query();
-
-        switch ($this->causer) {
-            case 'video':
-                $query->where('status', 1);
-                break;
-            case 'book':
-                $query->where('status', 1);
-                break;
-        }
-
-        foreach ($this->properties as $key => $value) {
-
-            if (!$value) {
-                continue;
-            }
-
-            switch ($key) {
-                case 'tag':
-                    switch ($this->causer) {
-                        case 'video':
-                            $type = 'video';
-                            break;
-                        case 'book':
-                            $type = 'comic';
-                            break;
-                    }
-                    $query->withAllTags($value, $type);
-                    break;
-                case 'limit':
-                        $query->limit($value);
-                    break;
-                case 'order':
-                    // $query->orderByDesc($value);
-                    $query->latest();
-                    break;
-                case 'author':
-                    $query->where('author', $value);
-                    break;
-                case 'ribbon':
-                    if ($this->causer == 'video') {
-                        $query->where('ribbon', $value);
-                    }
-                    break;
-                case 'date_between':
-                    $date = explode(' - ', $value);
-                    $start_date = $date[0] . ' 00:00:00';
-                    $end_date = $date[1] . ' 23:59:59';
-                    $query->whereBetween('created_at', [
-                        $start_date,
-                        $end_date,
-                    ]);
-                    break;
-            }
-        }
-        // Log::debug($query->toSql());
-        return $query;
-    }
-
-    public function getQueryCountAttribute(): int
-    {
-        return $this->buildQuery()->count();
-    }
-
-    public function getQueryResultAttribute(): Collection
-    {
-        return $this->buildQuery()->get();
+        return $this->hasOne('App\Models\Filter', 'id', 'filter_id');
     }
 
     public function getStyleAliasAttribute()
     {
         if (!$this->spotlight) {
-            return sprintf('一排%s个', $this->row);
+            return sprintf('每排%s笔', $this->row);
         }
 
-        return sprintf('%s大%s小', $this->spotlight, $this->row);
+        return sprintf('聚焦, 每排%s笔', $this->row);
     }
 }

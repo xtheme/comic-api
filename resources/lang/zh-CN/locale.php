@@ -31,6 +31,7 @@ return [
     "Categories" => "标签分类",
     "Tags" => "标签统计",
     "Topics" => "主题区块",
+    "Filter" => "筛选条件",
 
     "Videos" => "动画管理",
     "Video List" => "动画列表",

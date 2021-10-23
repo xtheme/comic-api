@@ -25,7 +25,7 @@ class TagsSeeder extends Seeder
         DB::statement('SET FOREIGN_KEY_CHECKS=1');
 
         $categories = [
-            'comic' => '漫画',
+            'book' => '漫画',
             'video.area' => '地区',
             'video.place' => '场景',
             'video.topic' => '主题',
@@ -46,7 +46,7 @@ class TagsSeeder extends Seeder
         });
 
         $list = [
-            'comic' => '日漫 韩漫 精选 汉化 最新 完结 单行本 同人志 恋爱 校园 剧情 都市 强奸 萝莉 乱伦 恐怖 奇幻 多人 后宫 男男 百合 猎奇 写真 CG画集 全彩',
+            'book' => '日漫 韩漫 精选 汉化 最新 完结 单行本 同人志 恋爱 校园 剧情 都市 强奸 萝莉 乱伦 恐怖 奇幻 多人 后宫 男男 百合 猎奇 写真 CG画集 全彩',
             'video.area' => '日本 韩国 国产 欧美',
             'video.place' => '校园 医院 电车 图书馆 巴士 办公室 美容院 健身房 温泉',
             'video.topic' => '偶像 主观视角 首次亮相 流出 无码 薄马赛克 马赛克破解 企画 共演 总编辑 感谢祭 女性向 成人电影 明星脸 艺人 素人 R15 4K VR 4小时以上 16小时以上 局部特写 写真偶像 3D 动漫改编',

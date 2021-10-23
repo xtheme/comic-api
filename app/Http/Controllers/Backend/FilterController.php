@@ -4,66 +4,70 @@ namespace App\Http\Controllers\Backend;
 
 use App\Enums\Options;
 use App\Http\Controllers\Controller;
-use App\Http\Requests\Backend\TopicRequest;
-use App\Models\Topic;
 use App\Models\Filter;
-use App\Repositories\Contracts\TopicRepositoryInterface;
+use App\Models\Topic;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Response;
 
-class TopicController extends Controller
+class FilterController extends Controller
 {
-    private $repository;
-
-    public function __construct(TopicRepositoryInterface $repository)
-    {
-        $this->repository = $repository;
-    }
 
     public function index(Request $request)
     {
         $data = [
-            'list' => $this->repository->filter($request)->paginate(),
+            'list' => Filter::paginate(),
         ];
 
-        return view('backend.topic.index')->with($data);
+        return view('backend.filter.index')->with($data);
     }
 
-    public function create()
+    public function create($type)
     {
         $data = [
-            'rules' => Filter::get(),
+            'type' => $type,
+            'tag_group' => getTagGroupByType($type),
             'causer_options' => Options::CAUSER_OPTIONS,
             'ribbon_options' => Options::RIBBON_OPTIONS,
         ];
 
-        return view('backend.topic.create')->with($data);
+        return view('backend.filter.create')->with($data);
     }
 
-    public function store(TopicRequest $request)
+    public function store(Request $request)
     {
         $post = $request->post();
 
-        $this->repository->create($post);
+        $rule = new Filter;
+
+        $rule->fill($post);
+
+        $rule->save();
 
         return Response::jsonSuccess(__('response.create.success'));
     }
 
-    public function edit($id)
+    public function edit($type, $id)
     {
         $data = [
-            'data' => $this->repository->find($id),
-            'rules' => Filter::get(),
+            'data' => Filter::findOrFail($id),
+            'type' => $type,
+            'tag_group' => getTagGroupByType($type),
             'causer_options' => Options::CAUSER_OPTIONS,
             'ribbon_options' => Options::RIBBON_OPTIONS,
         ];
 
-        return view('backend.topic.edit')->with($data);
+        return view('backend.filter.edit')->with($data);
     }
 
-    public function update(TopicRequest $request, $id)
+    public function update(Request $request, $id)
     {
-        $this->repository->update($id, $request->post());
+        $post = $request->post();
+
+        $rule = Filter::findOrFail($id);
+
+        $rule->fill($post);
+
+        $rule->save();
 
         return Response::jsonSuccess(__('response.update.success'));
     }

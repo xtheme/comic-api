@@ -2,8 +2,6 @@
 
 {{-- page style --}}
 @section('page-styles')
-    <link rel="stylesheet" type="text/css" href="{{ asset('vendors/css/bootstrap-multiselect/bootstrap-multiselect.css') }}">
-    <link rel="stylesheet" type="text/css" href="{{ asset('vendors/css/pickers/daterange/daterangepicker.css') }}">
 @endsection
 
 @section('content')
@@ -15,9 +13,9 @@
                     <div class="form-group">
                         <label><span class="danger">*</span> 类型</label>
                         <div class="controls">
-                            <select class="form-control" name="causer">
+                            <select class="form-control" name="type">
                                 @foreach ($causer_options as $key => $val)
-                                <option value="{{ $key }}" @if($data->causer == $key){{'selected'}}@endif>{{ $val }}</option>
+                                <option value="{{ $key }}" @if($data->type == $key){{'selected'}}@endif>{{ $val }}</option>
                                 @endforeach
                             </select>
                         </div>
@@ -76,94 +74,17 @@
                         <span class="float-right font-size-small text-danger">(例如：动漫1大2小, 填入5, 扣除聚焦笔数1则展示2行)</span>
                         <label><span class="danger">*</span> 模块展示笔数</label>
                         <div class="controls">
-                            <input type="number" class="form-control" name="properties[limit]" value="{{ $data->properties['limit'] ?? 0 }}">
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="divider">
-                <div class="divider-text">筛选条件, 留空表示忽略该条件</div>
-            </div>
-            <div class="row">
-                <div class="col-6">
-                    <div class="form-group">
-                        <span class="float-right font-size-small text-danger">(此条件只对动画类型有效)</span>
-                        <label>角标</label>
-                        <div class="controls">
-                            <select class="form-control" name="properties[ribbon]">
-                                <option value="">忽略</option>
-                                @foreach ($ribbon_options as $key => $val)
-                                    <option value="{{ $key }}" @if(($data->properties['ribbon'] ?? '') == $key){{'selected'}}@endif>{{ $val }}</option>
-                                @endforeach
-                            </select>
+                            <input type="number" class="form-control" name="limit" value="{{ $data->limit ?? 3 }}">
                         </div>
                     </div>
                 </div>
                 <div class="col-6">
                     <div class="form-group">
-                        <span class="float-right font-size-small text-light">(留空不设置挑选条件)</span>
-                        <label>挑选作者</label>
+                        <label>筛选条件</label>
                         <div class="controls">
-                            <input type="text" class="form-control" name="properties[author]" value="{{ $data->properties['author'] ?? '' }}">
-                        </div>
-                    </div>
-                </div>
-                <input type="hidden" name="properties[order]" value="created_at">
-                {{--                <div class="col-6">--}}
-                {{--                    <div class="form-group">--}}
-                {{--                        <label><span class="danger">*</span> 挑选排序</label>--}}
-                {{--                        <div class="controls">--}}
-                {{--                            <input type="hidden" name="properties[1]" value="created_at">--}}
-                {{--                            <ul class="list-unstyled mb-0">--}}
-                {{--                                <li class="d-inline-topic mr-2 mb-1">--}}
-                {{--                                    <fieldset>--}}
-                {{--                                        <div class="radio radio-shadow">--}}
-                {{--                                            <input type="radio" id="radio_condition_1"  name="properties[1]" value="created_at" checked>--}}
-                {{--                                            <label for="radio_condition_1">时间</label>--}}
-                {{--                                        </div>--}}
-                {{--                                    </fieldset>--}}
-                {{--                                </li>--}}
-                {{--                                <li class="d-inline-topic mr-2 mb-1">--}}
-                {{--                                    <fieldset>--}}
-                {{--                                        <div class="radio radio-shadow">--}}
-                {{--                                            <input type="radio" id="radio_condition_2" name="properties[1]" value="hot" >--}}
-                {{--                                            <label for="radio_condition_2">热度</label>--}}
-                {{--                                        </div>--}}
-                {{--                                    </fieldset>--}}
-                {{--                                </li>--}}
-                {{--                                <li class="d-inline-topic mr-2 mb-1">--}}
-                {{--                                    <fieldset>--}}
-                {{--                                        <div class="radio radio-shadow">--}}
-                {{--                                            <input type="radio" id="radio_condition_3" name="properties[1]" value="collect" >--}}
-                {{--                                            <label for="radio_condition_3">收藏量</label>--}}
-                {{--                                        </div>--}}
-                {{--                                    </fieldset>--}}
-                {{--                                </li>--}}
-                {{--                            </ul>--}}
-                {{--                        </div>--}}
-                {{--                    </div>--}}
-                {{--                </div>--}}
-                <div class="col-12">
-                    <div class="form-group">
-                        <span class="float-right font-size-small text-light">(留空不设置挑选条件)</span>
-                        <label>挑选作品上架时间段</label>
-                        <div class="controls">
-                            <fieldset class="form-group position-relative has-icon-left">
-                                <input type="text" class="form-control date-picker" name="properties[date_between]" autocomplete="off" value="{{ $data->properties['date_between'] ?? '' }}">
-                                <div class="form-control-position">
-                                    <i class='bx bx-calendar-check'></i>
-                                </div>
-                            </fieldset>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-12">
-                    <div class="form-group">
-                        <label>挑选标签</label>
-                        <div class="controls">
-                            <select id="tags-selector" class="form-control" name="properties[tag][]" multiple="multiple">
-                                @foreach($tags as $tag)
-                                    <option value="{{ $tag }}" @if(isset($data->properties['tag']) && in_array($tag, $data->properties['tag'])){{'selected'}}@endif>{{ $tag }}</option>
+                            <select id="tags-selector" class="form-control" name="topic_rule_id">
+                                @foreach($rules as $rule)
+                                    <option value="{{ $rule->id }}" @if($data->topic_rule_id == $rule->id ){{'selected'}}@endif>{{ $rule->title }}</option>
                                 @endforeach
                             </select>
                         </div>
@@ -179,54 +100,12 @@
 
 {{-- vendor scripts --}}
 @section('vendor-scripts')
-    <script src="{{ asset('vendors/js/extensions/moment.min.js') }}"></script>
-    <script src="{{ asset('vendors/js/pickers/daterange/daterangepicker.js') }}"></script>
-    <script src="{{ asset('vendors/js/extensions/locale/zh-cn.js') }}"></script>
-    <script src="{{ asset('vendors/js/bootstrap-multiselect/bootstrap-multiselect.js') }}"></script>
 @endsection
-
 
 {{-- page scripts --}}
 @section('page-scripts')
     <script>
-        let $datePicker = $('.date-picker');
-
-        $datePicker.daterangepicker({
-            autoUpdateInput: false,
-            startDate: moment().subtract(7, 'days').calendar(),
-        });
-
-        $datePicker.on('apply.daterangepicker', function(ev, picker) {
-            $(this).val(picker.startDate.format('YYYY-MM-DD') + ' - ' + picker.endDate.format('YYYY-MM-DD'));
-        });
-
-        $datePicker.on('cancel.daterangepicker', function(ev, picker) {
-            $(this).val('');
-        });
-
         $(document).ready(function () {
-            $('#tags-selector').multiselect({
-                buttonWidth: '100%',
-                buttonTextAlignment: 'left',
-                buttonText: function(options, select) {
-                    if (options.length === 0) {
-                        return '请选择标签';
-                    }
-                    else {
-                        var labels = [];
-                        options.each(function() {
-                            if ($(this).attr('label') !== undefined) {
-                                labels.push($(this).attr('label'));
-                            }
-                            else {
-                                labels.push($(this).html());
-                            }
-                        });
-                        return labels.join(', ') + '';
-                    }
-                }
-            });
-
             $('#form').submit(function (e) {
                 e.preventDefault();
 
@@ -236,7 +115,7 @@
                     data    : $('#form').serialize(),
                     // debug: true,
                     callback: function (res) {
-                        if (res.code == 200) {
+                        if (res.code === 200) {
                             // iframe.blade.php
                             parent.$.hideModal();
 

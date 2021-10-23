@@ -29,16 +29,16 @@ class TopicRepository extends Repository implements TopicRepositoryInterface
     public function filter(Request $request): Builder
     {
         $title = $request->input('title') ?? '';
-        $causer = $request->input('causer') ?? '';
+        $type = $request->input('type') ?? '';
         $status = $request->input('status') ?? '';
 
         $order = $request->input('order') ?? 'sort';
         $sort = $request->input('sort') ?? 'desc';
 
-        return $this->model::when($title, function (Builder $query, $title) {
+        return $this->model::with(['rule'])->when($title, function (Builder $query, $title) {
             return $query->where('title', 'like' , '%' . $title . '%' );
-        })->when($causer, function (Builder $query, $causer) {
-            return $query->where('causer', $causer);
+        })->when($type, function (Builder $query, $type) {
+            return $query->where('type', $type);
         })->when($status, function (Builder $query, $status) {
             return $query->where('status', $status);
         })->when($sort, function (Builder $query, $sort) use ($order) {

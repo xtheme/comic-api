@@ -63,7 +63,7 @@ class UpgradeSeeder extends Seeder
      * 添加视频广告位
      *
      * @param  string  $name  广告名称
-     * @param  string  $class  广告位分类 (video：视频，comics：漫画，other：其他)
+     * @param  string  $class  广告位分类 (video：视频，book：漫画，other：其他)
      */
     protected function addAdSpace(string $name, string $class)
     {

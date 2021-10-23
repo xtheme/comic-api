@@ -30,7 +30,7 @@ class BookController extends Controller
             'review_options' => Options::REVIEW_OPTIONS,
             'charge_options' => Options::CHARGE_OPTIONS,
             'list' => $this->repository->filter($request)->paginate(),
-            'tags' => getAllTags('comic'),
+            'tags' => getAllTags('book'),
             'pageConfigs' => ['hasSearchForm' => true],
         ];
 
@@ -58,7 +58,7 @@ class BookController extends Controller
     {
         $data = [
             'status_options' => Options::STATUS_OPTIONS,
-            'tags' => getAllTags('comic'),
+            'tags' => getAllTags('book'),
         ];
 
         return view('backend.book.create')->with($data);
@@ -75,7 +75,7 @@ class BookController extends Controller
     {
         $data = [
             'status_options' => Options::STATUS_OPTIONS,
-            'tags' => getAllTags('comic'),
+            'tags' => getAllTags('book'),
             'book' => Book::findOrFail($id),
         ];
 
@@ -151,7 +151,7 @@ class BookController extends Controller
                 ];
                 $books = Book::whereIn('id', $ids)->get();
                 foreach ($books as $book) {
-                    $book->attachTag($tag[$action], 'comic');
+                    $book->attachTag($tag[$action], 'book');
                 }
 
                 if ($data) {
@@ -203,7 +203,7 @@ class BookController extends Controller
         $data = [
             'url' => ($action == 'add') ? route('backend.book.addTag') : route('backend.book.deleteTag'),
             'ids' => $request->input('ids'),
-            'tags' => getAllTags('comic'),
+            'tags' => getAllTags('book'),
         ];
 
         return view('backend.book.modifyTag')->with($data);
@@ -216,7 +216,7 @@ class BookController extends Controller
 
         foreach ($ids as $id) {
             $book = Book::findOrFail($id);
-            $book->attachTags($tags, 'comic');
+            $book->attachTags($tags, 'book');
         }
 
         return Response::jsonSuccess('标签已更新');
@@ -229,7 +229,7 @@ class BookController extends Controller
 
         foreach ($ids as $id) {
             $book = Book::findOrFail($id);
-            $book->detachTags($tags, 'comic');
+            $book->detachTags($tags, 'book');
         }
 
         return Response::jsonSuccess('标签已更新');
