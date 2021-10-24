@@ -24,15 +24,15 @@ class CategoryController extends BaseController
     }
 
     // todo composer require protonemedia/laravel-cross-eloquent-search
-    public function search(Request $request, $page = 1)
+    public function search(Request $request)
     {
-        $size = 20;
-
         $params = [
             'keyword' => $request->post('keyword') ?? null,
             'tags' => $request->post('tags') ?? null,
             'end' => $request->post('end') ?? null,
             'sort' => $request->post('sort') ?? 'created_at',
+            'page' => $request->post('page') ?? 1,
+            'size' => $request->post('size') ?? 20,
         ];
 
         $type = $request->post('type') ?? 'book';
@@ -85,11 +85,11 @@ class CategoryController extends BaseController
 
         $count = (clone $query)->count();
 
-        $total_page = ceil($count / $size);
+        $total_page = ceil($count / $params['size']);
 
         // $sql = $query->forPage($page, $size)->toSql();
         // Log::debug($sql);
-        $data = (clone $query)->forPage($page, $size)->get();
+        $data = (clone $query)->forPage($params['page'], $params['size'])->get();
 
         $list = $data->map(function ($item) use ($type) {
             return [
@@ -104,8 +104,8 @@ class CategoryController extends BaseController
         })->toArray();
 
         $data = [
-            'page' => $page,
-            'size' => $size,
+            'page' => $params['page'],
+            'size' => $params['size'],
             'total_page' => $total_page,
             'list' => $list,
         ];
