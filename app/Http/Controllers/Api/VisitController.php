@@ -6,7 +6,7 @@ use App\Models\UserVisitLog;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Response;
 
-class VisitHistoryController extends BaseController
+class VisitController extends BaseController
 {
     private function getBookVisitHistories(Request $request)
     {

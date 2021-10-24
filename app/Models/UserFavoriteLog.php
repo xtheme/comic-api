@@ -15,12 +15,12 @@ class UserFavoriteLog extends BaseModel
 
     public function book(): HasOne
     {
-        return $this->hasOne('App\Models\Book', 'id', 'book_id');
+        return $this->hasOne('App\Models\Book', 'id', 'item_id');
     }
 
     public function relation(): HasOne
     {
-        return $this->hasOne($this->item_model);
+        return $this->hasOne($this->item_model, 'id', 'item_id');
     }
 
     public function getItem()

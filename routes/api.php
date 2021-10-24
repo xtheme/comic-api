@@ -97,23 +97,24 @@ Route::as('api.')->middleware(['api'])->group(function () {
             Route::any('/refresh', [Api\AuthController::class, 'refresh'])->name('refresh');
         });
 
-        // 用戶紀錄
+        // 用戶交易紀錄
         Route::prefix('user')->as('user.')->group(function () {
             Route::get('/order/{page?}', [Api\UserController::class, 'order'])->name('order');
             Route::get('/recharge/{page?}', [Api\UserController::class, 'recharge'])->name('recharge');
             Route::get('/purchase/{page?}', [Api\UserController::class, 'purchase'])->name('purchase');
         });
 
-        // 歷史紀錄 (閱覽/ 播放/ 收藏)
-        Route::prefix('history')->as('history.')->group(function () {
-            // 閱覽 (訪問) 歷史紀錄
-            Route::get('/visit/{type}', [Api\VisitHistoryController::class, 'list'])->name('visit.history');
-            Route::post('visit/{type}/destroy', [Api\VisitHistoryController::class, 'destroy'])->name('visit.history');
+        // 用戶訪問紀錄
+        Route::prefix('visit')->as('visit.')->group(function () {
+            Route::post('/list', [Api\VisitController::class, 'list'])->name('list');
+            Route::post('/destroy', [Api\VisitController::class, 'destroy'])->name('destroy');
+        });
 
-            // 收藏 (最愛) 歷史紀錄
-            Route::get('/favorite/{type}', [Api\FavoriteHistoryController::class, 'list'])->name('favorite.history');
-            Route::post('/favorite/{type}/save', [Api\FavoriteHistoryController::class, 'save'])->name('favorite.save');
-            Route::post('/favorite/{type}/destroy', [Api\FavoriteHistoryController::class, 'destroy'])->name('favorite.history');
+        // 用戶收藏紀錄
+        Route::prefix('favorite')->as('favorite.')->group(function () {
+            Route::post('/list', [Api\FavoriteController::class, 'list'])->name('list');
+            Route::post('/save', [Api\FavoriteController::class, 'save'])->name('save');
+            Route::post('/destroy', [Api\FavoriteController::class, 'destroy'])->name('destroy');
         });
 
         // 支付中心
