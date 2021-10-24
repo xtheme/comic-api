@@ -2,87 +2,51 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Http\Requests\Api\VisitDestroyRequest;
+use App\Http\Requests\Api\VisitListRequest;
 use App\Models\UserVisitLog;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Response;
 
 class VisitController extends BaseController
 {
-    private function getBookVisitHistories(Request $request)
-    {
-        // $histories = UserVisitLog::has('relation')->where('user_id', $request->user()->id)->orderByDesc('updated_at')->get();
-        $histories = $request->user()->visit_books()->get();
-
-        $histories = $histories->transform(function ($item) {
-            return [
-                'id' => $item->id,
-                'book_id' => $item->item_id,
-                'title' => $item->book->title,
-                // 'author' => $item->book()->author,
-                // 'cover' => $item->book()->vertical_cover,
-                // 'tagged_tags' => $item->book()->tagged_tags,
-                'created_at' => $item->created_at->format('Y-m-d'),
-                'updated_at' => $item->updated_at->format('Y-m-d'),
-            ];
-        })->toArray();
-
-        return $histories;
-    }
-
-    private function getVideoVisitHistories(Request $request)
-    {
-        $histories = UserVisitLog::has('video')->where('user_id', $request->user()->id)->orderByDesc('updated_at')->get();
-
-        $histories = $histories->transform(function ($item) {
-            return [
-                'id' => $item->id,
-                'video_id' => $item->video_id,
-                'title' => $item->video->title,
-                'author' => $item->video->author,
-                'cover' => $item->video->cover,
-                'ribbon' => $item->video->ribbon,
-                'tagged_tags' => $item->video->tagged_tags,
-                'created_at' => $item->created_at->format('Y-m-d'),
-                'updated_at' => $item->updated_at->format('Y-m-d'),
-            ];
-        })->toArray();
-
-        return $histories;
-    }
-
     // 閱覽 (訪問) 歷史紀錄
-    public function list(Request $request, $type)
+    public function list(VisitListRequest $request)
     {
-        switch ($type) {
-            case 'book':
-                $histories = $this->getBookVisitHistories($request);
-                break;
-            case 'video':
-                $histories = $this->getVideoVisitHistories($request);
-                break;
-        }
+        $input = $request->validated();
 
-        return Response::jsonSuccess(__('api.success'), $histories);
+        $type = $input['type'];
+
+        $query = UserVisitLog::with([$type])->where('user_id', $request->user()->id)->where('type', $type);
+
+        $logs = (clone $query)->orderByDesc('updated_at')->limit(50)->get();
+
+        $data = $logs->transform(function ($item) use ($type) {
+            return [
+                'id' => $item->id,
+                'type' => $item->type,
+                'item_id' => $item->item_id,
+                'title' => $item->{$type}->title,
+                'author' => $item->{$type}->author,
+                'cover' => ($type == 'book') ? $item->{$type}->horizontal_cover : $item->{$type}->cover,
+                'tagged_tags' => $item->{$type}->tagged_tags,
+                'view_counts' => shortenNumber($item->{$type}->view_counts),
+                'created_at' => $item->created_at->format('Y-m-d H:i:s'),
+            ];
+        })->toArray();
+
+        return Response::jsonSuccess(__('api.success'), $data);
     }
 
-    public function destroy(Request $request, $type)
+    public function destroy(VisitDestroyRequest $request)
     {
-        $ids = explode(',', $request->input('ids'));
+        $input = $request->validated();
 
-        switch ($type) {
-            case 'book':
-                UserVisitLog::whereIn('id', $ids)->where('user_id', $request->user()->id)->delete();
+        $type = $input['type'];
+        $ids = explode(',', $input['ids']);
 
-                $histories = $this->getBookVisitHistories($request);
-                break;
-            case 'video':
-                UserVisitLog::whereIn('id', $ids)->where('user_id', $request->user()->id)->delete();
+        UserVisitLog::whereIn('id', $ids)->where('user_id', $request->user()->id)->where('type', $type)->delete();
 
-                $histories = $this->getVideoVisitHistories($request);
-                break;
-        }
-
-        return Response::jsonSuccess(__('response.destroy.success'), $histories);
+        return Response::jsonSuccess(__('response.destroy.success'));
     }
 
 }

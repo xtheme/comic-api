@@ -17,9 +17,9 @@ class FavoriteController extends BaseController
 
         $type = $input['type'];
 
-        $histories = UserFavoriteLog::with([$type])->where('user_id', $request->user()->id)->where('type', $type)->orderByDesc('updated_at')->get();
+        $logs = UserFavoriteLog::with([$type])->where('user_id', $request->user()->id)->where('type', $type)->orderByDesc('updated_at')->get();
 
-        $histories = $histories->transform(function ($item) use ($type) {
+        $data = $logs->transform(function ($item) use ($type) {
             return [
                 'id' => $item->id,
                 'type' => $item->type,
@@ -33,7 +33,7 @@ class FavoriteController extends BaseController
             ];
         })->toArray();
 
-        return Response::jsonSuccess(__('api.success'), $histories);
+        return Response::jsonSuccess(__('api.success'), $data);
     }
 
     public function save(FavoriteSaveRequest $request)
