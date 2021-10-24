@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Models\Filter;
 use App\Repositories\Contracts\TopicRepositoryInterface;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Response;
 
 class TopicController extends BaseController
@@ -41,20 +42,27 @@ class TopicController extends BaseController
             'status' => 1,
         ]);
 
-        $topics = $this->repository->filter($request)->get();
+        $cache_key = sprintf('topic:%s', $type);
 
-        $data = $topics->map(function ($topic) {
+        if (Cache::has($cache_key)) {
+            $data = Cache::get($cache_key);
+        } else {
+            $topics = $this->repository->filter($request)->get();
 
-            $list = $topic->filter->buildQuery()->take($topic->limit)->get();
+            $data = $topics->map(function ($topic) {
+                $list = $topic->filter->buildQuery()->take($topic->limit)->get();
 
-            return [
-                'title' => $topic->filter->title,
-                'filter_id' => $topic->filter_id,
-                'spotlight' => $topic->spotlight,
-                'per_line' => $topic->row,
-                'list' => $this->arrangeData($topic->type, $list),
-            ];
-        });
+                return [
+                    'title' => $topic->filter->title,
+                    'filter_id' => $topic->filter_id,
+                    'spotlight' => $topic->spotlight,
+                    'per_line' => $topic->row,
+                    'list' => $this->arrangeData($topic->type, $list),
+                ];
+            });
+
+            Cache::set($cache_key, $data, 3600);
+        }
 
         return Response::jsonSuccess(__('api.success'), $data);
     }
