@@ -54,7 +54,7 @@ Route::as('api.')->middleware(['api'])->group(function () {
         // 分類頁
         Route::prefix('category')->as('category.')->group(function () {
             Route::get('/tags', [Api\CategoryController::class, 'tags'])->name('tags');
-            Route::post('/search', [Api\CategoryController::class, 'search'])->name('search');
+            Route::post('/search/{page?}', [Api\CategoryController::class, 'search'])->name('search');
         });
 
         // 漫畫

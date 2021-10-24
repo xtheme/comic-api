@@ -81,21 +81,21 @@ class TopicController extends BaseController
     {
         $filter = Filter::findOrFail($filter_id);
 
-        $per_page = 20;
+        $size = 20;
 
         $count = $filter->buildQuery()->count();
 
-        $total_page = ceil($count / $per_page);
+        $total_page = ceil($count / $size);
 
-        $list = $filter->buildQuery()->forPage($page, $per_page)->get();
+        $list = $filter->buildQuery()->forPage($page, $size)->get();
 
         $list = $this->arrangeData($filter->type, $list);
 
         $data = [
             'title' => $filter->title,
-            'per_page' => $per_page,
-            'total_page' => $total_page,
             'page' => $page,
+            'size' => $size,
+            'total_page' => $total_page,
             'list' => $list,
         ];
 
