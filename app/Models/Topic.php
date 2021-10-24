@@ -10,7 +10,6 @@ use Illuminate\Support\Str;
 class Topic extends BaseModel
 {
     protected $fillable = [
-        'title',
         'type',
         'filter_id',
         'sort',

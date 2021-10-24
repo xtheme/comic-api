@@ -52,7 +52,7 @@
                                 </th>
                                 <th>ID</th>
                                 <th>类型</th>
-                                <th>标题</th>
+                                <th>筛选器标题</th>
                                 <th>排序</th>
                                 <th>展示风格</th>
                                 <th>添加时间</th>
@@ -78,7 +78,7 @@
                                             <span class="badge badge-pill badge-success">漫画</span>
                                         @endif
                                     </td>
-                                    <td>{{ $item->title }}</td>
+                                    <td>{{ $item->filter->title }}</td>
                                     <td><span class="jeditable" data-pk="{{ $item->id }}" data-value="" > {{ $item->sort }}</td>
                                     <td>{{ $item->style_alias }}</td>
                                     <td>{{ $item->created_at->diffForHumans()  }}</td>

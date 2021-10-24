@@ -20,15 +20,19 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-8">
+                <div class="col-4">
                     <div class="form-group">
-                        <label><span class="danger">*</span> 模块标题</label>
+                        <label>筛选器</label>
                         <div class="controls">
-                            <input type="text" class="form-control" name="title" placeholder="请输入模块标题">
+                            <select  class="form-control" name="filter_id">
+                                @foreach($filters as $filter)
+                                    <option value="{{ $filter->id }}">{{ $filter->title }}</option>
+                                @endforeach
+                            </select>
                         </div>
                     </div>
                 </div>
-                <div class="col-6">
+                <div class="col-4">
                     <div class="form-group">
                         <span class="float-right font-size-small text-light">(数字由大到小排序)</span>
                         <label><span class="danger">*</span> 模块排序</label>
@@ -37,18 +41,8 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-6">
-                    <div class="form-group">
-                        <label><span class="danger">*</span> 状态</label>
-                        <div class="controls">
-                            <select class="form-control" name="status">
-                                <option value="1">开启</option>
-                                <option value="-1">关闭</option>
-                            </select>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-6">
+
+                <div class="col-4">
                     <div class="form-group">
                         <span class="float-right font-size-small text-danger">(例如：动漫1大2小, 则选择是)</span>
                         <label>首笔聚焦</label>
@@ -58,7 +52,7 @@
                         </select>
                     </div>
                 </div>
-                <div class="col-6">
+                <div class="col-4">
                     <div class="form-group">
                         <span class="float-right font-size-small text-danger">(例如：动漫1大2小, 则选择2)</span>
                         <label>聚焦之外的数据每行几笔</label>
@@ -68,7 +62,7 @@
                         </select>
                     </div>
                 </div>
-                <div class="col-6">
+                <div class="col-4">
                     <div class="form-group">
                         <span class="float-right font-size-small text-danger">(例如：动漫1大2小, 填入5, 扣除聚焦笔数1则展示2行)</span>
                         <label><span class="danger">*</span> 模块展示笔数</label>
@@ -77,14 +71,13 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-6">
+                <div class="col-4">
                     <div class="form-group">
-                        <label>筛选器</label>
+                        <label><span class="danger">*</span> 状态</label>
                         <div class="controls">
-                            <select  class="form-control" name="filter_id">
-                                @foreach($filters as $filter)
-                                    <option value="{{ $filter->id }}">{{ $filter->title }}</option>
-                                @endforeach
+                            <select class="form-control" name="status">
+                                <option value="1">开启</option>
+                                <option value="-1">关闭</option>
                             </select>
                         </div>
                     </div>

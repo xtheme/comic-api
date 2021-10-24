@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Models\Filter;
 use App\Repositories\Contracts\TopicRepositoryInterface;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Response;
@@ -65,9 +66,8 @@ class TopicController extends BaseController
             $list = $topic->filter->buildQuery()->take($topic->limit)->get();
 
             return [
-                'topic' => $topic->id,
-                'type' => $topic->type,
-                'title' => $topic->title,
+                'title' => $topic->filter->title,
+                'filter_id' => $topic->filter_id,
                 'spotlight' => $topic->spotlight,
                 'per_line' => $topic->row,
                 'list' => $this->arrangeData($topic->type, $list, $topic->row),
@@ -77,23 +77,22 @@ class TopicController extends BaseController
         return Response::jsonSuccess(__('api.success'), $data);
     }
 
-    public function more($topic_id, $page = 1)
+    public function filter($filter_id, $page = 1)
     {
-        $topic = $this->repository->find($topic_id);
+        $filter = Filter::findOrFail($filter_id);
 
         $per_page = 20;
 
-        $count = $topic->filter->buildQuery()->count();
+        $count = $filter->buildQuery()->count();
 
         $total_page = ceil($count / $per_page);
 
-        $list = $topic->filter->buildQuery()->forPage($page, $per_page)->get();
+        $list = $filter->buildQuery()->forPage($page, $per_page)->get();
 
-        $list = $this->arrangeData($topic->type, $list);
+        $list = $this->arrangeData($filter->type, $list);
 
         $data = [
-            'topic' => $topic_id,
-            'title' => $topic->title,
+            'title' => $filter->title,
             'per_page' => $per_page,
             'total_page' => $total_page,
             'page' => $page,

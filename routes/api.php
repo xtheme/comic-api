@@ -29,13 +29,13 @@ Route::as('api.')->middleware(['api'])->group(function () {
 
         // 首頁:導航列
         Route::prefix('navigation')->as('navigation.')->group(function () {
-            Route::get('/list', [Api\NavigationController::class , 'list'])->name('list');
+            Route::get('/', [Api\NavigationController::class , 'list'])->name('list');
         });
 
         // 首頁:主题
         Route::prefix('topic')->as('topic.')->group(function () {
-            Route::get('/{causer}', [Api\TopicController::class, 'list'])->name('list');
-            Route::get('/more/{topic}/{page?}', [Api\TopicController::class, 'more'])->name('more');
+            Route::get('/{type}', [Api\TopicController::class, 'list'])->name('list');
+            Route::get('/filter/{filter_id}/{page?}', [Api\TopicController::class, 'filter'])->name('filter');
         });
 
         // 視頻
