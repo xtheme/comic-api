@@ -17,37 +17,19 @@ class TopicController extends BaseController
     }
 
     // 整理不同模型輸出的數據格式
-    public function arrangeData($type, $list, $row = 3)
+    public function arrangeData($type, $list)
     {
-        switch ($type) {
-            case 'video':
-                $list = $list->map(function ($item) {
-                    return [
-                        'id' => $item->id,
-                        'title' => $item->title,
-                        'author' => $item->author,
-                        'cover' => $item->cover,
-                        'tagged_tags' => $item->tagged_tags,
-                        // 'ribbon' => $item->ribbon,
-                        // 'visit_counts' => shortenNumber($item->visit_histories_count),
-                        // 'play_counts' => (request()->header('platform') == 1) ? $item->play_histories_count : shortenNumber($item->play_histories_count),
-                    ];
-                })->toArray();
-                break;
-
-            case 'book':
-                $list = $list->map(function ($item) use ($row) {
-                    return [
-                        'id' => $item->id,
-                        'title' => $item->title,
-                        'author' => $item->author,
-                        'cover' => ($row > 2) ? $item->vertical_cover : $item->horizontal_cover,
-                        'tagged_tags' => $item->tagged_tags,
-                        // 'visit_counts' => shortenNumber($item->visit_histories_count),
-                    ];
-                })->toArray();
-                break;
-        }
+        $list = $list->map(function ($item) use ($type) {
+            return [
+                'id' => $item->id,
+                'title' => $item->title,
+                'author' => $item->author,
+                'cover' => ($type == 'book') ? $item->horizontal_cover : $item->cover,
+                'tagged_tags' => $item->tagged_tags,
+                'view_counts' => shortenNumber($item->view_counts),
+                'created_at' => optional($item->created_at)->format('Y-m-d'),
+            ];
+        })->toArray();
 
         return $list;
     }
