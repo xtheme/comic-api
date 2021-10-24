@@ -12,5 +12,6 @@ class NavigationOptions
     const TARGET_OPTIONS = [
         1 => '使用筛选器',
         2 => '另開浏览器',
+        3 => '指定路由',
     ];
 }
