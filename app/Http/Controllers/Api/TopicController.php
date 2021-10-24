@@ -24,7 +24,7 @@ class TopicController extends BaseController
                 'id' => $item->id,
                 'title' => $item->title,
                 'author' => $item->author,
-                'cover' => ($type == 'book') ? $item->horizontal_cover : $item->cover,
+                'cover' => ($type == 'book') ? $item->vertical_cover : $item->cover,
                 'tagged_tags' => $item->tagged_tags,
                 'view_counts' => shortenNumber($item->view_counts),
                 'created_at' => optional($item->created_at)->format('Y-m-d'),
