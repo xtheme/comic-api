@@ -264,7 +264,10 @@ Route::middleware(['auth', 'auth.route.role', 'log.activity'])->prefix('backend'
     // 廣告投放渠道
     Route::prefix('channel')->as('channel.')->group(function () {
         Route::get('/', [Backend\ChannelController::class , 'index'])->name('index');
-        Route::get('/series/{video_id}', [Backend\ChannelController::class , 'series'])->name('series');
+        Route::get('create', [Backend\ChannelController::class , 'create'])->name('create');
+        Route::post('store', [Backend\ChannelController::class , 'store'])->name('store');
+        Route::get('edit/{id}', [Backend\ChannelController::class , 'edit'])->name('edit');
+        Route::put('update/{id}', [Backend\ChannelController::class , 'update'])->name('update');
     });
 
     // 操作记录

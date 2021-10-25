@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Requests\Api\LoginRequest;
 use App\Http\Requests\Api\RegisterRequest;
+use App\Jobs\RegisterJob;
 use App\Models\User;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -66,13 +67,16 @@ class AuthController extends BaseController
         }
 
         $data = [
-            'channel_id' => $request->input('ch') ?? 0,
+            'app_id' => $request->input('app') ?? 0,
+            'channel_id' => $request->input('ch') ?? 1,
             'name' => $request->input('name'),
             'password' => $request->input('password'),
             'wallet' => getConfig('app', 'register_coin'),
         ];
 
-        User::create($data);
+        $user = User::create($data);
+
+        RegisterJob::dispatch($user, $request->header('platform'));
 
         return Response::jsonSuccess(__('api.success'));
     }

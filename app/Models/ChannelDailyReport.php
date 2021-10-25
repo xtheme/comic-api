@@ -2,7 +2,7 @@
 
 namespace App\Models;
 
-class Channel extends BaseModel
+class ChannelDailyReport extends BaseModel
 {
     protected $guarded = [
         'id',
