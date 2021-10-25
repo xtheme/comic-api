@@ -8,15 +8,21 @@ use Illuminate\Support\Facades\Response;
 
 class UserController extends BaseController
 {
-    private $page_size = 20;
-
-    public function order(Request $request, $page = 1)
+    public function order(Request $request)
     {
         $user = $request->user();
+        $page = $request->input('page') ?? 1;
+        $size = $request->input('size') ?? 20;
 
-        $logs = $user->orders()->forPage($page, $this->page_size)->get();
+        $query = $user->orders();
 
-        $response = $logs->map(function ($log) {
+        $count = (clone $query)->count();
+
+        $total_page = ceil($count / $size);
+
+        $logs = (clone $query)->forPage($page, $size)->get();
+
+        $list = $logs->map(function ($log) {
             return [
                 'order_no' => $log->order_no,
                 'type' => OrderOptions::TYPE_OPTIONS[$log->type],
@@ -28,16 +34,31 @@ class UserController extends BaseController
             ];
         })->toArray();
 
-        return Response::jsonSuccess(__('api.success'), $response);
+        $data = [
+            'page' => (int) $page,
+            'size' => (int) $size,
+            'total_page' => (int) $total_page,
+            'list' => $list,
+        ];
+
+        return Response::jsonSuccess(__('api.success'), $data);
     }
 
-    public function recharge(Request $request, $page = 1)
+    public function recharge(Request $request)
     {
         $user = $request->user();
+        $page = $request->input('page') ?? 1;
+        $size = $request->input('size') ?? 20;
 
-        $logs = $user->recharge_logs()->forPage($page, $this->page_size)->get();
+        $query = $user->recharge_logs();
 
-        $response = $logs->map(function ($log) {
+        $count = (clone $query)->count();
+
+        $total_page = ceil($count / $size);
+
+        $logs = (clone $query)->forPage($page, $size)->get();
+
+        $list = $logs->map(function ($log) {
             return [
                 'order_no' => $log->order_no,
                 'type' => OrderOptions::TYPE_OPTIONS[$log->type],
@@ -49,16 +70,32 @@ class UserController extends BaseController
             ];
         })->toArray();
 
-        return Response::jsonSuccess(__('api.success'), $response);
+        $data = [
+            'page' => (int) $page,
+            'size' => (int) $size,
+            'total_page' => (int) $total_page,
+            'list' => $list,
+        ];
+
+        return Response::jsonSuccess(__('api.success'), $data);
     }
 
-    public function purchase(Request $request, $type, $page = 1)
+    public function purchase(Request $request)
     {
         $user = $request->user();
+        $type = $request->input('type') ?? 'book_chapter';
+        $page = $request->input('page') ?? 1;
+        $size = $request->input('size') ?? 20;
 
-        $logs = $user->purchase_logs()->with([$type])->where('type', $type)->forPage($page, $this->page_size)->get();
+        $query = $user->purchase_logs()->with([$type])->where('type', $type);
 
-        $response = $logs->map(function ($log) {
+        $count = (clone $query)->count();
+
+        $total_page = ceil($count / $size);
+
+        $logs = (clone $query)->forPage($page, $size)->get();
+
+        $list = $logs->map(function ($log) {
             return [
                 'event' => $log->event,
                 'title' => $log->item_title,
@@ -67,6 +104,13 @@ class UserController extends BaseController
             ];
         })->toArray();
 
-        return Response::jsonSuccess(__('api.success'), $response);
+        $data = [
+            'page' => (int) $page,
+            'size' => (int) $size,
+            'total_page' => (int) $total_page,
+            'list' => $list,
+        ];
+
+        return Response::jsonSuccess(__('api.success'), $data);
     }
 }

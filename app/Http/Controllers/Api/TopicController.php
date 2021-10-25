@@ -73,19 +73,21 @@ class TopicController extends BaseController
 
         $size = 20;
 
-        $count = $filter->buildQuery()->count();
+        $query = $filter->buildQuery();
+
+        $count = (clone $query)->count();
 
         $total_page = ceil($count / $size);
 
-        $list = $filter->buildQuery()->forPage($page, $size)->get();
+        $list = (clone $query)->forPage($page, $size)->get();
 
         $list = $this->arrangeData($filter->type, $list);
 
         $data = [
             'title' => $filter->title,
-            'page' => $page,
+            'page' => (int) $page,
             'size' => $size,
-            'total_page' => $total_page,
+            'total_page' => (int) $total_page,
             'list' => $list,
         ];
 

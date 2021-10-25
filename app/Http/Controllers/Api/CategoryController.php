@@ -104,9 +104,9 @@ class CategoryController extends BaseController
         })->toArray();
 
         $data = [
-            'page' => $params['page'],
-            'size' => $params['size'],
-            'total_page' => $total_page,
+            'page' => (int) $params['page'],
+            'size' => (int) $params['size'],
+            'total_page' => (int) $total_page,
             'list' => $list,
         ];
 
