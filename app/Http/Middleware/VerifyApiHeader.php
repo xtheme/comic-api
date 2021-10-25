@@ -5,6 +5,7 @@ namespace App\Http\Middleware;
 use Closure;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Response;
+use Illuminate\Validation\Rule;
 use Validator;
 
 class VerifyApiHeader
@@ -34,7 +35,10 @@ class VerifyApiHeader
         $validator = Validator::make($data, [
             'uuid' => 'required',
             'timestamp' => 'required',
-            'platform' => 'required',
+            'platform' => [
+                'required',
+                Rule::in(['wap', 'app']),
+            ],
         ], [], $attributes);
 
         if ($validator->fails()) {
