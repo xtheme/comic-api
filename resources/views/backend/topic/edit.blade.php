@@ -23,7 +23,7 @@
                 </div>
                 <div class="col-4">
                     <div class="form-group">
-                        <label>筛选器</label>
+                        <label><span class="danger">*</span> 筛选器</label>
                         <div class="controls">
                             <select class="form-control" name="filter_id">
                                 @foreach($filters as $filter)
@@ -36,7 +36,7 @@
                 <div class="col-4">
                     <div class="form-group">
                         <span class="float-right font-size-small text-light">(数字由大到小排序)</span>
-                        <label><span class="danger">*</span> 模块排序</label>
+                        <label><span class="danger">*</span> 区块排序</label>
                         <div class="controls">
                             <input type="text" class="form-control" name="sort" placeholder="请输入排序" value="{{ $data->sort }}">
                         </div>
@@ -44,8 +44,7 @@
                 </div>
                 <div class="col-4">
                     <div class="form-group">
-                        <span class="float-right font-size-small text-danger">(例如：动漫1大2小, 则选择是)</span>
-                        <label>首笔聚焦</label>
+                        <label><span class="danger">*</span> 首笔聚焦</label>
                         <select class="form-control" name="spotlight">
                             <option value="0" @if($data->spotlight == 0){{'selected'}}@endif>否</option>
                             <option value="1" @if($data->spotlight == 1){{'selected'}}@endif>是</option>
@@ -54,8 +53,8 @@
                 </div>
                 <div class="col-4">
                     <div class="form-group">
-                        <span class="float-right font-size-small text-danger">(例如：动漫1大2小, 则选择2)</span>
-                        <label>聚焦之外的数据每行几笔</label>
+                        <span class="float-right font-size-small text-danger">(聚焦之外的数据每行几笔)</span>
+                        <label><span class="danger">*</span> 每行笔数</label>
                         <select class="form-control" name="row">
                             <option value="2" @if($data->row == 2){{'selected'}}@endif>每行 2 笔</option>
                             <option value="3" @if($data->row == 3){{'selected'}}@endif>每行 3 笔</option>
@@ -64,8 +63,7 @@
                 </div>
                 <div class="col-4">
                     <div class="form-group">
-                        <span class="float-right font-size-small text-danger">(例如：动漫1大2小, 填入5, 扣除聚焦笔数1则展示2行)</span>
-                        <label><span class="danger">*</span> 模块展示笔数</label>
+                        <label><span class="danger">*</span> 区块展示笔数</label>
                         <div class="controls">
                             <input type="number" class="form-control" name="limit" value="{{ $data->limit ?? 3 }}">
                         </div>

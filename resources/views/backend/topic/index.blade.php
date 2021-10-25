@@ -1,7 +1,7 @@
 @extends('layouts.iframePage')
 
 {{-- page Title --}}
-@section('title','主题模块')
+@section('title','主题区块')
 
 {{-- vendor style --}}
 @section('vendor-styles')
@@ -11,7 +11,7 @@
 @section('content')
     <section id="config-list">
         <div class="mb-1">
-            <a href="{{ route('backend.topic.create') }}" data-modal data-height="35vh" class="btn btn-primary" title="添加主题模块" role="button" aria-pressed="true">添加主题模块</a>
+            <a href="{{ route('backend.topic.create') }}" data-modal data-height="35vh" class="btn btn-primary" title="添加主题区块" role="button" aria-pressed="true">添加主题区块</a>
         </div>
         <div class="card">
             <div class="card-header">
@@ -84,9 +84,9 @@
                                     <td>{{ $item->created_at->diffForHumans()  }}</td>
                                     <td>
                                         @if($item->status == 1)
-                                            <a class="badge badge-pill badge-light-success" data-confirm href="{{ route('backend.topic.batch', ['action'=>'disable', 'ids' => $item->id]) }}" title="隐藏该模块">启用</a>
+                                            <a class="badge badge-pill badge-light-success" data-confirm href="{{ route('backend.topic.batch', ['action'=>'disable', 'ids' => $item->id]) }}" title="隐藏该区块">启用</a>
                                         @else
-                                            <a class="badge badge-pill badge-light-danger" data-confirm href="{{ route('backend.topic.batch', ['action'=>'enable', 'ids' => $item->id]) }}" title="启用该模块">隐藏</a>
+                                            <a class="badge badge-pill badge-light-danger" data-confirm href="{{ route('backend.topic.batch', ['action'=>'enable', 'ids' => $item->id]) }}" title="启用该区块">隐藏</a>
                                         @endif
                                     </td>
                                     <td>{{ $item->filter->query_count }}</td>
@@ -96,8 +96,8 @@
                                                   id="dropdownMenuButton{{ $item->id }}" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></span>
                                             <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuButton{{ $item->id }}">
                                                 <a class="dropdown-item" href="{{ $item->query_url }}" target="_blank"><i class="bx bx-link-external mr-1"></i>查看匹配</a>
-                                                <a class="dropdown-item" data-modal data-height="35vh" href="{{ route('backend.topic.edit', $item->id) }}" title="修改首页模块"><i class="bx bx-edit-alt mr-1"></i>修改</a>
-                                                <a class="dropdown-item" data-destroy href="{{ route('backend.topic.destroy', $item->id) }}" title="刪除首页模块"><i class="bx bx-trash mr-1"></i>刪除</a>
+                                                <a class="dropdown-item" data-modal data-height="35vh" href="{{ route('backend.topic.edit', $item->id) }}" title="修改首页区块"><i class="bx bx-edit-alt mr-1"></i>修改</a>
+                                                <a class="dropdown-item" data-destroy href="{{ route('backend.topic.destroy', $item->id) }}" title="刪除首页区块"><i class="bx bx-trash mr-1"></i>刪除</a>
                                             </div>
                                         </div>
                                     </td>

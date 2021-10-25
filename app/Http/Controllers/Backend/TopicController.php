@@ -42,9 +42,9 @@ class TopicController extends Controller
 
     public function store(TopicRequest $request)
     {
-        $post = $request->post();
+        $input = $request->validated();
 
-        $this->repository->create($post);
+        $this->repository->create($input);
 
         return Response::jsonSuccess(__('response.create.success'));
     }
@@ -63,7 +63,9 @@ class TopicController extends Controller
 
     public function update(TopicRequest $request, $id)
     {
-        $this->repository->update($id, $request->post());
+        $input = $request->validated();
+
+        $this->repository->update($id, $input);
 
         return Response::jsonSuccess(__('response.update.success'));
     }

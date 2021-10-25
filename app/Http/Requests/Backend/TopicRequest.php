@@ -9,18 +9,24 @@ class TopicRequest extends BaseRequest
     public function rules()
     {
         return [
+            'filter_id' => 'required|numeric',
             'spotlight' => 'numeric',
-            'row'       => 'numeric',
-            'sort'      => 'required|numeric',
+            'row' => 'numeric',
+            'sort' => 'required|numeric',
+            'limit' => 'required|numeric',
+            'status' => 'required',
         ];
     }
 
     public function attributes()
     {
         return [
+            'filter_id' => '筛选器',
             'spotlight' => '首笔聚焦',
-            'row'       => '每行笔数',
-            'sort'      => '模块排序',
+            'row' => '每行笔数',
+            'sort' => '模块排序',
+            'limit' => '模块展示笔数',
+            'status' => '状态',
         ];
     }
 }
