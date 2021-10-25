@@ -1,10 +1,10 @@
 {
     "menu": [
         {
-            "url": "/backend/dashboard",
-            "name": "Dashboard",
-            "slug": "dashboard",
-            "icon": "bx bxs-home"
+            "url": "/backend/channel",
+            "name": "Channel",
+            "slug": "channel",
+            "icon": "bx bxs-chalkboard"
         },
         {
             "url": "#",

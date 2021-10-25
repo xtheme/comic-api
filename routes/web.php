@@ -261,10 +261,10 @@ Route::middleware(['auth', 'auth.route.role', 'log.activity'])->prefix('backend'
         Route::delete('destroy/{id}', [Backend\FilterController::class , 'destroy'])->name('destroy');
     });
 
-    // 数据统计
-    Route::prefix('statistics')->as('statistics.')->group(function () {
-        Route::get('/', [Backend\StatisticsController::class , 'index'])->name('index');
-        Route::get('/series/{video_id}', [Backend\StatisticsController::class , 'series'])->name('series');
+    // 廣告投放渠道
+    Route::prefix('channel')->as('channel.')->group(function () {
+        Route::get('/', [Backend\ChannelController::class , 'index'])->name('index');
+        Route::get('/series/{video_id}', [Backend\ChannelController::class , 'series'])->name('series');
     });
 
     // 操作记录

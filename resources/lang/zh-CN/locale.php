@@ -4,6 +4,7 @@ return [
     "Site Title" => "色多多",
 
     "Dashboard" => "控制台",
+    "Channel" => "渠道统计",
 
     "Customers" => "会员管理",
     "Customer List" => "会员列表",
