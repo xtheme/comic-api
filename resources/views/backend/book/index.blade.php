@@ -110,7 +110,7 @@
                                         @endif
                                     </td>
                                     <td class="text-center">{{ $book->chapters_count }}</td>
-                                    <td>{{ optional($book->latest_chapter())->created_at->diffForHumans() }}</td>
+                                    <td>{{ $book->release_at }}</td>
                                     <td class="text-center">
                                         <span class="badge badge-pill badge-light-{{ $book->release_status_style }}">{{ $book->release_status }}</span>
                                     </td>

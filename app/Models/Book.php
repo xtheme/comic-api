@@ -28,9 +28,9 @@ class Book extends BaseModel
         return $this->hasMany('App\Models\BookChapter')->where('status', 1)->latest('episode');
     }
 
-    public function latest_chapter()
+    public function getLatestChapterAttribute()
     {
-        return $this->chapters->first();
+        return $this->chapters->first() ?? null;
     }
 
     /**
