@@ -54,6 +54,7 @@ class BookController extends BaseController
                     'episode' => $chapter->episode,
                     'title' => $chapter->title,
                     'price' => $chapter->price,
+                    'view_counts' => shortenNumber($chapter->view_counts),
                     'has_purchased' => $has_purchased,
                     'created_at' => $chapter->created_at->format('Y-m-d'),
                 ];
@@ -61,7 +62,6 @@ class BookController extends BaseController
         ];
 
         // 訪問數+1
-        // todo 抽離主表, 方便主表緩存, 但不利於查詢排序
         $book->increment('view_counts');
 
         // 添加到排行榜
@@ -105,6 +105,9 @@ class BookController extends BaseController
             return Response::jsonError('该漫画不存在或已下架！');
         }
 
+        // 訪問數+1
+        $chapter->increment('view_counts');
+
         // 收費章節
         $protect = true;
         $has_purchased = false;
@@ -143,6 +146,7 @@ class BookController extends BaseController
             'episode' => $chapter->episode,
             'title' => $chapter->title,
             'price' => $chapter->price,
+            'view_counts' => shortenNumber($chapter->view_counts),
             'content' => $images,
             'prev_chapter_id' => $chapter->prev_chapter_id,
             'next_chapter_id' => $chapter->next_chapter_id,
