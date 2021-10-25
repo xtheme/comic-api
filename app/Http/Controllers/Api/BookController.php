@@ -19,7 +19,7 @@ class BookController extends BaseController
 
     public function detail(Request $request, $id)
     {
-        $book = Book::with(['chapters', 'chapters.purchased'])->withCount(['chapters'])->find($id);
+        $book = Book::with(['chapters', 'chapters.purchase_log'])->withCount(['chapters'])->find($id);
 
         if (!$book) {
             return Response::jsonError('该漫画不存在或已下架！');
@@ -43,11 +43,10 @@ class BookController extends BaseController
                 if (!$user) {
                     $has_purchased = false;
                 } else {
-                    Log::debug('is_vip=' . $user->is_vip);
                     if ($user->is_vip) {
                         $has_purchased = true;
                     } else {
-                        $has_purchased = $chapter->purchased()->exists();
+                        $has_purchased = $chapter->purchased;
                     }
                 }
                 return [
@@ -69,7 +68,7 @@ class BookController extends BaseController
         $book->logRanking();
 
         // 記錄用戶訪問
-        if ($request->user()) {
+        if ($user) {
             $request->user()->visit($book);
         }
 
@@ -100,7 +99,7 @@ class BookController extends BaseController
 
     public function chapter(Request $request, $chapter_id)
     {
-        $chapter = BookChapter::with(['purchased'])->find($chapter_id);
+        $chapter = BookChapter::with(['purchase_log'])->find($chapter_id);
 
         if (!$chapter) {
             return Response::jsonError('该漫画不存在或已下架！');

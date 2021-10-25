@@ -25,9 +25,17 @@ class BookChapter extends BaseModel
         return $this->belongsTo('App\Models\Book');
     }
 
-    public function purchased()
+    public function purchase_log()
     {
-        return $this->hasOne('App\Models\UserPurchaseLog', 'item_id', 'id')->where('item_model', get_class($this))->where('user_id', auth()->user()->id);
+        return $this->hasOne('App\Models\UserPurchaseLog', 'item_id', 'id')->where('item_model', get_class($this));
+    }
+
+
+    public function getPurchasedAttribute()
+    {
+        if (!auth('sanctum')->user()) return false;
+
+        return $this->purchase_log->where('user_id', auth('sanctum')->user()->id)->exists();
     }
 
     // 將 json_images 字段中的圖片路徑加上資源域名, 如果使用加密資源則指定圖片寬度
