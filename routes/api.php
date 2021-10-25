@@ -101,7 +101,7 @@ Route::as('api.')->middleware(['api'])->group(function () {
         Route::prefix('user')->as('user.')->group(function () {
             Route::get('/order/{page?}', [Api\UserController::class, 'order'])->name('order');
             Route::get('/recharge/{page?}', [Api\UserController::class, 'recharge'])->name('recharge');
-            Route::get('/purchase/{page?}', [Api\UserController::class, 'purchase'])->name('purchase');
+            Route::get('/purchase/{type}/{page?}', [Api\UserController::class, 'purchase'])->name('purchase');
         });
 
         // 用戶訪問紀錄

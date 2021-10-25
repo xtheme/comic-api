@@ -3,23 +3,20 @@
 namespace App\Http\Controllers\Api;
 
 use App\Enums\OrderOptions;
-use App\Models\Order;
-use App\Models\UserPurchaseLog;
-use App\Models\UserRechargeLog;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Response;
 
 class UserController extends BaseController
 {
-    const PAGE_LIMIT = 20;
+    private $page_size = 20;
 
     public function order(Request $request, $page = 1)
     {
         $user = $request->user();
 
-        $logs = Order::where('user_id', $user->id)->forPage($page, self::PAGE_LIMIT)->get();
+        $logs = $user->orders()->forPage($page, $this->page_size)->get();
 
-        $response = $logs->map(function($log) {
+        $response = $logs->map(function ($log) {
             return [
                 'order_no' => $log->order_no,
                 'type' => OrderOptions::TYPE_OPTIONS[$log->type],
@@ -38,9 +35,9 @@ class UserController extends BaseController
     {
         $user = $request->user();
 
-        $logs = UserRechargeLog::where('user_id', $user->id)->forPage($page, self::PAGE_LIMIT)->get();
+        $logs = $user->recharge_logs()->forPage($page, $this->page_size)->get();
 
-        $response = $logs->map(function($log) {
+        $response = $logs->map(function ($log) {
             return [
                 'order_no' => $log->order_no,
                 'type' => OrderOptions::TYPE_OPTIONS[$log->type],
@@ -55,13 +52,13 @@ class UserController extends BaseController
         return Response::jsonSuccess(__('api.success'), $response);
     }
 
-    public function purchase(Request $request, $page = 1)
+    public function purchase(Request $request, $type, $page = 1)
     {
         $user = $request->user();
 
-        $logs = UserPurchaseLog::where('user_id', $user->id)->forPage($page, self::PAGE_LIMIT)->get();
+        $logs = $user->purchase_logs()->with([$type])->where('type', $type)->forPage($page, $this->page_size)->get();
 
-        $response = $logs->map(function($log) {
+        $response = $logs->map(function ($log) {
             return [
                 'event' => $log->event,
                 'title' => $log->item_title,

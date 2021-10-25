@@ -16,14 +16,14 @@ class UserPurchaseLog extends BaseModel
         'item_price',
     ];
 
-    public function relation(): HasOne
+    public function book(): HasOne
     {
-        return $this->hasOne($this->item_model);
+        return $this->hasOne('App\Models\Book', 'id', 'item_id');
     }
 
-    public function getItem()
+    public function book_chapter(): HasOne
     {
-        return $this->relation->findOrFail($this->item_id);
+        return $this->hasOne('App\Models\BookChapter', 'id', 'item_id');
     }
 
     public function getItemTypeAttribute()
@@ -33,15 +33,15 @@ class UserPurchaseLog extends BaseModel
 
     public function getItemTitleAttribute()
     {
-        $item = $this->getItem();
-
         switch ($this->type) {
             case 'video':
+                $title = $this->video->title;
+                break;
             case 'book':
-                $title = $item->title;
+                $title = $this->book->title;
                 break;
             case 'book_chapter':
-                $title = $item->book->title . ' (第 ' . $item->episode . ' 話)';
+                $title = $this->book_chapter->book->title . ' (第 ' . $this->book_chapter->episode . ' 話)';
                 break;
 
         }
