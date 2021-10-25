@@ -25,7 +25,7 @@ class FilterController extends Controller
     {
         $data = [
             'type' => $type,
-            'tag_group' => getTagGroupByType($type),
+            'tag_group' => getTagGroupByCategory($type),
             'causer_options' => Options::CAUSER_OPTIONS,
             'ribbon_options' => Options::RIBBON_OPTIONS,
         ];
@@ -51,7 +51,7 @@ class FilterController extends Controller
         $data = [
             'data' => Filter::findOrFail($id),
             'type' => $type,
-            'tag_group' => getTagGroupByType($type),
+            'tag_group' => getTagGroupByCategory($type),
             'causer_options' => Options::CAUSER_OPTIONS,
             'ribbon_options' => Options::RIBBON_OPTIONS,
         ];

@@ -11,18 +11,20 @@
     <form id="form" class="form" method="post" action="{{ route('backend.book.store') }}">
         <div class="form-body">
             <div class="row">
-                <div class="col-12">
-                    <div class="form-group">
-                        <label>标签分类</label>
-                        <div class="controls">
-                            <select id="tags-selector" class="form-control" name="tag[]" multiple="multiple">
-                                @foreach($tags as $tag)
-                                    <option value="{{ $tag }}">{{ $tag }}</option>
-                                @endforeach
-                            </select>
+                @foreach($categories as $title => $item)
+                    <div class="col-12">
+                        <div class="form-group">
+                            <label>{{ $title }}标签</label>
+                            <div class="controls">
+                                <select id="tags-selector" class="form-control" name="tags[{{ $item['code'] }}][]" multiple="multiple">
+                                    @foreach($item['tags'] as $tag)
+                                        <option value="{{ $tag }}">{{ $tag }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
                         </div>
                     </div>
-                </div>
+                @endforeach
                 <div class="col-8">
                     <div class="form-group">
                         <label><span class="danger">*</span> 漫画名称</label>

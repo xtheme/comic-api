@@ -83,10 +83,10 @@
                                     <td class="text-center">
                                         @switch($tag->suggest)
                                             @case(1)
-                                                <a class="badge badge-pill badge-light-primary" data-confirm href="{{ route('backend.tag.batch', ['action'=>'disable', 'ids' => $tag->name]) }}" title="在前端隐藏">显示</a>
+                                                <a class="badge badge-pill badge-light-primary" data-confirm href="{{ route('backend.tag.batch', ['action'=>'disable', 'ids' => $tag->id]) }}" title="在前端隐藏">显示</a>
                                             @break
                                             @case(0)
-                                                <a class="badge badge-pill badge-light-danger" data-confirm href="{{ route('backend.tag.batch', ['action'=>'enable', 'ids' => $tag->name]) }}" title="在前端显示">隐藏</a>
+                                                <a class="badge badge-pill badge-light-danger" data-confirm href="{{ route('backend.tag.batch', ['action'=>'enable', 'ids' => $tag->id]) }}" title="在前端显示">隐藏</a>
                                             @break
                                         @endswitch
                                     </td>

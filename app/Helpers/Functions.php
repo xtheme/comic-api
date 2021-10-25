@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\Category;
 use App\Models\Config;
 use App\Models\Tag;
 use Illuminate\Support\Facades\Cache;
@@ -150,30 +151,27 @@ if (!function_exists('watchDog')) {
     }
 }
 
-if (!function_exists('getAllTags')) {
-    function getAllTags($type = 'book')
+if (!function_exists('getCategoryByType')) {
+    function getCategoryByType($type)
     {
-        $cache_key = 'tags:' . $type;
+        $cache_key = 'category:' . $type;
 
         return Cache::remember($cache_key, 300, function () use ($type) {
-            return Tag::where('type', 'like', $type . '%')->orderByDesc('order_column')->pluck('name')->toArray();
+            $tags = Tag::with(['category'])->where('type', 'like', $type . '%')->orderByDesc('order_column')->get();
+
+            $tags =  $tags->mapToGroups(function ($tag) {
+                return [$tag['type'] => $tag['name']];
+            })->toArray();
+
+            $categories = Category::where('type', 'like', $type . '%')->get();
+
+            return $categories->mapWithKeys(function ($category) use ($tags) {
+                return [$category['name'] => [
+                    'code' => $category['type'],
+                    'tags' => $tags[$category['type']],
+                ]];
+            })->toArray();
         });
-    }
-}
-
-if (!function_exists('getTagGroupByType')) {
-    function getTagGroupByType($type = 'book')
-    {
-        $tags = Tag::with(['category'])->where('type', 'like', $type . '%')->orderByDesc('order_column')->get();
-
-        return $tags->mapToGroups(function($tag) {
-           return [
-               $tag->category->name => [
-                   'type' => $tag->type,
-                   'name' => $tag->name,
-               ]
-           ];
-        })->toArray();
     }
 }
 

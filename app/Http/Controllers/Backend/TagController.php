@@ -140,38 +140,24 @@ class TagController extends Controller
 
     public function batch(Request $request, $action)
     {
-        $tags = explode(',', $request->input('ids'));
+        $ids = explode(',', $request->input('ids'));
 
         switch ($action) {
             case 'dismiss_book':
                 $text = '解除关联的漫画';
-                collect($tags)->each(function ($string) {
-                    $tag = Tag::findFromString($string);
-                    $tag->tagged_book()->delete();
-                });
+                Tag::whereIn('id', $ids)->tagged_book()->delete();
                 break;
             case 'dismiss_video':
                 $text = '解除关联的动画';
-                collect($tags)->each(function ($string) {
-                    $tag = Tag::findFromString($string);
-                    $tag->tagged_video()->delete();
-                });
+                Tag::whereIn('id', $ids)->tagged_video()->delete();
                 break;
             case 'disable':
                 $text = '在前端隐藏';
-                collect($tags)->each(function ($string) {
-                    $tag = Tag::findFromString($string);
-                    $tag->suggest = 0;
-                    $tag->save();
-                });
+                Tag::whereIn('id', $ids)->update(['suggest' => 0]);
                 break;
             case 'enable':
                 $text = '在前端显示';
-                collect($tags)->each(function ($string) {
-                    $tag = Tag::findFromString($string);
-                    $tag->suggest = 1;
-                    $tag->save();
-                });
+                Tag::whereIn('id', $ids)->update(['suggest' => 1]);
                 break;
             default:
                 return Response::jsonError(__('response.error.unknown'));

@@ -178,16 +178,20 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-12">
-                    <div class="form-group">
-                        <label>标签分类</label>
-                        <select id="tags-selector" class="form-control" name="tag[]" multiple="multiple">
-                            @foreach($tags as $tag)
-                                <option value="{{ $tag }}" @if(in_array($tag, request()->get('tag') ?? [])){{'selected'}}@endif>{{ $tag }}</option>
-                            @endforeach
-                        </select>
+                @foreach($categories as $title => $item)
+                    <div class="col-12">
+                        <div class="form-group">
+                            <label>{{ $title }}标签</label>
+                            <div class="controls">
+                                <select id="tags-selector" class="form-control" name="tags[{{ $item['code'] }}][]" multiple="multiple">
+                                    @foreach($item['tags'] as $tag)
+                                        <option value="{{ $tag }}" @if(request()->get('tags') && in_array($tag, request()->get('tags'))){{'selected'}}@endif>{{ $tag }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                        </div>
                     </div>
-                </div>
+                @endforeach
                 <div class="col-12">
                     <div class="form-group">
                         <label>审核状态</label>
