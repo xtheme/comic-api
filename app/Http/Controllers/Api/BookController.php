@@ -141,6 +141,7 @@ class BookController extends BaseController
         // })->toArray();
 
         $data = [
+            'book_id' => $chapter->book_id,
             'protect' => $protect,
             'has_purchased' => $has_purchased,
             'episode' => $chapter->episode,
