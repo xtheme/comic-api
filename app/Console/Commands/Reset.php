@@ -39,6 +39,7 @@ class Reset extends Command
     {
         if ($this->confirm('是否確認要將數據初始化?')) {
             DB::statement('SET FOREIGN_KEY_CHECKS=0');
+            DB::table('migrations')->truncate();
             DB::table('personal_access_tokens')->truncate();
             DB::table('ranking_logs')->truncate();
             DB::table('users')->truncate();
@@ -58,11 +59,17 @@ class Reset extends Command
             DB::table('permissions')->truncate();
             DB::table('roles')->truncate();
             DB::table('role_has_permissions')->truncate();
-            DB::statement('SET FOREIGN_KEY_CHECKS=1');
-
+            DB::table('topics')->truncate();
+            DB::table('navigation')->truncate();
+            DB::table('payments')->truncate();
+            DB::table('pricings')->truncate();
+            DB::table('categories')->truncate();
+            DB::table('tags')->truncate();
+            DB::table('configs')->truncate();
             DB::unprepared(file_get_contents(database_path('sql/install.sql')));
+            DB::statement('SET FOREIGN_KEY_CHECKS=1');
         }
 
-        $this->info('目前处于开发模式下, 正式发布前请执行 php artisan release 优化代码');
+        $this->info('所有數據已還原至初始狀態!');
     }
 }

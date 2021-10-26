@@ -1,23 +1,3 @@
--- -------------------------------------------------------------
--- TablePlus 4.5.0(396)
---
--- https://tableplus.com/
---
--- Database: comic
--- Generation Time: 2021-10-26 21:46:09.7690
--- -------------------------------------------------------------
-
-
-/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
-/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
-/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
-/*!40101 SET NAMES utf8mb4 */;
-/*!40014 SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0 */;
-/*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
-/*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
-/*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
-
-
 INSERT INTO `rb_admins` (`id`, `nickname`, `username`, `password`, `avatar`, `status`, `remember_token`, `login_ip`, `login_at`, `created_at`, `updated_at`) VALUES
 (1, '超级管理员', 'admin', '$2y$10$HDoEv7QNTC9stOR9XTUJ3O7y015I7mLEG9Ws/9DqbdnMbmC3uMNki', '', 1, NULL, '18.167.171.160', '2021-09-06 17:08:30', NULL, '2021-09-01 19:01:19');
 
@@ -565,13 +545,3 @@ INSERT INTO `rb_topics` (`id`, `type`, `filter_id`, `sort`, `spotlight`, `row`, 
 (2, 'book', 2, 0, 0, 3, 6, '{\"tag\": [\"单行本\"], \"limit\": \"6\", \"order\": \"created_at\", \"author\": null, \"ribbon\": \"0\", \"date_between\": null}', 1, '2021-10-13 17:55:59', '2021-10-23 16:53:55'),
 (3, 'book', 3, 0, 0, 3, 6, '{\"tag\": [\"韩漫\"], \"limit\": \"6\", \"order\": \"created_at\", \"author\": null, \"ribbon\": \"0\", \"date_between\": null}', 1, '2021-10-13 17:57:03', '2021-10-23 16:54:20'),
 (4, 'book_safe', 3, 0, 0, 3, 6, '{\"tag\": [\"韩漫\"], \"limit\": \"6\", \"order\": \"created_at\", \"author\": null, \"ribbon\": \"0\", \"date_between\": null}', 1, '2021-10-13 17:57:03', '2021-10-23 16:54:20');
-
-
-
-/*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
-/*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;
-/*!40014 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS */;
-/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
-/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
-/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
-/*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
