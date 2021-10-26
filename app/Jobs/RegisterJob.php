@@ -30,7 +30,7 @@ class RegisterJob implements ShouldQueue
         $this->platform = $platform;
         $this->channel_id = $this->user->channel_id;
         $this->date = date('Y-m-d');
-        $this->hour = date('h');
+        $this->hour = date('H');
         $this->month = date('Y-m-01');
     }
 
