@@ -19,7 +19,6 @@ class RegisterJob implements ShouldQueue
 
     private $user;
     private $platform;
-    private $redis;
     private $channel_id;
     private $date;
     private $hour;
@@ -29,7 +28,6 @@ class RegisterJob implements ShouldQueue
     {
         $this->user = $user->withoutRelations();
         $this->platform = $platform;
-        $this->redis = Redis::connection('readonly');
         $this->channel_id = $this->user->channel_id;
         $this->date = date('Y-m-d');
         $this->hour = date('h');
@@ -57,8 +55,9 @@ class RegisterJob implements ShouldQueue
         $report->increment(sprintf('register_%s_count', $this->platform));
 
         // Redis 備份
+        $redis = Redis::connection('readonly');
         $redis_key = sprintf('channel:daily:%s:%s', $this->date, $this->hour);
-        $this->redis->set($redis_key, json_encode($report->toArray(), JSON_UNESCAPED_UNICODE));
+        $redis->set($redis_key, json_encode($report->toArray(), JSON_UNESCAPED_UNICODE));
     }
 
     private function monthly()
@@ -71,7 +70,8 @@ class RegisterJob implements ShouldQueue
         $report->increment(sprintf('register_%s_count', $this->platform));
 
         // Redis 備份
+        $redis = Redis::connection('readonly');
         $redis_key = sprintf('channel:monthly:%s', date('Y-m', strtotime($this->month)));
-        $this->redis->set($redis_key, json_encode($report->toArray(), JSON_UNESCAPED_UNICODE));
+        $redis->set($redis_key, json_encode($report->toArray(), JSON_UNESCAPED_UNICODE));
     }
 }

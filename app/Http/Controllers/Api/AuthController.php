@@ -21,9 +21,11 @@ class AuthController extends BaseController
     {
         $input = $request->validated();
 
-        $loginField = filter_var($input['name'], FILTER_VALIDATE_EMAIL) ? 'email' : 'name';
+        $user = User::where('name', $input['name'])->first();
 
-        $user = User::where($loginField, $input['name'])->first();
+        if (!$user) {
+            return Response::jsonError(__('api.login.password.wrong'));
+        }
 
         if (!Hash::check($input['password'], $user->password)) {
             return Response::jsonError(__('api.login.password.wrong'));

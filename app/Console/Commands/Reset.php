@@ -66,6 +66,7 @@ class Reset extends Command
             DB::table('categories')->truncate();
             DB::table('tags')->truncate();
             DB::table('configs')->truncate();
+            DB::table('activity_log')->truncate();
             DB::unprepared(file_get_contents(database_path('sql/install.sql')));
             DB::statement('SET FOREIGN_KEY_CHECKS=1');
         }
