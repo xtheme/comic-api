@@ -6,21 +6,10 @@ use Illuminate\Database\Eloquent\Builder;
 
 class Order extends BaseModel
 {
-    protected $fillable = [
-        'order_no',
-        'user_id',
-        'type' ,
-        'amount',
-        'currency',
-        'plan_options',
-        'payment_id',
-        'transaction_id',
-        'transaction_at',
-        'status',
-        'ip',
-        'platform',
-        'version',
-        'first',
+    protected $guarded = [
+        'id',
+        'created_at',
+        'updated_at',
     ];
 
     protected $casts = [
