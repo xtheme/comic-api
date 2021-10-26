@@ -14,13 +14,14 @@ class CreateNavigationTable extends Migration
     public function up()
     {
         Schema::create('navigation', function (Blueprint $table) {
-            $table->id();
-            $table->string('title')->comment('导航名称');
+            $table->bigIncrements('id');
+            $table->string('title')->comment('标题');
             $table->string('icon')->comment('图标');
-            $table->string('uri');
-            $table->tinyInteger('target')->unsigned()->default(0)->comment('跳转方式: 0=跳外部浏览器, 1=内置浏览器');
-            $table->tinyInteger('sort')->unsigned()->default(0)->comment('排序值: 数字越大越靠前');
-            $table->tinyInteger('status')->comment('状态: 0=下架, 1=上架');
+            $table->unsignedTinyInteger('target')->default(1)->comment('跳转方式: 1=內部路由, 2=另開浏览器');
+            $table->integer('filter_id')->default(0)->comment('篩選條件');
+            $table->string('link');
+            $table->tinyInteger('sort')->comment('排序值: 数字越大越靠前');
+            $table->tinyInteger('status')->comment('图标 URL');
             $table->timestamps();
         });
     }
