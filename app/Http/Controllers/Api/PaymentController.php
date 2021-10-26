@@ -27,7 +27,7 @@ class PaymentController extends Controller
         }
 
         // 所有啟用的支付方案
-        $pricing = Pricing::where('status', 1)->whereIn('target', $target)->orderBy('type')->orderByDesc('sort')->get();
+        $pricing = Pricing::where('status', 1)->whereIn('target', $target)->orderBy('type')->orderBy('sort')->get();
 
         $pricing = $pricing->mapToGroups(function ($plan) {
             return [

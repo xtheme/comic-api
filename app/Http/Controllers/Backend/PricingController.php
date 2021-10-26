@@ -13,7 +13,7 @@ class PricingController extends Controller
     public function index()
     {
         $data = [
-            'list' => Pricing::latest('sort')->paginate()
+            'list' => Pricing::orderBy('sort')->paginate()
         ];
 
         return view('backend.pricing.index')->with($data);

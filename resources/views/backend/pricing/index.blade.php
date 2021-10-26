@@ -49,8 +49,8 @@
                                     <td>{{ $item->label }}</td>
                                     <td>{{ $item->description }}</td>
                                     <td>@if($item->list_price)<del>{{ $item->list_price }}</del> @endif<span class="text-primary">{{ $item->price }}</span></td>
-                                    <td>{{ $item->days }}@if($item->gift_days) (+{{ $item->gift_days }})@endif</td>
-                                    <td>{{ $item->coin }}@if($item->gift_coin) (+{{ $item->gift_coin }})@endif</td>
+                                    <td>{{ $item->days }}@if($item->gift_days) + {{ $item->gift_days }}@endif</td>
+                                    <td>{{ $item->coin }}@if($item->gift_coin) + {{ $item->gift_coin }}@endif</td>
                                     <td>
                                         @if($item->target == 0)全用户@endif
                                         @if($item->target == 1)首存用戶@endif
