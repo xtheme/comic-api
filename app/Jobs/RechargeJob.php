@@ -2,6 +2,7 @@
 
 namespace App\Jobs;
 
+use App\Models\Channel;
 use App\Models\ChannelDailyReport;
 use App\Models\ChannelMonthlyReport;
 use App\Models\Order;
@@ -48,6 +49,12 @@ class RechargeJob implements ShouldQueue
         $this->dailyChannel();
         $this->monthlyPayment();
         $this->monthlyChannel();
+
+        $channel = Channel::findOrFail($this->channel_id);
+        $channel->increment('recharge_count');
+        $channel->increment(sprintf('recharge_%s_count', $this->platform));
+        $channel->increment('recharge_amount', $this->amount);
+        $channel->increment(sprintf('recharge_%s_amount', $this->platform), $this->amount);
     }
 
     private function incrementReport($report)
