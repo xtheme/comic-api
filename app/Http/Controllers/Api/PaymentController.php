@@ -58,7 +58,7 @@ class PaymentController extends Controller
             return $daily_total >= $gateway->daily_limit;
         })->map(function ($gateway) {
             return [
-                'gateway_id' => $gateway->id,
+                'payment_id' => $gateway->id,
                 'button' => [
                     'text' => $gateway->button_text,
                     'icon' => !empty($gateway->button_icon) ? asset($gateway->button_icon) : '',
