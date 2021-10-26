@@ -71,7 +71,7 @@ class RegisterJob implements ShouldQueue
         $report->increment(sprintf('register_%s_count', $this->platform));
 
         // Redis 備份
-        $redis_key = sprintf('channel:monthly:%s', date('Y-m'));
+        $redis_key = sprintf('channel:monthly:%s', date('Y-m', strtotime($this->month)));
         $this->redis->set($redis_key, json_encode($report->toArray(), JSON_UNESCAPED_UNICODE));
     }
 }

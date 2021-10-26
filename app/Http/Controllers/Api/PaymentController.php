@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Api\PayRequest;
+use App\Jobs\RechargeJob;
 use App\Models\Order;
 use App\Models\Payment;
 use App\Models\Pricing;
@@ -63,7 +64,7 @@ class PaymentController extends Controller
             // 排除停用渠道
             return $gateway->status == 0;
         })->reject(function ($gateway) {
-            // todo 排除每日限額已達上限
+            // 排除每日限額已達上限
             $daily_total = Gateway::getDailyLimit($gateway->id);
 
             return $daily_total >= $gateway->daily_limit;
@@ -143,7 +144,7 @@ class PaymentController extends Controller
             return Response::jsonError('很抱歉，支付渠道维护中！');
         }
 
-        // todo 獲取渠道限額
+        // 獲取渠道限額
         $daily_total = Gateway::getDailyLimit($payment_id);
         $estimated_amount = $plan->price + $daily_total;
 
@@ -201,10 +202,11 @@ class PaymentController extends Controller
         // 不同渠道返回格式不同
         $response = $gateway->updateOrder($order, $request->post());
 
-        // todo 添加每日限額
+        // 添加每日限額
         Gateway::incDailyLimit($order->payment_id, $order->amount);
 
-        // todo 建立財報紀錄
+        // 建立財報紀錄
+        RechargeJob::dispatch($order);
 
         return  $response;
     }

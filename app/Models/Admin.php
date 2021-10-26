@@ -8,7 +8,6 @@ use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Facades\Hash;
 use Spatie\Permission\Traits\HasRoles;
 
-// todo Admin 重構
 class Admin extends Authenticatable
 {
     use HasFactory, Notifiable;

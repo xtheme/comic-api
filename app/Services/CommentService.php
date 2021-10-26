@@ -13,8 +13,7 @@ class CommentService
      */
     public function check_cool_down()
     {
-        // todo 錯字
-        $cool_down = getConfig('comment', 'colddown');
+        $cool_down = getConfig('comment', 'cooldown');
 
         $cache_key = sprintf('comment:cd-%s', request()->user()->id);
 

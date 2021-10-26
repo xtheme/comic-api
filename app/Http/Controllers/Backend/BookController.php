@@ -159,7 +159,7 @@ class BookController extends Controller
                 }
                 break;
             case 'syncPrice':
-                // todo 批量收费
+                // 批量收费
                 $books = Book::whereIn('id', $ids)->get();
                 foreach ($books as $book) {
                     $book->chapters()->where('episode', '>', getConfig('comic', 'default_charge_chapter'))->update(['price' => getConfig('comic', 'default_charge_price')]);
