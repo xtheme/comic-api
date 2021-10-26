@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Backend;
 use App\Enums\OrderOptions;
 // use App\Exports\OrdersExport;
 use App\Http\Controllers\Controller;
+use App\Jobs\RechargeJob;
 use App\Models\Order;
 use App\Models\User;
 use App\Repositories\Contracts\OrderRepositoryInterface;
@@ -31,22 +32,11 @@ class OrderController extends Controller
             'type_options' => OrderOptions::TYPE_OPTIONS,
             'platform_options' => OrderOptions::PLATFORM_OPTIONS,
             'status_options' => OrderOptions::STATUS_OPTIONS,
-            // 'orders_count' => $this->repository->orders_count($request),
-            // 'orders_amount' => $this->repository->orders_amount($request),
-            // 'renew_orders_count' => $this->repository->renew_orders_count($request),
-            // 'renew_orders_amount' => $this->repository->renew_orders_amount($request),
             'pageConfigs' => ['hasSearchForm' => true],
         ];
 
         return view('backend.order.index')->with($data);
     }
-
-    // public function export(Request $request)
-    // {
-    //     $query = $this->repository->filter($request);
-    //
-    //     return Excel::download(new OrdersExport($query), 'orders-' . date('Y-m-d') . '.xlsx');
-    // }
 
     // 手動上分
     public function callback($id)
@@ -55,6 +45,9 @@ class OrderController extends Controller
 
         DB::transaction(function () use ($order) {
             app(UserService::class)->manualUpdateOrder($order);
+
+            // 建立財報紀錄
+            RechargeJob::dispatch($order);
         });
 
         return Response::jsonSuccess('回调订单完成！');

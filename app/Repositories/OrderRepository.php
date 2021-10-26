@@ -59,39 +59,4 @@ class OrderRepository extends Repository implements OrderRepositoryInterface
                 ]);
             })->latest();
     }
-
-    public function orders_count(Request $request): int
-    {
-        return $this->filter($request)->count();
-        // return Order::count();
-    }
-
-    // public function success_orders_count(Request $request): int
-    // {
-    //     return $this->filter($request)->where('status', 1)->count();
-    //     // return Order::whereStatus(1)->count();
-    // }
-
-    public function orders_amount(Request $request): string
-    {
-        $amount = $this->filter($request)->sum('amount');
-
-        // $amount = Order::whereStatus(1)->sum('amount');
-        return number_format($amount);
-    }
-
-    public function renew_orders_count(Request $request): int
-    {
-        return $this->filter($request)->where('first', 0)->count();
-        // return Order::whereStatus(1)->whereFirst(0)->count();
-
-    }
-
-    public function renew_orders_amount(Request $request): string
-    {
-        $amount = $this->filter($request)->where('first', 0)->sum('amount');
-
-        // $amount = Order::whereStatus(1)->whereFirst(0)->sum('amount');
-        return number_format($amount);
-    }
 }

@@ -14,26 +14,7 @@
         </div>
         <div class="card">
             <div class="card-header">
-                <div class="float-left">
-                    <h4 class="card-title">@yield('title')</h4>
-                </div>
-                {{--<div class="float-right d-flex flex-wrap">
-                    <form id="batch-action" class="form form-vertical" method="get" action="{{ route('backend.role.batch') }}" novalidate>
-                        <div class="form-body">
-                            <div class="d-flex align-items-center">
-                                <div class="form-group mr-1">
-                                    <select class="form-control" name="action">
-                                        <option value="enable">启用</option>
-                                        <option value="disable">封禁</option>
-                                    </select>
-                                </div>
-                                <div class="form-group">
-                                    <button type="submit" class="btn btn-primary">批量操作</button>
-                                </div>
-                            </div>
-                        </div>
-                    </form>
-                </div>--}}
+                <h4 class="card-title">@yield('title')</h4>
             </div>
             <div class="card-content">
                 <div class="card-body">
@@ -42,12 +23,6 @@
                         <table class="table table-striped table-hover">
                             <thead>
                             <tr>
-                                <th>
-                                    <div class="checkbox">
-                                        <input type="checkbox" class="checkbox-input check-all" id="check-all">
-                                        <label for="check-all"></label>
-                                    </div>
-                                </th>
                                 <th>ID</th>
                                 <th>角色</th>
                                 <th>添加时间</th>
@@ -58,12 +33,6 @@
                             <tbody>
                             @foreach ($list as $role)
                                 <tr>
-                                    <td>
-                                        <div class="checkbox">
-                                            <input type="checkbox" class="checkbox-input check-opt" id="check-{{ $role->id }}" name="ids[]" value="{{ $role->id }}">
-                                            <label for="check-{{ $role->id }}"></label>
-                                        </div>
-                                    </td>
                                     <td>{{ $role->id }}</td>
                                     <td>{{ $role->name }}</td>
                                     <td>{{ $role->created_at }}</td>

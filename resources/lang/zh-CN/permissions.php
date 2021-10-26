@@ -45,4 +45,7 @@ return [
     'role' => '角色',
     'navigation' => '导航推荐',
     'payment' => '支付管理',
+    'category' => '标签分类',
+    'filter' => '筛选器',
+    'channel' => '渠道统计',
 ];
