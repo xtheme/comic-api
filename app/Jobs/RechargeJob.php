@@ -18,20 +18,18 @@ class RechargeJob implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
-    private $redis;
     private $amount;
     private $platform;
     private $first;
     private $payment_id;
     private $channel_id;
+
     private $date;
     private $hour;
     private $month;
 
     public function __construct(Order $order)
     {
-        $this->redis = Redis::connection('readonly');
-
         $order = $order->withoutRelations();
         $this->amount = $order->amount;
         $this->platform = $order->platform;
@@ -73,8 +71,9 @@ class RechargeJob implements ShouldQueue
         $this->incrementReport($report);
 
         // Redis 備份
+        $redis = Redis::connection('readonly');
         $redis_key = sprintf('payment:daily:%s:%s', $this->date, $this->hour);
-        $this->redis->set($redis_key, json_encode($report->toArray(), JSON_UNESCAPED_UNICODE));
+        $redis->set($redis_key, json_encode($report->toArray(), JSON_UNESCAPED_UNICODE));
     }
 
     private function dailyChannel()
@@ -88,8 +87,9 @@ class RechargeJob implements ShouldQueue
         $this->incrementReport($report);
 
         // Redis 備份
+        $redis = Redis::connection('readonly');
         $redis_key = sprintf('channel:daily:%s:%s', $this->date, $this->hour);
-        $this->redis->set($redis_key, json_encode($report->toArray(), JSON_UNESCAPED_UNICODE));
+        $redis->set($redis_key, json_encode($report->toArray(), JSON_UNESCAPED_UNICODE));
     }
 
     private function monthlyPayment()
@@ -98,12 +98,13 @@ class RechargeJob implements ShouldQueue
             'payment_id' => $this->payment_id,
             'date' => $this->month,
         ]);
-        $report->increment('register_count');
-        $report->increment(sprintf('register_%s_count', $this->platform));
+
+        $this->incrementReport($report);
 
         // Redis 備份
-        $redis_key = sprintf('channel:monthly:%s', date('Y-m', strtotime($this->month)));
-        $this->redis->set($redis_key, json_encode($report->toArray(), JSON_UNESCAPED_UNICODE));
+        $redis = Redis::connection('readonly');
+        $redis_key = sprintf('payment:monthly:%s', date('Y-m', strtotime($this->month)));
+        $redis->set($redis_key, json_encode($report->toArray(), JSON_UNESCAPED_UNICODE));
     }
 
     private function monthlyChannel()
@@ -112,11 +113,12 @@ class RechargeJob implements ShouldQueue
             'channel_id' => $this->channel_id,
             'date' => $this->month,
         ]);
-        $report->increment('register_count');
-        $report->increment(sprintf('register_%s_count', $this->platform));
+
+        $this->incrementReport($report);
 
         // Redis 備份
+        $redis = Redis::connection('readonly');
         $redis_key = sprintf('channel:monthly:%s', date('Y-m', strtotime($this->month)));
-        $this->redis->set($redis_key, json_encode($report->toArray(), JSON_UNESCAPED_UNICODE));
+        $redis->set($redis_key, json_encode($report->toArray(), JSON_UNESCAPED_UNICODE));
     }
 }

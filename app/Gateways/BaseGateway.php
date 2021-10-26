@@ -44,7 +44,9 @@ class BaseGateway
 
         $data = [
             'order_no' => $order_no,
-            'user_id' => Auth::user()->id,
+            'user_id' => auth('sanctum')->user()->id,
+            'app_id' => auth('sanctum')->user()->app_id,
+            'channel_id' => auth('sanctum')->user()->channel_id,
             'type' => $plan->type,
             'amount' => $plan->price,
             'currency' => 'CNY',

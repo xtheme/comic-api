@@ -3,18 +3,14 @@
 namespace App\Http\Controllers\Backend;
 
 use App\Enums\OrderOptions;
-// use App\Exports\OrdersExport;
 use App\Http\Controllers\Controller;
 use App\Jobs\RechargeJob;
 use App\Models\Order;
-use App\Models\User;
 use App\Repositories\Contracts\OrderRepositoryInterface;
 use App\Services\UserService;
 use Illuminate\Http\Request;
-use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Response;
-// use Maatwebsite\Excel\Facades\Excel;
 
 class OrderController extends Controller
 {
@@ -45,10 +41,10 @@ class OrderController extends Controller
 
         DB::transaction(function () use ($order) {
             app(UserService::class)->manualUpdateOrder($order);
-
-            // 建立財報紀錄
-            RechargeJob::dispatch($order);
         });
+
+        // 建立財報紀錄
+        RechargeJob::dispatch($order);
 
         return Response::jsonSuccess('回调订单完成！');
     }
