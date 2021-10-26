@@ -14,7 +14,7 @@ INSERT INTO `rb_categories` (`id`, `name`, `type`, `status`, `created_at`, `upda
 (10, '人数', 'video.player', 1, '2021-10-22 10:13:44', '2021-10-22 10:13:44');
 
 INSERT INTO `rb_channels` (`id`, `channel_id`, `description`, `safe_landing`, `register_count`, `register_wap_count`, `register_app_count`, `recharge_count`, `recharge_wap_count`, `recharge_app_count`, `recharge_amount`, `recharge_wap_amount`, `recharge_app_amount`, `created_at`, `updated_at`) VALUES
-(1, 1, 'default', 1, 1, 1, 0, 1, 1, 0, 1.00, 1.00, 0.00, '2021-10-25 16:00:56', '2021-10-26 18:32:08');
+(1, 1, 'default', 1, 1, 1, 0, 1, 1, 0, 0.00, 0.00, 0.00, '2021-10-25 16:00:56', '2021-10-26 18:32:08');
 
 INSERT INTO `rb_configs` (`id`, `name`, `code`, `options`, `created_at`, `updated_at`) VALUES
 (1, '應用配置', 'app', '{\"register_coin\": \"0\", \"hourly_order_limit\": \"5\"}', '2021-10-10 04:05:30', '2021-10-15 19:14:17'),
