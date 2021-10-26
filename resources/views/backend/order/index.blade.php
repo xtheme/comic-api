@@ -59,7 +59,7 @@
                                         @if($order->type == 'vip')
                                             <label class="badge badge-light-primary badge-pill">{{ $type_options[$order->type] }}</label>
                                         @else
-                                            <label class="badge badge-light-secondary badge-pill">{{ $type_options[$order->type] }}</label>
+                                            <label class="badge badge-light-warning badge-pill">{{ $type_options[$order->type] }}</label>
                                         @endif
                                     </td>
                                     <td>{{ $order->platform }}</td>
