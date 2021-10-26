@@ -10,7 +10,7 @@
             "url": "#",
             "name": "Payment",
             "slug": "payment",
-            "icon": "bx bxs-package",
+            "icon": "bx bxs-dollar-circle",
             "submenu": [
                 {
                     "url": "/backend/pricing",

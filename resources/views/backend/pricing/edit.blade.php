@@ -47,7 +47,7 @@
                 </div>
                 <div class="col-4">
                     <div class="form-group">
-                        <label>充值金额</label>
+                        <label>支付金额</label>
                         <div class="controls">
                             <input type="text" class="form-control" name="price" value="{{ $pack->price }}">
                         </div>
@@ -71,7 +71,7 @@
                 </div>
                 <div class="col-4">
                     <div class="form-group">
-                        <label>原价</label>
+                        <label>支付原价</label>
                         <div class="controls">
                             <input type="text" class="form-control" name="list_price" value="{{ $pack->list_price }}">
                         </div>
@@ -121,7 +121,7 @@
                     <div class="form-group">
                         <label>排序</label>
                         <div class="controls">
-                            <input type="text" class="form-control" name="sort" placeholder="数字由大到小排序">
+                            <input type="text" class="form-control" name="sort" value="{{ $pack->sort }}" placeholder="数字由大到小排序">
                         </div>
                     </div>
                 </div>

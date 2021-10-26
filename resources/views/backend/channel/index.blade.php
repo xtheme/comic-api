@@ -43,26 +43,26 @@
                                     </td>
                                     <td>
                                         <p class="text-right"><span class="float-left badge badge-light-primary">WAP</span> {{ $item->register_wap_count }}</p>
-                                        <p class="text-right clearfix"><span class="float-left badge badge-light-secondary">APP</span>+ {{ $item->register_app_count }}</p>
+                                        <p class="text-right clearfix"><span class="float-left badge badge-light-warning">APP</span>+ {{ $item->register_app_count }}</p>
                                         <hr>
                                         <p class="text-right">= {{ $item->register_count }}</p>
                                     </td>
                                     <td>
                                         <p class="text-right"><span class="float-left badge badge-light-primary">WAP</span> {{ $item->recharge_wap_count }}</p>
-                                        <p class="text-right clearfix"><span class="float-left badge badge-light-secondary">APP</span>+ {{ $item->recharge_app_count }}</p>
+                                        <p class="text-right clearfix"><span class="float-left badge badge-light-warning">APP</span>+ {{ $item->recharge_app_count }}</p>
                                         <hr>
                                         <p class="text-right">= {{ $item->recharge_count }}</p>
                                     </td>
                                     <td>
                                         <p class="text-right"><span class="float-left badge badge-light-primary">WAP</span> {{ $item->recharge_wap_amount }}</p>
-                                        <p class="text-right clearfix"><span class="float-left badge badge-light-secondary">APP</span>+ {{ $item->recharge_app_amount }}</p>
+                                        <p class="text-right clearfix"><span class="float-left badge badge-light-warning">APP</span>+ {{ $item->recharge_app_amount }}</p>
                                         <hr>
                                         <p class="text-right">= {{ $item->recharge_amount }}</p>
                                     </td>
                                     <td class="text-center">
                                         <div class="btn-group-vertical">
                                             <a class="btn btn-light-primary">日报表</a>
-                                            <a class="btn btn-light-success">月报表</a>
+                                            <a class="btn btn-light-warning">月报表</a>
                                             <a class="btn btn-light-danger">数据校正</a>
                                         </div>
                                     </td>

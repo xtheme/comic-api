@@ -10,8 +10,8 @@ class PricingRequest extends BaseRequest
     {
         return [
             'type' => 'required',
-            'name' => 'required|between:2,6',
-            'label' => 'between:2,6',
+            'name' => 'required|between:2,20',
+            'label' => 'between:2,10',
             'price' => 'required|numeric',
             'list_price' => 'numeric',
             'coin' => 'numeric',

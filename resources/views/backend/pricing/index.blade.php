@@ -26,9 +26,9 @@
                                 <th>ID</th>
                                 <th>方案类型</th>
                                 <th>方案名称</th>
-                                <th>方案描述</th>
                                 <th>标签</th>
-                                <th>充值金额</th>
+                                <th>方案描述</th>
+                                <th>支付金额</th>
                                 <th>VIP天数</th>
                                 <th>金币</th>
                                 <th>目标客群</th>
@@ -46,8 +46,8 @@
                                         @if($item->type == 'vip')VIP方案@endif
                                     </td>
                                     <td>{{ $item->name }}</td>
-                                    <td>{{ $item->description }}</td>
                                     <td>{{ $item->label }}</td>
+                                    <td>{{ $item->description }}</td>
                                     <td>@if($item->list_price)<del>{{ $item->list_price }}</del> @endif<span class="text-primary">{{ $item->price }}</span></td>
                                     <td>{{ $item->days }}@if($item->gift_days) (+{{ $item->gift_days }})@endif</td>
                                     <td>{{ $item->coin }}@if($item->gift_coin) (+{{ $item->gift_coin }})@endif</td>
