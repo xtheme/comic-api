@@ -31,7 +31,7 @@ class OrderRepository extends Repository implements OrderRepositoryInterface
         $order_no = $request->get('order_no') ?? '';
         $transaction_id = $request->get('transaction_id') ?? '';
         $user_id = $request->get('user_id') ?? '';
-        $status = $request->get('status') ?? '';
+        $status = $request->get('status') ?? null;
         $platform = $request->get('platform') ?? 0;
         $version = $request->get('version') ?? 0;
         $created_at = $request->get('created_at') ?? '';

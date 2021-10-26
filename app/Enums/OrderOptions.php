@@ -10,13 +10,6 @@ final class OrderOptions
         'gift' => '赠送',
     ];
 
-    const PLATFORM_OPTIONS = [
-        'h5' => '手機',
-        'pc' => 'PC',
-        'ios' => '蘋果',
-        'android' => '安卓',
-    ];
-
     const STATUS_OPTIONS = [
         0 => '待支付',
         1 => '支付成功',

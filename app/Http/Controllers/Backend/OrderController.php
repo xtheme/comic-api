@@ -26,7 +26,6 @@ class OrderController extends Controller
         $data = [
             'list' => $this->repository->filter($request)->paginate(),
             'type_options' => OrderOptions::TYPE_OPTIONS,
-            'platform_options' => OrderOptions::PLATFORM_OPTIONS,
             'status_options' => OrderOptions::STATUS_OPTIONS,
             'pageConfigs' => ['hasSearchForm' => true],
         ];

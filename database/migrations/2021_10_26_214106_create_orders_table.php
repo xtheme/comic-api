@@ -19,7 +19,7 @@ class CreateOrdersTable extends Migration
             $table->string('order_no', 64)->index('order_no')->comment('訂單號');
             $table->integer('user_id')->index('user_id')->comment('用户ID');
             $table->integer('app_id')->default(0)->index('app_id')->comment('商戶ID');
-            $table->integer('channel_id')->default(0)->index('channel_id')->comment('用戶來源渠道ID');
+            $table->integer('channel_id')->default(1)->index('channel_id')->comment('用戶來源渠道ID');
             $table->decimal('amount', 10)->comment('订单金额');
             $table->string('currency', 8)->default('CNY')->comment('貨幣iso code');
             $table->json('plan_options')->comment('支付方案');

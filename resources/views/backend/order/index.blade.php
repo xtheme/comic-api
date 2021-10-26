@@ -62,7 +62,7 @@
                                             <label class="badge badge-light-secondary badge-pill">{{ $type_options[$order->type] }}</label>
                                         @endif
                                     </td>
-                                    <td>{{ $platform_options[$order->platform] }}</td>
+                                    <td>{{ $order->platform }}</td>
                                     <td>{{ $order->amount }}</td>
                                     <td>{{ $order->user_id }}</td>
                                     <td>{{ optional($order->created_at)->diffForHumans() ?? '' }}</td>
@@ -139,9 +139,8 @@
                         <label>平台</label>
                         <select class="form-control" name="platform">
                             <option value="">全部</option>
-                            @foreach ($platform_options as $key => $value)
-                            <option value="{{ $key }}" @if(request()->get('platform') == $key){{'selected'}}@endif>{{ $value }}</option>
-                            @endforeach
+                            <option value="wap" @if(request()->get('platform') == 'wap'){{'selected'}}@endif>wap</option>
+                            <option value="app" @if(request()->get('platform') == 'app'){{'selected'}}@endif>app</option>
                         </select>
                     </div>
                 </div>

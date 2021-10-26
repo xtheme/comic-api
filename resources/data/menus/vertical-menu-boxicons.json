@@ -29,7 +29,7 @@
             "icon": "bx bxs-cart",
             "submenu": [
                 {
-                    "url": "/backend/order?status=2",
+                    "url": "/backend/order",
                     "name": "Order List"
                 }
             ]
