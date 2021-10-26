@@ -45,9 +45,9 @@ class VerifyApiHeader
             return Response::jsonError('缺少必要的请求参数!', 500);
         }
 
-        // 验证时间戳, 接口有效期3分钟
+        // 验证时间戳, 接口有效期5分钟
         $time_lag = time() - (int) $request->header('timestamp');
-        if ($time_lag > 11) {
+        if ($time_lag > 300) {
             return Response::jsonError('请求已经过期！', 500);
         }
 
