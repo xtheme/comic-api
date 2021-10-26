@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Http\Resources\BookResource;
+use App\Http\Resources\VideoResource;
 use App\Models\Filter;
 use App\Repositories\Contracts\TopicRepositoryInterface;
 use Illuminate\Http\Request;
@@ -21,15 +23,11 @@ class TopicController extends BaseController
     public function arrangeData($type, $list)
     {
         $list = $list->map(function ($item) use ($type) {
-            return [
-                'id' => $item->id,
-                'title' => $item->title,
-                'author' => $item->author,
-                'cover' => ($type == 'book') ? $item->horizontal_cover : $item->cover,
-                'tagged_tags' => $item->tagged_tags,
-                'view_counts' => shortenNumber($item->view_counts),
-                'created_at' => optional($item->created_at)->format('Y-m-d'),
-            ];
+            if ($type == 'book') {
+                return new BookResource($item);
+            } else {
+                return new VideoResource($item);
+            }
         })->toArray();
 
         return $list;

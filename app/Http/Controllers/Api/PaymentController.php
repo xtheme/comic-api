@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Api\PayRequest;
+use App\Http\Resources\PricingResource;
 use App\Jobs\RechargeJob;
 use App\Models\Order;
 use App\Models\Payment;
@@ -31,20 +32,7 @@ class PaymentController extends Controller
 
         $pricing = $pricing->mapToGroups(function ($plan) {
             return [
-                $plan->type => [
-                    'plan_id' => $plan->id,
-                    'type' => $plan->type,
-                    'name' => $plan->name,
-                    'label' => $plan->label,
-                    // 'description' => $plan->description,
-                    'price' => $plan->price,
-                    'list_price' => $plan->list_price,
-                    'coin' => $plan->coin,
-                    'gift_coin' => $plan->gift_coin,
-                    'days' => $plan->days,
-                    'gift_days' => $plan->gift_days,
-                    'target' => $plan->target,
-                ],
+                $plan->type => new PricingResource($plan),
             ];
         })->toArray();
 

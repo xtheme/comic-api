@@ -2,11 +2,10 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Models\Book;
+use App\Http\Resources\BookResource;
+use App\Http\Resources\VideoResource;
 use App\Models\Tag;
-use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Str;
 
@@ -92,15 +91,11 @@ class CategoryController extends BaseController
         $data = (clone $query)->forPage($params['page'], $params['size'])->get();
 
         $list = $data->map(function ($item) use ($type) {
-            return [
-                'id' => $item->id,
-                'title' => $item->title,
-                'author' => $item->author,
-                'cover' => ($type == 'book') ? $item->horizontal_cover : $item->cover,
-                'tagged_tags' => $item->tagged_tags,
-                'view_counts' => shortenNumber($item->view_counts),
-                'created_at' => optional($item->created_at)->format('Y-m-d'),
-            ];
+            if ($type == 'book') {
+                return new BookResource($item);
+            } else {
+                return new VideoResource($item);
+            }
         })->toArray();
 
         $data = [
