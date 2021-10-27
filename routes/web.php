@@ -209,18 +209,6 @@ Route::middleware(['auth', 'auth.route.role', 'log.activity'])->prefix('backend'
         Route::put('editable/{field}', [Backend\VideoController::class, 'editable'])->name('editable');
     });
 
-    // Route::prefix('video_series')->as('video_series.')->group(function () {
-    //     Route::get('/{video_id}', [Backend\VideoSeriesController::class , 'index'])->name('index');
-    //     Route::get('create/{video_id}', [Backend\VideoSeriesController::class , 'create'])->name('create');
-    //     Route::post('store/{video_id}', [Backend\VideoSeriesController::class , 'store'])->name('store');
-    //     Route::get('edit/{video_id}/{id}', [Backend\VideoSeriesController::class , 'edit'])->name('edit');
-    //     Route::post('update/{video_id}/{id}', [Backend\VideoSeriesController::class , 'update'])->name('update');
-    //     Route::delete('destroy/{id}', [Backend\VideoSeriesController::class , 'destroy'])->name('destroy');
-    //     Route::put('batch/{action?}', [Backend\VideoSeriesController::class, 'batch'])->name('batch');
-    //     Route::put('editable/{field}', [Backend\VideoSeriesController::class, 'editable'])->name('editable');
-    //     Route::any('preview/{id}', [Backend\VideoSeriesController::class, 'preview'])->name('preview');
-    // });
-
     // 广告位
     Route::prefix('ad_space')->as('ad_space.')->group(function () {
         Route::get('/', [Backend\AdSpaceController::class , 'index'])->name('index');
@@ -252,6 +240,7 @@ Route::middleware(['auth', 'auth.route.role', 'log.activity'])->prefix('backend'
         Route::put('batch/{action?}', [Backend\TopicController::class, 'batch'])->name('batch');
     });
 
+    // 篩選器
     Route::prefix('filter')->as('filter.')->group(function () {
         Route::get('/', [Backend\FilterController::class , 'index'])->name('index');
         Route::get('create/{type}', [Backend\FilterController::class , 'create'])->name('create');
@@ -273,8 +262,8 @@ Route::middleware(['auth', 'auth.route.role', 'log.activity'])->prefix('backend'
     // 操作记录
     Route::prefix('activity')->as('activity.')->group(function () {
         Route::get('/', [Backend\ActivityLogController::class , 'index'])->name('index');
-        Route::get('/diff/{id}', [Backend\ActivityLogController::class , 'diff'])->name('diff'); // 查看差異
-        Route::post('/restore/{id}', [Backend\ActivityLogController::class , 'restore'])->name('restore'); // 數據回滾
+        Route::get('diff/{id}', [Backend\ActivityLogController::class , 'diff'])->name('diff'); // 查看差異
+        Route::post('restore/{id}', [Backend\ActivityLogController::class , 'restore'])->name('restore'); // 數據回滾
     });
 
     // 管理員
@@ -298,4 +287,9 @@ Route::middleware(['auth', 'auth.route.role', 'log.activity'])->prefix('backend'
         Route::delete('destroy/{id}', [Backend\RoleController::class , 'destroy'])->name('destroy');
     });
 
+    // 財報
+    Route::prefix('finance')->as('finance.')->group(function () {
+        Route::get('channel_daily/{date?}', [Backend\FinanceController::class , 'channelDaily'])->name('channel_daily');
+        Route::get('channel_detail/{channel_id}/{date?}', [Backend\FinanceController::class , 'channelDetail'])->name('channel_detail');
+    });
 });
