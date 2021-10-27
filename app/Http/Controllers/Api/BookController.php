@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Http\Resources\BookChapterResource;
 use App\Models\Book;
 use App\Models\BookChapter;
 use Illuminate\Http\Request;
@@ -39,25 +40,8 @@ class BookController extends BaseController
             'view_counts' => shortenNumber($book->view_counts),
             'collect_counts' => shortenNumber($book->collect_counts),
             'chapters_count' => $book->chapters_count,
-            'chapters' => $book->chapters->map(function ($chapter) use ($user) {
-                if (!$user) {
-                    $has_purchased = false;
-                } else {
-                    if ($user->is_vip) {
-                        $has_purchased = true;
-                    } else {
-                        $has_purchased = $chapter->purchased;
-                    }
-                }
-                return [
-                    'chapter_id' => $chapter->id,
-                    'episode' => $chapter->episode,
-                    'title' => $chapter->title,
-                    'price' => $chapter->price,
-                    'view_counts' => shortenNumber($chapter->view_counts),
-                    'has_purchased' => $has_purchased,
-                    'created_at' => $chapter->created_at->format('Y-m-d'),
-                ];
+            'chapters' => $book->chapters->map(function ($chapter) {
+                return new BookChapterResource($chapter);
             })->toArray(),
         ];
 
@@ -116,17 +100,9 @@ class BookController extends BaseController
             $protect = false;
         }
 
-        // 是否登入
-        $user = $request->user() ?? null;
-
-        if ($user) {
-            if ($user->is_vip) {
-                $protect = false;
-            }
-
-            if ($chapter->purchased()->exists()) {
-                $protect = false;
-            }
+        // 是否購買
+        if ($protect && $chapter->purchased) {
+            $protect = false;
         }
 
         $images = $chapter->content;
@@ -142,12 +118,8 @@ class BookController extends BaseController
         // })->toArray();
 
         $data = [
-            'book_id' => $chapter->book_id,
             'protect' => $protect,
-            'episode' => $chapter->episode,
-            'title' => $chapter->title,
-            'price' => $chapter->price,
-            'view_counts' => shortenNumber($chapter->view_counts),
+            'chapter' => new BookChapterResource($chapter),
             'content' => $images,
             'prev_chapter_id' => $chapter->prev_chapter_id,
             'next_chapter_id' => $chapter->next_chapter_id,
