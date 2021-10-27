@@ -151,7 +151,7 @@
                             <li class="navigation-header text-truncate"><span>{{$menu->navheader}}</span></li>
                         @else
                             <li class="nav-item {{ Route::currentRouteName() === $menu->slug ? 'active' : '' }}">
-                                <a href="@if(isset($menu->url)){{asset($menu->url)}} @endif" @if(isset($menu->newTab)){{'target=_blank'}}@else{{'target=content-frame'}}@endif>
+                                <a href="@if(isset($menu->url)){{asset($menu->url)}} @endif" @if(isset($menu->newTab)){{'target=' . $menu->newTab}}@else{{'target=content-frame'}}@endif>
                                     @if(isset($menu->icon))
                                         <i class="{{$menu->icon}}"></i>
                                     @endif

@@ -44,11 +44,12 @@ class Release extends Command
         if ($force) {
             $this->optimize();
         } else {
-            if ($this->confirm('是否要进行代码发布?')) {
-                $this->line('开始进行代码优化...');
+            if ($this->confirm('是否要进行上线前置作业?')) {
+                $this->line('运行脚本...');
                 $this->optimize();
                 $this->info('');
-                $this->info('代码优化完成, 准备好发布');
+                $this->info('已完成上线前置作业, 准备好发布');
+
             } else {
                 $this->line('有内鬼终止交易');
             }
@@ -57,11 +58,8 @@ class Release extends Command
 
     private function optimize()
     {
-        $this->call('optimize');        // config:cache / route:cache
-        $this->call('view:clear');      // 清除视图缓存
-        $this->call('view:cache');      // 重建视图缓存
-        $this->call('clear-compiled');  // Remove the compiled class file
-
-        $this->info('目前处于上线模式下, 所有的配置已缓存');
+        $this->call('migrate'); // 数据表结构更新
+        $this->call('db:seed', ['--class' => 'UpgradeSeeder']); // 新增本次升级数据
+        $this->call('optimize');
     }
 }

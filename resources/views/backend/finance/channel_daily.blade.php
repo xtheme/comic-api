@@ -5,6 +5,7 @@
 
 {{-- vendor style --}}
 @section('vendor-styles')
+    <link rel="stylesheet" type="text/css" href="{{ asset('vendors/css/x-editable/bootstrap-editable.css') }}">
 @endsection
 
 @section('content')
@@ -85,9 +86,78 @@
 
 {{-- vendor scripts --}}
 @section('vendor-scripts')
+    <script src="{{ asset('vendors/js/x-editable/bootstrap-editable.js') }}"></script>
 @endsection
 
 {{-- page scripts --}}
 @section('page-scripts')
+    <script>
+        $(document).ready(function () {
+            $.ajaxSetup({
+                headers: {
+                    'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                }
+            });
+            $.fn.editable.defaults.ajaxOptions = {type: 'PUT'};
+            $.fn.editableform.buttons = '<button type="submit" class="btn btn-primary editable-submit">确认</button>';
+
+            $('.editable-click').editable({
+                inputclass: 'form-control',
+                emptyclass: 'text-light',
+                emptytext: 'N/A',
+                success: function (res, newValue) {
+                    console.log(res);
+                    $.toast({
+                        title: '提交成功',
+                        message: res.msg
+                    });
+                }
+            });
+
+            $('#batch-action').submit(function (e) {
+                e.preventDefault();
+
+                let $this = $(this);
+                let ids   = $.checkedIds();
+                let url   = $this.attr('action') + '/' + $this.find('select[name="action"]').val();
+
+                if (!ids) {
+                    $.toast({
+                        type: 'error',
+                        message: '请先选择要操作的数据'
+                    });
+                    return false;
+                }
+
+                $.confirm({
+                    text: `请确认是否要继续批量操作?`,
+                    callback: function () {
+                        $.request({
+                            url: url,
+                            type: 'put',
+                            data: {'ids' : ids},
+                            debug   : true,
+                            callback: function (res) {
+                                $.reloadIFrame({
+                                    title  : '提交成功',
+                                    message: '请稍后数据刷新'
+                                });
+                            }
+                        });
+                    }
+                });
+            });
+
+            $('#search-form').submit(function(e) {
+                e.preventDefault();
+
+                let url = $(this).attr('action') + '?' + $(this).serialize();
+                console.log(url);
+                $.reloadIFrame({
+                    reloadUrl: url
+                });
+            });
+        });
+    </script>
 @endsection
 

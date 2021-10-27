@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Http\Resources\BookChapterResource;
 use App\Models\Book;
 use App\Models\BookChapter;
 use Illuminate\Http\Request;
@@ -39,25 +40,8 @@ class BookController extends BaseController
             'view_counts' => shortenNumber($book->view_counts),
             'collect_counts' => shortenNumber($book->collect_counts),
             'chapters_count' => $book->chapters_count,
-            'chapters' => $book->chapters->map(function ($chapter) use ($user) {
-                if (!$user) {
-                    $has_purchased = false;
-                } else {
-                    if ($user->is_vip) {
-                        $has_purchased = true;
-                    } else {
-                        $has_purchased = $chapter->purchased;
-                    }
-                }
-                return [
-                    'chapter_id' => $chapter->id,
-                    'episode' => $chapter->episode,
-                    'title' => $chapter->title,
-                    'price' => $chapter->price,
-                    'view_counts' => shortenNumber($chapter->view_counts),
-                    'has_purchased' => $has_purchased,
-                    'created_at' => $chapter->created_at->format('Y-m-d'),
-                ];
+            'chapters' => $book->chapters->map(function ($chapter) {
+                return new BookChapterResource($chapter);
             })->toArray(),
         ];
 
@@ -110,22 +94,15 @@ class BookController extends BaseController
 
         // 收費章節
         $protect = true;
-        $has_purchased = false;
 
         // 如果章節免費
         if ($chapter->price == 0) {
             $protect = false;
         }
 
-        // 是否登入
-        $user = $request->user() ?? null;
-        if ($user) {
-            if ($user->is_vip) {
-                $has_purchased = true;
-            } else {
-                $has_purchased = $chapter->purchased()->exists();
-            }
-            $protect = $has_purchased ? false : true;
+        // 是否購買
+        if ($protect && $chapter->purchased) {
+            $protect = false;
         }
 
         $images = $chapter->content;
@@ -141,13 +118,8 @@ class BookController extends BaseController
         // })->toArray();
 
         $data = [
-            'book_id' => $chapter->book_id,
             'protect' => $protect,
-            'has_purchased' => $has_purchased,
-            'episode' => $chapter->episode,
-            'title' => $chapter->title,
-            'price' => $chapter->price,
-            'view_counts' => shortenNumber($chapter->view_counts),
+            'chapter' => new BookChapterResource($chapter),
             'content' => $images,
             'prev_chapter_id' => $chapter->prev_chapter_id,
             'next_chapter_id' => $chapter->next_chapter_id,

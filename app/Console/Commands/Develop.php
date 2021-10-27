@@ -42,6 +42,6 @@ class Develop extends Command
         $this->call('ide-helper:generate');
         $this->call('ide-helper:meta');
         $this->info('');
-        $this->info('目前处于开发模式下, 正式发布前请执行 php artisan release 优化代码');
+        $this->info('目前处于开发模式下');
     }
 }
