@@ -9,4 +9,9 @@ class ChannelDailyReport extends BaseModel
         'created_at',
         'updated_at',
     ];
+
+    public function channel()
+    {
+        return $this->belongsTo('App\Models\Channel', 'id', 'channel_id');
+    }
 }

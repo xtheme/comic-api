@@ -35,11 +35,11 @@ class FinanceController extends Controller
             DB::raw('sum(app_amount) as app_amount'),
         ];
 
-        $list = ChannelDailyReport::select($select)->whereDate('date', $date)->groupBy('channel_id')->get();
+        $list = ChannelDailyReport::with(['channel'])->select($select)->whereDate('date', $date)->groupBy('channel_id')->paginate();
 
         $data = [
             'date' => $date,
-            'list' => $list->toArray(),
+            'list' => $list,
         ];
 
         return view('backend.finance.channel_daily')->with($data);

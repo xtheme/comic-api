@@ -1,7 +1,7 @@
 @extends('layouts.iframePage')
 
 {{-- page Title --}}
-@section('title','渠道统计')
+@section('title','渠道日充汇总')
 
 {{-- vendor style --}}
 @section('vendor-styles')
@@ -26,46 +26,33 @@
                         <table class="table table-striped table-hover">
                             <thead>
                             <tr>
-                                <th>渠道ID</th>
-                                <th>注册总数</th>
-                                <th>充值总数</th>
-                                <th>充值金额</th>
+                                <th>渠道编号</th>
+                                <th>日期</th>
+                                <th>总充值</th>
+                                <th>WAP总充值</th>
+                                <th>APP总充值</th>
+                                <th>实时总充值</th>
+                                <th>WAP新户充值</th>
+                                <th>APP新户充值</th>
+                                <th>老用户充值</th>
+                                <th>APP安装数</th>
                                 <th class="text-center">操作</th>
                             </tr>
                             </thead>
                             <tbody>
                             @foreach ($list as $item)
                                 <tr>
-                                    <td class="text-center">
-                                        <p class="font-medium-3 text-bold-700">{{ $item->id }}</p>
-                                        <p>{{ $item->description }}</p>
-                                        @if($item->safe_landing)<span class="badge badge-light-danger">安全落地頁</span>@endif
-                                    </td>
-                                    <td>
-                                        <p class="text-right"><span class="float-left badge badge-light-primary">WAP</span> {{ $item->register_wap_count }}</p>
-                                        <p class="text-right clearfix"><span class="float-left badge badge-light-warning">APP</span>+ {{ $item->register_app_count }}</p>
-                                        <hr>
-                                        <p class="text-right">= {{ $item->register_count }}</p>
-                                    </td>
-                                    <td>
-                                        <p class="text-right"><span class="float-left badge badge-light-primary">WAP</span> {{ $item->recharge_wap_count }}</p>
-                                        <p class="text-right clearfix"><span class="float-left badge badge-light-warning">APP</span>+ {{ $item->recharge_app_count }}</p>
-                                        <hr>
-                                        <p class="text-right">= {{ $item->recharge_count }}</p>
-                                    </td>
-                                    <td>
-                                        <p class="text-right"><span class="float-left badge badge-light-primary">WAP</span> {{ $item->recharge_wap_amount }}</p>
-                                        <p class="text-right clearfix"><span class="float-left badge badge-light-warning">APP</span>+ {{ $item->recharge_app_amount }}</p>
-                                        <hr>
-                                        <p class="text-right">= {{ $item->recharge_amount }}</p>
-                                    </td>
-                                    <td class="text-center">
-                                        <div class="btn-group-vertical">
-                                            <a class="btn btn-light-primary">日报表</a>
-                                            <a class="btn btn-light-warning">月报表</a>
-                                            <a class="btn btn-light-danger">数据校正</a>
-                                        </div>
-                                    </td>
+                                    <td>{{ $item->id }}</td>
+                                    <td>{{ $date }}</td>
+                                    <td>{{ $item->recharge_amount }}</td>
+                                    <td>{{ $item->wap_amount }}</td>
+                                    <td>{{ $item->app_amount }}</td>
+                                    <td>{{ $item->wap_new_count + $item->app_new_count }}</td>
+                                    <td>{{ $item->wap_new_count }}</td>
+                                    <td>{{ $item->app_new_count }}</td>
+                                    <td>{{ $item->wap_renew_count + $item->app_renew_count }}</td>
+                                    <td>{{ $item->register_app_count }}</td>
+                                    <td></td>
                                 </tr>
                             @endforeach
                             </tbody>
