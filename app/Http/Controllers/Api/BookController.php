@@ -110,7 +110,6 @@ class BookController extends BaseController
 
         // 收費章節
         $protect = true;
-        $has_purchased = false;
 
         // 如果章節免費
         if ($chapter->price == 0) {
@@ -119,13 +118,15 @@ class BookController extends BaseController
 
         // 是否登入
         $user = $request->user() ?? null;
+
         if ($user) {
             if ($user->is_vip) {
-                $has_purchased = true;
-            } else {
-                $has_purchased = $chapter->purchased()->exists();
+                $protect = false;
             }
-            $protect = $has_purchased ? false : true;
+
+            if ($chapter->purchased()->exists()) {
+                $protect = false;
+            }
         }
 
         $images = $chapter->content;
@@ -143,7 +144,6 @@ class BookController extends BaseController
         $data = [
             'book_id' => $chapter->book_id,
             'protect' => $protect,
-            'has_purchased' => $has_purchased,
             'episode' => $chapter->episode,
             'title' => $chapter->title,
             'price' => $chapter->price,
