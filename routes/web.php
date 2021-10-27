@@ -28,14 +28,14 @@ Route::post('login', [LoginController::class, 'login']);
 Route::get('logout', [LoginController::class, 'logout'])->name('logout');
 
 // Homepage
-Route::get('/', [Frontend\HomeController::class, 'index']);
+Route::get('/', [Frontend\HomeController::class, 'index'])->name('front');
 Route::get('403', [Frontend\HomeController::class, 'noPermission'])->name('403');
 Route::get('404', [Frontend\HomeController::class, 'notFound'])->name('404');
 Route::get('500', [Frontend\HomeController::class, 'internalError'])->name('500');
 
 // Backend iframe layout
 Route::middleware(['auth'])->group(function () {
-    Route::get('backend', [Backend\DashboardController::class, 'index']);
+    Route::get('backend', [Backend\DashboardController::class, 'index'])->name('backend');
     Route::post('upload/{dir?}/{id?}', [UploadController::class, 'upload'])->name('upload'); // 單檔案上傳
     Route::post('unlink', [UploadController::class, 'unlink'])->name('unlink'); // 單檔案刪除
     // Route::post('editor/upload/{dir?}/{id?}', [UploadController::class, 'editorUpload'])->name('editor.upload'); // CKEditor
