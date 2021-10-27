@@ -78,9 +78,12 @@ class AuthController extends BaseController
 
         $user = User::create($data);
 
+        // 簽發 personal token
+        $token = $user->createToken($user->name)->plainTextToken;
+
         RegisterJob::dispatch($user, $request->header('platform'));
 
-        return Response::jsonSuccess(__('api.success'));
+        return Response::jsonSuccess(__('api.success'), ['token' => $token]);
     }
 
     /**
