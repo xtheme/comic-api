@@ -26,7 +26,6 @@ class RechargeJob implements ShouldQueue
     private $channel_id;
 
     private $date;
-    private $hour;
     private $month;
 
     public function __construct(Order $order)
@@ -39,7 +38,6 @@ class RechargeJob implements ShouldQueue
         $this->channel_id = $order->channel_id;
 
         $this->date = date('Y-m-d');
-        $this->hour = date('H');
         $this->month = date('Y-m-01');
     }
 
@@ -60,10 +58,11 @@ class RechargeJob implements ShouldQueue
     private function incrementReport($report)
     {
         $report->increment(sprintf('%s_%s_count', $this->platform, $this->first));
-        $report->increment(sprintf('%s_count', $this->platform));
+        $report->increment(sprintf('%s_count', $this->first));
         $report->increment('recharge_count');
+
         $report->increment(sprintf('%s_%s_amount', $this->platform, $this->first), $this->amount);
-        $report->increment(sprintf('%s_amount', $this->platform), $this->amount);
+        $report->increment(sprintf('%s_amount', $this->first), $this->amount);
         $report->increment('recharge_amount', $this->amount);
     }
 
@@ -72,14 +71,13 @@ class RechargeJob implements ShouldQueue
         $report = PaymentDailyReport::firstOrCreate([
             'payment_id' => $this->payment_id,
             'date' => $this->date,
-            'hour' => $this->hour,
         ]);
 
         $this->incrementReport($report);
 
         // Redis 備份
         $redis = Redis::connection('readonly');
-        $redis_key = sprintf('payment:daily:%s:%s', $this->date, $this->hour);
+        $redis_key = sprintf('payment:daily:%s', $this->date);
         $redis->set($redis_key, json_encode($report->toArray(), JSON_UNESCAPED_UNICODE));
     }
 
@@ -88,14 +86,13 @@ class RechargeJob implements ShouldQueue
         $report = ChannelDailyReport::firstOrCreate([
             'channel_id' => $this->channel_id,
             'date' => $this->date,
-            'hour' => $this->hour,
         ]);
 
         $this->incrementReport($report);
 
         // Redis 備份
         $redis = Redis::connection('readonly');
-        $redis_key = sprintf('channel:daily:%s:%s', $this->date, $this->hour);
+        $redis_key = sprintf('channel:daily:%s', $this->date);
         $redis->set($redis_key, json_encode($report->toArray(), JSON_UNESCAPED_UNICODE));
     }
 

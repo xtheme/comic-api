@@ -21,7 +21,6 @@ class RegisterJob implements ShouldQueue
     private $platform;
     private $channel_id;
     private $date;
-    private $hour;
     private $month;
 
     public function __construct(User $user, $platform)
@@ -30,7 +29,6 @@ class RegisterJob implements ShouldQueue
         $this->platform = $platform;
         $this->channel_id = $this->user->channel_id;
         $this->date = date('Y-m-d');
-        $this->hour = date('H');
         $this->month = date('Y-m-01');
     }
 
@@ -41,7 +39,7 @@ class RegisterJob implements ShouldQueue
 
         $channel = Channel::findOrFail($this->channel_id);
         $channel->increment('register_count');
-        $channel->increment(sprintf('register_%s_count', $this->platform));
+        $channel->increment(sprintf('%s_register_count', $this->platform));
     }
 
     private function daily()
@@ -49,14 +47,13 @@ class RegisterJob implements ShouldQueue
         $report = ChannelDailyReport::firstOrCreate([
             'channel_id' => $this->channel_id,
             'date' => $this->date,
-            'hour' => $this->hour,
         ]);
         $report->increment('register_count');
-        $report->increment(sprintf('register_%s_count', $this->platform));
+        $report->increment(sprintf('%s_register_count', $this->platform));
 
         // Redis 備份
         $redis = Redis::connection('readonly');
-        $redis_key = sprintf('channel:daily:%s:%s', $this->date, $this->hour);
+        $redis_key = sprintf('channel:daily:%s', $this->date);
         $redis->set($redis_key, json_encode($report->toArray(), JSON_UNESCAPED_UNICODE));
     }
 
