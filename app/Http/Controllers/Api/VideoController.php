@@ -28,7 +28,7 @@ class VideoController extends BaseController
 
         // todo 數字格式化
         $data['visit_counts'] = shortenNumber($data['visit_histories_count']);
-        $data['play_counts'] = (request()->header('platform') == 1) ? $data['play_histories_count'] : shortenNumber($data['play_histories_count']);
+        $data['play_counts'] = shortenNumber($data['play_histories_count']);
 
         // todo 訪問數+1
         // $video->increment('view_counts');

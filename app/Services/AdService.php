@@ -21,7 +21,7 @@ class AdService
 
     public function getAdBySpace($space_id)
     {
-        $platform = request()->header('platform');
+        $platform = strtolower(request()->header('platform'));
 
         $key = sprintf('ad:type:%s-%s', $space_id, $platform);
 

@@ -53,7 +53,7 @@ class BaseGateway
             'plan_options' => $plan_options,
             'payment_id' => $this->payment_id,
             'ip' => request()->ip(),
-            'platform' => request()->header('platform'),
+            'platform' => strtolower(request()->header('platform')),
         ];
 
         $order = Order::create($data);
