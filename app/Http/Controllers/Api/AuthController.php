@@ -40,6 +40,7 @@ class AuthController extends BaseController
         $user->save();
 
         // 簽發 personal token
+        $user->tokens()->delete();
         $token = $user->createToken($user->name)->plainTextToken;
 
         $response = [
