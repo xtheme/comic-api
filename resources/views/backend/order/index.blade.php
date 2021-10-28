@@ -41,7 +41,7 @@
                                 <th>订单号</th>
                                 <th>方案类型</th>
                                 <th>平台</th>
-                                <th>订单金额</th>
+                                <th>充值金额</th>
                                 <th>用户ID</th>
                                 <th>订单创建时间</th>
                                 <th>支付渠道</th>
@@ -77,8 +77,9 @@
                                         @endif
                                     </td>
                                     <td>
+                                        <a class="btn btn-primary btn-sm" data-modal href="{{ route('backend.order.detail', $order->id) }}" title="查看">查看</a>
                                         @if($order->status == 0)
-                                        <a class="btn btn-warning btn-sm" data-confirm href="{{ route('backend.order.callback', $order->id) }}" title="回调订单为已付款">補單</a>
+                                        <a class="btn btn-warning btn-sm" data-confirm href="{{ route('backend.order.callback', $order->id) }}" title="手动上分">補單</a>
                                         @endif
                                     </td>
                                 </tr>
@@ -105,6 +106,16 @@
             <div class="row">
                 <div class="col-12">
                     <div class="form-group">
+                        <label>用户ID</label>
+                        <div class="controls">
+                            <input type="text" class="form-control"
+                                   name="user_id" value="{{ request()->get('user_id') }}"
+                                   placeholder="">
+                        </div>
+                    </div>
+                </div>
+                <div class="col-12">
+                    <div class="form-group">
                         <label>订单号</label>
                         <div class="controls">
                             <input type="text" class="form-control"
@@ -113,9 +124,10 @@
                         </div>
                     </div>
                 </div>
+
                 <div class="col-12">
                     <div class="form-group">
-                        <label>渠道訂單號	</label>
+                        <label>渠道訂單號</label>
                         <div class="controls">
                             <input type="text" class="form-control"
                                    name="transaction_id" value="{{ request()->get('transaction_id') }}"
@@ -129,7 +141,7 @@
                         <select class="form-control" name="type">
                             <option value="">全部</option>
                             @foreach ($type_options as $key => $value)
-                                <option value="{{ $key }}" @if(request()->get('platform') == $key){{'selected'}}@endif>{{ $value }}</option>
+                                <option value="{{ $key }}" @if(request()->get('type') == $key){{'selected'}}@endif>{{ $value }}</option>
                             @endforeach
                         </select>
                     </div>
@@ -142,16 +154,6 @@
                             <option value="wap" @if(request()->get('platform') == 'wap'){{'selected'}}@endif>wap</option>
                             <option value="app" @if(request()->get('platform') == 'app'){{'selected'}}@endif>app</option>
                         </select>
-                    </div>
-                </div>
-                <div class="col-12">
-                    <div class="form-group">
-                        <label>用户ID</label>
-                        <div class="controls">
-                            <input type="text" class="form-control"
-                                   name="user_id" value="{{ request()->get('user_id') }}"
-                                   placeholder="">
-                        </div>
                     </div>
                 </div>
                 <div class="col-12">

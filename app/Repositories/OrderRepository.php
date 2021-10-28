@@ -31,6 +31,7 @@ class OrderRepository extends Repository implements OrderRepositoryInterface
         $order_no = $request->get('order_no') ?? '';
         $transaction_id = $request->get('transaction_id') ?? '';
         $user_id = $request->get('user_id') ?? '';
+        $type = $request->get('type') ?? '';
         $status = $request->get('status') ?? null;
         $platform = $request->get('platform') ?? 0;
         $version = $request->get('version') ?? 0;
@@ -42,6 +43,8 @@ class OrderRepository extends Repository implements OrderRepositoryInterface
                 return $query->where('transaction_id', $transaction_id);
             })->when($user_id, function (Builder $query, $user_id) {
                 return $query->where('user_id', $user_id);
+            })->when($type, function (Builder $query, $type) {
+                return $query->where('type', $type);
             })->when($status, function (Builder $query, $status) {
                 return $query->where('status', $status);
             })->when($platform, function (Builder $query, $platform) {

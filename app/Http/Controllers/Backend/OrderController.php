@@ -33,10 +33,19 @@ class OrderController extends Controller
         return view('backend.order.index')->with($data);
     }
 
-    // 手動上分
-    public function callback($id)
+    public function detail($order_id)
     {
-        $order = Order::findOrFail($id);
+        $data = [
+            'order' => $this->repository->find($order_id),
+        ];
+
+        return view('backend.order.detail')->with($data);
+    }
+
+    // 手動上分
+    public function callback($order_id)
+    {
+        $order = Order::findOrFail($order_id);
 
         DB::transaction(function () use ($order) {
             app(UserService::class)->manualUpdateOrder($order);

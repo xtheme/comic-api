@@ -75,8 +75,9 @@ Route::middleware(['auth', 'auth.route.role', 'log.activity'])->prefix('backend'
     // 订单
     Route::prefix('order')->as('order.')->group(function () {
         Route::get('/', [Backend\OrderController::class, 'index'])->name('index');        // 订单列表
+        Route::get('detail/{order_id}', [Backend\OrderController::class, 'detail'])->name('detail');
         Route::get('export', [Backend\OrderController::class, 'export'])->name('export'); // 汇出订单
-        Route::put('callback/{id}', [Backend\OrderController::class, 'callback'])->name('callback'); // 第三方更改訂單狀態失效時手動回調
+        Route::put('callback/{order_id}', [Backend\OrderController::class, 'callback'])->name('callback'); // 第三方更改訂單狀態失效時手動回調
     });
 
     // 分类
