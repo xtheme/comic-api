@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use App\Jobs\RegisterJob;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Facades\Hash;
@@ -25,10 +26,19 @@ class UserFactory extends Factory
     {
         return [
             'name' => $this->faker->name,
-            'email' => $this->faker->unique()->safeEmail,
-            'email_verified_at' => now(),
+            'app_id' => 0,
+            'channel_id' => 1,
             'password' => Hash::make('password'),
-            'remember_token' => Str::random(10),
+            'wallet' => getConfig('app', 'register_coin'),
         ];
+    }
+
+    public function configure()
+    {
+        return $this->afterMaking(function (User $user) {
+            //
+        })->afterCreating(function (User $user) {
+            RegisterJob::dispatch($user, $this->faker->randomElement(['wap', 'app']));
+        });
     }
 }
