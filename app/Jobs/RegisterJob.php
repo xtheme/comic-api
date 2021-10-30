@@ -64,7 +64,7 @@ class RegisterJob implements ShouldQueue
             'date' => $this->month,
         ]);
         $report->increment('register_count');
-        $report->increment(sprintf('register_%s_count', $this->platform));
+        $report->increment(sprintf('%s_register_count', $this->platform));
 
         // Redis 備份
         $redis = Redis::connection('readonly');
