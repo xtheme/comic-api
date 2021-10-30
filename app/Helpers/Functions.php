@@ -15,20 +15,11 @@ if (!function_exists('getConfigs')) {
      */
     function getConfigs($code)
     {
-        $cache_key = 'config:' . $code;
-
-        if (Cache::has($cache_key)) {
-            return Cache::get($cache_key);
-        }
-
         $config = Config::code($code)->first();
 
         if (!$config) {
             Log::error('配置代号: ' . $code . ' 不存在');
-            throw new Exception('配置代号: ' . $code . ' 不存在');
         }
-
-        Cache::set($cache_key, $config->options, 300);
 
         return $config->options ?? [];
     }
@@ -40,14 +31,22 @@ if (!function_exists('getConfig')) {
      *
      * @return string|array
      */
-    function getConfig($code, $key)
+    function getConfig($code, $key, $default = '')
     {
+        $cache_key = sprintf('config:%s:%s', $code, $key);
+
+        if (Cache::has($cache_key)) {
+            return Cache::get($cache_key);
+        }
+
         $options = getConfigs($code);
 
         if (!isset($options[$key])) {
             Log::error('配置項: ' . $code . '.' . $key . ' 不存在');
-            throw new Exception('配置項: ' . $code . '.' . $key . ' 不存在');
+            return $default;
         }
+
+        Cache::set($cache_key, $options[$key], 600);
 
         return $options[$key] ?? '';
     }
