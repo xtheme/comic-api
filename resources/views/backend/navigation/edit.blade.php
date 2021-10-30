@@ -27,7 +27,9 @@
                                 <button class="btn btn-primary upload-image" type="button">上传</button>
                             </div>
                         </div>
-                        <div class="upload-image-callback">@if($data->getRawOriginal('icon'))<img src="{{ $data->icon }}" width="60" height="60">@endif</div>
+                        <div class="upload-image-callback">
+                            @if($data->getRawOriginal('icon'))<img src="{{ $data->icon }}" width="60" height="60">@endif
+                        </div>
                     </div>
                 </div>
                 <div class="col-12">

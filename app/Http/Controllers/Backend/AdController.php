@@ -81,8 +81,8 @@ class AdController extends Controller
     {
         $ad = Ad::findOrFail($id);
 
-        $banner = $ad->getRawOriginal('banner');
-        Storage::delete($banner);
+        $image = $ad->getRawOriginal('banner');
+        Storage::delete($image);
 
         $ad->fill($request->post())->save();
 

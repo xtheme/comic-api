@@ -43,7 +43,7 @@
                                     <td>{{ $item->target }}</td>
                                     <td>
                                         @if($item->getRawOriginal('target') == 1)
-                                        {{ $item->filter->title }}
+                                        {{ optional($item->filter)->title ?? '未指派筛选器' }}
                                         @else
                                         {{ $item->link }}
                                         @endif

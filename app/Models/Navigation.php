@@ -5,6 +5,7 @@ namespace App\Models;
 use App\Enums\NavigationOptions;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Storage;
 
 class Navigation extends Model
 {
@@ -41,5 +42,12 @@ class Navigation extends Model
     public function getTargetAttribute($value)
     {
         return NavigationOptions::TARGET_OPTIONS[$value];
+    }
+
+    public function getIconAttribute($value)
+    {
+        if (!$value) return '';
+
+        return Storage::url($value);
     }
 }

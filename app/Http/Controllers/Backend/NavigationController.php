@@ -8,6 +8,7 @@ use App\Http\Requests\Backend\NavigationRequest;
 use App\Models\Filter;
 use App\Models\Navigation;
 use Illuminate\Support\Facades\Response;
+use Illuminate\Support\Facades\Storage;
 
 class NavigationController extends Controller
 {
@@ -35,7 +36,7 @@ class NavigationController extends Controller
     {
         $post = $request->input();
 
-        $model = new Navigation;
+        $nav = new Navigation;
 
         if ($post['target'] == 1) {
             $post['link'] = '';
@@ -43,7 +44,7 @@ class NavigationController extends Controller
             $post['filter_id'] = 0;
         }
 
-        $model->fill($post)->save();
+        $nav->fill($post)->save();
 
         return Response::jsonSuccess(__('response.create.success'));
     }
@@ -64,7 +65,7 @@ class NavigationController extends Controller
     {
         $post = $request->input();
 
-        $model = Navigation::findOrFail($id);
+        $nav = Navigation::findOrFail($id);
 
         if ($post['target'] == 1) {
             $post['link'] = '';
@@ -72,16 +73,19 @@ class NavigationController extends Controller
             $post['filter_id'] = 0;
         }
 
-        $model->fill($post)->save();
+        $image = $nav->getRawOriginal('icon');
+        Storage::delete($image);
+
+        $nav->fill($post)->save();
 
         return Response::jsonSuccess(__('response.update.success'));
     }
 
     public function destroy($id)
     {
-        $model = Navigation::findOrFail($id);
+        $nav = Navigation::findOrFail($id);
 
-        $model->delete();
+        $nav->delete();
 
         return Response::jsonSuccess(__('response.destroy.success'));
     }

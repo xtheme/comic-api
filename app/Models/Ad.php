@@ -23,5 +23,4 @@ class Ad extends BaseModel
 
         return Storage::url($value);
     }
-
 }

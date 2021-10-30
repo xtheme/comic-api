@@ -72,7 +72,7 @@
                                     <td>{{ $item->id }}</td>
                                     <td>{{ $item->space->name }}</td>
                                     <td><span class="jeditable" data-pk="{{ $item->id }}" data-value="" > {{ $item->sort }}</td>
-                                    <td><img src="{{ $item->banner }}" class="cursor-pointer" width="50px" data-lightbox alt="点击查看大图"></td>
+                                    <td><img src="{{ $item->banner }}" class="cursor-pointer" width="200px" data-lightbox alt="点击查看大图"></td>
                                     <td>{{ $item->url }}</td>
                                     <td>@if($item->updated_at){{ $item->updated_at->diffForHumans()  }}@endif</td>
                                     <td>
