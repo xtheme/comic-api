@@ -29,7 +29,8 @@ class UserController extends BaseController
                 'amount' => $log->amount,
                 'plan' => $log->plan_options,
                 'created_at' => $log->created_at->format('Y-m-d H:i:s'),
-                'status' => OrderOptions::STATUS_OPTIONS[$log->status],
+                'status' => $log->status,
+                // 'status' => OrderOptions::STATUS_OPTIONS[$log->status],
                 'transaction_at' => optional($log->transaction_at)->format('Y-m-d H:i:s'),
             ];
         })->toArray();
@@ -99,6 +100,8 @@ class UserController extends BaseController
             return [
                 'event' => $log->item_type,
                 'title' => $log->item_title,
+                'type' => $log->type,
+                'id' => $log->item_id,
                 'price' => $log->item_price,
                 'created_at' => $log->created_at->format('Y-m-d H:i:s'),
             ];
