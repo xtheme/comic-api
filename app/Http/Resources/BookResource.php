@@ -6,7 +6,7 @@ use Illuminate\Http\Resources\Json\JsonResource;
 
 class BookResource extends JsonResource
 {
-    protected $has_favorite = false;
+    protected $has_favorite = null;
 
     public function favorite($value){
         $this->has_favorite = $value;

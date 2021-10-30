@@ -14,19 +14,33 @@ class TopicController extends BaseController
 {
     protected $repository;
 
-    public function __construct(TopicRepositoryInterface $repository)
+    public function __construct(Request $request, TopicRepositoryInterface $repository)
     {
+        if ($request->bearerToken()) {
+            $this->middleware('auth:sanctum');
+        }
+
         $this->repository = $repository;
     }
 
     // 整理不同模型輸出的數據格式
     public function arrangeData($type, $list)
     {
-        $list = $list->map(function ($item) use ($type) {
+        // 當前用戶是否收藏
+        $user = auth('sanctum')->user() ?? null;
+        $favorite_logs = [];
+        if ($user) {
+            $book_ids = $list->pluck('id')->toArray();
+            $favorite_logs = $user->favorite_logs()->where('type', $type)->whereIn('item_id', $book_ids)->pluck('item_id')->toArray();
+        }
+
+        $list = $list->map(function ($item) use ($type, $favorite_logs) {
+            $has_favorite = in_array($item->id, $favorite_logs) ? true : false;
+
             if ($type == 'book' || $type == 'book_safe') {
-                return new BookResource($item);
+                return (new BookResource($item))->favorite($has_favorite);
             } else {
-                return new VideoResource($item);
+                return (new VideoResource($item))->favorite($has_favorite);
             }
         })->toArray();
 

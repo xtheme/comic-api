@@ -22,9 +22,9 @@ class FavoriteController extends BaseController
 
         $data = $logs->transform(function ($item) use ($type) {
             if ($type == 'book') {
-                $item = (new BookResource($item->{$type}))->favorite(true);
+                $item = new BookResource($item->{$type});
             } else {
-                $item = (new VideoResource($item->{$type}))->favorite(true);
+                $item = new VideoResource($item->{$type});
             }
 
             return [
