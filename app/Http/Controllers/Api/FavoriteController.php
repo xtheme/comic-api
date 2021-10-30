@@ -5,8 +5,6 @@ namespace App\Http\Controllers\Api;
 use App\Http\Requests\Api\FavoriteDestroyRequest;
 use App\Http\Requests\Api\FavoriteListRequest;
 use App\Http\Requests\Api\FavoriteSaveRequest;
-use App\Http\Resources\BookResource;
-use App\Http\Resources\VideoResource;
 use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Str;
 
@@ -20,17 +18,19 @@ class FavoriteController extends BaseController
 
         $logs = $request->user()->favorite_logs()->with([$type, $type . '.tags'])->where('type', $type)->orderByDesc('updated_at')->get();
 
-        $data = $logs->transform(function ($item) use ($type) {
-            if ($type == 'book') {
-                $item = new BookResource($item->{$type});
-            } else {
-                $item = new VideoResource($item->{$type});
-            }
-
+        $data = $logs->transform(function ($log) use ($type) {
             return [
-                'record_id' => $item->id,
-                'recorded_at' => $item->created_at->format('Y-m-d H:i:s'),
-                'item' => $item,
+                'record_id' => $log->id,
+                'recorded_at' => $log->created_at->format('Y-m-d H:i:s'),
+                // 'type' => $log->type,
+                'id' => $log->item_id,
+                'title' => $log->{$type}->title,
+                'author' => $log->{$type}->author,
+                'cover' => ($type == 'book') ? $log->{$type}->horizontal_cover : $log->{$type}->cover,
+                'tagged_tags' => $log->{$type}->tagged_tags,
+                'view_counts' => shortenNumber($log->{$type}->view_counts),
+                'has_favorite' => true,
+                'created_at' => optional($log->{$type}->created_at)->format('Y-m-d'),
             ];
         })->toArray();
 

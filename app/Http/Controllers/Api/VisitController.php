@@ -4,8 +4,6 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Requests\Api\VisitDestroyRequest;
 use App\Http\Requests\Api\VisitListRequest;
-use App\Http\Resources\BookResource;
-use App\Http\Resources\VideoResource;
 use Illuminate\Support\Facades\Response;
 
 class VisitController extends BaseController
@@ -25,19 +23,21 @@ class VisitController extends BaseController
         $book_ids = $logs->pluck('item_id')->toArray();
         $favorite_logs = $request->user()->favorite_logs()->where('type', $type)->whereIn('item_id', $book_ids)->pluck('item_id')->toArray();
 
-        $data = $logs->transform(function ($item) use ($type, $favorite_logs) {
-            $has_favorite = in_array($item->item_id, $favorite_logs) ? true : false;
-
-            if ($type == 'book') {
-                $item = (new BookResource($item->{$type}))->favorite($has_favorite);
-            } else {
-                $item = (new VideoResource($item->{$type}))->favorite($has_favorite);
-            }
+        $data = $logs->transform(function ($log) use ($type, $favorite_logs) {
+            $has_favorite = in_array($log->item_id, $favorite_logs) ? true : false;
 
             return [
-                'record_id' => $item->id,
-                'recorded_at' => $item->created_at->format('Y-m-d H:i:s'),
-                'item' => $item,
+                'record_id' => $log->id,
+                'recorded_at' => $log->created_at->format('Y-m-d H:i:s'),
+                // 'type' => $log->type,
+                'id' => $log->item_id,
+                'title' => $log->{$type}->title,
+                'author' => $log->{$type}->author,
+                'cover' => ($type == 'book') ? $log->{$type}->horizontal_cover : $log->{$type}->cover,
+                'tagged_tags' => $log->{$type}->tagged_tags,
+                'view_counts' => shortenNumber($log->{$type}->view_counts),
+                'has_favorite' => $has_favorite,
+                'created_at' => optional($log->{$type}->created_at)->format('Y-m-d'),
             ];
         })->toArray();
 
