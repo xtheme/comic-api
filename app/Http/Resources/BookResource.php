@@ -28,7 +28,7 @@ class BookResource extends JsonResource
             'cover' => $this->horizontal_cover,
             'tagged_tags' => $this->tagged_tags,
             'view_counts' => shortenNumber($this->view_counts),
-            'has_favorite' => $this->has_favorite,
+            'has_favorite' => $this->when(!is_null($this->has_favorite), $this->has_favorite),
             'created_at' => optional($this->created_at)->format('Y-m-d'),
         ];
     }

@@ -27,7 +27,7 @@ class BookChapterResource extends JsonResource
             'episode' => $this->episode,
             'title' => $this->title,
             'price' => $this->price,
-            'purchased' => $this->purchased,
+            'purchased' => $this->when(!is_null($this->purchased), $this->purchased),
             'view_counts' => shortenNumber($this->view_counts),
             'created_at' => $this->created_at->format('Y-m-d'),
         ];
