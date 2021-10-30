@@ -38,7 +38,7 @@ class Book extends BaseModel
      */
     public function visit_logs()
     {
-        return $this->hasMany('App\Models\UserVisitLog');
+        return $this->hasMany('App\Models\UserVisitLog', 'item_id');
     }
 
     /**
@@ -46,7 +46,7 @@ class Book extends BaseModel
      */
     public function favorite_logs()
     {
-        return $this->hasMany('App\Models\UserFavoriteLog');
+        return $this->hasMany('App\Models\UserFavoriteLog', 'item_id');
     }
 
     /**
