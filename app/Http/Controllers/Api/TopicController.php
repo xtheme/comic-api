@@ -23,7 +23,7 @@ class TopicController extends BaseController
     public function arrangeData($type, $list)
     {
         $list = $list->map(function ($item) use ($type) {
-            if ($type == 'book') {
+            if ($type == 'book' || $type == 'book_safe') {
                 return new BookResource($item);
             } else {
                 return new VideoResource($item);

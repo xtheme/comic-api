@@ -97,7 +97,7 @@ class UserController extends BaseController
 
         $list = $logs->map(function ($log) {
             return [
-                'event' => $log->event,
+                'event' => $log->item_type,
                 'title' => $log->item_title,
                 'price' => $log->item_price,
                 'created_at' => $log->created_at->format('Y-m-d H:i:s'),
