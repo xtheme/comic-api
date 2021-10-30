@@ -21,15 +21,7 @@ use Illuminate\Support\Str;
 class UploadService
 {
     protected $path = null; // 上傳路徑
-    protected $sync = true; // 同步到第三方服務器
     protected $rule = 'image'; // checkFile() 使用的規則
-
-    public function __construct()
-    {
-        if (App::environment('local')) {
-            $this->sync = false;
-        }
-    }
 
     /**
      * 检查上传文件
@@ -90,65 +82,6 @@ class UploadService
         return $path;
     }
 
-    /**
-     * 指定一个文件名, 存储文件
-     *
-     * @param $file
-     * @param $path
-     *
-     * @return mixed
-     */
-    private function storeToLocal($file, $path)
-    {
-        // 获取后缀名
-        $extension = $file->extension();
-
-        // 生成文件路径
-        $filename = uniqid() . '.' . $extension;
-
-        return $file->storeAs($path, $filename);
-    }
-
-    /**
-     * 同步本地文件到文件服务器
-     *
-     * @param $file
-     *
-     * @return array
-     */
-    private function syncToFileServer($file): array
-    {
-        $url = config('api.third.upload_url') . '/upload';
-
-        $post_data = [
-            'image' => new CURLFile($file),
-        ];
-
-        $ch = curl_init();
-        curl_setopt($ch, CURLOPT_URL, $url);
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-        curl_setopt($ch, CURLOPT_POST, 1);
-        curl_setopt($ch, CURLOPT_POSTFIELDS, $post_data);
-        $output = curl_exec($ch);
-        curl_close($ch);
-        $result = json_decode($output, true);
-
-        if ($result['code'] != 200) {
-            Log::error('syncToFileServer error : ' . $output);
-            return [];
-        }
-
-        Log::debug('syncToFileServer output : ' . $output);
-        return $result['data'];
-    }
-
-    public function unsync()
-    {
-        $this->sync = false;
-
-        return $this;
-    }
-
     public function to($path, $id = null)
     {
         $this->path = $this->buildPath($path, $id);
@@ -174,44 +107,18 @@ class UploadService
             return $result;
         }
 
-        // 上传文件到本地
-        $path = $this->storeToLocal($file, $this->path);
+        $path = Storage::put($this->path, $file);
 
-        if (!$this->sync) {
-            // 不同步
-            $result = [
-                'success' => true,
-                'message' => __('response.upload.success'),
-                'path' => '/storage/' . $path,
-                'domain' => '',
-            ];
-            return $result;
-        }
+        // $path = Storage::url($path);
 
-        // 本地真实路径
-        $local_path =  Storage::path($path);
-
-        // 同步本地文件到文件服务器
-        $response = $this->syncToFileServer($local_path);
-
-        if (!$response) {
-            $result = [
-                'success' => false,
-                'message' => __('response.upload.fail.sync'),
-            ];
-            return $result;
-        }
-
-        // 删除本地文件
-        // Storage::delete($path);
-        Storage::deleteDirectory($this->path);
-
+        // 不同步
         $result = [
             'success' => true,
             'message' => __('response.upload.success'),
-            'path' => $response['image_path'],
-            'domain' => getImageDomain(),
+            'path' => $path,
+            'domain' => '',
         ];
+
         return $result;
     }
 }

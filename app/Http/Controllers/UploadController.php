@@ -36,7 +36,6 @@ class UploadController extends Controller
     public function unlink(Request $request)
     {
         $path = $request->input('path');
-        $path = substr($path, 8); // remove "/storage"
 
         Storage::delete($path);
 

@@ -8,7 +8,9 @@ use App\Models\Ad;
 use App\Models\AdSpace;
 use App\Repositories\Contracts\AdRepositoryInterface;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Response;
+use Illuminate\Support\Facades\Storage;
 use Upload;
 
 class AdController extends Controller
@@ -38,9 +40,8 @@ class AdController extends Controller
     {
         $data = [
             'list' => $this->repository->filter($request)->paginate(),
-            'pageConfigs' => ['hasSearchForm' => true],
             'ad_spaces' => AdSpace::orderBy('id')->get(),
-            'jump_type' => self::JUMP_TYPE,
+            'pageConfigs' => ['hasSearchForm' => true],
         ];
 
         return view('backend.ad.index')->with($data);
@@ -50,8 +51,6 @@ class AdController extends Controller
     {
         $data = [
             'ad_spaces' => AdSpace::orderBy('id')->get(),
-            'jump_type' => self::JUMP_TYPE,
-            'url_type' => self::URL_TYPE,
         ];
 
         return view('backend.ad.create')->with($data);
@@ -59,9 +58,9 @@ class AdController extends Controller
 
     public function store(AdRequest $request)
     {
-        $video_ad = new Ad;
+        $ad = new Ad;
 
-        $video_ad->fill($request->post())->save();
+        $ad->fill($request->post())->save();
 
         return Response::jsonSuccess(__('response.create.success'));
     }
@@ -71,10 +70,8 @@ class AdController extends Controller
 
         $data = [
             'data' => Ad::findOrFail($id),
-            'pageConfigs' => ['hasSearchForm' => true],
             'ad_spaces' => AdSpace::orderBy('id')->get(),
-            'jump_type' => self::JUMP_TYPE,
-            'url_type' => self::URL_TYPE,
+            'pageConfigs' => ['hasSearchForm' => true],
         ];
 
         return view('backend.ad.edit')->with($data);
@@ -82,9 +79,15 @@ class AdController extends Controller
 
     public function update(AdRequest $request, $id)
     {
-        $video_ad = Ad::findOrFail($id);
+        $ad = Ad::findOrFail($id);
 
-        $video_ad->fill($request->post())->save();
+        $ad->fill($request->post())->save();
+
+        if ($ad->wasChanged('banner')) {
+            $banner = $ad->getRawOriginal('banner');
+            // Log::debug($banner);
+            Storage::delete($banner);
+        }
 
         return Response::jsonSuccess(__('response.update.success'));
     }

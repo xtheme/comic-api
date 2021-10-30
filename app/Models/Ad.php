@@ -2,6 +2,8 @@
 
 namespace App\Models;
 
+use Illuminate\Support\Facades\Storage;
+
 class Ad extends BaseModel
 {
     protected $fillable = [
@@ -29,7 +31,7 @@ class Ad extends BaseModel
     {
         if (!$value) return '';
 
-        return getImageDomain() . $value;
+        return Storage::url($value);
     }
 
 }

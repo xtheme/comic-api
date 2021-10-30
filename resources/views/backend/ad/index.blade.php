@@ -72,7 +72,7 @@
                                     <td>{{ $item->id }}</td>
                                     <td>{{ $item->space->name }}</td>
                                     <td><span class="jeditable" data-pk="{{ $item->id }}" data-value="" > {{ $item->sort }}</td>
-                                    <td><img src="{{ $item->image_thumb }}" class="cursor-pointer" width="50px" data-lightbox alt="点击查看大图"></td>
+                                    <td><img src="{{ $item->banner }}" class="cursor-pointer" width="50px" data-lightbox alt="点击查看大图"></td>
                                     <td>{{ $item->url }}</td>
                                     <td>@if($item->updated_at){{ $item->updated_at->diffForHumans()  }}@endif</td>
                                     <td>
@@ -116,14 +116,6 @@
             <div class="row">
                 <div class="col-12">
                     <div class="form-group">
-                        <label>广告名称</label>
-                        <div class="controls">
-                            <input type="text" class="form-control" name="name" value="{{ request()->get('name') }}" placeholder="">
-                        </div>
-                    </div>
-                </div>
-                <div class="col-12">
-                    <div class="form-group">
                         <label for="input-nickname">广告位</label>
                         <div class="controls">
                             <select id="select-type" class="form-control" name="space_id">
@@ -131,31 +123,6 @@
                                 @foreach($ad_spaces as $key => $item)
                                     <option value="{{$item->id}}" @if(request()->get('space_id') == $item->id){{'selected'}}@endif>{{$item->name}}</option>
                                 @endforeach
-                            </select>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-12">
-                    <div class="form-group">
-                        <label for="input-nickname">跳转类型</label>
-                        <div class="controls">
-                            <select id="jump-type" class="form-control" name="jump_type">
-                                <option value="">全部</option>
-                                @foreach ($jump_type as $key => $val)
-                                    <option value="{{ $key }}" @if(request()->get('jump_type') == $key){{'selected'}}@endif>{{ $val }}</option>
-                                @endforeach
-                            </select>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-12">
-                    <div class="form-group">
-                        <label for="input-mobile">平台</label>
-                        <div class="controls">
-                            <select id="select-platform" class="form-control" name="platform">
-                                <option value="">全部</option>
-                                <option value="1" @if(request()->get('platform') == 1){{'selected'}}@endif>安卓</option>
-                                <option value="2" @if(request()->get('platform') == 2){{'selected'}}@endif>IOS</option>
                             </select>
                         </div>
                     </div>
