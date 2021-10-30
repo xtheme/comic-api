@@ -6,18 +6,8 @@ use Illuminate\Support\Facades\Storage;
 
 class Ad extends BaseModel
 {
-    protected $fillable = [
-        'space_id',
-        'sort',
-        'url',
-        'banner',
-        'status'
-    ];
-
-    protected $hidden = [
-        'space_id',
-        'sort',
-        'status',
+    protected $guarded = [
+        'id',
         'created_at',
         'updated_at',
     ];

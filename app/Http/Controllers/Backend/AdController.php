@@ -81,13 +81,10 @@ class AdController extends Controller
     {
         $ad = Ad::findOrFail($id);
 
-        $ad->fill($request->post())->save();
+        $banner = $ad->getRawOriginal('banner');
+        Storage::delete($banner);
 
-        if ($ad->wasChanged('banner')) {
-            $banner = $ad->getRawOriginal('banner');
-            // Log::debug($banner);
-            Storage::delete($banner);
-        }
+        $ad->fill($request->post())->save();
 
         return Response::jsonSuccess(__('response.update.success'));
     }

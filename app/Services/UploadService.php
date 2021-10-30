@@ -107,16 +107,16 @@ class UploadService
             return $result;
         }
 
-        $path = Storage::put($this->path, $file);
+        $path = Storage::put($this->path, $file, 'public');
 
-        // $path = Storage::url($path);
+        $url = Storage::url($path);
 
         // 不同步
         $result = [
             'success' => true,
             'message' => __('response.upload.success'),
             'path' => $path,
-            'domain' => '',
+            'url' => $url,
         ];
 
         return $result;
