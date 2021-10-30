@@ -6,7 +6,6 @@ use App\Http\Resources\BookChapterResource;
 use App\Models\Book;
 use App\Models\BookChapter;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Response;
 
 class BookController extends BaseController
@@ -20,13 +19,29 @@ class BookController extends BaseController
 
     public function detail(Request $request, $id)
     {
-        $book = Book::with(['chapters', 'chapters.purchase_log'])->withCount(['chapters'])->find($id);
+        $book = Book::with(['chapters', 'favorite_logs'])->withCount(['chapters'])->find($id);
 
         if (!$book) {
             return Response::jsonError('该漫画不存在或已下架！');
         }
 
         $user = $request->user() ?? null;
+
+        $has_favorite = false;
+        $purchase_logs = [];
+
+        if ($user) {
+            // 收藏紀錄
+            $has_favorite = $user->favorite_logs()->where('type', 'book')->where('item_id', $book->id)->exists();
+
+            // 購買記錄
+            $chapter_ids = $book->chapters->pluck('id')->toArray();
+            if ($user->is_vip) {
+                $purchase_logs = $chapter_ids;
+            } else {
+                $purchase_logs = $user->purchase_logs()->where('type', 'book_chapter')->whereIn('item_id', $chapter_ids)->pluck('item_id')->toArray();
+            }
+        }
 
         $data = [
             'id' => $book->id,
@@ -39,10 +54,13 @@ class BookController extends BaseController
             'tagged_tags' => $book->tagged_tags,
             'view_counts' => shortenNumber($book->view_counts),
             'collect_counts' => shortenNumber($book->collect_counts),
+            'has_favorite' => $has_favorite,
             'chapters_count' => $book->chapters_count,
-            'chapters' => $book->chapters->map(function ($chapter) {
-                return new BookChapterResource($chapter);
-            })->toArray(),
+            // 'chapters' => $chapters,
+            'chapters' => $book->chapters->map(function($chapter) use ($purchase_logs) {
+                $purchased = in_array($chapter->id, $purchase_logs) ? true : false;
+                return (new BookChapterResource($chapter))->purchased($purchased);
+            }),
         ];
 
         // 訪問數+1
@@ -58,28 +76,6 @@ class BookController extends BaseController
 
         return Response::jsonSuccess(__('api.success'), $data);
     }
-
-    /*public function chapters($book_id)
-    {
-        $book = Book::find($book_id);
-
-        if (!$book) {
-            return Response::jsonError('该漫画不存在或已下架！');
-        }
-
-        $data = $book->chapters->map(function ($chapter) {
-            return [
-                'book_id' => $chapter->book_id,
-                'chapter_id' => $chapter->id,
-                'episode' => $chapter->episode,
-                'title' => $chapter->title,
-                'price' => $chapter->price,
-                'created_at' => $chapter->created_at->format('Y-m-d'),
-            ];
-        })->toArray();
-
-        return Response::jsonSuccess(__('api.success'), $data);
-    }*/
 
     public function chapter(Request $request, $chapter_id)
     {
@@ -101,7 +97,17 @@ class BookController extends BaseController
         }
 
         // 是否購買
-        if ($protect && $chapter->purchased) {
+        $user = $request->user() ?? null;
+
+        if ($user) {
+            if ($user->is_vip) {
+                $purchased  = true;
+            } else {
+                $purchased = $user->purchase_logs()->where('type', 'book_chapter')->where('item_id', $chapter->id)->exists();
+            }
+        }
+
+        if ($purchased) {
             $protect = false;
         }
 
@@ -119,42 +125,11 @@ class BookController extends BaseController
 
         $data = [
             'protect' => $protect,
-            'chapter' => new BookChapterResource($chapter),
+            'chapter' => (new BookChapterResource($chapter))->purchased($purchased),
             'content' => $images,
             'prev_chapter_id' => $chapter->prev_chapter_id,
             'next_chapter_id' => $chapter->next_chapter_id,
         ];
-
-        return Response::jsonSuccess(__('api.success'), $data);
-    }
-
-    public function recommend($id = null)
-    {
-        $limit = 6;
-        $tags = [];
-
-        if ($id) {
-            $book = Book::findOrFail($id);
-            $tags = $book->tagged_tags;
-        }
-
-        $books = Book::select(['id', 'title', 'author', 'vertical_cover', 'view_counts'])
-                     ->withAnyTag($tags)
-                     ->where('id', '!=', $id)
-                     ->inRandomOrder()
-                     ->limit($limit)
-                     ->get();
-
-        $data = $books->map(function ($book) {
-            return [
-                'id' => $book->id,
-                'title' => $book->title,
-                'author' => $book->author,
-                'cover' => $book->vertical_cover,
-                'tagged_tags' => $book->tagged_tags,
-                'visit_counts' => shortenNumber($book->view_counts),
-            ];
-        })->toArray();
 
         return Response::jsonSuccess(__('api.success'), $data);
     }

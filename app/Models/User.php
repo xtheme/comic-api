@@ -75,15 +75,15 @@ class User extends Authenticatable
     }
 
     // 訪問記錄
-    public function visit_books()
+    public function visit_logs()
     {
-        return $this->hasMany('App\Models\UserVisitLog')->where('type', 'book');
+        return $this->hasMany('App\Models\UserVisitLog');
     }
 
     // 收藏記錄
-    public function favorite_books()
+    public function favorite_logs()
     {
-        return $this->hasMany('App\Models\UserFavoriteLog')->where('type', 'book');
+        return $this->hasMany('App\Models\UserFavoriteLog');
     }
 
     // 累計充值金額
@@ -185,5 +185,14 @@ class User extends Authenticatable
         ];
 
         UserRechargeLog::create($data);
+    }
+
+    public function hasPurchased($type, $item_id)
+    {
+        if ($this->is_vip) {
+            return true;
+        }
+
+        return $this->purchase_logs()->where('type', $type)->where('item_id', $item_id)->exists();
     }
 }

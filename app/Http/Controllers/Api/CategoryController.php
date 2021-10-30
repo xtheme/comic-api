@@ -11,6 +11,13 @@ use Illuminate\Support\Str;
 
 class CategoryController extends BaseController
 {
+    public function __construct(Request $request)
+    {
+        if ($request->bearerToken()) {
+            $this->middleware('auth:sanctum');
+        }
+    }
+
     public function tags($type = 'book')
     {
         $tags = Tag::whereLike('type', $type)->latest('order_column')->get();
@@ -40,7 +47,7 @@ class CategoryController extends BaseController
 
         $model = new $class;
 
-        $query = $model::query()->where('status', 1);
+        $query = $model::query()->with(['tags', 'favorite_logs'])->where('status', 1);
 
         // 標籤條件
         if ($params['tags']) {
@@ -86,15 +93,23 @@ class CategoryController extends BaseController
 
         $total_page = ceil($count / $params['size']);
 
-        // $sql = $query->forPage($page, $size)->toSql();
-        // Log::debug($sql);
         $data = (clone $query)->forPage($params['page'], $params['size'])->get();
 
-        $list = $data->map(function ($item) use ($type) {
+        // 當前用戶是否收藏
+        $user = $request->user() ?? null;
+        $favorite_logs = [];
+        if ($user) {
+            $book_ids = $data->pluck('id')->toArray();
+            $favorite_logs = $user->favorite_logs()->where('type', $type)->whereIn('item_id', $book_ids)->pluck('item_id')->toArray();
+        }
+
+        $list = $data->map(function ($item) use ($type, $favorite_logs) {
+            $has_favorite = in_array($item->id, $favorite_logs) ? true : false;
+
             if ($type == 'book') {
-                return new BookResource($item);
+                return (new BookResource($item))->favorite($has_favorite);
             } else {
-                return new VideoResource($item);
+                return (new VideoResource($item))->favorite($has_favorite);
             }
         })->toArray();
 

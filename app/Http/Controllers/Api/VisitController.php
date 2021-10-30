@@ -4,7 +4,8 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Requests\Api\VisitDestroyRequest;
 use App\Http\Requests\Api\VisitListRequest;
-use App\Models\UserVisitLog;
+use App\Http\Resources\BookResource;
+use App\Http\Resources\VideoResource;
 use Illuminate\Support\Facades\Response;
 
 class VisitController extends BaseController
@@ -16,21 +17,27 @@ class VisitController extends BaseController
 
         $type = $input['type'];
 
-        $query = UserVisitLog::with([$type])->where('user_id', $request->user()->id)->where('type', $type);
+        $query = $request->user()->visit_logs()->with([$type, $type . '.tags', $type . '.favorite_logs'])->where('type', $type);
 
         $logs = (clone $query)->orderByDesc('updated_at')->limit(50)->get();
 
-        $data = $logs->transform(function ($item) use ($type) {
+        // 當前用戶是否收藏
+        $book_ids = $logs->pluck('item_id')->toArray();
+        $favorite_logs = $request->user()->favorite_logs()->where('type', $type)->whereIn('item_id', $book_ids)->pluck('item_id')->toArray();
+
+        $data = $logs->transform(function ($item) use ($type, $favorite_logs) {
+            $has_favorite = in_array($item->item_id, $favorite_logs) ? true : false;
+
+            if ($type == 'book') {
+                $item = (new BookResource($item->{$type}))->favorite($has_favorite);
+            } else {
+                $item = (new VideoResource($item->{$type}))->favorite($has_favorite);
+            }
+
             return [
-                'id' => $item->id,
-                'type' => $item->type,
-                'item_id' => $item->item_id,
-                'title' => $item->{$type}->title,
-                'author' => $item->{$type}->author,
-                'cover' => ($type == 'book') ? $item->{$type}->horizontal_cover : $item->{$type}->cover,
-                'tagged_tags' => $item->{$type}->tagged_tags,
-                'view_counts' => shortenNumber($item->{$type}->view_counts),
-                'created_at' => $item->created_at->format('Y-m-d H:i:s'),
+                'record_id' => $item->id,
+                'recorded_at' => $item->created_at->format('Y-m-d H:i:s'),
+                'item' => $item,
             ];
         })->toArray();
 
@@ -44,7 +51,7 @@ class VisitController extends BaseController
         $type = $input['type'];
         $ids = explode(',', $input['ids']);
 
-        UserVisitLog::whereIn('id', $ids)->where('user_id', $request->user()->id)->where('type', $type)->delete();
+        $request->user()->visit_logs()->where('type', $type)->whereIn('id', $ids)->delete();
 
         return Response::jsonSuccess(__('response.destroy.success'));
     }

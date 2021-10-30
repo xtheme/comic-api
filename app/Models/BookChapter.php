@@ -31,18 +31,18 @@ class BookChapter extends BaseModel
     }
 
 
-    public function getPurchasedAttribute()
-    {
-        $user = auth('sanctum')->user() ?? null;
-
-        if (!$user) return false;
-
-        if ($user->is_vip) {
-            return true;
-        }
-
-        return $user->purchase_logs()->where('type', 'book_chapter')->where('item_id', $this->id)->exists();
-    }
+    // public function getPurchasedAttribute()
+    // {
+    //     $user = auth('sanctum')->user() ?? null;
+    //
+    //     if (!$user) return false;
+    //
+    //     if ($user->is_vip) {
+    //         return true;
+    //     }
+    //
+    //     return $user->purchase_logs()->where('type', 'book_chapter')->where('item_id', $this->id)->exists();
+    // }
 
     // 將 json_images 字段中的圖片路徑加上資源域名, 如果使用加密資源則指定圖片寬度
     public function getContentAttribute()

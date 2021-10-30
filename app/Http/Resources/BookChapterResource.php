@@ -6,6 +6,13 @@ use Illuminate\Http\Resources\Json\JsonResource;
 
 class BookChapterResource extends JsonResource
 {
+    protected $purchased = false;
+
+    public function purchased($value){
+        $this->purchased = $value;
+        return $this;
+    }
+
     /**
      * Transform the resource into an array.
      *
