@@ -13,4 +13,9 @@ final class PaymentOptions
         'new_tab' => '另开页面',
         'iframe' => '内嵌页面',
     ];
+
+    const ICON_OPTIONS = [
+        'alipay' => '支付宝',
+        'weixin' => '微信',
+    ];
 }

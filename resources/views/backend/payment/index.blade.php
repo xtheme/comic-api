@@ -52,7 +52,7 @@
                                         @if(!$item->status)
                                             <span class="badge badge-pill badge-light-danger">禁用</span>
                                         @else
-                                            <span class="badge badge-pill badge-light-primary">啟用</span>
+                                            <span class="badge badge-pill badge-light-success">啟用</span>
                                         @endif
                                     </td>
                                     <td>

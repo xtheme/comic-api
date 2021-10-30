@@ -67,7 +67,11 @@
                     <div class="form-group">
                         <label><span class="danger">*</span> 按钮图标</label>
                         <div class="controls">
-                            <input type="text" class="form-control" name="button_icon" value="{{ $payment->button_icon }}">
+                            <select class="form-control" name="button_icon">
+                                @foreach ($icon_options as $key => $val)
+                                    <option value="{{ $key }}" @if($payment->button_icon == $key){{'selected'}}@endif>{{ $val }}</option>
+                                @endforeach
+                            </select>
                         </div>
                     </div>
                 </div>

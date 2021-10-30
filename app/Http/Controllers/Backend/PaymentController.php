@@ -26,6 +26,7 @@ class PaymentController extends Controller
             'pricing' => Pricing::where('status', 1)->orderByDesc('sort')->get(),
             'status_options' => PaymentOptions::STATUS_OPTIONS,
             'target_options' => PaymentOptions::TARGET_OPTIONS,
+            'icon_options' => PaymentOptions::ICON_OPTIONS,
         ];
 
         return view('backend.payment.create')->with($data);
@@ -73,6 +74,7 @@ class PaymentController extends Controller
             'pricing' => Pricing::where('status', 1)->orderByDesc('sort')->get(),
             'status_options' => PaymentOptions::STATUS_OPTIONS,
             'target_options' => PaymentOptions::TARGET_OPTIONS,
+            'icon_options' => PaymentOptions::ICON_OPTIONS,
         ];
 
         return view('backend.payment.edit')->with($data);
