@@ -5,13 +5,26 @@ namespace App\Http\Controllers\Backend;
 use App\Http\Controllers\Controller;
 use App\Models\Channel;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Response;
 
 class ChannelController extends Controller
 {
     public function index()
     {
-        $channels = Channel::paginate(100);
+        $select = [
+            'id',
+            'description',
+            'safe_landing',
+            'register_count',
+            'recharge_count',
+            'recharge_amount',
+            DB::raw('sum(wap_new_amount + wap_renew_amount) as wap_amount'),
+            DB::raw('sum(app_new_amount + app_renew_amount) as app_amount'),
+            'app_download_count'
+        ];
+
+        $channels = Channel::select($select)->latest('recharge_amount')->paginate(50);
 
         $data = [
             'list' => $channels,

@@ -26,7 +26,7 @@ class FinanceController extends Controller
             DB::raw('sum(app_download_count) as app_download_count'),
         ];
 
-        $list = ChannelDailyReport::select($select)->whereDate('date', $date)->groupBy('channel_id')->paginate();
+        $list = ChannelDailyReport::select($select)->whereDate('date', $date)->groupBy('channel_id')->paginate(50);
 
         // 當日汇总
         $select = [
@@ -67,7 +67,7 @@ class FinanceController extends Controller
             DB::raw('sum(app_download_count) as app_download_count'),
         ];
 
-        $list = ChannelDailyReport::select($select)->where('channel_id', $channel_id)->groupBy('date')->latest('date')->paginate();
+        $list = ChannelDailyReport::select($select)->where('channel_id', $channel_id)->groupBy('date')->latest('date')->paginate(50);
 
         $data = [
             'list' => $list,
@@ -76,7 +76,7 @@ class FinanceController extends Controller
         return view('backend.finance.channel_detail')->with($data);
     }
 
-    public function daily(Request $request)
+    public function daily()
     {
         $select = [
             'date',
@@ -91,7 +91,7 @@ class FinanceController extends Controller
             DB::raw('sum(app_download_count) as app_download_count'),
         ];
 
-        $list = ChannelDailyReport::select($select)->groupBy('date')->latest('date')->paginate();
+        $list = ChannelDailyReport::select($select)->groupBy('date')->latest('date')->paginate(50);
 
         $data = [
             'list' => $list,

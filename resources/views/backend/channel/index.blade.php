@@ -26,14 +26,11 @@
                             <thead>
                             <tr>
                                 <th>渠道编号</th>
-{{--                                <th>日期</th>--}}
+                                <th>注册数</th>
+                                <th>订单数</th>
                                 <th>总充值</th>
                                 <th>WAP总充值</th>
                                 <th>APP总充值</th>
-                                <th>实时总充值</th>
-                                <th>WAP新户充值</th>
-                                <th>APP新户充值</th>
-                                <th>老用户充值</th>
                                 <th>APP安装数</th>
                                 <th class="text-center">操作</th>
                             </tr>
@@ -42,14 +39,11 @@
                             @foreach ($list as $item)
                                 <tr>
                                     <td>{{ $item->id }}</td>
-{{--                                    <td>{{ $date }}</td>--}}
+                                    <td>{{ $item->register_count }}</td>
+                                    <td>{{ $item->recharge_count }}</td>
                                     <td>{{ $item->recharge_amount }}</td>
-                                    <td>{{ $item->wap_new_amount + $item->wap_renew_amount }}</td>
-                                    <td>{{ $item->app_new_amount + $item->app_renew_amount  }}</td>
-                                    <td>{{ $item->wap_new_count + $item->app_new_count }}</td>
-                                    <td>{{ $item->wap_new_amount }}</td>
-                                    <td>{{ $item->app_new_amount }}</td>
-                                    <td>{{ $item->wap_renew_amount + $item->app_renew_amount }}</td>
+                                    <td>{{ $item->wap_amount }}</td>
+                                    <td>{{ $item->app_amount }}</td>
                                     <td>{{ $item->app_download_count }}</td>
                                     <td></td>
                                 </tr>
