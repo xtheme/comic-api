@@ -47,7 +47,7 @@ class OrderFactory extends Factory
             'status' => 1,
             'ip' => $this->faker->ipv4,
             'platform' => 'wap',
-            'first' => $this->faker->shuffle([0, 1]),
+            'first' => $this->faker->randomElement([0, 1]),
             'created_at' => now(),
         ];
     }
