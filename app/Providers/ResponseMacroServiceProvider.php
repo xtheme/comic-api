@@ -23,7 +23,7 @@ class ResponseMacroServiceProvider extends ServiceProvider
             ];
 
             // 数据加密
-            if (true == config('api.encrypt.response') && request()->hasHeader('sign')) {
+            if (true == config('api.encrypt.response')) {
                 $response = json_encode($response);
                 $aes = new AesService();
                 $response = $aes->encrypt($response);
