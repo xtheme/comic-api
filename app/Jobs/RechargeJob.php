@@ -52,6 +52,7 @@ class RechargeJob implements ShouldQueue
         $channel->increment(sprintf('%s_%s_count', $this->platform, $this->first));
         $channel->increment(sprintf('%s_count', $this->first));
         $channel->increment('recharge_count');
+
         $channel->increment(sprintf('%s_%s_amount', $this->platform, $this->first), $this->amount);
         $channel->increment(sprintf('%s_amount', $this->first), $this->amount);
         $channel->increment('recharge_amount', $this->amount);
@@ -59,11 +60,15 @@ class RechargeJob implements ShouldQueue
 
     private function incrementReport($report)
     {
+        // wap_new_count / app_new_count / wap_renew_count / app_renew_count
         $report->increment(sprintf('%s_%s_count', $this->platform, $this->first));
+        // new_count / renew_count
         $report->increment(sprintf('%s_count', $this->first));
         $report->increment('recharge_count');
 
+        // wap_new_amount / app_new_amount / wap_renew_amount / app_renew_amount
         $report->increment(sprintf('%s_%s_amount', $this->platform, $this->first), $this->amount);
+        // new_amount / renew_amount
         $report->increment(sprintf('%s_amount', $this->first), $this->amount);
         $report->increment('recharge_amount', $this->amount);
     }
