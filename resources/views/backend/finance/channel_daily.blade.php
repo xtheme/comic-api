@@ -1,22 +1,33 @@
 @extends('layouts.iframePage')
 
 {{-- page Title --}}
-@section('title','渠道日充汇总')
+@section('title','渠道日报表')
 
 {{-- vendor style --}}
 @section('vendor-styles')
-    <link rel="stylesheet" type="text/css" href="{{ asset('vendors/css/x-editable/bootstrap-editable.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ asset('vendors/css/pickers/pickadate/pickadate.css') }}">
 @endsection
 
 @section('content')
     <section>
-        <div class="mb-1">
-            <a href="{{ route('backend.channel.create') }}" class="btn btn-primary" data-modal data-size="sm" data-height="20vh" title="添加渠道" role="button" aria-pressed="true">添加渠道</a>
-        </div>
         <div class="card">
             <div class="card-header">
                 <div class="float-left">
                     <h4 class="card-title">@yield('title')</h4>
+                </div>
+                <div class="float-right">
+                    <form id="search-form" class="form form-vertical" method="get" action="{{ route('backend.finance.channel_daily') }}" novalidate>
+                        <div class="form-body">
+                            <div class="d-flex align-items-center">
+                                <div class="form-group mr-1">
+                                    <input type="text" name="date" class="form-control date-picker" value="{{ $date }}" placeholder="选择日期">
+                                </div>
+                                <div class="form-group">
+                                    <button type="submit" class="btn btn-primary">查询</button>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
                 </div>
             </div>
             <div class="card-content">
@@ -31,7 +42,7 @@
                                 <th>总充值</th>
                                 <th>WAP总充值</th>
                                 <th>APP总充值</th>
-                                <th>实时总充值</th>
+                                <th>新用户总充值</th>
                                 <th>WAP新户充值</th>
                                 <th>APP新户充值</th>
                                 <th>老用户充值</th>
@@ -40,21 +51,40 @@
                             </tr>
                             </thead>
                             <tbody>
-                            @foreach ($list as $item)
+                            @if($total)
                                 <tr>
-                                    <td>{{ $item->id }}</td>
+                                    <td>汇总</td>
                                     <td>{{ $date }}</td>
-                                    <td>{{ $item->recharge_amount }}</td>
-                                    <td>{{ $item->wap_new_amount + $item->wap_renew_amount }}</td>
-                                    <td>{{ $item->app_new_amount + $item->app_renew_amount  }}</td>
-                                    <td>{{ $item->wap_new_count + $item->app_new_count }}</td>
-                                    <td>{{ $item->wap_new_amount }}</td>
-                                    <td>{{ $item->app_new_amount }}</td>
-                                    <td>{{ $item->wap_renew_amount + $item->app_renew_amount }}</td>
-                                    <td>{{ $item->app_download_count }}</td>
+                                    <td>{{ $total->recharge_amount }}</td>
+                                    <td>{{ $total->wap_amount}}</td>
+                                    <td>{{ $total->app_amount }}</td>
+                                    <td>{{ $total->new_amount }}</td>
+                                    <td>{{ $total->wap_new_amount }}</td>
+                                    <td>{{ $total->app_new_amount }}</td>
+                                    <td>{{ $total->renew_amount }}</td>
+                                    <td>{{ $total->app_download_count }}</td>
                                     <td></td>
                                 </tr>
-                            @endforeach
+                            @endif
+                            @forelse ($list as $item)
+                                <tr>
+                                    <td>{{ $item->channel_id }}</td>
+                                    <td>{{ $date }}</td>
+                                    <td>{{ $item->recharge_amount }}</td>
+                                    <td>{{ $item->wap_amount }}</td>
+                                    <td>{{ $item->app_amount }}</td>
+                                    <td>{{ $item->new_amount}}</td>
+                                    <td>{{ $item->wap_new_amount }}</td>
+                                    <td>{{ $item->app_new_amount }}</td>
+                                    <td>{{ $item->renew_amount }}</td>
+                                    <td>{{ $item->app_download_count }}</td>
+                                    <td><a class="btn btn-sm btn-primary" data-modal data-size="full" title="渠道分日汇总" href="{{ route('backend.finance.channel_detail', $item->channel_id) }}">详细</a></td>
+                                </tr>
+                            @empty
+                                <tr>
+                                    <td colspan="11" class="text-center font-medium-3">没有数据，请选择其他日期</td>
+                                </tr>
+                            @endforelse
                             </tbody>
                         </table>
                     </div>
@@ -73,67 +103,24 @@
 
 {{-- vendor scripts --}}
 @section('vendor-scripts')
-    <script src="{{ asset('vendors/js/x-editable/bootstrap-editable.js') }}"></script>
+    <script src="{{ asset('vendors/js/pickers/pickadate/picker.js') }}"></script>
+    <script src="{{ asset('vendors/js/pickers/pickadate/picker.date.js') }}"></script>
 @endsection
 
 {{-- page scripts --}}
 @section('page-scripts')
     <script>
         $(document).ready(function () {
-            $.ajaxSetup({
-                headers: {
-                    'X-CSRF-TOKEN': '{{ csrf_token() }}'
-                }
-            });
-            $.fn.editable.defaults.ajaxOptions = {type: 'PUT'};
-            $.fn.editableform.buttons = '<button type="submit" class="btn btn-primary editable-submit">确认</button>';
-
-            $('.editable-click').editable({
-                inputclass: 'form-control',
-                emptyclass: 'text-light',
-                emptytext: 'N/A',
-                success: function (res, newValue) {
-                    console.log(res);
-                    $.toast({
-                        title: '提交成功',
-                        message: res.msg
-                    });
-                }
-            });
-
-            $('#batch-action').submit(function (e) {
-                e.preventDefault();
-
-                let $this = $(this);
-                let ids   = $.checkedIds();
-                let url   = $this.attr('action') + '/' + $this.find('select[name="action"]').val();
-
-                if (!ids) {
-                    $.toast({
-                        type: 'error',
-                        message: '请先选择要操作的数据'
-                    });
-                    return false;
-                }
-
-                $.confirm({
-                    text: `请确认是否要继续批量操作?`,
-                    callback: function () {
-                        $.request({
-                            url: url,
-                            type: 'put',
-                            data: {'ids' : ids},
-                            debug   : true,
-                            callback: function (res) {
-                                $.reloadIFrame({
-                                    title  : '提交成功',
-                                    message: '请稍后数据刷新'
-                                });
-                            }
-                        });
-                    }
-                });
-            });
+	        $('.date-picker').pickadate({
+                firstDay: 1,
+		        format: 'yyyy-mm-dd',
+		        monthsFull: [ '一月', '二月', '三月', '四月', '五月', '六月', '七月', '八月', '九月', '十月', '十一月', '十二月' ],
+		        monthsShort: [ '一', '二', '三', '四', '五', '六', '七', '八', '九', '十', '十一', '十二' ],
+		        weekdaysShort: [ '日', '一', '二', '三', '四', '五', '六' ],
+		        today: '今天',
+		        clear: '清除',
+		        close: '关闭'
+	        });
 
             $('#search-form').submit(function(e) {
                 e.preventDefault();

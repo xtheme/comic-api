@@ -13,6 +13,10 @@
                 {
                     "url": "/backend/finance/channel_daily",
                     "name": "Channel Daily Report"
+                },
+                {
+                    "url": "/backend/finance/daily",
+                    "name": "Daily Report"
                 }
             ]
         },

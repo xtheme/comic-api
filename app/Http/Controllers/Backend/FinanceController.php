@@ -4,77 +4,99 @@ namespace App\Http\Controllers\Backend;
 
 use App\Http\Controllers\Controller;
 use App\Models\ChannelDailyReport;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
 class FinanceController extends Controller
 {
-    public function channelDaily($date = null)
+    public function channelDaily(Request $request)
     {
-        if (!$date) {
-            $date = date('Y-m-d');
-        }
+        $date = $request->input('date') ?? date('Y-m-d');
 
         $select = [
-            'id',
-            DB::raw('sum(register_count) as register_count'),
-            DB::raw('sum(wap_register_count) as wap_register_count'),
-            DB::raw('sum(app_register_count) as app_register_count'),
-            DB::raw('sum(recharge_count) as recharge_count'),
-            DB::raw('sum(wap_new_count) as wap_new_count'),
-            DB::raw('sum(wap_renew_count) as wap_renew_count'),
-            DB::raw('sum(app_new_count) as app_new_count'),
-            DB::raw('sum(app_renew_count) as app_renew_count'),
+            'channel_id',
             DB::raw('sum(recharge_amount) as recharge_amount'),
+            DB::raw('sum(register_count) as register_count'),
+            DB::raw('sum(wap_new_amount + wap_renew_amount) as wap_amount'),
+            DB::raw('sum(app_new_amount + app_renew_amount) as app_amount'),
+            DB::raw('sum(app_new_amount + wap_new_amount) as new_amount'),
             DB::raw('sum(wap_new_amount) as wap_new_amount'),
-            DB::raw('sum(wap_renew_amount) as wap_renew_amount'),
             DB::raw('sum(app_new_amount) as app_new_amount'),
-            DB::raw('sum(app_renew_amount) as app_renew_amount'),
+            DB::raw('sum(wap_renew_amount + app_renew_amount) as renew_amount'),
+            DB::raw('sum(app_download_count) as app_download_count'),
         ];
 
-        $list = ChannelDailyReport::with(['channel'])->select($select)->whereDate('date', $date)->groupBy('channel_id')->paginate();
+        $list = ChannelDailyReport::select($select)->whereDate('date', $date)->groupBy('channel_id')->paginate();
+
+        // 當日汇总
+        $select = [
+            DB::raw('sum(recharge_amount) as recharge_amount'),
+            DB::raw('sum(register_count) as register_count'),
+            DB::raw('sum(wap_new_amount + wap_renew_amount) as wap_amount'),
+            DB::raw('sum(app_new_amount + app_renew_amount) as app_amount'),
+            DB::raw('sum(app_new_amount + wap_new_amount) as new_amount'),
+            DB::raw('sum(wap_new_amount) as wap_new_amount'),
+            DB::raw('sum(app_new_amount) as app_new_amount'),
+            DB::raw('sum(wap_renew_amount + app_renew_amount) as renew_amount'),
+            DB::raw('sum(app_download_count) as app_download_count'),
+        ];
+
+        $total = ChannelDailyReport::select($select)->whereDate('date', $date)->groupBy('date')->first();
 
         $data = [
             'date' => $date,
             'list' => $list,
+            'total' => $total,
         ];
 
         return view('backend.finance.channel_daily')->with($data);
     }
 
-    public function channelDetail($channel_id, $date = null)
+    public function channelDetail($channel_id)
     {
-        if (!$date) {
-            $date = date('Y-m-d');
-        }
-
         $select = [
-            'id',
-            DB::raw('sum(register_count) as register_count'),
-            DB::raw('sum(register_app_count) as register_app_count'),
-            DB::raw('sum(register_wap_count) as register_wap_count'),
-            DB::raw('sum(recharge_count) as recharge_count'),
-            DB::raw('sum(wap_new_count) as wap_new_count'),
-            DB::raw('sum(wap_renew_count) as wap_renew_count'),
-            DB::raw('sum(wap_count) as wap_count'),
-            DB::raw('sum(app_new_count) as app_new_count'),
-            DB::raw('sum(app_renew_count) as app_renew_count'),
-            DB::raw('sum(app_count) as app_count'),
+            'date',
             DB::raw('sum(recharge_amount) as recharge_amount'),
+            DB::raw('sum(register_count) as register_count'),
+            DB::raw('sum(wap_new_amount + wap_renew_amount) as wap_amount'),
+            DB::raw('sum(app_new_amount + app_renew_amount) as app_amount'),
+            DB::raw('sum(app_new_amount + wap_new_amount) as new_amount'),
             DB::raw('sum(wap_new_amount) as wap_new_amount'),
-            DB::raw('sum(wap_renew_amount) as wap_renew_amount'),
-            DB::raw('sum(wap_amount) as wap_amount'),
             DB::raw('sum(app_new_amount) as app_new_amount'),
-            DB::raw('sum(app_renew_amount) as app_renew_amount'),
-            DB::raw('sum(app_amount) as app_amount'),
+            DB::raw('sum(wap_renew_amount + app_renew_amount) as renew_amount'),
+            DB::raw('sum(app_download_count) as app_download_count'),
         ];
 
-        $list = ChannelDailyReport::where('channel_id', $channel_id)->whereDate('date', $date)->get();
+        $list = ChannelDailyReport::select($select)->where('channel_id', $channel_id)->groupBy('date')->latest('date')->paginate();
 
         $data = [
-            'date' => $date,
-            'list' => $list->toArray(),
+            'list' => $list,
         ];
 
         return view('backend.finance.channel_detail')->with($data);
+    }
+
+    public function daily(Request $request)
+    {
+        $select = [
+            'date',
+            DB::raw('sum(recharge_amount) as recharge_amount'),
+            DB::raw('sum(register_count) as register_count'),
+            DB::raw('sum(wap_new_amount + wap_renew_amount) as wap_amount'),
+            DB::raw('sum(app_new_amount + app_renew_amount) as app_amount'),
+            DB::raw('sum(app_new_amount + wap_new_amount) as new_amount'),
+            DB::raw('sum(wap_new_amount) as wap_new_amount'),
+            DB::raw('sum(app_new_amount) as app_new_amount'),
+            DB::raw('sum(wap_renew_amount + app_renew_amount) as renew_amount'),
+            DB::raw('sum(app_download_count) as app_download_count'),
+        ];
+
+        $list = ChannelDailyReport::select($select)->groupBy('date')->latest('date')->paginate();
+
+        $data = [
+            'list' => $list,
+        ];
+
+        return view('backend.finance.daily')->with($data);
     }
 }

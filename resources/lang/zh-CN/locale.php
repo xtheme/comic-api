@@ -6,7 +6,8 @@ return [
     "Dashboard" => "控制台",
     "Channel" => "渠道管理",
     "Channel List" => "渠道列表",
-    "Channel Daily Report" => "日充汇总",
+    "Channel Daily Report" => "渠道日报表",
+    "Daily Report" => "每日汇总",
 
     "Customers" => "会员管理",
     "Customer List" => "会员列表",

@@ -290,7 +290,8 @@ Route::middleware(['auth', 'auth.route.role', 'log.activity'])->prefix('backend'
 
     // 財報
     Route::prefix('finance')->as('finance.')->group(function () {
-        Route::get('channel_daily/{date?}', [Backend\FinanceController::class , 'channelDaily'])->name('channel_daily');
-        Route::get('channel_detail/{channel_id}/{date?}', [Backend\FinanceController::class , 'channelDetail'])->name('channel_detail');
+        Route::get('daily', [Backend\FinanceController::class , 'daily'])->name('daily');
+        Route::get('channel_daily', [Backend\FinanceController::class , 'channelDaily'])->name('channel_daily');
+        Route::get('channel_detail/{channel_id}', [Backend\FinanceController::class , 'channelDetail'])->name('channel_detail');
     });
 });
