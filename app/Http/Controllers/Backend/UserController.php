@@ -5,15 +5,10 @@ namespace App\Http\Controllers\Backend;
 use App\Enums\OrderOptions;
 use App\Enums\UserOptions;
 use App\Http\Controllers\Controller;
-use App\Services\UserService;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\DB;
-use Sso;
 use App\Models\User;
 use App\Repositories\Contracts\UserRepositoryInterface;
 use Illuminate\Http\Request;
-use Illuminate\Support\Carbon;
-use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\Validator;
 
@@ -64,7 +59,6 @@ class UserController extends Controller
         $data = [
             'list' => User::findOrFail($id)->success_orders()->paginate(),
             'type_options' => OrderOptions::TYPE_OPTIONS,
-            'platform_options' => OrderOptions::PLATFORM_OPTIONS,
             'status_options' => OrderOptions::STATUS_OPTIONS,
         ];
 
@@ -118,7 +112,7 @@ class UserController extends Controller
         // 更新用戶錢包或VIP時效 && 建立用戶充值紀錄
         $user->saveGift($gift);
 
-        activity()->useLog('后台')->causedBy(Auth::user())->performedOn($user)->withProperties($plan)->log(sprintf('赠送用户 %s 金币, VIP %s 天', $plan['gift_coin'], $plan['gift_days']));
+        activity()->useLog('后台')->causedBy(Auth::user())->performedOn($user)->withProperties($gift)->log(sprintf('赠送用户 %s 金币, VIP %s 天', $gift['gift_coin'], $gift['gift_days']));
 
         return Response::jsonSuccess(__('response.update.success'));
     }

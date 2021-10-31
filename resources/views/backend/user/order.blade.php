@@ -31,7 +31,7 @@
                             <label class="badge badge-light-secondary badge-pill">{{ $type_options[$order->type] }}</label>
                         @endif
                     </td>
-                    <td>{{ $platform_options[$order->platform] }}</td>
+                    <td>{{ $order->platform }}</td>
                     <td>{{ $order->amount }}</td>
                     <td>{{ optional($order->created_at)->diffForHumans() ?? '' }}</td>
                     <td>{{ $order->payment->name }}</td>
