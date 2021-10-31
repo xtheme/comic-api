@@ -20,7 +20,7 @@ class UserController extends BaseController
 
         $total_page = ceil($count / $size);
 
-        $logs = (clone $query)->forPage($page, $size)->get();
+        $logs = (clone $query)->latest()->forPage($page, $size)->get();
 
         $list = $logs->map(function ($log) {
             return [
@@ -57,7 +57,7 @@ class UserController extends BaseController
 
         $total_page = ceil($count / $size);
 
-        $logs = (clone $query)->forPage($page, $size)->get();
+        $logs = (clone $query)->latest()->forPage($page, $size)->get();
 
         $list = $logs->map(function ($log) {
             return [
@@ -94,7 +94,7 @@ class UserController extends BaseController
 
         $total_page = ceil($count / $size);
 
-        $logs = (clone $query)->forPage($page, $size)->get();
+        $logs = (clone $query)->latest()->forPage($page, $size)->get();
 
         $list = $logs->map(function ($log) {
             return [
