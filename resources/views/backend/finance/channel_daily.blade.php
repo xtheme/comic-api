@@ -45,13 +45,13 @@
                                     <td>{{ $item->id }}</td>
                                     <td>{{ $date }}</td>
                                     <td>{{ $item->recharge_amount }}</td>
-                                    <td>{{ $item->wap_amount }}</td>
-                                    <td>{{ $item->app_amount }}</td>
+                                    <td>{{ $item->wap_new_amount + $item->wap_renew_amount }}</td>
+                                    <td>{{ $item->app_new_amount + $item->app_renew_amount  }}</td>
                                     <td>{{ $item->wap_new_count + $item->app_new_count }}</td>
-                                    <td>{{ $item->wap_new_count }}</td>
-                                    <td>{{ $item->app_new_count }}</td>
-                                    <td>{{ $item->wap_renew_count + $item->app_renew_count }}</td>
-                                    <td>{{ $item->register_app_count }}</td>
+                                    <td>{{ $item->wap_new_amount }}</td>
+                                    <td>{{ $item->app_new_amount }}</td>
+                                    <td>{{ $item->wap_renew_amount + $item->app_renew_amount }}</td>
+                                    <td>{{ $item->app_download_count }}</td>
                                     <td></td>
                                 </tr>
                             @endforeach

@@ -1,10 +1,20 @@
 {
     "menu": [
         {
-            "url": "/backend/channel",
+            "url": "#",
             "name": "Channel",
             "slug": "channel",
-            "icon": "bx bxs-chalkboard"
+            "icon": "bx bxs-chalkboard",
+            "submenu": [
+                {
+                    "url": "/backend/channel",
+                    "name": "Channel List"
+                },
+                {
+                    "url": "/backend/finance/channel_daily",
+                    "name": "Channel Daily Report"
+                }
+            ]
         },
         {
             "url": "#",
