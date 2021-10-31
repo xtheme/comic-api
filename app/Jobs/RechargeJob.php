@@ -49,10 +49,12 @@ class RechargeJob implements ShouldQueue
         $this->monthlyChannel();
 
         $channel = Channel::findOrFail($this->channel_id);
+        $channel->increment(sprintf('%s_%s_count', $this->platform, $this->first));
+        $channel->increment(sprintf('%s_count', $this->first));
         $channel->increment('recharge_count');
-        $channel->increment(sprintf('recharge_%s_count', $this->platform));
+        $channel->increment(sprintf('%s_%s_amount', $this->platform, $this->first), $this->amount);
+        $channel->increment(sprintf('%s_amount', $this->first), $this->amount);
         $channel->increment('recharge_amount', $this->amount);
-        $channel->increment(sprintf('recharge_%s_amount', $this->platform), $this->amount);
     }
 
     private function incrementReport($report)

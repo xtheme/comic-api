@@ -17,22 +17,18 @@ class FinanceController extends Controller
         $select = [
             'id',
             DB::raw('sum(register_count) as register_count'),
-            DB::raw('sum(register_app_count) as register_app_count'),
-            DB::raw('sum(register_wap_count) as register_wap_count'),
+            DB::raw('sum(wap_register_count) as wap_register_count'),
+            DB::raw('sum(app_register_count) as app_register_count'),
             DB::raw('sum(recharge_count) as recharge_count'),
             DB::raw('sum(wap_new_count) as wap_new_count'),
             DB::raw('sum(wap_renew_count) as wap_renew_count'),
-            DB::raw('sum(wap_count) as wap_count'),
             DB::raw('sum(app_new_count) as app_new_count'),
             DB::raw('sum(app_renew_count) as app_renew_count'),
-            DB::raw('sum(app_count) as app_count'),
             DB::raw('sum(recharge_amount) as recharge_amount'),
             DB::raw('sum(wap_new_amount) as wap_new_amount'),
             DB::raw('sum(wap_renew_amount) as wap_renew_amount'),
-            DB::raw('sum(wap_amount) as wap_amount'),
             DB::raw('sum(app_new_amount) as app_new_amount'),
             DB::raw('sum(app_renew_amount) as app_renew_amount'),
-            DB::raw('sum(app_amount) as app_amount'),
         ];
 
         $list = ChannelDailyReport::with(['channel'])->select($select)->whereDate('date', $date)->groupBy('channel_id')->paginate();
