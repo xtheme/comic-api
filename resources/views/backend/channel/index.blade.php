@@ -27,6 +27,7 @@
                             <tr>
                                 <th>渠道编号</th>
                                 <th>注册数</th>
+                                <th>注册数</th>
                                 <th>订单数</th>
                                 <th>总充值</th>
                                 <th>WAP总充值</th>
@@ -39,7 +40,17 @@
                             @foreach ($list as $item)
                                 <tr>
                                     <td>{{ $item->id }}</td>
-                                    <td>{{ $item->register_count }}</td>
+                                    <td>{{ $item->id }}</td>
+                                    <td>
+                                        <ul class="list-unstyled">
+                                        @foreach ($domains as $domain)
+                                            <li class="d-flex justify-content-start">
+                                                <div class="d-inline p-50"><a data-modal data-size="sm" data-height="20vh" href="{{ route('backend.qrcode') }}?url={{ $domain->domain }}?ch={{ $item->id }}" title="QRCode"><i class="bx bx-barcode"></i></a></div>
+                                                <div class="d-inline p-50">{{ $domain->domain }}?ch={{ $item->id }}</div>
+                                            </li>
+                                        @endforeach
+                                        </ul>
+                                    </td>
                                     <td>{{ $item->recharge_count }}</td>
                                     <td>{{ $item->recharge_amount }}</td>
                                     <td>{{ $item->wap_amount }}</td>

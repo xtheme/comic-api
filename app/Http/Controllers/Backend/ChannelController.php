@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Backend;
 
 use App\Http\Controllers\Controller;
 use App\Models\Channel;
+use App\Models\Domain;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Response;
@@ -26,8 +27,12 @@ class ChannelController extends Controller
 
         $channels = Channel::select($select)->latest('recharge_amount')->paginate(50);
 
+        // 推廣域名
+        $domains = Domain::where('type', 'frontend')->where('status', 1)->get();
+
         $data = [
             'list' => $channels,
+            'domains' => $domains,
         ];
 
         return view('backend.channel.index')->with($data);

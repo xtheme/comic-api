@@ -45,6 +45,8 @@ Route::middleware(['auth'])->group(function () {
 Route::middleware(['auth', 'auth.route.role'])->prefix('backend')->as('backend.')->group(function () {
     Route::get('dashboard', [Backend\DashboardController::class, 'dashboard'])->name('dashboard');
 
+    Route::get('qrcode', [Backend\ToolController::class, 'qrcode'])->name('qrcode');
+
     // 系统配置
     Route::prefix('config')->as('config.')->group(function () {
         Route::get('/', [Backend\ConfigController::class, 'index'])->name('index');
@@ -299,7 +301,7 @@ Route::middleware(['auth', 'auth.route.role'])->prefix('backend')->as('backend.'
     Route::prefix('domain')->as('domain.')->group(function () {
         Route::get('/', [Backend\DomainController::class , 'index'])->name('index');
         Route::get('create', [Backend\DomainController::class , 'create'])->name('create');
-        Route::post('store', [Backend\FilterController::class , 'store'])->name('store');
+        Route::post('store', [Backend\DomainController::class , 'store'])->name('store');
         Route::get('edit/{id}', [Backend\DomainController::class , 'edit'])->name('edit');
         Route::put('update/{id}', [Backend\DomainController::class , 'update'])->name('update');
         Route::delete('destroy/{id}', [Backend\DomainController::class , 'destroy'])->name('destroy');

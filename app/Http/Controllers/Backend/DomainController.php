@@ -33,7 +33,9 @@ class DomainController extends Controller
 
     public function store(Request $request)
     {
-        Domain::fill($request->post())->save();
+        $domain = new Domain;
+        $domain->fill($request->post());
+        $domain->save();
 
         return Response::jsonSuccess(__('response.create.success'));
     }
@@ -52,9 +54,7 @@ class DomainController extends Controller
     public function update(Request $request, $id)
     {
         $domain = Domain::findOrFail($id);
-
         $domain->fill($request->post());
-        
         $domain->save();
 
         return Response::jsonSuccess(__('response.update.success'));
