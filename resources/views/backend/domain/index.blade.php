@@ -9,6 +9,9 @@
 
 @section('content')
     <section>
+        <div class="mb-1">
+            <a href="{{ route('backend.domain.create') }}" class="btn btn-primary" data-modal data-size="md" data-height="30vh" title="添加域名" role="button" aria-pressed="true">添加域名</a>
+        </div>
         <div class="card">
             <div class="card-header">
                 <h4 class="card-title">@yield('title')</h4>
@@ -42,10 +45,9 @@
                                         <div class="@if(($loop->count - $loop->iteration) < 3){{'dropup'}}@else{{'dropdown'}}@endif">
                                             <span class="bx bx-dots-vertical-rounded font-medium-3 dropdown-toggle nav-hide-arrow cursor-pointer"
                                                   id="dropdownMenuButton{{ $item->id }}" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></span>
-{{--                                            <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuButton{{ $item->id }}">--}}
-{{--                                                <a class="dropdown-item" data-modal href="{{ route('backend.filter.edit', [$item->type, $item->id]) }}" title="修改筛选器"><i class="bx bx-edit-alt mr-1"></i>修改</a>--}}
-{{--                                                <a class="dropdown-item" data-destroy href="{{ route('backend.filter.destroy', $item->id) }}" title="刪除筛选器"><i class="bx bx-trash mr-1"></i>刪除</a>--}}
-{{--                                            </div>--}}
+                                            <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuButton{{ $item->id }}">
+                                                <a class="dropdown-item" data-modal data-size="md" data-height="30vh" href="{{ route('backend.domain.edit', $item->id) }}" title="修改域名"><i class="bx bx-edit-alt mr-1"></i>修改</a>
+                                            </div>
                                         </div>
                                     </td>
                                 </tr>

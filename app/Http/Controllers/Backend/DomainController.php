@@ -24,6 +24,8 @@ class DomainController extends Controller
     public function create()
     {
         $data = [
+            'type_options' => DomainOptions::TYPE_OPTIONS,
+            'status_options' => DomainOptions::STATUS_OPTIONS,
         ];
 
         return view('backend.domain.create')->with($data);
@@ -40,6 +42,8 @@ class DomainController extends Controller
     {
         $data = [
             'domain' => Domain::findOrFail($id),
+            'type_options' => DomainOptions::TYPE_OPTIONS,
+            'status_options' => DomainOptions::STATUS_OPTIONS,
         ];
 
         return view('backend.domain.edit')->with($data);
@@ -49,6 +53,8 @@ class DomainController extends Controller
     {
         $domain = Domain::findOrFail($id);
 
+        $domain->fill($request->post());
+        
         $domain->save();
 
         return Response::jsonSuccess(__('response.update.success'));
