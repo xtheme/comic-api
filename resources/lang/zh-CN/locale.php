@@ -8,6 +8,7 @@ return [
     "Channel List" => "渠道列表",
     "Channel Daily Report" => "渠道日报表",
     "Daily Report" => "每日汇总",
+    "Domains" => "域名清单",
 
     "Customers" => "会员管理",
     "Customer List" => "会员列表",

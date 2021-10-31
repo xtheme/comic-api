@@ -1,6 +1,12 @@
 {
     "menu": [
         {
+            "url": "/backend/domain",
+            "name": "Domains",
+            "slug": "domains",
+            "icon": "bx bxs-server"
+        },
+        {
             "url": "#",
             "name": "Channel",
             "slug": "channel",
@@ -37,28 +43,16 @@
             ]
         },
         {
-            "url": "#",
+            "url": "/backend/order",
             "name": "Orders",
             "slug": "orders",
-            "icon": "bx bxs-cart",
-            "submenu": [
-                {
-                    "url": "/backend/order",
-                    "name": "Order List"
-                }
-            ]
+            "icon": "bx bxs-cart"
         },
         {
-            "url": "#",
+            "url": "/backend/user",
             "name": "Customers",
             "slug": "customers",
-            "icon": "bx bxs-group",
-            "submenu": [
-                {
-                    "url": "/backend/user",
-                    "name": "Customer List"
-                }
-            ]
+            "icon": "bx bxs-group"
         },
         {
             "url": "#",
@@ -89,16 +83,10 @@
             ]
         },
         {
-            "url": "#",
+            "url": "/backend/book",
             "name": "Books",
             "slug": "books",
-            "icon": "bx bxs-book-open",
-            "submenu": [
-                {
-                    "url": "/backend/book",
-                    "name": "Books List"
-                }
-            ]
+            "icon": "bx bxs-book-open"
         },
         {
             "url": "#",
