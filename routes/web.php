@@ -32,6 +32,7 @@ Route::get('/', [Frontend\HomeController::class, 'index'])->name('front');
 Route::get('403', [Frontend\HomeController::class, 'noPermission'])->name('403');
 Route::get('404', [Frontend\HomeController::class, 'notFound'])->name('404');
 Route::get('500', [Frontend\HomeController::class, 'internalError'])->name('500');
+Route::get('location', [Frontend\HomeController::class, 'location'])->name('location');
 
 // Backend iframe layout
 Route::middleware(['auth'])->group(function () {

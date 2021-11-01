@@ -1,6 +1,12 @@
 {
     "menu": [
         {
+            "url": "/backend/dashboard",
+            "name": "Dashboard",
+            "slug": "dashboard",
+            "icon": "bx bxs-home"
+        },
+        {
             "url": "/backend/domain",
             "name": "Domains",
             "slug": "domains",
