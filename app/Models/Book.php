@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Enums\BookOptions;
 use App\Traits\HasRanking;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Spatie\Tags\HasTags;
@@ -111,11 +112,7 @@ class Book extends BaseModel
 
     public function getTypeAttribute($value)
     {
-        $types = [
-            1 => '日漫',
-            2 => '韩漫',
-            3 => '写真',
-        ];
+        $types = BookOptions::TYPE_OPTIONS;
 
         return $types[$value];
     }

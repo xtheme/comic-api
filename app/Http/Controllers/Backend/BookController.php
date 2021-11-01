@@ -112,13 +112,25 @@ class BookController extends Controller
                 $text = '标记为韩漫';
                 $data = ['type' => 2];
                 break;
+            case 'american':
+                $text = '标记为美漫';
+                $data = ['type' => 3];
+                break;
+            case 'album':
+                $text = '标记为写真';
+                $data = ['type' => 4];
+                break;
+            case 'cg':
+                $text = '标记为CG';
+                $data = ['type' => 5];
+                break;
+            case 'featured':
+                $text = '标记为精选封面';
+                $data = null;
+                break;
             case 'end':
                 $text = '标记为完结';
                 $data = ['end' => 1];
-                break;
-            case 'choice':
-                $text = '标记为精选';
-                $data = null;
                 break;
             case 'enable':
                 $text = '批量上架';
@@ -141,13 +153,19 @@ class BookController extends Controller
         switch ($action) {
             case 'japan':
             case 'korea':
+            case 'american':
+            case 'album':
+            case 'cg':
             case 'end':
-            case 'choice':
+            case 'featured':
                 $tag = [
                     'japan' => '日漫',
                     'korea' => '韩漫',
+                    'american' => '美漫',
+                    'album' => '写真',
+                    'cg' => 'CG',
+                    'featured' => '精选',
                     'end' => '完结',
-                    'choice' => '精选',
                 ];
                 $books = Book::whereIn('id', $ids)->get();
                 foreach ($books as $book) {

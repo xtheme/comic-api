@@ -30,6 +30,10 @@
                                     <select class="form-control" name="action">
                                         <option value="korea">标记为韩漫</option>
                                         <option value="japan">标记为日漫</option>
+                                        <option value="american">标记为美漫</option>
+                                        <option value="album">标记为写真</option>
+                                        <option value="cg">标记为CG</option>
+                                        <option value="featured">标记为精选封面</option>
                                         <option value="end">标记为完结</option>
                                         <option value="enable">批量上架</option>
                                         <option value="disable">批量下架</option>
