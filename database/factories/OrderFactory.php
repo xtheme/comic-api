@@ -4,6 +4,8 @@ namespace Database\Factories;
 
 use App\Jobs\RechargeJob;
 use App\Models\Order;
+use App\Models\Pricing;
+use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 class OrderFactory extends Factory
@@ -26,20 +28,26 @@ class OrderFactory extends Factory
 
         $order_no = date('ymd') . str_pad((string) ($count + 1), 5, '0', STR_PAD_LEFT) . rand(10, 99);
 
+
+
+        $user_id = User::where('status', 1)->inRandomOrder()->first()->id;
+
+        $pricing = Pricing::where('status', 1)->inRandomOrder()->first();
+
         $plan_options = [
-            'coin' => 5000,
-            'gift_coin' => 3000,
-            'days' => 0,
-            'gift_days' => 0,
+            'coin' => $pricing->coin,
+            'gift_coin' => $pricing->gift_coin,
+            'days' => $pricing->days,
+            'gift_days' => $pricing->gift_days,
         ];
 
         return [
-            'type' => 'charge',
+            'type' => $pricing->type,
             'order_no' => $order_no,
-            'user_id' => 1,
+            'user_id' => $user_id,
             'app_id' => 0,
             'channel_id' => 1,
-            'amount' => 30.00,
+            'amount' => $pricing->price,
             'plan_options' => $plan_options,
             'payment_id' => 1,
             'transaction_id' => $order_no,
