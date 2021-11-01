@@ -98,7 +98,7 @@ class BooksConvert extends Command
             $pending_num = DB::table($old_table)->where('id', '>', $latest_primary_id)->count();
 
             if ($this->confirm('尚有' . $pending_num . '筆數據等待遷移，是否繼續執行此腳本？')) {
-                $this->call('migrate:books');
+                $this->call('convert:books');
             } else {
                 $this->line('操作已結束');
             }
