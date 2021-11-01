@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Resources\BookResource;
 use App\Http\Resources\VideoResource;
+use App\Models\Channel;
 use App\Models\Filter;
 use App\Repositories\Contracts\TopicRepositoryInterface;
 use Illuminate\Http\Request;
@@ -49,6 +50,13 @@ class TopicController extends BaseController
 
     public function list(Request $request, $type)
     {
+        if ($request->headers->has('ch')) {
+            $safe_landing = Channel::where('id', (int) $request->header('ch'))->where('safe_landing', 1)->exists();
+            if ($safe_landing) {
+                $type .= '_safe';
+            }
+        }
+
         $request->merge([
             'type' => $type,
             'status' => 1,
