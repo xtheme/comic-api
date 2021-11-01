@@ -10,10 +10,11 @@ use Illuminate\Support\Facades\Response;
 
 class DomainController extends Controller
 {
-    public function index()
+    public function index($type = 'frontend')
     {
         $data = [
-            'list' => Domain::orderBy('type')->paginate(),
+            'type' => $type,
+            'list' => Domain::where('type', $type)->orderBy('type')->paginate(),
             'type_options' => DomainOptions::TYPE_OPTIONS,
             'status_options' => DomainOptions::STATUS_OPTIONS,
         ];

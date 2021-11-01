@@ -82,7 +82,7 @@
                                 </tr>
                             @empty
                                 <tr>
-                                    <td colspan="11" class="text-center font-medium-3">没有数据，请选择其他日期</td>
+                                    <td colspan="11" class="text-center font-medium-1">没有数据，请选择其他日期</td>
                                 </tr>
                             @endforelse
                             </tbody>

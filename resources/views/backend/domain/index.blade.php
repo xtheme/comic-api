@@ -18,6 +18,15 @@
             </div>
             <div class="card-content">
                 <div class="card-body">
+                    <ul class="nav nav-pills nav-fill">
+                        @foreach($type_options as $key => $val)
+                        <li class="nav-item">
+                            <a class="nav-link @if($key == $type){{'active'}}@endif" href="{{ route('backend.domain.index', $key) }}">
+                                {{ $val }}
+                            </a>
+                        </li>
+                        @endforeach
+                    </ul>
                     <!-- Table with outer spacing -->
                     <div class="table-responsive">
                         <table class="table table-striped table-hover">
@@ -53,7 +62,7 @@
                                 </tr>
                             @empty
                                 <tr>
-                                    <td colspan="6" class="text-center font-medium-3">没有数据</td>
+                                    <td colspan="7" class="text-center font-medium-1">暂无数据</td>
                                 </tr>
                             @endforelse
                             </tbody>

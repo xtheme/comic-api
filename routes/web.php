@@ -299,7 +299,7 @@ Route::middleware(['auth', 'auth.route.role'])->prefix('backend')->as('backend.'
 
     // 域名
     Route::prefix('domain')->as('domain.')->group(function () {
-        Route::get('/', [Backend\DomainController::class , 'index'])->name('index');
+        Route::get('/{type?}', [Backend\DomainController::class , 'index'])->name('index');
         Route::get('create', [Backend\DomainController::class , 'create'])->name('create');
         Route::post('store', [Backend\DomainController::class , 'store'])->name('store');
         Route::get('edit/{id}', [Backend\DomainController::class , 'edit'])->name('edit');
