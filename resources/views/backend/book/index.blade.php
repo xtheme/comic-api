@@ -174,6 +174,17 @@
                 </div>
                 <div class="col-12">
                     <div class="form-group">
+                        <label>类型</label>
+                        <select class="form-control" name="type">
+                            <option value="">全部</option>
+                            @foreach ($type_options as $key => $val)
+                                <option value="{{ $key }}" @if(request()->get('type') == $key){{'selected'}}@endif>{{ $val }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                </div>
+                <div class="col-12">
+                    <div class="form-group">
                         <label>漫画名称</label>
                         <div class="controls">
                             <input type="text" class="form-control"
@@ -196,17 +207,6 @@
                         </div>
                     </div>
                 @endforeach
-                <div class="col-12">
-                    <div class="form-group">
-                        <label>审核状态</label>
-                        <select class="form-control" name="review">
-                            <option value="">全部</option>
-                            @foreach ($review_options as $key => $val)
-                                <option value="{{ $key }}" @if(request()->get('review') == $key){{'selected'}}@endif>{{ $val }}</option>
-                            @endforeach
-                        </select>
-                    </div>
-                </div>
                 <div class="col-12">
                     <div class="form-group">
                         <label>状态</label>

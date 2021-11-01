@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Backend;
 
+use App\Enums\BookOptions;
 use App\Enums\Options;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Backend\BookRequest;
@@ -29,6 +30,7 @@ class BookController extends Controller
             'status_options' => Options::STATUS_OPTIONS,
             'review_options' => Options::REVIEW_OPTIONS,
             'charge_options' => Options::CHARGE_OPTIONS,
+            'type_options' => BookOptions::TYPE_OPTIONS,
             'list' => $this->repository->filter($request)->paginate(),
             'categories' => getCategoryByType('book'),
             'pageConfigs' => ['hasSearchForm' => true],

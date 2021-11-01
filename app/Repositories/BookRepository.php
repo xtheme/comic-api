@@ -29,8 +29,8 @@ class BookRepository extends Repository implements BookRepositoryInterface
     {
         $id = $request->get('id') ?? null;
         $title = $request->get('title') ?? null;
+        $type = $request->get('type') ?? null;
         $tags = $request->get('tags') ?? null;
-        $review = $request->get('review') ?? null;
         $status = $request->get('status') ?? null;
 
         $order = $request->get('order') ?? 'id';
@@ -40,8 +40,8 @@ class BookRepository extends Repository implements BookRepositoryInterface
             return $query->where('id', $id);
         })->when($title, function (Builder $query, $title) {
             return $query->where('title', 'like', '%' . $title . '%');
-        })->when($review, function (Builder $query, $review) {
-            return $query->where('review', $review);
+        })->when($type, function (Builder $query, $type) {
+            return $query->where('type', $type);
         })->when($status, function (Builder $query, $status) {
             return $query->where('status', $status);
         })->when($sort, function (Builder $query, $sort) use ($order) {
