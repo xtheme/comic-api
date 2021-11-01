@@ -59,7 +59,7 @@ class BooksConvert extends Command
 
         if ($old_primary_id > $new_primary_id) {
             // 分割集合
-            $data = DB::table($old_table)->where('id', '>', $new_primary_id)->limit($batch_num)->get()->chunk($chunk_num);
+            $data = DB::table($old_table)->where('id', '>', $new_primary_id)->orderBy('id')->limit($batch_num)->get()->chunk($chunk_num);
 
             $this->line(sprintf('為了避免腳本超時，本次操作將轉移 %s 筆數據，共拆分為 %s 批数据進行迁移！', $batch_num, ceil($batch_num / $chunk_num)));
 
