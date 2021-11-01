@@ -10,8 +10,10 @@ use Illuminate\Support\Facades\Response;
 
 class DomainController extends Controller
 {
-    public function index($type = 'frontend')
+    public function index(Request $request)
     {
+        $type = $request->input('type') ?? 'frontend';
+
         $data = [
             'type' => $type,
             'list' => Domain::where('type', $type)->orderBy('type')->paginate(),
@@ -35,7 +37,20 @@ class DomainController extends Controller
     public function store(Request $request)
     {
         $domain = new Domain;
-        $domain->fill($request->post());
+
+        $domain->type = $request->input('type');
+        $domain->domain = cleanDomain($request->input('domain'));
+        $domain->desc = $request->input('desc');
+        $domain->status = $request->input('status');
+
+        if ($request->input('expire_at')) {
+            $domain->expire_at = $request->input('expire_at') . ' 00:00:00';
+        }
+
+        if ($request->input('status') == 3) {
+            $domain->intercept_at = now();
+        }
+
         $domain->save();
 
         return Response::jsonSuccess(__('response.create.success'));
@@ -55,7 +70,20 @@ class DomainController extends Controller
     public function update(Request $request, $id)
     {
         $domain = Domain::findOrFail($id);
-        $domain->fill($request->post());
+
+        $domain->type = $request->input('type');
+        $domain->domain = cleanDomain($request->input('domain'));
+        $domain->desc = $request->input('desc');
+        $domain->status = $request->input('status');
+
+        if ($request->input('expire_at')) {
+            $domain->expire_at = $request->input('expire_at') . ' 00:00:00';
+        }
+
+        if ($request->input('status') == 3) {
+            $domain->intercept_at = now();
+        }
+
         $domain->save();
 
         return Response::jsonSuccess(__('response.update.success'));

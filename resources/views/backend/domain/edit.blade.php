@@ -1,6 +1,7 @@
 @extends('layouts.modal')
 
 @section('vendor-styles')
+    <link rel="stylesheet" type="text/css" href="{{ asset('vendors/css/pickers/pickadate/pickadate.css') }}">
 @endsection
 
 @section('page-styles')
@@ -41,6 +42,14 @@
                 </div>
                 <div class="col-12">
                     <div class="form-group">
+                        <label>到期时间</label>
+                        <div class="controls">
+                            <input type="text" name="expire_at" class="form-control date-picker" value="{{ $domain->expire_at }}" placeholder="选择日期">
+                        </div>
+                    </div>
+                </div>
+                <div class="col-12">
+                    <div class="form-group">
                         <label>状态</label>
                         <div class="controls">
                             <select class="form-control" name="status">
@@ -62,12 +71,35 @@
 
 {{-- vendor scripts --}}
 @section('vendor-scripts')
+    <script src="{{ asset('vendors/js/pickers/pickadate/picker.js') }}"></script>
+    <script src="{{ asset('vendors/js/pickers/pickadate/picker.date.js') }}"></script>
 @endsection
 
 {{-- page scripts --}}
 @section('page-scripts')
     <script>
 		$(document).ready(function () {
+            $('.date-picker').pickadate({
+                firstDay: 1,
+                format: 'yyyy-mm-dd',
+                monthsFull: [ '一月', '二月', '三月', '四月', '五月', '六月', '七月', '八月', '九月', '十月', '十一月', '十二月' ],
+                monthsShort: [ '一', '二', '三', '四', '五', '六', '七', '八', '九', '十', '十一', '十二' ],
+                weekdaysShort: [ '日', '一', '二', '三', '四', '五', '六' ],
+                today: '今天',
+                clear: '清除',
+                close: '关闭'
+            });
+
+            $('#search-form').submit(function(e) {
+                e.preventDefault();
+
+                let url = $(this).attr('action') + '?' + $(this).serialize();
+                console.log(url);
+                $.reloadIFrame({
+                    reloadUrl: url
+                });
+            });
+
 			$('#form').submit(function (e) {
 				e.preventDefault();
 
