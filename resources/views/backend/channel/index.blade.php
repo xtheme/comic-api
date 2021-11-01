@@ -25,22 +25,26 @@
                         <table class="table table-striped table-hover">
                             <thead>
                             <tr>
-                                <th>渠道编号</th>
-                                <th>注册数</th>
+                                <th class="text-center">渠道编号</th>
                                 <th>注册数</th>
                                 <th>订单数</th>
                                 <th>总充值</th>
                                 <th>WAP总充值</th>
                                 <th>APP总充值</th>
                                 <th>APP安装数</th>
-                                <th class="text-center">操作</th>
+                                <th>操作</th>
                             </tr>
                             </thead>
                             <tbody>
                             @foreach ($list as $item)
                                 <tr>
-                                    <td>{{ $item->id }}</td>
-                                    <td>{{ $item->id }}</td>
+                                    <td>
+                                        <p class="text-center font-medium-1">{{ $item->id }}</p>
+                                        <p class="text-center">{{ $item->description }}</p>
+                                        @if($item->safe_landing)
+                                        <p class="text-center"><span class="badge badge-pill badge-light-danger">安全落地頁</span></p>
+                                        @endif
+                                    </td>
                                     <td>
                                         <ul class="list-unstyled">
                                         @foreach ($domains as $domain)
@@ -56,7 +60,15 @@
                                     <td>{{ $item->wap_amount }}</td>
                                     <td>{{ $item->app_amount }}</td>
                                     <td>{{ $item->app_download_count }}</td>
-                                    <td></td>
+                                    <td>
+                                        <div class="@if(($loop->count - $loop->iteration) < 3){{'dropup'}}@else{{'dropdown'}}@endif">
+                                            <span class="bx bx-dots-vertical-rounded font-medium-3 dropdown-toggle nav-hide-arrow cursor-pointer"
+                                                  id="dropdownMenuButton{{ $item->id }}" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></span>
+                                            <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuButton{{ $item->id }}">
+                                                <a class="dropdown-item" data-modal data-size="md" data-height="30vh" href="{{ route('backend.channel.edit', $item->id) }}" title="修改渠道"><i class="bx bx-edit-alt mr-1"></i>修改</a>
+                                            </div>
+                                        </div>
+                                    </td>
                                 </tr>
                             @endforeach
                             </tbody>

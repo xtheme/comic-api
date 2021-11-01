@@ -47,9 +47,9 @@ class ChannelController extends Controller
     {
         $post = $request->post();
 
-        $category = new Channel;
+        $channel = new Channel;
 
-        $category->fill($post)->save();
+        $channel->fill($post)->save();
 
         return Response::jsonSuccess(__('response.create.success'));
     }
@@ -65,18 +65,18 @@ class ChannelController extends Controller
 
     public function update(Request $request, $id)
     {
-        $category = Channel::findOrFail($id);
+        $channel = Channel::findOrFail($id);
 
-        $category->update($request->input());
+        $channel->update($request->input());
 
         return Response::jsonSuccess(__('response.update.success'));
     }
 
     public function destroy($id)
     {
-        $category = Channel::findOrFail($id);
+        $channel = Channel::findOrFail($id);
 
-        $category->delete();
+        $channel->delete();
 
         return Response::jsonSuccess(__('response.destroy.success'));
     }
