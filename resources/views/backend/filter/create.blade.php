@@ -2,6 +2,7 @@
 
 {{-- page style --}}
 @section('page-styles')
+    <link rel="stylesheet" type="text/css" href="{{ asset('vendors/css/bootstrap-multiselect/bootstrap-multiselect.css') }}">
     <link rel="stylesheet" type="text/css" href="{{ asset('vendors/css/pickers/daterange/daterangepicker.css') }}">
 @endsection
 
@@ -68,23 +69,16 @@
                         </div>
                     </div>
                 </div>
-                @foreach($tag_group as $group_name => $group)
+                @foreach($categories as $title => $item)
                     <div class="col-12">
                         <div class="form-group">
-                            <label>{{ $group_name }}</label>
+                            <label>{{ $title }}标签</label>
                             <div class="controls">
-                                <div class="row">
-                                    @foreach($group as $tag)
-                                        <div class="col-2">
-                                            <fieldset>
-                                                <div class="checkbox mt-1">
-                                                    <input type="checkbox" name="tags[{{ $tag['type'] }}][]" id="{{ $tag['type'] . $tag['name'] }}" value="{{ $tag['name'] }}">
-                                                    <label for="{{ $tag['type'] . $tag['name'] }}">{{ $tag['name'] }}</label>
-                                                </div>
-                                            </fieldset>
-                                        </div>
+                                <select class="form-control tags-selector" name="tags[{{ $item['code'] }}][]" multiple="multiple">
+                                    @foreach($item['tags'] as $tag)
+                                        <option value="{{ $tag }}">{{ $tag }}</option>
                                     @endforeach
-                                </div>
+                                </select>
                             </div>
                         </div>
                     </div>
@@ -103,6 +97,7 @@
     <script src="{{ asset('vendors/js/extensions/moment.min.js') }}"></script>
     <script src="{{ asset('vendors/js/pickers/daterange/daterangepicker.js') }}"></script>
     <script src="{{ asset('vendors/js/extensions/locale/zh-cn.js') }}"></script>
+    <script src="{{ asset('vendors/js/bootstrap-multiselect/bootstrap-multiselect.js') }}"></script>
 @endsection
 
 
@@ -125,6 +120,28 @@
         });
 
 		$(document).ready(function () {
+			$('.tags-selector').multiselect({
+				buttonWidth: '100%',
+				buttonTextAlignment: 'left',
+				buttonText: function(options, select) {
+					if (options.length === 0) {
+						return '请选择标签';
+					}
+					else {
+						var labels = [];
+						options.each(function() {
+							if ($(this).attr('label') !== undefined) {
+								labels.push($(this).attr('label'));
+							}
+							else {
+								labels.push($(this).html());
+							}
+						});
+						return labels.join(', ') + '';
+					}
+				}
+			});
+
 			$('#form').submit(function (e) {
 				e.preventDefault();
 

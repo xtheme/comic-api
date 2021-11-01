@@ -70,26 +70,19 @@
                         </div>
                     </div>
                 </div>
-                @foreach($tag_group as $group_name => $group)
-                <div class="col-12">
-                    <div class="form-group">
-                        <label>{{ $group_name }}</label>
-                        <div class="controls">
-                            <div class="row">
-                                @foreach($group as $tag)
-                                    <div class="col-2">
-                                    <fieldset>
-                                        <div class="checkbox mt-1">
-                                            <input type="checkbox" name="tags[{{ $tag['type'] }}][]" id="{{ $tag['type'] . $tag['name'] }}" value="{{ $tag['name'] }}" @if(isset($data->tags[$tag['type']]) && in_array($tag['name'], $data->tags[$tag['type']]))checked="checked"@endif>
-                                            <label for="{{ $tag['type'] . $tag['name'] }}">{{ $tag['name'] }}</label>
-                                        </div>
-                                    </fieldset>
-                                </div>
-                                @endforeach
+                @foreach($categories as $title => $item)
+                    <div class="col-12">
+                        <div class="form-group">
+                            <label>{{ $title }}标签</label>
+                            <div class="controls">
+                                <select class="form-control tags-selector" name="tags[{{ $item['code'] }}][]" multiple="multiple">
+                                    @foreach($item['tags'] as $tag)
+                                        <option value="{{ $tag }}" @if(in_array($tag, $data->tags[$item['code']])){{'selected'}}@endif>{{ $tag }}</option>
+                                    @endforeach
+                                </select>
                             </div>
                         </div>
                     </div>
-                </div>
                 @endforeach
                 <div class="col-12 d-flex justify-content-end">
                     <input type="hidden" name="type" value="{{ $type }}">
@@ -128,7 +121,7 @@
         });
 
         $(document).ready(function () {
-            $('#tags-selector').multiselect({
+            $('.tags-selector').multiselect({
                 buttonWidth: '100%',
                 buttonTextAlignment: 'left',
                 buttonText: function(options, select) {
