@@ -45,7 +45,7 @@
                                         <ul class="list-unstyled">
                                         @foreach ($domains as $domain)
                                             <li class="d-flex justify-content-start">
-                                                <div class="d-inline p-50"><a data-modal data-size="sm" data-height="20vh" href="{{ route('backend.qrcode') }}?url={{ $domain->domain }}?ch={{ $item->id }}" title="QRCode"><i class="bx bx-barcode"></i></a></div>
+                                                <div class="d-inline p-50"><a data-modal data-size="sm" data-height="26vh" href="{{ route('backend.qrcode') }}?url={{ $domain->domain }}?ch={{ $item->id }}" title="QRCode"><i class="bx bx-barcode"></i></a></div>
                                                 <div class="d-inline p-50">{{ $domain->domain }}?ch={{ $item->id }}</div>
                                             </li>
                                         @endforeach
