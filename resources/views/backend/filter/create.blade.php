@@ -2,7 +2,7 @@
 
 {{-- page style --}}
 @section('page-styles')
-    <link rel="stylesheet" type="text/css" href="{{ asset('vendors/css/bootstrap-multiselect/bootstrap-multiselect.css') }}">
+{{--    <link rel="stylesheet" type="text/css" href="{{ asset('vendors/css/bootstrap-multiselect/bootstrap-multiselect.css') }}">--}}
     <link rel="stylesheet" type="text/css" href="{{ asset('vendors/css/pickers/daterange/daterangepicker.css') }}">
 @endsection
 
@@ -72,17 +72,42 @@
                 @foreach($categories as $title => $item)
                     <div class="col-12">
                         <div class="form-group">
-                            <label>{{ $title }}标签</label>
+                            <label>{{ $title }}</label>
                             <div class="controls">
-                                <select class="form-control tags-selector" name="tags[{{ $item['code'] }}][]" multiple="multiple">
+                                <div class="row">
                                     @foreach($item['tags'] as $tag)
-                                        <option value="{{ $tag }}">{{ $tag }}</option>
+                                        <div class="col-2">
+                                            <div class="form-group">
+                                                <div class="controls">
+                                                    <fieldset>
+                                                        <div class="checkbox mt-1">
+                                                            <input type="checkbox" name="tags[{{ $item['code'] }}][]" id="{{ $tag }}" value="{{ $tag }}">
+                                                            <label for="{{ $tag }}">{{ $tag }}</label>
+                                                        </div>
+                                                    </fieldset>
+                                                </div>
+                                            </div>
+                                        </div>
                                     @endforeach
-                                </select>
+                                </div>
                             </div>
                         </div>
                     </div>
                 @endforeach
+{{--                @foreach($categories as $title => $item)--}}
+{{--                    <div class="col-12">--}}
+{{--                        <div class="form-group">--}}
+{{--                            <label>{{ $title }}标签</label>--}}
+{{--                            <div class="controls">--}}
+{{--                                <select class="form-control tags-selector" name="tags[{{ $item['code'] }}][]" multiple="multiple">--}}
+{{--                                    @foreach($item['tags'] as $tag)--}}
+{{--                                        <option value="{{ $tag }}">{{ $tag }}</option>--}}
+{{--                                    @endforeach--}}
+{{--                                </select>--}}
+{{--                            </div>--}}
+{{--                        </div>--}}
+{{--                    </div>--}}
+{{--                @endforeach--}}
                 <div class="col-12 d-flex justify-content-end">
                     <input type="hidden" name="type" value="{{ $type }}">
                     <button type="submit" class="btn btn-primary">提交</button>
@@ -97,7 +122,7 @@
     <script src="{{ asset('vendors/js/extensions/moment.min.js') }}"></script>
     <script src="{{ asset('vendors/js/pickers/daterange/daterangepicker.js') }}"></script>
     <script src="{{ asset('vendors/js/extensions/locale/zh-cn.js') }}"></script>
-    <script src="{{ asset('vendors/js/bootstrap-multiselect/bootstrap-multiselect.js') }}"></script>
+{{--    <script src="{{ asset('vendors/js/bootstrap-multiselect/bootstrap-multiselect.js') }}"></script>--}}
 @endsection
 
 
@@ -120,27 +145,27 @@
         });
 
 		$(document).ready(function () {
-			$('.tags-selector').multiselect({
-				buttonWidth: '100%',
-				buttonTextAlignment: 'left',
-				buttonText: function(options, select) {
-					if (options.length === 0) {
-						return '请选择标签';
-					}
-					else {
-						var labels = [];
-						options.each(function() {
-							if ($(this).attr('label') !== undefined) {
-								labels.push($(this).attr('label'));
-							}
-							else {
-								labels.push($(this).html());
-							}
-						});
-						return labels.join(', ') + '';
-					}
-				}
-			});
+			// $('.tags-selector').multiselect({
+			// 	buttonWidth: '100%',
+			// 	buttonTextAlignment: 'left',
+			// 	buttonText: function(options, select) {
+			// 		if (options.length === 0) {
+			// 			return '请选择标签';
+			// 		}
+			// 		else {
+			// 			var labels = [];
+			// 			options.each(function() {
+			// 				if ($(this).attr('label') !== undefined) {
+			// 					labels.push($(this).attr('label'));
+			// 				}
+			// 				else {
+			// 					labels.push($(this).html());
+			// 				}
+			// 			});
+			// 			return labels.join(', ') + '';
+			// 		}
+			// 	}
+			// });
 
 			$('#form').submit(function (e) {
 				e.preventDefault();
