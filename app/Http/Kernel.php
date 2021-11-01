@@ -56,20 +56,21 @@ class Kernel extends HttpKernel
      * @var array
      */
     protected $routeMiddleware = [
-        'auth'             => \App\Http\Middleware\Authenticate::class,
-        'auth.basic'       => \Illuminate\Auth\Middleware\AuthenticateWithBasicAuth::class,
-        'cache.headers'    => \Illuminate\Http\Middleware\SetCacheHeaders::class,
-        'can'              => \Illuminate\Auth\Middleware\Authorize::class,
-        'guest'            => \App\Http\Middleware\RedirectIfAuthenticated::class,
+        'auth' => \App\Http\Middleware\Authenticate::class,
+        'auth.basic' => \Illuminate\Auth\Middleware\AuthenticateWithBasicAuth::class,
+        'cache.headers' => \Illuminate\Http\Middleware\SetCacheHeaders::class,
+        'can' => \Illuminate\Auth\Middleware\Authorize::class,
+        'guest' => \App\Http\Middleware\RedirectIfAuthenticated::class,
         'password.confirm' => \Illuminate\Auth\Middleware\RequirePassword::class,
-        'signed'           => \Illuminate\Routing\Middleware\ValidateSignature::class,
+        'signed' => \Illuminate\Routing\Middleware\ValidateSignature::class,
         // 'throttle' => \Illuminate\Routing\Middleware\ThrottleRequests::class,
-        'throttle'         => \Illuminate\Routing\Middleware\ThrottleRequestsWithRedis::class,
-        'verified'         => \Illuminate\Auth\Middleware\EnsureEmailIsVerified::class,
-        'api.header'       => Middleware\VerifyApiHeader::class,
-        'api.sign'         => Middleware\VerifyApiSign::class,
+        'throttle' => \Illuminate\Routing\Middleware\ThrottleRequestsWithRedis::class,
+        'verified' => \Illuminate\Auth\Middleware\EnsureEmailIsVerified::class,
+        'api.location' => Middleware\VerifyLocation::class,
+        'api.header' => Middleware\VerifyApiHeader::class,
+        'api.sign' => Middleware\VerifyApiSign::class,
         // 'device.sso'       => Middleware\SingleSignOn::class,
-        'auth.route.role'  => Middleware\AuthRouteRole::class,
-        'log.activity'     => Middleware\LogActivity::class,
+        'auth.route.role' => Middleware\AuthRouteRole::class,
+        'log.activity' => Middleware\LogActivity::class,
     ];
 }
