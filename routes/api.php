@@ -23,6 +23,7 @@ Route::as('api.')->middleware(['api'])->group(function () {
         });
 
         Route::prefix('auth')->as('auth.')->group(function () {
+            Route::post('/captcha', [Api\AuthController::class, 'captcha'])->name('captcha');
             Route::post('/login', [Api\AuthController::class, 'login'])->name('login');
             Route::post('/register', [Api\AuthController::class, 'register'])->name('register');
         });

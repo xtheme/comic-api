@@ -15,6 +15,18 @@ use Illuminate\Support\Facades\Response;
 class AuthController extends BaseController
 {
     /**
+     * 驗證碼
+     */
+    public function captcha(Request $request): JsonResponse
+    {
+        $data = [
+            'url' => app('captcha')->create('math', true)
+        ];
+
+        return Response::jsonSuccess(__('api.success'), $data);
+    }
+
+    /**
      * 登入帳號
      */
     public function login(LoginRequest $request): JsonResponse
