@@ -48,4 +48,5 @@ return [
     'category' => '标签分类',
     'filter' => '筛选器',
     'channel' => '渠道统计',
+    'domain' => '域名',
 ];

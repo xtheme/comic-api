@@ -41,7 +41,7 @@ class BookChapterController extends Controller
 
         $data = [
             'title' => $chapter->title,
-            'images' => $chapter->json_image_thumb,
+            'images' => $chapter->content,
         ];
 
         return view('backend.book_chapter.preview')->with($data);
