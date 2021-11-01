@@ -44,6 +44,7 @@ Route::middleware(['auth'])->group(function () {
 // Backend iframe pages
 Route::middleware(['auth', 'auth.route.role'])->prefix('backend')->as('backend.')->group(function () {
     Route::get('dashboard', [Backend\DashboardController::class, 'dashboard'])->name('dashboard');
+    Route::get('dashboard/user/growth', [Backend\DashboardController::class, 'userGrowth'])->name('dashboard.user.growth');
 
     Route::get('qrcode', [Backend\ToolController::class, 'qrcode'])->name('qrcode');
 
