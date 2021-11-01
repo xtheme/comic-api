@@ -58,8 +58,9 @@
                         <label for="input-email">漫画类型</label>
                         <div class="controls">
                             <select class="form-control" name="type">
-                                <option value="1">日漫</option>
-                                <option value="2">韩漫</option>
+                                @foreach ($type_options as $key => $val)
+                                    <option value="{{ $key }}">{{ $val }}</option>
+                                @endforeach
                             </select>
                         </div>
                     </div>

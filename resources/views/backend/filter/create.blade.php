@@ -69,6 +69,23 @@
                         </div>
                     </div>
                 </div>
+                <div class="col-6">
+                    <div class="form-group">
+                        <label>类型</label>
+                        <div class="controls">
+                            <div class="form-group">
+                                <div class="controls">
+                                    <select class="form-control" name="params[type]">
+                                        <option value="0">无限制</option>
+                                        @foreach ($type_options as $key => $val)
+                                            <option value="{{ $key }}">{{ $val }}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
                 @foreach($categories as $title => $item)
                     <div class="col-12">
                         <div class="form-group">

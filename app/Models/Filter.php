@@ -48,6 +48,10 @@ class Filter extends BaseModel
                     // 漫畫才有此欄位
                     $query->where('end', 1);
                     break;
+                case 'type':
+                    // 漫畫才有此欄位
+                    $query->where('type', $value);
+                    break;
                 case 'order_by':
                     $query->latest($value);
                     break;

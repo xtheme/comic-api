@@ -59,8 +59,9 @@
                         <label>漫画类型</label>
                         <div class="controls">
                             <select class="form-control" name="type">
-                                <option value="1" @if($key == $book->type){{'selected'}}@endif>日漫</option>
-                                <option value="2" @if($key == $book->type){{'selected'}}@endif>韩漫</option>
+                                @foreach ($type_options as $key => $val)
+                                    <option value="{{ $key }}" @if($key == $book->type){{'selected'}}@endif>{{ $val }}</option>
+                                @endforeach
                             </select>
                         </div>
                     </div>

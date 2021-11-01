@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Backend;
 
+use App\Enums\BookOptions;
 use App\Enums\Options;
 use App\Http\Controllers\Controller;
 use App\Models\Filter;
@@ -28,6 +29,7 @@ class FilterController extends Controller
             'categories' => getCategoryByType($type),
             'causer_options' => Options::CAUSER_OPTIONS,
             'ribbon_options' => Options::RIBBON_OPTIONS,
+            'type_options' => BookOptions::TYPE_OPTIONS,
         ];
 
         return view('backend.filter.create')->with($data);
@@ -54,6 +56,7 @@ class FilterController extends Controller
             'categories' => getCategoryByType($type),
             'causer_options' => Options::CAUSER_OPTIONS,
             'ribbon_options' => Options::RIBBON_OPTIONS,
+            'type_options' => BookOptions::TYPE_OPTIONS,
         ];
 
         return view('backend.filter.edit')->with($data);

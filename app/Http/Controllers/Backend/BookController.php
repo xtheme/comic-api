@@ -60,6 +60,7 @@ class BookController extends Controller
     {
         $data = [
             'status_options' => Options::STATUS_OPTIONS,
+            'type_options' => BookOptions::TYPE_OPTIONS,
             'categories' => getCategoryByType('book'),
         ];
 
@@ -77,6 +78,7 @@ class BookController extends Controller
     {
         $data = [
             'status_options' => Options::STATUS_OPTIONS,
+            'type_options' => BookOptions::TYPE_OPTIONS,
             'categories' => getCategoryByType('book'),
             'book' => Book::findOrFail($id),
         ];
