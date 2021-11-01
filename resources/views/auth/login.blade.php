@@ -29,6 +29,16 @@
                                                 <input type="password" class="form-control" name="password" placeholder="请输入密码" autocomplete="on">
                                             </div>
                                         </div>
+                                        <div class="form-group mb-2">
+                                            <div class="controls">
+                                                <input type="text" class="form-control" name="captcha" placeholder="请输入验证码" autocomplete="on">
+                                            </div>
+                                        </div>
+                                        <div class="form-group mb-2">
+                                            <div class="controls">
+                                                {!! captcha_img('math') !!}
+                                            </div>
+                                        </div>
                                         <button type="submit" class="btn btn-primary glow w-100 position-relative">登录
                                             <i id="icon-arrow" class="bx bx-right-arrow-alt"></i>
                                         </button>
@@ -89,7 +99,7 @@
                             $.toast({
                                 title  : '登录失败',
                                 type  : 'error',
-                                message: res.msg
+                                message: res.msg || '验证码错误'
                             });
                         }
                     }
