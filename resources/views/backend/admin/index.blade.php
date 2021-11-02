@@ -53,10 +53,10 @@
                                 <th>登录帐号</th>
                                 <th>角色</th>
                                 <th>昵称</th>
+                                <th>登录IP</th>
+                                <th>登录日期</th>
                                 <th>添加时间</th>
                                 <th>修改时间</th>
-                                <th>登录日期</th>
-                                <th>登录IP</th>
                                 <th>状态</th>
                                 <th>操作</th>
                             </tr>
@@ -74,10 +74,10 @@
                                     <td>{{ $admin->username }}</td>
                                     <td>{{ $admin->getRoleNames()->first() }}</td>
                                     <td>{{ $admin->nickname }}</td>
-                                    <td>{{ $admin->create_time }}</td>
-                                    <td>{{ $admin->update_time }}</td>
-                                    <td>{{ $admin->logintime }}</td>
-                                    <td>{{ $admin->loginip }}</td>
+                                    <td>{{ $admin->login_ip }}</td>
+                                    <td>{{ $admin->login_at }}</td>
+                                    <td>{{ $admin->created_at }}</td>
+                                    <td>{{ $admin->updated_at }}</td>
                                     <td>
                                         @if($admin->id == 1)
                                             <span class="badge badge-pill badge-light-warning">超级管理员</span>
