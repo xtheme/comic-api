@@ -43,7 +43,7 @@ class BookRepository extends Repository implements BookRepositoryInterface
         })->when($type, function (Builder $query, $type) {
             return $query->where('type', $type);
         })->when($status, function (Builder $query, $status) {
-            return $query->where('status', $status);
+            return $query->where('status', $status - 1);
         })->when($sort, function (Builder $query, $sort) use ($order) {
             if ($sort == 'desc') {
                 return $query->orderByDesc($order);
