@@ -4,6 +4,7 @@ namespace App\Http\Middleware;
 
 use Closure;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Response;
 use Illuminate\Validation\Rule;
 use Validator;
@@ -42,6 +43,7 @@ class VerifyApiHeader
         ], [], $attributes);
 
         if ($validator->fails()) {
+            Log::error($validator->errors()->first());
             return Response::jsonError('缺少必要的请求参数!', 500);
         }
 
