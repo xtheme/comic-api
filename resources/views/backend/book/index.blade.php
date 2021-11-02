@@ -146,8 +146,18 @@
                         </table>
                     </div>
                     <div class="row">
-                        <div class="col-md-6">总共 <b>{{ $list->appends(request()->input())->total() }}</b> 条, 分为 <b>{{ $list->lastPage() }}</b> 页</div>
+                        <div class="col-md-4">总共 <b>{{ $list->appends(request()->input())->total() }}</b> 条, 分为 <b>{{ $list->lastPage() }}</b> 页</div>
                         <div class="col-md-6">{!! $list->appends(request()->input())->links() !!}</div>
+                        <div class="col-md-2">
+                            <form class="form" method="get" action="{{ route('backend.book.index') }}">
+                                <div class="input-group">
+                                    <input type="text" class="form-control" name="page" placeholder="前往页面">
+                                    <div class="input-group-append">
+                                        <button class="btn btn-primary" type="submit">Go</button>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
                     </div>
                 </div>
             </div>
