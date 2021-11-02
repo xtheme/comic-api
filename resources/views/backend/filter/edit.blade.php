@@ -92,13 +92,13 @@
                         <div class="form-group">
                             <label>{{ $title }}</label>
                             <div class="controls">
-                                <div class="row">
+                                <div class="row mt-1">
                                     @foreach($item['tags'] as $tag)
                                         <div class="col-2">
                                             <div class="form-group">
                                                 <div class="controls">
                                                     <fieldset>
-                                                        <div class="checkbox mt-1">
+                                                        <div class="checkbox">
                                                             <input type="checkbox" name="tags[{{ $item['code'] }}][]" id="{{ $tag }}" value="{{ $tag }}" @if(in_array($tag, $data->tags[$item['code']])){{'checked'}}@endif>
                                                             <label for="{{ $tag }}">{{ $tag }}</label>
                                                         </div>

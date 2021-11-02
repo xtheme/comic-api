@@ -36,7 +36,7 @@
                                         </div>
                                         <div class="form-group mb-2">
                                             <div class="controls">
-                                                {!! captcha_img('math') !!}
+                                                {!! captcha_img() !!}
                                             </div>
                                         </div>
                                         <button type="submit" class="btn btn-primary glow w-100 position-relative">登录

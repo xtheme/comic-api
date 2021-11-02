@@ -5,9 +5,9 @@ return [
     'default' => [
         'length' => 9,
         'width' => 120,
-        'height' => 36,
+        'height' => 30,
         'quality' => 90,
-        'math' => false,
+        'math' => true,
         'expire' => 120,
         'encrypt' => false,
     ],
