@@ -67,7 +67,6 @@ class AdController extends Controller
 
     public function edit($id)
     {
-
         $data = [
             'data' => Ad::findOrFail($id),
             'ad_spaces' => AdSpace::orderBy('id')->get(),

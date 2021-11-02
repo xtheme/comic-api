@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Backend\AdminUpdateRequest;
 use App\Models\Admin;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Response;
 use Spatie\Permission\Models\Role;
@@ -33,7 +34,13 @@ class AdminController extends Controller
 
     public function store(Request $request)
     {
-        Admin::fill($request->post())->save();
+        $post = $request->post();
+
+        $admin = new Admin;
+
+        $admin->fill($post)->save();
+
+        activity()->useLog('后台')->causedBy(Auth::user())->performedOn($admin)->log('创建管理员帐号');
 
         return Response::jsonSuccess(__('response.create.success'));
     }
@@ -67,6 +74,8 @@ class AdminController extends Controller
 
         $admin->syncRoles($request->post('role'));
 
+        activity()->useLog('后台')->causedBy(Auth::user())->performedOn($admin)->log('编辑管理员帐号');
+
         return Response::jsonSuccess(__('response.update.success'));
     }
 
@@ -75,8 +84,12 @@ class AdminController extends Controller
         if ($id == 1) return Response::jsonError('无法删除超级管理员');
 
         $admin = Admin::findOrFail($id);
+
         $admin->roles()->detach();
+
         $admin->delete();
+
+        activity()->useLog('后台')->causedBy(Auth::user())->performedOn($admin)->log('删除管理员帐号');
 
         return Response::jsonSuccess(__('response.destroy.success'));
     }
@@ -95,17 +108,17 @@ class AdminController extends Controller
 
         switch ($action) {
             case 'enable':
-                $text = '启用帐号';
+                $text = '启用管理员帐号';
                 $data = ['status' => 1];
                 Admin::whereIn('id', $ids)->update($data);
                 break;
             case 'disable':
-                $text = '封禁帐号';
+                $text = '封禁管理员帐号';
                 $data = ['status' => 0];
                 Admin::whereIn('id', $ids)->update($data);
                 break;
             case 'assign':
-                $text = '指派角色';
+                $text = '指派管理员角色';
                 $role = $request->input('role');
                 $admins = Admin::whereIn('id', $ids)->get();
                 $admins->each(function ($admin) use ($role) {
@@ -115,6 +128,8 @@ class AdminController extends Controller
             default:
                 return Response::jsonError(__('response.error.unknown'));
         }
+
+        activity()->useLog('后台')->causedBy(Auth::user())->withProperties($ids)->log($text);
 
         return Response::jsonSuccess($text . '成功！');
     }
