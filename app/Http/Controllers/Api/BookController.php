@@ -99,6 +99,8 @@ class BookController extends BaseController
         // 是否購買
         $user = $request->user() ?? null;
 
+        $purchased  = false;
+
         if ($user) {
             if ($user->is_vip) {
                 $purchased  = true;
