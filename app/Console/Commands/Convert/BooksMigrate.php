@@ -17,7 +17,7 @@ class BooksMigrate extends Command
      *
      * @var string
      */
-    protected $signature = 'migrate:books';
+    protected $signature = 'migrate:books {--id=*}';
 
     /**
      * The console command description.
@@ -44,16 +44,17 @@ class BooksMigrate extends Command
     public function handle()
     {
         // 每次轉詞數據量
-        $batch_num = 1000;
+        $batch_num = 10000;
 
         // 每多少筆切割一次操作
-        $chunk_num = 20;
+        $chunk_num = 100;
 
         // 目前用戶表最後 uid
         $old_primary_id = DB::table('book')->where('check_status', '!=', 3)->orderByDesc('id')->first()->id ?? 0;
 
         // 新表最後 uid
-        $new_primary_id = Book::orderByDesc('id')->first()->id ?? 0;
+        $new_primary_id = $this->option('id') ?? 0;
+        // $new_primary_id = Book::orderByDesc('id')->first()->id ?? 0;
 
         if ($old_primary_id > $new_primary_id) {
             // 分割集合
@@ -68,6 +69,7 @@ class BooksMigrate extends Command
                     $has_chapter = DB::table('chapterlist')->where('book_id', $item->id)->where('status', 1)->where('check_status', 1)->count();
 
                     if (!$has_chapter) {
+                        $this->line('第 ' . $item->id . ' 本漫畫缺少章節, 略過');
                         return;
                     }
 

@@ -9,6 +9,7 @@ use App\Models\Topic;
 use App\Models\Filter;
 use App\Repositories\Contracts\TopicRepositoryInterface;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Response;
 
 class TopicController extends Controller
@@ -66,6 +67,9 @@ class TopicController extends Controller
         $input = $request->validated();
 
         $this->repository->update($id, $input);
+
+        $cache_key = sprintf('topic:%s', $id);
+        Cache::delete($cache_key);
 
         return Response::jsonSuccess(__('response.update.success'));
     }

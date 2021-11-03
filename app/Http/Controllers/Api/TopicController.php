@@ -62,16 +62,14 @@ class TopicController extends BaseController
             'status' => 1,
         ]);
 
-        $cache_key = sprintf('topic:%s', $type);
+        $topics = $this->repository->filter($request)->get();
 
-        if (Cache::has($cache_key)) {
-            $data = Cache::get($cache_key);
-        } else {
-            $topics = $this->repository->filter($request)->get();
+        $data = $topics->map(function ($topic) {
+            $cache_key = sprintf('topic:%s', $topic->id);
 
-            $data = $topics->map(function ($topic) {
-                $list = $topic->filter->buildQuery()->take($topic->limit)->get();
+            $list = $topic->filter->buildQuery()->take($topic->limit)->get();
 
+            return Cache::remember($cache_key, 300, function () use ($topic, $list) {
                 return [
                     'title' => $topic->filter->title,
                     'filter_id' => $topic->filter_id,
@@ -80,9 +78,7 @@ class TopicController extends BaseController
                     'list' => $this->arrangeData($topic->type, $list),
                 ];
             });
-
-            Cache::set($cache_key, $data, 3600);
-        }
+        });
 
         return Response::jsonSuccess(__('api.success'), $data);
     }
