@@ -5,18 +5,19 @@ namespace App\Console\Commands\Convert;
 ini_set('memory_limit', '-1');
 
 use App\Models\Book;
+use App\Models\BookChapter;
 use Illuminate\Console\Command;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
 
-class BooksConvert extends Command
+class BooksMigrate extends Command
 {
     /**
      * The name and signature of the console command.
      *
      * @var string
      */
-    protected $signature = 'convert:books';
+    protected $signature = 'migrate:books';
 
     /**
      * The console command description.
@@ -43,32 +44,34 @@ class BooksConvert extends Command
     public function handle()
     {
         // 每次轉詞數據量
-        $batch_num = 10000;
+        $batch_num = 1000;
 
         // 每多少筆切割一次操作
-        $chunk_num = 500;
-
-        // 新舊數據表名稱
-        $old_table = 'book';
+        $chunk_num = 20;
 
         // 目前用戶表最後 uid
-        $old_primary_id = DB::table($old_table)->orderByDesc('id')->first()->id ?? 0;
+        $old_primary_id = DB::table('book')->where('check_status', '!=', 3)->orderByDesc('id')->first()->id ?? 0;
 
         // 新表最後 uid
         $new_primary_id = Book::orderByDesc('id')->first()->id ?? 0;
 
         if ($old_primary_id > $new_primary_id) {
             // 分割集合
-            $data = DB::table($old_table)->where('id', '>', $new_primary_id)->orderBy('id')->limit($batch_num)->get()->chunk($chunk_num);
+            $raw = DB::table('book')->where('book_status', 1)->where('check_status', 1)->where('id', '>', $new_primary_id)->orderBy('id')->limit($batch_num)->get()->chunk($chunk_num);
 
             $this->line(sprintf('為了避免腳本超時，本次操作將轉移 %s 筆數據，共拆分為 %s 批数据進行迁移！', $batch_num, ceil($batch_num / $chunk_num)));
 
             // 數據批次
-            $data->each(function($items, $key) {
+            $raw->each(function($items, $key) {
                 // 漫畫數據轉換
-                $insert = $items->map(function($item) {
-                    return [
-                        'id' => $item->id,
+                $items->each(function($item) {
+                    $has_chapter = DB::table('chapterlist')->where('book_id', $item->id)->where('status', 1)->where('check_status', 1)->count();
+
+                    if (!$has_chapter) {
+                        return;
+                    }
+
+                    $data = [
                         'title' => $item->book_name,
                         'author' => $item->pen_name,
                         'description' => $item->book_desc,
@@ -82,12 +85,40 @@ class BooksConvert extends Command
                         'source_id' => $item->id,
                         'view_counts' => 0,
                         'collect_counts' => 0,
-                        'created_at' => $item->book_addtime ? Carbon::createFromTimestamp($item->book_addtime) : null,
-                        'updated_at' => null,
+                        'created_at' => now(),
                     ];
-                })->toArray();
 
-                Book::insert($insert);
+                    $book = Book::create($data);
+
+                    $chapters = DB::table('chapterlist')->where('book_id', $item->id)->where('status', 1)->where('check_status', 1)->orderBy('id')->get();
+
+                    $insert = $chapters->map(function($item) use ($book) {
+                        if ($item->json_images) {
+                            $json_images = json_decode($item->json_images);
+                            $json_images = collect($json_images)->map(function($img) {
+                                return $img->url;
+                            })->toArray();
+                        } else {
+                            $json_images = parseImgFromHtml($item->content);
+                        }
+                        return [
+                            'book_id' => $book->id,
+                            'episode' => $item->idx,
+                            'title' => $item->title,
+                            'content' => '',
+                            'json_images' => json_encode($json_images),
+                            'status' => $item->status ? 1 : 0,
+                            'price' => $item->idx > 2 ? 60 : 0,
+                            'operating' => $item->operating,
+                            'created_at' => $item->addtime ? Carbon::createFromTimestamp($item->addtime) : null,
+                            'updated_at' => null,
+                        ];
+                    })->toArray();
+
+                    BookChapter::insert($insert);
+
+                    $this->line('第 ' . $book->id . ' 本漫畫完成');
+                });
 
                 $this->line('第 ' . ($key + 1) . ' 批漫畫数据迁移完成...');
             });
@@ -96,10 +127,10 @@ class BooksConvert extends Command
 
             $latest_primary_id = Book::orderByDesc('id')->first()->id;
 
-            $pending_num = DB::table($old_table)->where('id', '>', $latest_primary_id)->count();
+            $pending_num = DB::table('book')->where('id', '>', $latest_primary_id)->count();
 
             if ($this->confirm('尚有' . $pending_num . '筆數據等待遷移，是否繼續執行此腳本？')) {
-                $this->call('convert:books');
+                $this->call('migrate:books');
             } else {
                 $this->line('操作已結束');
             }
