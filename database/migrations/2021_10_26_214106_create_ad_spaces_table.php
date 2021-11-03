@@ -15,7 +15,7 @@ class CreateAdSpacesTable extends Migration
     {
         Schema::create('ad_spaces', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->string('name', 100)->unique('tp_ad_spaces_name_unique')->comment('名称');
+            $table->string('name', 100)->unique('name')->comment('名称');
             $table->text('remark')->comment('备注');
             $table->tinyInteger('status')->default(-1)->comment('上下架表示 [-1:下架,1:上架]');
             $table->tinyInteger('sdk')->default(-1)->comment('接入廣告sdk [-1:否,1:是]');

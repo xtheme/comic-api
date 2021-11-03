@@ -15,7 +15,7 @@ class CreatePaymentPricingTable extends Migration
     {
         Schema::create('payment_pricing', function (Blueprint $table) {
             $table->integer('payment_id');
-            $table->integer('pricing_id')->index('pricing_id_index');
+            $table->integer('pricing_id')->index('pricing_id');
             $table->unique(['payment_id', 'pricing_id'], 'payment_id_pricing_id_unique');
         });
     }

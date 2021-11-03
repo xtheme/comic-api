@@ -15,9 +15,9 @@ class CreateReportsTable extends Migration
     {
         Schema::create('reports', function (Blueprint $table) {
             $table->increments('id')->comment('漫画书举报记录 Id');
-            $table->unsignedInteger('book_report_type_id')->default(0)->index('tp_book_reports_tp_book_report_types_id_fk')->comment('漫画书举报类型 Id');
-            $table->unsignedInteger('user_id')->default(0)->index('tp_book_reports_ien_admin_user_id_index')->comment('用户 Id');
-            $table->unsignedInteger('book_id')->nullable()->default(0)->index('tp_book_reports_tp_book_id_index')->comment('漫画书 Id');
+            $table->unsignedInteger('book_report_type_id')->default(0)->index('book_report_type_id')->comment('漫画书举报类型 Id');
+            $table->unsignedInteger('user_id')->default(0)->index('user_id')->comment('用户 Id');
+            $table->unsignedInteger('book_id')->nullable()->default(0)->index('book_id')->comment('漫画书 Id');
             $table->timestamp('created_at')->useCurrent()->comment('记录添加时间戳');
         });
     }

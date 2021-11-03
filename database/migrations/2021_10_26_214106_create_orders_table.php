@@ -31,7 +31,7 @@ class CreateOrdersTable extends Migration
             $table->string('platform', 8)->nullable()->index('platform')->comment('平台');
             $table->string('version')->nullable()->comment('平台版本号');
             $table->tinyInteger('first')->default(0)->comment('用戶首储=1');
-            $table->timestamps()->comment('订单更新时间');
+            $table->timestamps();
         });
     }
 

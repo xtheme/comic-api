@@ -20,7 +20,7 @@ class CreateVideosTable extends Migration
             $table->text('description')->nullable()->comment('简介');
             $table->string('cover')->nullable()->comment('封面图');
             $table->unsignedTinyInteger('ribbon')->default(0)->comment('角标: 0=无, 1=限时免费, 2=会员抢先');
-            $table->boolean('status')->default(0)->index('tp_videos_status_index')->comment('状态: 1=上架, -1=下架');
+            $table->boolean('status')->default(0)->index('status')->comment('状态: 1=上架, -1=下架');
             $table->timestamps();
         });
     }

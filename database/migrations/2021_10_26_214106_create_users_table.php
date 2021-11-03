@@ -20,7 +20,7 @@ class CreateUsersTable extends Migration
             $table->string('name');
             $table->string('area', 5)->nullable()->comment('区码');
             $table->string('mobile', 11)->nullable()->comment('手机号');
-            $table->string('email')->nullable()->unique('users_email_unique');
+            $table->string('email')->nullable()->unique('email');
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
             $table->rememberToken();

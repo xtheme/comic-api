@@ -35,7 +35,7 @@ class CreateMoviesTable extends Migration
             $table->string('actor')->nullable()->comment('主演');
             $table->string('publish_time', 32)->nullable()->comment('发行时间');
             $table->string('tags')->nullable()->comment('标签');
-            $table->timestamps()->comment('更新时间');
+            $table->timestamps();
             $table->unsignedInteger('views')->nullable()->default(0)->comment('播放次数');
             $table->index(['id', 'number'], 'movie_id_index');
         });
