@@ -21,7 +21,7 @@ class BookFilter extends Command
      *
      * @var string
      */
-    protected $description = '下架沒有章節的漫畫!';
+    protected $description = '標記已完結的漫畫!';
 
 
     /**
@@ -41,7 +41,13 @@ class BookFilter extends Command
      */
     public function handle()
     {
-        Book::doesntHave('chapters')->update(['status' => 0]);
+        // Book::doesntHave('chapters')->update(['status' => 0]);
+
+        $books = Book::where('end', 1)->get();
+
+        $books->each(function($book) {
+            $book->attachTag('完结', 'book');
+        });
 
         $this->info('Done');
 
