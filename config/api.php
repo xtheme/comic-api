@@ -8,8 +8,8 @@ return [
      * 數據加密
      */
     'encrypt' => [
-        'response' => env('ENCRYPT_RESPONSE', true),
-        'image' => env('ENCRYPT_IMAGE', true),
+        'response' => env('ENCRYPT_RESPONSE', false),
+        'image' => env('ENCRYPT_IMAGE', false),
     ],
 
     /**

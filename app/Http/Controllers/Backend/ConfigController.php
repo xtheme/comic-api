@@ -7,7 +7,6 @@ use App\Http\Requests\Backend\ConfigRequest;
 use App\Models\Config;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
-use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Response;
 
 class ConfigController extends Controller
@@ -64,27 +63,31 @@ class ConfigController extends Controller
 
     public function update(ConfigRequest $request, $id)
     {
-        $exists = Config::where('id', '!=', $id)->code($request->post('code'))->exists();
+        $name = $request->post('name');
+        $code = $request->post('code');
+        $options = $request->post('options');
+
+        $exists = Config::where('id', '!=', $id)->code($code)->exists();
 
         if ($exists) {
             return Response::jsonError('配置代码冲突，请变更配置代码！');
         }
 
-        $options = collect($request->post('options'))->reject(function ($item) {
+        $options = collect($options)->reject(function ($item) {
             return $item['key'] == '';
-        })->flatMap(function ($item) {
+        })->flatMap(function ($item) use ($code) {
+            // 清除緩存
+            $cache_key = sprintf('config:%s:%s', $code, $item['key']);
+            Cache::delete($cache_key);
+
             return [$item['key'] => $item['value']];
         });
 
         $config = Config::findOrFail($id);
-        $config->name = $request->post('name');
-        $config->code = $request->post('code');
+        $config->name = $name;
+        $config->code = $code;
         $config->options = $options;
         $config->save();
-
-        // todo Observer 清除緩存
-        $cache_key = 'config:' . $config->code;
-        Cache::delete($cache_key);
 
         return Response::jsonSuccess(__('response.create.success'));
     }
