@@ -99,7 +99,7 @@
                                                 <div class="controls">
                                                     <fieldset>
                                                         <div class="checkbox">
-                                                            <input type="checkbox" name="tags[{{ $item['code'] }}][]" id="{{ $tag }}" value="{{ $tag }}" @if(in_array($tag, $data->tags[$item['code']])){{'checked'}}@endif>
+                                                            <input type="checkbox" name="tags[{{ $item['code'] }}][]" id="{{ $tag }}" value="{{ $tag }}" @if(!empty($data->tags) && in_array($tag, $data->tags[$item['code']])){{'checked'}}@endif>
                                                             <label for="{{ $tag }}">{{ $tag }}</label>
                                                         </div>
                                                     </fieldset>

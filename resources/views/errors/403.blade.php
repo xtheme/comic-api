@@ -16,7 +16,7 @@
                         <p class="p-2">
                             您没有足够的权限可以访问本页面，如有任何疑问请洽询运营人员．
                         </p>
-                        <a href="{{ asset('/dashboard') }}" class="btn btn-primary round glow">返回控制台</a>
+                        <a href="{{ asset('/backend') }}" class="btn btn-primary round glow">返回控制台</a>
                     </div>
                 </div>
             </div>

@@ -68,6 +68,10 @@ class FilterController extends Controller
 
         $rule = Filter::findOrFail($id);
 
+        if (!isset($post['tags'])) {
+            $post['tags'] = [];
+        }
+
         $rule->fill($post);
 
         $rule->save();

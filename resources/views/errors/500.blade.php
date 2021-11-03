@@ -16,7 +16,7 @@
                         <p class="p-2">
                             出现了一些技术问题导致您看到此信息，请联系开发人员排查．
                         </p>
-                        <a href="{{ asset('/dashboard') }}" class="btn btn-primary round glow">返回控制台</a>
+                        <a href="{{ asset('/backend') }}" class="btn btn-primary round glow">返回控制台</a>
                     </div>
                 </div>
             </div>
