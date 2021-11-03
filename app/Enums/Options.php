@@ -30,8 +30,8 @@ final class Options
     ];
 
     const STATUS_OPTIONS = [
-        0 => '下架',
-        1 => '上架',
+        0 => '禁用',
+        1 => '启用',
     ];
 
     const RIBBON_OPTIONS = [
@@ -43,23 +43,5 @@ final class Options
     const CAUSER_OPTIONS = [
         'video' => '动画',
         'book' => '漫画',
-    ];
-
-    const SORTING_OPTIONS = [
-        'created_at' => '上架时间',
-        'views' => '热度',
-    ];
-
-    const REVIEW_OPTIONS = [
-        '1' => '待审核',
-        '2' => '审核成功',
-        '3' => '审核未通过',
-        '4' => '屏蔽',
-        '5' => '未审核',
-    ];
-
-    const CHARGE_OPTIONS = [
-        0 => '免费',
-        1 => '付费',
     ];
 }

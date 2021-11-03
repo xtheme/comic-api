@@ -3,7 +3,6 @@
 namespace App\Http\Controllers\Backend;
 
 use App\Enums\BookOptions;
-use App\Enums\Options;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Backend\BookRequest;
 use App\Http\Requests\Backend\UpdatePriceRequest;
@@ -11,7 +10,6 @@ use App\Models\Book;
 use App\Models\BookChapter;
 use App\Repositories\Contracts\BookRepositoryInterface;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\Validator;
 
@@ -27,9 +25,9 @@ class BookController extends Controller
     public function index(Request $request)
     {
         $data = [
-            'status_options' => Options::STATUS_OPTIONS,
-            'review_options' => Options::REVIEW_OPTIONS,
-            'charge_options' => Options::CHARGE_OPTIONS,
+            'status_options' => BookOptions::STATUS_OPTIONS,
+            'review_options' => BookOptions::REVIEW_OPTIONS,
+            'charge_options' => BookOptions::CHARGE_OPTIONS,
             'type_options' => BookOptions::TYPE_OPTIONS,
             'list' => $this->repository->filter($request)->paginate(),
             'categories' => getCategoryByType('book'),
@@ -59,7 +57,7 @@ class BookController extends Controller
     public function create()
     {
         $data = [
-            'status_options' => Options::STATUS_OPTIONS,
+            'status_options' => BookOptions::STATUS_OPTIONS,
             'type_options' => BookOptions::TYPE_OPTIONS,
             'categories' => getCategoryByType('book'),
         ];
@@ -77,7 +75,7 @@ class BookController extends Controller
     public function edit($id)
     {
         $data = [
-            'status_options' => Options::STATUS_OPTIONS,
+            'status_options' => BookOptions::STATUS_OPTIONS,
             'type_options' => BookOptions::TYPE_OPTIONS,
             'categories' => getCategoryByType('book'),
             'book' => Book::findOrFail($id),
