@@ -22,10 +22,15 @@ class Book extends BaseModel
         return $this->hasMany('App\Models\BookChapter')->where('status', 1)->latest('episode');
     }
 
-    public function getLatestChapterAttribute()
+    public function last_chapter()
     {
-        return $this->chapters->first() ?? null;
+        return $this->hasOne('App\Models\BookChapter')->where('status', 1)->latest('episode');
     }
+
+    // public function getLatestChapterAttribute()
+    // {
+    //     return $this->chapters->first() ?? null;
+    // }
 
     /**
      * 訪問關聯
@@ -56,7 +61,8 @@ class Book extends BaseModel
      */
     public function getChargeAttribute()
     {
-        return $this->chapters->where('price', '>', 0)->count() > 0;
+        // return $this->chapters->where('price', '>', 0)->count() > 0;
+        return (bool) $this->last_chapter->price > 0;
     }
 
     /**
@@ -64,8 +70,8 @@ class Book extends BaseModel
      */
     public function getReleaseAtAttribute()
     {
-        if ($this->chapters->first()) {
-            return $this->chapters->first()->created_at->format('Y-m-d');
+        if ($this->last_chapter) {
+            return $this->last_chapter->created_at->format('Y-m-d');
         }
 
         return '';

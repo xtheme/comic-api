@@ -65,7 +65,7 @@
                                 <th>ID</th>
                                 <th>名称</th>
                                 <th>封面图</th>
-{{--                                <th>作者</th>--}}
+                                {{--                                <th>作者</th>--}}
                                 <th>类型</th>
                                 <th>收费</th>
                                 <th class="text-center">章节数</th>
@@ -74,7 +74,7 @@
                                 <th class="text-center">采集</th>
                                 <th class="text-center">阅读数</th>
                                 <th class="text-center">收藏数</th>
-{{--                                <th>审核状态</th>--}}
+                                {{--                                <th>审核状态</th>--}}
                                 <th>上架状态</th>
                                 <th>操作</th>
                             </tr>
@@ -88,23 +88,23 @@
                                             <label for="check-{{ $book->id }}"></label>
                                         </div>
                                     </td>
-                                    <td>{{ $book->id }}</td>
+                                    <td><a href="{{ route('backend.book_chapter.preview', $book->last_chapter->id) }}" title="章节详情" target="_blank">{{ $book->id }}</a></td>
                                     <td style="max-width: 300px;">
                                         <span data-toggle="tooltip" data-placement="top" data-original-title="{{ $book->title }}">
                                             {{ Str::limit($book->title, 50, '...') }}
                                         </span>
                                         @if(!empty($book->tags))
-                                        <div class="d-flex align-content-center flex-wrap" style="margin-top: 5px;">
-                                            @foreach($book->tags as $tag)
-                                                <span class="badge badge-pill badge-light-primary" style="margin-right: 3px; margin-bottom: 3px;">{{ $tag->name }}</span>
-                                            @endforeach
-                                        </div>
+                                            <div class="d-flex align-content-center flex-wrap" style="margin-top: 5px;">
+                                                @foreach($book->tags as $tag)
+                                                    <span class="badge badge-pill badge-light-primary" style="margin-right: 3px; margin-bottom: 3px;">{{ $tag->name }}</span>
+                                                @endforeach
+                                            </div>
                                         @endif
                                     </td>
                                     <td>
                                         <img class="cursor-pointer" data-lightbox alt="点击查看大图" src="{{ $book->horizontal_cover }}" height="60px">
                                     </td>
-{{--                                    <td>{{ $book->author }}</td>--}}
+                                    {{--                                    <td>{{ $book->author }}</td>--}}
                                     <td>{{ $book->type }}</td>
                                     <td>
                                         @if($book->charge)
@@ -114,7 +114,7 @@
                                         @endif
                                     </td>
                                     <td class="text-center">{{ $book->chapters_count }}</td>
-                                    <td>{{ $book->release_at }}</td>
+                                    <td>{{ $book->last_chapter->created_at->format('Y-m-d') }}</td>
                                     <td class="text-center">
                                         <span class="badge badge-pill badge-light-{{ $book->release_status_style }}">{{ $book->release_status }}</span>
                                     </td>
@@ -133,7 +133,7 @@
                                             <span class="bx bx-dots-vertical-rounded font-medium-3 dropdown-toggle nav-hide-arrow cursor-pointer"
                                                   id="dropdownMenuButton{{ $book->id }}" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></span>
                                             <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuButton{{ $book->id }}">
-{{--                                                <a class="dropdown-item" data-modal href="" title="推荐设置"><i class="bx bxs-bookmark-star mr-1"></i>推荐设置</a>--}}
+                                                {{--                                                <a class="dropdown-item" data-modal href="" title="推荐设置"><i class="bx bxs-bookmark-star mr-1"></i>推荐设置</a>--}}
                                                 <a class="dropdown-item" data-modal data-size="full" href="{{ route('backend.book_chapter.index', $book->id) }}" title="章节列表"><i class="bx bx-list-ol mr-1"></i>章节列表</a>
                                                 <a class="dropdown-item" data-modal href="{{ route('backend.book.edit', $book->id) }}" title="编辑漫画"><i class="bx bx-edit-alt mr-1"></i>编辑漫画</a>
                                                 <a class="dropdown-item" data-destroy href="{{ route('backend.book.destroy', $book->id) }}" title="删除漫画"><i class="bx bx-trash mr-1"></i>删除漫画</a>
@@ -245,119 +245,119 @@
 {{-- page scripts --}}
 @section('page-scripts')
     <script>
-        $(document).ready(function () {
-            $.ajaxSetup({
-                headers: {
-                    'X-CSRF-TOKEN': '{{ csrf_token() }}'
-                }
-            });
-            $.fn.editable.defaults.ajaxOptions = {type: 'PUT'};
-            $.fn.editableform.buttons = '<button type="submit" class="btn btn-primary editable-submit">确认</button>';
+		$(document).ready(function () {
+			$.ajaxSetup({
+				headers: {
+					'X-CSRF-TOKEN': '{{ csrf_token() }}'
+				}
+			});
+			$.fn.editable.defaults.ajaxOptions = {type: 'PUT'};
+			$.fn.editableform.buttons = '<button type="submit" class="btn btn-primary editable-submit">确认</button>';
 
-            $('.editable-click').editable({
-                inputclass: 'form-control',
-                emptyclass: 'text-light',
-                emptytext: 'N/A',
-                success: function (res, newValue) {
-                    console.log(res);
-                    $.toast({
-                        title: '提交成功',
-                        message: res.msg
-                    });
-                }
-            });
+			$('.editable-click').editable({
+				inputclass: 'form-control',
+				emptyclass: 'text-light',
+				emptytext: 'N/A',
+				success: function (res, newValue) {
+					console.log(res);
+					$.toast({
+						title: '提交成功',
+						message: res.msg
+					});
+				}
+			});
 
-            $('#tags-selector').multiselect({
-                buttonWidth: '100%',
-                buttonTextAlignment: 'left',
-                buttonText: function(options, select) {
-                    if (options.length === 0) {
-                        return '请选择标签';
-                    }
-                    else {
-                        var labels = [];
-                        options.each(function() {
-                            if ($(this).attr('label') !== undefined) {
-                                labels.push($(this).attr('label'));
-                            }
-                            else {
-                                labels.push($(this).html());
-                            }
-                        });
-                        return labels.join(', ') + '';
-                    }
-                }
-            });
+			$('#tags-selector').multiselect({
+				buttonWidth: '100%',
+				buttonTextAlignment: 'left',
+				buttonText: function(options, select) {
+					if (options.length === 0) {
+						return '请选择标签';
+					}
+					else {
+						var labels = [];
+						options.each(function() {
+							if ($(this).attr('label') !== undefined) {
+								labels.push($(this).attr('label'));
+							}
+							else {
+								labels.push($(this).html());
+							}
+						});
+						return labels.join(', ') + '';
+					}
+				}
+			});
 
-            $('#add-tag, #remove-tag').on('click', function (e) {
-                e.preventDefault();
+			$('#add-tag, #remove-tag').on('click', function (e) {
+				e.preventDefault();
 
-                let $this = $(this);
-                let ids   = $.checkedIds();
-                let url   = $this.attr('href') + '?ids=' + ids;
-                console.log(url);
+				let $this = $(this);
+				let ids   = $.checkedIds();
+				let url   = $this.attr('href') + '?ids=' + ids;
+				console.log(url);
 
-                if (!ids) {
-                    $.toast({
-                        type: 'error',
-                        message: '请先选择要操作的数据'
-                    });
-                    return false;
-                }
+				if (!ids) {
+					$.toast({
+						type: 'error',
+						message: '请先选择要操作的数据'
+					});
+					return false;
+				}
 
-                $.openModal({
-                    size: 'lg',
-                    height: '50vh',
-                    title: $this.attr('title'),
-                    url: url
-                });
+				$.openModal({
+					size: 'lg',
+					height: '50vh',
+					title: $this.attr('title'),
+					url: url
+				});
 
-            });
+			});
 
-            $('#batch-action').submit(function (e) {
-                e.preventDefault();
+			$('#batch-action').submit(function (e) {
+				e.preventDefault();
 
-                let $this = $(this);
-                let ids   = $.checkedIds();
-                let url   = $this.attr('action') + '/' + $this.find('select[name="action"]').val();
+				let $this = $(this);
+				let ids   = $.checkedIds();
+				let url   = $this.attr('action') + '/' + $this.find('select[name="action"]').val();
 
-                if (!ids) {
-                    $.toast({
-                        type: 'error',
-                        message: '请先选择要操作的数据'
-                    });
-                    return false;
-                }
+				if (!ids) {
+					$.toast({
+						type: 'error',
+						message: '请先选择要操作的数据'
+					});
+					return false;
+				}
 
-                $.confirm({
-                    text: `请确认是否要继续批量操作?`,
-                    callback: function () {
-                        $.request({
-                            url: url,
-                            type: 'put',
-                            data: {'ids' : ids},
-                            debug   : true,
-                            callback: function (res) {
-                                $.reloadIFrame({
-                                    title  : '提交成功',
-                                    message: '请稍后数据刷新'
-                                });
-                            }
-                        });
-                    }
-                });
-            });
+				$.confirm({
+					text: `请确认是否要继续批量操作?`,
+					callback: function () {
+						$.request({
+							url: url,
+							type: 'put',
+							data: {'ids' : ids},
+							debug   : true,
+							callback: function (res) {
+								$.reloadIFrame({
+									title  : '提交成功',
+									message: '请稍后数据刷新'
+								});
+							}
+						});
+					}
+				});
+			});
 
-            $('#search-form').submit(function(e) {
-                e.preventDefault();
+			$('#search-form').submit(function(e) {
+				e.preventDefault();
 
-                let url = $(this).attr('action') + '?' + $(this).serialize();
-                console.log(url);
-                $.reloadIFrame({
-                    reloadUrl: url
-                });
-            });
-        });
+				let url = $(this).attr('action') + '?' + $(this).serialize();
+				console.log(url);
+				$.reloadIFrame({
+					reloadUrl: url
+				});
+			});
+		});
     </script>
 @endsection
 
