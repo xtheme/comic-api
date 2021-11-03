@@ -53,7 +53,7 @@
                         <label for="input-username"><span class="danger">*</span> 广告图</label>
                         <div class="input-group">
                             <input type="text" class="form-control image-path" name="banner" autocomplete="off" value="{{ $data->getRawOriginal('banner') }}">
-                            <input type="file" class="hidden-file-upload" data-path="ad/{{ $data->id }}">
+                            <input type="file" class="hidden-file-upload" data-path="notable/{{ $data->id }}">
                             <div class="input-group-append" id="input-file-addon">
                                 <button class="btn btn-primary upload-image" type="button">上传</button>
                             </div>

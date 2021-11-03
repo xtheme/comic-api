@@ -52,7 +52,7 @@
                         <label><span class="danger">*</span> 广告图</label>
                         <div class="input-group">
                             <input type="text" class="form-control image-path" name="banner" autocomplete="off">
-                            <input type="file" class="hidden-file-upload" data-path="ad">
+                            <input type="file" class="hidden-file-upload" data-path="notable">
                             <div class="input-group-append" id="input-file-addon">
                                 <button class="btn btn-primary upload-image" type="button">上传</button>
                             </div>

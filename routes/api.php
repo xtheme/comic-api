@@ -81,8 +81,8 @@ Route::as('api.')->middleware(['api'])->group(function () {
             Route::get('/url', [Api\ServiceController::class, 'url'])->name('url');
         });
 
-        // 广告
-        Route::prefix('ad')->as('ad.')->group(function () {
+        // 广告 (避開 ad 字眼避免被封鎖)
+        Route::prefix('notable')->as('notable.')->group(function () {
             Route::get('/space/{id}', [Api\AdController::class, 'space'])->name('space');
         });
     });
