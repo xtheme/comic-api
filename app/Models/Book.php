@@ -11,17 +11,10 @@ class Book extends BaseModel
 {
     use SoftDeletes, HasTags, HasRanking;
 
-    protected $fillable = [
-        'title',
-        'author',
-        'description',
-        'end',
-        'vertical_cover',
-        'horizontal_cover',
-        'type',
-        'status',
-        'review',
-        'operating',
+    protected $guarded = [
+        'id',
+        'created_at',
+        'updated_at',
     ];
 
     public function chapters()

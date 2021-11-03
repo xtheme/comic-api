@@ -4,16 +4,12 @@ namespace App\Models;
 
 class BookChapter extends BaseModel
 {
-    protected $perPage = 10;
+    // protected $perPage = 10;
 
-    protected $fillable = [
-        'book_id',
-        'episode',
-        'title',
-        'json_images',
-        'status',
-        'price',
-        'operating',
+    protected $guarded = [
+        'id',
+        'created_at',
+        'updated_at',
     ];
 
     protected $casts = [
