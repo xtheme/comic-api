@@ -12,7 +12,7 @@ class DomainController extends Controller
 {
     public function index(Request $request)
     {
-        $type = $request->input('type') ?? 'frontend';
+        $type = $request->input('type') ?? 'wap';
 
         $data = [
             'type' => $type,
