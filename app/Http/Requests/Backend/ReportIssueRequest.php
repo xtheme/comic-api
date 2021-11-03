@@ -4,7 +4,7 @@ namespace App\Http\Requests\Backend;
 
 use App\Http\Requests\BaseRequest;
 
-class ReportTypeRequest extends BaseRequest
+class ReportIssueRequest extends BaseRequest
 {
     public function rules()
     {

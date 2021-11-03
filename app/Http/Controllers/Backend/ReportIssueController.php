@@ -3,35 +3,33 @@
 namespace App\Http\Controllers\Backend;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\Backend\ReportTypeRequest;
-use App\Models\ReportType;
+use App\Http\Requests\Backend\ReportIssueRequest;
+use App\Models\ReportIssue;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Response;
 
-class ReportTypeController extends Controller
+class ReportIssueController extends Controller
 {
     public function index()
     {
-        $list = ReportType::with('admin')->orderByDesc('id')->paginate();
+        $list = ReportIssue::with('admin')->orderByDesc('id')->paginate();
 
-        return view('backend.report_type.index', [
+        return view('backend.report_issue.index', [
             'list' => $list
         ]);
     }
 
     public function create()
     {
-        return view('backend.report_type.create');
+        return view('backend.report_issue.create');
     }
 
-    public function store(ReportTypeRequest $request)
+    public function store(ReportIssueRequest $request)
     {
         $post = $request->post();
 
-        $bookReportType = new ReportType;
-
-        $post['operator_id'] = Auth::user()->id;
+        $bookReportType = new ReportIssue;
 
         $bookReportType->fill($post)->save();
 
@@ -40,20 +38,18 @@ class ReportTypeController extends Controller
 
     public function edit($id)
     {
-        $data = ReportType::findOrFail($id);
+        $data = ReportIssue::findOrFail($id);
 
-        return view('backend.report_type.edit', [
+        return view('backend.report_issue.edit', [
             'data' => $data
         ]);
     }
 
-    public function update(ReportTypeRequest $request, $id)
+    public function update(ReportIssueRequest $request, $id)
     {
         $post = $request->post();
 
-        $bookReportType = ReportType::findOrFail($id);
-
-        $post['operator_id'] = Auth::user()->id;
+        $bookReportType = ReportIssue::findOrFail($id);
 
         $bookReportType->fill($post)->save();
 
@@ -62,7 +58,7 @@ class ReportTypeController extends Controller
 
     public function destroy($id)
     {
-        $bookReportType = ReportType::findOrFail($id);
+        $bookReportType = ReportIssue::findOrFail($id);
 
         $bookReportType->delete();
 
@@ -73,7 +69,7 @@ class ReportTypeController extends Controller
     {
         $post = $request->post();
 
-        ReportType::where('id', $post['pk'])->update(['sort' => $post['value']]);
+        ReportIssue::where('id', $post['pk'])->update(['sort' => $post['value']]);
 
         return Response::jsonSuccess(__('response.update.success'));
     }

@@ -188,13 +188,13 @@ Route::middleware(['auth', 'auth.route.role'])->prefix('backend')->as('backend.'
 
     // 举报类型
     Route::prefix('report_type')->as('report_type.')->group(function () {
-        Route::get('/', [Backend\ReportTypeController::class , 'index'])->name('index');
-        Route::get('create', [Backend\ReportTypeController::class , 'create'])->name('create');
-        Route::post('store', [Backend\ReportTypeController::class , 'store'])->name('store');
-        Route::get('edit/{id}', [Backend\ReportTypeController::class , 'edit'])->name('edit');
-        Route::put('update/{id}', [Backend\ReportTypeController::class , 'update'])->name('update');
-        Route::delete('destroy/{id}', [Backend\ReportTypeController::class , 'destroy'])->name('destroy');
-        Route::put('sort', [Backend\ReportTypeController::class , 'sort'])->name('sort');
+        Route::get('/', [Backend\ReportIssueController::class , 'index'])->name('index');
+        Route::get('create', [Backend\ReportIssueController::class , 'create'])->name('create');
+        Route::post('store', [Backend\ReportIssueController::class , 'store'])->name('store');
+        Route::get('edit/{id}', [Backend\ReportIssueController::class , 'edit'])->name('edit');
+        Route::put('update/{id}', [Backend\ReportIssueController::class , 'update'])->name('update');
+        Route::delete('destroy/{id}', [Backend\ReportIssueController::class , 'destroy'])->name('destroy');
+        Route::put('sort', [Backend\ReportIssueController::class , 'sort'])->name('sort');
     });
 
     // 用户举报

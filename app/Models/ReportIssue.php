@@ -2,22 +2,15 @@
 
 namespace App\Models;
 
-class ReportType extends BaseModel
+class ReportIssue extends BaseModel
 {
     protected $fillable = [
         'name',
-        'operator',
-        'operator_id',
         'sort',
         'status',
         'created_at',
         'updated_at',
     ];
-
-    public function admin()
-    {
-        return $this->hasOne('App\Models\Admin', 'id', 'operator_id');
-    }
 
     public function getStatusTypeAttribute()
     {

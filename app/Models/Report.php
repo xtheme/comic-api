@@ -4,18 +4,20 @@ namespace App\Models;
 
 class Report extends BaseModel
 {
+    const UPDATED_AT = null;
+
     public function user()
     {
-        return $this->hasOne('App\Models\User', 'id', 'user_id');
+        return $this->hasOne('App\Models\User');
     }
 
-    public function book()
-    {
-        return $this->hasOne('App\Models\Book', 'id', 'book_id');
-    }
+    // public function book()
+    // {
+    //     return $this->hasOne('App\Models\Book', 'id', 'book_id');
+    // }
 
-    public function report_type()
+    public function issue()
     {
-        return $this->hasOne('App\Models\ReportType', 'id', 'book_report_type_id');
+        return $this->hasOne('App\Models\ReportIssue');
     }
 }
