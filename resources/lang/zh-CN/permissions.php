@@ -12,6 +12,7 @@ return [
     'review' => '审查',
     'preview' => '预览',
     'export' => '汇出',
+    'callback' => '回调',
     'editable' => '实时编辑',
     'batch' => '批量操作',
     'batch_destroy' => '批量删除',
