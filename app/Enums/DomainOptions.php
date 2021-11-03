@@ -5,8 +5,8 @@ namespace App\Enums;
 final class DomainOptions
 {
     const TYPE_OPTIONS = [
-        'backend' => '后台',
-        'frontend' => '推广',
+        'api' => 'API',
+        'wap' => '推广',
         'image' => '圖片',
         'video' => '视频',
     ];
