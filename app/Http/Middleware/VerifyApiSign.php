@@ -4,6 +4,7 @@ namespace App\Http\Middleware;
 
 use Closure;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Response;
 
 class VerifyApiSign
@@ -34,6 +35,7 @@ class VerifyApiSign
         $str = hash('sha256', $str . config('api.secret'));
 
         if ($sign != $str) {
+            Log::emergency('API 請求签名错误!');
             return Response::jsonError('签名错误!', 500);
         }
 

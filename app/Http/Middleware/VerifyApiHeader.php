@@ -43,7 +43,7 @@ class VerifyApiHeader
         ], [], $attributes);
 
         if ($validator->fails()) {
-            Log::error($validator->errors()->first());
+            Log::emergency($validator->errors()->first());
             return Response::jsonError('缺少必要的请求参数!', 500);
         }
 
