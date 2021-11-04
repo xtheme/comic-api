@@ -37,23 +37,6 @@ class BookController extends Controller
         return view('backend.book.index')->with($data);
     }
 
-    public function price()
-    {
-        $data = [
-            'default_charge_chapter' => getConfig('comic', 'default_charge_chapter'),
-            'default_charge_price' => getConfig('comic', 'default_charge_price'),
-        ];
-
-        return view('backend.book.price')->with($data);
-    }
-
-    public function revisePrice(UpdatePriceRequest $request)
-    {
-        BookChapter::where('episode', '>=', $request->input('charge_chapter'))->update(['price' => $request->input('charge_price')]);
-
-        return Response::jsonSuccess(__('response.update.success'));
-    }
-
     public function create()
     {
         $data = [
@@ -262,7 +245,7 @@ class BookController extends Controller
     }
 
     // CDN 預熱清單
-    public function caching(Request $request)
+    /*public function caching(Request $request)
     {
         $books = $this->repository->filter($request)->take(20)->get();
 
@@ -291,5 +274,39 @@ class BookController extends Controller
             'Cache-Control' => 'no-store, no-cache',
             'Content-Disposition' => 'attachment; filename="CDN预热名单_' . date('Y-m-d') . '.txt',
         ]);
+    }*/
+
+    public function price()
+    {
+        $data = [
+            'default_charge_chapter' => getConfig('comic', 'default_charge_chapter'),
+            'default_charge_price' => getConfig('comic', 'default_charge_price'),
+        ];
+
+        return view('backend.book.price')->with($data);
+    }
+
+    public function revisePrice(UpdatePriceRequest $request)
+    {
+        BookChapter::where('episode', '>=', $request->input('charge_chapter'))->update(['price' => $request->input('charge_price')]);
+
+        return Response::jsonSuccess(__('response.update.success'));
+    }
+
+    public function review($id)
+    {
+        $data = [
+            'review_options' => BookOptions::REVIEW_OPTIONS,
+            'book' => Book::findOrFail($id),
+        ];
+
+        return view('backend.book.review')->with($data);
+    }
+
+    public function updateReview(Request $request, $id)
+    {
+        $this->repository->update($id, $request->input());
+
+        return Response::jsonSuccess(__('response.update.success'));
     }
 }

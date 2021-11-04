@@ -31,6 +31,7 @@ class BookRepository extends Repository implements BookRepositoryInterface
         $title = $request->get('title') ?? null;
         $type = $request->get('type') ?? null;
         $tags = $request->get('tags') ?? null;
+        $review = $request->get('review') ?? null;
         $status = $request->get('status') ?? null;
 
         $order = $request->get('order') ?? 'id';
@@ -42,6 +43,8 @@ class BookRepository extends Repository implements BookRepositoryInterface
             return $query->where('title', 'like', '%' . $title . '%');
         })->when($type, function (Builder $query, $type) {
             return $query->where('type', $type);
+        })->when($review, function (Builder $query, $review) {
+            return $query->where('review', $review);
         })->when($status, function (Builder $query, $status) {
             return $query->where('status', $status - 1);
         })->when($sort, function (Builder $query, $sort) use ($order) {
@@ -70,7 +73,7 @@ class BookRepository extends Repository implements BookRepositoryInterface
     {
         $model = $this->model::create($input);
 
-        if ($input['tags'] && is_array($input['tags'])) {
+        if (isset($input['tags']) && is_array($input['tags'])) {
             foreach ($input['tags'] as $type => $tag) {
                 $model->attachTags($tag, $type);
             }
@@ -91,14 +94,12 @@ class BookRepository extends Repository implements BookRepositoryInterface
 
         $model->fill($input);
 
-        $model->save();
-
-        if ($input['tags'] && is_array($input['tags'])) {
+        if (isset($input['tags']) && is_array($input['tags'])) {
             foreach ($input['tags'] as $type => $tag) {
                 $model->syncTags($tag, $type);
             }
         }
 
-        return $model;
+        return $model->save();
     }
 }

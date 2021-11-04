@@ -65,7 +65,6 @@
                                 <th>ID</th>
                                 <th>名称</th>
                                 <th>封面图</th>
-                                {{--                                <th>作者</th>--}}
                                 <th>类型</th>
                                 <th>收费</th>
                                 <th class="text-center">章节数</th>
@@ -74,7 +73,7 @@
                                 <th class="text-center">采集</th>
                                 <th class="text-center">阅读数</th>
                                 <th class="text-center">收藏数</th>
-                                {{--                                <th>审核状态</th>--}}
+                                <th>审核状态</th>
                                 <th>上架状态</th>
                                 <th>操作</th>
                             </tr>
@@ -95,20 +94,20 @@
                                     </td>
                                     <td style="max-width: 300px;">
                                         <span data-toggle="tooltip" data-placement="top" data-original-title="{{ $book->title }}">
-                                            {{ Str::limit($book->title, 50, '...') }}
+                                            <span class="text-bold-600">{{ Str::limit($book->title, 50, '...') }}</span>
                                         </span>
-                                        @if(!empty($book->tags))
-                                            <div class="d-flex align-content-center flex-wrap" style="margin-top: 5px;">
-                                                @foreach($book->tags as $tag)
-                                                    <span class="badge badge-pill badge-light-primary" style="margin-right: 3px; margin-bottom: 3px;">{{ $tag->name }}</span>
-                                                @endforeach
-                                            </div>
+                                        <div class="d-flex align-content-center flex-wrap mt-50">
+                                        @foreach($book->tags as $tag)
+                                            <span class="badge badge-pill badge-light-primary mr-25">{{ $tag->name }}</span>
+                                        @endforeach
+                                        @if ($book->author)
+                                            <span class="badge badge-pill badge-light-warning mr-25">{{ $book->author }}</span>
                                         @endif
+                                        </div>
                                     </td>
                                     <td>
                                         <img class="cursor-pointer" data-lightbox alt="点击查看大图" src="{{ $book->horizontal_cover }}" height="60px">
                                     </td>
-                                    {{--                                    <td>{{ $book->author }}</td>--}}
                                     <td>{{ $book->type }}</td>
                                     <td>
                                         @if($book->charge)
@@ -126,6 +125,15 @@
                                     <td class="text-center">{{ shortenNumber($book->view_counts) }}</td>
                                     <td class="text-center">{{ shortenNumber($book->collect_counts) }}</td>
                                     <td>
+                                        @if($book->review == 1)
+                                            <a class="badge badge-pill badge-light-warning" data-modal data-size="sm" data-height="30vh" href="{{ route('backend.book.review', $book->id) }}" title="上架审查">{{ $review_options[$book->review] }}</a>
+                                        @elseif($book->review == 2)
+                                            <a class="badge badge-pill badge-light-success" data-modal data-size="sm" data-height="30vh" href="{{ route('backend.book.review', $book->id) }}" title="上架审查">{{ $review_options[$book->review] }}</a>
+                                        @else
+                                            <a class="badge badge-pill badge-light-danger" data-modal data-size="sm" data-height="30vh" href="{{ route('backend.book.review', $book->id) }}" title="上架审查">{{ $review_options[$book->review] }}</a>
+                                        @endif
+                                    </td>
+                                    <td>
                                         @if($book->status == 1)
                                             <a class="badge badge-pill badge-light-success" data-confirm href="{{ route('backend.book.batch', ['action'=>'disable', 'ids' => $book->id]) }}" title="下架该作品">上架</a>
                                         @else
@@ -137,7 +145,6 @@
                                             <span class="bx bx-dots-vertical-rounded font-medium-3 dropdown-toggle nav-hide-arrow cursor-pointer"
                                                   id="dropdownMenuButton{{ $book->id }}" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></span>
                                             <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuButton{{ $book->id }}">
-                                                {{--                                                <a class="dropdown-item" data-modal href="" title="推荐设置"><i class="bx bxs-bookmark-star mr-1"></i>推荐设置</a>--}}
                                                 <a class="dropdown-item" data-modal data-size="full" href="{{ route('backend.book_chapter.index', $book->id) }}" title="章节列表"><i class="bx bx-list-ol mr-1"></i>章节列表</a>
                                                 <a class="dropdown-item" data-modal href="{{ route('backend.book.edit', $book->id) }}" title="编辑漫画"><i class="bx bx-edit-alt mr-1"></i>编辑漫画</a>
                                                 <a class="dropdown-item" data-destroy href="{{ route('backend.book.destroy', $book->id) }}" title="删除漫画"><i class="bx bx-trash mr-1"></i>删除漫画</a>
@@ -223,11 +230,22 @@
                 @endforeach
                 <div class="col-12">
                     <div class="form-group">
-                        <label>状态</label>
+                        <label>審查状态</label>
+                        <select class="form-control" name="review">
+                            <option value="">全部</option>
+                            @foreach ($review_options as $key => $val)
+                                <option value="{{ $key }}" @if(request()->get('review') == $key){{'selected'}}@endif>{{ $val }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                </div>
+                <div class="col-12">
+                    <div class="form-group">
+                        <label>上架状态</label>
                         <select class="form-control" name="status">
                             <option value="">全部</option>
                             @foreach ($status_options as $key => $val)
-                                <option value="{{ $key + 1 }}" @if(request()->get('status') == $key){{'selected'}}@endif>{{ $val }}</option>
+                                <option value="{{ $key + 1 }}" @if(request()->has('status') && request()->get('status') == $key){{'selected'}}@endif>{{ $val }}</option>
                             @endforeach
                         </select>
                     </div>
