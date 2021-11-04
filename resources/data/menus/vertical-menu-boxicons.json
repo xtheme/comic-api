@@ -101,8 +101,8 @@
             "icon": "bx bxs-chat",
             "submenu": [
                 {
-                    "url": "/backend/report_type",
-                    "name": "Report Type"
+                    "url": "/backend/report_issue",
+                    "name": "Report Issue"
                 },
                 {
                     "url": "/backend/report",

@@ -190,7 +190,7 @@ Route::middleware(['auth', 'auth.route.role'])->prefix('backend')->as('backend.'
     });
 
     // 举报类型
-    Route::prefix('report_type')->as('report_type.')->group(function () {
+    Route::prefix('report_issue')->as('report_issue.')->group(function () {
         Route::get('/', [Backend\ReportIssueController::class , 'index'])->name('index');
         Route::get('create', [Backend\ReportIssueController::class , 'create'])->name('create');
         Route::post('store', [Backend\ReportIssueController::class , 'store'])->name('store');
