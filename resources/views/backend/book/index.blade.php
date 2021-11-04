@@ -88,7 +88,11 @@
                                             <label for="check-{{ $book->id }}"></label>
                                         </div>
                                     </td>
-                                    <td><a href="{{ route('backend.book_chapter.preview', $book->last_chapter->id) }}" title="章节详情" target="_blank">{{ $book->id }}</a></td>
+                                    <td>
+                                        <a href="{{ route('backend.book_chapter.preview', $book->last_chapter->id) }}" title="章节预览" data-modal data-size="full">
+                                            {{ $book->id }}
+                                        </a>
+                                    </td>
                                     <td style="max-width: 300px;">
                                         <span data-toggle="tooltip" data-placement="top" data-original-title="{{ $book->title }}">
                                             {{ Str::limit($book->title, 50, '...') }}
