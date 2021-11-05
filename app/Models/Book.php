@@ -17,6 +17,9 @@ class Book extends BaseModel
         'updated_at',
     ];
 
+    /**
+     * 章節 BookObserver
+     */
     public function chapters()
     {
         return $this->hasMany('App\Models\BookChapter')->where('status', 1)->latest('episode');
@@ -27,13 +30,8 @@ class Book extends BaseModel
         return $this->hasOne('App\Models\BookChapter')->where('status', 1)->latest('episode');
     }
 
-    // public function getLatestChapterAttribute()
-    // {
-    //     return $this->chapters->first() ?? null;
-    // }
-
     /**
-     * 訪問關聯
+     * 訪問 BookObserver
      */
     public function visit_logs()
     {
@@ -41,7 +39,7 @@ class Book extends BaseModel
     }
 
     /**
-     * 收藏關聯
+     * 收藏 BookObserver
      */
     public function favorite_logs()
     {

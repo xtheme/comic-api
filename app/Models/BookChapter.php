@@ -2,9 +2,11 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\SoftDeletes;
+
 class BookChapter extends BaseModel
 {
-    // protected $perPage = 10;
+    use SoftDeletes;
 
     protected $guarded = [
         'id',
@@ -26,20 +28,6 @@ class BookChapter extends BaseModel
         return $this->hasOne('App\Models\UserPurchaseLog', 'item_id', 'id')->where('item_model', get_class($this));
     }
 
-
-    // public function getPurchasedAttribute()
-    // {
-    //     $user = auth('sanctum')->user() ?? null;
-    //
-    //     if (!$user) return false;
-    //
-    //     if ($user->is_vip) {
-    //         return true;
-    //     }
-    //
-    //     return $user->purchase_logs()->where('type', 'book_chapter')->where('item_id', $this->id)->exists();
-    // }
-
     // 將 json_images 字段中的圖片路徑加上資源域名, 如果使用加密資源則指定圖片寬度
     public function getContentAttribute()
     {
@@ -54,7 +42,7 @@ class BookChapter extends BaseModel
 
     public function setJsonImagesAttribute($images)
     {
-        foreach ($images as $key => $image) {
+        foreach ($images as $image) {
             if (!parse_url($image)['path']) {
                 continue;
             }
