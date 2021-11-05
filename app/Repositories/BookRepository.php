@@ -96,7 +96,7 @@ class BookRepository extends Repository implements BookRepositoryInterface
 
         if (isset($input['tags']) && is_array($input['tags'])) {
             foreach ($input['tags'] as $type => $tag) {
-                $model->syncTags($tag, $type);
+                $model->syncTagsWithType($tag, $type);
             }
         }
 

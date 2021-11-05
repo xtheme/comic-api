@@ -108,7 +108,7 @@ class VideoRepository extends Repository implements VideoRepositoryInterface
 
         $model->fill($input);
 
-        $model->syncTags($input['tag']);
+        $model->syncTagsWithType($input['tag'], 'video');
 
         return $model->save();
     }
