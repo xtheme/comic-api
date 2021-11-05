@@ -113,7 +113,7 @@ class BooksImport extends Command
                     'horizontal_cover' => $item->book_thumb2,
                     'type' => $item->cartoon_type,
                     'status' => $item->book_status ? 1 : 0,
-                    'review' => $item->check_status + 1,
+                    'review' => $item->check_status,
                     'operating' => $item->operating,
                     'source_id' => $item->id,
                 ];

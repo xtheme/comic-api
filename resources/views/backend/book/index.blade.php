@@ -125,9 +125,9 @@
                                     <td class="text-center">{{ shortenNumber($book->view_counts) }}</td>
                                     <td class="text-center">{{ shortenNumber($book->collect_counts) }}</td>
                                     <td>
-                                        @if($book->review == 1)
+                                        @if($book->review == 0)
                                             <a class="badge badge-pill badge-light-warning" data-modal data-size="sm" data-height="30vh" href="{{ route('backend.book.review', $book->id) }}" title="上架审查">{{ $review_options[$book->review] }}</a>
-                                        @elseif($book->review == 2)
+                                        @elseif($book->review == 1)
                                             <a class="badge badge-pill badge-light-success" data-modal data-size="sm" data-height="30vh" href="{{ route('backend.book.review', $book->id) }}" title="上架审查">{{ $review_options[$book->review] }}</a>
                                         @else
                                             <a class="badge badge-pill badge-light-danger" data-modal data-size="sm" data-height="30vh" href="{{ route('backend.book.review', $book->id) }}" title="上架审查">{{ $review_options[$book->review] }}</a>
