@@ -68,9 +68,9 @@
                                 <th>类型</th>
                                 <th>收费</th>
                                 <th class="text-center">章节数</th>
-                                <th>发布时间</th>
+{{--                                <th>发布时间</th>--}}
                                 <th class="text-center">连载状态</th>
-                                <th class="text-center">采集</th>
+{{--                                <th class="text-center">采集</th>--}}
                                 <th class="text-center">阅读数</th>
                                 <th class="text-center">收藏数</th>
                                 <th>审核状态</th>
@@ -117,11 +117,11 @@
                                         @endif
                                     </td>
                                     <td class="text-center">{{ $book->chapters_count }}</td>
-                                    <td>{{ $book->last_chapter->created_at->format('Y-m-d') }}</td>
+{{--                                    <td>{{ $book->last_chapter->created_at->format('Y-m-d') }}</td>--}}
                                     <td class="text-center">
                                         <span class="badge badge-pill badge-light-{{ $book->release_status_style }}">{{ $book->release_status }}</span>
                                     </td>
-                                    <td class="text-center">@if($book->operating == 1){{'人工'}}@else{{'爬虫'}}@endif</td>
+{{--                                    <td class="text-center">@if($book->operating == 1){{'人工'}}@else{{'爬虫'}}@endif</td>--}}
                                     <td class="text-center">{{ shortenNumber($book->view_counts) }}</td>
                                     <td class="text-center">{{ shortenNumber($book->collect_counts) }}</td>
                                     <td>
