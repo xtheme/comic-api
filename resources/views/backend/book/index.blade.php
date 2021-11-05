@@ -234,7 +234,7 @@
                         <select class="form-control" name="review">
                             <option value="">全部</option>
                             @foreach ($review_options as $key => $val)
-                                <option value="{{ $key }}" @if(request()->get('review') == $key){{'selected'}}@endif>{{ $val }}</option>
+                                <option value="{{ $key + 1 }}" @if(request()->has('review') && request()->get('review') == $key + 1){{'selected'}}@endif>{{ $val }}</option>
                             @endforeach
                         </select>
                     </div>
@@ -245,7 +245,7 @@
                         <select class="form-control" name="status">
                             <option value="">全部</option>
                             @foreach ($status_options as $key => $val)
-                                <option value="{{ $key + 1 }}" @if(request()->has('status') && request()->get('status') == $key){{'selected'}}@endif>{{ $val }}</option>
+                                <option value="{{ $key + 1 }}" @if(request()->has('status') && request()->get('status') == $key + 1){{'selected'}}@endif>{{ $val }}</option>
                             @endforeach
                         </select>
                     </div>
