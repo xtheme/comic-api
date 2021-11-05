@@ -69,7 +69,6 @@ class TagsSeeder extends Seeder
                     'slug' => json_encode($name),
                     'type' => $type,
                     'suggest' => 1,
-                    'queries' => 0,
                     'order_column' => 0,
                 ];
             })->toArray();
