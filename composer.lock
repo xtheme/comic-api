@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "f5b51ed6fd1bd381aa96923bc5c61f72",
+    "content-hash": "6c0ea2d01c4c16cb43518f0e9e743bb0",
     "packages": [
         {
             "name": "arcanedev/log-viewer",
@@ -3977,6 +3977,46 @@
                 "source": "https://github.com/staudenmeir/laravel-migration-views/tree/v1.5.1"
             },
             "time": "2020-11-25T19:44:53+00:00"
+        },
+        {
+            "name": "steelywing/chinese",
+            "version": "0.5.3",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/steelywing/PHP-Chinese.git",
+                "reference": "8ff0b4c1275718222f5ffd3991dddab1af06be1d"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/steelywing/PHP-Chinese/zipball/8ff0b4c1275718222f5ffd3991dddab1af06be1d",
+                "reference": "8ff0b4c1275718222f5ffd3991dddab1af06be1d",
+                "shasum": ""
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "SteelyWing\\Chinese\\": ""
+                },
+                "exclude-from-classmap": [
+                    "/Tests/"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Steely Wing",
+                    "email": "steely.wing@gmail.com"
+                }
+            ],
+            "description": "中文繁簡轉換 Convert Traditional and Simplified Chinese",
+            "support": {
+                "issues": "https://github.com/steelywing/PHP-Chinese/issues",
+                "source": "https://github.com/steelywing/PHP-Chinese/tree/0.5.3"
+            },
+            "time": "2019-06-10T01:58:44+00:00"
         },
         {
             "name": "swiftmailer/swiftmailer",
