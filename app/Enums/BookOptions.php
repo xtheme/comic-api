@@ -12,9 +12,9 @@ final class BookOptions
     const REVIEW_OPTIONS = [
         0 => '待审核',
         1 => '审核成功',
-        2 => '审核未通过',
-        3 => '屏蔽',
-        4 => '未审核',
+        2 => '图片不完整',
+        3 => '重复的漫画',
+        4 => '版权争议',
     ];
 
     const TYPE_OPTIONS = [
