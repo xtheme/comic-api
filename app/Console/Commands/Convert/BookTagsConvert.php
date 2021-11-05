@@ -65,7 +65,7 @@ class BookTagsConvert extends Command
                     $cate_arr = explode(',', $cate_id);
                     $tags = DB::table('category')->whereIn('id', $cate_arr)->get()->pluck('name');
                     $book = Book::findOrFail($item->id);
-                    $book->attachTags($tags);
+                    $book->attachTags($tags, 'book');
 
                     // update updated_at
                     $book->touch();
