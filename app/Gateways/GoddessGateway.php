@@ -9,7 +9,6 @@ use Illuminate\Support\Facades\DB;
 
 class GoddessGateway extends BaseGateway implements Contracts\GatewayInterface
 {
-    const ID_FIELD = 'th_orderno';
     const PAY_URL = 'http://47.75.109.3:8081/gate/take_order.do?';
     // const QUERY_URL = 'http://47.75.109.3:8081/gate/take_order.do?';
 
@@ -23,7 +22,7 @@ class GoddessGateway extends BaseGateway implements Contracts\GatewayInterface
             'type' => '',
             'money' => (int) $plan->price * 100, // 單位分
             'orderno' => $order->order_no,
-            'notifyurl' => route('api.payment.callback', ['order_no' => $order->order_no]),
+            'notifyurl' => route('api.payment.notify', $order->order_no),
         ];
 
         $data = array_merge($data, $this->pay_options);
@@ -81,7 +80,7 @@ class GoddessGateway extends BaseGateway implements Contracts\GatewayInterface
     public function updateOrder(Order $order, array $params)
     {
         // 獲取渠道訂單號
-        $transaction_id = $params[self::ID_FIELD];
+        $transaction_id = $params['th_orderno'];
 
         DB::transaction(function () use ($order, $transaction_id) {
             app(UserService::class)->updateOrder($order, $transaction_id);
