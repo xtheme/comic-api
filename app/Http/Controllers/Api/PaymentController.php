@@ -216,4 +216,49 @@ class PaymentController extends Controller
 
         return '';
     }
+
+    // 支付結果回調
+    public function notify(Request $request, $order_no = '')
+    {
+        if (!$order_no) {
+            return Response::jsonError('缺少订单号！');
+        }
+
+        try {
+            // 查詢訂單是否存在
+            $order = Order::orderNo($order_no)->firstOrFail();
+        } catch (\Exception $e) {
+            Log::warning(sprintf('渠道试图回调不存在的订单 %s, 请求源 %s', $order_no, $request->url()));
+
+            return Response::jsonError('订单已回调或不存在！');
+        }
+
+        // 不允許重複回調
+        if ($order->status != 0) {
+            Log::warning(sprintf('渠道试图重複回调订单 %s, 请求源 %s', $order_no, $request->url()));
+
+            return Response::jsonError('订单已回调或不存在！');
+        }
+
+        // 調用支付渠道 SDK
+        $gateway = $order->payment->initGateway();
+
+        // 驗證簽名
+        $valid = $gateway->checkSign($request->post());
+
+        if (!$valid) {
+            return Response::jsonError('签名验证失败！');
+        }
+
+        // 不同渠道返回格式不同
+        $response = $gateway->updateOrder($order, $request->post());
+
+        // 添加每日限額
+        Gateway::incDailyLimit($order->payment_id, $order->amount);
+
+        // 建立財報紀錄
+        RechargeJob::dispatch($order);
+
+        return  $response;
+    }
 }

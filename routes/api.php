@@ -130,6 +130,7 @@ Route::as('api.')->middleware(['api'])->group(function () {
     // 第三方支付回調
     Route::prefix('payment')->as('payment.')->group(function () {
         Route::any('/callback', [Api\PaymentController::class, 'callback'])->name('callback'); // 支付結果回調
+        Route::any('/notify/{order_no?}', [Api\PaymentController::class, 'notify'])->name('notify'); // 支付結果回調
         Route::any('/mockCallback', [Api\PaymentController::class, 'mockCallback']); // 測試接口:支付結果回調
     });
 });
