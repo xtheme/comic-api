@@ -34,7 +34,7 @@ class BookChapter extends BaseModel
         $images = $this->json_images;
 
         foreach ($images as $key => $image) {
-            $images[$key] = getImageDomain() . $image;
+            $images[$key] = getImageDomain() . '/' . $image;
         }
 
         return $images;
