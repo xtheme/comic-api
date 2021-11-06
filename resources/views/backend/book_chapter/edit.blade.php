@@ -52,6 +52,7 @@
                     <div class="form-group">
                         <label><span class="danger">*</span> 章节详情</label>
                         <div class="controls">
+                            <span id="clear-dropzone" class="btn btn-primary mb-1"><i class="icon-trash4"></i>清空图片</span>
                             <div id="dpz-multiple-files" class="dropzone sortable dropzone-area">
                                 <div class="dz-message">请拖拉图片到此上传</div>
                             </div>
@@ -105,6 +106,10 @@
                     $(file.previewTemplate).append(input);
                     // 移除 size
                     $(file.previewTemplate).find('.dz-size').remove();
+
+	                $("#clear-dropzone").on('click', function () {
+		                myDropzone.removeAllFiles();
+	                });
                 });
             },
             error: function (file, response) {
