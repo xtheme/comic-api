@@ -107,7 +107,7 @@ class User extends Authenticatable
     // 查詢用戶使否為首儲
     public function isRenew(): bool
     {
-        return !Order::where('user_id', $this->id)->where('status', 1)->exists();
+        return Order::where('user_id', $this->id)->where('status', 1)->exists();
     }
 
     // 更新用戶錢包或VIP時效
