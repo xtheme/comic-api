@@ -95,7 +95,7 @@ class User extends Authenticatable
     // 累计漫画消费金币
     public function getPurchaseTotalAttribute()
     {
-        return $this->purchase_logs()->sum('coin');
+        return $this->purchase_logs()->sum('item_price');
     }
 
     // VIP狀態
