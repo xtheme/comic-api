@@ -1,11 +1,10 @@
 @extends('layouts.iframePage')
 
 {{-- page Title --}}
-@section('title','用户举报列表')
+@section('title','用户举报')
 
 {{-- vendor style --}}
 @section('vendor-styles')
-    <link rel="stylesheet" type="text/css" href="{{ asset('vendors/css/x-editable/bootstrap-editable.css') }}">
 @endsection
 
 @section('content')
@@ -61,39 +60,9 @@
 
 {{-- vendor scripts --}}
 @section('vendor-scripts')
-    <script src="{{ asset('vendors/js/x-editable/bootstrap-editable.js') }}"></script>
 @endsection
 
 {{-- page scripts --}}
 @section('page-scripts')
-    <script>
-        $(document).ready(function () {
-            $.ajaxSetup({
-                headers: {
-                    'X-CSRF-TOKEN': '{{ csrf_token() }}'
-                }
-            });
-
-            $.fn.editable.defaults.ajaxOptions = {type: 'PUT'};
-            $.fn.editableform.buttons = '<button type="submit" class="btn btn-primary editable-submit">确认</button>';
-
-            $('.jeditable').editable({
-                inputclass: 'form-control',
-                emptyclass: 'text-light',
-                emptytext: 'N/A',
-                placeholder: '数字需大于 0',
-                url: '{{ route('backend.report_type.sort') }}',
-                success: function (res, newValue) {
-                    console.log(res);
-                    $.toast({
-                        title: '提交成功',
-                        message: res.msg
-                    });
-                }
-            });
-
-        });
-
-    </script>
 @endsection
 
