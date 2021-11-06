@@ -19,7 +19,9 @@ class BookController extends BaseController
 
     public function detail(Request $request, $id)
     {
-        $book = Book::with(['chapters', 'favorite_logs'])->withCount(['chapters'])->find($id);
+        $book = Book::with(['chapters' => function($query) {
+            $query->where('status', 1)->oldest('episode');
+        }, 'favorite_logs'])->withCount(['chapters'])->find($id);
 
         if (!$book) {
             return Response::jsonError('该漫画不存在或已下架！');

@@ -22,7 +22,7 @@ class Book extends BaseModel
      */
     public function chapters()
     {
-        return $this->hasMany('App\Models\BookChapter')->where('status', 1)->latest('episode');
+        return $this->hasMany('App\Models\BookChapter');
     }
 
     public function last_chapter()
