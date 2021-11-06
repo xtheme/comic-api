@@ -36,7 +36,7 @@
                                         </div>
                                         <div class="form-group mb-2">
                                             <div class="controls">
-                                                {!! captcha_img() !!}
+                                                <img src="{{ captcha_src() }}" alt="验证码" id="captcha">
                                             </div>
                                         </div>
                                         <button type="submit" class="btn btn-primary glow w-100 position-relative">登录
@@ -86,21 +86,32 @@
                     data    : $(this).serialize(),
                     callback: function (res) {
                         console.log(res);
-                        if (res.code == 200) {
-                            $.toast({
-                                title  : '登录成功',
-                                message: '正在转跳控制台'
-                            });
 
-                            setTimeout(function () {
-                                location.href = '/backend';
-                            }, 1500);
+	                    $('#captcha').attr('src', '{{ captcha_src() }}');
+
+						if (res.message) {
+							$.toast({
+								title  : '登录失败',
+								type  : 'error',
+								message: res.message || '验证码错误'
+							});
                         } else {
-                            $.toast({
-                                title  : '登录失败',
-                                type  : 'error',
-                                message: res.msg || '验证码错误'
-                            });
+							if (res.code == 200) {
+								$.toast({
+									title  : '登录成功',
+									message: '正在转跳控制台'
+								});
+
+								setTimeout(function () {
+									location.href = '/backend';
+								}, 1500);
+							} else {
+								$.toast({
+									title  : '登录失败',
+									type  : 'error',
+									message: res.msg || '验证码错误'
+								});
+							}
                         }
                     }
                 });
