@@ -131,6 +131,26 @@ class BookController extends Controller
             case 'destroy':
                 $text = '批量删除';
                 break;
+            case 'review-0':
+                $text = '待审核';
+                $data = ['review' => 0];
+                break;
+            case 'review-1':
+                $text = '审核成功';
+                $data = ['review' => 1, 'status' => 1];
+                break;
+            case 'review-2':
+                $text = '图片不完整';
+                $data = ['review' => 2, 'status' => 0];
+                break;
+            case 'review-3':
+                $text = '重复的漫画';
+                $data = ['review' => 3, 'status' => 0];
+                break;
+            case 'review-4':
+                $text = '版权争议';
+                $data = ['review' => 4, 'status' => 0];
+                break;
             default:
                 return Response::jsonError('未知的操作');
         }

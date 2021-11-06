@@ -23,7 +23,26 @@
                     <h4 class="card-title">@yield('title')</h4>
                 </div>
                 <div class="float-right d-flex flex-wrap">
-                    <form id="batch-action" class="form form-vertical" method="get" action="{{ route('backend.book.batch') }}" novalidate>
+                    <form id="batch-review" class="form form-vertical mr-1" method="get" action="{{ route('backend.book.batch') }}">
+                        <div class="form-body">
+                            <div class="d-flex align-items-center">
+                                <div class="form-group mr-1">
+                                    <select class="form-control" name="action">
+                                        @foreach($review_options as $key => $val)
+                                            <option value="review-{{ $key }}">{{ $val }}</option>
+                                        @endforeach
+                                        <option value="enable">批量上架</option>
+                                        <option value="disable">批量下架</option>
+                                        <option value="destroy">批量删除</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <button type="submit" class="btn btn-warning">批量审核</button>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                    <form id="batch-action" class="form form-vertical" method="get" action="{{ route('backend.book.batch') }}">
                         <div class="form-body">
                             <div class="d-flex align-items-center">
                                 <div class="form-group mr-1">
@@ -35,9 +54,6 @@
                                         <option value="cg">标记为CG</option>
                                         <option value="featured">标记为精选封面</option>
                                         <option value="end">标记为完结</option>
-                                        <option value="enable">批量上架</option>
-                                        <option value="disable">批量下架</option>
-                                        <option value="destroy">批量删除</option>
                                         <option value="syncPrice">套用预设收费设置</option>
                                     </select>
                                 </div>
@@ -126,11 +142,11 @@
                                     <td class="text-center">{{ shortenNumber($book->collect_counts) }}</td>
                                     <td>
                                         @if($book->review == 0)
-                                            <a class="badge badge-pill badge-light-warning" data-modal data-size="sm" data-height="30vh" href="{{ route('backend.book.review', $book->id) }}" title="上架审查">{{ $review_options[$book->review] }}</a>
+                                            <a class="badge badge-pill badge-light-warning" data-modal data-size="sm" data-height="240px" href="{{ route('backend.book.review', $book->id) }}" title="上架审查">{{ $review_options[$book->review] }}</a>
                                         @elseif($book->review == 1)
-                                            <a class="badge badge-pill badge-light-success" data-modal data-size="sm" data-height="30vh" href="{{ route('backend.book.review', $book->id) }}" title="上架审查">{{ $review_options[$book->review] }}</a>
+                                            <a class="badge badge-pill badge-light-success" data-modal data-size="sm" data-height="240px" href="{{ route('backend.book.review', $book->id) }}" title="上架审查">{{ $review_options[$book->review] }}</a>
                                         @else
-                                            <a class="badge badge-pill badge-light-danger" data-modal data-size="sm" data-height="30vh" href="{{ route('backend.book.review', $book->id) }}" title="上架审查">{{ $review_options[$book->review] }}</a>
+                                            <a class="badge badge-pill badge-light-danger" data-modal data-size="sm" data-height="240px" href="{{ route('backend.book.review', $book->id) }}" title="上架审查">{{ $review_options[$book->review] }}</a>
                                         @endif
                                     </td>
                                     <td>
@@ -336,7 +352,7 @@
 
 			});
 
-			$('#batch-action').submit(function (e) {
+			$('#batch-review, #batch-action').submit(function (e) {
 				e.preventDefault();
 
 				let $this = $(this);
