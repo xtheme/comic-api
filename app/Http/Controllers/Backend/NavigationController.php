@@ -73,10 +73,20 @@ class NavigationController extends Controller
             $post['filter_id'] = 0;
         }
 
-        $image = $nav->getRawOriginal('icon');
-        Storage::delete($image);
+        $nav->title = $post['title'];
+        $nav->icon = $post['icon'];
+        $nav->sort = $post['sort'];
+        $nav->target = $post['target'];
+        $nav->filter_id = $post['filter_id'];
+        $nav->link = $post['link'];
+        $nav->status = $post['status'];
 
-        $nav->fill($post)->save();
+        if ($nav->isDirty('icon')) {
+            $image = $nav->getRawOriginal('icon');
+            Storage::delete($image);
+        }
+        
+        $nav->save();
 
         return Response::jsonSuccess(__('response.update.success'));
     }
