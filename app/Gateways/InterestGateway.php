@@ -7,6 +7,7 @@ use App\Models\Order;
 use App\Models\Pricing;
 use App\Services\UserService;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 
 class InterestGateway extends BaseGateway implements Contracts\GatewayInterface
 {
@@ -15,7 +16,7 @@ class InterestGateway extends BaseGateway implements Contracts\GatewayInterface
     // todo only support wap
     public function getBackUrl($platform)
     {
-        $domain = Domain::where('type', $platform)->where('status', 1)->get();
+        $domain = Domain::where('type', $platform)->where('status', 1)->first();
 
         if (!$domain) {
             return '';
@@ -44,11 +45,11 @@ class InterestGateway extends BaseGateway implements Contracts\GatewayInterface
 
         $data = array_merge($data, $this->pay_options);
 
-        $data['fxsign'] = $this->getSign($data);
+        $data['fxsign'] = $this->getPaySign($data);
 
         // todo need check
-        $response = $this->postJson(self::PAY_URL, $data);
-
+        $response = $this->postForm(self::PAY_URL, $data);
+        Log::debug($response);
         if ($response['status'] != 1) {
             throw new \Exception($response['error']);
         }
@@ -63,7 +64,7 @@ class InterestGateway extends BaseGateway implements Contracts\GatewayInterface
     }
 
     // 簽名公式
-    public function getSign(array $params)
+    public function getPaySign(array $params)
     {
         $data = [
             'fxid' => $params['fxid'],
@@ -75,11 +76,23 @@ class InterestGateway extends BaseGateway implements Contracts\GatewayInterface
 
         $str = join('', $data);
         $sign = md5($str);
+        
+        return $sign;
+    }
 
-        // ksort($params);
-        // $str = urldecode(http_build_query($params));
-        // $sign = md5($str . '&key=' . $this->app_key);
-        // $sign = strtoupper($sign);
+    // 异步通知簽名公式
+    public function getSign(array $params)
+    {
+        $data = [
+            'fxstatus' => $params['fxstatus'],
+            'fxid' => $params['fxid'],
+            'fxddh' => $params['fxddh'],
+            'fxfee' => $params['fxfee'],
+            'app_key' => $this->app_key,
+        ];
+
+        $str = join('', $data);
+        $sign = md5($str);
 
         return $sign;
     }
@@ -120,18 +133,22 @@ class InterestGateway extends BaseGateway implements Contracts\GatewayInterface
         $data = [
             'fxid' => $this->app_id, // 商务号
             'fxddh' => $order->order_no, // 商户订单号
+            'fxorder' => '1457768687644704768', // 渠道訂單號
             'fxdesc' => '', // 商品名称, utf-8编码
             'fxfee' => $order->amount, // 支付金额,单位元
-            'fxnotifyurl' => route('api.payment.notify', $order->order_no), // 异步接收支付结果通知的回调地址，不能携带参数
-            'fxbackurl' => $this->getBackUrl($order->platform), // 同步通知地址, 支付成功后跳转到的地址
-            'fxpay' => 'wxwap', // 请求支付的接口类型
             'fxattch' => '', // 备注, utf-8编码
-            'fxip' => request()->ip(), // 用户支付时设备的IP地址
-            'fxuserid' => $order->user_id, // 商户自定义客户号
+            'fxstatus' => 1, // 支付成功
+            'fxtime' => time(), // 支付成功时的时间，格式unix时间戳
         ];
 
         $data['fxsign'] = $this->getSign($data);
 
-        return $data;
+        $str = '';
+
+        foreach ($data as $key => $val) {
+            $str .= $key . ':' . $val . "\r";
+        }
+
+        return $str;
     }
 }

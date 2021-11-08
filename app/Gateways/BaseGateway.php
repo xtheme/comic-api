@@ -29,6 +29,13 @@ class BaseGateway
         return $response->json();
     }
 
+    public function postForm($url, $data)
+    {
+        $response = Http::asForm()->post($url, $data);
+
+        return $response->json();
+    }
+
     public function createOrder(Pricing $plan)
     {
         $count = Order::whereDate('created_at', date('Y-m-d'))->count();

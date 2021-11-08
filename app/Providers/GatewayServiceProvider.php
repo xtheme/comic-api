@@ -17,6 +17,10 @@ class GatewayServiceProvider extends ServiceProvider
         $this->app->singleton('GoddessGateway', function () {
             return new Gateways\GoddessGateway();
         });
+
+        $this->app->singleton('InterestGateway', function () {
+            return new Gateways\InterestGateway();
+        });
     }
 
     /**
