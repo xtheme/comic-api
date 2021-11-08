@@ -10,7 +10,7 @@ use Illuminate\Support\Facades\DB;
 
 class InterestGateway extends BaseGateway implements Contracts\GatewayInterface
 {
-    const PAY_URL = 'http://47.75.109.3:8081/gate/take_order.do?';
+    const PAY_URL = 'https://www.qupay88.com/Pay';
 
     // todo only support wap
     public function getBackUrl($platform)
