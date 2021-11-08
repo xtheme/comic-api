@@ -94,6 +94,7 @@ Route::as('api.')->middleware(['api'])->group(function () {
             Route::any('/profile', [Api\AuthController::class, 'profile'])->name('profile');
             Route::any('/logout', [Api\AuthController::class, 'logout'])->name('logout');
             Route::any('/refresh', [Api\AuthController::class, 'refresh'])->name('refresh');
+            Route::post('/modify', [Api\AuthController::class, 'modify'])->name('modify');
         });
 
         // 用戶交易紀錄

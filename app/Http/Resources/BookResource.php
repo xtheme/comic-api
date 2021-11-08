@@ -8,8 +8,10 @@ class BookResource extends JsonResource
 {
     protected $has_favorite = null;
 
-    public function favorite($value){
+    public function favorite($value)
+    {
         $this->has_favorite = $value;
+
         return $this;
     }
 
@@ -17,6 +19,7 @@ class BookResource extends JsonResource
      * Transform the resource into an array.
      *
      * @param  \Illuminate\Http\Request  $request
+     *
      * @return array
      */
     public function toArray($request)

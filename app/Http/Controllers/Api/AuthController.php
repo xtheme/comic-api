@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Requests\Api\LoginRequest;
 use App\Http\Requests\Api\RegisterRequest;
+use App\Http\Resources\ProfileResource;
 use App\Jobs\RegisterJob;
 use App\Models\User;
 use Illuminate\Http\JsonResponse;
@@ -20,7 +21,7 @@ class AuthController extends BaseController
     public function captcha(Request $request): JsonResponse
     {
         $data = [
-            'url' => app('captcha')->create('math', true)
+            'url' => app('captcha')->create('math', true),
         ];
 
         return Response::jsonSuccess(__('api.success'), $data);
@@ -55,16 +56,7 @@ class AuthController extends BaseController
         $user->tokens()->delete();
         $token = $user->createToken($user->name)->plainTextToken;
 
-        $response = [
-            'id' => $user->id,
-            'name' => $user->name,
-            'area' => $user->area,
-            'mobile' => $user->mobile,
-            'wallet' => $user->wallet,
-            'subscribed_until' => optional($user->subscribed_until)->format('Y-m-d H:i:s'),
-            'logged_at' => optional($user->logged_at)->format('Y-m-d H:i:s'),
-            'token' => $token,
-        ];
+        $response = (new ProfileResource($user))->withToken($token);
 
         return Response::jsonSuccess(__('api.success'), $response);
     }
@@ -110,21 +102,41 @@ class AuthController extends BaseController
     }
 
     /**
-     * 用戶信息
+     * 獲取用戶信息
      */
     public function profile(Request $request): JsonResponse
     {
         $user = $request->user();
 
-        $response = [
-            'id' => $user->id,
-            'name' => $user->name,
-            'area' => $user->area,
-            'mobile' => $user->mobile,
-            'wallet' => $user->wallet,
-            'subscribed_until' => optional($user->subscribed_until)->format('Y-m-d H:i:s'),
-            'logged_at' => optional($user->logged_at)->format('Y-m-d H:i:s'),
-        ];
+        $response = (new ProfileResource($user));
+
+        return Response::jsonSuccess(__('api.success'), $response);
+    }
+
+    /**
+     * 修改用戶信息
+     */
+    public function modify(Request $request): JsonResponse
+    {
+        $user = $request->user();
+
+        if ($request->input('password') && $request->input('new_password')) {
+            if (!Hash::check($request->post('password'), $user->getAuthPassword())) {
+                return Response::jsonError('原密码验证错误！');
+            }
+        }
+
+        if (!empty($request->input('new_password')) || !empty($request->input('new_password_confirm'))) {
+            if ($request->input('new_password') != $request->input('new_password_confirm')) {
+                return Response::jsonError('两次输入的新密码不同！');
+            }
+
+            $user->password = $request->input('new_password');
+        }
+
+        $user->save();
+
+        $response = (new ProfileResource($user));
 
         return Response::jsonSuccess(__('api.success'), $response);
     }

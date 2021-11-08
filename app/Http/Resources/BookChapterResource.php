@@ -8,8 +8,10 @@ class BookChapterResource extends JsonResource
 {
     protected $purchased = null;
 
-    public function purchased($value){
+    public function purchased($value)
+    {
         $this->purchased = $value;
+
         return $this;
     }
 
@@ -17,6 +19,7 @@ class BookChapterResource extends JsonResource
      * Transform the resource into an array.
      *
      * @param  \Illuminate\Http\Request  $request
+     *
      * @return array
      */
     public function toArray($request)
