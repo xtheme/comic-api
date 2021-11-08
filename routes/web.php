@@ -74,6 +74,7 @@ Route::middleware(['auth', 'auth.route.role'])->prefix('backend')->as('backend.'
         Route::get('order/{id}', [Backend\UserController::class , 'order'])->name('order');
         Route::get('recharge/{id}', [Backend\UserController::class , 'recharge'])->name('recharge');
         Route::get('purchase/{id}', [Backend\UserController::class , 'purchase'])->name('purchase');
+        Route::get('visit/{id}', [Backend\UserController::class , 'visit'])->name('visit');
     });
 
     // 订单

@@ -129,6 +129,7 @@
                                                 <a class="dropdown-item" data-modal href="{{ route('backend.user.order', $user->id) }}" title="订单记录"><i class="bx bxs-dollar-circle mr-1"></i>订单记录</a>
                                                 <a class="dropdown-item" data-modal href="{{ route('backend.user.recharge', $user->id) }}" title="充值纪录"><i class="bx bxs-wallet mr-1"></i>充值纪录</a>
                                                 <a class="dropdown-item" data-modal href="{{ route('backend.user.purchase', $user->id) }}" title="消费纪录"><i class="bx bxs-cart mr-1"></i>消费纪录</a>
+                                                <a class="dropdown-item" data-modal href="{{ route('backend.user.visit', $user->id) }}" title="阅读记录"><i class="bx bxs-time-five mr-1"></i>阅读记录</a>
                                                 @if ($user->is_active)
                                                     <a class="dropdown-item" data-modal data-size="sm" data-height="20vh" href="{{ route('backend.user.gift', $user->id) }}" title="赠送用户"><i class="bx bxs-gift mr-1"></i>赠送</a>
                                                 @endif

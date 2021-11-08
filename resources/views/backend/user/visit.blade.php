@@ -13,7 +13,6 @@
                 <th>商品类别</th>
                 <th>商品ID</th>
                 <th>商品名称</th>
-                <th>售价 (金币)</th>
                 <th>时间</th>
             </tr>
             </thead>
@@ -24,7 +23,6 @@
                     <td>{{ $log->item_type }}</td>
                     <td>{{ $log->item_id }}</td>
                     <td>{{ $log->item_title }}</td>
-                    <td>{{ $log->item_price }}</td>
                     <td>{{ $log->created_at }}</td>
                 </tr>
             @endforeach

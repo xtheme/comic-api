@@ -177,4 +177,16 @@ class UserController extends Controller
 
         return Response::jsonSuccess(__('response.update.success'));
     }
+
+    // 閱讀紀錄
+    public function visit($id)
+    {
+        $user = User::findOrFail($id);
+
+        $data = [
+            'list' => $user->visit_logs()->with(['book'])->latest()->paginate(),
+        ];
+
+        return view('backend.user.visit')->with($data);
+    }
 }
