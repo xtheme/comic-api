@@ -56,8 +56,6 @@
     </section>
 @endsection
 
-
-
 {{-- vendor scripts --}}
 @section('vendor-scripts')
 @endsection

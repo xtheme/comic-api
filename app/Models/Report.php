@@ -16,8 +16,8 @@ class Report extends BaseModel
     //     return $this->hasOne('App\Models\Book', 'id', 'book_id');
     // }
 
-    public function issue()
-    {
-        return $this->hasOne('App\Models\ReportIssue');
-    }
+    // public function issue()
+    // {
+    //     return $this->hasOne('App\Models\ReportIssue');
+    // }
 }
