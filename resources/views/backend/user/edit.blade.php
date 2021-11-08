@@ -47,9 +47,9 @@
                     <div class="form-group">
                         <label>封禁</label>
                         <div class="controls">
-                            <select class="form-control" name="subtitle">
+                            <select class="form-control" name="is_active">
                                 @foreach ($active_options as $key => $val)
-                                    <option value="{{ $key }}" @if($key == $user->status){{'selected'}}@endif>{{ $val }}</option>
+                                    <option value="{{ $key }}" @if($key == $user->is_active){{'selected'}}@endif>{{ $val }}</option>
                                 @endforeach
                             </select>
                         </div>
@@ -59,9 +59,9 @@
                     <div class="form-group">
                         <label>黑名單</label>
                         <div class="controls">
-                            <select class="form-control" name="subtitle">
+                            <select class="form-control" name="is_ban">
                                 @foreach ($ban_options as $key => $val)
-                                    <option value="{{ $key }}" @if($key == $user->status){{'selected'}}@endif>{{ $val }}</option>
+                                    <option value="{{ $key }}" @if($key == $user->is_ban){{'selected'}}@endif>{{ $val }}</option>
                                 @endforeach
                             </select>
                         </div>
@@ -144,6 +144,22 @@
                         <label>最近登入时间</label>
                         <div class="controls">
                             <input type="text" class="form-control" value="{{ $user->logged_at }}" readonly>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-3">
+                    <div class="form-group">
+                        <label>新密码</label>
+                        <div class="controls">
+                            <input type="password" class="form-control" name="password">
+                        </div>
+                    </div>
+                </div>
+                <div class="col-3">
+                    <div class="form-group">
+                        <label>重复新密码</label>
+                        <div class="controls">
+                            <input type="password" class="form-control" name="password_confirm">
                         </div>
                     </div>
                 </div>

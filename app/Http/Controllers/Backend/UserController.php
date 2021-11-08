@@ -9,6 +9,7 @@ use App\Models\User;
 use App\Repositories\Contracts\UserRepositoryInterface;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\Validator;
 
@@ -44,11 +45,21 @@ class UserController extends Controller
 
     public function update(Request $request, $id)
     {
-        // $validated = $request->validated();
+        $user = User::findOrFail($id);
+        $user->name = $request->input('name');
+        $user->email = $request->input('email');
+        $user->area = $request->input('area');
+        $user->mobile = $request->input('mobile');
+        $user->is_active = $request->input('is_active');
+        $user->is_ban = $request->input('is_ban');
+        if (!empty($request->input('password')) || !empty($request->input('password_confirm'))) {
+            if ($request->input('password') != $request->input('password_confirm')) {
+                return Response::jsonError('两次密码不相符');
+            }
 
-        $model = User::findOrFail($id);
-
-        $model->fill($request->input())->save();
+            $user->password = $request->input('password');
+        }
+        $user->save();
 
         return Response::jsonSuccess(__('response.update.success'));
     }
