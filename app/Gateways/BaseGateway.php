@@ -4,8 +4,6 @@ namespace App\Gateways;
 
 use App\Models\Order;
 use App\Models\Pricing;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Http;
 
 class BaseGateway
 {
@@ -20,20 +18,6 @@ class BaseGateway
         $this->app_id = $params['app_id'];
         $this->app_key = $params['app_key'];
         $this->pay_options = $params['pay_options'];
-    }
-
-    public function postJson($url, $data)
-    {
-        $response = Http::acceptJson()->post($url, $data);
-
-        return $response->json();
-    }
-
-    public function postForm($url, $data)
-    {
-        $response = Http::asForm()->post($url, $data);
-
-        return $response->json();
     }
 
     public function createOrder(Pricing $plan)
@@ -67,5 +51,4 @@ class BaseGateway
 
         return $order;
     }
-
 }

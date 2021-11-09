@@ -6,6 +6,7 @@ use App\Models\Order;
 use App\Models\Pricing;
 use App\Services\UserService;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Http;
 
 class GoddessGateway extends BaseGateway implements Contracts\GatewayInterface
 {
@@ -13,7 +14,7 @@ class GoddessGateway extends BaseGateway implements Contracts\GatewayInterface
     // const QUERY_URL = 'http://47.75.109.3:8081/gate/take_order.do?';
 
     // 獲取支付網址
-    public function pay(Pricing $plan)
+    public function pay(Pricing $plan): array
     {
         $order = $this->createOrder($plan);
 
@@ -29,16 +30,16 @@ class GoddessGateway extends BaseGateway implements Contracts\GatewayInterface
 
         $data['sign'] = $this->getSign($data);
 
-        // return $data;
+        // Post Json
+        $response = Http::acceptJson()->post(self::PAY_URL, $data);
+        $result = $response->json();
 
-        $response = $this->postJson(self::PAY_URL, $data);
-
-        if (!$response['result']) {
-            throw new \Exception($response['message']);
+        if (!$result['result']) {
+            throw new \Exception($result['message']);
         }
 
         // 判斷要返回哪個網址
-        $pay_url = $response['data']['pay_url'];
+        $pay_url = $result['data']['pay_url'];
 
         return [
             'order_no' => $order->order_no,
@@ -47,7 +48,7 @@ class GoddessGateway extends BaseGateway implements Contracts\GatewayInterface
     }
 
     // 簽名公式
-    public function getSign(array $params)
+    public function getSign(array $params): string
     {
         foreach ($params as $key => $value) {
             if (!$value) {
@@ -63,7 +64,7 @@ class GoddessGateway extends BaseGateway implements Contracts\GatewayInterface
     }
 
     // 第三方回調上分時驗證簽名
-    public function checkSign($params)
+    public function checkSign($params): bool
     {
         $callback_sign = $params['sign'];
 
@@ -77,7 +78,7 @@ class GoddessGateway extends BaseGateway implements Contracts\GatewayInterface
     }
 
     // 回調成功更新訂單
-    public function updateOrder(Order $order, array $params)
+    public function updateOrder(Order $order, array $params): string
     {
         // 獲取渠道訂單號
         $transaction_id = $params['th_orderno'];
@@ -91,7 +92,7 @@ class GoddessGateway extends BaseGateway implements Contracts\GatewayInterface
     }
 
     // 模擬回調數據
-    public function mockCallback(Order $order)
+    public function mockCallback(Order $order): array
     {
         $data = [
             'channel' => $this->app_id,
