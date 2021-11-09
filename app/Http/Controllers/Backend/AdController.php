@@ -6,40 +6,37 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Backend\AdRequest;
 use App\Models\Ad;
 use App\Models\AdSpace;
-use App\Repositories\Contracts\AdRepositoryInterface;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\Storage;
-use Upload;
 
 class AdController extends Controller
 {
-
-    private $repository;
-
-    const JUMP_TYPE = [
-        1 => '内置浏览器',
-        2 => '站內功能跳转',
-        3 => '外部浏览器',
-        5 => '不跳转'
-    ];
-
-    const URL_TYPE = [
-        'deposit' => '存款页',
-        'book' => '漫画页',
-        'video' => '动漫页'
-    ];
-
-    public function __construct(AdRepositoryInterface $repository)
+    private function filter(Request $request): Builder
     {
-        $this->repository = $repository;
+        $space_id = $request->get('space_id') ?? '';
+        $status = $request->get('status') ?? '';
+        $order = $request->get('order') ?? 'sort';
+        $sort = $request->get('sort') ?? 'ASC';
+
+        return Ad::with(['space'])->when($space_id, function (Builder $query, $space_id) {
+            return $query->where('space_id', $space_id);
+        })->when($status, function (Builder $query, $status) {
+            return $query->where('status', $status);
+        })->when($sort, function (Builder $query, $sort) use ($order) {
+            if ($sort == 'desc') {
+                return $query->orderByDesc($order);
+            } else {
+                return $query->orderBy($order);
+            }
+        });
     }
 
     public function index(Request $request)
     {
         $data = [
-            'list' => $this->repository->filter($request)->paginate(),
+            'list' => $this->filter($request)->paginate(),
             'ad_spaces' => AdSpace::orderBy('id')->get(),
             'pageConfigs' => ['hasSearchForm' => true],
         ];
