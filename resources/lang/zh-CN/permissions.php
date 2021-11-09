@@ -20,6 +20,11 @@ return [
     'transfer' => '转让',
     'unbind' => '解绑',
     'caching' => '下载CDN缓存文件',
+    'daily' => '每日汇总',
+    'channel_daily' => '渠道日报表',
+    'channel_detail' => '渠道每日汇总',
+    'total_revenue' => '总收入',
+    'gateway_revenue' => '各金流收入',
     // 功能
     'config' => '配置项',
     'user' => '会员',
@@ -32,7 +37,7 @@ return [
     'comment' => '评论',
     'pricing' => '会员套餐',
     'notice' => '公告',
-    'report_type' => '举报类型',
+    'report_issue' => '举报类型',
     'report' => '用户举报',
     'video' => '动画',
     'video_series' => '动画影集',
@@ -50,4 +55,5 @@ return [
     'filter' => '筛选器',
     'channel' => '渠道统计',
     'domain' => '域名',
+    'finance' => '财报',
 ];

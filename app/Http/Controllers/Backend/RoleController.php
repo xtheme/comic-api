@@ -18,7 +18,24 @@ class RoleController extends Controller
         return collect(Route::getRoutes())->filter(function ($route) {
             return Str::startsWith($route->getName(), 'backend');
         })->filter(function ($route) {
-            $abilities = ['index', 'create', 'edit', 'destroy', 'review', 'preview', 'export', 'editable', 'batch', 'transfer', 'callback'];
+            $abilities = [
+                'index',
+                'create',
+                'edit',
+                'destroy',
+                'review',
+                'preview',
+                'export',
+                'editable',
+                'batch',
+                'transfer',
+                'callback',
+                'daily',
+                'channel_daily',
+                'channel_detail',
+                'total_revenue',
+                'gateway_revenue',
+            ];
             $name = last(explode('.', $route->getName()));
             return Str::endsWith($name, $abilities);
         })->mapToGroups(function ($route) {
