@@ -5,18 +5,16 @@ namespace App\Http\Controllers\Backend;
 use App\Enums\Options;
 use App\Http\Controllers\Controller;
 use App\Models\AdSpace;
-use App\Repositories\Contracts\AdSpaceRepositoryInterface;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Response;
 
 class AdSpaceController extends Controller
 {
-    private $repository;
-
     const CLASS_TYPE = [
         'video' => '动画',
         'book' => '漫画',
-        'other' => '其他'
+        'other' => '其他',
     ];
 
     const DISPLAY_TYPE = [
@@ -25,14 +23,33 @@ class AdSpaceController extends Controller
         3 => '跑马灯',
     ];
 
-    public function __construct(AdSpaceRepositoryInterface $repository)
+    private function filter(Request $request): Builder
     {
-        $this->repository = $repository;
+        $id = $request->get('id') ?? '';
+        $name = $request->get('name') ?? '';
+        $class = $request->get('class') ?? '';
+
+        $order = $request->get('order') ?? 'id';
+        $sort = $request->get('sort') ?? 'DESC';
+
+        return AdSpace::when($id, function (Builder $query, $id) {
+            return $query->where('id', $id);
+        })->when($name, function (Builder $query, $name) {
+            return $query->where('name', $name);
+        })->when($class, function (Builder $query, $class) {
+            return $query->where('class', $class);
+        })->when($sort, function (Builder $query, $sort) use ($order) {
+            if ($sort == 'desc') {
+                return $query->orderByDesc($order);
+            } else {
+                return $query->orderBy($order);
+            }
+        });
     }
 
     public function index(Request $request)
     {
-        $list = $this->repository->filter($request)->paginate();
+        $list = $this->filter($request)->paginate();
 
         $data = [
             'list' => $list,
