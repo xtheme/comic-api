@@ -34,9 +34,25 @@
         },
         {
             "url": "#",
+            "name": "Finance",
+            "slug": "finance",
+            "icon": "bx bxs-dollar-circle",
+            "submenu": [
+                {
+                    "url": "/backend/finance/total_revenue",
+                    "name": "Total revenue"
+                },
+                {
+                    "url": "/backend/finance/gateway_revenue",
+                    "name": "Gateway revenue"
+                }
+            ]
+        },
+        {
+            "url": "#",
             "name": "Payment",
             "slug": "payment",
-            "icon": "bx bxs-dollar-circle",
+            "icon": "bx bxs-extension",
             "submenu": [
                 {
                     "url": "/backend/pricing",

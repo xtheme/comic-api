@@ -17,6 +17,10 @@ return [
     "Pricing List" => "支付方案",
     "Payment Gateway" => "支付渠道",
 
+    "Finance" => "财务统计",
+    "Total revenue" => "总收入",
+    "Gateway revenue" => "各金流收入",
+
     "Orders" => "订单管理",
     "Order List" => "订单列表",
 

@@ -9,4 +9,9 @@ class PaymentDailyReport extends BaseModel
         'created_at',
         'updated_at',
     ];
+
+    public function payment()
+    {
+        return $this->belongsTo('App\Models\Payment', 'payment_id');
+    }
 }

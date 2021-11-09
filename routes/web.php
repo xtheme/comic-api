@@ -292,11 +292,13 @@ Route::middleware(['auth', 'auth.route.role'])->prefix('backend')->as('backend.'
         Route::delete('destroy/{id}', [Backend\RoleController::class , 'destroy'])->name('destroy');
     });
 
-    // 財報
+    // 财务统计
     Route::prefix('finance')->as('finance.')->group(function () {
         Route::get('daily', [Backend\FinanceController::class , 'daily'])->name('daily');
         Route::get('channel_daily', [Backend\FinanceController::class , 'channelDaily'])->name('channel_daily');
         Route::get('channel_detail/{channel_id}', [Backend\FinanceController::class , 'channelDetail'])->name('channel_detail');
+        Route::get('total_revenue', [Backend\FinanceController::class , 'totalRevenue'])->name('total_revenue'); // 总收入
+        Route::get('gateway_revenue', [Backend\FinanceController::class , 'gatewayRevenue'])->name('gateway_revenue'); // 各金流收入
     });
 
     // 域名
