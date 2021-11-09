@@ -8,18 +8,50 @@ use App\Http\Requests\Backend\BookRequest;
 use App\Http\Requests\Backend\UpdatePriceRequest;
 use App\Models\Book;
 use App\Models\BookChapter;
-use App\Repositories\Contracts\BookRepositoryInterface;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\Validator;
 
 class BookController extends Controller
 {
-    private $repository;
-
-    public function __construct(BookRepositoryInterface $repository)
+    private function filter(Request $request): Builder
     {
-        $this->repository = $repository;
+        $id = $request->get('id') ?? null;
+        $title = $request->get('title') ?? null;
+        $type = $request->get('type') ?? null;
+        $tags = $request->get('tags') ?? null;
+        $review = $request->get('review') ?? null;
+        $status = $request->get('status') ?? null;
+
+        $order = $request->get('order') ?? 'id';
+        $sort = $request->get('sort') ?? 'desc';
+
+        $query = Book::with(['tags', 'last_chapter'])->withCount(['chapters'])->when($id, function (Builder $query, $id) {
+            return $query->where('id', $id);
+        })->when($title, function (Builder $query, $title) {
+            return $query->where('title', 'like', '%' . $title . '%');
+        })->when($type, function (Builder $query, $type) {
+            return $query->where('type', $type);
+        })->when($review, function (Builder $query, $review) {
+            return $query->where('review', $review - 1);
+        })->when($status, function (Builder $query, $status) {
+            return $query->where('status', $status - 1);
+        })->when($sort, function (Builder $query, $sort) use ($order) {
+            if ($sort == 'desc') {
+                return $query->orderByDesc($order);
+            } else {
+                return $query->orderBy($order);
+            }
+        });
+
+        if ($tags && is_array($tags)) {
+            foreach ($tags as $type => $tag) {
+                $query->withAllTags($tag, $type);
+            }
+        }
+
+        return $query;
     }
 
     public function index(Request $request)
@@ -29,7 +61,7 @@ class BookController extends Controller
             'review_options' => BookOptions::REVIEW_OPTIONS,
             'charge_options' => BookOptions::CHARGE_OPTIONS,
             'type_options' => BookOptions::TYPE_OPTIONS,
-            'list' => $this->repository->filter($request)->paginate(),
+            'list' => $this->filter($request)->paginate(),
             'categories' => getCategoryByType('book'),
             'pageConfigs' => ['hasSearchForm' => true],
         ];
@@ -50,7 +82,7 @@ class BookController extends Controller
 
     public function store(BookRequest $request)
     {
-        $this->repository->create($request->post());
+        Book::create($request->post());
 
         return Response::jsonSuccess(__('response.create.success'));
     }
@@ -69,14 +101,17 @@ class BookController extends Controller
 
     public function update(BookRequest $request, $id)
     {
-        $this->repository->update($id, $request->post());
+        $book = Book::findOrFail($id);
+        $book->fill($request->input());
+        $book->save();
 
         return Response::jsonSuccess(__('response.update.success'));
     }
 
     public function destroy($id)
     {
-        $this->repository->destroy($id);
+        $book = Book::findOrFail($id);
+        $book->delete();
 
         return Response::jsonSuccess(__('response.destroy.success'));
     }
@@ -215,7 +250,11 @@ class BookController extends Controller
             return Response::jsonError($validator->errors()->first(), 500);
         }
 
-        $this->repository->editable($request->post('pk'), $field, $request->post('value'));
+        $book = Book::findOrFail($data['pk']);
+
+        $book->update([
+            $field => $data['value']
+        ]);
 
         return Response::jsonSuccess('数据已更新成功');
     }
@@ -267,7 +306,7 @@ class BookController extends Controller
     // CDN 預熱清單
     /*public function caching(Request $request)
     {
-        $books = $this->repository->filter($request)->take(20)->get();
+        $books = $this->filter($request)->take(20)->get();
 
         $images = $books->reject(function ($book) {
             return $book->chapters_count === 0;
@@ -325,7 +364,9 @@ class BookController extends Controller
 
     public function updateReview(Request $request, $id)
     {
-        $this->repository->update($id, $request->input());
+        $book = Book::findOrFail($id);
+        $book->fill($request->input());
+        $book->save();
 
         return Response::jsonSuccess(__('response.update.success'));
     }
