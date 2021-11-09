@@ -10,9 +10,6 @@
 
 @section('content')
     <section>
-{{--        <div class="mb-1">--}}
-{{--            <a href=" {{ route('backend.tag.create') }}" data-modal data-size="sm" data-height="40vh" title="添加标签" class="btn btn-primary glow">添加标签</a>--}}
-{{--        </div>--}}
         <div class="card">
             <div class="card-header">
                 <div class="float-left">
