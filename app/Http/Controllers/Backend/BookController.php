@@ -82,7 +82,13 @@ class BookController extends Controller
 
     public function store(BookRequest $request)
     {
-        Book::create($request->post());
+        $book = Book::create($request->post());
+
+        if ($request->has('tags') && is_array($request->input('tags'))) {
+            foreach ($request->input('tags') as $type => $tag) {
+                $book->attachTags($tag, $type);
+            }
+        }
 
         return Response::jsonSuccess(__('response.create.success'));
     }
@@ -104,6 +110,13 @@ class BookController extends Controller
         $book = Book::findOrFail($id);
         $book->fill($request->input());
         $book->save();
+
+        if ($request->has('tags') && is_array($request->input('tags'))) {
+            foreach ($request->input('tags') as $type => $tag) {
+                $book->syncTagsWithType($tag, $type);
+            }
+        }
+
 
         return Response::jsonSuccess(__('response.update.success'));
     }
