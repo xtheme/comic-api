@@ -47,11 +47,18 @@ class UserController extends Controller
     {
         $user = User::findOrFail($id);
         $user->name = $request->input('name');
-        $user->email = $request->input('email');
         $user->area = $request->input('area');
         $user->mobile = $request->input('mobile');
         $user->is_active = $request->input('is_active');
         $user->is_ban = $request->input('is_ban');
+
+        if (!empty($request->input('email'))) {
+            if (!filter_var($request->input('email'), FILTER_VALIDATE_EMAIL)) {
+                return Response::jsonError('信箱格式不正确');
+            }
+            $user->email = $request->input('email');
+        }
+
         if (!empty($request->input('password')) || !empty($request->input('password_confirm'))) {
             if ($request->input('password') != $request->input('password_confirm')) {
                 return Response::jsonError('两次密码不相符');
