@@ -3,30 +3,23 @@
 namespace App\Http\Controllers\Backend;
 
 use App\Http\Controllers\Controller;
-use App\Models\Book;
 use App\Models\BookChapter;
-use App\Repositories\Contracts\BookChapterRepositoryInterface;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\Validator;
 
 class BookChapterController extends Controller
 {
-    private $repository;
-
-    public function __construct(BookChapterRepositoryInterface $repository)
-    {
-        $this->repository = $repository;
-    }
-
     /**
      * 章节列表
      */
     public function index($book_id)
     {
+        $list = BookChapter::where('book_id', $book_id)->latest('id')->paginate();
+
         $data = [
             'book_id' => $book_id,
-            'list' => $this->repository->filter($book_id)->paginate(),
+            'list' => $list,
         ];
 
         return view('backend.book_chapter.index')->with($data);
@@ -68,7 +61,7 @@ class BookChapterController extends Controller
             'title' => $request->input('title') ?? sprintf('第%s话', $request->input('episode')),
         ]);
 
-        $this->repository->create($request->post());
+        BookChapter::create($request->post());
 
         return Response::jsonSuccess(__('response.create.success'));
     }
@@ -76,7 +69,7 @@ class BookChapterController extends Controller
     public function edit($id)
     {
         $data = [
-            'data' => $this->repository->find($id),
+            'data' => BookChapter::findOrFail($id),
         ];
 
         return view('backend.book_chapter.edit')->with($data);
@@ -88,7 +81,9 @@ class BookChapterController extends Controller
             'title' => $request->input('title') ?? sprintf('第 %s 章', $request->input('episode')),
         ]);
 
-        $this->repository->update($id, $request->post());
+        $chapter = BookChapter::find($id);
+        $chapter->fill($request->post());
+        $chapter->save();
 
         return Response::jsonSuccess(__('response.update.success'));
     }
@@ -132,7 +127,11 @@ class BookChapterController extends Controller
             return Response::jsonError($validator->errors()->first(), 500);
         }
 
-        $this->repository->editable($request->post('pk'), $field, $request->post('value'));
+        $chapter = BookChapter::findOrFail($data['pk']);
+
+        $chapter->update([
+            $field => $data['value']
+        ]);
 
         return Response::jsonSuccess('数据已更新成功');
     }
