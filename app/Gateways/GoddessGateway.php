@@ -10,9 +10,6 @@ use Illuminate\Support\Facades\Http;
 
 class GoddessGateway extends BaseGateway implements Contracts\GatewayInterface
 {
-    const PAY_URL = 'http://47.75.109.3:8081/gate/take_order.do?';
-    // const QUERY_URL = 'http://47.75.109.3:8081/gate/take_order.do?';
-
     // 獲取支付網址
     public function pay(Pricing $plan): array
     {
@@ -31,7 +28,7 @@ class GoddessGateway extends BaseGateway implements Contracts\GatewayInterface
         $data['sign'] = $this->getSign($data);
 
         // Post Json
-        $response = Http::acceptJson()->post(self::PAY_URL, $data);
+        $response = Http::acceptJson()->post($this->api_url, $data);
         $result = $response->json();
 
         if (!$result['result']) {

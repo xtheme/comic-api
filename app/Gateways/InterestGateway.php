@@ -2,7 +2,6 @@
 
 namespace App\Gateways;
 
-use App\Models\Domain;
 use App\Models\Order;
 use App\Models\Pricing;
 use App\Services\UserService;
@@ -11,8 +10,6 @@ use Illuminate\Support\Facades\Http;
 
 class InterestGateway extends BaseGateway implements Contracts\GatewayInterface
 {
-    const PAY_URL = 'https://www.qupay88.com/Pay';
-
     // 獲取支付網址
     public function pay(Pricing $plan): array
     {
@@ -36,7 +33,7 @@ class InterestGateway extends BaseGateway implements Contracts\GatewayInterface
         $data['fxsign'] = $this->getPaySign($data);
 
         // Post as form
-        $response = Http::asForm()->post(self::PAY_URL, $data);
+        $response = Http::asForm()->post($this->api_url, $data);
         $result = $response->json();
 
         if ($result['status'] != 1) {
