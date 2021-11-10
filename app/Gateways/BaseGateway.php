@@ -35,14 +35,15 @@ class BaseGateway
 
         $data = [
             'order_no' => $order_no,
-            'user_id' => auth('sanctum')->user()->id,
-            'app_id' => auth('sanctum')->user()->app_id,
-            'channel_id' => auth('sanctum')->user()->channel_id,
+            'user_id' => request()->user()->id,
+            'app_id' => request()->user()->app_id,
+            'channel_id' => request()->user()->channel_id,
             'type' => $plan->type,
             'amount' => $plan->price,
             'currency' => 'CNY',
             'plan_options' => $plan_options,
             'payment_id' => $this->payment_id,
+            'domain' => request()->getSchemeAndHttpHost(),
             'ip' => request()->ip(),
             'platform' => strtolower(request()->header('platform')),
         ];

@@ -27,6 +27,7 @@ class CreateOrdersTable extends Migration
             $table->string('transaction_id', 64)->nullable()->index('transaction_id')->comment('第三方訂單號');
             $table->dateTime('transaction_at')->nullable()->comment('订单交易时间, 金流方回传');
             $table->tinyInteger('status')->default(0)->index('status')->comment('状态, -1=支付失败, 0=待处理, 1=支付成功');
+            $table->string('domain')->nullable();
             $table->string('ip')->nullable();
             $table->string('platform', 8)->nullable()->index('platform')->comment('平台');
             $table->string('version')->nullable()->comment('平台版本号');

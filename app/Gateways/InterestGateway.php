@@ -13,18 +13,6 @@ class InterestGateway extends BaseGateway implements Contracts\GatewayInterface
 {
     const PAY_URL = 'https://www.qupay88.com/Pay';
 
-    // todo only support wap
-    public function getBackUrl($platform): string
-    {
-        $domain = Domain::where('type', $platform)->where('status', 1)->first();
-
-        if (!$domain) {
-            return '';
-        }
-
-        return $domain->domain . '/record-order';
-    }
-
     // 獲取支付網址
     public function pay(Pricing $plan): array
     {
@@ -36,7 +24,7 @@ class InterestGateway extends BaseGateway implements Contracts\GatewayInterface
             'fxdesc' => '',                                                 // 商品名称, utf-8编码
             'fxfee' => $plan->price,                                        // 支付金额,单位元
             'fxnotifyurl' => route('api.payment.notify', $order->order_no), // 异步接收支付结果通知的回调地址，不能携带参数
-            'fxbackurl' => $this->getBackUrl($order->platform),             // 同步通知地址, 支付成功后跳转到的地址
+            'fxbackurl' => $order->domain . '/record-order',             // 同步通知地址, 支付成功后跳转到的地址
             'fxpay' => 'wxwap',                                             // 请求支付的接口类型
             'fxattch' => '',                                                // 备注, utf-8编码
             'fxip' => request()->ip(),                                      // 用户支付时设备的IP地址
