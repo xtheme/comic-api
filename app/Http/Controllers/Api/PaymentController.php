@@ -11,6 +11,7 @@ use App\Models\Payment;
 use App\Models\Pricing;
 use Gateway;
 use Illuminate\Http\Request;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Response;
@@ -112,14 +113,14 @@ class PaymentController extends Controller
         try {
             $plan = Pricing::where('status', 1)->findOrFail($pricing_id);
         } catch (\Exception $e) {
-            Log::warning(sprintf('用戶 %s 嘗試調用未開放的支付方案', $request->user()->id));
+            Log::warning(sprintf('用戶 %s 嘗試調用未開放的支付方案 %s', $request->user()->id, $pricing_id));
 
             return Response::jsonError('很抱歉，支付方案维护中！');
         }
 
         // 檢查方案是否允許使用以下支付渠道
         if (!in_array($payment_id, $plan->gateway_ids)) {
-            Log::warning(sprintf('用戶 %s 嘗試調用支付方案不支援的渠道', $request->user()->id));
+            Log::warning(sprintf('用戶 %s 嘗試調用支付方案不支援的渠道 %s', $request->user()->id, $payment_id));
 
             return Response::jsonError('很抱歉，支付渠道维护中！');
         }
@@ -127,9 +128,22 @@ class PaymentController extends Controller
         try {
             $payment = Payment::where('status', 1)->findOrFail($payment_id);
         } catch (\Exception $e) {
-            Log::warning(sprintf('用戶 %s 嘗試調用未開放的支付渠道', $request->user()->id));
+            Log::warning(sprintf('用戶 %s 嘗試調用未開放的支付渠道 %s', $request->user()->id, $payment_id));
 
             return Response::jsonError('很抱歉，支付渠道维护中！');
+        }
+
+        // 檢查渠道營業時間
+        $business_hours = explode('-', $payment->business_hours);
+        if (count($business_hours) == 2) {
+            $start_date = Carbon::createFromFormat('H:i:s', $business_hours[0] . ':00');
+            $end_date = Carbon::createFromFormat('H:i:s',  $business_hours[1] . ':00');
+            $check = Carbon::now()->between($start_date, $end_date);
+            if (!$check) {
+                Log::warning(sprintf('用戶 %s 嘗試調用非开放时段的支付渠道 %s', $request->user()->id, $payment_id));
+
+                return Response::jsonError('很抱歉，支付渠道维护中！');
+            }
         }
 
         // 獲取渠道限額
