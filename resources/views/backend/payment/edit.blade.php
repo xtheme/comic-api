@@ -126,7 +126,7 @@
                         <div class="controls">
                             <select class="select2 form-control" multiple="multiple" name="packages[]">
                                 @foreach ($pricing as $pack)
-                                <option value="{{ $pack->id }}" @if(in_array($pack->id, $payment->packages()->pluck('id')->toArray())){{'selected'}}@endif>{{ $pack->name }} {{ $pack->price }}</option>
+                                <option value="{{ $pack->id }}" @if(in_array($pack->id, $payment->packages()->pluck('id')->toArray())){{'selected'}}@endif>{{ $pack->price }} ({{ $pack->name }})</option>
                                 @endforeach
                             </select>
                         </div>

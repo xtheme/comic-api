@@ -125,7 +125,7 @@
                         <div class="controls">
                             <select class="select2 form-control" multiple="multiple" name="packages[]">
                                 @foreach ($pricing as $pack)
-                                    <option value="{{ $pack->id }}">{{ $pack->name }} {{ $pack->price }}</option>
+                                    <option value="{{ $pack->id }}">{{ $pack->price }} ({{ $pack->name }})</option>
                                 @endforeach
                             </select>
                         </div>
