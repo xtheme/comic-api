@@ -252,7 +252,7 @@
 					$(this).slideDown();
 				},
 				hide: function (deleteElement) {
-					if (confirm('是否确定要删除此渠道？')) {
+					if (confirm('是否确定要删除此配置？')) {
 						$(this).slideUp(deleteElement);
 					}
 				}
