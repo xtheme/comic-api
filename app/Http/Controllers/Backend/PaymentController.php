@@ -56,6 +56,7 @@ class PaymentController extends Controller
         $payment->button_target = $request->post('button_target');
         $payment->fee_percentage = $request->post('fee_percentage');
         $payment->sdk = $request->post('sdk');
+        $payment->business_hours = $request->post('business_hours');
         $payment->daily_limit = $request->post('daily_limit');
         $payment->pay_options = $pay_options;
         $payment->order_options = $order_options;
@@ -104,6 +105,7 @@ class PaymentController extends Controller
         $payment->button_target = $request->post('button_target');
         $payment->fee_percentage = $request->post('fee_percentage');
         $payment->sdk = $request->post('sdk');
+        $payment->business_hours = $request->post('business_hours');
         $payment->daily_limit = $request->post('daily_limit');
         $payment->pay_options = $pay_options;
         $payment->order_options = $order_options;

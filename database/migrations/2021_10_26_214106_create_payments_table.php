@@ -24,6 +24,7 @@ class CreatePaymentsTable extends Migration
             $table->string('button_target')->default('')->comment('前端轉跳方式');
             $table->tinyInteger('fee_percentage')->default(0)->comment('手續費%');
             $table->string('sdk')->nullable()->default('')->comment('SDK');
+            $table->string('business_hours')->nullable()->default('')->comment('营业时间');
             $table->unsignedInteger('daily_limit')->default(0)->comment('每日限額');
             $table->json('pay_options')->comment('支付配置');
             $table->json('order_options')->comment('查詢訂單配置');

@@ -39,18 +39,25 @@
                 </div>
                 <div class="col-4">
                     <div class="form-group">
-                        <span class="float-right font-size-small text-light">(达到当日限额将自动停用)</span>
-                        <label>每日限額</label>
+                        <label><span class="danger">*</span> 渠道网关</label>
                         <div class="controls">
-                            <input type="text" class="form-control" name="daily_limit" value="0">
+                            <input type="text" class="form-control" name="url">
                         </div>
                     </div>
                 </div>
-                <div class="col-8">
+                <div class="col-4">
                     <div class="form-group">
-                        <label>渠道網址</label>
+                        <label><span class="danger">*</span> 渠道商户号</label>
                         <div class="controls">
-                            <input type="text" class="form-control" name="url">
+                            <input type="text" class="form-control" name="app_id">
+                        </div>
+                    </div>
+                </div>
+                <div class="col-4">
+                    <div class="form-group">
+                        <label><span class="danger">*</span> 渠道金钥</label>
+                        <div class="controls">
+                            <input type="text" class="form-control" name="app_key">
                         </div>
                     </div>
                 </div>
@@ -88,25 +95,27 @@
                 </div>
                 <div class="col-4">
                     <div class="form-group">
+                        <span class="float-right font-size-small text-light">(留空表示全日開放)</span>
+                        <label><span class="danger">*</span> 開放時段</label>
+                        <div class="controls">
+                            <input type="text" class="form-control" name="business_hours" placeholder="00:00-23:00">
+                        </div>
+                    </div>
+                </div>
+                <div class="col-4">
+                    <div class="form-group">
+                        <span class="float-right font-size-small text-light">(达到当日限额将自动停用)</span>
+                        <label>每日限額</label>
+                        <div class="controls">
+                            <input type="text" class="form-control" name="daily_limit" value="0">
+                        </div>
+                    </div>
+                </div>
+                <div class="col-4">
+                    <div class="form-group">
                         <label>SDK</label>
                         <div class="controls">
                             <input type="text" class="form-control" name="sdk">
-                        </div>
-                    </div>
-                </div>
-                <div class="col-4">
-                    <div class="form-group">
-                        <label><span class="danger">*</span> 渠道商户号</label>
-                        <div class="controls">
-                            <input type="text" class="form-control" name="app_id">
-                        </div>
-                    </div>
-                </div>
-                <div class="col-4">
-                    <div class="form-group">
-                        <label><span class="danger">*</span> 渠道金钥</label>
-                        <div class="controls">
-                            <input type="text" class="form-control" name="app_key">
                         </div>
                     </div>
                 </div>
@@ -212,7 +221,7 @@
 				}
 			});
 
-			$('#form').submit(function (e) {
+            $('#form').submit(function (e) {
 				e.preventDefault();
 
 				$.request({

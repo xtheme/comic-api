@@ -10,7 +10,7 @@
 @section('content')
     <section id="config-list">
         <div class="mb-1">
-            <a href="{{ route('backend.payment.create') }}" class="btn btn-primary glow" data-modal title="添加渠道" role="button" aria-pressed="true">添加渠道</a>
+            <a href="{{ route('backend.payment.create') }}" class="btn btn-primary glow" data-modal data-height="80vh" title="添加渠道" role="button" aria-pressed="true">添加渠道</a>
         </div>
         <div class="card">
             <div class="card-header">
@@ -60,7 +60,7 @@
                                             <span class="bx bx-dots-vertical-rounded font-medium-3 dropdown-toggle nav-hide-arrow cursor-pointer"
                                                   id="dropdownMenuButton{{ $item->id }}" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></span>
                                             <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuButton{{ $item->id }}">
-                                                <a class="dropdown-item" data-modal href="{{ route('backend.payment.edit', $item->id) }}" title="修改套餐"><i class="bx bx-edit-alt mr-1"></i> 修改</a>
+                                                <a class="dropdown-item" data-modal data-height="80vh" href="{{ route('backend.payment.edit', $item->id) }}" title="修改套餐"><i class="bx bx-edit-alt mr-1"></i> 修改</a>
                                                 <a class="dropdown-item" data-destroy href="{{ route('backend.payment.destroy', $item->id) }}" title="刪除套餐"><i class="bx bx-trash mr-1"></i>刪除</a>
                                             </div>
                                         </div>

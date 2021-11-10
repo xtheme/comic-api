@@ -15,6 +15,7 @@ class BaseGateway
     public function init(array $params)
     {
         $this->payment_id = $params['payment_id'];
+        $this->api_url = $params['api_url'];
         $this->app_id = $params['app_id'];
         $this->app_key = $params['app_key'];
         $this->pay_options = $params['pay_options'];

@@ -27,6 +27,7 @@ class Payment extends BaseModel
 
         $sdk->init([
             'payment_id' => $this->id,
+            'api_url' => $this->url,
             'app_id' => $this->app_id,
             'app_key' => $this->app_key,
             'pay_options' => $this->pay_options,
