@@ -36,6 +36,11 @@ class ResponseMacroServiceProvider extends ServiceProvider
                 'msg' => $message,
             ];
 
+            // 数据加密
+            if (true == config('api.encrypt.response')) {
+                return Response::encrypt($response);
+            }
+
             return Response::json($response);
         });
 
