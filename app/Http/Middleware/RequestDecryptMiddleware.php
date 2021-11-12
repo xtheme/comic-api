@@ -32,9 +32,14 @@ class RequestDecryptMiddleware
                 return Response::jsonError('Not Acceptable!', 406);
             }
 
-            $decrypted = Crypt::decryptString($encrypted);
-            parse_str($decrypted, $params);
-            $request->replace($params);
+            try {
+                $decrypted = Crypt::decryptString($encrypted);
+                parse_str($decrypted, $params);
+                $request->replace($params);
+            } catch (\Exception $e) {
+                return Response::jsonError($e->getMessage(), 406);
+            }
+
         }
 
         return $next($request);
