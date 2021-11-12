@@ -17,6 +17,8 @@ use Illuminate\Support\Facades\Route;
 
 Route::as('api.')->middleware(['api'])->group(function () {
     Route::prefix(config('api.version'))->middleware(['api.location', 'api.header', 'api.sign'])->group(function () {
+        Route::get('/decrypt', [Api\DevController::class, 'decrypt']);
+
         Route::prefix('bootstrap')->as('bootstrap.')->group(function () {
             Route::get('/configs', [Api\BootstrapController::class, 'configs'])->name('configs');
             Route::get('/notices', [Api\BootstrapController::class, 'notices'])->name('notices');

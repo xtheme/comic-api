@@ -2,7 +2,7 @@
 
 namespace App\Providers;
 
-use App\Services\AesService;
+use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\Response;
 use Illuminate\Support\ServiceProvider;
 
@@ -24,10 +24,7 @@ class ResponseMacroServiceProvider extends ServiceProvider
 
             // 数据加密
             if (true == config('api.encrypt.response')) {
-                $response = json_encode($response);
-                $aes = new AesService();
-                $response = $aes->encrypt($response);
-                return response($response);
+                return Response::encrypt($response);
             }
 
             return Response::json($response);
@@ -40,6 +37,13 @@ class ResponseMacroServiceProvider extends ServiceProvider
             ];
 
             return Response::json($response);
+        });
+
+        Response::macro('encrypt', function ($response = [], $status = 200) {
+            $text = json_encode($response, JSON_UNESCAPED_UNICODE);
+            $encrypt_text = Crypt::encryptString($text);
+
+            return response($encrypt_text, $status)->header('Content-Type', 'text/plain');
         });
     }
 }

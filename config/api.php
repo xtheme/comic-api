@@ -13,16 +13,6 @@ return [
     ],
 
     /**
-     * AES
-     */
-    'aes' => [
-        'method' => env('AES_METHOD', 'AES-128-ECB'),
-        'key' => env('AES_KEY', ''),
-        'options' => 0,
-        'iv' => env('AES_IV', ''),
-    ],
-
-    /**
      * 漫畫
      */
     'comic' => [
