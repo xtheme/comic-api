@@ -18,7 +18,7 @@ class AuthController extends BaseController
     /**
      * 驗證碼
      */
-    public function captcha(Request $request): JsonResponse
+    public function captcha(Request $request)
     {
         $data = [
             'url' => app('captcha')->create('math', true),
@@ -30,7 +30,7 @@ class AuthController extends BaseController
     /**
      * 登入帳號
      */
-    public function login(LoginRequest $request): JsonResponse
+    public function login(LoginRequest $request)
     {
         $input = $request->validated();
 
@@ -64,7 +64,7 @@ class AuthController extends BaseController
     /**
      * 註冊帳號
      */
-    public function register(RegisterRequest $request): JsonResponse
+    public function register(RegisterRequest $request)
     {
         $input = $request->validated();
 
@@ -104,7 +104,7 @@ class AuthController extends BaseController
     /**
      * 獲取用戶信息
      */
-    public function profile(Request $request): JsonResponse
+    public function profile(Request $request)
     {
         $user = $request->user();
 
@@ -116,7 +116,7 @@ class AuthController extends BaseController
     /**
      * 修改用戶信息
      */
-    public function modify(Request $request): JsonResponse
+    public function modify(Request $request)
     {
         $user = $request->user();
 
@@ -144,7 +144,7 @@ class AuthController extends BaseController
     /**
      * 重新簽發 token
      */
-    public function refresh(Request $request): JsonResponse
+    public function refresh(Request $request)
     {
         $user = $request->user();
 
