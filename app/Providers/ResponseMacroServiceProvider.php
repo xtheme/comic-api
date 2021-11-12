@@ -22,7 +22,7 @@ class ResponseMacroServiceProvider extends ServiceProvider
                 'data' => $data,
             ];
 
-            // 数据加密
+            // 若開啟数据加密
             if (true == config('api.encrypt.response')) {
                 return Response::encrypt($response);
             }
@@ -36,7 +36,7 @@ class ResponseMacroServiceProvider extends ServiceProvider
                 'msg' => $message,
             ];
 
-            // 数据加密
+            // 若開啟数据加密
             if (true == config('api.encrypt.response')) {
                 return Response::encrypt($response);
             }
@@ -44,6 +44,7 @@ class ResponseMacroServiceProvider extends ServiceProvider
             return Response::json($response);
         });
 
+        // 若開啟数据加密, 響應加密後的字串給前端
         Response::macro('encrypt', function ($response = [], $status = 200) {
             $text = json_encode($response, JSON_UNESCAPED_UNICODE);
             $encrypt_text = Crypt::encryptString($text);
