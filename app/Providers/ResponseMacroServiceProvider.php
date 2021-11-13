@@ -23,7 +23,7 @@ class ResponseMacroServiceProvider extends ServiceProvider
             ];
 
             // 若開啟数据加密
-            if (true == config('api.encrypt.response')) {
+            if (true == config('api.encrypt.response') && request()->is('api/*')) {
                 return Response::encrypt($response);
             }
 
@@ -37,7 +37,7 @@ class ResponseMacroServiceProvider extends ServiceProvider
             ];
 
             // 若開啟数据加密
-            if (true == config('api.encrypt.response')) {
+            if (true == config('api.encrypt.response') && request()->is('api/*')) {
                 return Response::encrypt($response);
             }
 
