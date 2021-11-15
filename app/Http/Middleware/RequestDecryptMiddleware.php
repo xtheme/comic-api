@@ -7,8 +7,6 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Response;
-use Illuminate\Validation\Rule;
-use Validator;
 
 class RequestDecryptMiddleware
 {
@@ -23,7 +21,7 @@ class RequestDecryptMiddleware
     public function handle(Request $request, Closure $next)
     {
         // 若開啟数据加密
-        if (true == config('api.encrypt.response')) {
+        if (true == config('api.encrypt.response') && $request->isMethod('post')) {
             $encrypted = $request->getContent();
 
             if (!$this->isBase64($encrypted)) {
@@ -39,7 +37,6 @@ class RequestDecryptMiddleware
             } catch (\Exception $e) {
                 return Response::jsonError($e->getMessage(), 406);
             }
-
         }
 
         return $next($request);
