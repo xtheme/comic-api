@@ -2,8 +2,11 @@
 
 namespace App\Console\Commands\Tool;
 
+use App\Jobs\CheckChapterImages;
 use App\Models\Book;
 use Illuminate\Console\Command;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
 
 class BookCompareS3 extends Command
 {
@@ -12,7 +15,7 @@ class BookCompareS3 extends Command
      *
      * @var string
      */
-    protected $signature = 'book:com:s3';
+    protected $signature = 'book:checks3';
 
     /**
      * The console command description.
@@ -38,13 +41,23 @@ class BookCompareS3 extends Command
      */
     public function handle()
     {
-        $books = Book::where('status', 1)->latest()->get('id');
+        // 將所有漫畫標記為圖片不完整
+        DB::table('books')->update(['review' => 2]);
+
+        $count = DB::table('books')->count();
+
+        $this->info('共有' . $count . '本漫畫進行檢查');
+
+        $books = Book::with(['chapters'])->latest()->get();
 
         $books->each(function($book) {
-
+            CheckChapterImages::dispatch($book);
         });
 
-        $this->info($books);
+        $count = DB::table('books')->where('review', 1)->count();
+
+        $this->info('共有' . $count . '本漫畫存在於S3');
+
         return 0;
     }
 }
