@@ -32,7 +32,8 @@ class RequestDecryptMiddleware
 
             try {
                 $decrypted = Crypt::decryptString($encrypted);
-                parse_str($decrypted, $params);
+                $params = json_decode($decrypted, true);
+                // parse_str($decrypted, $params);
                 $request->replace($params);
             } catch (\Exception $e) {
                 return Response::jsonError($e->getMessage(), 406);

@@ -16,7 +16,8 @@ class DevController extends Controller
     {
         $encrypted = $request->getContent();
         $decrypted = Crypt::decryptString($encrypted);
-        parse_str($decrypted, $params);
+        // parse_str($decrypted, $params);
+        $params = json_decode($decrypted, true);
         $request->replace($params);
         return Response::json($request->input());
     }
