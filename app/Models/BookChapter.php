@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Str;
 
 class BookChapter extends BaseModel
 {
@@ -34,6 +35,9 @@ class BookChapter extends BaseModel
         $images = $this->json_images;
 
         foreach ($images as $key => $image) {
+            if (Str::startsWith($image, '/') ) {
+                $image = substr($image, 1);
+            }
             $images[$key] = getImageDomain() . '/' . $image;
         }
 
