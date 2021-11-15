@@ -21,8 +21,9 @@ class RequestDecryptMiddleware
     public function handle(Request $request, Closure $next)
     {
         // 若開啟数据加密
-        if (true == config('api.encrypt.response') && $request->isMethod('post')) {
-            $encrypted = $request->getContent();
+        $encrypted = $request->getContent();
+
+        if (true == config('api.encrypt.response') && !empty($encrypted)) {
 
             if (!$this->isBase64($encrypted)) {
                 Log::warning('收到未加密的请求');
