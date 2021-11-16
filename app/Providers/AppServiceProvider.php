@@ -30,7 +30,8 @@ class AppServiceProvider extends ServiceProvider
         Schema::defaultStringLength(255);
 
         // redirect http to https
-        if ($this->app->environment('production')) {
+        // if ($this->app->environment('production')) {
+        if (request()->secure()) {
             Url::forceScheme('https');
             $this->app['request']->server->set('HTTPS', 'on');
         }
