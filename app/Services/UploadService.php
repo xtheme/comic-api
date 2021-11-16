@@ -47,12 +47,6 @@ class UploadService
                 return __('response.upload.fail.mime_type');
             }
 
-            // 16进制文件检查，防止图片恶意代码
-            if (!checkHex($file)) {
-                return __('response.upload.fail.script_find');
-
-            }
-
             return '';
         }
 

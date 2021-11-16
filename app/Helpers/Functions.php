@@ -71,11 +71,11 @@ if (!function_exists('shortenNumber')) {
     }
 }
 
-if (!function_exists('clearLength')) {
+if (!function_exists('videoLength')) {
     /**
      * 將視頻秒數轉換為易懂的片長
      */
-    function clearLength($seconds)
+    function videoLength($seconds)
     {
         return gmdate('H:i:s', $seconds);
     }
@@ -108,38 +108,6 @@ if (!function_exists('starMask')) {
     }
 }
 
-if (!function_exists('checkHex')) {
-    /**
-     * 私有 16进制检测
-     *
-     * @param $file
-     *
-     * @return bool
-     */
-    function checkHex($file)
-    {
-        if (file_exists($file)) {
-            $resource = fopen($file, 'rb');
-            $fileSize = filesize($file);
-            fseek($resource, 0);
-            if ($fileSize > 512) { // 取頭和尾
-                $hexCode = bin2hex(fread($resource, 512));
-                fseek($resource, $fileSize - 512);
-                $hexCode .= bin2hex(fread($resource, 512));
-            } else { // 取全部
-                $hexCode = bin2hex(fread($resource, $fileSize));
-            }
-            fclose($resource);
-            /* 匹配16進制中的 <% ( ) %> */ /* 匹配16進制中的 <? ( ) ?> */
-            /* 匹配16進制中的 <script | /script> 大小寫亦可 */
-            if (preg_match("/(3c25)|(3c3f.*?706870)|(3C534352495054)|(2F5343524950543E)|(3C736372697074)|(2F7363726970743E)/is", $hexCode)) {
-                return false;
-            }
-        }
-
-        return true;
-    }
-}
 if (!function_exists('watchDog')) {
     function watchDog($user)
     {
@@ -199,65 +167,6 @@ if (!function_exists('parseImgFromHtml')) {
         }
 
         return $img;
-    }
-}
-
-if (!function_exists('webpWidth')) {
-    /**
-     * 指定 webp 寬度, 僅適用加密資源域名
-     *
-     * @param  string  $file_path
-     * @param  string  $width
-     *
-     * @return string
-     */
-    function webpWidth(string $file_path, string $width = '')
-    {
-        if (true == config('api.encrypt.image')) {
-            return $file_path;
-        }
-
-        $extension = strrchr($file_path, '.');
-        $file_name = explode($extension, $file_path)[0];
-
-        return $file_name . $width . $extension;
-    }
-}
-
-if (!function_exists('insertArray')) {
-    function insertArray(array $array, array $insert, int $position = 0)
-    {
-        $num = count($array);
-
-        // 未指定位置时, 将新数据插入至原数组中间
-        if ($position == 0) {
-            $position = ceil($num / 2);
-        }
-
-        // 將元素插入陣列開頭
-        if ($position == 1) {
-            array_unshift($array, $insert);
-
-            return $array;
-        }
-
-        // 將元素插入陣列最后
-        if ($position > $num) {
-            array_push($array, $insert);
-
-            return $array;
-        }
-
-        $new_array = [];
-
-        foreach ($array as $key => $value) {
-            array_push($new_array, $value);
-            if ($key + 1 == $position) {
-                array_push($new_array, $insert);
-            }
-        }
-
-        return $new_array;
     }
 }
 
