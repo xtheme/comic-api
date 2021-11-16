@@ -202,7 +202,7 @@ if (!function_exists('getEncryptDomain')) {
 
         foreach ($list as $domain) {
             try {
-                $response = Http::timeout(2)->head($domain);
+                $response = Http::timeout(1)->head($domain);
                 if (200 == $response->status()) {
                     return $domain;
                 }
