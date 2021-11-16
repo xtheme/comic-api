@@ -198,20 +198,22 @@ if (!function_exists('getEncryptDomain')) {
      */
     function getEncryptDomain()
     {
-        $cache_key = 'encrypt:domain';
+        $list = config('api.encrypt.domains');
 
-        return Cache::remember($cache_key, 300, function () {
-            $list = config('api.encrypt.domains');
-
-            foreach ($list as $domain) {
+        foreach ($list as $domain) {
+            try {
                 $response = Http::timeout(2)->head($domain);
                 if (200 == $response->status()) {
                     return $domain;
                 }
+            } catch (\Exception $e) {
+                continue;
             }
+        }
 
-            return $list[0];
-        });
+        Log::emergency('所有加密圖片域名都掛了');
+
+        return $list[0];
     }
 }
 
@@ -224,13 +226,9 @@ if (!function_exists('getImageUrl')) {
     {
         if (true == config('api.encrypt.image')) {
             // 加密
-            $cache_key = 'encrypt:image:' . $path;
-
-            return Cache::remember($cache_key, 300, function () use ($path) {
-                $base58 = new Base58(null, new GMPService());
-                $encrypted_filename = $base58->encode(sodium_crypto_secretbox($path, config('api.encrypt.nonce'), config('api.encrypt.key')));
-                return getEncryptDomain() . $encrypted_filename . '.html';
-            });
+            $base58 = new Base58(null, new GMPService());
+            $encrypted_filename = $base58->encode(sodium_crypto_secretbox($path, config('api.encrypt.nonce'), config('api.encrypt.key')));
+            $url =  getEncryptDomain() . '/' . $encrypted_filename . '.html';
         } else {
             // 未加密
             $url = Storage::url($path);
