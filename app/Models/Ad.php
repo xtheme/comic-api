@@ -21,6 +21,6 @@ class Ad extends BaseModel
     {
         if (!$value) return '';
 
-        return Storage::url($value);
+        return getImageUrl($value);
     }
 }

@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 
 class BookChapter extends BaseModel
@@ -38,7 +39,7 @@ class BookChapter extends BaseModel
             if (Str::startsWith($image, '/') ) {
                 $image = substr($image, 1);
             }
-            $images[$key] = getImageDomain() . '/' . $image;
+            $images[$key] = getImageUrl($image);
         }
 
         return $images;

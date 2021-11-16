@@ -5,6 +5,7 @@ namespace App\Models;
 use App\Enums\BookOptions;
 use App\Traits\HasRanking;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Facades\Storage;
 use Spatie\Tags\HasTags;
 
 class Book extends BaseModel
@@ -84,7 +85,7 @@ class Book extends BaseModel
             return '';
         }
 
-        return getImageDomain() . $value;
+        return getImageUrl($value);
     }
 
     /**
@@ -96,7 +97,7 @@ class Book extends BaseModel
             return '';
         }
 
-        return getImageDomain() . $value;
+        return getImageUrl($value);
     }
 
     /**

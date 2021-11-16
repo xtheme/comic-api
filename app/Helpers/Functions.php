@@ -5,6 +5,7 @@ use App\Models\Config;
 use App\Models\Tag;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 
 if (!function_exists('getConfigs')) {
@@ -276,22 +277,20 @@ if (!function_exists('cleanDomain')) {
     }
 }
 
-if (!function_exists('getImageDomain')) {
+if (!function_exists('getImageUrl')) {
     /**
      * @return string
      */
-    function getImageDomain()
+    function getImageUrl($path)
     {
         if (true == config('api.encrypt.image')) {
             // 加密資源域名
-            $domain = getConfig('comic', 'encrypt_image_domain');
+            $url = Storage::url($path);
         } else {
             // 未加密資源域名
-            $domain = getConfig('comic', 'image_domain');
+            $url = Storage::url($path);
         }
 
-        $domain = cleanDomain($domain);
-
-        return $domain;
+        return $url;
     }
 }

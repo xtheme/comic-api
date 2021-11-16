@@ -23,11 +23,6 @@ class Navigation extends Model
         'status',
     ];
 
-    // public function getIconAttribute($value)
-    // {
-    //     return getImageDomain() . $value;
-    // }
-
     // 篩選規則
     public function filter()
     {
@@ -48,6 +43,6 @@ class Navigation extends Model
     {
         if (!$value) return '';
 
-        return Storage::url($value);
+        return getImageUrl($value);
     }
 }
