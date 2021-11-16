@@ -217,7 +217,6 @@ if (!function_exists('getEncryptDomain')) {
     }
 }
 
-
 if (!function_exists('getImageUrl')) {
     /**
      * @return string

@@ -242,7 +242,6 @@ return [
          * Custom Facades...
          */
         'Upload' => App\Facades\UploadFacade::class,
-        'Sso' => App\Facades\SsoFacade::class,
         'Gateway' => App\Facades\GatewayFacade::class,
         'Captcha' => Mews\Captcha\Facades\Captcha::class,
     ],

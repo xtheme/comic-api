@@ -34,7 +34,8 @@
         "staudenmeir/laravel-migration-views": "^1.0",
         "steelywing/chinese": "^0.5.3",
         "stephenhill/base58": "^1.1",
-        "vinkla/hashids": "^9.1"
+        "vinkla/hashids": "^9.1",
+        "ext-mcrypt": "*"
     },
     "require-dev": {
         "barryvdh/laravel-ide-helper": "^2.9",
