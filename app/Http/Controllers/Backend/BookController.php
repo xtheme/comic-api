@@ -316,38 +316,6 @@ class BookController extends Controller
         return Response::jsonSuccess('标签已更新');
     }
 
-    // CDN 預熱清單
-    /*public function caching(Request $request)
-    {
-        $books = $this->filter($request)->take(20)->get();
-
-        $images = $books->reject(function ($book) {
-            return $book->chapters_count === 0;
-        })->map(function ($book) {
-            $chapters = $book->chapters;
-
-            return $chapters->reject(function ($chapter) {
-                return $chapter->json_images === '';
-            })->map(function ($chapter) {
-                return collect($chapter->json_images)->map(function ($image) {
-                    return getImageDomain() . webpWidth($image, getConfig('app', 'webp_width'));
-                });
-            })->flatten()->toArray();
-        })->flatten()->toArray();
-
-        $txt = '';
-
-        foreach ($images as $image) {
-            $txt .= $image . "\n";
-        }
-
-        return response($txt)->withHeaders([
-            'Content-Type' => 'text/plain',
-            'Cache-Control' => 'no-store, no-cache',
-            'Content-Disposition' => 'attachment; filename="CDN预热名单_' . date('Y-m-d') . '.txt',
-        ]);
-    }*/
-
     public function price()
     {
         $data = [

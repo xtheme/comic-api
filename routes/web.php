@@ -115,7 +115,6 @@ Route::middleware(['auth', 'auth.route.role'])->prefix('backend')->as('backend.'
         Route::delete('destroy/{id}', [Backend\BookController::class , 'destroy'])->name('destroy'); // 軟刪除
         Route::put('batch/{action?}', [Backend\BookController::class, 'batch'])->name('batch');
         Route::put('editable/{field}', [Backend\BookController::class, 'editable'])->name('editable');
-        // Route::get('caching', [Backend\BookController::class, 'caching'])->name('caching'); // 下載CDN緩存文件
         Route::get('price', [Backend\BookController::class, 'price'])->name('price'); // 下載CDN緩存文件
         Route::put('revise/price', [Backend\BookController::class, 'revisePrice'])->name('revise.price'); // 下載CDN緩存文件
 
