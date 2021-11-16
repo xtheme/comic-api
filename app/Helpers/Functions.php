@@ -4,9 +4,12 @@ use App\Models\Category;
 use App\Models\Config;
 use App\Models\Tag;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
+use StephenHill\Base58;
+use StephenHill\GMPService;
 
 if (!function_exists('getConfigs')) {
     /**
@@ -44,6 +47,7 @@ if (!function_exists('getConfig')) {
 
         if (!isset($options[$key])) {
             Log::error('配置項: ' . $code . '.' . $key . ' 不存在');
+
             return $default;
         }
 
@@ -127,17 +131,19 @@ if (!function_exists('getCategoryByType')) {
         return Cache::remember($cache_key, 300, function () use ($type) {
             $tags = Tag::with(['category'])->where('type', 'like', $type . '%')->orderByDesc('order_column')->get();
 
-            $tags =  $tags->mapToGroups(function ($tag) {
+            $tags = $tags->mapToGroups(function ($tag) {
                 return [$tag['type'] => $tag['name']];
             })->toArray();
 
             $categories = Category::where('type', 'like', $type . '%')->get();
 
             return $categories->mapWithKeys(function ($category) use ($tags) {
-                return [$category['name'] => [
-                    'code' => $category['type'],
-                    'tags' => $tags[$category['type']],
-                ]];
+                return [
+                    $category['name'] => [
+                        'code' => $category['type'],
+                        'tags' => $tags[$category['type']],
+                    ],
+                ];
             })->toArray();
         });
     }
@@ -186,6 +192,30 @@ if (!function_exists('cleanDomain')) {
     }
 }
 
+if (!function_exists('getEncryptDomain')) {
+    /**
+     * @return string
+     */
+    function getEncryptDomain()
+    {
+        $cache_key = 'encrypt:domain';
+
+        return Cache::remember($cache_key, 300, function () {
+            $list = config('api.encrypt.domains');
+
+            foreach ($list as $domain) {
+                $response = Http::timeout(2)->head($domain);
+                if (200 == $response->status()) {
+                    return $domain;
+                }
+            }
+
+            return $list[0];
+        });
+    }
+}
+
+
 if (!function_exists('getImageUrl')) {
     /**
      * @return string
@@ -193,10 +223,16 @@ if (!function_exists('getImageUrl')) {
     function getImageUrl($path)
     {
         if (true == config('api.encrypt.image')) {
-            // 加密資源域名
-            $url = Storage::url($path);
+            // 加密
+            $cache_key = 'encrypt:image:' . $path;
+
+            return Cache::remember($cache_key, 300, function () use ($path) {
+                $base58 = new Base58(null, new GMPService());
+                $encrypted_filename = $base58->encode(sodium_crypto_secretbox($path, config('api.encrypt.nonce'), config('api.encrypt.key')));
+                return getEncryptDomain() . $encrypted_filename . '.html';
+            });
         } else {
-            // 未加密資源域名
+            // 未加密
             $url = Storage::url($path);
         }
 

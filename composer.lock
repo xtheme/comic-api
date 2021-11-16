@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "6c0ea2d01c4c16cb43518f0e9e743bb0",
+    "content-hash": "409b5a64a811f4e0a7213630eceba87c",
     "packages": [
         {
             "name": "arcanedev/log-viewer",
@@ -4017,6 +4017,48 @@
                 "source": "https://github.com/steelywing/PHP-Chinese/tree/0.5.3"
             },
             "time": "2019-06-10T01:58:44+00:00"
+        },
+        {
+            "name": "stephenhill/base58",
+            "version": "v1.1.5",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/stephen-hill/base58php.git",
+                "reference": "bd9fc19c788160a2f85ba0a19cd800eaf5ba5e99"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/stephen-hill/base58php/zipball/bd9fc19c788160a2f85ba0a19cd800eaf5ba5e99",
+                "reference": "bd9fc19c788160a2f85ba0a19cd800eaf5ba5e99",
+                "shasum": ""
+            },
+            "require-dev": {
+                "athletic/athletic": "~0.1",
+                "phpunit/phpunit": "4.*"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "StephenHill\\": "src/",
+                    "StephenHill\\Benchmarks\\": "benchmarks/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Stephen Hill",
+                    "email": "stephen@gatekiller.co.uk"
+                }
+            ],
+            "description": "Base58 Encoding and Decoding Library for PHP",
+            "support": {
+                "issues": "https://github.com/stephen-hill/base58php/issues",
+                "source": "https://github.com/stephen-hill/base58php/tree/v1.1.5"
+            },
+            "time": "2019-08-22T16:51:59+00:00"
         },
         {
             "name": "swiftmailer/swiftmailer",

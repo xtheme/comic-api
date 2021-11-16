@@ -10,29 +10,13 @@ return [
     'encrypt' => [
         'response' => env('ENCRYPT_RESPONSE', false),
         'image' => env('ENCRYPT_IMAGE', false),
+        'key' => base64_decode(env('ENCRYPT_KEY', '')),
+        'nonce' => base64_decode(env('ENCRYPT_NONCE', '')),
+        'domains' => [
+            'http://e93uka.sjzleon.com',
+            'http://t79ca8.sjzleon.com',
+            'http://r7ncvu.bxcshihu.com',
+        ],
     ],
 
-    /**
-     * 漫畫
-     */
-    'comic' => [
-        'image_domain' => 'http://pic.honganll.com',
-        'encrypt_image_domain' => 'http://pic.honganll.com',
-    ],
-
-    /**
-     * Resume
-     */
-    'resume' => [
-        'image_domain' => 'http://lfimg.gs562.cn',
-    ],
-
-    /**
-     * Video
-     */
-    'video' => [
-        'hls_domain' => 'https://1107newcdn.3r5ewowo.com',
-        'image_domain' => 'https://pic.vip88991.com',
-        'encrypt_image_domain' => 'https://pic.vip88991.com',
-    ],
 ];
