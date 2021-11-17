@@ -225,6 +225,7 @@ if (!function_exists('getImageUrl')) {
     {
         if (true == config('api.encrypt.image') && request()->is('api/*')) {
             // 加密
+            $path = Str::of($path)->ltrim('/');
             $base58 = new Base58(null, new GMPService());
             $encrypted_filename = $base58->encode(sodium_crypto_secretbox($path, config('api.encrypt.nonce'), config('api.encrypt.key')));
             $url =  getEncryptDomain() . '/' . $encrypted_filename . '.html';

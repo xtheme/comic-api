@@ -13,9 +13,9 @@ return [
         'key' => base64_decode(env('ENCRYPT_KEY', '')),
         'nonce' => base64_decode(env('ENCRYPT_NONCE', '')),
         'domains' => [
-            'http://e93uka.sjzleon.com',
-            'http://t79ca8.sjzleon.com',
-            'http://r7ncvu.bxcshihu.com',
+            'https://e93uka.sjzleon.com',
+            'https://t79ca8.sjzleon.com',
+            'https://r7ncvu.bxcshihu.com',
         ],
     ],
 
