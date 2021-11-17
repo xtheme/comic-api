@@ -34,6 +34,7 @@ class VisitController extends BaseController
                 'title' => $log->{$type}->title,
                 'author' => $log->{$type}->author,
                 'cover' => ($type == 'book') ? $log->{$type}->horizontal_cover : $log->{$type}->cover,
+                'description' => $log->{$type}->description,
                 'tagged_tags' => $log->{$type}->tagged_tags,
                 'view_counts' => shortenNumber($log->{$type}->view_counts),
                 'has_favorite' => $has_favorite,
