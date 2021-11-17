@@ -160,10 +160,12 @@ class User extends Authenticatable
 
         $this->wallet = $this->wallet + $coin;
 
-        if ($this->subscribed_until && $this->subscribed_until->greaterThan(Carbon::now())) {
-            $this->subscribed_until = $this->subscribed_until->addDays($days);
-        } else {
-            $this->subscribed_until = Carbon::now()->addDays($days);
+        if ($days > 0) {
+            if ($this->subscribed_until && $this->subscribed_until->greaterThan(Carbon::now())) {
+                $this->subscribed_until = $this->subscribed_until->addDays($days);
+            } else {
+                $this->subscribed_until = Carbon::now()->addDays($days);
+            }
         }
 
         $this->save();
