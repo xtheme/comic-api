@@ -51,10 +51,15 @@ class FavoriteController extends BaseController
             return Response::jsonError('很抱歉，您的收藏数已达上限！');
         }
 
+        try {
+            $target = app('\\App\\Models\\' . Str::studly($type))->findOrFail($item_id);
+        } catch (\Exception $e) {
+            return Response::jsonError('很抱歉，收藏项目不存在或已下架！');
+        }
+
         $history = $request->user()->favorite_logs()->firstOrCreate([
-            // 'user_id' => $request->user()->id,
             'type' => $type,
-            'item_model' => '\\App\\Models\\' . Str::studly($type),
+            'item_model' => get_class($target),
             'item_id' => $item_id,
         ]);
 
