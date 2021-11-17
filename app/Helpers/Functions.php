@@ -223,7 +223,7 @@ if (!function_exists('getImageUrl')) {
      */
     function getImageUrl($path)
     {
-        if (true == config('api.encrypt.image')) {
+        if (true == config('api.encrypt.image') && request()->is('api/*')) {
             // 加密
             $base58 = new Base58(null, new GMPService());
             $encrypted_filename = $base58->encode(sodium_crypto_secretbox($path, config('api.encrypt.nonce'), config('api.encrypt.key')));
