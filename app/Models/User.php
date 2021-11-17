@@ -119,12 +119,16 @@ class User extends Authenticatable
         $days += $order->plan_options['days'] ?? 0;
         $days += $order->plan_options['gift_days'] ?? 0;
 
-        $this->wallet = $this->wallet + $coin;
+        if ($coin > 0) {
+            $this->wallet = $this->wallet + $coin;
+        }
 
-        if ($this->subscribed_until && $this->subscribed_until->greaterThan(Carbon::now())) {
-            $this->subscribed_until = $this->subscribed_until->addDays($days);
-        } else {
-            $this->subscribed_until = Carbon::now()->addDays($days);
+        if ($days > 0) {
+            if ($this->subscribed_until && $this->subscribed_until->greaterThan(Carbon::now())) {
+                $this->subscribed_until = $this->subscribed_until->addDays($days);
+            } else {
+                $this->subscribed_until = Carbon::now()->addDays($days);
+            }
         }
 
         $this->save();
@@ -158,7 +162,9 @@ class User extends Authenticatable
         $coin += $gift['gift_coin'] ?? 0;
         $days += $gift['gift_days'] ?? 0;
 
-        $this->wallet = $this->wallet + $coin;
+        if ($coin > 0) {
+            $this->wallet = $this->wallet + $coin;
+        }
 
         if ($days > 0) {
             if ($this->subscribed_until && $this->subscribed_until->greaterThan(Carbon::now())) {
