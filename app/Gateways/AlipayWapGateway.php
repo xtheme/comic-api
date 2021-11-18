@@ -15,14 +15,16 @@ class AlipayWapGateway extends BaseGateway implements Contracts\GatewayInterface
 {
     function getOptions()
     {
+        $url = parse_url($this->api_url);
+
         $options = new Config();
-        $options->protocol = 'https';
-        $options->gatewayHost = 'openapi.alipay.com';
+        $options->protocol = $url['scheme'] ?? '';
+        $options->gatewayHost = $url['host'] ?? '';
         $options->signType = 'RSA2';
 
-        $options->appId = config('pay.alipay.app_id');
+        $options->appId = $this->app_id;
         $options->merchantPrivateKey = config('pay.alipay.app_secret_cert'); // 私钥
-        $options->alipayPublicKey = config('pay.alipay.app_public_cert_path'); // 支付宝公钥
+        $options->alipayPublicKey = config('pay.alipay.app_public_cert'); // 支付宝公钥
 
         return $options;
     }
@@ -36,14 +38,20 @@ class AlipayWapGateway extends BaseGateway implements Contracts\GatewayInterface
         Factory::setOptions($this->getOptions());
 
         try {
-            // 2. 发起API调用（以支付能力下的统一收单交易创建接口为例）
-            $subject = $plan->name;                                     // 订单标题。注意：不可使用特殊字符，如 /，=，& 等。
-            $outTradeNo = $order->order_no;                             // 商户网站唯一订单号
-            $totalAmount = $plan->price;                                // 订单总金额
-            $quitUrl = $order->domain . '/deposit';                     // 用户付款中途退出返回商户网站的地址
-            $returnUrl = $order->domain . '/record-order';
-            $notifyUrl = route('api.payment.notify', $order->order_no); // 异步通知地址
+            $subject = $plan->name;         // 订单标题。注意：不可使用特殊字符，如 /，=，& 等。
+            $outTradeNo = $order->order_no; // 商户网站唯一订单号
+            $totalAmount = $plan->price;    // 订单总金额
 
+            $replace = ['{domain}'];
+            $with = [$order->domain];
+            // 用户付款中途退出返回商户网站的地址
+            $quitUrl = str_replace($replace, $with, $this->pay_options['quit_url']); // {domain}/deposit
+            // 付款成功後轉跳的網址
+            $returnUrl = str_replace($replace, $with, $this->pay_options['return_url']);  // {domain}/record-order
+            // 异步通知地址
+            $notifyUrl = route('api.payment.notify', $order->order_no);
+
+            // 2. 发起API调用（以支付能力下的统一收单交易创建接口为例）
             $result = Factory::payment()->wap()->asyncNotify($notifyUrl)->pay($subject, $outTradeNo, $totalAmount, $quitUrl, $returnUrl);
 
             // 3. 处理响应或异常

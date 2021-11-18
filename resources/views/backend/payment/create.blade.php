@@ -39,7 +39,7 @@
                 </div>
                 <div class="col-4">
                     <div class="form-group">
-                        <label><span class="danger">*</span> 渠道网关</label>
+                        <label>渠道网关</label>
                         <div class="controls">
                             <input type="text" class="form-control" name="url">
                         </div>
@@ -47,7 +47,7 @@
                 </div>
                 <div class="col-4">
                     <div class="form-group">
-                        <label><span class="danger">*</span> 渠道商户号</label>
+                        <label>渠道商户号</label>
                         <div class="controls">
                             <input type="text" class="form-control" name="app_id">
                         </div>
@@ -55,7 +55,7 @@
                 </div>
                 <div class="col-4">
                     <div class="form-group">
-                        <label><span class="danger">*</span> 渠道金钥</label>
+                        <label>渠道金钥</label>
                         <div class="controls">
                             <input type="text" class="form-control" name="app_key">
                         </div>
