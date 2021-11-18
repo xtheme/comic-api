@@ -223,15 +223,21 @@ if (!function_exists('getImageUrl')) {
      */
     function getImageUrl($path)
     {
-        if (true == config('api.encrypt.image') && request()->is('api/*')) {
-            // 加密
-            $path = Str::of($path)->ltrim('/');
-            $base58 = new Base58(null, new GMPService());
-            $encrypted_filename = $base58->encode(sodium_crypto_secretbox($path, config('api.encrypt.nonce'), config('api.encrypt.key')));
-            $url =  getEncryptDomain() . '/' . $encrypted_filename . '.html';
+        $path = Str::of($path)->ltrim('/');
+
+        if (request()->is('api/*')) {
+            if (true == config('api.encrypt.image')) {
+                // 加密
+                $base58 = new Base58(null, new GMPService());
+                $encrypted_filename = $base58->encode(sodium_crypto_secretbox($path, config('api.encrypt.nonce'), config('api.encrypt.key')));
+                $url =  getEncryptDomain() . '/' . $encrypted_filename . '.html';
+            } else {
+                // 未加密
+                $url = Storage::url($path);
+            }
         } else {
-            // 未加密
-            $url = Storage::url($path);
+            // 後台圖片使用 S3 Presigned URL
+            $url = Storage::temporaryUrl($path, now()->addMinutes(10));
         }
 
         return $url;
