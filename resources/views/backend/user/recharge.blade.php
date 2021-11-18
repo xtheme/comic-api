@@ -30,6 +30,9 @@
                             <label class="badge badge-light-secondary badge-pill">{{ $type_options[$log->type] }}</label>
                         @endif
                         @if($log->type == 'gift')
+                            <label class="badge badge-light-success badge-pill">{{ $type_options[$log->type] }}</label>
+                        @endif
+                        @if($log->type == 'penalty')
                             <label class="badge badge-light-danger badge-pill">{{ $type_options[$log->type] }}</label>
                         @endif
                     </td>

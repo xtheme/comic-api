@@ -18,7 +18,7 @@ class CreateUserRechargeLogsTable extends Migration
             $table->integer('user_id')->default(0)->index('user_id')->comment('用戶ID');
             $table->integer('app_id')->default(0)->comment('商戶ID');
             $table->integer('channel_id')->default(0)->comment('來源渠道ID');
-            $table->enum('type', ['charge', 'vip', 'gift'])->comment('類型');
+            $table->enum('type', ['charge', 'vip', 'gift', 'penalty'])->comment('類型');
             $table->integer('admin_id')->nullable()->index('admin_id')->comment('管理員ID (人工補單)');
             $table->integer('order_id')->nullable()->comment('訂單ID');
             $table->string('order_no', 64)->comment('訂單號');

@@ -8,6 +8,7 @@ final class OrderOptions
         'charge' => '充值金币',
         'vip' => 'VIP方案',
         'gift' => '赠送',
+        'penalty' => '惩罚',
     ];
 
     const STATUS_OPTIONS = [

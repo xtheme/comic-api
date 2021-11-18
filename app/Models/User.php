@@ -10,6 +10,7 @@ use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Log;
 use Laravel\Sanctum\HasApiTokens;
 
 class User extends Authenticatable
@@ -119,15 +120,21 @@ class User extends Authenticatable
         $days += $order->plan_options['days'] ?? 0;
         $days += $order->plan_options['gift_days'] ?? 0;
 
-        if ($coin > 0) {
-            $this->wallet = $this->wallet + $coin;
-        }
+        $this->wallet = $this->wallet + $coin;
 
         if ($days > 0) {
             if ($this->subscribed_until && $this->subscribed_until->greaterThan(Carbon::now())) {
                 $this->subscribed_until = $this->subscribed_until->addDays($days);
             } else {
                 $this->subscribed_until = Carbon::now()->addDays($days);
+            }
+        }
+
+        if ($days < 0) {
+            if ($this->subscribed_until && $this->subscribed_until->greaterThan(Carbon::now())) {
+                $this->subscribed_until = $this->subscribed_until->subDays(abs($days));
+            } else {
+                $this->subscribed_until = Carbon::now()->subDays(abs($days));
             }
         }
 
@@ -158,19 +165,26 @@ class User extends Authenticatable
     // 後台贈送
     public function saveGift(array $gift)
     {
-        $coin = $days = 0;
-        $coin += $gift['gift_coin'] ?? 0;
-        $days += $gift['gift_days'] ?? 0;
+        $coin = (int) $gift['gift_coin'] ?? 0;
+        $days = (int) $gift['gift_days'] ?? 0;
 
-        if ($coin > 0) {
-            $this->wallet = $this->wallet + $coin;
-        }
+        $this->wallet = $this->wallet + $coin;
 
         if ($days > 0) {
+            Log::debug('addDays');
             if ($this->subscribed_until && $this->subscribed_until->greaterThan(Carbon::now())) {
                 $this->subscribed_until = $this->subscribed_until->addDays($days);
             } else {
                 $this->subscribed_until = Carbon::now()->addDays($days);
+            }
+        }
+
+        if ($days < 0) {
+            Log::debug('subDays');
+            if ($this->subscribed_until && $this->subscribed_until->greaterThan(Carbon::now())) {
+                $this->subscribed_until = $this->subscribed_until->subDays(abs($days));
+            } else {
+                $this->subscribed_until = Carbon::now()->subDays(abs($days));
             }
         }
 
@@ -182,11 +196,17 @@ class User extends Authenticatable
     // 建立贈送紀錄
     public function logGift(array $gift)
     {
+        $type = 'gift';
+
+        if (0 > $gift['gift_coin'] || 0 > $gift['gift_days']) {
+            $type = 'penalty';
+        }
+
         $data = [
             'app_id' => $this->app_id,
             'channel_id' => $this->channel_id,
             'user_id' => $this->id,
-            'type' => 'gift',
+            'type' => $type,
             'admin_id' => Auth::user()->id,
             'gift_coin' => $gift['gift_coin'],
             'gift_days' => $gift['gift_days'],
