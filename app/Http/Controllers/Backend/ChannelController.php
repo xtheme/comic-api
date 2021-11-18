@@ -28,7 +28,7 @@ class ChannelController extends Controller
         $channels = Channel::select($select)->latest('recharge_amount')->paginate(50);
 
         // 推廣域名
-        $domains = Domain::where('type', 'frontend')->where('status', 1)->get();
+        $domains = Domain::where('type', 'wap')->where('status', 1)->get();
 
         $data = [
             'list' => $channels,

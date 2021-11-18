@@ -26,6 +26,7 @@
                             <thead>
                             <tr>
                                 <th class="text-center">渠道编号</th>
+                                <th>推广连结</th>
                                 <th>注册数</th>
                                 <th>订单数</th>
                                 <th>总充值</th>
@@ -55,6 +56,7 @@
                                         @endforeach
                                         </ul>
                                     </td>
+                                    <td>{{ $item->register_count }}</td>
                                     <td>{{ $item->recharge_count }}</td>
                                     <td>{{ $item->recharge_amount }}</td>
                                     <td>{{ $item->wap_amount }}</td>
