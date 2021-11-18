@@ -122,7 +122,7 @@
                                         </div>
                                     </td>
                                     <td>
-                                        <img class="cursor-pointer" data-lightbox alt="点击查看大图" src="{{ $book->horizontal_cover }}" height="60px">
+                                        <img class="cursor-pointer" data-lightbox alt="点击查看大图" src="{{ $book->vertical_cover }}" height="60px">
                                     </td>
                                     <td>{{ $book->type }}</td>
                                     <td>
