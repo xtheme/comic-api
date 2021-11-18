@@ -103,7 +103,8 @@ class UploadService
 
         $path = Storage::put($this->path, $file, 'public');
 
-        $url = Storage::url($path);
+        // $url = Storage::url($path);
+        $url = Storage::temporaryUrl($path, now()->addMinutes(10));
 
         // 不同步
         $result = [
