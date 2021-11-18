@@ -20,8 +20,8 @@ class ChannelController extends Controller
             'register_count',
             'recharge_count',
             'recharge_amount',
-            DB::raw('sum(wap_new_amount + wap_renew_amount) as wap_amount'),
-            DB::raw('sum(app_new_amount + app_renew_amount) as app_amount'),
+            DB::raw('(wap_new_amount + wap_renew_amount) as wap_amount'),
+            DB::raw('(app_new_amount + app_renew_amount) as app_amount'),
             'app_download_count'
         ];
 
