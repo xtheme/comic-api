@@ -33,7 +33,7 @@ class VisitController extends BaseController
                 'id' => $log->item_id,
                 'title' => $log->{$type}->title,
                 'author' => $log->{$type}->author,
-                'cover' => ($type == 'book') ? $log->{$type}->horizontal_cover : $log->{$type}->cover,
+                'cover' => ($type == 'book') ? $log->{$type}->vertical_cover : $log->{$type}->cover,
                 'description' => $log->{$type}->description,
                 'tagged_tags' => $log->{$type}->tagged_tags,
                 'view_counts' => shortenNumber($log->{$type}->view_counts),
