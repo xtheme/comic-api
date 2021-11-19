@@ -51,17 +51,9 @@
                 </div>--}}
                 <div class="col-12">
                     <div class="form-group">
-                        <label>原密码</label>
+                        <label>密码</label>
                         <div class="controls">
                             <input type="password" class="form-control" name="password">
-                        </div>
-                    </div>
-                </div>
-                <div class="col-12">
-                    <div class="form-group">
-                        <label>新密码</label>
-                        <div class="controls">
-                            <input type="password" class="form-control" name="new_password">
                         </div>
                     </div>
                 </div>
