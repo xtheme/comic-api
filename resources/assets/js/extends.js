@@ -57,7 +57,7 @@ $.extend({
         $modal.on('shown.bs.modal', function () {
             if (settings.image) {
                 setTimeout(function () {
-                    $modal.find('.modal-body').html(`<img src="${settings.image}" style="width: 480px;">`);
+                    $modal.find('.modal-body').html(`<img src="${settings.image}" class="img-fluid mx-auto d-block" alt="Responsive image">`);
                 }, 500);
             }
         })

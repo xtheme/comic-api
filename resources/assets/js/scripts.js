@@ -39,7 +39,7 @@
             success: function (res) {
                 console.log(res);
                 if (res.code == 200) {
-                    $this.parents('.form-group').find('.upload-image-callback').empty().append(`<img src="${res.data.url}" class="img-fluid" alt="">`).show();
+                    $this.parents('.form-group').find('.upload-image-callback').empty().append(`<img src="${res.data.url}" class="img-fluid mx-auto d-block" alt="Responsive image">`).show();
                     $this.parents('.form-group').find('.image-path').val(res.data.path);
                 } else {
                     $.toast({
@@ -76,7 +76,7 @@
         let $this = $(this);
         $.openImage({
             size: $this.data('size') || '',
-            height: $this.data('height') || '30vh',
+            height: $this.data('height') || '',
             title: '检视图片',
             image: $this.attr('src')
         });
