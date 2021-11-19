@@ -1,0 +1,5 @@
+INSERT INTO `rb_payments` (`id`, `name`, `url`, `app_id`, `app_key`, `button_text`, `button_icon`, `button_target`, `fee_percentage`, `sdk`, `business_hours`, `daily_limit`, `pay_options`, `order_options`, `status`, `created_at`, `updated_at`) VALUES
+(1, '女神支付宝', 'http://47.75.109.3:8081/gate/take_order.do?', '4', '2741039981193e488c511baf1ab14568', '支付寶', 'alipay', 'new_tab', 13, 'GoddessGateway', NULL, 50000, '{\"type\": \"alipay_h5\", \"channel\": \"4\"}', '{}', 1, NULL, '2021-11-10 16:53:38'),
+(2, '趣支付微信', 'https://www.qupay88.com/Pay', '100702', 'TSULXpbEerhQHkqQLCGtabkhYPZpCDdA', '微信', 'weixin', 'new_tab', 13, 'InterestGateway', '00:00-23:00', 50000, '{\"fxpay\": \"wxwap\"}', '[]', 1, '2021-10-11 07:01:35', '2021-11-10 16:51:33'),
+(3, '原生支付宝', 'https://openapi.alipay.com', '2021002185636861', '', '支付宝', 'alipay', 'iframe', 13, 'AlipayWapGateway', NULL, 0, '{\"quit_url\": \"{domain}/deposit\", \"return_url\": \"{domain}/record-order\"}', '[]', 1, '2021-11-19 15:10:26', '2021-11-19 15:10:26');
+COMMIT;
