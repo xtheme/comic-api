@@ -68,7 +68,7 @@ class AlipayWapGateway extends BaseGateway implements Contracts\GatewayInterface
 
         return [
             'order_no' => $order->order_no,
-            'pay_form' => $result->body,
+            'pay_url' => $result->body,
         ];
     }
 

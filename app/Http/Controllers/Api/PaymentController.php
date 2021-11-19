@@ -106,6 +106,7 @@ class PaymentController extends Controller
             Cache::set($cache_key, 0, 3600);
         }
 
+        // 限制單用戶每小時能建立的訂單數
         if ($hourly_orders >= getConfig('app', 'hourly_order_limit')) {
             return Response::jsonError('支付渠道冷却中，请稍后在试！');
         }

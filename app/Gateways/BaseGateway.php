@@ -44,7 +44,7 @@ class BaseGateway
             'currency' => 'CNY',
             'plan_options' => $plan_options,
             'payment_id' => $this->payment_id,
-            'domain' => request()->getSchemeAndHttpHost(),
+            'domain' => request()->getRequestUri(),
             'ip' => request()->ip(),
             'platform' => strtolower(request()->header('platform')),
         ];
