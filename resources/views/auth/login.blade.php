@@ -78,7 +78,7 @@
                 }
             }
 
-            $form.submit(function (e) {
+            $form.on('submit', function (e) {
                 e.preventDefault();
                 $.request({
                     url     : '{{ route('login') }}',
