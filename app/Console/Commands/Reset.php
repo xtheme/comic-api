@@ -2,7 +2,6 @@
 
 namespace App\Console\Commands;
 
-use App\Models\Channel;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\DB;
 
