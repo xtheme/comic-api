@@ -57,6 +57,7 @@
                                 <button class="btn btn-primary upload-image" type="button">上传</button>
                             </div>
                         </div>
+                        <div class="upload-image-callback"></div>
                     </div>
                 </div>
                 <div class="col-12 d-flex justify-content-end">

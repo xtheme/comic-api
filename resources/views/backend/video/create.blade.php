@@ -76,12 +76,7 @@
                                     <button class="btn btn-primary upload-image" type="button">上传</button>
                                 </div>
                             </div>
-{{--                            <div class="upload-image-callback"></div>--}}
-{{--                            <div class="text-muted"></div>--}}
-{{--                            <div class="custom-file">--}}
-{{--                                <input type="file" class="custom-file-input" id="vertical-thumb" name="cover">--}}
-{{--                                <label class="custom-file-label" for="vertical-thumb">请选择文件</label>--}}
-{{--                            </div>--}}
+                            <div class="upload-image-callback"></div>
                         </div>
                     </div>
                 </div>

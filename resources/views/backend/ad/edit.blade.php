@@ -58,6 +58,9 @@
                                 <button class="btn btn-primary upload-image" type="button">上传</button>
                             </div>
                         </div>
+                        <div class="upload-image-callback">
+                            @if($data->getRawOriginal('banner'))<img src="{{ $data->banner }}" class="img-fluid" alt="">@endif
+                        </div>
                     </div>
                 </div>
                 <div class="col-12 d-flex justify-content-end">

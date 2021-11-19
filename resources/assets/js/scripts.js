@@ -39,7 +39,7 @@
             success: function (res) {
                 console.log(res);
                 if (res.code == 200) {
-                    $this.parents('.form-group').find('.upload-image-callback').empty().append(`<img src="${res.data.url}" alt="">`).show();
+                    $this.parents('.form-group').find('.upload-image-callback').empty().append(`<img src="${res.data.url}" class="img-fluid" alt="">`).show();
                     $this.parents('.form-group').find('.image-path').val(res.data.path);
                 } else {
                     $.toast({
