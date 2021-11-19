@@ -11,7 +11,7 @@ class BookRequest extends BaseRequest
         return [
             'tag' => 'array',
             'title' => 'required',
-            'description' => 'required',
+            // 'description' => 'required',
             'author' => 'required',
             'vertical_cover' => 'required',
             // 'horizontal_cover' => 'required',
@@ -27,7 +27,7 @@ class BookRequest extends BaseRequest
         return [
             'tag' => '漫画分类',
             'title' => '漫画名称',
-            'description' => '内容简介',
+            // 'description' => '内容简介',
             'author' => '作者',
             'vertical_cover' => '竖向封面',
             // 'horizontal_cover' => '横向封面',
