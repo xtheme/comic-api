@@ -48,13 +48,13 @@ class PaymentController extends Controller
 
         $payment = new Payment;
         $payment->name = $request->post('name');
-        $payment->url = $request->post('url');
-        $payment->app_id = $request->post('app_id');
-        $payment->app_key = $request->post('app_key');
+        $payment->url = $request->post('url') ?? '';
+        $payment->app_id = $request->post('app_id') ?? '';
+        $payment->app_key = $request->post('app_key') ?? '';
         $payment->button_text = $request->post('button_text');
         $payment->button_icon = $request->post('button_icon');
         $payment->button_target = $request->post('button_target');
-        $payment->fee_percentage = $request->post('fee_percentage');
+        $payment->fee_percentage = $request->post('fee_percentage') ?? 0;
         $payment->sdk = $request->post('sdk');
         $payment->business_hours = $request->post('business_hours');
         $payment->daily_limit = $request->post('daily_limit');
@@ -97,13 +97,13 @@ class PaymentController extends Controller
 
         $payment = Payment::findOrFail($id);
         $payment->name = $request->post('name');
-        $payment->url = $request->post('url');
-        $payment->app_id = $request->post('app_id');
-        $payment->app_key = $request->post('app_key');
+        $payment->url = $request->post('url') ?? '';
+        $payment->app_id = $request->post('app_id') ?? '';
+        $payment->app_key = $request->post('app_key') ?? '';
         $payment->button_text = $request->post('button_text');
         $payment->button_icon = $request->post('button_icon');
         $payment->button_target = $request->post('button_target');
-        $payment->fee_percentage = $request->post('fee_percentage');
+        $payment->fee_percentage = $request->post('fee_percentage') ?? 0;
         $payment->sdk = $request->post('sdk');
         $payment->business_hours = $request->post('business_hours');
         $payment->daily_limit = $request->post('daily_limit');
