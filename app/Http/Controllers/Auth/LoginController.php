@@ -129,7 +129,7 @@ class LoginController extends Controller
                 return Response::jsonError('帐号被封禁!', 500);
             }
 
-            activity()->useLog('后台')->causedBy(auth()->user())->log('登录后台!');
+            activity()->useLog('后台')->causedBy(Auth::user())->log('登录后台!');
 
             // 更新管理員登入資訊
             $data = [
@@ -152,7 +152,7 @@ class LoginController extends Controller
      */
     public function logout(Request $request)
     {
-        activity()->useLog('后台')->causedBy(auth()->user())->log('登出后台!');
+        activity()->useLog('后台')->causedBy(Auth::user())->log('登出后台!');
 
         return $this->traitLogout($request);
     }

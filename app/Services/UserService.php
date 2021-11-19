@@ -4,7 +4,7 @@ namespace App\Services;
 
 use App\Models\Order;
 use App\Models\User;
-use Gateway;
+use Illuminate\Support\Facades\Auth;
 
 class UserService
 {
@@ -49,6 +49,6 @@ class UserService
         // 更新用戶錢包或VIP時效 && 建立用戶充值紀錄
         $user->saveRecharge($order);
 
-        activity()->useLog('后台')->causedBy(auth()->user())->performedOn($order)->withProperties($order->getChanges())->log('手动回调订单');
+        activity()->useLog('后台')->causedBy(Auth::user())->performedOn($order)->withProperties($order->getChanges())->log('手动回调订单');
     }
 }
