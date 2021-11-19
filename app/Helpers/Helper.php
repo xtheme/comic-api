@@ -9,19 +9,7 @@ class Helper
 {
     public static function applClasses()
     {
-        // Demo
-        $fullURL = request()->fullurl();
-        // if (App()->environment() === 'production') {
-        //     for ($i = 1; $i < 7; $i++) {
-        //         $contains = Str::contains($fullURL, 'demo-' . $i);
-        //         if ($contains === true) {
-        //             $data = config('custom.' . 'demo-' . $i);
-        //         }
-        //     }
-        // } else {
-        //     $data = config('custom.custom');
-        // }
-        $data = config('custom.custom');
+        $data = config('backend.theme');
 
         // default data value
         $dataDefault = [
@@ -146,9 +134,11 @@ class Helper
         if (isset($pageConfigs)) {
             if (count($pageConfigs) > 0) {
                 foreach ($pageConfigs as $config => $val) {
-                    Config::set('custom.custom.' . $config, $val);
+                    Config::set('backend.theme.' . $config, $val);
                 }
             }
         }
+
+        return true;
     }
 }

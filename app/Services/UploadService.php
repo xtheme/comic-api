@@ -35,14 +35,14 @@ class UploadService
         if ($file->isValid()) {
             // 检查文件大小
             $size = $file->getSize();
-            if ($size > config('custom.upload.image.size')) {
-                $limit_size = ceil(config('custom.upload.image.size') / 1024);
+            if ($size > config('backend.upload.image.size')) {
+                $limit_size = ceil(config('backend.upload.image.size') / 1024);
                 return __('response.upload.fail.too_big', ['size' => $limit_size]);
             }
 
             // 检查 mime type
             $mimeType = $file->getMimeType();
-            $allowMimeType = config('custom.upload.image.mime_type');
+            $allowMimeType = config('backend.upload.image.mime_type');
             if (!in_array($mimeType, $allowMimeType)) {
                 return __('response.upload.fail.mime_type');
             }

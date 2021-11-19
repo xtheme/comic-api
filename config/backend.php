@@ -2,7 +2,7 @@
 
 // custom.php file returd default configuration setting of layouts
 return [
-    'custom' => [
+    'theme' => [
         'mainLayoutType' => 'vertical-menu-boxicons',
         //Options:vertical-menu,horizontal-menu,vertical-menu-boxicons, default(vertical-menu)
         'theme' => 'semi-dark',

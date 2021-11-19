@@ -35,7 +35,7 @@ class ActivityLogController extends Controller
                 $start_date,
                 $end_date
             ]);
-        })->orderByDesc('id')->paginate(config('custom.perpage'));
+        })->orderByDesc('id')->paginate();
         // dd($logs);
         // 列出所有的日志名称
         $name_options = Activity::groupBy('log_name')->pluck('log_name');

@@ -57,7 +57,7 @@ class LoginController extends Controller
     // Login
     public function showLoginForm(Request $request, $secret = '')
     {
-        if ($secret != config('custom.login_secret')) {
+        if ($secret != config('backend.login_secret')) {
             return '';
         }
 
@@ -125,11 +125,11 @@ class LoginController extends Controller
             $admin = Auth::user();
 
             if ($admin->status != 1) {
-                Auth::logout();
+                auth()->logout();
                 return Response::jsonError('帐号被封禁!', 500);
             }
 
-            activity()->useLog('后台')->causedBy($admin)->log('登录后台!');
+            activity()->useLog('后台')->causedBy(auth()->user())->log('登录后台!');
 
             // 更新管理員登入資訊
             $data = [
