@@ -257,7 +257,7 @@ class PaymentController extends Controller
 
         $data = $request->input();
 
-        Log::info('支付結果回調: ' . $request->getSchemeAndHttpHost(), $data);
+        Log::debug('支付結果回調: ' . $request->fullUrl(), $data);
 
         // 調用支付渠道 SDK
         $gateway = $order->payment->initGateway();
@@ -268,6 +268,8 @@ class PaymentController extends Controller
         if (!$valid) {
             return Response::jsonError('签名验证失败！');
         }
+
+        Log::debug('签名验证成功: ' . $request->fullUrl());
 
         // 不同渠道返回格式不同
         $response = $gateway->updateOrder($order, $data);
