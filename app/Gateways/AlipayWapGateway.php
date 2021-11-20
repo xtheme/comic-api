@@ -115,7 +115,7 @@ class AlipayWapGateway extends BaseGateway implements Contracts\GatewayInterface
         if (in_array($params['trade_status'], ['TRADE_SUCCESS', 'TRADE_FINISHED'])) {
 
             Log::debug('AlipayWapGateway updateOrder $params: ' . $transaction_id, $params);
-            Log::debug('AlipayWapGateway updateOrder $order: ' . $transaction_id, $order);
+            // Log::debug('AlipayWapGateway updateOrder $order: ' . $transaction_id, $order);
 
             DB::transaction(function () use ($order, $transaction_id) {
                 app(UserService::class)->updateOrder($order, $transaction_id);
