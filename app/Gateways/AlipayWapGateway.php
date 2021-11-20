@@ -79,6 +79,8 @@ class AlipayWapGateway extends BaseGateway implements Contracts\GatewayInterface
     // 第三方回調上分時驗證簽名
     public function checkSign($params): bool
     {
+        Factory::setOptions($this->getOptions());
+
         return Factory::payment()->common()->verifyNotify($params);
     }
 

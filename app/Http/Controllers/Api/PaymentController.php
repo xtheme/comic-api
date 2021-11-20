@@ -255,18 +255,22 @@ class PaymentController extends Controller
             return Response::jsonError('订单已回调或不存在！');
         }
 
+        $data = $request->input();
+
+        Log::info('支付結果回調: ' . $request->getSchemeAndHttpHost(), $data);
+
         // 調用支付渠道 SDK
         $gateway = $order->payment->initGateway();
 
         // 驗證簽名
-        $valid = $gateway->checkSign($request->post());
+        $valid = $gateway->checkSign($data);
 
         if (!$valid) {
             return Response::jsonError('签名验证失败！');
         }
 
         // 不同渠道返回格式不同
-        $response = $gateway->updateOrder($order, $request->post());
+        $response = $gateway->updateOrder($order, $data);
 
         // 添加每日限額
         Gateway::incDailyLimit($order->payment_id, $order->amount);
