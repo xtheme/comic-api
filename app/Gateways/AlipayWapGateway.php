@@ -91,6 +91,21 @@ class AlipayWapGateway extends BaseGateway implements Contracts\GatewayInterface
     // 回調成功更新訂單
     public function updateOrder(Order $order, array $params): string
     {
+        // 商户需要验证该通知数据中的 out_trade_no 是否为商户系统中创建的订单号
+        if ($order->order_no != $params['out_trade_no']) {
+            return 'fail';
+        }
+
+        // 判断 total_amount 是否确实为该订单的实际金额（即商户订单创建时的金额
+        if ($order->amount != $params['total_amount']) {
+            return 'fail';
+        }
+
+        // 验证 app_id 是否为该商户本身
+        if ($this->app_id != $params['app_id']) {
+            return 'fail';
+        }
+
         // 獲取渠道訂單號
         $transaction_id = $params['trade_no'];
 
