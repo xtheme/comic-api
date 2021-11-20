@@ -93,16 +93,19 @@ class AlipayWapGateway extends BaseGateway implements Contracts\GatewayInterface
     {
         // 商户需要验证该通知数据中的 out_trade_no 是否为商户系统中创建的订单号
         if ($order->order_no != $params['out_trade_no']) {
+            Log::error($order->order_no . ' order_no 不符', $params);
             return 'fail';
         }
 
         // 判断 total_amount 是否确实为该订单的实际金额（即商户订单创建时的金额
         if ($order->amount != $params['total_amount']) {
+            Log::error($order->order_no . 'amount 不符', $params);
             return 'fail';
         }
 
         // 验证 app_id 是否为该商户本身
         if ($this->app_id != $params['app_id']) {
+            Log::error($order->order_no . 'app_id 不符', $params);
             return 'fail';
         }
 
