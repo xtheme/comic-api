@@ -265,6 +265,8 @@ class PaymentController extends Controller
         // 驗證簽名
         $valid = $gateway->checkSign($data);
 
+        Log::debug('签名验证結果: ' . $request->fullUrl(), $valid);
+
         if (!$valid) {
             return Response::jsonError('签名验证失败！');
         }
