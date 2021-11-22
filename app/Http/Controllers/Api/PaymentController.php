@@ -47,7 +47,7 @@ class PaymentController extends Controller
     // 支付渠道
     public function gateway(Request $request, $pricing_id)
     {
-        $gateways = Pricing::findOrFail($pricing_id)->gateways()->get();
+        $gateways = Pricing::findOrFail($pricing_id)->gateways()->orderBy('button_icon')->get();
 
         $gateways = $gateways->reject(function ($gateway) {
             // 排除停用渠道
@@ -60,16 +60,35 @@ class PaymentController extends Controller
         })->map(function ($gateway) {
             return [
                 'payment_id' => $gateway->id,
-                'button' => [
-                    'text' => $gateway->button_text,
-                    'icon' => $gateway->button_icon,
-                    'target' => $gateway->button_target,
-                ],
+                'text' => $gateway->button_text,
+                'icon' => $gateway->button_icon,
+                'target' => $gateway->button_target,
+                // 'button' => [
+                //     'text' => $gateway->button_text,
+                //     'icon' => $gateway->button_icon,
+                //     'target' => $gateway->button_target,
+                // ],
             ];
         })->toArray();
 
         if (!$gateways) {
             return Response::jsonError('很抱歉，此方案暂时没有配置支付渠道！');
+        }
+
+        $i = 0;
+        foreach ($gateways as $key => $row) {
+            if ($row['icon'] == 'alipay') {
+                $gateways[$key]['text'] = '支付宝' . ($i + 1);
+                $i++;
+            }
+        }
+
+        $j = 0;
+        foreach ($gateways as $key => $row) {
+            if ($row['icon'] == 'weixin') {
+                $gateways[$key]['text'] = '微信' . ($j + 1);
+                $j++;
+            }
         }
 
         return Response::jsonSuccess(__('api.success'), $gateways);
