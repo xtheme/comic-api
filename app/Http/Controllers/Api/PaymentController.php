@@ -216,20 +216,16 @@ class PaymentController extends Controller
 
     public function mockCallback(Request $request)
     {
-        if (config('app.env') == 'local') {
-            $order_no = $request->get('order_no') ?? '';
+        $order_no = $request->get('order_no') ?? '';
 
-            $order = Order::orderNo($order_no)->firstOrFail();
+        $order = Order::orderNo($order_no)->firstOrFail();
 
-            // 調用支付渠道 SDK
-            $gateway = $order->payment->initGateway();
+        // 調用支付渠道 SDK
+        $gateway = $order->payment->initGateway();
 
-            $response = $gateway->mockCallback($order);
+        $response = $gateway->mockCallback($order);
 
-            return $response;
-        }
-
-        return '';
+        return $response;
     }
 
     // 支付結果回調
