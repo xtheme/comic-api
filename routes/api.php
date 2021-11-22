@@ -16,7 +16,7 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::as('api.')->middleware(['api'])->group(function () {
-    Route::prefix(config('api.version'))->middleware(['api.location', 'api.header', 'api.sign'])->group(function () {
+    Route::prefix(config('api.version'))->middleware(['request.decrypt', 'api.location', 'api.header', 'api.sign'])->group(function () {
         Route::get('/decrypt', [Api\DevController::class, 'decrypt']);
 
         Route::prefix('bootstrap')->as('bootstrap.')->group(function () {
@@ -90,7 +90,7 @@ Route::as('api.')->middleware(['api'])->group(function () {
     });
 
     // 需要 Bearer Token (sanctum 簽發)
-    Route::prefix(config('api.version'))->middleware(['api.header', 'api.sign', 'auth:sanctum'])->group(function () {
+    Route::prefix(config('api.version'))->middleware(['request.decrypt', 'api.header', 'api.sign', 'auth:sanctum'])->group(function () {
         // 用戶驗證
         Route::prefix('auth')->as('auth.')->group(function () {
             Route::any('/profile', [Api\AuthController::class, 'profile'])->name('profile');

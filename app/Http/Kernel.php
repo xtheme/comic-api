@@ -42,7 +42,6 @@ class Kernel extends HttpKernel
         ],
 
         'api' => [
-            \App\Http\Middleware\RequestDecryptMiddleware::class,
             \App\Http\Middleware\AddJsonHeader::class,
             'throttle:api',
             \Illuminate\Routing\Middleware\SubstituteBindings::class,
@@ -73,5 +72,6 @@ class Kernel extends HttpKernel
         // 'device.sso'       => Middleware\SingleSignOn::class,
         'auth.route.role' => Middleware\AuthRouteRole::class,
         'log.activity' => Middleware\LogActivity::class,
+        'request.decrypt' => Middleware\RequestDecryptMiddleware::class,
     ];
 }

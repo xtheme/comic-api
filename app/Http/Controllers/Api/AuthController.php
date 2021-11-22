@@ -52,8 +52,10 @@ class AuthController extends BaseController
         $user->logged_at = Carbon::now();
         $user->save();
 
-        // 簽發 personal token
+        // 清除所有 token
         $user->tokens()->delete();
+
+        // 簽發 personal token
         $token = $user->createToken($user->name)->plainTextToken;
 
         $response = (new ProfileResource($user))->withToken($token);
@@ -96,6 +98,7 @@ class AuthController extends BaseController
      */
     public function logout(Request $request)
     {
+        // 清除所有 token
         $request->user()->tokens()->delete();
 
         return Response::jsonSuccess(__('api.logout.success'));
