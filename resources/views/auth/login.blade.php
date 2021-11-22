@@ -88,6 +88,7 @@
                         console.log(res);
 
 	                    $('#captcha').attr('src', '{{ captcha_src() }}');
+	                    $('input[name="captcha"]').val('');
 
 						if (res.message) {
 							$.toast({
