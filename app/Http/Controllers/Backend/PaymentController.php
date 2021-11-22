@@ -51,7 +51,7 @@ class PaymentController extends Controller
         $payment->url = $request->post('url') ?? '';
         $payment->app_id = $request->post('app_id') ?? '';
         $payment->app_key = $request->post('app_key') ?? '';
-        $payment->button_text = $request->post('button_text');
+        $payment->button_text = $request->post('button_text') ?? '';
         $payment->button_icon = $request->post('button_icon');
         $payment->button_target = $request->post('button_target');
         $payment->fee_percentage = $request->post('fee_percentage') ?? 0;
@@ -100,7 +100,7 @@ class PaymentController extends Controller
         $payment->url = $request->post('url') ?? '';
         $payment->app_id = $request->post('app_id') ?? '';
         $payment->app_key = $request->post('app_key') ?? '';
-        $payment->button_text = $request->post('button_text');
+        $payment->button_text = $request->post('button_text') ?? '';
         $payment->button_icon = $request->post('button_icon');
         $payment->button_target = $request->post('button_target');
         $payment->fee_percentage = $request->post('fee_percentage') ?? 0;

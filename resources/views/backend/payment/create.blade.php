@@ -61,14 +61,14 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-4">
-                    <div class="form-group">
-                        <label><span class="danger">*</span> 按钮文字</label>
-                        <div class="controls">
-                            <input type="text" class="form-control" name="button_text">
-                        </div>
-                    </div>
-                </div>
+{{--                <div class="col-4">--}}
+{{--                    <div class="form-group">--}}
+{{--                        <label><span class="danger">*</span> 按钮文字</label>--}}
+{{--                        <div class="controls">--}}
+{{--                            <input type="text" class="form-control" name="button_text">--}}
+{{--                        </div>--}}
+{{--                    </div>--}}
+{{--                </div>--}}
                 <div class="col-4">
                     <div class="form-group">
                         <label><span class="danger">*</span> 按钮图标</label>
