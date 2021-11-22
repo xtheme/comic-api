@@ -4,8 +4,8 @@
     {!! Helper::updatePageConfig($pageConfigs) !!}
 @endisset
 @php
-    // confiData variable layoutClasses array in Helper.php file.
-      $configData = Helper::applClasses();
+    // configData variable layoutClasses array in Helper.php file.
+    $configData = Helper::applClasses();
 @endphp
 
 <html class="loading" lang="en" data-textdirection="ltr">

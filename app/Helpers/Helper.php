@@ -137,7 +137,5 @@ class Helper
                 }
             }
         }
-
-        return true;
     }
 }
