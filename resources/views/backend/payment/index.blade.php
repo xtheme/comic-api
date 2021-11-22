@@ -40,7 +40,7 @@
                                     <td>{{ $item->id }}</td>
                                     <td>{{ $item->name }}</td>
                                     <td>{{ $item->fee_percentage }}</td>
-                                    <td>{{ $item->daily_limit }}</td>
+                                    <td>{{ $item->daily_recharge }} / {{ $item->daily_limit }}</td>
                                     <td>{{ $item->button_text }}</td>
                                     <td>
                                         @foreach($item->packages as $package)

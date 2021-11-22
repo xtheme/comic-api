@@ -2,6 +2,8 @@
 
 namespace App\Models;
 
+use Gateway;
+
 class Payment extends BaseModel
 {
     protected $guarded = [
@@ -35,4 +37,12 @@ class Payment extends BaseModel
 
         return $sdk;
     }
+
+    // 今日累計充值金額
+    public function getDailyRechargeAttribute()
+    {
+        return Gateway::getDailyLimit($this->id);
+    }
+
+
 }
