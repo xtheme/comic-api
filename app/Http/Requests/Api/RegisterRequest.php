@@ -13,7 +13,8 @@ class RegisterRequest extends BaseApiRequest
             'name' => 'required|min:2|max:16|alpha_dash',
             'password' => [
                 'required',
-                Password::min(8)->mixedCase()->letters()->numbers(),
+                // Password::min(8)->mixedCase()->letters()->numbers(),
+                Password::min(6),
             ],
             'password_confirmation' => 'required_with:password|same:password',
         ];
