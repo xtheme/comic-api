@@ -43,5 +43,6 @@ final class Options
     const CAUSER_OPTIONS = [
         'video' => '动画',
         'book' => '漫画',
+        'book_safe' => '安全漫画',
     ];
 }
