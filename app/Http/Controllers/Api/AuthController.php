@@ -77,7 +77,7 @@ class AuthController extends BaseController
 
         $data = [
             'app_id' => $request->input('app') ?? 0,
-            'channel_id' => $request->input('ch') ?? 1,
+            'channel_id' => $request->header('ch') ?? 1,
             'name' => $request->input('name'),
             'password' => $request->input('password'),
             'wallet' => getConfig('app', 'register_coin'),
