@@ -51,9 +51,9 @@ if (!function_exists('getConfig')) {
             return $default;
         }
 
-        Cache::set($cache_key, $options[$key], 600);
+        Cache::set($cache_key, $options[$key]['value'], 600);
 
-        return $options[$key] ?? '';
+        return $options[$key]['value'] ?? '';
     }
 }
 

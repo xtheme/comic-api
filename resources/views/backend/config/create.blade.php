@@ -32,9 +32,12 @@
                                 <div data-repeater-item>
                                     <div class="row">
                                         <div class="col-3 form-group">
+                                            <input type="text" class="form-control" name="remark" placeholder="配置说明">
+                                        </div>
+                                        <div class="col-3 form-group">
                                             <input type="text" class="form-control" name="key" placeholder="配置键">
                                         </div>
-                                        <div class="col-8 form-group">
+                                        <div class="col-5 form-group">
                                             <input type="text" class="form-control" name="value" placeholder="配置值">
                                         </div>
                                         <div class="col-1 form-group">

@@ -6,6 +6,10 @@ use Illuminate\Database\Eloquent\Builder;
 
 class Config extends BaseModel
 {
+    protected $casts = [
+        'options' => 'array',
+    ];
+
     public function scopeCode(Builder $query, string $code = null)
     {
         return $query->when($code, function (Builder $query, $code) {

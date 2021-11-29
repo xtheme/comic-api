@@ -39,7 +39,10 @@ class ConfigController extends Controller
         $options = collect($request->post('options'))->reject(function ($item) {
             return $item['key'] == '';
         })->flatMap(function ($item) {
-            return [$item['key'] => $item['value']];
+            return [$item['key'] => [
+                'remark' => $item['remark'],
+                'value' => $item['value'],
+            ]];
         })->toArray();
 
         $config = new Config;
@@ -80,7 +83,10 @@ class ConfigController extends Controller
             $cache_key = sprintf('config:%s:%s', $code, $item['key']);
             Cache::delete($cache_key);
 
-            return [$item['key'] => $item['value']];
+            return [$item['key'] => [
+                'remark' => $item['remark'],
+                'value' => $item['value'],
+            ]];
         });
 
         $config = Config::findOrFail($id);

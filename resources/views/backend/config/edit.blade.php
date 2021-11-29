@@ -30,14 +30,17 @@
                         <label><span class="danger">*</span> 配置項</label>
                         <div class="controls repeater">
                             <div data-repeater-list="options">
-                                @forelse ($config->options as $key => $value)
+                                @forelse ($config->options as $key => $row)
                                     <div data-repeater-item>
                                         <div class="row">
                                             <div class="col-3 form-group">
+                                                <input type="text" class="form-control" name="remark" placeholder="配置说明" value="{{ isset($row['remark']) ? $row['remark']  : '' }}">
+                                            </div>
+                                            <div class="col-3 form-group">
                                                 <input type="text" class="form-control" name="key" placeholder="配置键" value="{{ $key }}">
                                             </div>
-                                            <div class="col-8 form-group">
-                                                <input type="text" class="form-control" name="value" placeholder="配置值" value="{{ $value }}">
+                                            <div class="col-5 form-group">
+                                                <input type="text" class="form-control" name="value" placeholder="配置值" value="{{ isset($row['value']) ? $row['value'] : '' }}">
                                             </div>
                                             <div class="col-1 form-group">
                                                 <button class="btn btn-danger text-nowrap px-1" data-repeater-delete type="button">
@@ -50,9 +53,12 @@
                                     <div data-repeater-item>
                                         <div class="row">
                                             <div class="col-3 form-group">
+                                                <input type="text" class="form-control" name="remark" placeholder="配置说明">
+                                            </div>
+                                            <div class="col-3 form-group">
                                                 <input type="text" class="form-control" name="key" placeholder="配置键">
                                             </div>
-                                            <div class="col-8 form-group">
+                                            <div class="col-5 form-group">
                                                 <input type="text" class="form-control" name="value" placeholder="配置值">
                                             </div>
                                             <div class="col-1 form-group">

@@ -58,10 +58,11 @@
                                     <td>{{ $item->name }}</td>
                                     <td>{{ $item->code }}</td>
                                     <td>
-                                        @foreach($item->options as $key => $value)
+                                        @foreach($item->options as $key => $row)
                                             <dl class="row mb-0">
+                                                <dt class="col-sm-3">{{ isset($row['remark']) ? $row['remark']  : '' }}</dt>
                                                 <dt class="col-sm-3">{{ $key }}</dt>
-                                                <dd class="col-sm-9">{{ $value }}</dd>
+                                                <dd class="col-sm-6">{{ isset($row['value']) ? $row['value']  : '' }}</dd>
                                             </dl>
                                         @endforeach
                                     </td>
