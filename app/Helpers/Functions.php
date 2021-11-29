@@ -198,22 +198,28 @@ if (!function_exists('getEncryptDomain')) {
      */
     function getEncryptDomain()
     {
-        $list = config('api.encrypt.domains');
+        $cache_key = 'encrypt:domain';
 
-        foreach ($list as $domain) {
-            try {
-                $response = Http::timeout(1)->head($domain);
-                if (200 == $response->status()) {
-                    return $domain;
+        $domain = Cache::remember($cache_key, 600, function () {
+            $list = config('api.encrypt.domains');
+
+            foreach ($list as $domain) {
+                try {
+                    $response = Http::timeout(1)->head($domain);
+                    if (200 == $response->status()) {
+                        return $domain;
+                    }
+                } catch (\Exception $e) {
+                    continue;
                 }
-            } catch (\Exception $e) {
-                continue;
             }
-        }
 
-        Log::emergency('所有加密圖片域名都掛了');
+            Log::emergency('所有加密圖片域名都掛了');
 
-        return $list[0];
+            return $list[0];
+        });
+
+        return $domain;
     }
 }
 
