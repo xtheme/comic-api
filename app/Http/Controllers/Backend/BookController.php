@@ -63,6 +63,8 @@ class BookController extends Controller
             'type_options' => BookOptions::TYPE_OPTIONS,
             'list' => $this->filter($request)->paginate(),
             'categories' => getCategoryByType('book'),
+            // 'default_charge_chapter' => getConfig('comic', 'default_charge_chapter'),
+            // 'default_charge_price' => getConfig('comic', 'default_charge_price'),
             'pageConfigs' => ['hasSearchForm' => true],
         ];
 
@@ -316,19 +318,25 @@ class BookController extends Controller
         return Response::jsonSuccess('标签已更新');
     }
 
-    public function price()
-    {
-        $data = [
-            'default_charge_chapter' => getConfig('comic', 'default_charge_chapter'),
-            'default_charge_price' => getConfig('comic', 'default_charge_price'),
-        ];
-
-        return view('backend.book.price')->with($data);
-    }
+    // public function price()
+    // {
+    //     $data = [
+    //         'default_charge_chapter' => getConfig('comic', 'default_charge_chapter'),
+    //         'default_charge_price' => getConfig('comic', 'default_charge_price'),
+    //     ];
+    //
+    //     return view('backend.book.price')->with($data);
+    // }
 
     public function revisePrice(UpdatePriceRequest $request)
     {
-        BookChapter::where('episode', '>=', $request->input('charge_chapter'))->update(['price' => $request->input('charge_price')]);
+        $data = $request->validated();
+
+        $ids = explode(',', $data['ids']);
+
+        BookChapter::whereIn('book_id', $ids)->update(['price' => 0]);
+
+        BookChapter::whereIn('book_id', $ids)->where('episode', '>=', $data['charge_chapter'])->update(['price' => $data['charge_price']]);
 
         return Response::jsonSuccess(__('response.update.success'));
     }

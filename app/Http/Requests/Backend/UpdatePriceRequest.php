@@ -9,6 +9,7 @@ class UpdatePriceRequest extends BaseRequest
     public function rules()
     {
         return [
+            'ids' => 'required',
             'charge_chapter' => 'required|numeric',
             'charge_price' => 'required|numeric',
         ];
@@ -17,6 +18,7 @@ class UpdatePriceRequest extends BaseRequest
     public function attributes()
     {
         return [
+            'ids' => '勾选漫画',
             'charge_chapter' => '开始章节',
             'charge_price' => '金币',
         ];

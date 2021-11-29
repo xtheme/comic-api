@@ -13,8 +13,7 @@
     <section>
         <div class="mb-1">
             <a href="{{ route('backend.book.create') }}" class="btn btn-primary" data-modal title="添加漫画" data-height="55vh" role="button" aria-pressed="true">添加漫画</a>
-            <a href="{{ route('backend.book.price') }}" class="btn btn-success" data-modal data-size="sm" data-height="20vh" title="收费设置" role="button" aria-pressed="true">收费设置</a>
-            <a id="add-tag" href="{{ route('backend.book.modifyTag', 'add') }}" class="btn btn-warning" title="添加标签" role="button" aria-pressed="true">添加标签</a>
+            <a id="add-tag" href="{{ route('backend.book.modifyTag', 'add') }}" class="btn btn-success" title="添加标签" role="button" aria-pressed="true">添加标签</a>
             <a id="remove-tag" href="{{ route('backend.book.modifyTag', 'remove') }}" class="btn btn-danger" title="移除标签" role="button" aria-pressed="true">移除标签</a>
         </div>
         <div class="card">
@@ -23,6 +22,25 @@
                     <h4 class="card-title">@yield('title')</h4>
                 </div>
                 <div class="float-right d-flex flex-wrap">
+                    <form id="batch-price" class="form form-vertical mr-1" method="get" action="{{ route('backend.book.revise.price') }}">
+                        <div class="form-body">
+                            <div class="d-flex align-items-center">
+                                <div class="form-group mr-1">
+                                    <div class="controls">
+                                        <input type="text" class="form-control" name="charge_chapter" placeholder="开始章节">
+                                    </div>
+                                </div>
+                                <div class="form-group mr-1">
+                                    <div class="controls">
+                                        <input type="text" class="form-control" name="charge_price" placeholder="金币">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <button type="submit" class="btn btn-success">收费设置</button>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
                     <form id="batch-review" class="form form-vertical mr-1" method="get" action="{{ route('backend.book.batch') }}">
                         <div class="form-body">
                             <div class="d-flex align-items-center">
@@ -357,7 +375,7 @@
 
 				let $this = $(this);
 				let ids   = $.checkedIds();
-				let url   = $this.attr('action') + '/' + $this.find('select[name="action"]').val();
+				let url   = `{{ route('backend.book.price') }}`;
 
 				if (!ids) {
 					$.toast({
@@ -377,6 +395,40 @@
 							debug   : true,
 							callback: function (res) {
 								$.reloadIFrame({
+									title  : '提交成功',
+									message: '请稍后数据刷新'
+								});
+							}
+						});
+					}
+				});
+			});
+
+			$('#batch-price').submit(function (e) {
+				e.preventDefault();
+
+				let $this = $(this);
+				let ids   = $.checkedIds();
+				let url   = $this.attr('action');
+
+				if (!ids) {
+					$.toast({
+						type: 'error',
+						message: '请先选择要操作的数据'
+					});
+					return false;
+				}
+
+				$.confirm({
+					text: `请确认是否要继续批量操作?`,
+					callback: function () {
+						$.request({
+							url: url,
+							type: 'put',
+							data: {'ids' : ids, 'charge_chapter' : $this.find('input[name="charge_chapter"]').val(), 'charge_price' : $this.find('input[name="charge_price"]').val()},
+							debug   : true,
+							callback: function (res) {
+								$.toast({
 									title  : '提交成功',
 									message: '请稍后数据刷新'
 								});
