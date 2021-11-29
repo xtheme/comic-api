@@ -17,6 +17,7 @@ class OrderController extends Controller
     private function filter(Request $request): Builder
     {
         $order_no = $request->get('order_no') ?? '';
+        $payment_id = $request->get('payment_id') ?? '';
         $transaction_id = $request->get('transaction_id') ?? '';
         $user_id = $request->get('user_id') ?? '';
         $type = $request->get('type') ?? '';
@@ -27,6 +28,8 @@ class OrderController extends Controller
 
         return Order::has('user')->with(['user', 'payment'])->when($order_no, function (Builder $query, $order_no) {
             return $query->where('order_no', $order_no);
+        })->when($payment_id, function (Builder $query, $payment_id) {
+            return $query->where('payment_id', $payment_id);
         })->when($transaction_id, function (Builder $query, $transaction_id) {
             return $query->where('transaction_id', $transaction_id);
         })->when($user_id, function (Builder $query, $user_id) {
