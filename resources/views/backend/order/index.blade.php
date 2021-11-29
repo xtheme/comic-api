@@ -10,30 +10,12 @@
 
 @section('content')
     <section id="config-list">
-{{--        <div class="mb-1">--}}
-{{--            <a href="{{ route('backend.order.export', request()->input()) }}" class="btn btn-primary glow" role="button">导出表格</a>--}}
-{{--        </div>--}}
         <div class="card">
             <div class="card-header">
                 <h4 class="card-title">@yield('title')</h4>
             </div>
             <div class="card-content">
                 <div class="card-body">
-{{--                    <div class="row bg-primary bg-lighten-5 rounded mb-2 mx-25 text-center text-lg-left">--}}
-{{--                        <div class="col-12 col-sm-2 p-1">--}}
-{{--                            <h6 class="text-primary mb-0">总订单数：<span class="font-medium-3 align-middle">{{ $orders_count }}</span></h6>--}}
-{{--                        </div>--}}
-{{--                        <div class="col-12 col-sm-2 p-1">--}}
-{{--                            <h6 class="text-primary mb-0">总金额：<span class="font-medium-3 align-middle">{{ $orders_amount }}</span></h6>--}}
-{{--                        </div>--}}
-{{--                        <div class="col-12 col-sm-2 p-1">--}}
-{{--                            <h6 class="text-primary mb-0">续费订单数：<span class="font-medium-3 align-middle">{{ $renew_orders_count }}</span></h6>--}}
-{{--                        </div>--}}
-{{--                        <div class="col-12 col-sm-2 p-1">--}}
-{{--                            <h6 class="text-primary mb-0">续费总金额：<span class="font-medium-3 align-middle">{{ $renew_orders_amount }}</span></h6>--}}
-{{--                        </div>--}}
-{{--                    </div>--}}
-                    <!-- Table with outer spacing -->
                     <div class="table-responsive">
                         <table class="table table-striped table-hover">
                             <thead>
@@ -66,7 +48,7 @@
                                     <td>{{ $order->amount }}</td>
                                     <td>{{ $order->user_id }}</td>
                                     <td>{{ optional($order->created_at)->diffForHumans() ?? '' }}</td>
-                                    <td>{{ $order->payment->name }}</td>
+                                    <td>{{ $order->payment_id }} : {{ $order->payment->name }}</td>
                                     <td>{{ $order->transaction_id }}</td>
                                     <td>{{ $order->transaction_at }}</td>
                                     <td>
@@ -124,7 +106,16 @@
                         </div>
                     </div>
                 </div>
-
+                <div class="col-12">
+                    <div class="form-group">
+                        <label>支付渠道ID</label>
+                        <div class="controls">
+                            <input type="text" class="form-control"
+                                   name="payment_id" value="{{ request()->get('payment_id') }}"
+                                   placeholder="">
+                        </div>
+                    </div>
+                </div>
                 <div class="col-12">
                     <div class="form-group">
                         <label>渠道訂單號</label>

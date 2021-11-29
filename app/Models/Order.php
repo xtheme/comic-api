@@ -37,10 +37,18 @@ class Order extends BaseModel
         return $query->where('order_no', $order_no);
     }
 
-    //
+    // 支付渠道
     public function getGatewayAttribute()
     {
         return $this->payment()->first();
+    }
+
+    // 能否補單
+    public function getCanManualCallbackAttribute()
+    {
+        $order_created = $this->created_at->addDays(3);
+
+        return now()->lt($order_created);
     }
 
 }
