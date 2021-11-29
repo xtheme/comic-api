@@ -7,7 +7,6 @@ use App\Http\Requests\Api\RegisterRequest;
 use App\Http\Resources\ProfileResource;
 use App\Jobs\RegisterJob;
 use App\Models\User;
-use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Hash;

@@ -23,7 +23,7 @@ class VerifyLocation
             $location = $request->header('CF-IPCountry');
             $white_locations = explode(',', getConfig('app', 'white_locations'));
             if (!in_array($location, $white_locations)) {
-                Log::emergency('被屏蔽的請求來自: ' . $location);
+                Log::emergency('被屏蔽的請求來自: ' . $location, $request->all());
                 return Response::jsonError('你的所在地不在本服务的区域内，敬请见谅!', 403);
             }
         }
