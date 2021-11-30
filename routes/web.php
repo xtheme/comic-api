@@ -263,6 +263,16 @@ Route::middleware(['auth', 'auth.route.role'])->prefix('backend')->as('backend.'
         Route::put('update/{id}', [Backend\ChannelController::class , 'update'])->name('update');
     });
 
+    // 域名
+    Route::prefix('channel_domain')->as('channel_domain.')->group(function () {
+        Route::get('/', [Backend\ChannelDomainController::class , 'index'])->name('index');
+        Route::get('create', [Backend\ChannelDomainController::class , 'create'])->name('create');
+        Route::post('store', [Backend\ChannelDomainController::class , 'store'])->name('store');
+        Route::get('edit/{id}', [Backend\ChannelDomainController::class , 'edit'])->name('edit');
+        Route::put('update/{id}', [Backend\ChannelDomainController::class , 'update'])->name('update');
+        Route::delete('destroy/{id}', [Backend\ChannelDomainController::class , 'destroy'])->name('destroy');
+    });
+
     // 操作记录
     Route::prefix('activity')->as('activity.')->group(function () {
         Route::get('/', [Backend\ActivityLogController::class , 'index'])->name('index');
@@ -298,15 +308,5 @@ Route::middleware(['auth', 'auth.route.role'])->prefix('backend')->as('backend.'
         Route::get('channel_detail/{channel_id}', [Backend\FinanceController::class , 'channelDetail'])->name('channel_detail');
         Route::get('total_revenue', [Backend\FinanceController::class , 'totalRevenue'])->name('total_revenue'); // 总收入
         Route::get('gateway_revenue', [Backend\FinanceController::class , 'gatewayRevenue'])->name('gateway_revenue'); // 各金流收入
-    });
-
-    // 域名
-    Route::prefix('domain')->as('domain.')->group(function () {
-        Route::get('/', [Backend\DomainController::class , 'index'])->name('index');
-        Route::get('create', [Backend\DomainController::class , 'create'])->name('create');
-        Route::post('store', [Backend\DomainController::class , 'store'])->name('store');
-        Route::get('edit/{id}', [Backend\DomainController::class , 'edit'])->name('edit');
-        Route::put('update/{id}', [Backend\DomainController::class , 'update'])->name('update');
-        Route::delete('destroy/{id}', [Backend\DomainController::class , 'destroy'])->name('destroy');
     });
 });

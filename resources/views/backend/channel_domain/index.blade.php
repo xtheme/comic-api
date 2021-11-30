@@ -10,7 +10,7 @@
 @section('content')
     <section>
         <div class="mb-1">
-            <a href="{{ route('backend.domain.create') }}" class="btn btn-primary" data-modal data-size="md" data-height="50vh" title="添加域名" role="button" aria-pressed="true">添加域名</a>
+            <a href="{{ route('backend.channel_domain.create') }}" class="btn btn-primary" data-modal data-size="md" data-height="50vh" title="添加域名" role="button" aria-pressed="true">添加域名</a>
         </div>
         <div class="card">
             <div class="card-header">
@@ -18,15 +18,6 @@
             </div>
             <div class="card-content">
                 <div class="card-body">
-                    <ul class="nav nav-pills nav-fill">
-                        @foreach($type_options as $key => $val)
-                        <li class="nav-item">
-                            <a class="nav-link @if($key == $type){{'active'}}@endif" href="{{ route('backend.domain.index') }}?type={{ $key }}">
-                                {{ $val }}
-                            </a>
-                        </li>
-                        @endforeach
-                    </ul>
                     <!-- Table with outer spacing -->
                     <div class="table-responsive">
                         <table class="table table-striped table-hover">
@@ -57,7 +48,7 @@
                                             <span class="bx bx-dots-vertical-rounded font-medium-3 dropdown-toggle nav-hide-arrow cursor-pointer"
                                                   id="dropdownMenuButton{{ $item->id }}" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></span>
                                             <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuButton{{ $item->id }}">
-                                                <a class="dropdown-item" data-modal data-size="md" data-height="50vh" href="{{ route('backend.domain.edit', $item->id) }}" title="修改域名"><i class="bx bx-edit-alt mr-1"></i>修改</a>
+                                                <a class="dropdown-item" data-modal data-size="md" data-height="50vh" href="{{ route('backend.channel_domain.edit', $item->id) }}" title="修改域名"><i class="bx bx-edit-alt mr-1"></i>修改</a>
                                             </div>
                                         </div>
                                     </td>

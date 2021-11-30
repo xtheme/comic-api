@@ -7,7 +7,7 @@
             "icon": "bx bxs-home"
         },
         {
-            "url": "/backend/domain",
+            "url": "/backend/channel_domain",
             "name": "Domains",
             "slug": "domains",
             "icon": "bx bxs-server"

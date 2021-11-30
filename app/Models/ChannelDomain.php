@@ -2,7 +2,7 @@
 
 namespace App\Models;
 
-class Domain extends BaseModel
+class ChannelDomain extends BaseModel
 {
     protected $guarded = [
         'id',

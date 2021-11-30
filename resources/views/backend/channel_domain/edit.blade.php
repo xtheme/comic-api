@@ -8,7 +8,8 @@
 @endsection
 
 @section('content')
-    <form id="form" class="form" method="post" action="{{ route('backend.domain.store') }}">
+    <form id="form" class="form" method="post" action="{{ route('backend.channel_domain.update', $domain->id) }}">
+        @method('put')
         <div class="form-body">
             <div class="row">
                 <div class="col-12">
@@ -17,7 +18,7 @@
                         <div class="controls">
                             <select class="form-control" name="type">
                                 @foreach ($type_options as $key => $val)
-                                    <option value="{{ $key }}">{{ $val }}</option>
+                                    <option value="{{ $key }}" @if($domain->type == $key){{'selected'}}@endif>{{ $val }}</option>
                                 @endforeach
                             </select>
                         </div>
@@ -27,7 +28,7 @@
                     <div class="form-group">
                         <label>域名</label>
                         <div class="controls">
-                            <input type="text" class="form-control" name="domain">
+                            <input type="text" class="form-control" name="domain" value="{{ $domain->domain }}">
                         </div>
                     </div>
                 </div>
@@ -35,7 +36,7 @@
                     <div class="form-group">
                         <label>备注</label>
                         <div class="controls">
-                            <input type="text" class="form-control" name="desc">
+                            <input type="text" class="form-control" name="desc" value="{{ $domain->desc }}">
                         </div>
                     </div>
                 </div>
@@ -43,7 +44,7 @@
                     <div class="form-group">
                         <label>到期时间</label>
                         <div class="controls">
-                            <input type="text" name="expire_at" class="form-control date-picker" value="" placeholder="选择日期">
+                            <input type="text" name="expire_at" class="form-control date-picker" value="{{ $domain->expire_at }}" placeholder="选择日期">
                         </div>
                     </div>
                 </div>
@@ -53,7 +54,7 @@
                         <div class="controls">
                             <select class="form-control" name="status">
                                 @foreach ($status_options as $key => $val)
-                                    <option value="{{ $key }}">{{ $val }}</option>
+                                    <option value="{{ $key }}" @if($domain->status == $key){{'selected'}}@endif>{{ $val }}</option>
                                 @endforeach
                             </select>
                         </div>

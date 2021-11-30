@@ -6,9 +6,10 @@ final class DomainOptions
 {
     const TYPE_OPTIONS = [
         'api' => 'API',
-        'wap' => '推广',
-        'image' => '圖片',
-        'video' => '视频',
+        'wap' => '网站',
+        'android' => '安卓',
+        // 'image' => '圖片',
+        // 'video' => '视频',
     ];
 
     const STATUS_OPTIONS = [
