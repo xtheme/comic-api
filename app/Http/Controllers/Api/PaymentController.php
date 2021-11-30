@@ -63,11 +63,6 @@ class PaymentController extends Controller
                 'text' => $gateway->button_text,
                 'icon' => $gateway->button_icon,
                 'target' => $gateway->button_target,
-                // 'button' => [
-                //     'text' => $gateway->button_text,
-                //     'icon' => $gateway->button_icon,
-                //     'target' => $gateway->button_target,
-                // ],
             ];
         })->toArray();
 

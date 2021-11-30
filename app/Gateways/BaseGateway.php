@@ -47,6 +47,7 @@ class BaseGateway
             'domain' => request()->headers->get('origin'),
             'ip' => request()->ip(),
             'platform' => strtolower(request()->header('platform')),
+            'uuid' => request()->header('uuid'),
         ];
 
         $order = Order::create($data);
