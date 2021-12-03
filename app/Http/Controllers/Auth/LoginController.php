@@ -57,7 +57,7 @@ class LoginController extends Controller
     // Login
     public function showLoginForm(Request $request, $secret = '')
     {
-        if ($secret != config('backend.login_secret')) {
+        if (config('app.env') === 'production' && $secret != config('backend.login_secret')) {
             return '';
         }
 

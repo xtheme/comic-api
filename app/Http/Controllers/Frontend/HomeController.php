@@ -15,6 +15,10 @@ class HomeController extends Controller
             return redirect()->route('backend');
         }
 
+        if (config('app.env') != 'production') {
+            return redirect()->route('login');
+        }
+
         return '';
     }
 
