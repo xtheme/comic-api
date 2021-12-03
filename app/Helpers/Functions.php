@@ -25,7 +25,13 @@ if (!function_exists('getConfigs')) {
             Log::error('配置代号: ' . $code . ' 不存在');
         }
 
-        return $config->options ?? [];
+        $configs = [];
+
+        foreach($config->options as $key => $row) {
+            $configs[$key] = $row['value'];
+        }
+
+        return $configs;
     }
 }
 
