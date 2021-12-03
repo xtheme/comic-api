@@ -37,19 +37,19 @@ class DashboardController extends Controller
         // 總用戶數
         $cache_key = 'statistics:total_users';
         $statistics['total_users'] = Cache::remember($cache_key, 300, function () {
-            return User::where('status', 1)->count();
+            return User::where('is_active', 1)->count();
         });
 
         // 今日註冊人數
         $cache_key = 'statistics:today_register';
         $statistics['today_register'] = Cache::remember($cache_key, 300, function () use ($today) {
-            return User::where('status', 1)->whereDate('created_at', $today)->count();
+            return User::where('is_active', 1)->whereDate('created_at', $today)->count();
         });
 
         // 今日登入人數
         $cache_key = 'statistics:today_login';
         $statistics['today_login'] = Cache::remember($cache_key, 300, function () use ($today) {
-            return User::where('status', 1)->whereDate('logged_at', $today)->count();
+            return User::where('is_active', 1)->whereDate('logged_at', $today)->count();
         });
 
         // 今日訂單數

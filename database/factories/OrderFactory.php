@@ -28,9 +28,7 @@ class OrderFactory extends Factory
 
         $order_no = date('ymd') . str_pad((string) ($count + 1), 5, '0', STR_PAD_LEFT) . rand(10, 99);
 
-
-
-        $user_id = User::where('status', 1)->inRandomOrder()->first()->id;
+        $user_id = User::where('is_active', 1)->inRandomOrder()->first()->id;
 
         $pricing = Pricing::where('status', 1)->inRandomOrder()->first();
 
