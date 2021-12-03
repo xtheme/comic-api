@@ -15,6 +15,15 @@ class ProfileResource extends JsonResource
         return $this;
     }
 
+    protected $password = null;
+
+    public function withPassword($value)
+    {
+        $this->password = $value;
+
+        return $this;
+    }
+
     /**
      * Transform the resource into an array.
      *
@@ -32,6 +41,7 @@ class ProfileResource extends JsonResource
             'subscribed_until' => optional($this->subscribed_until)->format('Y-m-d H:i:s'),
             'logged_at' => optional($this->logged_at)->format('Y-m-d H:i:s'),
             'token' => $this->when(!is_null($this->token), $this->token),
+            'password' => $this->when(!is_null($this->password), $this->password),
         ];
     }
 }

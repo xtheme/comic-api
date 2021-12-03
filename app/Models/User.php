@@ -28,6 +28,7 @@ class User extends Authenticatable
         'email_verified_at',
         'remember_token',
         'updated_at',
+        'fingerprint',
     ];
 
     protected $dates = [

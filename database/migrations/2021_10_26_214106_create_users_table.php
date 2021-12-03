@@ -28,7 +28,7 @@ class CreateUsersTable extends Migration
             $table->dateTime('subscribed_until')->nullable()->comment('VIP到期时间');
             $table->tinyInteger('is_active')->nullable()->default(1)->comment('1=正常, 0=封禁');
             $table->tinyInteger('is_ban')->nullable()->default(0)->comment('0=正常, 1=黑單');
-            $table->tinyInteger('status')->nullable()->default(1)->comment('状态：0禁用，1启用');
+            $table->string('fingerprint')->comment('设备指纹');
             $table->timestamp('logged_at')->nullable()->comment('最近登入时间');
             $table->timestamps();
         });

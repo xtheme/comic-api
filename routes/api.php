@@ -28,6 +28,7 @@ Route::as('api.')->middleware(['api'])->group(function () {
             Route::post('/captcha', [Api\AuthController::class, 'captcha'])->name('captcha');
             Route::post('/login', [Api\AuthController::class, 'login'])->name('login');
             Route::post('/register', [Api\AuthController::class, 'register'])->name('register');
+            Route::post('/fast/register', [Api\AuthController::class, 'fastRegister']);
         });
 
         // 首頁:導航列

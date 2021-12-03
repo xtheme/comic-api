@@ -11,6 +11,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Response;
+use Illuminate\Support\Str;
 
 class AuthController extends BaseController
 {
@@ -49,6 +50,7 @@ class AuthController extends BaseController
 
         // 更新登入時間
         $user->logged_at = Carbon::now();
+        $user->fingerprint = $request->header('uuid');
         $user->save();
 
         // 清除所有 token
@@ -79,6 +81,7 @@ class AuthController extends BaseController
             'channel_id' => $request->header('ch') ?? 1,
             'name' => $request->input('name'),
             'password' => $request->input('password'),
+            'fingerprint' => $request->header('uuid'),
             'wallet' => getConfig('app', 'register_coin'),
         ];
 
@@ -89,7 +92,53 @@ class AuthController extends BaseController
 
         RegisterJob::dispatch($user, $request->header('platform'));
 
-        return Response::jsonSuccess(__('api.success'), ['token' => $token]);
+        $response = (new ProfileResource($user))->withToken($token);
+
+        return Response::jsonSuccess(__('api.success'), $response);
+    }
+
+    /**
+     * 一鍵註冊
+     * 檢查設備指紋是否匹配用戶帳號, 如是自動登入, 如否快速創建帳號
+     */
+    public function fastRegister(Request $request)
+    {
+        $fingerprint = $request->header('uuid');
+
+        // 檢查設備指紋是否匹配用戶帳號
+        $user = User::where('fingerprint', $fingerprint)->first();
+
+        if ($user) {
+            // 簽發 personal token
+            $token = $user->createToken($user->name)->plainTextToken;
+
+            $response = (new ProfileResource($user))->withToken($token);
+
+            return Response::jsonSuccess(__('api.success'), $response);
+        }
+
+        $name = Str::random(8);
+        $password = Str::random(8);
+
+        $data = [
+            'app_id' => $request->input('app') ?? 0,
+            'channel_id' => $request->header('ch') ?? 1,
+            'name' => $name,
+            'password' => $password,
+            'fingerprint' => $request->header('uuid'),
+            'wallet' => getConfig('app', 'register_coin'),
+        ];
+
+        $user = User::create($data);
+
+        // 簽發 personal token
+        $token = $user->createToken($user->name)->plainTextToken;
+
+        RegisterJob::dispatch($user, $request->header('platform'));
+
+        $response = (new ProfileResource($user))->withToken($token)->withPassword($password);
+
+        return Response::jsonSuccess(__('api.success'), $response);
     }
 
     /**
