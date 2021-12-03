@@ -78,6 +78,11 @@
                 }
             }
 
+	        $('#captcha').on('click', function() {
+		        $(this).attr('src', '{{ captcha_src() }}');
+		        $('input[name="captcha"]').val('');
+            });
+
             $form.on('submit', function (e) {
                 e.preventDefault();
                 $.request({
