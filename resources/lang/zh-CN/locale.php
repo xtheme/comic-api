@@ -2,13 +2,13 @@
 
 return [
     "Site Title" => "色多多",
-
     "Dashboard" => "控制台",
-    "Channel" => "渠道管理",
+
+    "Channel" => "推广渠道",
     "Channel List" => "渠道列表",
     "Channel Daily Report" => "渠道日报表",
     "Daily Report" => "每日汇总",
-    "Domains" => "域名清单",
+    "Domains" => "推广域名",
 
     "Customers" => "会员管理",
     "Customer List" => "会员列表",

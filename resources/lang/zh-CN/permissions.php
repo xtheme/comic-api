@@ -53,7 +53,8 @@ return [
     'payment' => '支付管理',
     'category' => '标签分类',
     'filter' => '筛选器',
-    'channel' => '渠道统计',
+    'channel' => '推广渠道',
+    'channel_domain' => '推广域名',
     'domain' => '域名',
     'finance' => '财报',
 ];
