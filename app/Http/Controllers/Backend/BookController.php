@@ -262,7 +262,7 @@ class BookController extends Controller
         ]);
 
         if ($validator->fails()) {
-            return Response::jsonError($validator->errors()->first(), 500);
+            return Response::jsonError($validator->errors()->first());
         }
 
         $book = Book::findOrFail($data['pk']);

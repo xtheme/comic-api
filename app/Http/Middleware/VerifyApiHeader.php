@@ -44,13 +44,13 @@ class VerifyApiHeader
 
         if ($validator->fails()) {
             Log::emergency($validator->errors()->first(), $request->all());
-            return Response::jsonError('缺少必要的请求参数!', 500);
+            return Response::jsonError('缺少必要的请求参数!', 401);
         }
 
         // 验证时间戳, 接口有效期5分钟
         $time_lag = time() - (int) $request->header('timestamp');
         if ($time_lag > 300) {
-            return Response::jsonError('请求已经过期！', 500);
+            return Response::jsonError('请求已经过期！', 403);
         }
 
         return $next($request);

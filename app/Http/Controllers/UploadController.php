@@ -24,7 +24,7 @@ class UploadController extends Controller
         $response = Upload::to($dir, $id)->store($file);
 
         if (!$response['success']) {
-            return Response::jsonError($response['message'], 500);
+            return Response::jsonError($response['message'], 415);
         }
 
         return Response::jsonSuccess(__('response.upload.success'), $response);

@@ -124,7 +124,7 @@ class BookChapterController extends Controller
         ]);
 
         if ($validator->fails()) {
-            return Response::jsonError($validator->errors()->first(), 500);
+            return Response::jsonError($validator->errors()->first());
         }
 
         $chapter = BookChapter::findOrFail($data['pk']);

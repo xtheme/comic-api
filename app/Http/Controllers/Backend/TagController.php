@@ -61,7 +61,7 @@ class TagController extends Controller
         ]);
 
         if ($validator->fails()) {
-            return Response::jsonError($validator->errors()->first(), 500);
+            return Response::jsonError($validator->errors()->first());
         }
 
         [$tag_name, $tag_type] = explode('-', $request->post('pk'));
