@@ -21,7 +21,7 @@ class AuthController extends BaseController
     public function captcha(Request $request)
     {
         $data = [
-            'url' => app('captcha')->create('math', true),
+            'url' => app('captcha')->create('default', true),
         ];
 
         return Response::jsonSuccess(__('api.success'), $data);

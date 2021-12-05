@@ -9,7 +9,7 @@ class RegisterRequest extends BaseApiRequest
     public function rules()
     {
         return [
-            'captcha' => 'required|captcha_api:'. request()->input('key') . ',math',
+            'captcha' => 'required|captcha_api:'. request()->input('key') . ',default',
             'name' => 'required|min:2|max:16|alpha_dash',
             'password' => [
                 'required',
