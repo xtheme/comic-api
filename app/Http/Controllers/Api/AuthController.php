@@ -97,6 +97,14 @@ class AuthController extends BaseController
         return Response::jsonSuccess(__('api.success'), $response);
     }
 
+    function randomString($length_1 = 2, $length_2 = 4)
+    {
+        $str = substr(str_shuffle(str_repeat($x = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ', ceil($length_1 / strlen($x)))), 1, $length_1);
+        $str .= substr(str_shuffle(str_repeat($x = '0123456789', ceil($length_2 / strlen($x)))), 1, $length_2);
+
+        return $str;
+    }
+
     /**
      * 一鍵註冊
      * 檢查設備指紋是否匹配用戶帳號, 如是自動登入, 如否快速創建帳號
@@ -117,8 +125,13 @@ class AuthController extends BaseController
             return Response::jsonSuccess(__('api.success'), $response);
         }
 
-        $name = Str::random(8);
-        $password = Str::random(8);
+        $name = $this->randomString();
+        $password = $this->randomString(0, 6);
+
+        // 檢查用戶名(信箱)是否已被使用
+        if (true === User::where('name', strtolower($name))->exists()) {
+            return $this->fastRegister($request);
+        }
 
         $data = [
             'app_id' => $request->input('app') ?? 0,
