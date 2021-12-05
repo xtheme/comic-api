@@ -50,7 +50,7 @@ class AuthController extends BaseController
 
         // 更新登入時間
         $user->logged_at = Carbon::now();
-        $user->fingerprint = $request->header('uuid');
+        // $user->fingerprint = $request->header('uuid');
         $user->save();
 
         // 清除所有 token
@@ -81,7 +81,7 @@ class AuthController extends BaseController
             'channel_id' => $request->header('ch') ?? 1,
             'name' => $request->input('name'),
             'password' => $request->input('password'),
-            'fingerprint' => $request->header('uuid'),
+            // 'fingerprint' => $request->header('uuid'),
             'wallet' => getConfig('app', 'register_coin'),
         ];
 
