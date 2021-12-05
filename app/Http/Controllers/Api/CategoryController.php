@@ -36,6 +36,7 @@ class CategoryController extends BaseController
             'keyword' => $request->post('keyword') ?? null,
             'tags' => $request->post('tags') ?? null,
             'end' => $request->post('end') ?? null,
+            'date_between' => $request->post('date_between') ?? null,
             'sort' => $request->post('sort') ?? 'created_at',
             'page' => $request->post('page') ?? 1,
             'size' => $request->post('size') ?? 20,
@@ -74,7 +75,7 @@ class CategoryController extends BaseController
                     // 漫畫才有此欄位
                     $query->where('end', 1);
                     break;
-                case 'order_by':
+                case 'sort':
                     $query->latest($value);
                     break;
                 case 'date_between':
