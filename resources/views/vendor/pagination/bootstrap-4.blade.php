@@ -6,7 +6,7 @@
                 <li class="page-item previous disabled" aria-disabled="true" aria-label="@lang('pagination.previous')">
                     <a class="page-link" href="#">
                         <i class="bx bx-chevron-left"></i>
-                    </a
+                    </a>
                 </li>
             @else
                 <li class="page-item previous">
