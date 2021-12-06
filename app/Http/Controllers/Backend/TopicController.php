@@ -68,7 +68,7 @@ class TopicController extends Controller
 
         $this->repository->update($id, $input);
 
-        $cache_key = sprintf('topic:%s', $id);
+        $cache_key = sprintf('topic:%s', $input['type']);
         Cache::delete($cache_key);
 
         return Response::jsonSuccess(__('response.update.success'));
