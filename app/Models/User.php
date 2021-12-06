@@ -10,7 +10,6 @@ use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Log;
 use Laravel\Sanctum\HasApiTokens;
 
 class User extends Authenticatable
@@ -172,7 +171,6 @@ class User extends Authenticatable
         $this->wallet = $this->wallet + $coin;
 
         if ($days > 0) {
-            Log::debug('addDays');
             if ($this->subscribed_until && $this->subscribed_until->greaterThan(Carbon::now())) {
                 $this->subscribed_until = $this->subscribed_until->addDays($days);
             } else {
@@ -181,7 +179,6 @@ class User extends Authenticatable
         }
 
         if ($days < 0) {
-            Log::debug('subDays');
             if ($this->subscribed_until && $this->subscribed_until->greaterThan(Carbon::now())) {
                 $this->subscribed_until = $this->subscribed_until->subDays(abs($days));
             } else {
