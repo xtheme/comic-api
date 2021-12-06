@@ -6,6 +6,7 @@ use App\Http\Resources\BookChapterResource;
 use App\Models\Book;
 use App\Models\BookChapter;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Response;
 
 class BookController extends BaseController
@@ -19,9 +20,17 @@ class BookController extends BaseController
 
     public function detail(Request $request, $id)
     {
-        $book = Book::with(['chapters' => function($query) {
-            $query->where('status', 1)->oldest('episode');
-        }, 'favorite_logs'])->withCount(['chapters'])->find($id);
+        $cache_key = 'book:' . $id;
+
+        $book = Cache::remember($cache_key, 600, function () use ($id) {
+            return Book::with(['chapters' => function($query) {
+                $query->where('status', 1)->oldest('episode');
+            }, 'favorite_logs'])->withCount(['chapters'])->find($id);
+        });
+
+        // $book = Book::with(['chapters' => function($query) {
+        //     $query->where('status', 1)->oldest('episode');
+        // }, 'favorite_logs'])->withCount(['chapters'])->find($id);
 
         if (!$book) {
             return Response::jsonError('该漫画不存在或已下架！');
@@ -81,7 +90,13 @@ class BookController extends BaseController
 
     public function chapter(Request $request, $chapter_id)
     {
-        $chapter = BookChapter::with(['purchase_log'])->find($chapter_id);
+        $cache_key = 'chapter:' . $chapter_id;
+
+        $chapter = Cache::remember($cache_key, 600, function () use ($chapter_id) {
+            return BookChapter::with(['purchase_log'])->find($chapter_id);
+        });
+
+        // $chapter = BookChapter::with(['purchase_log'])->find($chapter_id);
 
         if (!$chapter) {
             return Response::jsonError('该漫画不存在或已下架！');

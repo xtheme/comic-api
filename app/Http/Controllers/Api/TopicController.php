@@ -69,7 +69,7 @@ class TopicController extends BaseController
 
             $list = $topic->filter->buildQuery()->take($topic->limit)->get();
 
-            return Cache::remember($cache_key, 300, function () use ($topic, $list) {
+            return Cache::remember($cache_key, 600, function () use ($topic, $list) {
                 return [
                     'title' => $topic->filter->title,
                     'filter_id' => $topic->filter_id,
@@ -85,27 +85,55 @@ class TopicController extends BaseController
 
     public function filter($filter_id, $page = 1)
     {
-        $filter = Filter::findOrFail($filter_id);
+        $cache_key = sprintf('filter:%s:%s', $filter_id, $page);
 
-        $size = 20;
+        $data = Cache::remember($cache_key, 600, function () use ($filter_id, $page) {
+            $filter = Filter::findOrFail($filter_id);
 
-        $query = $filter->buildQuery();
+            $size = 20;
 
-        $count = (clone $query)->count();
+            $query = $filter->buildQuery();
 
-        $total_page = ceil($count / $size);
+            $count = (clone $query)->count();
 
-        $list = (clone $query)->forPage($page, $size)->get();
+            $total_page = ceil($count / $size);
 
-        $list = $this->arrangeData($filter->type, $list);
+            $list = (clone $query)->forPage($page, $size)->get();
 
-        $data = [
-            'title' => $filter->title,
-            'page' => (int) $page,
-            'size' => $size,
-            'total_page' => (int) $total_page,
-            'list' => $list,
-        ];
+            $list = $this->arrangeData($filter->type, $list);
+
+            $data = [
+                'title' => $filter->title,
+                'page' => (int) $page,
+                'size' => $size,
+                'total_page' => (int) $total_page,
+                'list' => $list,
+            ];
+
+            return $data;
+        });
+
+        // $filter = Filter::findOrFail($filter_id);
+        //
+        // $size = 20;
+        //
+        // $query = $filter->buildQuery();
+        //
+        // $count = (clone $query)->count();
+        //
+        // $total_page = ceil($count / $size);
+        //
+        // $list = (clone $query)->forPage($page, $size)->get();
+        //
+        // $list = $this->arrangeData($filter->type, $list);
+        //
+        // $data = [
+        //     'title' => $filter->title,
+        //     'page' => (int) $page,
+        //     'size' => $size,
+        //     'total_page' => (int) $total_page,
+        //     'list' => $list,
+        // ];
 
         return Response::jsonSuccess(__('api.success'), $data);
     }
