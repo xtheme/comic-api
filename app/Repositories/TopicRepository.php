@@ -9,8 +9,6 @@ use Illuminate\Http\Request;
 
 class TopicRepository extends Repository implements TopicRepositoryInterface
 {
-    protected $cache_ttl = 60; // 缓存秒数
-
     /**
      * @return string
      */

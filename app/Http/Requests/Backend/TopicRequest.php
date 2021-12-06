@@ -9,6 +9,7 @@ class TopicRequest extends BaseRequest
     public function rules()
     {
         return [
+            'type' => 'required',
             'filter_id' => 'required|numeric',
             'spotlight' => 'numeric',
             'row' => 'numeric',
@@ -21,6 +22,7 @@ class TopicRequest extends BaseRequest
     public function attributes()
     {
         return [
+            'type' => '类型',
             'filter_id' => '筛选器',
             'spotlight' => '首笔聚焦',
             'row' => '每行笔数',
