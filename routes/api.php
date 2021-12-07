@@ -1,7 +1,6 @@
 <?php
 
 use App\Http\Controllers\Api;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -16,9 +15,11 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::as('api.')->middleware(['api'])->group(function () {
-    Route::prefix(config('api.version'))->middleware(['request.decrypt', 'api.location', 'api.header', 'api.sign'])->group(function () {
-        Route::get('/decrypt', [Api\DevController::class, 'decrypt']);
 
+    Route::get('/stress', [Api\DevController::class, 'stress']);
+    Route::get('/decrypt', [Api\DevController::class, 'decrypt']);
+
+    Route::prefix(config('api.version'))->middleware(['request.decrypt', 'api.location', 'api.header', 'api.sign'])->group(function () {
         Route::prefix('bootstrap')->as('bootstrap.')->group(function () {
             Route::get('/configs', [Api\BootstrapController::class, 'configs'])->name('configs');
             Route::get('/notices', [Api\BootstrapController::class, 'notices'])->name('notices');
