@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Requests\Api\LoginRequest;
 use App\Http\Requests\Api\RegisterRequest;
+use App\Http\Requests\Api\UserModifyRequest;
 use App\Http\Resources\ProfileResource;
 use App\Jobs\RegisterJob;
 use App\Models\User;
@@ -180,22 +181,23 @@ class AuthController extends BaseController
     /**
      * 修改用戶信息
      */
-    public function modify(Request $request)
+    public function modify(UserModifyRequest $request)
     {
+        $input = $request->validated();
+
         $user = $request->user();
 
-        if ($request->input('password') && $request->input('new_password')) {
-            if (!Hash::check($request->post('password'), $user->getAuthPassword())) {
-                return Response::jsonError('原密码验证错误！');
+        if (isset($input['name'])) {
+            // 檢查用戶名(信箱)是否已被使用
+            if (true === User::where('name', strtolower($input['name']))->where('id', '!=', $user->id)->exists()) {
+                return Response::jsonError(__('api.register.name.exists'));
             }
+
+            $user->name = $input['name'];
         }
 
-        if (!empty($request->input('new_password')) || !empty($request->input('new_password_confirm'))) {
-            if ($request->input('new_password') != $request->input('new_password_confirm')) {
-                return Response::jsonError('两次输入的新密码不同！');
-            }
-
-            $user->password = $request->input('new_password');
+        if (isset($input['password'])) {
+            $user->password = $input['password'];
         }
 
         $user->save();

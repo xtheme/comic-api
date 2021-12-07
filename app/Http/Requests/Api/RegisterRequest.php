@@ -13,10 +13,10 @@ class RegisterRequest extends BaseApiRequest
             'name' => 'required|min:2|max:16|alpha_dash',
             'password' => [
                 'required',
+                'confirmed',
                 // Password::min(8)->mixedCase()->letters()->numbers(),
                 Password::min(4),
             ],
-            'password_confirmation' => 'required_with:password|same:password',
         ];
     }
 
@@ -26,7 +26,6 @@ class RegisterRequest extends BaseApiRequest
             'captcha' => '验证码',
             'name' => '帐号',
             'password' => '密码',
-            'password_confirmation' => '确认密码',
         ];
     }
 }
