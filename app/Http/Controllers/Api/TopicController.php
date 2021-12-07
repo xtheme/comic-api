@@ -64,7 +64,7 @@ class TopicController extends BaseController
 
         $cache_key = sprintf('topic:%s', $type);
 
-        $data = Cache::remember($cache_key, 600, function () use ($request) {
+        $data = Cache::remember($cache_key, 1800, function () use ($request) {
             $topics = $this->repository->filter($request)->get();
 
             return $topics->map(function ($topic) {

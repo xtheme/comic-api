@@ -26,7 +26,7 @@ class Filter extends BaseModel
 
         $model = new $class;
 
-        $query = $model::query()->where('status', 1);
+        $query = $model::query()->with(['tags'])->where('status', 1);
 
         // 標籤條件
         foreach ($this->tags as $type => $tags) {
@@ -39,7 +39,7 @@ class Filter extends BaseModel
 
             switch ($field) {
                 case 'title':
-                    $query->whereLike('author', $value);
+                    $query->whereLike('title', $value);
                     break;
                 case 'author':
                     $query->whereLike('author', $value);
