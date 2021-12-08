@@ -60,8 +60,11 @@ class Book extends BaseModel
      */
     public function getChargeAttribute()
     {
-        // return $this->chapters->where('price', '>', 0)->count() > 0;
-        return (bool) $this->last_chapter->price > 0;
+        if ($this->last_chapter) {
+            return (bool) $this->last_chapter->price > 0;
+        }
+
+        return false;
     }
 
     /**
