@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Backend;
 use App\Http\Controllers\Controller;
 use App\Models\BookChapter;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\Validator;
 
@@ -107,6 +108,12 @@ class BookChapterController extends Controller
         }
 
         BookChapter::whereIn('id', $ids)->update($data);
+
+        // mass delete cache
+        foreach($ids as $id) {
+            $cache_key = sprintf('chapter:%s', $id);
+            Cache::delete($cache_key);
+        }
 
         return Response::jsonSuccess($text . '成功！');
     }

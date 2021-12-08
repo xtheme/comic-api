@@ -3,6 +3,7 @@
 namespace App\Observers;
 
 use App\Models\Book;
+use Illuminate\Support\Facades\Cache;
 
 class BookObserver
 {
@@ -25,7 +26,8 @@ class BookObserver
      */
     public function updated(Book $book)
     {
-        //
+        $cache_key = sprintf('book:%s', $book->id);
+        Cache::delete($cache_key);
     }
 
     /**
@@ -39,6 +41,9 @@ class BookObserver
         $book->chapters()->delete();
         $book->visit_logs()->delete();
         $book->favorite_logs()->delete();
+
+        $cache_key = sprintf('book:%s', $book->id);
+        Cache::delete($cache_key);
     }
 
     /**

@@ -22,7 +22,7 @@ class BookController extends BaseController
     {
         $cache_key = 'book:' . $id;
 
-        $book = Cache::remember($cache_key, 600, function () use ($id) {
+        $book = Cache::remember($cache_key, 1800, function () use ($id) {
             return Book::with(['chapters' => function($query) {
                 $query->where('status', 1)->oldest('episode');
             }, 'favorite_logs'])->withCount(['chapters'])->find($id);
@@ -74,11 +74,13 @@ class BookController extends BaseController
             }),
         ];
 
-        // 訪問數+1
-        $book->increment('view_counts');
+        Book::withoutEvents(function () use ($book) {
+            // 訪問數+1
+            $book->increment('view_counts');
 
-        // 添加到排行榜
-        $book->logRanking();
+            // 添加到排行榜
+            $book->logRanking();
+        });
 
         // 記錄用戶訪問
         if ($user) {
@@ -92,7 +94,7 @@ class BookController extends BaseController
     {
         $cache_key = 'chapter:' . $chapter_id;
 
-        $chapter = Cache::remember($cache_key, 600, function () use ($chapter_id) {
+        $chapter = Cache::remember($cache_key, 1800, function () use ($chapter_id) {
             return BookChapter::with(['purchase_log'])->find($chapter_id);
         });
 
@@ -102,9 +104,11 @@ class BookController extends BaseController
             return Response::jsonError('该漫画不存在或已下架！');
         }
 
-        // 訪問數+1
-        $chapter->increment('view_counts');
-
+        BookChapter::withoutEvents(function () use ($chapter) {
+            // 訪問數+1
+            $chapter->increment('view_counts');
+        });
+        
         // 收費章節
         $protect = true;
 

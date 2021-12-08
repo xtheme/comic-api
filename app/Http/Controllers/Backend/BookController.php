@@ -10,6 +10,7 @@ use App\Models\Book;
 use App\Models\BookChapter;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\Validator;
 
@@ -244,6 +245,12 @@ class BookController extends Controller
             default:
                 Book::whereIn('id', $ids)->update($data);
                 break;
+        }
+
+        // mass delete cache
+        foreach($ids as $id) {
+            $cache_key = sprintf('book:%s', $id);
+            Cache::delete($cache_key);
         }
 
         return Response::jsonSuccess($text . '成功！');
