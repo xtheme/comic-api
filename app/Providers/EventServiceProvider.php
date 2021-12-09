@@ -31,6 +31,7 @@ class EventServiceProvider extends ServiceProvider
         Models\Book::observe(Observers\BookObserver::class);
         Models\BookChapter::observe(Observers\BookChapterObserver::class);
         Models\Config::observe(Observers\ConfigObserver::class);
+        Models\Filter::observe(Observers\FilterObserver::class);
         Models\Order::observe(Observers\OrderObserver::class);
         Models\User::observe(Observers\UserObserver::class);
         Models\Video::observe(Observers\VideoObserver::class);

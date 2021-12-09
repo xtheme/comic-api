@@ -27,21 +27,11 @@ class TopicController extends BaseController
     // 整理不同模型輸出的數據格式
     public function arrangeData($type, $list)
     {
-        // 當前用戶是否收藏
-        $user = auth('sanctum')->user() ?? null;
-        $favorite_logs = [];
-        if ($user) {
-            $book_ids = $list->pluck('id')->toArray();
-            $favorite_logs = $user->favorite_logs()->where('type', $type)->whereIn('item_id', $book_ids)->pluck('item_id')->toArray();
-        }
-
-        $list = $list->map(function ($item) use ($type, $favorite_logs) {
-            $has_favorite = in_array($item->id, $favorite_logs) ? true : false;
-
+        $list = $list->map(function ($item) use ($type) {
             if ($type == 'book' || $type == 'book_safe') {
-                return (new BookResource($item))->favorite($has_favorite);
+                return json_decode((new BookResource($item))->favorite(false)->toJson(), true);
             } else {
-                return (new VideoResource($item))->favorite($has_favorite);
+                return json_decode((new VideoResource($item))->favorite(false)->toJson(), true);
             }
         })->toArray();
 
@@ -64,7 +54,7 @@ class TopicController extends BaseController
 
         $cache_key = sprintf('topic:%s', $type);
 
-        $data = Cache::remember($cache_key, 1800, function () use ($request) {
+        $data = Cache::remember($cache_key, 28800, function () use ($request) {
             $topics = $this->repository->filter($request)->get();
 
             return $topics->map(function ($topic) {
@@ -80,6 +70,23 @@ class TopicController extends BaseController
             })->toArray();
         });
 
+        // 當前用戶是否收藏
+        $user = auth('sanctum')->user() ?? null;
+
+        if ($user) {
+            foreach($data as &$topic) {
+                $favorite_logs = [];
+                if ($user) {
+                    $book_ids = collect($topic['list'])->pluck('id')->toArray();
+                    $favorite_logs = $user->favorite_logs()->where('type', $type)->whereIn('item_id', $book_ids)->pluck('item_id')->toArray();
+                }
+
+                foreach($topic['list'] as &$row) {
+                    $row['has_favorite'] = in_array($row['id'], $favorite_logs) ? true : false;
+                }
+            }
+        }
+
         return Response::jsonSuccess(__('api.success'), $data);
     }
 
@@ -87,7 +94,7 @@ class TopicController extends BaseController
     {
         $cache_key = sprintf('filter:%s:%s', $filter_id, $page);
 
-        $data = Cache::remember($cache_key, 600, function () use ($filter_id, $page) {
+        $data = Cache::tags(['filter', $filter_id])->remember($cache_key, 28800, function () use ($filter_id, $page) {
             $filter = Filter::findOrFail($filter_id);
 
             $size = 20;
@@ -104,6 +111,7 @@ class TopicController extends BaseController
 
             $data = [
                 'title' => $filter->title,
+                'type' => $filter->type,
                 'page' => (int) $page,
                 'size' => $size,
                 'total_page' => (int) $total_page,
@@ -113,27 +121,20 @@ class TopicController extends BaseController
             return $data;
         });
 
-        // $filter = Filter::findOrFail($filter_id);
-        //
-        // $size = 20;
-        //
-        // $query = $filter->buildQuery();
-        //
-        // $count = (clone $query)->count();
-        //
-        // $total_page = ceil($count / $size);
-        //
-        // $list = (clone $query)->forPage($page, $size)->get();
-        //
-        // $list = $this->arrangeData($filter->type, $list);
-        //
-        // $data = [
-        //     'title' => $filter->title,
-        //     'page' => (int) $page,
-        //     'size' => $size,
-        //     'total_page' => (int) $total_page,
-        //     'list' => $list,
-        // ];
+        // 當前用戶是否收藏
+        $user = auth('sanctum')->user() ?? null;
+
+        if ($user) {
+            $favorite_logs = [];
+            if ($user) {
+                $book_ids = collect($data['list'])->pluck('id')->toArray();
+                $favorite_logs = $user->favorite_logs()->where('type', $data['type'])->whereIn('item_id', $book_ids)->pluck('item_id')->toArray();
+            }
+
+            foreach($data['list'] as &$row) {
+                $row['has_favorite'] = in_array($row['id'], $favorite_logs) ? true : false;
+            }
+        }
 
         return Response::jsonSuccess(__('api.success'), $data);
     }

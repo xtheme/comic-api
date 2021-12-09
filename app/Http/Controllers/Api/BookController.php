@@ -22,7 +22,7 @@ class BookController extends BaseController
     {
         $cache_key = 'book:' . $id;
 
-        $book = Cache::remember($cache_key, 1800, function () use ($id) {
+        $book = Cache::remember($cache_key, 28800, function () use ($id) {
             return Book::with(['chapters' => function($query) {
                 $query->where('status', 1)->oldest('episode');
             }, 'favorite_logs'])->withCount(['chapters'])->find($id);
@@ -94,7 +94,7 @@ class BookController extends BaseController
     {
         $cache_key = 'chapter:' . $chapter_id;
 
-        $chapter = Cache::remember($cache_key, 1800, function () use ($chapter_id) {
+        $chapter = Cache::remember($cache_key, 28800, function () use ($chapter_id) {
             return BookChapter::with(['purchase_log'])->find($chapter_id);
         });
 
