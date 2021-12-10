@@ -18,10 +18,10 @@ class ApiRequestLogging
      */
     public function handle(Request $request, Closure $next)
     {
-        if (defined('LARAVEL_START')) {
-            $time = $this->getElapsedTimeInMs();
-            Log::debug(sprintf('IP: %s, Api: %s (Prepare: %s sec)', $request->ip(), $request->fullUrl(), $time));
-        }
+        // if (defined('LARAVEL_START')) {
+        //     $time = $this->getElapsedTimeInMs();
+        //     Log::debug(sprintf('IP: %s, Api: %s (Prepare: %s sec)', $request->ip(), $request->fullUrl(), $time));
+        // }
 
         return $next($request);
     }
@@ -37,7 +37,7 @@ class ApiRequestLogging
     {
         if (defined('LARAVEL_START')) {
             $time = $this->getElapsedTimeInMs();
-            Log::debug(sprintf('IP: %s, Api: %s (Execution: %s sec)', $request->ip(), $request->fullUrl(), $time));
+            Log::debug(sprintf('%s : %s (%s sec)', $request->ip(), $request->path(), round($time, 5)));
         }
     }
 
