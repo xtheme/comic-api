@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Resources\BookChapterResource;
 use App\Models\Book;
 use App\Models\BookChapter;
+use Illuminate\Http\Exceptions\HttpResponseException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Response;
@@ -22,57 +23,58 @@ class BookController extends BaseController
     {
         $cache_key = 'book:' . $id;
 
-        $book = Cache::remember($cache_key, 28800, function () use ($id) {
-            return Book::with(['chapters' => function($query) {
-                $query->where('status', 1)->oldest('episode');
-            }, 'favorite_logs'])->withCount(['chapters'])->find($id);
+        $data = Cache::remember($cache_key, 28800, function () use ($id) {
+            try {
+                $book = Book::with([
+                    'chapters' => function ($query) {
+                        $query->where('status', 1)->oldest('episode');
+                    },
+                    'favorite_logs',
+                ])->withCount(['chapters'])->findOrFail($id);
+
+                return [
+                    'id' => $book->id,
+                    'title' => $book->title,
+                    'author' => $book->author,
+                    'cover' => $book->vertical_cover,
+                    'description' => $book->description,
+                    'end' => $book->end,
+                    'type' => $book->type,
+                    'tagged_tags' => $book->tagged_tags,
+                    'view_counts' => shortenNumber($book->view_counts),
+                    'collect_counts' => shortenNumber($book->collect_counts),
+                    'has_favorite' => false,
+                    'chapters_count' => $book->chapters_count,
+                    'chapters' => $book->chapters->map(function($chapter) {
+                        return json_decode((new BookChapterResource($chapter))->purchased(false)->toJson(), true);
+                    })->toArray(),
+                ];
+            } catch (\Exception $e) {
+                throw new HttpResponseException(Response::jsonError('该漫画不存在或已下架！'));
+            }
         });
-
-        // $book = Book::with(['chapters' => function($query) {
-        //     $query->where('status', 1)->oldest('episode');
-        // }, 'favorite_logs'])->withCount(['chapters'])->find($id);
-
-        if (!$book) {
-            return Response::jsonError('该漫画不存在或已下架！');
-        }
 
         $user = $request->user() ?? null;
 
-        $has_favorite = false;
-        $purchase_logs = [];
-
         if ($user) {
             // 收藏紀錄
-            $has_favorite = $user->favorite_logs()->where('type', 'book')->where('item_id', $book->id)->exists();
+            $data['has_favorite'] = $user->favorite_logs()->where('type', 'book')->where('item_id', $id)->exists();
 
             // 購買記錄
-            $chapter_ids = $book->chapters->pluck('id')->toArray();
+            $chapter_ids = collect($data['chapters'])->pluck('chapter_id')->toArray();
+            // dd($chapter_ids);
             if ($user->is_vip) {
                 $purchase_logs = $chapter_ids;
             } else {
                 $purchase_logs = $user->purchase_logs()->where('type', 'book_chapter')->whereIn('item_id', $chapter_ids)->pluck('item_id')->toArray();
             }
+// dd($purchase_logs);
+            foreach ($data['chapters'] as &$chapter) {
+                $chapter['purchased'] = in_array($chapter['chapter_id'], $purchase_logs);
+            }
         }
 
-        $data = [
-            'id' => $book->id,
-            'title' => $book->title,
-            'author' => $book->author,
-            'cover' => $book->vertical_cover,
-            'description' => $book->description,
-            'end' => $book->end,
-            'type' => $book->type,
-            'tagged_tags' => $book->tagged_tags,
-            'view_counts' => shortenNumber($book->view_counts),
-            'collect_counts' => shortenNumber($book->collect_counts),
-            'has_favorite' => $has_favorite,
-            'chapters_count' => $book->chapters_count,
-            // 'chapters' => $chapters,
-            'chapters' => $book->chapters->map(function($chapter) use ($purchase_logs) {
-                $purchased = in_array($chapter->id, $purchase_logs) ? true : false;
-                return (new BookChapterResource($chapter))->purchased($purchased);
-            }),
-        ];
+        $book = Book::find($id);
 
         Book::withoutEvents(function () use ($book) {
             // 訪問數+1
@@ -108,7 +110,7 @@ class BookController extends BaseController
             // 訪問數+1
             $chapter->increment('view_counts');
         });
-        
+
         // 收費章節
         $protect = true;
 
