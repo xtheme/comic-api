@@ -26,8 +26,7 @@ class BookChapterObserver
      */
     public function updated(BookChapter $chapter)
     {
-        $cache_key = sprintf('chapter:%s', $chapter->id);
-        Cache::delete($cache_key);
+        $this->forgetCache($chapter);
     }
 
     /**
@@ -38,8 +37,7 @@ class BookChapterObserver
      */
     public function deleted(BookChapter $chapter)
     {
-        $cache_key = sprintf('chapter:%s', $chapter->id);
-        Cache::delete($cache_key);
+        $this->forgetCache($chapter);
     }
 
     /**
@@ -61,5 +59,12 @@ class BookChapterObserver
      */
     public function forceDeleted(BookChapter $chapter)
     {
+        $this->forgetCache($chapter);
+    }
+
+    public function forgetCache(BookChapter $chapter)
+    {
+        $cache_key = sprintf('chapter:%s', $chapter->id);
+        Cache::forget($cache_key);
     }
 }

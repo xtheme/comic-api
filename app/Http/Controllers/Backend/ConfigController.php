@@ -81,7 +81,7 @@ class ConfigController extends Controller
         })->flatMap(function ($item) use ($code) {
             // 清除緩存
             $cache_key = sprintf('config:%s:%s', $code, $item['key']);
-            Cache::delete($cache_key);
+            Cache::forget($cache_key);
 
             return [$item['key'] => [
                 'remark' => $item['remark'],

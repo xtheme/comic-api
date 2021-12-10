@@ -75,14 +75,11 @@ class TopicController extends BaseController
 
         if ($user) {
             foreach($data as &$topic) {
-                $favorite_logs = [];
-                if ($user) {
-                    $book_ids = collect($topic['list'])->pluck('id')->toArray();
-                    $favorite_logs = $user->favorite_logs()->where('type', $type)->whereIn('item_id', $book_ids)->pluck('item_id')->toArray();
-                }
+                $book_ids = collect($topic['list'])->pluck('id')->toArray();
+                $favorite_logs = $user->favorite_logs()->where('type', $type)->whereIn('item_id', $book_ids)->pluck('item_id')->toArray();
 
                 foreach($topic['list'] as &$row) {
-                    $row['has_favorite'] = in_array($row['id'], $favorite_logs) ? true : false;
+                    $row['has_favorite'] = in_array($row['id'], $favorite_logs);
                 }
             }
         }
@@ -125,14 +122,11 @@ class TopicController extends BaseController
         $user = auth('sanctum')->user() ?? null;
 
         if ($user) {
-            $favorite_logs = [];
-            if ($user) {
-                $book_ids = collect($data['list'])->pluck('id')->toArray();
-                $favorite_logs = $user->favorite_logs()->where('type', $data['type'])->whereIn('item_id', $book_ids)->pluck('item_id')->toArray();
-            }
+            $book_ids = collect($data['list'])->pluck('id')->toArray();
+            $favorite_logs = $user->favorite_logs()->where('type', $data['type'])->whereIn('item_id', $book_ids)->pluck('item_id')->toArray();
 
             foreach($data['list'] as &$row) {
-                $row['has_favorite'] = in_array($row['id'], $favorite_logs) ? true : false;
+                $row['has_favorite'] = in_array($row['id'], $favorite_logs);
             }
         }
 

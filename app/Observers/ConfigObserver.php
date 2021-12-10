@@ -15,9 +15,7 @@ class ConfigObserver
      */
     public function created(Config $config)
     {
-        $cache_key = 'config:' . $config->code;
-
-        Cache::forever($cache_key, $config->content);
+        $this->forgetCache($config);
     }
 
     /**
@@ -28,9 +26,7 @@ class ConfigObserver
      */
     public function updated(Config $config)
     {
-        $cache_key = 'config:' . $config->code;
-
-        Cache::forever($cache_key, $config->content);
+        $this->forgetCache($config);
     }
 
     /**
@@ -41,9 +37,7 @@ class ConfigObserver
      */
     public function deleted(Config $config)
     {
-        $cache_key = 'config:' . $config->code;
-
-        Cache::forget($cache_key);
+        $this->forgetCache($config);
     }
 
     /**
@@ -54,9 +48,7 @@ class ConfigObserver
      */
     public function restored(Config $config)
     {
-        $cache_key = 'config:' . $config->code;
-
-        Cache::forever($cache_key, $config->content);
+        $this->forgetCache($config);
     }
 
     /**
@@ -67,8 +59,12 @@ class ConfigObserver
      */
     public function forceDeleted(Config $config)
     {
-        $cache_key = 'config:' . $config->code;
+        $this->forgetCache($config);
+    }
 
+    public function forgetCache(Config $config)
+    {
+        $cache_key = sprintf('config:%s', $config->code);
         Cache::forget($cache_key);
     }
 }

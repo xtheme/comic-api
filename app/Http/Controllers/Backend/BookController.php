@@ -250,7 +250,7 @@ class BookController extends Controller
         // mass delete cache
         foreach($ids as $id) {
             $cache_key = sprintf('book:%s', $id);
-            Cache::delete($cache_key);
+            Cache::forget($cache_key);
         }
 
         return Response::jsonSuccess($text . '成功！');
