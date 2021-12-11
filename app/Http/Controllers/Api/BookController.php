@@ -86,7 +86,7 @@ class BookController extends BaseController
     {
         $cache_key = 'chapter:' . $chapter_id;
 
-        $data = Cache::remember($cache_key, 20, function () use ($chapter_id) {
+        $data = Cache::remember($cache_key, 28800, function () use ($chapter_id) {
             try {
                 $chapter = BookChapter::with(['purchase_log'])->findOrFail($chapter_id);
 
@@ -101,7 +101,7 @@ class BookController extends BaseController
                 throw new HttpResponseException(Response::jsonError('该漫画不存在或已下架！'));
             }
         });
-        
+
         // 如果章節免費
         if ($data['chapter']['price'] == 0) {
             $data['protect'] = false;
