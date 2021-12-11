@@ -26,7 +26,8 @@ class Filter extends BaseModel
 
         $model = new $class;
 
-        $query = $model::query()->with(['tags'])->where('status', 1);
+        // $query = $model::query()->with(['tags'])->where('status', 1);
+        $query = $model::query()->where('status', 1); // 不查詢標籤
 
         // 標籤條件
         foreach ($this->tags as $type => $tags) {
