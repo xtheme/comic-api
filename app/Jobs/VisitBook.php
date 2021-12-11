@@ -15,15 +15,17 @@ class VisitBook implements ShouldQueue
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
     private $book_id;
+    private $user;
 
     /**
      * Create a new job instance.
      *
      * @return void
      */
-    public function __construct($book_id)
+    public function __construct($book_id, $user)
     {
         $this->book_id = $book_id;
+        $this->user = $user;
     }
 
     /**
@@ -41,6 +43,11 @@ class VisitBook implements ShouldQueue
 
             // 添加到排行榜
             $book->logRanking();
+
+            // 記錄用戶訪問
+            if ($this->user) {
+                $this->user->visit($book);
+            }
         });
     }
 }

@@ -76,7 +76,7 @@ class BookController extends BaseController
         }
 
 
-        VisitBook::dispatch($id);
+        VisitBook::dispatch($id, $user);
         // $book = Book::find($id);
 
         // Book::withoutEvents(function () use ($book) {
