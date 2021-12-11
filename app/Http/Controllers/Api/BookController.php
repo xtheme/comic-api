@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Resources\BookChapterResource;
+use App\Jobs\VisitBook;
 use App\Models\Book;
 use App\Models\BookChapter;
 use Illuminate\Http\Exceptions\HttpResponseException;
@@ -23,7 +24,7 @@ class BookController extends BaseController
     {
         $cache_key = 'book:' . $id;
 
-        $data = Cache::remember($cache_key, 28800, function () use ($id) {
+        $data = Cache::remember($cache_key, 1, function () use ($id) {
             try {
                 $book = Book::with([
                     'chapters' => function ($query) {
@@ -62,32 +63,34 @@ class BookController extends BaseController
 
             // 購買記錄
             $chapter_ids = collect($data['chapters'])->pluck('chapter_id')->toArray();
-            // dd($chapter_ids);
+
             if ($user->is_vip) {
                 $purchase_logs = $chapter_ids;
             } else {
                 $purchase_logs = $user->purchase_logs()->where('type', 'book_chapter')->whereIn('item_id', $chapter_ids)->pluck('item_id')->toArray();
             }
-// dd($purchase_logs);
+
             foreach ($data['chapters'] as &$chapter) {
                 $chapter['purchased'] = in_array($chapter['chapter_id'], $purchase_logs);
             }
         }
 
-        $book = Book::find($id);
 
-        Book::withoutEvents(function () use ($book) {
+        VisitBook::dispatch($id);
+        // $book = Book::find($id);
+
+        // Book::withoutEvents(function () use ($book) {
             // 訪問數+1
-            $book->increment('view_counts');
+            // $book->increment('view_counts');
 
             // 添加到排行榜
-            $book->logRanking();
-        });
+            // $book->logRanking();
+        // });
 
         // 記錄用戶訪問
-        if ($user) {
-            $request->user()->visit($book);
-        }
+        // if ($user) {
+        //     $request->user()->visit($book);
+        // }
 
         return Response::jsonSuccess(__('api.success'), $data);
     }
