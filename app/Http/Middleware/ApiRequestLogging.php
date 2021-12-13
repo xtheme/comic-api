@@ -2,6 +2,7 @@
 
 namespace App\Http\Middleware;
 
+use App\Models\ApiRequestLog;
 use Closure;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
@@ -36,14 +37,22 @@ class ApiRequestLogging
     public function terminate(Request $request)
     {
         if (defined('LARAVEL_START')) {
-            $time = $this->getElapsedTimeInMs();
-            Log::debug(sprintf('%s : %s (%s sec)', $request->ip(), $request->path(), round($time, 5)));
+            $log = new ApiRequestLog;
+            $log->user_id = $request->user() ? $request->user()->id : null;
+            $log->fingerprint = $request->header('uuid') ?? null;
+            $log->ip = $request->ip();
+            $log->host = $request->getSchemeAndHttpHost();
+            $log->path = $request->path();
+            $log->params = $request->input();
+            $log->times = $this->getElapsedTimeInMs();
+            $log->save();
         }
     }
 
     protected function getElapsedTimeInMs()
     {
-        return (microtime(true) - LARAVEL_START);
+        $time = (microtime(true) - LARAVEL_START);
+        return round($time, 4);
     }
 
 }
