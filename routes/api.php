@@ -130,6 +130,11 @@ Route::as('api.')->middleware(['api'])->group(function () {
 
         // 購買商品
         Route::post('/purchase', [Api\PurchaseController::class, 'purchase'])->name('purchase');
+
+        // 用戶反饋
+        Route::prefix('feedback')->as('feedback.')->group(function () {
+            Route::get('/questionnaire', [Api\FeedbackController::class, 'questionnaire']);
+        });
     });
 
     // 第三方支付回調
