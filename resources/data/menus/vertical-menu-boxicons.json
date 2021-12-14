@@ -179,6 +179,10 @@
                 {
                     "url": "/log-viewer/logs",
                     "name": "System Log"
+                },
+                {
+                    "url": "/backend/analysis/request/report",
+                    "name": "Request Log"
                 }
             ]
         },

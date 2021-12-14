@@ -64,6 +64,7 @@ return [
     "Notice List" => "公告列表",
     "Activity Log" => "操作日志",
     "System Log" => "系统日志",
+    "Request Log" => "請求日志",
 
     "Logout" => "退出登录",
 ];

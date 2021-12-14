@@ -309,4 +309,8 @@ Route::middleware(['auth', 'auth.route.role'])->prefix('backend')->as('backend.'
         Route::get('total_revenue', [Backend\FinanceController::class , 'totalRevenue'])->name('total_revenue'); // 总收入
         Route::get('gateway_revenue', [Backend\FinanceController::class , 'gatewayRevenue'])->name('gateway_revenue'); // 各金流收入
     });
+
+    Route::prefix('analysis')->as('analysis.')->group(function () {
+        Route::get('request/report', [Backend\LogAnalysisController::class , 'index'])->name('request_report');
+    });
 });
