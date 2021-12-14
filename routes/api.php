@@ -175,5 +175,4 @@ Route::prefix('comment')->as('comment.')->group(function () {
     Route::post('/like/{comment_id}', [Api\CommentController::class, 'like'])->name('like');
     Route::post('/destroy/{comment_id}', [Api\CommentController::class, 'destroy'])->name('destroy');
 });
-
 */
