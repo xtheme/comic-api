@@ -9,10 +9,8 @@ use App\Http\Resources\ProfileResource;
 use App\Jobs\RegisterJob;
 use App\Models\User;
 use Illuminate\Http\Request;
-use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Response;
-use Illuminate\Support\Str;
 
 class AuthController extends BaseController
 {
@@ -50,8 +48,7 @@ class AuthController extends BaseController
         }
 
         // 更新登入時間
-        $user->logged_at = Carbon::now();
-        // $user->fingerprint = $request->header('uuid');
+        $user->logged_at = now();
         $user->save();
 
         // 清除所有 token
@@ -82,8 +79,8 @@ class AuthController extends BaseController
             'channel_id' => $request->header('ch') ?? 1,
             'name' => $request->input('name'),
             'password' => $request->input('password'),
-            // 'fingerprint' => $request->header('uuid'),
             'wallet' => getConfig('app', 'register_coin'),
+            'logged_at' => now(),
         ];
 
         $user = User::create($data);
@@ -141,6 +138,7 @@ class AuthController extends BaseController
             'password' => $password,
             'fingerprint' => $request->header('uuid'),
             'wallet' => getConfig('app', 'register_coin'),
+            'logged_at' => now(),
         ];
 
         $user = User::create($data);
