@@ -36,7 +36,8 @@ class LampGateway extends BaseGateway implements Contracts\GatewayInterface
         $response = Http::asForm()->post($this->api_url . '/gateway/order/unified', $data);
         $result = $response->json();
 
-        Log::debug('LampGateway', $result);
+        Log::debug('LampGateway Request', $data);
+        Log::debug('LampGateway Response', $result);
 
         if ($result['code'] != 0) {
             throw new \Exception($result['message']);
