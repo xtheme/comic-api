@@ -25,6 +25,7 @@
                             <tr>
                                 <th>ID</th>
                                 <th>渠道名稱</th>
+                                <th>优先级</th>
                                 <th>手續費%</th>
                                 <th>每日限額</th>
                                 <th>按钮文字</th>
@@ -39,6 +40,7 @@
                                 <tr>
                                     <td>{{ $item->id }}</td>
                                     <td>{{ $item->name }}</td>
+                                    <td>{{ $item->priority }}</td>
                                     <td>{{ $item->fee_percentage }}</td>
                                     <td>{{ $item->daily_recharge }} / {{ $item->daily_limit }}</td>
                                     <td>{{ $item->button_icon }}</td>

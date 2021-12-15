@@ -14,7 +14,7 @@ class PaymentController extends Controller
     public function index()
     {
         $data = [
-            'list' => Payment::with('packages')->paginate(),
+            'list' => Payment::with('packages')->oldest('priority')->paginate(),
         ];
 
         return view('backend.payment.index')->with($data);
@@ -56,6 +56,7 @@ class PaymentController extends Controller
         $payment->button_target = $request->post('button_target');
         $payment->fee_percentage = $request->post('fee_percentage') ?? 0;
         $payment->sdk = $request->post('sdk');
+        $payment->priority = (int) $request->post('priority') ?? 0;
         $payment->business_hours = $request->post('business_hours');
         $payment->daily_limit = $request->post('daily_limit');
         $payment->pay_options = $pay_options;
@@ -105,6 +106,7 @@ class PaymentController extends Controller
         $payment->button_target = $request->post('button_target');
         $payment->fee_percentage = $request->post('fee_percentage') ?? 0;
         $payment->sdk = $request->post('sdk');
+        $payment->priority = (int) $request->post('priority') ?? 0;
         $payment->business_hours = $request->post('business_hours');
         $payment->daily_limit = $request->post('daily_limit');
         $payment->pay_options = $pay_options;

@@ -120,6 +120,14 @@
                         </div>
                     </div>
                 </div>
+                <div class="col-4">
+                    <div class="form-group">
+                        <label>优先级</label>
+                        <div class="controls">
+                            <input type="text" class="form-control" name="priority" value="{{ $payment->priority }}">
+                        </div>
+                    </div>
+                </div>
                 <div class="col-12">
                     <div class="form-group">
                         <label><span class="danger">*</span> 支付方案</label>
