@@ -87,7 +87,7 @@ class LampGateway extends BaseGateway implements Contracts\GatewayInterface
         // 獲取渠道訂單號
         $transaction_id = $params['order_no'] ?? '';
 
-        if ($params['status'] != 2) {
+        if ($params['pay_status'] != 2) {
             return 'fail';
         }
 
