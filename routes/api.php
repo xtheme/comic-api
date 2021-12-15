@@ -19,6 +19,13 @@ Route::as('api.')->middleware(['api'])->group(function () {
     Route::get('/stress', [Api\DevController::class, 'stress']);
     Route::get('/decrypt', [Api\DevController::class, 'decrypt']);
 
+    // 第三方支付回調
+    Route::prefix('payment')->as('payment.')->group(function () {
+        // Route::any('/callback', [Api\PaymentController::class, 'callback'])->name('callback'); // 支付結果回調
+        Route::any('/notify/{order_no?}', [Api\PaymentController::class, 'notify'])->name('notify'); // 支付結果回調
+        Route::any('/mockCallback', [Api\PaymentController::class, 'mockCallback']); // 測試接口:支付結果回調
+    });
+
     Route::prefix(config('api.version'))->middleware(['request.decrypt', 'api.location', 'api.header', 'api.sign'])->group(function () {
         Route::prefix('bootstrap')->as('bootstrap.')->group(function () {
             Route::get('/configs', [Api\BootstrapController::class, 'configs'])->name('configs');
@@ -135,13 +142,6 @@ Route::as('api.')->middleware(['api'])->group(function () {
         Route::prefix('feedback')->as('feedback.')->group(function () {
             Route::get('/questionnaire', [Api\FeedbackController::class, 'questionnaire']);
         });
-    });
-
-    // 第三方支付回調
-    Route::prefix('payment')->as('payment.')->group(function () {
-        Route::any('/callback', [Api\PaymentController::class, 'callback'])->name('callback'); // 支付結果回調
-        Route::any('/notify/{order_no?}', [Api\PaymentController::class, 'notify'])->name('notify'); // 支付結果回調
-        Route::any('/mockCallback', [Api\PaymentController::class, 'mockCallback']); // 測試接口:支付結果回調
     });
 });
 
