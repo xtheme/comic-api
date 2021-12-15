@@ -25,6 +25,10 @@ class GatewayServiceProvider extends ServiceProvider
         $this->app->singleton('AlipayWapGateway', function () {
             return new Gateways\AlipayWapGateway();
         });
+
+        $this->app->singleton('LampGateway', function () {
+            return new Gateways\LampGateway();
+        });
     }
 
     /**

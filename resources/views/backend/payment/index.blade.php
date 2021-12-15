@@ -41,7 +41,7 @@
                                     <td>{{ $item->name }}</td>
                                     <td>{{ $item->fee_percentage }}</td>
                                     <td>{{ $item->daily_recharge }} / {{ $item->daily_limit }}</td>
-                                    <td>{{ $item->button_text }}</td>
+                                    <td>{{ $item->button_icon }}</td>
                                     <td>
                                         @foreach($item->packages as $package)
                                             <span class="badge badge-light-primary p-50">￥{{ floatval($package->price) }}</span>
