@@ -186,7 +186,7 @@ class PaymentController extends Controller
     }
 
     // 支付結果回調
-    public function callback(Request $request)
+    /*public function callback(Request $request)
     {
         $order_no = $request->get('order_no') ?? '';
 
@@ -226,7 +226,7 @@ class PaymentController extends Controller
         RechargeJob::dispatch($order);
 
         return  $response;
-    }
+    }*/
 
     public function mockCallback(Request $request)
     {
