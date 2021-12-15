@@ -85,7 +85,7 @@ class LampGateway extends BaseGateway implements Contracts\GatewayInterface
     public function updateOrder(Order $order, array $params): string
     {
         // 獲取渠道訂單號
-        $transaction_id = $params['order_no'];
+        $transaction_id = $params['order_no'] ?? '';
 
         if ($params['status'] != 2) {
             return 'fail';
