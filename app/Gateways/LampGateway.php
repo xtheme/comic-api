@@ -22,7 +22,6 @@ class LampGateway extends BaseGateway implements Contracts\GatewayInterface
             'amount' => $plan->price,                                        // 支付金额,单位元
             'channel_code' => 'wechatPartnerApplets',                        // 通道code
             'notify_url' => route('api.payment.notify', $order->order_no),   // 异步接收支付结果通知的回调地址，不能携带参数
-            // 'return_url' => 'https://comic.hiav.one/record-order',           // 同步通知地址, 支付成功后跳转到的地址
             'return_url' => $order->domain . '/record-order',                // 同步通知地址, 支付成功后跳转到的地址
             'client_ip' => request()->ip(),                                  // 用户支付时设备的IP地址
             'timestamp' => time(),                                           // unix秒级时间戳

@@ -45,9 +45,9 @@ class PaymentController extends Controller
     }
 
     // 支付渠道
-    public function gateway(Request $request, $pricing_id)
+    public function gateway($pricing_id)
     {
-        $gateways = Pricing::findOrFail($pricing_id)->gateways()->orderBy('button_icon')->get();
+        $gateways = Pricing::findOrFail($pricing_id)->gateways()->orderBy('button_icon')->latest()->get();
 
         $gateways = $gateways->reject(function ($gateway) {
             // 排除停用渠道
