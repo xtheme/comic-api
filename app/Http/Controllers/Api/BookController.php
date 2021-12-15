@@ -126,7 +126,7 @@ class BookController extends BaseController
 
         if ($data['protect']) {
             // 如果是收費章節, 只返回第一張圖
-            $data['content'] = [$data['content'][0]];
+            $data['content'] = array_slice($data['content'], 0, 1);
         }
 
         // 排程: 訪問數+1
