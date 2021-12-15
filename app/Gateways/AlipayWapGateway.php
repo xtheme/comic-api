@@ -13,6 +13,9 @@ use Illuminate\Support\Facades\Log;
 
 class AlipayWapGateway extends BaseGateway implements Contracts\GatewayInterface
 {
+    const FAIL = 'fail';
+    const SUCCESS = 'success';
+
     function getOptions()
     {
         $url = parse_url($this->api_url);
@@ -79,13 +82,22 @@ class AlipayWapGateway extends BaseGateway implements Contracts\GatewayInterface
     // 第三方回調上分時驗證簽名
     public function checkSign($params): bool
     {
+        // unset($params['sign']);
         // Factory::setOptions($this->getOptions());
-        //
         // $result = Factory::payment()->common()->verifyNotify($params);
-        //
         // Log::debug($result);
 
         return true;
+    }
+
+    public function fail(): string
+    {
+        return self::FAIL;
+    }
+
+    public function success(): string
+    {
+        return self::SUCCESS;
     }
 
     // 回調成功更新訂單
@@ -94,19 +106,19 @@ class AlipayWapGateway extends BaseGateway implements Contracts\GatewayInterface
         // 商户需要验证该通知数据中的 out_trade_no 是否为商户系统中创建的订单号
         if ($order->order_no != $params['out_trade_no']) {
             Log::error($order->order_no . ' order_no 不符', $params);
-            return 'fail';
+            return $this->fail();
         }
 
         // 判断 total_amount 是否确实为该订单的实际金额（即商户订单创建时的金额
         if ($order->amount != $params['total_amount']) {
             Log::error($order->order_no . 'amount 不符', $params);
-            return 'fail';
+            return $this->fail();
         }
 
         // 验证 app_id 是否为该商户本身
         if ($this->app_id != $params['app_id']) {
             Log::error($order->order_no . 'app_id 不符', $params);
-            return 'fail';
+            return $this->fail();
         }
 
         // 獲取渠道訂單號
@@ -115,16 +127,15 @@ class AlipayWapGateway extends BaseGateway implements Contracts\GatewayInterface
         if (in_array($params['trade_status'], ['TRADE_SUCCESS', 'TRADE_FINISHED'])) {
 
             Log::debug('AlipayWapGateway updateOrder $params: ' . $transaction_id, $params);
-            // Log::debug('AlipayWapGateway updateOrder $order: ' . $transaction_id, (array) $order);
 
             DB::transaction(function () use ($order, $transaction_id) {
                 app(UserService::class)->updateOrder($order, $transaction_id);
             });
 
-            return 'success';
+            return $this->success();
         }
 
-        return 'fail';
+        return $this->fail();
     }
 
     // 模擬回調數據

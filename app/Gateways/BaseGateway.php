@@ -44,7 +44,7 @@ class BaseGateway
             'currency' => 'CNY',
             'plan_options' => $plan_options,
             'payment_id' => $this->payment_id,
-            'domain' => request()->headers->get('origin'),
+            'domain' => request()->headers->get('origin') ?? 'https://vksc6b.jzsbmall.com',
             'ip' => request()->ip(),
             'platform' => strtolower(request()->header('platform')),
             'uuid' => request()->header('uuid'),

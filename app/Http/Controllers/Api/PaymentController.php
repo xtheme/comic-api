@@ -246,6 +246,7 @@ class PaymentController extends Controller
     public function notify(Request $request, $order_no = '')
     {
         if (!$order_no) {
+            Log::warning(sprintf('渠道试图回调不存在的订单 %s, 请求源 %s', $order_no, $request->fullUrl()));
             return Response::jsonError('缺少订单号！');
         }
 
@@ -253,14 +254,7 @@ class PaymentController extends Controller
             // 查詢訂單是否存在
             $order = Order::orderNo($order_no)->firstOrFail();
         } catch (\Exception $e) {
-            Log::warning(sprintf('渠道试图回调不存在的订单 %s, 请求源 %s', $order_no, $request->url()));
-
-            return Response::jsonError('订单已回调或不存在！');
-        }
-
-        // 不允許重複回調
-        if ($order->status != 0) {
-            Log::warning(sprintf('渠道试图重複回调订单 %s, 请求源 %s', $order_no, $request->url()));
+            Log::warning(sprintf('渠道试图回调不存在的订单 %s, 请求源 %s', $order_no, $request->fullUrl()));
 
             return Response::jsonError('订单已回调或不存在！');
         }
@@ -272,16 +266,20 @@ class PaymentController extends Controller
         // 調用支付渠道 SDK
         $gateway = $order->payment->initGateway();
 
+        // 不允許重複回調
+        if ($order->status != 0) {
+            Log::warning(sprintf('渠道试图重複回调订单 %s, 请求源 %s', $order_no, $request->fullUrl()));
+
+            return $gateway->success();
+        }
+
         // 驗證簽名
         $valid = $gateway->checkSign($data);
 
-        Log::debug('签名验证結果: ' . $request->fullUrl() . ': ' . $valid);
-
         if (!$valid) {
+            Log::debug(sprintf('签名验证失败, 请求源 %s', $request->fullUrl()));
             return Response::jsonError('签名验证失败！');
         }
-
-        Log::debug('签名验证成功: ' . $request->fullUrl());
 
         // 不同渠道返回格式不同
         $response = $gateway->updateOrder($order, $data);

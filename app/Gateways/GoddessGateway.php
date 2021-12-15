@@ -10,6 +10,9 @@ use Illuminate\Support\Facades\Http;
 
 class GoddessGateway extends BaseGateway implements Contracts\GatewayInterface
 {
+    const FAIL = 'fail';
+    const SUCCESS = 'success';
+
     // 獲取支付網址
     public function pay(Pricing $plan): array
     {
@@ -74,6 +77,16 @@ class GoddessGateway extends BaseGateway implements Contracts\GatewayInterface
         return false;
     }
 
+    public function fail(): string
+    {
+        return self::FAIL;
+    }
+
+    public function success(): string
+    {
+        return self::SUCCESS;
+    }
+
     // 回調成功更新訂單
     public function updateOrder(Order $order, array $params): string
     {
@@ -85,7 +98,7 @@ class GoddessGateway extends BaseGateway implements Contracts\GatewayInterface
         });
 
         // 返回三方指定格式
-        return 'success';
+        return $this->success();
     }
 
     // 模擬回調數據

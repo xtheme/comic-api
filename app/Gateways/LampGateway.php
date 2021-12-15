@@ -11,6 +11,9 @@ use Illuminate\Support\Facades\Log;
 
 class LampGateway extends BaseGateway implements Contracts\GatewayInterface
 {
+    const FAIL = 'FAIL';
+    const SUCCESS = 'SUCCESS';
+
     // 獲取支付網址
     public function pay(Pricing $plan): array
     {
@@ -81,6 +84,16 @@ class LampGateway extends BaseGateway implements Contracts\GatewayInterface
         return false;
     }
 
+    public function fail(): string
+    {
+        return self::FAIL;
+    }
+
+    public function success(): string
+    {
+        return self::SUCCESS;
+    }
+
     // 回調成功更新訂單
     public function updateOrder(Order $order, array $params): string
     {
@@ -88,7 +101,7 @@ class LampGateway extends BaseGateway implements Contracts\GatewayInterface
         $transaction_id = $params['order_no'] ?? '';
 
         if ($params['pay_status'] != 2) {
-            return 'FAIL';
+            return $this->fail();
         }
 
         DB::transaction(function () use ($order, $transaction_id) {
@@ -96,21 +109,19 @@ class LampGateway extends BaseGateway implements Contracts\GatewayInterface
         });
 
         // 返回三方指定格式
-        return 'SUCCESS';
+        return $this->success();
     }
 
     // 模擬回調數據
     public function mockCallback(Order $order): array
     {
         $data = [
-            'mch_id' => $this->app_id,                                       // 商务号
-            'order_no' => $order->order_no,                                  // 系统订单号
-            'out_order_no' => $order->order_no,                              // 商户订单号
-            'amount' => $order->amount,                                      // 支付金额,单位元
-            'client_ip' => request()->ip(),                                  // 用户支付时设备的IP地址
-            'status' => '2',                                                 // 代付状态{2-处理成功 3-处理失败}
-            'resolved_timestamp' => time(),                                  // unix时间戳 确认时间
-            'created_timestamp' => time(),                                   // unix时间戳 创建时间
+            'mch_id' => $this->app_id,           // 商务号
+            'out_order_no' => $order->order_no,  // 商户订单号
+            'amount' => $order->amount,          // 支付金额,单位元
+            'client_ip' => request()->ip(),      // 用户支付时设备的IP地址
+            'pay_status' => '2',                 // 代付状态{2-处理成功 3-处理失败}
+            'pay_timestamp"' => time(),          // unix时间戳
         ];
 
         $data['sign'] = $this->getSign($data);
