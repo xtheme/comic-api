@@ -88,7 +88,7 @@ class LampGateway extends BaseGateway implements Contracts\GatewayInterface
         $transaction_id = $params['order_no'] ?? '';
 
         if ($params['pay_status'] != 2) {
-            return 'fail';
+            return 'FAIL';
         }
 
         DB::transaction(function () use ($order, $transaction_id) {
@@ -96,7 +96,7 @@ class LampGateway extends BaseGateway implements Contracts\GatewayInterface
         });
 
         // 返回三方指定格式
-        return 'success';
+        return 'SUCCESS';
     }
 
     // 模擬回調數據
