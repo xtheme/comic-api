@@ -29,7 +29,7 @@ class PaymentController extends Controller
         }
 
         // 所有啟用的支付方案
-        $pricing = Pricing::where('status', 1)->whereIn('target', $target)->orderBy('type')->orderBy('priority')->get();
+        $pricing = Pricing::where('status', 1)->whereIn('target', $target)->orderBy('type')->get();
 
         $pricing = $pricing->mapToGroups(function ($plan) {
             return [
@@ -47,7 +47,7 @@ class PaymentController extends Controller
     // 支付渠道
     public function gateway($pricing_id)
     {
-        $gateways = Pricing::findOrFail($pricing_id)->gateways()->orderBy('button_icon')->latest()->get();
+        $gateways = Pricing::findOrFail($pricing_id)->gateways()->orderBy('button_icon')->orderBy('priority')->get();
 
         $gateways = $gateways->reject(function ($gateway) {
             // 排除停用渠道
