@@ -9,6 +9,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
+use Throwable;
 
 class VisitBook implements ShouldQueue
 {
@@ -49,5 +50,12 @@ class VisitBook implements ShouldQueue
                 $this->user->visit($book);
             }
         });
+    }
+
+    public function failed(Throwable $exception)
+    {
+        if (app()->bound('sentry')) {
+            app('sentry')->captureException($exception);
+        }
     }
 }

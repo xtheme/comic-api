@@ -10,6 +10,7 @@ use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
+use Throwable;
 
 class CheckChapterImages implements ShouldQueue
 {
@@ -54,5 +55,12 @@ class CheckChapterImages implements ShouldQueue
         Log::warning('Book#' . $this->book->id . ' 圖片完整');
 
         return true;
+    }
+
+    public function failed(Throwable $exception)
+    {
+        if (app()->bound('sentry')) {
+            app('sentry')->captureException($exception);
+        }
     }
 }

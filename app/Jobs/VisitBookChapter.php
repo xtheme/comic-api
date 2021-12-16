@@ -9,6 +9,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
+use Throwable;
 
 class VisitBookChapter implements ShouldQueue
 {
@@ -38,5 +39,12 @@ class VisitBookChapter implements ShouldQueue
             // 訪問數+1
             $chapter->increment('view_counts');
         });
+    }
+
+    public function failed(Throwable $exception)
+    {
+        if (app()->bound('sentry')) {
+            app('sentry')->captureException($exception);
+        }
     }
 }
