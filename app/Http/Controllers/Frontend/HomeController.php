@@ -5,19 +5,22 @@ namespace App\Http\Controllers\Frontend;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 
 class HomeController extends Controller
 {
     // index
     public function index()
     {
-        if (Auth::check()) {
-            return redirect()->route('backend');
-        }
+        Log::warning('test warning', ['a', 'b']);
 
-        if (config('app.env') != 'production') {
-            return redirect()->route('login');
-        }
+        // if (Auth::check()) {
+        //     return redirect()->route('backend');
+        // }
+        //
+        // if (config('app.env') != 'production') {
+        //     return redirect()->route('login');
+        // }
 
         return '';
     }

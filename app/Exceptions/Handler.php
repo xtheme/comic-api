@@ -46,4 +46,13 @@ class Handler extends ExceptionHandler
 
         return redirect()->guest(route('login'));
     }
+
+    public function report(Throwable $exception)
+    {
+        if (app()->bound('sentry') && $this->shouldReport($exception)) {
+            app('sentry')->captureException($exception);
+        }
+
+        parent::report($exception);
+    }
 }
