@@ -12,15 +12,13 @@ class HomeController extends Controller
     // index
     public function index()
     {
-        Log::warning('test warning', ['a', 'b']);
+        if (Auth::check()) {
+            return redirect()->route('backend');
+        }
 
-        // if (Auth::check()) {
-        //     return redirect()->route('backend');
-        // }
-        //
-        // if (config('app.env') != 'production') {
-        //     return redirect()->route('login');
-        // }
+        if (config('app.env') != 'production') {
+            return redirect()->route('login');
+        }
 
         return '';
     }
