@@ -50,7 +50,12 @@ class Handler extends ExceptionHandler
     public function report(Throwable $exception)
     {
         if (app()->bound('sentry') && $this->shouldReport($exception)) {
-            app('sentry')->captureException($exception);
+            app('sentry')->withScope(function (\Sentry\State\Scope $scope) use ($exception): void {
+                $scope->setUser(['id' => auth('sanctum')->id()]);
+                $scope->setTag('channel_id', request()->header('ch') ?? '');
+
+                app('sentry')->captureException($exception);
+            });
         }
 
         parent::report($exception);
