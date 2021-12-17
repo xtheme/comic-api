@@ -22,7 +22,8 @@ class ChannelController extends Controller
             'recharge_amount',
             DB::raw('(wap_new_amount + wap_renew_amount) as wap_amount'),
             DB::raw('(app_new_amount + app_renew_amount) as app_amount'),
-            'app_download_count'
+            'app_download_count',
+            'pwa_download_count',
         ];
 
         $channels = Channel::select($select)->latest('recharge_amount')->paginate(50);
