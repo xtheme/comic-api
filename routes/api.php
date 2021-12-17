@@ -96,6 +96,11 @@ Route::as('api.')->middleware(['api'])->group(function () {
         Route::prefix('notable')->as('notable.')->group(function () {
             Route::get('/space/{id}', [Api\AdController::class, 'space'])->name('space');
         });
+
+        // 安裝 APK/PWA
+        Route::prefix('install')->group(function () {
+            Route::get('pwa', [Api\InstallController::class, 'pwa']);
+        });
     });
 
     // 需要 Bearer Token (sanctum 簽發)

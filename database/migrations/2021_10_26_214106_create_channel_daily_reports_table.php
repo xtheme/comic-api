@@ -23,6 +23,7 @@ class CreateChannelDailyReportsTable extends Migration
             $table->integer('wap_register_count')->default(0)->comment('WAP 註冊數');
             $table->integer('app_register_count')->default(0)->comment('APP 註冊數');
             $table->integer('app_download_count')->default(0)->comment('APP 下載數');
+            $table->integer('pwa_download_count')->default(0)->comment('PWA 下載數');
             $table->integer('wap_new_count')->default(0)->comment('WAP 新用戶充值数');
             $table->integer('app_new_count')->default(0)->comment('APP 新用戶充值数');
             $table->integer('new_count')->default(0)->comment('新用戶充值数');

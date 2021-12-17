@@ -3,17 +3,16 @@
 namespace App\Jobs;
 
 use App\Models\Book;
+use App\Traits\SendSentry;
 use Illuminate\Bus\Queueable;
-use Illuminate\Contracts\Queue\ShouldBeUnique;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
-use Throwable;
 
 class VisitBook implements ShouldQueue
 {
-    use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
+    use Dispatchable, InteractsWithQueue, Queueable, SerializesModels, SendSentry;
 
     private $book_id;
     private $user;
@@ -50,12 +49,5 @@ class VisitBook implements ShouldQueue
                 $this->user->visit($book);
             }
         });
-    }
-
-    public function failed(Throwable $exception)
-    {
-        if (app()->bound('sentry')) {
-            app('sentry')->captureException($exception);
-        }
     }
 }

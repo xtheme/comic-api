@@ -68,6 +68,7 @@ class ResetReport extends Command
             'wap_register_count' => 0,
             'app_register_count' => 0,
             'app_download_count' => 0,
+            'pwa_download_count' => 0,
             'wap_new_count' => 0,
             'app_new_count' => 0,
             'new_count' => 0,

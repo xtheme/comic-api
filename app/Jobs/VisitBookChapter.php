@@ -3,17 +3,16 @@
 namespace App\Jobs;
 
 use App\Models\BookChapter;
+use App\Traits\SendSentry;
 use Illuminate\Bus\Queueable;
-use Illuminate\Contracts\Queue\ShouldBeUnique;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
-use Throwable;
 
 class VisitBookChapter implements ShouldQueue
 {
-    use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
+    use Dispatchable, InteractsWithQueue, Queueable, SerializesModels, SendSentry;
 
     private $chapter_id;
 
@@ -39,12 +38,5 @@ class VisitBookChapter implements ShouldQueue
             // 訪問數+1
             $chapter->increment('view_counts');
         });
-    }
-
-    public function failed(Throwable $exception)
-    {
-        if (app()->bound('sentry')) {
-            app('sentry')->captureException($exception);
-        }
     }
 }

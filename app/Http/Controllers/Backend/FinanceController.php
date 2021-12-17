@@ -25,6 +25,7 @@ class FinanceController extends Controller
             DB::raw('SUM(app_new_amount) as app_new_amount'),
             DB::raw('SUM(wap_renew_amount + app_renew_amount) as renew_amount'),
             DB::raw('SUM(app_download_count) as app_download_count'),
+            DB::raw('SUM(pwa_download_count) as pwa_download_count'),
         ];
 
         $list = ChannelDailyReport::select($select)->whereDate('date', $date)->groupBy('channel_id')->paginate(50);
@@ -40,6 +41,7 @@ class FinanceController extends Controller
             DB::raw('SUM(app_new_amount) as app_new_amount'),
             DB::raw('SUM(wap_renew_amount + app_renew_amount) as renew_amount'),
             DB::raw('SUM(app_download_count) as app_download_count'),
+            DB::raw('SUM(pwa_download_count) as pwa_download_count'),
         ];
 
         $total = ChannelDailyReport::select($select)->whereDate('date', $date)->groupBy('date')->first();
@@ -66,6 +68,7 @@ class FinanceController extends Controller
             DB::raw('SUM(app_new_amount) as app_new_amount'),
             DB::raw('SUM(wap_renew_amount + app_renew_amount) as renew_amount'),
             DB::raw('SUM(app_download_count) as app_download_count'),
+            DB::raw('SUM(pwa_download_count) as pwa_download_count'),
         ];
 
         $list = ChannelDailyReport::select($select)->where('channel_id', $channel_id)->groupBy('date')->latest('date')->paginate(50);
@@ -90,6 +93,7 @@ class FinanceController extends Controller
             DB::raw('SUM(app_new_amount) as app_new_amount'),
             DB::raw('SUM(wap_renew_amount + app_renew_amount) as renew_amount'),
             DB::raw('SUM(app_download_count) as app_download_count'),
+            DB::raw('SUM(pwa_download_count) as pwa_download_count'),
         ];
 
         $list = ChannelDailyReport::select($select)->groupBy('date')->latest('date')->paginate(50);
