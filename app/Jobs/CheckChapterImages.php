@@ -3,6 +3,7 @@
 namespace App\Jobs;
 
 use App\Models\Book;
+use App\Traits\SendSentry;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
@@ -10,11 +11,10 @@ use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
-use Throwable;
 
 class CheckChapterImages implements ShouldQueue
 {
-    use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
+    use Dispatchable, InteractsWithQueue, Queueable, SerializesModels, SendSentry;
 
     private $book;
 
@@ -55,12 +55,5 @@ class CheckChapterImages implements ShouldQueue
         Log::warning('Book#' . $this->book->id . ' 圖片完整');
 
         return true;
-    }
-
-    public function failed(Throwable $exception)
-    {
-        if (app()->bound('sentry')) {
-            app('sentry')->captureException($exception);
-        }
     }
 }

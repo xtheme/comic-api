@@ -8,17 +8,17 @@ use App\Models\ChannelMonthlyReport;
 use App\Models\Order;
 use App\Models\PaymentDailyReport;
 use App\Models\PaymentMonthlyReport;
+use App\Traits\SendSentry;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\Redis;
-use Throwable;
 
 class RechargeJob implements ShouldQueue
 {
-    use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
+    use Dispatchable, InteractsWithQueue, Queueable, SerializesModels, SendSentry;
 
     private $amount;
     private $platform;
@@ -132,12 +132,5 @@ class RechargeJob implements ShouldQueue
         $redis = Redis::connection('readonly');
         $redis_key = sprintf('channel:monthly:%s', date('Y-m', strtotime($this->month)));
         $redis->set($redis_key, json_encode($report->toArray(), JSON_UNESCAPED_UNICODE));
-    }
-
-    public function failed(Throwable $exception)
-    {
-        if (app()->bound('sentry')) {
-            app('sentry')->captureException($exception);
-        }
     }
 }

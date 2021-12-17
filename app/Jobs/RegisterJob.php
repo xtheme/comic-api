@@ -6,17 +6,17 @@ use App\Models\Channel;
 use App\Models\ChannelDailyReport;
 use App\Models\ChannelMonthlyReport;
 use App\Models\User;
+use App\Traits\SendSentry;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\Redis;
-use Throwable;
 
 class RegisterJob implements ShouldQueue
 {
-    use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
+    use Dispatchable, InteractsWithQueue, Queueable, SerializesModels, SendSentry;
 
     private $user;
     private $platform;
@@ -71,12 +71,5 @@ class RegisterJob implements ShouldQueue
         $redis = Redis::connection('readonly');
         $redis_key = sprintf('channel:monthly:%s', date('Y-m', strtotime($this->month)));
         $redis->set($redis_key, json_encode($report->toArray(), JSON_UNESCAPED_UNICODE));
-    }
-
-    public function failed(Throwable $exception)
-    {
-        if (app()->bound('sentry')) {
-            app('sentry')->captureException($exception);
-        }
     }
 }
