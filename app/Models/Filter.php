@@ -30,8 +30,10 @@ class Filter extends BaseModel
         $query = $model::query()->where('status', 1); // 不查詢標籤
 
         // 標籤條件
-        foreach ($this->tags as $type => $tags) {
-            $query->withAllTags($tags, $type);
+        if ($this->tags) {
+            foreach ($this->tags as $type => $tags) {
+                $query->withAllTags($tags, $type);
+            }
         }
 
         // 查詢條件
