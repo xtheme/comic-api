@@ -36,7 +36,9 @@ class Filter extends BaseModel
 
         // 查詢條件
         foreach ($this->params as $field => $value) {
-            if (!$value) continue;
+            if (!$value) {
+                continue;
+            }
 
             switch ($field) {
                 case 'title':

@@ -41,15 +41,17 @@
                                     <td>{{ $item->type }}</td>
                                     <td>{{ $item->title }}</td>
                                     <td>
-                                        @forelse($item->tags as $key => $value)
-                                            <dl class="row">
-                                                <dt class="col-sm-3">{{ $key }}</dt>
-                                                <dd class="col-sm-9">
-                                                    {{ implode(', ', $value) }}
-                                                </dd>
-                                            </dl>
-                                        @empty
-                                        @endforelse
+                                        @if($item->tags)
+                                            @forelse($item->tags as $key => $value)
+                                                <dl class="row">
+                                                    <dt class="col-sm-3">{{ $key }}</dt>
+                                                    <dd class="col-sm-9">
+                                                        {{ implode(', ', $value) }}
+                                                    </dd>
+                                                </dl>
+                                            @empty
+                                            @endforelse
+                                        @endif
                                     </td>
                                     <td>
                                         @forelse($item->params as $key => $value)
