@@ -258,6 +258,7 @@ if (!function_exists('getImageUrl')) {
     {
         $path = Str::of($path)->ltrim('/');
 
-        return 'https://akspic.fac87b.com/' . $path;
+        // return 'https://akspic.fac87b.com/' . $path;
+        return  Storage::url($path);
     }
 }
