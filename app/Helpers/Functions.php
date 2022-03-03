@@ -206,7 +206,7 @@ if (!function_exists('getEncryptDomain')) {
     {
         $cache_key = 'encrypt:domain';
 
-        $domain = Cache::remember($cache_key, 600, function () {
+        return Cache::remember($cache_key, 600, function () {
             $list = config('api.encrypt.domains');
 
             foreach ($list as $domain) {
@@ -224,16 +224,16 @@ if (!function_exists('getEncryptDomain')) {
 
             return $list[0];
         });
-
-        return $domain;
     }
 }
 
 if (!function_exists('getImageUrl')) {
     /**
+     * @param $path
      * @return string
+     * @throws Exception
      */
-    function getImageUrl($path)
+    /*function getImageUrl($path)
     {
         $path = Str::of($path)->ltrim('/');
 
@@ -253,5 +253,11 @@ if (!function_exists('getImageUrl')) {
         }
 
         return $url;
+    }*/
+    function getImageUrl($path)
+    {
+        $path = Str::of($path)->ltrim('/');
+
+        return 'https://akspic.fac87b.com/' . $path;
     }
 }
