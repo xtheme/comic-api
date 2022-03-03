@@ -1,7 +1,7 @@
 <?php
 
 return [
-    "Site Title" => "色多多",
+    "Site Title" => "后台管理",
     "Dashboard" => "控制台",
 
     "Channel" => "推广渠道",
