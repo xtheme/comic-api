@@ -205,12 +205,19 @@ class VideoConvert extends Command
 
         $videos->each(function ($video) use ($list) {
             $source = DB::table('source_movies')->where('id', $video->source_id)->first();
-            $tags = explode(',', $source->tags);
-            foreach ($tags as $id) {
-                $item = $list[$id] ?? null;
-                if ($item) {
-                    $video->attachTags([$item['name']], $item['cate']);
+            $tag_ids = explode(',', $source->tags);
+            $tags = [];
+            foreach ($tag_ids as $id) {
+                $tag = $list[$id] ?? null;
+                if ($tag) {
+                    $tags[$tag['cate']][] = $tag['name'];
                 }
+            }
+
+            foreach ($tags as $cate => $tag) {
+                // $this->info($cate);
+                // $this->error(json_encode($tag, JSON_UNESCAPED_UNICODE));
+                $video->attachTags($tag, $cate);
             }
         });
 

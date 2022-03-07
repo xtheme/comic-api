@@ -14,7 +14,7 @@ class VideoReset extends Command
      *
      * @var string
      */
-    protected $signature = 'reset:video';
+    protected $signature = 'reset:videos';
 
     /**
      * The console command description.
