@@ -12,7 +12,7 @@ use Illuminate\Support\Str;
 
 class TagController extends Controller
 {
-    private $front_length_limit = 4;
+    private int $front_length_limit = 4;
 
     const STATUS_OPTIONS = [
         1 => '显示',

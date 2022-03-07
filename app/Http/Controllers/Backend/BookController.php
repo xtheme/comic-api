@@ -120,7 +120,6 @@ class BookController extends Controller
             }
         }
 
-
         return Response::jsonSuccess(__('response.update.success'));
     }
 

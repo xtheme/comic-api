@@ -106,8 +106,8 @@
                                             <span class="bx bx-dots-vertical-rounded font-medium-3 dropdown-toggle nav-hide-arrow cursor-pointer"
                                                   id="dropdownMenuButton{{ $tag->id }}" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></span>
                                             <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuButton{{ $tag->id }}">
-                                                <a class="dropdown-item" href="{{ route('backend.book.index', ['tag[]' => $tag->name]) }}"><i class="bx bx-book mr-1"></i>查看关联漫画</a>
-                                                <a class="dropdown-item" href="{{ route('backend.video.index', ['tag[]' => $tag->name]) }}"><i class="bx bx-movie mr-1"></i>查看关联动画</a>
+                                                <a class="dropdown-item" href="{{ route('backend.book.index', ['tags[' . $tag->type . '][]' => $tag->name]) }}"><i class="bx bx-book mr-1"></i>查看关联漫画</a>
+                                                <a class="dropdown-item" href="{{ route('backend.video.index', ['tags[' . $tag->type . '][]' => $tag->name]) }}"><i class="bx bx-movie mr-1"></i>查看关联动画</a>
                                                 <a class="dropdown-item" data-destroy href="{{ route('backend.tag.destroy', $tag->name) }}" title="删除标签"><i class="bx bx-trash mr-1"></i> 删除标签</a>
                                             </div>
                                         </div>

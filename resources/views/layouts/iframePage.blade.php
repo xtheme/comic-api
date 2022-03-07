@@ -73,7 +73,7 @@ data-open="click" data-menu="vertical-menu-modern" data-col="1-column" data-fram
 
 <!-- BEGIN: Customizer-->
 @if($configData['hasSearchForm'] === true)
-<div class="customizer d-none d-md-block" style="top:100px;">
+<div class="customizer d-none d-md-block">
     <a class="customizer-close" href="#"><i class="bx bx-x"></i></a>
     <a class="customizer-toggle" href="#"><i class="bx bx-search-alt white"></i></a>
     <div class="customizer-content p-2">

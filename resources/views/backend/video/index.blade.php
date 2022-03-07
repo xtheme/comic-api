@@ -138,7 +138,7 @@
     <form id="search-form" class="form form-vertical" method="get" action="{{ url()->current() }}" novalidate>
         <div class="form-body">
             <div class="row">
-                <div class="col-12">
+                <div class="col-6">
                     <div class="form-group">
                         <label>作品名称</label>
                         <div class="controls">
@@ -146,7 +146,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-12">
+                <div class="col-6">
                     <div class="form-group">
                         <label>作者</label>
                         <div class="controls">
@@ -154,17 +154,21 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-12">
-                    <div class="form-group">
-                        <label>标签分类</label>
-                        <select id="tags-selector" class="form-control" name="tag[]" multiple="multiple">
-                            @foreach($tags as $tag)
-                                <option value="{{ $tag }}" @if(in_array($tag, request()->get('tag') ?? [])){{'selected'}}@endif>{{ $tag }}</option>
-                            @endforeach
-                        </select>
+                @foreach($categories as $title => $item)
+                    <div class="col-12">
+                        <div class="form-group">
+                            <label>{{ $title }}标签</label>
+                            <div class="controls">
+                                <select class="form-control tags-selector" name="tags[{{ $item['code'] }}][]" multiple="multiple">
+                                    @foreach($item['tags'] as $tag)
+                                        <option value="{{ $tag }}" @if(request()->get('tags') && in_array($tag, request()->get('tags'))){{'selected'}}@endif>{{ $tag }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                        </div>
                     </div>
-                </div>
-                <div class="col-12">
+                @endforeach
+                <div class="col-6">
                     <div class="form-group">
                         <label>角标</label>
                         <select class="form-control" name="ribbon">
@@ -175,7 +179,7 @@
                         </select>
                     </div>
                 </div>
-                <div class="col-12">
+                <div class="col-6">
                     <div class="form-group">
                         <label>状态</label>
                         <select class="form-control" name="status">
@@ -225,7 +229,7 @@
                 }
             });
 
-            $('#tags-selector').multiselect({
+            $('.tags-selector').multiselect({
                 buttonWidth: '100%',
                 buttonTextAlignment: 'left',
                 buttonText: function(options, select) {
