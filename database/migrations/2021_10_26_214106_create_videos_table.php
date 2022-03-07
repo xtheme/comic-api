@@ -28,10 +28,9 @@ class CreateVideosTable extends Migration
             $table->boolean('style')->default(0)->comment('拍摄类型: 0=专业拍摄, 1=偷拍, 2=自拍, 3=业务拍摄');
             $table->unsignedTinyInteger('subtitle')->default(0)->comment('字幕类型: 0=无, 1=中文, 2=英文, 3=中英文, 4=其他');
             $table->unsignedInteger('views')->default(0)->comment('播放次数');
-            $table->string('number', 100)->default('')->comment('播放次数');
-            $table->string('producer', 100)->default('')->comment('制作商');
-            $table->string('actor', 255)->default('')->comment('主演');
-            $table->string('published_at', 10)->default('')->comment('发行时间');
+            $table->string('number', 100)->nullable()->comment('播放次数');
+            $table->string('producer', 100)->nullable()->comment('制作商');
+            $table->string('published_at', 10)->nullable()->comment('发行时间');
             $table->timestamps();
             $table->string('source_platform', 10)->default('')->comment('來源平台')->index();
             $table->unsignedBigInteger('source_id')->default(0)->comment('來源編號')->index();

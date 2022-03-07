@@ -9,22 +9,12 @@ class Video extends BaseModel
 {
     use HasTags;
 
-    protected $fillable = [
-        'title',
-        'description',
-        'url',
-        'video_cdn_id',
-        'cover',
-        'length',
-        'ribbon',
-        'status',
-        'mosaic',
-        'style',
-        'subtitle',
-        'number',
-        'producer',
-        'actor',
-        'published_at',
+    protected $guarded = [
+        'id',
+        'created_at',
+        'updated_at',
+        'source_platform',
+        'source_id',
     ];
 
     /*public function visit_histories()
