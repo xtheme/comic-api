@@ -100,17 +100,18 @@ class UploadService
 
         $path = Storage::put($this->path, $file, 'public');
 
-        // $url = Storage::url($path);
-        $url = Storage::temporaryUrl($path, now()->addMinutes(10));
+        try {
+            $url = Storage::temporaryUrl($path, now()->addMinutes(10));
+        } catch (\Exception $e) {
+            $url = Storage::url($path);
+        }
 
         // 不同步
-        $result = [
+        return [
             'success' => true,
             'message' => __('response.upload.success'),
             'path' => $path,
             'url' => $url,
         ];
-
-        return $result;
     }
 }
