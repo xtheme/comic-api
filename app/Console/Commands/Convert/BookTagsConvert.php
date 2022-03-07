@@ -58,9 +58,9 @@ class BookTagsConvert extends Command
             $this->line(sprintf('為了避免腳本超時，本次操作將轉移 %s 筆數據，共拆分為 %s 批数据進行迁移！', $batch_num, ceil($batch_num / $chunk_num)));
 
             // 數據批次
-            $data->each(function($items, $key) {
+            $data->each(function ($items, $key) {
                 // 漫畫標籤轉換
-                $items->each(function($item) {
+                $items->each(function ($item) {
                     $cate_id = trim($item->cate_id);
                     $cate_arr = explode(',', $cate_id);
                     $tags = DB::table('category')->whereIn('id', $cate_arr)->get()->pluck('name');

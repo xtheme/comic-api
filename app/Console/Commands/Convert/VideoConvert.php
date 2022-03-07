@@ -57,48 +57,47 @@ class VideoConvert extends Command
     public function handle()
     {
         // 每次轉詞數據量
-        $batch_num = 10000;
+        $batch_num = 1000;
 
         // 每多少筆切割一次操作
         $chunk_num = 500;
 
         // 動畫源最新視頻 id
-        $old_primary_id = DB::connection('mysql_video')->table('movies')->orderByDesc('id')->first()->id;
+        $old_primary_id = DB::table('source_movies')->where('status', 1)->orderByDesc('id')->first()->id;
 
         // 本地最新視頻 id
-        $new_primary_id = DB::table('videos')->orderByDesc('id')->first()->id;
+        $new_primary_id = DB::table('videos')->where('source_platform', 'nasu')->orderByDesc('source_id')->first()->source_id ?? 0;
 
         if ($old_primary_id > $new_primary_id) {
             // 分割集合
-            $data = DB::connection('mysql_video')->table('movies')->where('id', '>', $new_primary_id)->limit($batch_num)->get()->chunk($chunk_num);
+            $data = DB::table('source_movies')->where('id', '>', $new_primary_id)->limit($batch_num)->get()->chunk($chunk_num);
 
             $this->line(sprintf('為了避免腳本超時，本次操作將轉移 %s 筆數據，共拆分為 %s 批数据進行迁移！', $batch_num, ceil($batch_num / $chunk_num)));
 
-            $data->each(function($items, $key) {
-                $insert = $items->map(function($item) {
+            $data->each(function ($items, $key) {
+                $insert = $items->map(function ($item) {
                     // 標籤 tags
                     // 女優 actor
                     return [
-                        'id' => $item->id,
                         'title' => $item->video_name,
-                        'description' => $item->description,
-                        'url' => $item->url,
                         'cover' => $item->preview_pics,
-                        'length' => $item->movie_length,
+                        'storage_path' => $item->url,
+                        'description' => $item->description,
                         'ribbon' => 0,
-                        'country' => self::$countries[$item->country],
                         'status' => $item->status,
+                        'length' => $item->movie_length,
+                        'country' => self::$countries[$item->country],
                         'mosaic' => $item->video_type,
                         'style' => $item->shooting_type,
                         'subtitle' => $item->subtitle_type,
-                        'views' => 0,
-                        'heat' => 0,
+                        'views' => $item->views,
                         'number' => strtoupper($item->number),
                         'producer' => $item->producer,
                         'actor' => $item->actor,
                         'published_at' => $item->publish_time,
                         'created_at' => $item->created_at,
-                        'updated_at' => null,
+                        'source_platform' => 'nasu',
+                        'source_id' => $item->id,
                     ];
                 })->toArray();
 
@@ -109,12 +108,12 @@ class VideoConvert extends Command
 
             $this->line('本次數據已全數遷移！');
 
-            $latest_primary_id = DB::table('movies')->orderByDesc('id')->first()->id;
+            $latest_primary_id = DB::table('videos')->where('source_platform', 'nasu')->orderByDesc('source_id')->first()->source_id;
 
-            $pending_num = DB::table('movies')->where('id', '>', $latest_primary_id)->count();
+            $pending_num = DB::table('source_movies')->where('id', '>', $latest_primary_id)->where('status', 1)->count();
 
             if ($this->confirm('尚有' . $pending_num . '筆數據等待遷移，是否繼續執行此腳本？')) {
-                $this->call('migrate:books');
+                $this->call('convert:videos');
             } else {
                 $this->line('操作已結束');
             }
