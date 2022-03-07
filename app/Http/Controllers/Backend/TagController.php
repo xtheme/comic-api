@@ -99,7 +99,7 @@ class TagController extends Controller
                 Tag::whereIn('id', $ids)->tagged_book()->delete();
                 break;
             case 'dismiss_video':
-                $text = '解除关联的动画';
+                $text = '解除关联的视频';
                 Tag::whereIn('id', $ids)->tagged_video()->delete();
                 break;
             case 'disable':

@@ -171,7 +171,7 @@ Route::prefix('sms')->group(function () {
     Route::post('/send', [Api\SmsController::class, 'send']);
 });
 
-// 动画
+// 视频
 Route::prefix('video')->group(function () {
     Route::get('/list/{page?}', [Api\VideoController::class, 'list']);
     Route::get('/detail/{id}', [Api\VideoController::class, 'detail']);

@@ -12,7 +12,7 @@ use Illuminate\Support\Facades\Response;
 class AdSpaceController extends Controller
 {
     const CLASS_TYPE = [
-        'video' => '动画',
+        'video' => '视频',
         'book' => '漫画',
         'other' => '其他',
     ];

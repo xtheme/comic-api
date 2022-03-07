@@ -73,7 +73,7 @@
                                     <td>{{ $item->id }}</td>
                                     <td>
                                         @if($item->type == 'video')
-                                            <span class="badge badge-pill badge-primary">动画</span>
+                                            <span class="badge badge-pill badge-primary">视频</span>
                                         @elseif($item->type == 'book_safe')
                                             <span class="badge badge-pill badge-primary">安全漫画</span>
                                         @else

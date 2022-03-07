@@ -22,7 +22,7 @@
                                 <div class="form-group mr-1">
                                     <select class="form-control" name="action">
                                         <option value="dismiss_book">解除关联的漫画</option>
-                                        <option value="dismiss_video">解除关联的动画</option>
+                                        <option value="dismiss_video">解除关联的视频</option>
                                         <option value="enable">在前端显示</option>
                                         <option value="disable">在前端隐藏</option>
                                     </select>
@@ -54,7 +54,7 @@
                                 <th class="text-right">查询次数</th>
                                 <th class="text-center">前端显示</th>
                                 <th class="text-center">关联漫画数</th>
-                                <th class="text-center">关联动画数</th>
+                                <th class="text-center">关联视频数</th>
                                 <th>操作</th>
                             </tr>
                             </thead>
@@ -107,7 +107,7 @@
                                                   id="dropdownMenuButton{{ $tag->id }}" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></span>
                                             <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuButton{{ $tag->id }}">
                                                 <a class="dropdown-item" href="{{ route('backend.book.index', ['tags[' . $tag->type . '][]' => $tag->name]) }}"><i class="bx bx-book mr-1"></i>查看关联漫画</a>
-                                                <a class="dropdown-item" href="{{ route('backend.video.index', ['tags[' . $tag->type . '][]' => $tag->name]) }}"><i class="bx bx-movie mr-1"></i>查看关联动画</a>
+                                                <a class="dropdown-item" href="{{ route('backend.video.index', ['tags[' . $tag->type . '][]' => $tag->name]) }}"><i class="bx bx-movie mr-1"></i>查看关联视频</a>
                                                 <a class="dropdown-item" data-destroy href="{{ route('backend.tag.destroy', $tag->name) }}" title="删除标签"><i class="bx bx-trash mr-1"></i> 删除标签</a>
                                             </div>
                                         </div>
