@@ -52,12 +52,9 @@ Route::middleware(['api'])->group(function () {
 
         // 视频
         Route::prefix('video')->group(function () {
-            Route::get('/list/{page?}', [Api\VideoController::class, 'list']);
-            Route::get('/detail/{id}', [Api\VideoController::class, 'detail']);
+            Route::get('/{id}', [Api\VideoController::class, 'detail']);
             Route::get('/recommend/{id?}', [Api\VideoController::class, 'recommend']);
-            Route::post('/play/{id}/{series_id}', [Api\VideoController::class, 'play']);
         });
-
 
         // 樓鳳履歷
         Route::prefix('resume')->group(function () {

@@ -20,6 +20,12 @@ class Video extends BaseModel
         'source_id',
     ];
 
+    protected $hidden = [
+        'deleted_at',
+        'source_platform',
+        'source_id',
+    ];
+
     /**
      * 訪問 BookObserver
      */

@@ -52,7 +52,7 @@ class BookController extends BaseController
                     })->toArray(),
                 ];
             } catch (\Exception $e) {
-                throw new HttpResponseException(Response::jsonError('该漫画不存在或已下架！'));
+                throw new HttpResponseException(Response::jsonError('漫画不存在或已下架！'));
             }
         });
 
@@ -76,7 +76,7 @@ class BookController extends BaseController
             }
         }
 
-        // 排程: 訪問數+1 / 更新漫畫排行榜 / 記錄用戶訪問
+        // 排程: 訪問數+1 / 更新排行榜 / 記錄用戶訪問
         VisitBook::dispatch($book_id, $user);
 
         return Response::jsonSuccess(__('api.success'), $data);
