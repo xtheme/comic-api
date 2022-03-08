@@ -4,9 +4,11 @@ namespace App\Models;
 
 use App\Enums\VideoOptions;
 use App\Traits\HasRanking;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Spatie\Tags\HasTags;
+use Spatie\Tags\Tag;
 
 class Video extends BaseModel
 {
@@ -38,7 +40,8 @@ class Video extends BaseModel
 
     public function getTaggedTagsAttribute()
     {
-        return $this->tags->where('suggest', 1)->sortByDesc('order_column')->take(3)->pluck('name')->toArray();
+        // return $this->tags->where('suggest', 1)->sortByDesc('order_column')->take(3)->pluck('name')->toArray();
+        return $this->tags->pluck('name')->toArray();
     }
 
     public function getCountryAttribute($value): string

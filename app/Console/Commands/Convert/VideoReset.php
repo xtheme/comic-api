@@ -5,6 +5,7 @@ namespace App\Console\Commands\Convert;
 ini_set('memory_limit', '-1');
 
 use Illuminate\Console\Command;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 
 class VideoReset extends Command
@@ -46,6 +47,8 @@ class VideoReset extends Command
             DB::table('tags')->truncate();
             DB::table('taggables')->truncate();
             DB::statement('SET FOREIGN_KEY_CHECKS=1');
+
+            Cache::forget('topic:video');
         }
 
         $this->line('數據已清空！');

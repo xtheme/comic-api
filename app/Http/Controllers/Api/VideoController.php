@@ -17,19 +17,24 @@ class VideoController extends BaseController
 
     public function detail($id)
     {
-        $data = Video::withCount(['visit_logs', 'favorite_logs'])->find($id);
+        try {
+            $data = Video::withCount(['visit_logs', 'favorite_logs'])->findOrFail($id);
 
-        // todo 數字格式化
-        $data['visit_counts'] = shortenNumber($data['visit_logs_count']);
-        $data['favorite_counts'] = shortenNumber($data['favorite_logs_count']);
+            // todo 數字格式化
+            $data['visit_counts'] = shortenNumber($data['visit_logs_count']);
+            $data['favorite_counts'] = shortenNumber($data['favorite_logs_count']);
 
-        // todo 訪問數+1
-        // $video->increment('view_counts');
+            // todo 訪問數+1
+            // $video->increment('view_counts');
 
-        // todo 添加到排行榜
+            // todo 添加到排行榜
+
+            return Response::jsonSuccess(__('api.success'), $data);
+        } catch (\Exception $e) {
+            return Response::jsonError($e->getMessage());
+        }
 
 
-        return Response::jsonSuccess(__('api.success'), $data);
     }
 
     // 猜你喜歡
@@ -41,12 +46,14 @@ class VideoController extends BaseController
         if ($id) {
             $video = Video::findOrFail($id);
             $tags = $video->tagged_tags;
+            shuffle($tags);
+            $tags = array_chunk($tags, 3)[0];
         }
 
         if ($tags) {
-            $videos = Video::select(['id', 'title', 'cover'])->withCount(['visit_histories'])->withAnyTag($tags)->where('id', '!=', $id)->inRandomOrder()->limit($limit)->get();
+            $videos = Video::select(['id', 'title', 'cover'])->withCount(['visit_logs'])->withAnyTags($tags)->where('id', '!=', $id)->inRandomOrder()->limit($limit)->get();
         } else {
-            $videos = Video::select(['id', 'title', 'cover'])->withCount(['visit_histories'])->inRandomOrder()->limit($limit)->get();
+            $videos = Video::select(['id', 'title', 'cover'])->withCount(['visit_logs'])->inRandomOrder()->limit($limit)->get();
         }
 
         $data = $videos->map(function ($video) {
@@ -56,7 +63,7 @@ class VideoController extends BaseController
                 // 'author' => $video->author,
                 // 'description' => $video->description,
                 'cover' => $video->cover,
-                'tagged_tags' => $video->tagged_tags,
+                // 'tagged_tags' => $video->tagged_tags,
                 'visit_counts' => shortenNumber($video->visit_histories_count),
             ];
         })->toArray();
