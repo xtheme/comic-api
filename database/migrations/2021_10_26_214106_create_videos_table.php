@@ -31,10 +31,11 @@ class CreateVideosTable extends Migration
             $table->unsignedInteger('collect_counts')->default(0)->comment('收藏数');
             $table->string('number', 100)->nullable()->comment('番号');
             $table->string('producer', 100)->nullable()->comment('制作商');
-            $table->string('published_at', 10)->nullable()->comment('发行时间');
-            $table->timestamps();
+            $table->string('release_date', 10)->nullable()->comment('发行时间');
             $table->string('source_platform', 10)->default('')->comment('來源平台')->index();
             $table->unsignedBigInteger('source_id')->default(0)->comment('來源編號')->index();
+            $table->timestamps();
+            $table->softDeletes();
         });
     }
 

@@ -17,18 +17,11 @@ class VideoController extends BaseController
 
     public function detail($id)
     {
-        $data = Video::with([
-            'series' => function ($query) {
-                return $query->where('status', 1)->orderBy('episode');
-            },
-            'series.cdn' => function ($query) {
-                return $query->where('status', 1);
-            },
-        ])->withCount(['visit_histories', 'play_histories'])->find($id);
+        $data = Video::withCount(['visit_logs', 'favorite_logs'])->find($id);
 
         // todo 數字格式化
-        $data['visit_counts'] = shortenNumber($data['visit_histories_count']);
-        $data['play_counts'] = shortenNumber($data['play_histories_count']);
+        $data['visit_counts'] = shortenNumber($data['visit_logs_count']);
+        $data['favorite_counts'] = shortenNumber($data['favorite_logs_count']);
 
         // todo 訪問數+1
         // $video->increment('view_counts');

@@ -254,11 +254,11 @@ if (!function_exists('getImageUrl')) {
 
         return $url;
     }*/
-    function getImageUrl($path)
+    function getImageUrl($path): string
     {
         $path = Str::of($path)->ltrim('/');
 
         // return 'https://akspic.fac87b.com/' . $path;
-        return  Storage::url($path);
+        return Storage::url($path);
     }
 }

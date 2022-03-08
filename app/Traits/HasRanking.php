@@ -3,13 +3,14 @@
 namespace App\Traits;
 
 use App\Models\RankingLog;
+use Illuminate\Redis\Connections\Connection;
 use Illuminate\Support\Facades\Redis;
 use Illuminate\Support\Str;
 
 trait HasRanking
 {
-    private $redis;
-    private $class_name;
+    private Connection $redis;
+    private string $class_name;
 
     public static function bootHasRanking()
     {

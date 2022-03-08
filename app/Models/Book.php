@@ -4,6 +4,8 @@ namespace App\Models;
 
 use App\Enums\BookOptions;
 use App\Traits\HasRanking;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\Storage;
 use Spatie\Tags\HasTags;
@@ -21,12 +23,12 @@ class Book extends BaseModel
     /**
      * 章節 BookObserver
      */
-    public function chapters()
+    public function chapters(): HasMany
     {
         return $this->hasMany('App\Models\BookChapter');
     }
 
-    public function last_chapter()
+    public function last_chapter(): HasOne
     {
         return $this->hasOne('App\Models\BookChapter')->where('status', 1)->latest('episode');
     }
@@ -34,7 +36,7 @@ class Book extends BaseModel
     /**
      * 訪問 BookObserver
      */
-    public function visit_logs()
+    public function visit_logs(): HasMany
     {
         return $this->hasMany('App\Models\UserVisitLog', 'item_id');
     }
@@ -42,7 +44,7 @@ class Book extends BaseModel
     /**
      * 收藏 BookObserver
      */
-    public function favorite_logs()
+    public function favorite_logs(): HasMany
     {
         return $this->hasMany('App\Models\UserFavoriteLog', 'item_id');
     }
@@ -58,7 +60,7 @@ class Book extends BaseModel
     /**
      * 透過章節查詢本書是否收費
      */
-    public function getChargeAttribute()
+    public function getChargeAttribute(): bool
     {
         if ($this->last_chapter) {
             return (bool) $this->last_chapter->price > 0;
@@ -70,7 +72,7 @@ class Book extends BaseModel
     /**
      * 查詢最新章節時間
      */
-    public function getReleaseAtAttribute()
+    public function getReleaseAtAttribute(): string
     {
         if ($this->last_chapter) {
             return $this->last_chapter->created_at->format('Y-m-d');
@@ -82,7 +84,7 @@ class Book extends BaseModel
     /**
      * 直幅封面
      */
-    public function getVerticalCoverAttribute($value)
+    public function getVerticalCoverAttribute($value): string
     {
         if (!$value) {
             return '';
@@ -94,7 +96,7 @@ class Book extends BaseModel
     /**
      * 横向封面
      */
-    public function getHorizontalCoverAttribute($value)
+    public function getHorizontalCoverAttribute($value): string
     {
         if (!$value) {
             return '';
@@ -106,19 +108,19 @@ class Book extends BaseModel
     /**
      * 數字格式化
      */
-    public function getVisitAttribute($value)
+    public function getVisitAttribute($value): string
     {
         return shortenNumber($value);
     }
 
-    public function getTypeAttribute($value)
+    public function getTypeAttribute($value): string
     {
         $types = BookOptions::TYPE_OPTIONS;
 
         return $types[$value];
     }
 
-    public function getReleaseStatusStyleAttribute()
+    public function getReleaseStatusStyleAttribute(): string
     {
         $types = [
             1 => 'success',
@@ -128,7 +130,7 @@ class Book extends BaseModel
         return $types[$this->end];
     }
 
-    public function getReleaseStatusAttribute()
+    public function getReleaseStatusAttribute(): string
     {
         $types = [
             1 => '已完结',

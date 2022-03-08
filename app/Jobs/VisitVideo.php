@@ -3,6 +3,8 @@
 namespace App\Jobs;
 
 use App\Models\Book;
+use App\Models\User;
+use App\Models\Video;
 use App\Traits\SendSentry;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -10,11 +12,11 @@ use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 
-class VisitBook implements ShouldQueue
+class VisitVideo implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels, SendSentry;
 
-    private int $book_id;
+    private int $video_id;
     private $user;
 
     /**
@@ -22,9 +24,9 @@ class VisitBook implements ShouldQueue
      *
      * @return void
      */
-    public function __construct($book_id, $user)
+    public function __construct($video_id, $user)
     {
-        $this->book_id = $book_id;
+        $this->video_id = $video_id;
         $this->user = $user;
     }
 
@@ -35,18 +37,18 @@ class VisitBook implements ShouldQueue
      */
     public function handle()
     {
-        Book::withoutEvents(function () {
-            $book = Book::find($this->book_id);
+        Video::withoutEvents(function () {
+            $video = Video::find($this->video_id);
 
             // 訪問數+1
-            $book->increment('view_counts');
+            $video->increment('view_counts');
 
             // 添加到排行榜
-            $book->logRanking();
+            $video->logRanking();
 
             // 記錄用戶訪問
             if ($this->user) {
-                $this->user->visit($book);
+                $this->user->visit($video);
             }
         });
     }

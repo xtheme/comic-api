@@ -3,11 +3,14 @@
 namespace App\Models;
 
 use App\Enums\VideoOptions;
+use App\Traits\HasRanking;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Spatie\Tags\HasTags;
 
 class Video extends BaseModel
 {
-    use HasTags;
+    use SoftDeletes, HasTags, HasRanking;
 
     protected $guarded = [
         'id',
@@ -17,37 +20,43 @@ class Video extends BaseModel
         'source_id',
     ];
 
-    /*public function visit_histories()
+    /**
+     * 訪問 BookObserver
+     */
+    public function visit_logs(): HasMany
     {
-        return $this->hasMany('App\Models\VideoVisit', 'video_id', 'id');
+        return $this->hasMany('App\Models\UserVisitLog', 'item_id');
     }
 
-    public function play_histories()
+    /**
+     * 收藏 BookObserver
+     */
+    public function favorite_logs(): HasMany
     {
-        return $this->hasMany('App\Models\VideoPlayLog', 'video_id', 'id');
-    }*/
+        return $this->hasMany('App\Models\UserFavoriteLog', 'item_id');
+    }
 
     public function getTaggedTagsAttribute()
     {
         return $this->tags->where('suggest', 1)->sortByDesc('order_column')->take(3)->pluck('name')->toArray();
     }
 
-    public function getCountryAttribute($value)
+    public function getCountryAttribute($value): string
     {
         return VideoOptions::COUNTRIES[$value];
     }
 
-    public function getSubtitleAttribute($value)
+    public function getSubtitleAttribute($value): string
     {
         return VideoOptions::SUBTITLE[$value];
     }
 
-    public function getUrlAttribute($value)
+    public function getUrlAttribute($value): string
     {
         return config('api.video.hls_domain') . $value;
     }
 
-    public function getCoverAttribute($value)
+    public function getCoverAttribute($value): string
     {
         if (!$value) return '';
 
