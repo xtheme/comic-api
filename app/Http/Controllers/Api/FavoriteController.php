@@ -22,16 +22,17 @@ class FavoriteController extends BaseController
             return [
                 'record_id' => $log->id,
                 'recorded_at' => $log->created_at->format('Y-m-d H:i:s'),
-                // 'type' => $log->type,
-                'id' => $log->item_id,
-                'title' => $log->{$type}->title,
-                'author' => $log->{$type}->author,
-                'cover' => ($type == 'book') ? $log->{$type}->vertical_cover : $log->{$type}->cover,
-                'description' => $log->{$type}->description,
-                'tagged_tags' => $log->{$type}->tagged_tags,
-                'view_counts' => shortenNumber($log->{$type}->view_counts),
-                'has_favorite' => true,
-                'created_at' => optional($log->{$type}->created_at)->format('Y-m-d'),
+                'item' => [
+                    'id' => $log->item_id,
+                    'title' => $log->{$type}->title,
+                    'author' => $log->{$type}->author,
+                    'cover' => ($type == 'book') ? $log->{$type}->vertical_cover : $log->{$type}->cover,
+                    'description' => $log->{$type}->description,
+                    // 'tagged_tags' => $log->{$type}->tagged_tags,
+                    'view_counts' => shortenNumber($log->{$type}->view_counts),
+                    'has_favorite' => true,
+                    'created_at' => optional($log->{$type}->created_at)->format('Y-m-d'),
+                ],
             ];
         })->toArray();
 
@@ -45,16 +46,25 @@ class FavoriteController extends BaseController
         $type = $input['type'];
         $item_id = $input['id'];
 
+        switch ($type) {
+            case 'video':
+                $title = '视频';
+                break;
+            default:
+                $title = '漫画';
+                break;
+        }
+
         $count = $request->user()->favorite_logs()->where('type', $type)->count();
 
         if ($count >= 50) {
-            return Response::jsonError('很抱歉，您的收藏数已达上限！');
+            return Response::jsonError('很抱歉，收藏的' . $title . '已达上限！');
         }
 
         try {
             $target = app('\\App\\Models\\' . Str::studly($type))->findOrFail($item_id);
         } catch (\Exception $e) {
-            return Response::jsonError('很抱歉，收藏项目不存在或已下架！');
+            return Response::jsonError('很抱歉，收藏' . $title . '不存在或已下架！');
         }
 
         $history = $request->user()->favorite_logs()->firstOrCreate([
@@ -64,7 +74,7 @@ class FavoriteController extends BaseController
         ]);
 
         if (!$history->wasRecentlyCreated) {
-            return Response::jsonError('您已经收藏过此漫画！');
+            return Response::jsonError('您已经收藏过此' . $title . '！');
         }
 
         return Response::jsonSuccess(__('response.create.success'));

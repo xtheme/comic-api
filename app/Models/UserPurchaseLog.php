@@ -26,6 +26,11 @@ class UserPurchaseLog extends BaseModel
         return $this->hasOne('App\Models\BookChapter', 'id', 'item_id');
     }
 
+    public function video(): HasOne
+    {
+        return $this->hasOne('App\Models\Video', 'id', 'item_id');
+    }
+
     public function getItemTypeAttribute()
     {
         return __('model.' . $this->type);
@@ -43,7 +48,9 @@ class UserPurchaseLog extends BaseModel
             case 'book_chapter':
                 $title = $this->book_chapter->book->title . ' (第 ' . $this->book_chapter->episode . ' 話)';
                 break;
-
+            default:
+                $title = '';
+                break;
         }
 
         return $title;
