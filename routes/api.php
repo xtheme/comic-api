@@ -49,7 +49,7 @@ Route::middleware(['api'])->group(function () {
             Route::get('/{type}', [Api\TopicController::class, 'list']);
             Route::get('/filter/{filter_id}/{page?}', [Api\TopicController::class, 'filter']);
         });
-        
+
         // 视频
         Route::prefix('video')->group(function () {
             Route::get('/list/{page?}', [Api\VideoController::class, 'list']);

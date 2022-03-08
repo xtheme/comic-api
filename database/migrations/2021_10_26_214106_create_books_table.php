@@ -26,8 +26,8 @@ class CreateBooksTable extends Migration
             $table->tinyInteger('review')->default(1)->index('review')->comment('审核状态: 0=待审核, 1=审核成功, 2=审核失败, 3=屏蔽, 4=未审核');
             $table->tinyInteger('operating')->default(1)->index('operating')->comment('添加方式: 1=人工, 2= 爬虫');
             $table->integer('source_id')->default(0)->comment('添加來源');
-            $table->integer('view_counts')->default(0)->comment('访问数');
-            $table->integer('collect_counts')->default(0)->comment('收藏数');
+            $table->unsignedInteger('view_counts')->default(0)->comment('访问数');
+            $table->unsignedInteger('collect_counts')->default(0)->comment('收藏数');
             $table->timestamps();
             $table->softDeletes();
         });
