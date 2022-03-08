@@ -49,12 +49,15 @@ Route::middleware(['api'])->group(function () {
             Route::get('/{type}', [Api\TopicController::class, 'list']);
             Route::get('/filter/{filter_id}/{page?}', [Api\TopicController::class, 'filter']);
         });
-
-        // 視頻
-        Route::prefix('movie')->group(function () {
-            Route::get('/list/{type}', [Api\MovieController::class, 'list']);
-            Route::get('/detail/{id}', [Api\MovieController::class, 'detail']);
+        
+        // 视频
+        Route::prefix('video')->group(function () {
+            Route::get('/list/{page?}', [Api\VideoController::class, 'list']);
+            Route::get('/detail/{id}', [Api\VideoController::class, 'detail']);
+            Route::get('/recommend/{id?}', [Api\VideoController::class, 'recommend']);
+            Route::post('/play/{id}/{series_id}', [Api\VideoController::class, 'play']);
         });
+
 
         // 樓鳳履歷
         Route::prefix('resume')->group(function () {
@@ -169,14 +172,6 @@ Route::fallback(function () {
 Route::prefix('sms')->group(function () {
     Route::post('/verify', [Api\SmsController::class, 'verify'])O
     Route::post('/send', [Api\SmsController::class, 'send']);
-});
-
-// 视频
-Route::prefix('video')->group(function () {
-    Route::get('/list/{page?}', [Api\VideoController::class, 'list']);
-    Route::get('/detail/{id}', [Api\VideoController::class, 'detail']);
-    Route::get('/recommend/{id?}', [Api\VideoController::class, 'recommend']);
-    Route::post('/play/{id}/{series_id}', [Api\VideoController::class, 'play']);
 });
 
 // 评论
