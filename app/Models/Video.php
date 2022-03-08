@@ -4,11 +4,9 @@ namespace App\Models;
 
 use App\Enums\VideoOptions;
 use App\Traits\HasRanking;
-use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Spatie\Tags\HasTags;
-use Spatie\Tags\Tag;
 
 class Video extends BaseModel
 {
@@ -61,7 +59,9 @@ class Video extends BaseModel
 
     public function getCoverAttribute($value): string
     {
-        if (!$value) return '';
+        if (!$value) {
+            return '';
+        }
 
         return config('api.video.img_domain') . $value;
     }

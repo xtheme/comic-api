@@ -88,6 +88,28 @@ class VideoConvert extends Command
 
             $data->each(function ($items, $key) {
                 $insert = $items->map(function ($item) {
+                    // actor
+                    $actor_list = $this->getActorList();
+                    $actor_ids = explode(',', $item->actor);
+                    $tmp_actors = [];
+                    foreach ($actor_ids as $id) {
+                        if (isset($actor_list[$id])) {
+                            $names = explode('/', $actor_list[$id]);
+                            foreach ($names as $name) {
+                                $tmp_actors[] = $name;
+                            }
+                        }
+                    }
+                    // tags
+                    $tag_list = $this->getTagList();
+                    $tag_ids = explode(',', $item->tags);
+                    $tmp_tags = [];
+                    foreach ($tag_ids as $id) {
+                        if (isset($tag_list[$id])) {
+                            $tmp_tags[] = $tag_list[$id]['name'];
+                        }
+                    }
+
                     return [
                         'title' => $item->video_name,
                         'cover' => $item->preview_pics,
@@ -106,6 +128,8 @@ class VideoConvert extends Command
                         'source_platform' => 'nasu',
                         'source_id' => $item->id,
                         'created_at' => now(),
+                        'actor' => join(',', $tmp_actors),
+                        'keywords' => join(',', $tmp_tags),
                     ];
                 })->toArray();
 
@@ -120,19 +144,23 @@ class VideoConvert extends Command
 
             $pending_num = DB::table('source_movies')->where('id', '>', $latest_target_id)->where('status', 1)->count();
 
-            // tagging actor
-            $this->taggingActor($last_target_id, $latest_target_id);
-
-            // tagging tags
-            $this->taggingTags($last_target_id, $latest_target_id);
-
-            if ($this->confirm('尚有' . $pending_num . '筆數據等待遷移，是否繼續執行此腳本？')) {
+            if ($this->confirm('尚有' . $pending_num . ' 筆數據等待遷移，是否繼續執行此腳本？')) {
                 $this->call('convert:videos');
             } else {
                 $this->line('操作已結束');
             }
         } else {
-            $this->line('目前沒有等待遷移的數據，操作已結束');
+            $this->line('目前沒有等待遷移的數據');
+
+            if ($this->confirm('是否要进行女優標籤轉換?')) {
+                $this->taggingActor();
+            }
+
+            if ($this->confirm('是否要进行視頻標籤轉換?')) {
+                $this->taggingTags();
+            }
+
+            $this->line('操作已結束');
         }
 
         return 0;
@@ -151,13 +179,13 @@ class VideoConvert extends Command
     }
 
     // 標記女優標籤
-    private function taggingActor($last_target_id, $latest_target_id)
+    private function taggingActor()
     {
         $this->line('女優標籤轉換中...');
 
         $list = $this->getActorList();
 
-        $videos = Video::where('id', '>', $last_target_id)->where('id', '<=', $latest_target_id)->orderBy('id')->get(['id', 'source_id']);
+        $videos = Video::orderBy('id')->get(['id', 'source_id']);
 
         $videos->each(function ($item) use ($list) {
             $source = DB::table('source_movies')->where('id', $item->source_id)->first();
@@ -194,13 +222,13 @@ class VideoConvert extends Command
     }
 
     // 標記視頻標籤
-    private function taggingTags($last_target_id, $latest_target_id)
+    private function taggingTags()
     {
-        $this->line('視頻標籤轉換中...' . $last_target_id . ' ~ ' . $latest_target_id);
+        $this->line('視頻標籤轉換中...');
 
         $list = $this->getTagList();
 
-        $videos = Video::where('source_id', '>', $last_target_id)->where('source_id', '<=', $latest_target_id)->orderBy('source_id')->get(['id', 'source_id']);
+        $videos = Video::orderBy('source_id')->get(['id', 'source_id']);
 
         $videos->each(function ($video) use ($list) {
             $source = DB::table('source_movies')->where('id', $video->source_id)->first();
