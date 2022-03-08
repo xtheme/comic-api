@@ -181,6 +181,10 @@
                     "name": "System Log"
                 },
                 {
+                    "url": "/horizon",
+                    "name": "Horizon"
+                },
+                {
                     "url": "/backend/analysis/request/report",
                     "name": "Request Log"
                 }
