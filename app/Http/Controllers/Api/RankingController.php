@@ -105,6 +105,7 @@ class RankingController extends Controller
         if (!$cache) {
             $rankings = RankingLog::with([$type])
                 ->selectRaw('item_id, sum(views) as views')
+                ->where('type', $type)
                 ->where('year', date('Y'))
                 ->where('month', date('m'))
                 ->groupBy('item_id')
@@ -126,6 +127,18 @@ class RankingController extends Controller
     private function dataTransformation($type, $rankings)
     {
         switch ($type) {
+            case 'video':
+                $data = $rankings->map(function ($rank) {
+                    return [
+                        'id' => $rank->video->id,
+                        'title' => $rank->video->title,
+                        'description' => $rank->video->description,
+                        'cover' => $rank->video->cover,
+                        'keywords' => $rank->video->keywords,
+                        'views' => $rank->views,
+                    ];
+                })->toArray();
+                break;
             case 'book':
             default:
                 $data = $rankings->map(function ($rank) {
