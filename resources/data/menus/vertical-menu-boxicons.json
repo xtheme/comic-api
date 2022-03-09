@@ -111,6 +111,12 @@
             "icon": "bx bxs-book-open"
         },
         {
+            "url": "/backend/resume",
+            "name": "Resumes",
+            "slug": "resumes",
+            "icon": "bx bxs-id-card"
+        },
+        {
             "url": "#",
             "name": "Report",
             "slug": "Report",

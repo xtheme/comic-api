@@ -25,9 +25,8 @@ return [
     "Order List" => "订单列表",
 
     "Books" => "漫画管理",
-    "Books List" => "漫画列表",
-    // "Recommended Books" => "推荐漫画",
-    // "CDN Caching List" => "CDN 预热名单",
+    "Videos" => "视频管理",
+    'Resumes' => '楼凤履历',
 
     "Report" => "举报管理",
     "Report Issue" => "举报类型",
@@ -42,10 +41,7 @@ return [
     "Topics" => "主题区块",
     "Filter" => "筛选器",
 
-    "Videos" => "视频管理",
-    "Video List" => "视频列表",
-    "Video Domain" => "视频域名配置",
-    "Play Statistics" => "播放统计",
+    // "Play Statistics" => "播放统计",
     "Comment List" => "评论列表",
 
     "Ad" => "站内广告",
