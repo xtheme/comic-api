@@ -166,6 +166,7 @@ class RankingController extends Controller
         if (!$cache) {
             $rankings = RankingLog::with([$type])
                 ->selectRaw('item_id, sum(views) as views')
+                ->where('type', $type)
                 ->where('year', date('Y'))
                 ->groupBy('item_id')
                 ->orderByDesc('views')
@@ -194,31 +195,58 @@ class RankingController extends Controller
 
         $cache = $this->redis->get($redis_key);
 
-        if (!$cache) {
-            $books = Book::where(function ($query) use ($country) {
-                $country = ($country == 'japan') ? 1 : 2;
-                $query->where('status', 1)->where('type', $country);
-            })->orderByDesc('view_counts')->limit(self::LIMIT)->get();
-
-            $data = $books->map(function ($book) {
-                return [
-                    'id' => $book->id,
-                    'title' => $book->title,
-                    'description' => $book->description,
-                    'cover' => $book->vertical_cover,
-                    'tagged_tags' => $book->tagged_tags,
-                    'views' => $book->view_counts,
-                    'updated_at' => $book->updated_at->format('Y-m-d'),
-                ];
-            })->toArray();
-
-            $this->redis->set($redis_key, json_encode($data, JSON_UNESCAPED_UNICODE));
-            $this->redis->expire($redis_key, self::CACHE_TTL);
-        } else {
+        if ($cache) {
             $data = json_decode($cache, true);
+            return Response::jsonSuccess(__('api.success'), $data);
         }
 
+        $result = Book::where(function ($query) use ($country) {
+            $country = ($country == 'japan') ? 1 : 2;
+            $query->where('status', 1)->where('type', $country);
+        })->orderByDesc('view_counts')->limit(self::LIMIT)->get();
+
+
+        $data = $this->sortData($type, $result);
+
         return Response::jsonSuccess(__('api.success'), $data);
+    }
+
+    private function sortData($type, $data, $redis_key)
+    {
+        switch ($type) {
+            case 'video':
+                $list = $data->map(function ($video) {
+                    return [
+                        'id' => $video->id,
+                        'title' => $video->title,
+                        'description' => $video->description,
+                        'cover' => $video->cover,
+                        'tagged_tags' => $video->keywords,
+                        'views' => $video->view_counts,
+                        'created_at' => $video->created_at->format('Y-m-d'),
+                    ];
+                })->toArray();
+                break;
+            case 'book':
+            default:
+                $list = $data->map(function ($book) {
+                    return [
+                        'id' => $book->id,
+                        'title' => $book->title,
+                        'description' => $book->description,
+                        'cover' => $book->vertical_cover,
+                        'tagged_tags' => $book->tagged_tags,
+                        'views' => $book->view_counts,
+                        'created_at' => $book->created_at->format('Y-m-d'),
+                    ];
+                })->toArray();
+                break;
+        }
+
+        $this->redis->set($redis_key, json_encode($list, JSON_UNESCAPED_UNICODE));
+        $this->redis->expire($redis_key, self::CACHE_TTL);
+
+        return $list;
     }
 
     public function korea($type = 'book')
@@ -232,28 +260,23 @@ class RankingController extends Controller
 
         $cache = $this->redis->get($redis_key);
 
-        if (!$cache) {
-            $books = Book::where('status', 1)->latest('updated_at')->limit(self::LIMIT)->get();
-
-            $data = $books->map(function ($book) {
-                return [
-                    'id' => $book->id,
-                    'title' => $book->title,
-                    'description' => $book->description,
-                    'cover' => $book->vertical_cover,
-                    'tagged_tags' => $book->tagged_tags,
-                    'views' => $book->view_counts,
-                    'updated_at' => $book->updated_at->format('Y-m-d'),
-                ];
-            })->toArray();
-
-            $this->redis->set($redis_key, json_encode($data, JSON_UNESCAPED_UNICODE));
-            $this->redis->expire($redis_key, self::CACHE_TTL);
-        } else {
+        if ($cache) {
             $data = json_decode($cache, true);
+            return Response::jsonSuccess(__('api.success'), $data);
         }
+
+        switch ($type) {
+            case 'video':
+                $result = Video::where('status', 1)->latest('created_at')->limit(self::LIMIT)->get();
+                break;
+            case 'book':
+            default:
+                $result = Book::where('status', 1)->latest('created_at')->limit(self::LIMIT)->get();
+                break;
+        }
+
+        $data = $this->sortData($type, $result, $redis_key);
 
         return Response::jsonSuccess(__('api.success'), $data);
     }
-
 }
