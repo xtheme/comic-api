@@ -15,29 +15,32 @@ class CreateResumesTable extends Migration
     {
         Schema::create('resumes', function (Blueprint $table) {
             $table->bigInteger('id', true);
-            $table->string('name')->nullable()->comment('模特名');
-            $table->integer('age')->nullable()->comment('年龄');
-            $table->integer('sale_price')->nullable()->comment('平台销售价格');
-            $table->string('price')->nullable()->comment('价格');
-            $table->integer('province_id')->nullable()->comment('地区');
-            $table->integer('city_id')->nullable()->comment('城市');
-            $table->string('qq')->nullable();
-            $table->string('wechat')->nullable();
-            $table->string('phone')->nullable();
-            $table->text('tag')->nullable()->comment('标签');
-            $table->text('profile')->nullable()->comment('简介
-');
-            $table->integer('images_count')->nullable()->default(0);
-            $table->integer('tag_count')->nullable()->default(0);
-            $table->integer('sold_count')->nullable()->default(0);
-            $table->integer('complaint_count')->nullable()->default(0);
-            $table->tinyInteger('state')->nullable()->default(1)->comment('1上架  2下架');
-            $table->string('operator', 45)->nullable()->comment('最后操作人');
-            $table->timestamp('created_at')->nullable()->useCurrent();
-            $table->timestamp('updated_at')->nullable()->useCurrent();
-            $table->json('pictures')->nullable();
-            $table->tinyInteger('approve')->nullable()->default(0)->comment('0不认证 1认证');
-            $table->string('tt')->nullable()->default('')->comment('tt联系');
+            $table->enum('agent_type', ['admin', 'user'])->comment('來源')->index();
+            $table->unsignedInteger('agent_id')->comment('经纪人')->index();
+            $table->unsignedInteger('province_id')->default(0)->comment('省id')->index();
+            $table->unsignedInteger('city_id')->default(0)->comment('城市id')->index();
+            $table->unsignedInteger('area_id')->default(0)->comment('区县id')->index();
+            $table->string('nickname')->nullable()->comment('昵称');
+            $table->integer('birth_year')->nullable()->comment('出生年');
+            $table->integer('cup')->nullable()->comment('罩杯');
+            $table->string('body_shape')->nullable()->comment('身形');
+            $table->json('service')->nullable()->comment('服务项目');
+            $table->string('price')->nullable()->comment('价位');
+            $table->string('schedule')->comment('班表');
+            $table->string('contact')->comment('联络方式');
+            $table->string('cover')->comment('封面');
+            $table->string('video')->comment('视频');
+            $table->json('album')->nullable()->comment('相簿');
+            $table->unsignedInteger('view_counts')->default(0)->comment('访问数');
+            $table->unsignedInteger('collect_counts')->default(0)->comment('收藏数');
+            $table->unsignedInteger('like_counts')->default(0)->comment('点赞数');
+            $table->unsignedInteger('dislike_counts')->default(0)->comment('倒赞数');
+            $table->unsignedInteger('sales_volume')->default(0)->comment('销售量');
+            $table->integer('point')->default(5)->comment('解锁点数');
+            $table->unsignedTinyInteger('verify')->nullable()->default(0)->comment('认证: 0=否, 1=是');
+            $table->unsignedTinyInteger('status')->default(0)->comment('上架: 1=上架, 0=下架');
+            $table->timestamps();
+            $table->softDeletes();
         });
     }
 
