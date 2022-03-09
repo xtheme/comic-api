@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Http\Resources\BookChapterResource;
 use App\Jobs\VisitVideo;
 use App\Models\Video;
 use Illuminate\Http\Exceptions\HttpResponseException;
@@ -21,7 +20,7 @@ class VideoController extends BaseController
 
     public function detail(Request $request, $video_id)
     {
-        $cache_key = 'video:' . $video_id;
+        $cache_key = 'video:detail:' . $video_id;
 
         $data = Cache::remember($cache_key, 28800, function () use ($video_id) {
             try {
@@ -30,19 +29,16 @@ class VideoController extends BaseController
                 return [
                     'id' => $video->id,
                     'title' => $video->title,
-                    'author' => $video->author,
-                    'cover' => $video->vertical_cover,
+                    'cover' => $video->cover,
                     'description' => $video->description,
-                    'end' => $video->end,
-                    'type' => $video->type,
-                    'tagged_tags' => $video->tagged_tags,
-                    'view_counts' => shortenNumber($video->view_counts),
-                    'collect_counts' => shortenNumber($video->collect_counts),
+                    'length' => $video->length,
+                    'number' => $video->number, // 番号
+                    'actor' => $video->actor,
+                    'keywords' => $video->keywords,
+                    'view_counts' => $video->view_counts,
+                    'collect_counts' => $video->collect_counts,
                     'has_favorite' => false,
-                    // 'chapters_count' => $book->chapters_count,
-                    // 'chapters' => $book->chapters->map(function ($chapter) {
-                    //     return json_decode((new BookChapterResource($chapter))->purchased(false)->toJson(), true);
-                    // })->toArray(),
+                    'purchased' => false,
                 ];
             } catch (\Exception $e) {
                 throw new HttpResponseException(Response::jsonError('视频不存在或已下架！'));
@@ -56,24 +52,68 @@ class VideoController extends BaseController
             $data['has_favorite'] = $user->favorite_logs()->where('type', 'book')->where('item_id', $video_id)->exists();
 
             // 購買記錄
-            // $chapter_ids = collect($data['chapters'])->pluck('chapter_id')->toArray();
-            //
-            // if ($user->is_vip) {
-            //     $purchase_logs = $chapter_ids;
-            // } else {
-            //     $purchase_logs = $user->purchase_logs()->where('type', 'video')->whereIn('item_id', $chapter_ids)->pluck('item_id')->toArray();
-            // }
-            //
-            // foreach ($data['chapters'] as &$chapter) {
-            //     $chapter['purchased'] = in_array($chapter['chapter_id'], $purchase_logs);
-            // }
+            if ($user->is_vip) {
+                $data['purchased'] = true;
+            } else {
+                $data['purchased'] = $user->purchase_logs()->where('type', 'video')->where('item_id', $video_id)->exists();
+            }
         }
 
         // 排程: 訪問數+1 / 更新排行榜 / 記錄用戶訪問
         VisitVideo::dispatch($video_id, $user);
 
         return Response::jsonSuccess(__('api.success'), $data);
+    }
 
+    // 點擊播放, 驗證權限, 返回 HLS 網址
+    public function play(Request $request, $video_id = null)
+    {
+        $user = $request->user() ?? null;
+
+        if (!$user) {
+            return Response::jsonError('请先登录会员！');
+        }
+
+        // 購買記錄
+        if ($user->is_vip) {
+            $purchased = true;
+        } else {
+            $purchased = $user->purchase_logs()->where('type', 'video')->where('item_id', $video_id)->exists();
+        }
+
+        // 針對免費仔
+        if (!$purchased) {
+            $cache_key = 'free:video:' . $user->id;
+
+            if (Cache::has($cache_key)) {
+                $free_count = Cache::get($cache_key);
+                // 每日免费观看次数
+                if ($free_count < getConfig('video', 'daily_free_views', 3)) {
+                    $purchased = true;
+                    Cache::increment($cache_key);
+                }
+            } else {
+                $purchased = true;
+                $ttl = getTtlRemainingToday();
+                Cache::put($cache_key, 1, $ttl);
+            }
+        }
+
+        if (!$purchased) {
+            return Response::jsonError('您今天的免费次数已用尽！');
+        } else {
+            try {
+                $video = Video::select(['storage_path'])->findOrFail($video_id);
+
+                $data = [
+                    'storage_path' => $video->storage_path,
+                ];
+
+                return Response::jsonSuccess(__('api.success'), $data);
+            } catch (\Exception $e) {
+                throw new HttpResponseException(Response::jsonError('视频不存在或已下架！'));
+            }
+        }
     }
 
     // 猜你喜歡
@@ -90,20 +130,21 @@ class VideoController extends BaseController
         }
 
         if ($tags) {
-            $videos = Video::select(['id', 'title', 'cover'])->withCount(['visit_logs'])->withAnyTags($tags)->where('id', '!=', $id)->inRandomOrder()->limit($limit)->get();
+            $videos = Video::withCount(['visit_logs'])->withAnyTags($tags)->where('id', '!=', $id)->inRandomOrder()->limit($limit)->get();
         } else {
-            $videos = Video::select(['id', 'title', 'cover'])->withCount(['visit_logs'])->inRandomOrder()->limit($limit)->get();
+            $videos = Video::withCount(['visit_logs'])->inRandomOrder()->limit($limit)->get();
         }
 
         $data = $videos->map(function ($video) {
             return [
                 'id' => $video->id,
                 'title' => $video->title,
-                // 'author' => $video->author,
-                // 'description' => $video->description,
                 'cover' => $video->cover,
-                // 'tagged_tags' => $video->tagged_tags,
-                'visit_counts' => shortenNumber($video->visit_histories_count),
+                'description' => $video->description,
+                'number' => $video->number, // 番号
+                'actor' => $video->actor,
+                'keywords' => $video->keywords,
+                'view_counts' => $video->view_counts,
             ];
         })->toArray();
 

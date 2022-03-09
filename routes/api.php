@@ -53,6 +53,7 @@ Route::middleware(['api'])->group(function () {
         // 视频
         Route::prefix('video')->group(function () {
             Route::get('/{id}', [Api\VideoController::class, 'detail']);
+            Route::get('/play/{id}', [Api\VideoController::class, 'play']);
             Route::get('/recommend/{id?}', [Api\VideoController::class, 'recommend']);
         });
 

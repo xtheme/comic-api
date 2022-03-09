@@ -48,6 +48,11 @@ class Video extends BaseModel
         return $this->tags->pluck('name')->toArray();
     }
 
+    public function setNumberAttribute($value)
+    {
+        $this->attributes['number'] = strtoupper($value);
+    }
+
     public function getCountryAttribute($value): string
     {
         return VideoOptions::COUNTRIES[$value];
@@ -56,6 +61,29 @@ class Video extends BaseModel
     public function getSubtitleAttribute($value): string
     {
         return VideoOptions::SUBTITLE[$value];
+    }
+
+    public function getActorAttribute($value): array
+    {
+        return explode(',', $value);
+    }
+
+    // 标签
+    public function getKeywordsAttribute($value): array
+    {
+        return explode(',', $value);
+    }
+
+    // 访问数
+    public function getViewCountsAttribute($value): string
+    {
+        return shortenNumber($value);
+    }
+
+    // 收藏数
+    public function getCollectCountsAttribute($value): string
+    {
+        return shortenNumber($value);
     }
 
     public function getUrlAttribute($value): string
