@@ -44,7 +44,7 @@ class VerifyApiHeader
 
         if ($validator->fails()) {
             Log::emergency($validator->errors()->first(), $request->all());
-            return Response::jsonError('缺少必要的请求参数!', 401);
+            return Response::jsonError('缺少必要的请求参数！', 401);
         }
 
         // 验证时间戳, 接口有效期5分钟

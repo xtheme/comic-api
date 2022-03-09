@@ -36,7 +36,7 @@ class VerifyApiSign
 
         if ($sign != $str) {
             Log::emergency('API 請求签名错误!', $request->all());
-            return Response::jsonError('签名错误!', 403);
+            return Response::jsonError('签名错误！', 403);
         }
 
         return $next($request);

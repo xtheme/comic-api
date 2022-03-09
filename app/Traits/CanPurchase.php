@@ -3,16 +3,17 @@
 namespace App\Traits;
 
 use App\Models\UserPurchaseLog;
+use Exception;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Str;
 
 trait CanPurchase
 {
     // 用戶模型應增加錢包欄位
-    protected $userWalletField = 'wallet';
+    protected string $userWalletField = 'wallet';
 
     // 商品模型應增加售價欄位
-    protected $itemPriceField = 'price';
+    protected string $itemPriceField = 'price';
 
     // 返回錢包
     public function getWallet()
@@ -21,7 +22,7 @@ trait CanPurchase
     }
 
     // 檢查是否曾經購買
-    public function hasBought(Model $model)
+    public function hasBought(Model $model): bool
     {
         return UserPurchaseLog::where('user_id', $this->id)
                               ->where('item_model', get_class($model))
@@ -30,10 +31,14 @@ trait CanPurchase
     }
 
     // 建立用戶消費(購買)紀錄
-    public function purchase(Model $model)
+
+    /**
+     * @throws Exception
+     */
+    public function purchase(Model $model): self
     {
         if ($this->hasBought($model)) {
-            throw new \Exception('您已购买过此项目！');
+            throw new Exception('您已购买过此项目！');
         }
 
         $class = get_class($model);
@@ -44,7 +49,7 @@ trait CanPurchase
         $wallet = $this->{$this->userWalletField};
 
         if ($wallet < $item_price) {
-            throw new \Exception('钱包余额不足！');
+            throw new Exception('钱包余额不足！');
         }
 
         // 建立用戶消費(購買)紀錄

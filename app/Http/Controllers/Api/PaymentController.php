@@ -117,7 +117,7 @@ class PaymentController extends Controller
             $hourly_orders = Cache::get($cache_key);
         } else {
             $hourly_orders = 0;
-            Cache::set($cache_key, 0, 3600);
+            Cache::put($cache_key, 0, 3600);
         }
 
         // 限制單用戶每小時能建立的訂單數

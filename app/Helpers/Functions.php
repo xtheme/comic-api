@@ -57,7 +57,7 @@ if (!function_exists('getConfig')) {
             return $default;
         }
 
-        Cache::set($cache_key, $options[$key], 600);
+        Cache::put($cache_key, $options[$key], 600);
 
         return $options[$key] ?? '';
     }
@@ -260,5 +260,13 @@ if (!function_exists('getImageUrl')) {
 
         // return 'https://akspic.fac87b.com/' . $path;
         return Storage::url($path);
+    }
+}
+
+if (!function_exists('getTtlRemainingToday')) {
+    function getTtlRemainingToday()
+    {
+        // 当天剩餘秒數
+        return mktime(24, 0, 0) - time();
     }
 }

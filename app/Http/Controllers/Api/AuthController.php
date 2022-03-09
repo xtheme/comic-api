@@ -79,7 +79,7 @@ class AuthController extends BaseController
             'channel_id' => $request->header('ch') ?? 1,
             'name' => $request->input('name'),
             'password' => $request->input('password'),
-            'wallet' => getConfig('app', 'register_coin'),
+            'wallet' => getConfig('app', 'register_point', 0),
             'logged_at' => now(),
         ];
 
@@ -137,7 +137,7 @@ class AuthController extends BaseController
             'name' => $name,
             'password' => $password,
             'fingerprint' => $request->header('uuid'),
-            'wallet' => getConfig('app', 'register_coin'),
+            'wallet' => getConfig('app', 'register_point', 0),
             'logged_at' => now(),
         ];
 

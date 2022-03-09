@@ -65,7 +65,7 @@ class BookController extends Controller
             'list' => $this->filter($request)->paginate(),
             'categories' => getCategoryByType('book'),
             // 'default_charge_chapter' => getConfig('comic', 'default_charge_chapter'),
-            // 'default_charge_price' => getConfig('comic', 'default_charge_price'),
+            // 'default_charge_point' => getConfig('comic', 'default_charge_point'),
             'pageConfigs' => ['hasSearchForm' => true],
         ];
 
@@ -202,7 +202,7 @@ class BookController extends Controller
                 $data = ['review' => 4, 'status' => 0];
                 break;
             default:
-                return Response::jsonError('未知的操作');
+                return Response::jsonError('未知的操作！');
         }
 
         switch ($action) {
@@ -235,7 +235,7 @@ class BookController extends Controller
                 // 批量收费
                 $books = Book::whereIn('id', $ids)->get();
                 foreach ($books as $book) {
-                    $book->chapters()->where('episode', '>', getConfig('comic', 'default_charge_chapter'))->update(['price' => getConfig('comic', 'default_charge_price')]);
+                    $book->chapters()->where('episode', '>', getConfig('comic', 'default_charge_chapter'))->update(['price' => getConfig('comic', 'default_charge_point')]);
                 }
                 break;
             case 'destroy':
@@ -328,7 +328,7 @@ class BookController extends Controller
     // {
     //     $data = [
     //         'default_charge_chapter' => getConfig('comic', 'default_charge_chapter'),
-    //         'default_charge_price' => getConfig('comic', 'default_charge_price'),
+    //         'default_charge_point' => getConfig('comic', 'default_charge_point'),
     //     ];
     //
     //     return view('backend.book.price')->with($data);

@@ -50,7 +50,7 @@ class BookChapterController extends Controller
             'book_id' => $book_id,
             'episode' => $chapters,
             'title' => sprintf('第%s话', $chapters),
-            'price' => $chapters >= getConfig('comic', 'default_charge_chapter') ? getConfig('comic', 'default_charge_price') : 0,
+            'price' => $chapters >= getConfig('comic', 'default_charge_chapter') ? getConfig('comic', 'default_charge_point') : 0,
         ];
 
         return view('backend.book_chapter.create')->with($data);

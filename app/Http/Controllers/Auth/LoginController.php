@@ -114,11 +114,11 @@ class LoginController extends Controller
         $this->incrementLoginAttempts($request);
 
         if (empty($request->post('username'))) {
-            return Response::jsonError('请输入帐号!', 401);
+            return Response::jsonError('请输入帐号！', 401);
         }
 
         if (empty($request->post('password'))) {
-            return Response::jsonError('请输入密码!', 401);
+            return Response::jsonError('请输入密码！', 401);
         }
 
         if ($this->attemptLogin($request)) {
@@ -126,7 +126,7 @@ class LoginController extends Controller
 
             if ($admin->status != 1) {
                 auth()->logout();
-                return Response::jsonError('帐号被封禁!', 401);
+                return Response::jsonError('帐号被封禁！', 401);
             }
 
             activity()->useLog('后台')->causedBy(Auth::user())->log('登录后台!');

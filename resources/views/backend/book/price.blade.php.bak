@@ -23,7 +23,7 @@
                     <div class="form-group">
                         <label><span class="danger">*</span> 金币</label>
                         <div class="controls">
-                            <input type="text" class="form-control" name="charge_price" value="{{ $default_charge_price }}">
+                            <input type="text" class="form-control" name="charge_price" value="{{ $default_charge_point }}">
                         </div>
                     </div>
                 </div>

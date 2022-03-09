@@ -54,7 +54,7 @@ class CommentService
     public function update_cache()
     {
         $cache_key = sprintf('comment:cd-%s', request()->user()->id);
-        Cache::set($cache_key, time());
+        Cache::put($cache_key, time());
 
         $cache_key = sprintf('comment:frequency-%s', request()->user()->id);
         Cache::increment($cache_key);

@@ -29,7 +29,7 @@ class UserFactory extends Factory
             'app_id' => 0,
             'channel_id' => 1,
             'password' => Hash::make('password'),
-            'wallet' => getConfig('app', 'register_coin'),
+            'wallet' => getConfig('app', 'register_point', 0),
         ];
     }
 

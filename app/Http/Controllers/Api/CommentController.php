@@ -53,7 +53,7 @@ class CommentController extends Controller
         $comment = Comment::create($request->post());
 
         if (!$comment) {
-            return Response::jsonError('评论失败');
+            return Response::jsonError('评论失败！');
         }
 
         $this->commentService->update_cache();

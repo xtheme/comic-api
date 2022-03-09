@@ -53,14 +53,14 @@ class UserController extends Controller
 
         if (!empty($request->input('email'))) {
             if (!filter_var($request->input('email'), FILTER_VALIDATE_EMAIL)) {
-                return Response::jsonError('信箱格式不正确');
+                return Response::jsonError('信箱格式不正确！');
             }
             $user->email = $request->input('email');
         }
 
         if (!empty($request->input('password')) || !empty($request->input('password_confirm'))) {
             if ($request->input('password') != $request->input('password_confirm')) {
-                return Response::jsonError('两次密码不相符');
+                return Response::jsonError('两次密码不相符！');
             }
 
             $user->password = $request->input('password');
@@ -123,7 +123,7 @@ class UserController extends Controller
         ];
 
         if (!$gift['gift_coin'] && !$gift['gift_days']) {
-            return Response::jsonError('请输入有效的数字');
+            return Response::jsonError('请输入有效的数字！');
         }
 
         // 更新用戶錢包或VIP時效 && 建立用戶充值紀錄
