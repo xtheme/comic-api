@@ -41,6 +41,13 @@ class Develop extends Command
         $this->call('optimize:clear');
         $this->call('ide-helper:generate');
         $this->call('ide-helper:meta');
+
+        $this->info('npm run dev');
+        system('npm run dev');
+
+        $this->info('重启 Horizon 进程');
+        $this->call('horizon:terminate');
+
         $this->info('');
         $this->info('目前处于开发模式下');
     }

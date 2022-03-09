@@ -61,5 +61,14 @@ class Release extends Command
         $this->call('migrate'); // 数据表结构更新
         $this->call('db:seed', ['--class' => 'UpgradeSeeder']); // 新增本次升级数据
         $this->call('optimize');
+
+        $this->info('npm run prod');
+        system('npm run prod');
+
+        $this->info('重启 Horizon 进程');
+        $this->call('horizon:terminate');
+
+        $this->info('移除过旧的活动日志');
+        $this->call('activitylog:clean');
     }
 }
