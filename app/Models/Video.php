@@ -74,18 +74,6 @@ class Video extends BaseModel
         return explode(',', $value);
     }
 
-    // 访问数
-    public function getViewCountsAttribute($value): string
-    {
-        return shortenNumber($value);
-    }
-
-    // 收藏数
-    public function getCollectCountsAttribute($value): string
-    {
-        return shortenNumber($value);
-    }
-
     public function getUrlAttribute($value): string
     {
         return config('api.video.hls_domain') . $value;

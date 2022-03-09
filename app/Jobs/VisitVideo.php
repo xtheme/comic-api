@@ -2,8 +2,6 @@
 
 namespace App\Jobs;
 
-use App\Models\Book;
-use App\Models\User;
 use App\Models\Video;
 use App\Traits\SendSentry;
 use Illuminate\Bus\Queueable;

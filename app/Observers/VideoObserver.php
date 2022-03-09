@@ -9,7 +9,7 @@ class VideoObserver
     /**
      * Handle the Video "created" event.
      *
-     * @param  \App\Models\Video  $video
+     * @param  Video  $video
      * @return void
      */
     public function created(Video $video)
@@ -20,7 +20,7 @@ class VideoObserver
     /**
      * Handle the Video "updated" event.
      *
-     * @param  \App\Models\Video  $video
+     * @param  Video  $video
      * @return void
      */
     public function updated(Video $video)
@@ -31,20 +31,19 @@ class VideoObserver
     /**
      * Handle the Video "deleted" event.
      *
-     * @param  \App\Models\Video  $video
+     * @param  Video  $video
      * @return void
      */
     public function deleted(Video $video)
     {
-        $video->series()->delete();
-        $video->visit_histories()->delete();
-        $video->play_histories()->delete();
+        $video->visit_logs()->delete();
+        $video->favorite_logs()->delete();
     }
 
     /**
      * Handle the Video "restored" event.
      *
-     * @param  \App\Models\Video  $video
+     * @param  Video  $video
      * @return void
      */
     public function restored(Video $video)
@@ -55,13 +54,12 @@ class VideoObserver
     /**
      * Handle the Video "force deleted" event.
      *
-     * @param  \App\Models\Video  $video
+     * @param  Video  $video
      * @return void
      */
     public function forceDeleted(Video $video)
     {
-        $video->series()->delete();
-        $video->visit_histories()->delete();
-        $video->play_histories()->delete();
+        $video->visit_logs()->delete();
+        $video->favorite_logs()->delete();
     }
 }

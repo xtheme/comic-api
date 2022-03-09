@@ -35,8 +35,8 @@ class VideoController extends BaseController
                     'number' => $video->number, // 番号
                     'actor' => $video->actor,
                     'keywords' => $video->keywords,
-                    'view_counts' => $video->view_counts,
-                    'collect_counts' => $video->collect_counts,
+                    'view_counts' => shortenNumber($video->view_counts),
+                    'collect_counts' => shortenNumber($video->collect_counts),
                     'has_favorite' => false,
                     'purchased' => false,
                 ];
