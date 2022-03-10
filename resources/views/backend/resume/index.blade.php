@@ -1,7 +1,7 @@
 @extends('layouts.iframePage')
 
 {{-- page Title --}}
-@section('title','主题区块')
+@section('title','楼凤履历')
 
 {{-- vendor style --}}
 @section('vendor-styles')
@@ -11,7 +11,7 @@
 @section('content')
     <section id="config-list">
         <div class="mb-1">
-            <a href="{{ route('backend.topic.create') }}" data-modal data-height="35vh" class="btn btn-primary" title="添加主题区块" role="button" aria-pressed="true">添加主题区块</a>
+            <a href="{{ route('backend.resume.create') }}" data-modal data-size="full" class="btn btn-primary" title="新增履历" role="button" aria-pressed="true">新增履历</a>
         </div>
         <div class="card">
             <div class="card-header">
@@ -81,7 +81,7 @@
                                         @endif
                                     </td>
                                     <td>{{ $item->filter->title }}</td>
-                                    <td><span class="jeditable" data-pk="{{ $item->id }}" data-value="" > {{ $item->sort }}</td>
+                                    <td><span class="jeditable" data-pk="{{ $item->id }}" data-value=""> {{ $item->sort }}</td>
                                     <td>{{ $item->style_alias }}</td>
                                     <td>{{ $item->created_at->diffForHumans()  }}</td>
                                     <td>
@@ -155,8 +155,8 @@
                 e.preventDefault();
 
                 let $this = $(this);
-                let ids   = $.checkedIds();
-                let url   = $this.attr('action') + '/' + $this.find('select[name="action"]').val();
+                let ids = $.checkedIds();
+                let url = $this.attr('action') + '/' + $this.find('select[name="action"]').val();
 
                 if (!ids) {
                     $.toast({

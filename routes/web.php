@@ -317,5 +317,16 @@ Route::middleware(['auth', 'auth.route.role'])->prefix('backend')->as('backend.'
     // 履歷
     Route::prefix('resume')->as('resume.')->group(function () {
         Route::get('/', [Backend\ResumeController::class, 'index'])->name('index');
+        Route::get('create', [Backend\ResumeController::class, 'create'])->name('create');
+        Route::post('store', [Backend\ResumeController::class, 'store'])->name('store');
+        Route::get('edit/{id}', [Backend\ResumeController::class, 'edit'])->name('edit');
+        Route::put('update/{id}', [Backend\ResumeController::class, 'update'])->name('update');
+        Route::delete('destroy/{id}', [Backend\ResumeController::class, 'destroy'])->name('destroy');
+    });
+
+    // 地區 json
+    Route::prefix('location')->as('location.')->group(function () {
+        Route::get('/city/{province_id?}', [Backend\LocationController::class, 'cities'])->name('cities');
+        Route::get('/area/{city_id?}', [Backend\LocationController::class, 'areas'])->name('areas');
     });
 });

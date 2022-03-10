@@ -1,9 +1,11 @@
 @extends('layouts.modal')
 
+{{-- vendor style --}}
 @section('vendor-styles')
     <link rel="stylesheet" type="text/css" href="{{ asset('vendors/css/bootstrap-multiselect/bootstrap-multiselect.css') }}">
 @endsection
 
+{{-- page style --}}
 @section('page-styles')
 @endsection
 
@@ -95,21 +97,22 @@
                         <div class="upload-image-callback"></div>
                     </div>
                 </div>
-{{--                <div class="col-12">--}}
-{{--                    <div class="form-group">--}}
-{{--                        <label>横向封面</label>--}}
-{{--                        <div class="input-group">--}}
-{{--                            <input type="text" class="form-control image-path" name="horizontal_cover" autocomplete="off">--}}
-{{--                            <input type="file" class="hidden-file-upload" data-path="book">--}}
-{{--                            <div class="input-group-append" id="input-file-addon">--}}
-{{--                                <button class="btn btn-primary upload-image" type="button">上传</button>--}}
-{{--                            </div>--}}
-{{--                        </div>--}}
-{{--                    </div>--}}
-{{--                </div>--}}
+                {{--                <div class="col-12">--}}
+                {{--                    <div class="form-group">--}}
+                {{--                        <label>横向封面</label>--}}
+                {{--                        <div class="input-group">--}}
+                {{--                            <input type="text" class="form-control image-path" name="horizontal_cover" autocomplete="off">--}}
+                {{--                            <input type="file" class="hidden-file-upload" data-path="book">--}}
+                {{--                            <div class="input-group-append" id="input-file-addon">--}}
+                {{--                                <button class="btn btn-primary upload-image" type="button">上传</button>--}}
+                {{--                            </div>--}}
+                {{--                        </div>--}}
+                {{--                    </div>--}}
+                {{--                </div>--}}
                 <div class="col-12 d-flex justify-content-end">
                     <input type="hidden" name="operating" value="1">
-                    <button type="submit" class="btn btn-primary">提交</button></div>
+                    <button type="submit" class="btn btn-primary">提交</button>
+                </div>
             </div>
         </div>
     </form>
@@ -123,21 +126,19 @@
 {{-- page scripts --}}
 @section('page-scripts')
     <script>
-		$(document).ready(function () {
+        $(document).ready(function () {
             $('#tags-selector').multiselect({
                 buttonWidth: '100%',
                 buttonTextAlignment: 'left',
-                buttonText: function(options, select) {
+                buttonText: function (options, select) {
                     if (options.length === 0) {
                         return '请选择标签';
-                    }
-                    else {
+                    } else {
                         var labels = [];
-                        options.each(function() {
+                        options.each(function () {
                             if ($(this).attr('label') !== undefined) {
                                 labels.push($(this).attr('label'));
-                            }
-                            else {
+                            } else {
                                 labels.push($(this).html());
                             }
                         });
@@ -146,34 +147,34 @@
                 }
             });
 
-			$('#form').submit(function (e) {
-				e.preventDefault();
+            $('#form').submit(function (e) {
+                e.preventDefault();
 
-				$.request({
-					url     : $(this).attr('action'),
-					type    : $(this).attr('method'),
-					data    : $(this).serialize(),
-					debug: true,
-					callback: function (res) {
-						if (res.code == 200) {
-							// iframe.blade.php
-							parent.$.hideModal();
+                $.request({
+                    url: $(this).attr('action'),
+                    type: $(this).attr('method'),
+                    data: $(this).serialize(),
+                    debug: true,
+                    callback: function (res) {
+                        if (res.code == 200) {
+                            // iframe.blade.php
+                            parent.$.hideModal();
 
-							// iframeLayoutMaster.blade.php
-							parent.$.reloadIFrame({
-								title  : '提交成功',
-								message: '请稍后数据刷新'
-							});
-						} else {
-							$.toast({
-								type: 'error',
-								title: '提交失败',
-								message: res.msg
-							});
-						}
-					}
-				});
-			});
-		});
+                            // iframeLayoutMaster.blade.php
+                            parent.$.reloadIFrame({
+                                title: '提交成功',
+                                message: '请稍后数据刷新'
+                            });
+                        } else {
+                            $.toast({
+                                type: 'error',
+                                title: '提交失败',
+                                message: res.msg
+                            });
+                        }
+                    }
+                });
+            });
+        });
     </script>
 @endsection

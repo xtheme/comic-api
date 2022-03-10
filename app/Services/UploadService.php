@@ -17,42 +17,19 @@ use Illuminate\Support\Str;
  */
 class UploadService
 {
-    protected $path = null; // 上傳路徑
-    protected $rule = 'image'; // checkFile() 使用的規則
+    protected string $path = ''; // 上傳路徑
+    protected string $rule = 'image'; // checkFile() 使用的規則
 
-    /**
-     * 检查上传文件
-     *
-     * @param  UploadedFile  $file
-     *
-     * @return string
-     */
-    private function checkFile(UploadedFile $file)
+    public function to($path, $id = null): UploadService
     {
-        if ($file->isValid()) {
-            // 检查文件大小
-            $size = $file->getSize();
-            if ($size > config('backend.upload.image.size')) {
-                $limit_size = ceil(config('backend.upload.image.size') / 1024);
-                return __('response.upload.fail.too_big', ['size' => $limit_size]);
-            }
+        $this->path = $this->buildPath($path, $id);
 
-            // 检查 mime type
-            $mimeType = $file->getMimeType();
-            $allowMimeType = config('backend.upload.image.mime_type');
-            if (!in_array($mimeType, $allowMimeType)) {
-                return __('response.upload.fail.mime_type');
-            }
-
-            return '';
-        }
-
-        return $file->getErrorMessage();
+        return $this;
     }
 
-    private function buildPath(string $dir = null, $id = null)
+    private function buildPath(string $dir = null, $id = null): string
     {
-        $path = !is_null($dir) ? trim($dir) : date('Ymd');
+        $path = !empty($dir) ? trim($dir) : date('Ymd');
 
         if (!$id) {
             // 新增时尚无 id, 找出最后一笔 id +1
@@ -73,13 +50,6 @@ class UploadService
         return $path;
     }
 
-    public function to($path, $id = null)
-    {
-        $this->path = $this->buildPath($path, $id);
-
-        return $this;
-    }
-
     /**
      * @param  $file
      *
@@ -91,11 +61,10 @@ class UploadService
         $message = $this->checkFile($file);
 
         if ($message) {
-            $result = [
+            return [
                 'success' => false,
                 'message' => $message,
             ];
-            return $result;
         }
 
         $path = Storage::put($this->path, $file, 'public');
@@ -113,5 +82,35 @@ class UploadService
             'path' => $path,
             'url' => $url,
         ];
+    }
+
+    /**
+     * 检查上传文件
+     *
+     * @param  UploadedFile  $file
+     *
+     * @return string
+     */
+    private function checkFile(UploadedFile $file): string
+    {
+        if ($file->isValid()) {
+            // 检查文件大小
+            $size = $file->getSize();
+            if ($size > config('backend.upload.image.size')) {
+                $limit_size = ceil(config('backend.upload.image.size') / 1024);
+                return __('response.upload.fail.too_big', ['size' => $limit_size]);
+            }
+
+            // 检查 mime type
+            $mimeType = $file->getMimeType();
+            $allowMimeType = config('backend.upload.image.mime_type');
+            if (!in_array($mimeType, $allowMimeType)) {
+                return __('response.upload.fail.mime_type');
+            }
+
+            return '';
+        }
+
+        return $file->getErrorMessage();
     }
 }

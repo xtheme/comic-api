@@ -15,21 +15,23 @@ class CreateResumesTable extends Migration
     {
         Schema::create('resumes', function (Blueprint $table) {
             $table->bigInteger('id', true);
-            $table->unsignedInteger('admin_id')->comment('经纪人')->index();
+            $table->enum('agent_type', ['admin', 'user'])->comment('來源')->index();
+            $table->unsignedInteger('agent_id')->comment('经纪人')->index();
             $table->unsignedInteger('province_id')->default(0)->comment('省id')->index();
             $table->unsignedInteger('city_id')->default(0)->comment('城市id')->index();
             $table->unsignedInteger('area_id')->default(0)->comment('区县id')->index();
             $table->string('nickname')->nullable()->comment('昵称');
             $table->integer('birth_year')->nullable()->comment('出生年');
-            $table->integer('cup')->nullable()->comment('罩杯');
-            $table->integer('height')->nullable()->comment('身高');
-            $table->integer('weight')->nullable()->comment('体重');
-            $table->string('price')->nullable()->comment('价位');
+            $table->json('cup')->nullable()->comment('罩杯');
+            $table->json('body_shape')->nullable()->comment('身形');
             $table->json('service')->nullable()->comment('服务项目');
-            $table->string('schedule')->comment('班表');
-            $table->string('contact')->comment('联络方式');
-            $table->string('cover')->comment('封面');
-            $table->string('video')->comment('视频');
+            $table->string('price')->nullable()->comment('价位');
+            $table->string('profile')->comment('简介');
+            $table->string('qq')->comment('QQ');
+            $table->string('wechat')->comment('微信');
+            $table->string('phone')->comment('手机号');
+            $table->string('cover')->nullable()->comment('封面');
+            $table->string('video')->nullable()->comment('视频');
             $table->json('album')->nullable()->comment('相簿');
             $table->unsignedInteger('view_counts')->default(0)->comment('访问数');
             $table->unsignedInteger('collect_counts')->default(0)->comment('收藏数');
