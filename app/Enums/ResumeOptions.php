@@ -6,6 +6,7 @@ final class ResumeOptions
 {
     // 身材
     const BODY_SHAPE = [
+        '中等身材',
         '高挑',
         '娇小',
         '苗条',
@@ -13,11 +14,11 @@ final class ResumeOptions
         '微胖',
         '丰满',
         '骨感',
-        '中等身材',
+        '巨乳',
     ];
 
     // 服务项目
-    const SERVICE_ITEMS = [
+    const SERVICE_TYPE = [
         '按摩',
         '刮痧',
         '漫游',

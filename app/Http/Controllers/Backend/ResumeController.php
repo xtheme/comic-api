@@ -4,8 +4,11 @@ namespace App\Http\Controllers\Backend;
 
 use App\Enums\ResumeOptions;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Backend\ResumeRequest;
+use App\Models\ChinaProvince;
 use App\Models\Resume;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Response;
 
 class ResumeController extends Controller
@@ -21,20 +24,28 @@ class ResumeController extends Controller
 
     public function create()
     {
+        $cache_key = 'china:provinces';
+
+        $provinces = Cache::remember($cache_key, 28800, function () {
+            $provinces = ChinaProvince::get();
+
+            return $provinces->mapWithKeys(function ($row) {
+                return [$row->province_id => $row->province_name];
+            });
+        });
+
         $data = [
             'body_shape' => ResumeOptions::BODY_SHAPE,
-            'service_items' => ResumeOptions::SERVICE_ITEMS,
+            'service_type' => ResumeOptions::SERVICE_TYPE,
+            'provinces' => $provinces,
         ];
 
         return view('backend.resume.create')->with($data);
     }
 
-    public function store(Request $request)
+    public function store(ResumeRequest $request)
     {
-        Resume::create([
-            'name' => $request->input('name'),
-            'guard_name' => 'web',
-        ]);
+        Resume::create($request->post());
 
         return Response::jsonSuccess(__('response.create.success'));
     }
