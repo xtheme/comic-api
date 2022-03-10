@@ -323,4 +323,10 @@ Route::middleware(['auth', 'auth.route.role'])->prefix('backend')->as('backend.'
         Route::put('update/{id}', [Backend\ResumeController::class, 'update'])->name('update');
         Route::delete('destroy/{id}', [Backend\ResumeController::class, 'destroy'])->name('destroy');
     });
+
+    // 地區 json
+    Route::prefix('location')->as('location.')->group(function () {
+        Route::get('/city/{province_id?}', [Backend\LocationController::class, 'cities'])->name('cities');
+        Route::get('/area/{city_id?}', [Backend\LocationController::class, 'areas'])->name('areas');
+    });
 });

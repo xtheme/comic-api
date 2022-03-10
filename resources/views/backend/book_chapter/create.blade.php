@@ -1,9 +1,11 @@
 @extends('layouts.modal')
 
+{{-- vendor style --}}
 @section('vendor-styles')
     <link rel="stylesheet" type="text/css" href="{{ asset('vendors/css/file-uploader/dropzone.min.css') }}">
 @endsection
 
+{{-- page style --}}
 @section('page-styles')
     <link rel="stylesheet" type="text/css" href="{{ asset('css/plugins/file-uploader/dropzone.css') }}">
 @endsection
