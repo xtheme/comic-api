@@ -9,7 +9,7 @@
 
     // 檔案上傳
     $('.upload-image').on('click', function () {
-        var file = $('.hidden-file-upload');
+        const file = $(this).parents('.input-group').find('.hidden-file-upload');
         file.trigger('click');
     });
 
@@ -22,8 +22,8 @@
     //     </div>
     // </div>
     $('.hidden-file-upload').on('change', function () {
-        var $this = $(this);
-        var file  = new FormData();
+        const $this = $(this);
+        const file = new FormData();
         file.append('image', $this.get(0).files[0]);
         $.ajax({
             url: `/upload/${$this.attr('data-path')}`,
@@ -83,11 +83,11 @@
     });
 
     function confirmThenUpdate($this, $action) {
-        let url    = $this.attr('href');
+        let url = $this.attr('href');
         let params = new URLSearchParams(url);
 
         $.confirm({
-            text : `请确认是否要${$this.attr('title')}?`,
+            text: `请确认是否要${$this.attr('title')}?`,
             callback: function () {
                 $.request({
                     url: url,
@@ -95,15 +95,15 @@
                     data: (Object.keys(params).length === 0) ? null : params,
                     // debug: true,
                     callback: function (res) {
-	                    // console.log(res);
-                    	if (res.code != 200) {
-		                    $.toast({
-			                    type: 'error',
-			                    message: res.msg
-		                    });
-	                    } else {
-		                    $.reloadIFrame({title: res.msg});
-	                    }
+                        // console.log(res);
+                        if (res.code != 200) {
+                            $.toast({
+                                type: 'error',
+                                message: res.msg
+                            });
+                        } else {
+                            $.reloadIFrame({title: res.msg});
+                        }
                     }
                 });
             }
@@ -129,11 +129,11 @@
     });
 
     function modalConfirmThenUpdate($this, $action) {
-        let url    = $this.attr('href');
+        let url = $this.attr('href');
         let params = new URLSearchParams(url);
 
         $.confirm({
-            text : `请确认是否要${$this.attr('title')}?`,
+            text: `请确认是否要${$this.attr('title')}?`,
             callback: function () {
                 $.request({
                     url: url,
@@ -186,9 +186,9 @@
         let ids = $.checkedIds();
 
         $.confirm({
-            text : `请确认是否要继续批量操作?`,
+            text: `请确认是否要继续批量操作?`,
             callback: function () {
-                let url    = $this.attr('href') + '/' + ids;
+                let url = $this.attr('href') + '/' + ids;
                 let params = new URLSearchParams(url);
                 $.request({
                     url: url,

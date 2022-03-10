@@ -22,6 +22,6 @@
     "sass-loader": "^8.0.0"
   },
   "dependencies": {
-    "rtlcss": "^2.5.0"
+    "rtlcss": "^3.5.0"
   }
 }
