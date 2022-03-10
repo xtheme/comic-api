@@ -35,7 +35,7 @@ return [
     'upload' => [
         'image' => [
             'size' => env('FILE_SIZE_LIMIT', 12000000), // 12MB
-            'mime_type' => ['image/jpeg', 'image/png', 'image/gif'],
+            'mime_type' => ['image/jpeg', 'image/png', 'image/gif', 'video/mp4', 'application/mp4'],
         ],
         'excel' => [
             'size' => env('FILE_SIZE_LIMIT', 4194304), // 4MB
