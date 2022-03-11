@@ -11,14 +11,15 @@
 @endsection
 
 @section('content')
-    <form id="form" class="form" method="post" action="{{ route('backend.resume.store') }}" novalidate>
+    <form id="form" class="form" method="post" action="{{ route('backend.resume.update', $resume->id) }}" novalidate>
+        @method('put')
         <div class="form-body">
             <div class="row">
                 <div class="col-4">
                     <div class="form-group">
                         <label><span class="danger">*</span> 昵称</label>
                         <div class="controls">
-                            <input type="text" class="form-control" name="nickname" placeholder="请输入昵称" value="">
+                            <input type="text" class="form-control" name="nickname" placeholder="请输入昵称" value="{{ $resume->nickname }}">
                         </div>
                     </div>
                 </div>
@@ -27,7 +28,7 @@
                         <span class="float-right font-size-small text-muted">(换算年龄用)</span>
                         <label><span class="danger">*</span> 出生年份</label>
                         <div class="controls">
-                            <input type="text" class="form-control" name="birth_year" placeholder="请输入出生年份" value="">
+                            <input type="text" class="form-control" name="birth_year" placeholder="请输入出生年份" value="{{ $resume->birth_year }}">
                         </div>
                     </div>
                 </div>
@@ -35,7 +36,7 @@
                     <div class="form-group">
                         <label><span class="danger">*</span> 罩杯</label>
                         <div class="controls">
-                            <input type="text" class="form-control" name="cup" placeholder="请输入罩杯" value="">
+                            <input type="text" class="form-control" name="cup" placeholder="请输入罩杯" value="{{ $resume->cup }}">
                         </div>
                     </div>
                 </div>
@@ -44,9 +45,8 @@
                         <label><span class="danger">*</span> 省份</label>
                         <div class="controls">
                             <select class="form-control" name="province_id" id="province_id">
-                                <option value=""> ---</option>
                                 @foreach($provinces as $province_id => $province_name)
-                                    <option value="{{ $province_id }}">{{ $province_name }}</option>
+                                    <option value="{{ $province_id }}" @if($resume->province_id == $province_id){{'selected'}}@endif>{{ $province_name }}</option>
                                 @endforeach
                             </select>
                         </div>
@@ -57,7 +57,9 @@
                         <label><span class="danger">*</span> 城市</label>
                         <div class="controls">
                             <select class="form-control" name="city_id" id="city_id">
-                                <option value=""> ---</option>
+                                @foreach($cities as $city_id => $city_name)
+                                    <option value="{{ $city_id }}" @if($resume->city_id == $city_id){{'selected'}}@endif>{{ $city_name }}</option>
+                                @endforeach
                             </select>
                         </div>
                     </div>
@@ -67,7 +69,9 @@
                         <label><span class="danger">*</span> 区县</label>
                         <div class="controls">
                             <select class="form-control" name="area_id" id="area_id">
-                                <option value=""> ---</option>
+                                @foreach($areas as $area_id => $area_name)
+                                    <option value="{{ $area_id }}" @if($resume->area_id == $area_id){{'selected'}}@endif>{{ $area_name }}</option>
+                                @endforeach
                             </select>
                         </div>
                     </div>
@@ -76,7 +80,7 @@
                     <div class="form-group">
                         <label><span class="danger">*</span> QQ</label>
                         <div class="controls">
-                            <input type="text" class="form-control" name="content[qq]" placeholder="请至少提供一种联系方式" value="">
+                            <input type="text" class="form-control" name="content[qq]" placeholder="请至少提供一种联系方式" value="{{ $resume->contact['qq'] }}">
                         </div>
                     </div>
                 </div>
@@ -84,7 +88,7 @@
                     <div class="form-group">
                         <label><span class="danger">*</span> 微信</label>
                         <div class="controls">
-                            <input type="text" class="form-control" name="content[wechat]" placeholder="请至少提供一种联系方式" value="">
+                            <input type="text" class="form-control" name="content[wechat]" placeholder="请至少提供一种联系方式" value="{{ $resume->contact['wechat'] }}">
                         </div>
                     </div>
                 </div>
@@ -92,7 +96,7 @@
                     <div class="form-group">
                         <label><span class="danger">*</span> 手机号</label>
                         <div class="controls">
-                            <input type="text" class="form-control" name="content[phone]" placeholder="请至少提供一种联系方式" value="">
+                            <input type="text" class="form-control" name="content[phone]" placeholder="请至少提供一种联系方式" value="{{ $resume->contact['phone'] }}">
                         </div>
                     </div>
                 </div>
@@ -131,7 +135,8 @@
                                 <fieldset>
                                     @foreach($body_shape as $tag)
                                         <div class="checkbox m-25">
-                                            <input type="checkbox" name="body_shape[]" id="{{ $tag }}" value="{{ $tag }}">
+                                            <input type="checkbox" name="body_shape[]" id="{{ $tag }}" value="{{ $tag }}"
+                                            @if(isset($resume->body_shape) && in_array($tag, $resume->body_shape)){{'checked'}}@endif>
                                             <label for="{{ $tag }}">{{ $tag }}</label>
                                         </div>
                                     @endforeach
@@ -148,7 +153,8 @@
                                 <fieldset>
                                     @foreach($service_type as $tag)
                                         <div class="checkbox m-25">
-                                            <input type="checkbox" name="service[]" id="{{ $tag }}" value="{{ $tag }}">
+                                            <input type="checkbox" name="service[]" id="{{ $tag }}" value="{{ $tag }}"
+                                            @if(isset($resume->service) && in_array($tag, $resume->service)){{'checked'}}@endif>
                                             <label for="{{ $tag }}">{{ $tag }}</label>
                                         </div>
                                     @endforeach
@@ -162,13 +168,15 @@
                     <div class="form-group">
                         <label><span class="danger">*</span> 照片</label>
                         <div class="input-group">
-                            <input type="text" class="form-control image-path" name="cover" autocomplete="off">
+                            <input type="text" class="form-control image-path" name="cover" value="{{ $resume->getRawOriginal('cover') }}" autocomplete="off">
                             <input type="file" class="hidden-file-upload" data-path="resume">
                             <div class="input-group-append">
                                 <button class="btn btn-primary upload-image" type="button">上传</button>
                             </div>
                         </div>
-                        <div class="upload-image-callback"></div>
+                        <div class="upload-image-callback">
+                            <img src="{{ $resume->cover }}" width="300" alt="">
+                        </div>
                     </div>
                 </div>
                 <div class="col-12">

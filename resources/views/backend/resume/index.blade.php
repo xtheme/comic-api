@@ -52,7 +52,7 @@
                                 </th>
                                 <th>ID</th>
                                 <th>昵称</th>
-                                <th>昵称</th>
+                                <th>封面</th>
                                 <th>省份</th>
                                 <th>城市</th>
                                 <th>区县</th>
@@ -95,8 +95,8 @@
                                             <span class="bx bx-dots-vertical-rounded font-medium-3 dropdown-toggle nav-hide-arrow cursor-pointer"
                                                   id="dropdownMenuButton{{ $item->id }}" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></span>
                                             <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuButton{{ $item->id }}">
-                                                <a class="dropdown-item" data-modal data-height="35vh" href="{{ route('backend.resume.edit', $item->id) }}" title="修改首页区块"><i class="bx bx-edit-alt mr-1"></i>修改</a>
-                                                <a class="dropdown-item" data-destroy href="{{ route('backend.resume.destroy', $item->id) }}" title="刪除首页区块"><i class="bx bx-trash mr-1"></i>刪除</a>
+                                                <a class="dropdown-item" data-modal data-height="35vh" href="{{ route('backend.resume.edit', $item->id) }}" title="修改履历"><i class="bx bx-edit-alt mr-1"></i>修改</a>
+                                                <a class="dropdown-item" data-destroy href="{{ route('backend.resume.destroy', $item->id) }}" title="刪除履历"><i class="bx bx-trash mr-1"></i>刪除</a>
                                             </div>
                                         </div>
                                     </td>
@@ -113,6 +113,64 @@
             </div>
         </div>
     </section>
+@endsection
+
+@section('search-form')
+    <h4 class="text-uppercase mb-0">查询</h4>
+    <small></small>
+    <hr>
+    <form id="search-form" class="form form-vertical" method="get" action="{{ url()->current() }}" novalidate>
+        <div class="form-body">
+            <div class="row">
+                <div class="col-12">
+                    <div class="form-group">
+                        <label><span class="danger">*</span> 省份</label>
+                        <div class="controls">
+                            <select class="form-control" name="province_id" id="province_id">
+                                <option value="">---</option>
+                                @foreach($provinces as $province_id => $province_name)
+                                    <option value="{{ $province_id }}" @if(request()->get('province_id') == $province_id){{'selected'}}@endif>{{ $province_name }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-12">
+                    <div class="form-group">
+                        <label><span class="danger">*</span> 城市</label>
+                        <div class="controls">
+                            <select class="form-control" name="city_id" id="city_id">
+                                <option value="">---</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-12">
+                    <div class="form-group">
+                        <label><span class="danger">*</span> 区县</label>
+                        <div class="controls">
+                            <select class="form-control" name="area_id" id="area_id">
+                                <option value="">---</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-2">
+                    <div class="form-group">
+                        <label>状态</label>
+                        <select class="form-control" name="status">
+                            <option value="">全部</option>
+                            <option value="2" @if(request()->get('status') == 2){{'selected'}}@endif>上架</option>
+                            <option value="1" @if(request()->get('status') == 1){{'selected'}}@endif>下架</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="col-12 d-flex justify-content-end">
+                    <button type="submit" class="btn btn-primary">搜索</button>
+                </div>
+            </div>
+        </div>
+    </form>
 @endsection
 
 {{-- vendor scripts --}}
@@ -179,6 +237,39 @@
                     }
                 });
             });
+
+            function chainSelect(current, target) {
+                $('#' + current + '_id').on('change', function () {
+                    let $id = '';
+                    if ($(this).find(':selected').val() != '') {
+                        $(target).removeAttr('disabled');
+                        $id = $(this).find(':selected').val();
+                    }
+                    console.log($id);
+                    if ($id) {
+                        let $url = '/backend/location/' + target + '/' + $id;
+                        console.log($url);
+                        $.ajax({
+                            url: $url,
+                            type: 'GET',
+                            dataType: 'json',
+                            success: function (data) {
+                                let newTarget = $('#' + target + '_id');
+                                newTarget.empty();
+                                newTarget.append('<option value=""> --- </option>');
+                                $.each(data, function (key, value) {
+                                    newTarget.append('<option value="' + key + '">' + value + '</option>');
+                                });
+                            }
+                        });
+                    } else {
+                        $('select[name="cities"]').empty();
+                    }
+                });
+            }
+
+            chainSelect('province', 'city');
+            chainSelect('city', 'area');
         });
     </script>
 @endsection

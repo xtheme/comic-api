@@ -59,7 +59,7 @@ class Resume extends Model
         if (!$value) {
             return '';
         }
-        
+
         return Storage::url($value);
     }
 
