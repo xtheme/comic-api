@@ -185,6 +185,7 @@ return [
         App\Providers\FacadesServiceProvider::class,
         App\Providers\GatewayServiceProvider::class, // 註冊支付渠道 SDK
         Mews\Captcha\CaptchaServiceProvider::class,
+        App\Providers\HorizonServiceProvider::class,
     ],
 
     /*

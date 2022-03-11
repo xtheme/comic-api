@@ -30,7 +30,7 @@ class Tag extends \Spatie\Tags\Tag
 
         return static::query()
             ->where("name->{$locale}", $name)
-            // ->where('type', $type)
+            ->where('type', $type)
             ->first();
     }
 }

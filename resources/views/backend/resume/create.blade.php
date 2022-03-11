@@ -282,7 +282,7 @@
                             success: function (data) {
                                 let newTarget = $('#' + target + '_id');
                                 newTarget.empty();
-                                newTarget.append('<option value=""> --- </option>');
+                                newTarget.append('<option value="">---</option>');
                                 $.each(data, function (key, value) {
                                     newTarget.append('<option value="' + key + '">' + value + '</option>');
                                 });

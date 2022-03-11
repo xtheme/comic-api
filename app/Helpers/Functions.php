@@ -8,8 +8,6 @@ use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
-use StephenHill\Base58;
-use StephenHill\GMPService;
 
 if (!function_exists('getConfigs')) {
     /**
@@ -27,7 +25,7 @@ if (!function_exists('getConfigs')) {
 
         $configs = [];
 
-        foreach($config->options as $key => $row) {
+        foreach ($config->options as $key => $row) {
             $configs[$key] = $row['value'];
         }
 
@@ -118,14 +116,14 @@ if (!function_exists('starMask')) {
     }
 }
 
-if (!function_exists('watchDog')) {
-    function watchDog($user)
+if (!function_exists('isSuperAdmin')) {
+    function isSuperAdmin(): bool
     {
-        if ($user->id == 1) {
+        if (auth()->check() && auth()->id()) {
             return true;
         }
 
-        return null;
+        return false;
     }
 }
 

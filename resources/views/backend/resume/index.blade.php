@@ -51,13 +51,14 @@
                                     </div>
                                 </th>
                                 <th>ID</th>
-                                <th>类型</th>
-                                <th>筛选器标题</th>
-                                <th>排序</th>
-                                <th>展示风格</th>
-                                <th>添加时间</th>
+                                <th>昵称</th>
+                                <th>封面</th>
+                                <th>省份</th>
+                                <th>城市</th>
+                                <th>区县</th>
+                                <th>价位</th>
+                                <th>销售量</th>
                                 <th>状态</th>
-                                <th>匹配数</th>
                                 <th>操作</th>
                             </tr>
                             </thead>
@@ -71,35 +72,31 @@
                                         </div>
                                     </td>
                                     <td>{{ $item->id }}</td>
+                                    <td><span class="jeditable" data-pk="{{ $item->id }}" data-url="{{ route('backend.resume.editable', 'nickname') }}">{{ $item->nickname }}</td>
                                     <td>
-                                        @if($item->type == 'video')
-                                            <span class="badge badge-pill badge-primary">视频</span>
-                                        @elseif($item->type == 'book_safe')
-                                            <span class="badge badge-pill badge-primary">安全漫画</span>
-                                        @else
-                                            <span class="badge badge-pill badge-success">漫画</span>
+                                        @if($item->cover)
+                                            <img src="{{ $item->cover }}" class="cursor-pointer" width="50px" data-lightbox title="点击查看大图">
                                         @endif
                                     </td>
-                                    <td>{{ $item->filter->title }}</td>
-                                    <td><span class="jeditable" data-pk="{{ $item->id }}" data-value=""> {{ $item->sort }}</td>
-                                    <td>{{ $item->style_alias }}</td>
-                                    <td>{{ $item->created_at->diffForHumans()  }}</td>
+                                    <td>{{ $item->province->province_name ?? '' }}</td>
+                                    <td>{{ $item->city->city_name ?? '' }}</td>
+                                    <td>{{ $item->area->area_name ?? '' }}</td>
+                                    <td><span class="jeditable" data-pk="{{ $item->id }}" data-url="{{ route('backend.resume.editable', 'price') }}">{{ $item->price }}</td>
+                                    <td>{{ $item->sales_volume }}</td>
                                     <td>
                                         @if($item->status == 1)
-                                            <a class="badge badge-pill badge-light-success" data-confirm href="{{ route('backend.topic.batch', ['action'=>'disable', 'ids' => $item->id]) }}" title="隐藏该区块">启用</a>
+                                            <a class="badge badge-pill badge-light-success" data-confirm href="{{ route('backend.resume.batch', ['action'=>'disable', 'ids' => $item->id]) }}" title="下架">上架</a>
                                         @else
-                                            <a class="badge badge-pill badge-light-danger" data-confirm href="{{ route('backend.topic.batch', ['action'=>'enable', 'ids' => $item->id]) }}" title="启用该区块">隐藏</a>
+                                            <a class="badge badge-pill badge-light-danger" data-confirm href="{{ route('backend.resume.batch', ['action'=>'enable', 'ids' => $item->id]) }}" title="上架">下架</a>
                                         @endif
                                     </td>
-                                    <td>{{ $item->filter->query_count }}</td>
                                     <td>
                                         <div class="@if(($loop->count - $loop->iteration) < 3){{'dropup'}}@else{{'dropdown'}}@endif">
                                             <span class="bx bx-dots-vertical-rounded font-medium-3 dropdown-toggle nav-hide-arrow cursor-pointer"
                                                   id="dropdownMenuButton{{ $item->id }}" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></span>
                                             <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuButton{{ $item->id }}">
-                                                <a class="dropdown-item" href="{{ $item->query_url }}" target="_blank"><i class="bx bx-link-external mr-1"></i>查看匹配</a>
-                                                <a class="dropdown-item" data-modal data-height="35vh" href="{{ route('backend.topic.edit', $item->id) }}" title="修改首页区块"><i class="bx bx-edit-alt mr-1"></i>修改</a>
-                                                <a class="dropdown-item" data-destroy href="{{ route('backend.topic.destroy', $item->id) }}" title="刪除首页区块"><i class="bx bx-trash mr-1"></i>刪除</a>
+                                                <a class="dropdown-item" data-modal data-height="35vh" href="{{ route('backend.resume.edit', $item->id) }}" title="修改履历"><i class="bx bx-edit-alt mr-1"></i>修改</a>
+                                                <a class="dropdown-item" data-destroy href="{{ route('backend.resume.destroy', $item->id) }}" title="刪除履历"><i class="bx bx-trash mr-1"></i>刪除</a>
                                             </div>
                                         </div>
                                     </td>
@@ -116,6 +113,64 @@
             </div>
         </div>
     </section>
+@endsection
+
+@section('search-form')
+    <h4 class="text-uppercase mb-0">查询</h4>
+    <small></small>
+    <hr>
+    <form id="search-form" class="form form-vertical" method="get" action="{{ url()->current() }}" novalidate>
+        <div class="form-body">
+            <div class="row">
+                <div class="col-12">
+                    <div class="form-group">
+                        <label><span class="danger">*</span> 省份</label>
+                        <div class="controls">
+                            <select class="form-control" name="province_id" id="province_id">
+                                <option value="">---</option>
+                                @foreach($provinces as $province_id => $province_name)
+                                    <option value="{{ $province_id }}" @if(request()->get('province_id') == $province_id){{'selected'}}@endif>{{ $province_name }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-12">
+                    <div class="form-group">
+                        <label><span class="danger">*</span> 城市</label>
+                        <div class="controls">
+                            <select class="form-control" name="city_id" id="city_id">
+                                <option value="">---</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-12">
+                    <div class="form-group">
+                        <label><span class="danger">*</span> 区县</label>
+                        <div class="controls">
+                            <select class="form-control" name="area_id" id="area_id">
+                                <option value="">---</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-2">
+                    <div class="form-group">
+                        <label>状态</label>
+                        <select class="form-control" name="status">
+                            <option value="">全部</option>
+                            <option value="2" @if(request()->get('status') == 2){{'selected'}}@endif>上架</option>
+                            <option value="1" @if(request()->get('status') == 1){{'selected'}}@endif>下架</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="col-12 d-flex justify-content-end">
+                    <button type="submit" class="btn btn-primary">搜索</button>
+                </div>
+            </div>
+        </div>
+    </form>
 @endsection
 
 {{-- vendor scripts --}}
@@ -140,8 +195,6 @@
                 inputclass: 'form-control',
                 emptyclass: 'text-light',
                 emptytext: 'N/A',
-                placeholder: '数字需大于0',
-                url: '{{ route('backend.topic.sort') }}',
                 success: function (res, newValue) {
                     console.log(res);
                     $.toast({
@@ -184,6 +237,39 @@
                     }
                 });
             });
+
+            function chainSelect(current, target) {
+                $('#' + current + '_id').on('change', function () {
+                    let $id = '';
+                    if ($(this).find(':selected').val() != '') {
+                        $(target).removeAttr('disabled');
+                        $id = $(this).find(':selected').val();
+                    }
+                    console.log($id);
+                    if ($id) {
+                        let $url = '/backend/location/' + target + '/' + $id;
+                        console.log($url);
+                        $.ajax({
+                            url: $url,
+                            type: 'GET',
+                            dataType: 'json',
+                            success: function (data) {
+                                let newTarget = $('#' + target + '_id');
+                                newTarget.empty();
+                                newTarget.append('<option value=""> --- </option>');
+                                $.each(data, function (key, value) {
+                                    newTarget.append('<option value="' + key + '">' + value + '</option>');
+                                });
+                            }
+                        });
+                    } else {
+                        $('select[name="cities"]').empty();
+                    }
+                });
+            }
+
+            chainSelect('province', 'city');
+            chainSelect('city', 'area');
         });
     </script>
 @endsection

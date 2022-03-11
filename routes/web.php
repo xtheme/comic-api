@@ -322,6 +322,8 @@ Route::middleware(['auth', 'auth.route.role'])->prefix('backend')->as('backend.'
         Route::get('edit/{id}', [Backend\ResumeController::class, 'edit'])->name('edit');
         Route::put('update/{id}', [Backend\ResumeController::class, 'update'])->name('update');
         Route::delete('destroy/{id}', [Backend\ResumeController::class, 'destroy'])->name('destroy');
+        Route::put('batch/{action?}', [Backend\ResumeController::class, 'batch'])->name('batch'); // 批量操作
+        Route::put('editable/{field}', [Backend\ResumeController::class, 'editable'])->name('editable');
     });
 
     // 地區 json

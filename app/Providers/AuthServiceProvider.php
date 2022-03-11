@@ -25,8 +25,8 @@ class AuthServiceProvider extends ServiceProvider
     {
         $this->registerPolicies();
 
-        Gate::before(function ($user, $ability) {
-            return watchDog($user);
+        Gate::before(function () {
+            return isSuperAdmin();
         });
     }
 }
