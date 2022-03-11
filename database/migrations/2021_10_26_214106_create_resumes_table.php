@@ -22,7 +22,7 @@ class CreateResumesTable extends Migration
             $table->unsignedInteger('area_id')->default(0)->comment('区县id')->index();
             $table->string('nickname')->nullable()->comment('昵称');
             $table->integer('birth_year')->nullable()->comment('出生年');
-            $table->json('cup')->nullable()->comment('罩杯');
+            $table->string('cup', 10)->nullable()->comment('罩杯');
             $table->json('body_shape')->nullable()->comment('身形');
             $table->json('service')->nullable()->comment('服务项目');
             $table->string('price')->nullable()->comment('价位');
