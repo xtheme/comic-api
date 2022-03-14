@@ -40,7 +40,8 @@ class BookChapter extends BaseModel
             if (Str::startsWith($image, '/')) {
                 $image = substr($image, 1);
             }
-            $images[$key] = getImageUrl($image);
+            // $images[$key] = getImageUrl($image);
+            $images[$key] = getConfig('comic', 'image_domain') . '/' . $image;
         }
 
         return $images;
@@ -48,6 +49,8 @@ class BookChapter extends BaseModel
 
     public function setJsonImagesAttribute($images)
     {
+        $array = [];
+
         foreach ($images as $image) {
             if (!parse_url($image)['path']) {
                 continue;

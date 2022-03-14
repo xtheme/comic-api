@@ -7,7 +7,6 @@ use App\Traits\HasRanking;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use Illuminate\Support\Facades\Storage;
 use Spatie\Tags\HasTags;
 
 class Book extends BaseModel
@@ -84,25 +83,13 @@ class Book extends BaseModel
     /**
      * 直幅封面
      */
-    public function getVerticalCoverAttribute($value): string
+    public function getCoverAttribute($value): string
     {
         if (!$value) {
             return '';
         }
 
-        return getImageUrl($value);
-    }
-
-    /**
-     * 横向封面
-     */
-    public function getHorizontalCoverAttribute($value): string
-    {
-        if (!$value) {
-            return '';
-        }
-
-        return getImageUrl($value);
+        return getConfig('comic', 'image_domain') . $value;
     }
 
     /**

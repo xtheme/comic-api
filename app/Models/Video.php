@@ -76,7 +76,7 @@ class Video extends BaseModel
 
     public function getUrlAttribute($value): string
     {
-        return config('api.video.hls_domain') . $value;
+        return getConfig('video', 'hls_domain') . $value;
     }
 
     public function getCoverAttribute($value): string
@@ -85,6 +85,6 @@ class Video extends BaseModel
             return '';
         }
 
-        return config('api.video.img_domain') . $value;
+        return getConfig('video', 'image_domain') . $value;
     }
 }

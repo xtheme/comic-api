@@ -60,6 +60,7 @@ class BooksImport extends Command
     {
         $book_condition = [
             ['status', '=', 1],
+            ['review', '=', 1],
         ];
 
         // 符合條件的漫畫筆數
@@ -80,13 +81,12 @@ class BooksImport extends Command
                 $chapter_condition = [
                     ['book_id', '=', $item->id],
                     ['status', '=', 1],
-                    ['review', '=', 1],
                 ];
 
                 $has_chapter = DB::table('source_book_chapters')->where($chapter_condition)->count();
 
                 if (!$has_chapter) {
-                    $this->line('第 ' . $item->id . ' 本漫畫缺少章節, 略過');
+                    $this->line('第 ' . $item->id . ' 本漫畫查无章節, 略過');
                     return;
                 }
 
@@ -108,7 +108,7 @@ class BooksImport extends Command
                     'cover' => $item->vertical_cover,
                     'type' => $item->type, // 类型: 1=日漫, 2=韩漫, 3=美漫, 4=写真, 5=CG
                     'status' => $item->status == 1 ? 1 : 0, // 状态: 1=上架, 0=下架
-                    'review' => $item->review + 1, // 审核状态: 1=待审核, 2=审核成功, 3=审核失败, 4=屏蔽, 5=未审核
+                    'review' => 2, // 审核状态: 1=待审核, 2=审核成功, 3=审核失败, 4=屏蔽, 5=未审核
                     'operating' => $item->operating, // 添加方式: 1=人工, 2= 爬虫
                     'source_platform' => 'nasu',
                     'source_id' => $item->id,
@@ -124,20 +124,52 @@ class BooksImport extends Command
 
                     $chapters = DB::table('source_book_chapters')->where($chapter_condition)->orderBy('id')->get();
 
-                    $insert = $chapters->map(function ($item) use ($book_id) {
-                        return [
-                            'book_id' => $book_id,
-                            'episode' => $item->episode,
-                            'title' => $item->title,
-                            'json_images' => $item->json_images,
-                            'status' => $item->status ? 1 : 0,
-                            'price' => $item->episode > 2 ? 5 : 0,
-                            'operating' => $item->operating, // 添加方式: 1=人工, 2= 爬虫
-                            'created_at' => $item->created_at,
-                            'updated_at' => $item->updated_at,
-                            'deleted_at' => $item->deleted_at,
-                        ];
-                    })->toArray();
+                    $first = $chapters->first();
+
+                    $images = json_decode($first->json_images, true);
+
+                    if (count($images) < 5) {
+                        $this->info('#' . $book_id . ' 重构章节');
+                        $images = [];
+                        foreach ($chapters as $chapter) {
+                            $arr = json_decode($chapter->json_images, true);
+                            $images = array_merge($images, $arr);
+                        }
+                        // 重切章節
+                        $chapters = collect($images)->chunk(20);
+
+                        $insert = $chapters->map(function ($images, $key) use ($book_id) {
+                            $episode = $key + 1;
+                            $title = sprintf('第%s话', $episode);
+                            return [
+                                'book_id' => $book_id,
+                                'episode' => $episode,
+                                'title' => $title,
+                                'json_images' => json_encode($images),
+                                'status' => 1,
+                                'price' => $episode > 2 ? 5 : 0,
+                                'operating' => 2, // 添加方式: 1=人工, 2= 爬虫
+                                'created_at' => now(),
+                                'updated_at' => now(),
+                                'deleted_at' => null,
+                            ];
+                        })->toArray();
+                    } else {
+                        $insert = $chapters->map(function ($item) use ($book_id) {
+                            return [
+                                'book_id' => $book_id,
+                                'episode' => $item->episode,
+                                'title' => $item->title,
+                                'json_images' => $item->json_images,
+                                'status' => $item->status ? 1 : 0,
+                                'price' => $item->episode > 2 ? 5 : 0,
+                                'operating' => $item->operating, // 添加方式: 1=人工, 2= 爬虫
+                                'created_at' => $item->created_at,
+                                'updated_at' => $item->updated_at,
+                                'deleted_at' => $item->deleted_at,
+                            ];
+                        })->toArray();
+                    }
 
                     BookChapter::insert($insert);
 
