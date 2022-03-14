@@ -25,13 +25,8 @@ class CheckChapterImages implements ShouldQueue
 
     public function handle()
     {
-        if (Storage::missing($this->book->getRawOriginal('vertical_cover'))) {
-            Log::warning('Book#' . $this->book->id . ' vertical_cover : ' . Storage::url($this->book->getRawOriginal('vertical_cover')) . ' 不存在');
-            return true;
-        }
-
-        if (Storage::missing($this->book->getRawOriginal('horizontal_cover'))) {
-            Log::warning('Book#' . $this->book->id . ' horizontal_cover : ' . Storage::url($this->book->getRawOriginal('horizontal_cover')) . ' 不存在');
+        if (Storage::missing($this->book->getRawOriginal('cover'))) {
+            Log::warning('Book#' . $this->book->id . ' cover : ' . Storage::url($this->book->getRawOriginal('cover')) . ' 不存在');
             return true;
         }
 

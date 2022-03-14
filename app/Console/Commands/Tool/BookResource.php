@@ -41,9 +41,8 @@ class BookResource extends Command
     {
         $books = Book::withTrashed()->with(['chapters'])->where('status', 0)->where('type', 2)->latest()->get();
 
-        $books->each(function($book) {
-            Storage::disk('local')->append('resource.txt', $book->getRawOriginal('vertical_cover'));
-            // Storage::disk('local')->append('resource.txt', $book->getRawOriginal('horizontal_cover'));
+        $books->each(function ($book) {
+            Storage::disk('local')->append('resource.txt', $book->getRawOriginal('cover'));
             $chapters = $book->chapters;
             $chapters->each(function ($chapter) {
                 $images = $chapter->json_images;

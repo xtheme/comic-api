@@ -24,7 +24,7 @@ class VisitController extends BaseController
         $favorite_logs = $request->user()->favorite_logs()->where('type', $type)->whereIn('item_id', $book_ids)->pluck('item_id')->toArray();
 
         $data = $logs->transform(function ($log) use ($type, $favorite_logs) {
-            $has_favorite = in_array($log->item_id, $favorite_logs) ? true : false;
+            $has_favorite = in_array($log->item_id, $favorite_logs);
 
             return [
                 'record_id' => $log->id,
@@ -33,9 +33,9 @@ class VisitController extends BaseController
                 'id' => $log->item_id,
                 'title' => $log->{$type}->title,
                 'author' => $log->{$type}->author,
-                'cover' => ($type == 'book') ? $log->{$type}->vertical_cover : $log->{$type}->cover,
+                'cover' => $log->{$type}->cover,
                 'description' => $log->{$type}->description,
-                'tagged_tags' => $log->{$type}->tagged_tags,
+                'keywords' => $log->{$type}->keywords,
                 'view_counts' => shortenNumber($log->{$type}->view_counts),
                 'has_favorite' => $has_favorite,
                 'created_at' => optional($log->{$type}->created_at)->format('Y-m-d'),

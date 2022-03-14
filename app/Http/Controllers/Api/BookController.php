@@ -38,7 +38,7 @@ class BookController extends BaseController
                     'id' => $book->id,
                     'title' => $book->title,
                     'author' => $book->author,
-                    'cover' => $book->vertical_cover,
+                    'cover' => $book->cover,
                     'description' => $book->description,
                     'end' => $book->end,
                     'type' => $book->type,

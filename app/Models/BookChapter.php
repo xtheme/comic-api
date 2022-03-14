@@ -2,6 +2,8 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Str;
 
@@ -19,12 +21,12 @@ class BookChapter extends BaseModel
         'json_images' => 'array',
     ];
 
-    public function book()
+    public function book(): BelongsTo
     {
         return $this->belongsTo('App\Models\Book');
     }
 
-    public function purchase_log()
+    public function purchase_log(): HasOne
     {
         return $this->hasOne('App\Models\UserPurchaseLog', 'item_id', 'id')->where('item_model', get_class($this));
     }
@@ -35,7 +37,7 @@ class BookChapter extends BaseModel
         $images = $this->json_images ?? [];
 
         foreach ($images as $key => $image) {
-            if (Str::startsWith($image, '/') ) {
+            if (Str::startsWith($image, '/')) {
                 $image = substr($image, 1);
             }
             $images[$key] = getImageUrl($image);

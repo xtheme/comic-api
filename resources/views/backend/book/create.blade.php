@@ -88,7 +88,7 @@
                     <div class="form-group">
                         <label>漫画封面</label>
                         <div class="input-group">
-                            <input type="text" class="form-control image-path" name="vertical_cover" autocomplete="off">
+                            <input type="text" class="form-control image-path" name="cover" autocomplete="off">
                             <input type="file" class="hidden-file-upload" data-path="book">
                             <div class="input-group-append" id="input-file-addon">
                                 <button class="btn btn-primary upload-image" type="button">上传</button>
@@ -97,18 +97,6 @@
                         <div class="upload-image-callback"></div>
                     </div>
                 </div>
-                {{--                <div class="col-12">--}}
-                {{--                    <div class="form-group">--}}
-                {{--                        <label>横向封面</label>--}}
-                {{--                        <div class="input-group">--}}
-                {{--                            <input type="text" class="form-control image-path" name="horizontal_cover" autocomplete="off">--}}
-                {{--                            <input type="file" class="hidden-file-upload" data-path="book">--}}
-                {{--                            <div class="input-group-append" id="input-file-addon">--}}
-                {{--                                <button class="btn btn-primary upload-image" type="button">上传</button>--}}
-                {{--                            </div>--}}
-                {{--                        </div>--}}
-                {{--                    </div>--}}
-                {{--                </div>--}}
                 <div class="col-12 d-flex justify-content-end">
                     <input type="hidden" name="operating" value="1">
                     <button type="submit" class="btn btn-primary">提交</button>

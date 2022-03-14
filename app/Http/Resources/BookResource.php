@@ -29,9 +29,10 @@ class BookResource extends JsonResource
             'id' => $this->id,
             'title' => $this->title,
             'author' => $this->author,
-            'cover' => $this->vertical_cover,
+            'cover' => $this->cover,
             'description' => $this->description,
             // 'tagged_tags' => $this->tagged_tags, // 不查詢標籤
+            'keywords' => $this->keywords,
             'view_counts' => shortenNumber($this->view_counts),
             'has_favorite' => $this->when(!is_null($this->has_favorite), $this->has_favorite),
             'created_at' => optional($this->created_at)->format('Y-m-d'),

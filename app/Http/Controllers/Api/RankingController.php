@@ -53,7 +53,7 @@ class RankingController extends Controller
                         'title' => $video->title,
                         'cover' => $video->cover,
                         'description' => $video->description,
-                        'tagged_tags' => $video->keywords,
+                        'keywords' => $video->keywords,
                         'views' => $raw_data[$video->id],
                     ];
                 });
@@ -66,9 +66,9 @@ class RankingController extends Controller
                     return [
                         'id' => $book->id,
                         'title' => $book->title,
-                        'cover' => $book->vertical_cover,
+                        'cover' => $book->cover,
                         'description' => $book->description,
-                        'tagged_tags' => $book->tagged_tags,
+                        'keywords' => $book->keywords,
                         'views' => $raw_data[$book->id],
                     ];
                 });
@@ -146,8 +146,8 @@ class RankingController extends Controller
                         'id' => $rank->book->id,
                         'title' => $rank->book->title,
                         'description' => $rank->book->description,
-                        'cover' => $rank->book->vertical_cover,
-                        'tagged_tags' => $rank->book->tagged_tags,
+                        'cover' => $rank->book->cover,
+                        'keywords' => $rank->book->keywords,
                         'views' => $rank->views,
                     ];
                 })->toArray();
@@ -221,7 +221,7 @@ class RankingController extends Controller
                         'title' => $video->title,
                         'description' => $video->description,
                         'cover' => $video->cover,
-                        'tagged_tags' => $video->keywords,
+                        'keywords' => $video->keywords,
                         'views' => $video->view_counts,
                         'created_at' => $video->created_at->format('Y-m-d'),
                     ];
@@ -234,8 +234,8 @@ class RankingController extends Controller
                         'id' => $book->id,
                         'title' => $book->title,
                         'description' => $book->description,
-                        'cover' => $book->vertical_cover,
-                        'tagged_tags' => $book->tagged_tags,
+                        'cover' => $book->cover,
+                        'keywords' => $book->keywords,
                         'views' => $book->view_counts,
                         'created_at' => $book->created_at->format('Y-m-d'),
                     ];
