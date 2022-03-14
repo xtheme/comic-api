@@ -7,7 +7,6 @@ ini_set('memory_limit', '-1');
 use App\Models\Book;
 use App\Models\BookChapter;
 use Illuminate\Console\Command;
-use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
 use SteelyWing\Chinese\Chinese;
 
@@ -48,7 +47,6 @@ class BooksImport extends Command
             DB::statement('SET FOREIGN_KEY_CHECKS=0');
             DB::table('books')->truncate();
             DB::table('book_chapters')->truncate();
-            // DB::table('taggables')->truncate();
             DB::statement('SET FOREIGN_KEY_CHECKS=1');
         }
 
@@ -61,13 +59,11 @@ class BooksImport extends Command
     public function hasReview()
     {
         $book_condition = [
-            ['book_status', '=', 1],
-            ['check_status', '=', 1],
-            ['app_show', '=', 1],
+            ['status', '=', 1],
         ];
 
         // 符合條件的漫畫筆數
-        $batch_num = DB::table('book')->where($book_condition)->count() ?? 0;
+        $batch_num = DB::table('source_books')->where($book_condition)->count() ?? 0;
 
         // 每多少筆漫畫拆分一次操作
         $chunk_num = 200;
@@ -75,19 +71,19 @@ class BooksImport extends Command
         $this->line(sprintf('本次操作將轉移 %s 筆數據，拆分為 %s 批数据進行迁移！', $batch_num, ceil($batch_num / $chunk_num)));
 
         // 审核成功
-        $raw = DB::table('book')->where('book_status', 1)->where('check_status', 1)->orderBy('id')->get()->chunk($chunk_num);
+        $raw = DB::table('source_books')->where('status', 1)->orderBy('id')->get()->chunk($chunk_num);
 
         // 數據批次
-        $raw->each(function($items, $key) {
+        $raw->each(function ($items, $key) {
             // 漫畫數據轉換
-            $items->each(function($item) {
+            $items->each(function ($item) {
                 $chapter_condition = [
                     ['book_id', '=', $item->id],
                     ['status', '=', 1],
-                    ['check_status', '<', 2],
+                    ['review', '=', 1],
                 ];
 
-                $has_chapter = DB::table('chapterlist')->where($chapter_condition)->count();
+                $has_chapter = DB::table('source_book_chapters')->where($chapter_condition)->count();
 
                 if (!$has_chapter) {
                     $this->line('第 ' . $item->id . ' 本漫畫缺少章節, 略過');
@@ -95,9 +91,9 @@ class BooksImport extends Command
                 }
 
                 $chinese = new Chinese();
-                $title = $chinese->to(Chinese::ZH_HANS, $item->book_name);
-                $author = $chinese->to(Chinese::ZH_HANS, $item->pen_name);
-                $description = $chinese->to(Chinese::ZH_HANS, $item->book_desc);
+                $title = $chinese->to(Chinese::ZH_HANS, $item->title);
+                $author = $chinese->to(Chinese::ZH_HANS, $item->author);
+                $description = $chinese->to(Chinese::ZH_HANS, $item->description);
 
                 if (Book::where('title', 'LIKE', '%' . $title . '%')->exists()) {
                     $this->line('第 ' . $item->id . ' 本漫畫標題已存在於數據庫中, 略過');
@@ -108,43 +104,38 @@ class BooksImport extends Command
                     'title' => $title,
                     'author' => $author,
                     'description' => $description,
-                    'end' => $item->book_isend == 1 ? 1 : 0,
-                    'vertical_cover' => $item->book_thumb,
-                    'horizontal_cover' => $item->book_thumb2,
-                    'type' => $item->cartoon_type,
-                    'status' => $item->book_status ? 1 : 0,
-                    'review' => $item->check_status,
-                    'operating' => $item->operating,
+                    'end' => $item->end == 1 ? 1 : 0, // 完结: 1=完结, 0=未完结
+                    'cover' => $item->vertical_cover,
+                    'type' => $item->type, // 类型: 1=日漫, 2=韩漫, 3=美漫, 4=写真, 5=CG
+                    'status' => $item->status == 1 ? 1 : 0, // 状态: 1=上架, 0=下架
+                    'review' => $item->review + 1, // 审核状态: 1=待审核, 2=审核成功, 3=审核失败, 4=屏蔽, 5=未审核
+                    'operating' => $item->operating, // 添加方式: 1=人工, 2= 爬虫
+                    'source_platform' => 'nasu',
                     'source_id' => $item->id,
+                    'created_at' => $item->created_at,
+                    'updated_at' => $item->updated_at,
+                    'deleted_at' => $item->deleted_at,
                 ];
 
                 $book = Book::firstOrCreate($insert);
 
                 if ($book->wasRecentlyCreated) {
-                    $book_id =$book->id;
+                    $book_id = $book->id;
 
-                    $chapters = DB::table('chapterlist')->where($chapter_condition)->orderBy('id')->get();
+                    $chapters = DB::table('source_book_chapters')->where($chapter_condition)->orderBy('id')->get();
 
-                    $insert = $chapters->map(function($item) use ($book_id) {
-                        if ($item->json_images) {
-                            $json_images = json_decode($item->json_images);
-                            $json_images = collect($json_images)->map(function($img) {
-                                return $img->url;
-                            })->toArray();
-                        } else {
-                            $json_images = parseImgFromHtml($item->content);
-                        }
+                    $insert = $chapters->map(function ($item) use ($book_id) {
                         return [
                             'book_id' => $book_id,
-                            'episode' => $item->idx,
+                            'episode' => $item->episode,
                             'title' => $item->title,
-                            'content' => '',
-                            'json_images' => json_encode($json_images),
+                            'json_images' => $item->json_images,
                             'status' => $item->status ? 1 : 0,
-                            'price' => $item->idx > 2 ? 60 : 0,
-                            'operating' => $item->operating,
-                            'created_at' => $item->addtime ? Carbon::createFromTimestamp($item->addtime) : null,
-                            'updated_at' => null,
+                            'price' => $item->episode > 2 ? 5 : 0,
+                            'operating' => $item->operating, // 添加方式: 1=人工, 2= 爬虫
+                            'created_at' => $item->created_at,
+                            'updated_at' => $item->updated_at,
+                            'deleted_at' => $item->deleted_at,
                         ];
                     })->toArray();
 

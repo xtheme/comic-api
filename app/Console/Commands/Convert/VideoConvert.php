@@ -125,7 +125,7 @@ class VideoConvert extends Command
                         'number' => strtoupper($item->number),
                         'producer' => $item->producer,
                         'release_date' => $item->publish_time,
-                        'source_platform' => 'nasu',
+                        'source_platform' => 'qqc',
                         'source_id' => $item->id,
                         'created_at' => now(),
                         'actor' => join(',', $tmp_actors),
@@ -213,10 +213,12 @@ class VideoConvert extends Command
             $tags = DB::table('source_tags')->where('status', '1')->get(['id', 'name', 'cate_id'])->toArray();
 
             return collect($tags)->mapWithKeys(function ($item) {
-                return [$item->id => [
-                    'cate' => self::$tag_countries[$item->cate_id],
-                    'name' => $item->name,
-                ]];
+                return [
+                    $item->id => [
+                        'cate' => self::$tag_countries[$item->cate_id],
+                        'name' => $item->name,
+                    ]
+                ];
             })->toArray();
         });
     }
