@@ -232,7 +232,7 @@ class VideoConvert extends Command
 
         $videos = Video::orderBy('source_id')->get(['id', 'source_id']);
 
-        $videos->each(function ($video) use ($list) {
+        $videos->each(function (Video $video) use ($list) {
             $source = DB::table('source_movies')->where('id', $video->source_id)->first();
             $tag_ids = explode(',', $source->tags);
             $tags = [];
@@ -244,8 +244,6 @@ class VideoConvert extends Command
             }
 
             foreach ($tags as $cate => $tag) {
-                // $this->info($cate);
-                // $this->error(json_encode($tag, JSON_UNESCAPED_UNICODE));
                 $video->attachTags($tag, $cate);
             }
         });
