@@ -14,15 +14,15 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::middleware(['api'])->group(function () {
+Route::middleware(['api'])->as('api.')->group(function () {
 
     Route::get('/stress', [Api\DevController::class, 'stress']);
     Route::get('/decrypt', [Api\DevController::class, 'decrypt']);
 
     // 第三方支付回調
-    Route::prefix('payment')->group(function () {
+    Route::prefix('payment')->as('payment.')->group(function () {
         // Route::any('/callback', [Api\PaymentController::class, 'callback']); // 支付結果回調
-        Route::any('/notify/{order_no?}', [Api\PaymentController::class, 'notify']);
+        Route::any('/notify/{order_no?}', [Api\PaymentController::class, 'notify'])->name('notify');
         Route::any('/mockCallback', [Api\PaymentController::class, 'mockCallback']); // 測試接口:支付結果回調
     });
 
@@ -41,7 +41,7 @@ Route::middleware(['api'])->group(function () {
 
         // 首頁:導航列
         Route::prefix('navigation')->group(function () {
-            Route::get('/', [Api\NavigationController::class , 'list']);
+            Route::get('/', [Api\NavigationController::class, 'list']);
         });
 
         // 首頁:主题
