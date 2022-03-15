@@ -28,6 +28,7 @@ class CreatePaymentsTable extends Migration
             $table->unsignedInteger('daily_limit')->default(0)->comment('每日限額');
             $table->json('pay_options')->comment('支付配置');
             $table->json('order_options')->comment('查詢訂單配置');
+            $table->unsignedInteger('priority')->default(0);
             $table->tinyInteger('status')->default(0)->comment('状态: 0=禁用, 1=啟用');
             $table->timestamps();
         });

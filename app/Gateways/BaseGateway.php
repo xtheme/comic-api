@@ -21,7 +21,7 @@ class BaseGateway
         $this->pay_options = $params['pay_options'];
     }
 
-    public function createOrder(Pricing $plan)
+    public function createOrder(Pricing $plan): Order
     {
         $count = Order::whereDate('created_at', date('Y-m-d'))->count();
 
@@ -50,8 +50,6 @@ class BaseGateway
             'uuid' => request()->header('uuid'),
         ];
 
-        $order = Order::create($data);
-
-        return $order;
+        return Order::create($data);
     }
 }
