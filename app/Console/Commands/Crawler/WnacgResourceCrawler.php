@@ -100,18 +100,27 @@ class WnacgResourceCrawler extends Command
      */
     private function crawlComicDetail()
     {
-        $url = 'http://www.wnacg.org/photos-index-aid-141600.html';
+        $pending_data = ComicResource::where('crawl_detail', 0)->get()->chunk(200);
 
-        $ql = QueryList::get($url)->find('#bodywrap.userwrap');
+        $pending_data->each(function ($items) {
+            $items->each(function (ComicResource $item) {
+                $source_id = $item->source_id;
 
-        $data = [
-            'desc' => $ql->find('.uwconn>p')->text(),
-            'keywords' => $ql->find('.uwconn>.addtags>a.tagshow')->texts()->toArray(),
-        ];
+                $url = sprintf('%s/photos-index-aid-%s.html', $this->source_domain, $source_id);
 
+                $ql = QueryList::get($url);
+                $range = $ql->find('#bodywrap.userwrap');
+                $description = $range->find('.uwconn>p')->text();
+                $keywords = $range->find('.uwconn>.addtags>a.tagshow')->texts()->toArray();
 
-        print_r($data);
+                $item->description = $description;
+                $item->keywords = join(',', $keywords);
+                $item->crawl_detail = 1;
+                $item->save();
 
+                $ql->destruct();
+            });
+        });
     }
 }
 
