@@ -37,7 +37,7 @@ class VideoReset extends Command
     /**
      * Execute the console command.
      *
-     * @return int
+     * @return void
      */
     public function handle()
     {
@@ -52,7 +52,5 @@ class VideoReset extends Command
         }
 
         $this->line('數據已清空！');
-
-        return 0;
     }
 }

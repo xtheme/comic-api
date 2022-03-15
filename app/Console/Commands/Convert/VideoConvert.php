@@ -26,7 +26,7 @@ class VideoConvert extends Command
     protected $description = '轉換視頻數據!';
 
     // 国家
-    public static $countries = [
+    public static array $countries = [
         '0' => '日本',
         '1' => '韩国',
         '2' => '印度',
@@ -39,7 +39,7 @@ class VideoConvert extends Command
 
 
     // 標籤類型
-    public static $tag_countries = [
+    public static array $tag_countries = [
         '1' => 'video.subject', // 主题
         '2' => 'video.place', // 场景
         '3' => 'video.role', // 角色
@@ -64,7 +64,7 @@ class VideoConvert extends Command
     /**
      * Execute the console command.
      *
-     * @return int
+     * @return void
      */
     public function handle()
     {
@@ -162,8 +162,6 @@ class VideoConvert extends Command
 
             $this->line('操作已結束');
         }
-
-        return 0;
     }
 
     // 獲取女優清單
