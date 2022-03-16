@@ -21,17 +21,19 @@ class WnacgResourceCrawler extends Command
 
     public function handle()
     {
-        if ($this->confirm('開始爬取漫畫清單?')) {
-            $this->crawlComicList();
-        }
+        // if ($this->confirm('開始爬取漫畫清單?')) {
+        //     $this->crawlComicList();
+        // }
 
         // if ($this->confirm('開始爬取漫畫詳情?')) {
         //     $this->crawlComicDetail();
         // }
 
-        if ($this->confirm('開始爬取漫畫原圖路徑?')) {
-            $this->crawlRawImages();
-        }
+        // if ($this->confirm('開始爬取漫畫原圖路徑?')) {
+        //     $this->crawlRawImages();
+        // }
+
+        $this->test();
     }
 
     /**
@@ -144,7 +146,7 @@ class WnacgResourceCrawler extends Command
 
     private function crawlRawImages()
     {
-        $pending_data = ComicResource::where('crawl_image', 0)->take(20s0)->get();
+        $pending_data = ComicResource::where('crawl_image', 0)->take(200)->get();
 
         $pending_data->each(function (ComicResource $comic) {
             $pages = $this->getComicTotalPage($comic);
@@ -183,5 +185,16 @@ class WnacgResourceCrawler extends Command
             $this->info('#'.$comic->id.' crawling success!');
             $this->line('');
         });
+    }
+
+    private function test()
+    {
+        $rules = [
+            'title' => ['div:eq(1)>a', 'text',],
+            'img' => ['a>img', 'src',],
+            'brief' => ['.brief>a', 'text',],
+        ];
+        $data = QueryList::get('https://tw.xchina.co/fictions/1.html')->rules($rules)->range('.list .fiction')->queryData();
+        print_r($data);
     }
 }
