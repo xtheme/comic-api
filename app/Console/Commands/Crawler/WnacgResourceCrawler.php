@@ -25,8 +25,12 @@ class WnacgResourceCrawler extends Command
             $this->crawlComicList();
         }
 
-        if ($this->confirm('開始爬取漫畫詳情?')) {
-            $this->crawlComicDetail();
+        // if ($this->confirm('開始爬取漫畫詳情?')) {
+        //     $this->crawlComicDetail();
+        // }
+
+        if ($this->confirm('開始爬取漫畫原圖路徑?')) {
+            $this->crawlRawImages();
         }
     }
 
@@ -71,7 +75,7 @@ class WnacgResourceCrawler extends Command
 
             ComicResource::upsert($insert, ['source_platform', 'source_id']);
 
-            $this->info('第 ' . $i . ' 頁');
+            $this->info('第 '.$i.' 頁');
 
             $ql->destruct();
         }
@@ -82,6 +86,21 @@ class WnacgResourceCrawler extends Command
     private function getLastPage()
     {
         $url = sprintf('%s/albums-index-cate-%s.html', $this->source_domain, $this->category);
+
+        $ql = QueryList::get($url);
+
+        $paginator = $ql->find('.paginator>a')->texts()->toArray();
+
+        $last_page = end($paginator);
+
+        $ql->destruct();
+
+        return $last_page;
+    }
+
+    private function getComicTotalPage(ComicResource $comic)
+    {
+        $url = sprintf('%s/photos-index-aid-%s.html', $this->source_domain, $comic->source_id);
 
         $ql = QueryList::get($url);
 
@@ -113,7 +132,7 @@ class WnacgResourceCrawler extends Command
                 $description = $range->find('.uwconn>p')->text();
                 $keywords = $range->find('.uwconn>.addtags>a.tagshow')->texts()->toArray();
 
-                $item->description = $description;
+                $item->description = Str::replaceFirst('簡介：', '', $description);
                 $item->keywords = join(',', $keywords);
                 $item->crawl_detail = 1;
                 $item->save();
@@ -122,19 +141,47 @@ class WnacgResourceCrawler extends Command
             });
         });
     }
+
+    private function crawlRawImages()
+    {
+        $pending_data = ComicResource::where('crawl_image', 0)->take(20s0)->get();
+
+        $pending_data->each(function (ComicResource $comic) {
+            $pages = $this->getComicTotalPage($comic);
+            $raw_images = [];
+
+            $this->info('#'.$comic->id.' crawling from '.$pages.' pages!');
+
+            $bar = $this->output->createProgressBar($pages);
+
+            $bar->start();
+
+            for ($i = 1; $i <= $pages; $i++) {
+                $url = sprintf('%s/photos-index-page-%s-aid-%s.html', $this->source_domain, $i, $comic->source_id);
+
+                $ql = QueryList::get($url);
+
+                $images = $ql->find('li.gallary_item img')->attrs('src')->toArray();
+
+                foreach ($images as $image) {
+                    $raw_images[] = Str::start($image, 'http:');
+                }
+
+                $ql->destruct();
+
+                $bar->advance();
+            }
+
+            $bar->finish();
+
+            // Update Comic
+            $comic->crawl_image = 1;
+            $comic->raw_images = $raw_images;
+            $comic->save();
+
+            $this->line('');
+            $this->info('#'.$comic->id.' crawling success!');
+            $this->line('');
+        });
+    }
 }
-
-
-// $data = collect($data)->map(function ($row) {
-//     $id = preg_replace('/\D/', '', $row['link']);
-//     $img = file_get_contents('http:' . $row['cover']);
-//     // Storage::disk('s3')->put('comic/' . $id . '/cover.jpg', $img);
-//     return [
-//         'id' => $id,
-//         'title' => $row['text'],
-//         'link' => $row['link'],
-//         'cover' => $row['cover'],
-//     ];
-// });
-//
-// dd($data);
