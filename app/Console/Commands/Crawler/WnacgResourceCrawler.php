@@ -144,7 +144,7 @@ class WnacgResourceCrawler extends Command
 
     private function crawlRawImages()
     {
-        $pending_data = ComicResource::where('crawl_image', 0)->take(20s0)->get();
+        $pending_data = ComicResource::where('crawl_image', 0)->take(200)->get();
 
         $pending_data->each(function (ComicResource $comic) {
             $pages = $this->getComicTotalPage($comic);
