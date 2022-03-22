@@ -1,4 +1,4 @@
-@extends('layouts.iframePage')
+@extends('layouts.contentLayout')
 
 {{-- page Title --}}
 @section('title','标签统计')
@@ -80,10 +80,10 @@
                                     <td class="text-center">
                                         @switch($tag->suggest)
                                             @case(1)
-                                                <a class="badge badge-pill badge-light-primary" data-confirm href="{{ route('backend.tag.batch', ['action'=>'disable', 'ids' => $tag->id]) }}" title="在前端隐藏">显示</a>
+                                            <a class="badge badge-pill badge-light-primary" data-confirm href="{{ route('backend.tag.batch', ['action'=>'disable', 'ids' => $tag->id]) }}" title="在前端隐藏">显示</a>
                                             @break
                                             @case(0)
-                                                <a class="badge badge-pill badge-light-danger" data-confirm href="{{ route('backend.tag.batch', ['action'=>'enable', 'ids' => $tag->id]) }}" title="在前端显示">隐藏</a>
+                                            <a class="badge badge-pill badge-light-danger" data-confirm href="{{ route('backend.tag.batch', ['action'=>'enable', 'ids' => $tag->id]) }}" title="在前端显示">隐藏</a>
                                             @break
                                         @endswitch
                                     </td>
@@ -165,7 +165,7 @@
                             <input type="checkbox" class="checkbox-input" id="tagged_video" name="tagged_video" value="1" @if(request()->get('tagged_video')){{'checked'}}@endif>
                             <label for="tagged_video">有关联的视频</label>
                         </div>
-                </div>
+                    </div>
                 </div>
                 <div class="col-12 d-flex justify-content-end">
                     <button type="submit" class="btn btn-primary">搜索</button>
@@ -215,48 +215,48 @@
         });
 
         $('#batch-action').submit(function (e) {
-	        e.preventDefault();
+            e.preventDefault();
 
-	        let $this = $(this);
-	        let ids   = $.checkedIds();
-	        let url   = $this.attr('action') + '/' + $this.find('select[name="action"]').val();
+            let $this = $(this);
+            let ids = $.checkedIds();
+            let url = $this.attr('action') + '/' + $this.find('select[name="action"]').val();
 
-	        if (!ids) {
-		        $.toast({
-			        type: 'error',
-			        message: '请先选择要操作的数据'
-		        });
-		        return false;
-	        }
+            if (!ids) {
+                $.toast({
+                    type: 'error',
+                    message: '请先选择要操作的数据'
+                });
+                return false;
+            }
 
-	        $.confirm({
-		        text: `请确认是否要继续批量操作?`,
-		        callback: function () {
-			        $.request({
-				        url: url,
-				        type: 'put',
-				        data: {'ids': ids},
-				        debug: true,
-				        callback: function (res) {
-					        $.reloadIFrame({
-						        title: '提交成功',
-						        message: '请稍后数据刷新'
-					        });
-				        }
-			        });
-		        }
-	        });
+            $.confirm({
+                text: `请确认是否要继续批量操作?`,
+                callback: function () {
+                    $.request({
+                        url: url,
+                        type: 'put',
+                        data: {'ids': ids},
+                        debug: true,
+                        callback: function (res) {
+                            $.reloadIFrame({
+                                title: '提交成功',
+                                message: '请稍后数据刷新'
+                            });
+                        }
+                    });
+                }
+            });
         });
 
-	    $('#search-form').submit(function(e) {
-		    e.preventDefault();
+        $('#search-form').submit(function (e) {
+            e.preventDefault();
 
-		    let url = $(this).attr('action') + '?' + $(this).serialize();
+            let url = $(this).attr('action') + '?' + $(this).serialize();
             console.log(url);
             $.reloadIFrame({
-			    reloadUrl: url
+                reloadUrl: url
             });
-	    });
+        });
     </script>
 @endsection
 

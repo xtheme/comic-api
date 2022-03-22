@@ -1,4 +1,4 @@
-@extends('layouts.iframePage')
+@extends('layouts.contentLayout')
 
 {{-- page Title --}}
 @section('title','用户举报')

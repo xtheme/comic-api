@@ -1,4 +1,4 @@
-@extends('layouts.iframePage')
+@extends('layouts.contentLayout')
 
 {{-- page Title --}}
 @section('title','Dashboard')
@@ -212,7 +212,7 @@
                 analyticsBarChartOptions
             );
 
-            $.getJSON('{{ route('backend.dashboard.user.growth') }}', function(response) {
+            $.getJSON('{{ route('backend.dashboard.user.growth') }}', function (response) {
                 analyticsBarChart.updateSeries(response);
             });
 

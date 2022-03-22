@@ -1,4 +1,4 @@
-@extends('layouts.iframePage')
+@extends('layouts.contentLayout')
 
 {{-- page Title --}}
 @section('title','操作日志')
@@ -9,87 +9,87 @@
 
 @section('content')
     <section id="config-list home-fill">
-            <div class="card">
-                <div class="card-header">
-                    <div class="float-left">
-                        <h4 class="card-title">@yield('title')</h4>
-                    </div>
-                    <div class="float-right d-flex flex-wrap">
-                        <form id="search-form" class="form form-horizontal" method="get" action="{{ url()->current() }}" novalidate>
-                            <div class="form-body">
-                                <div class="d-flex align-items-center">
-                                    <div class="form-group mr-1">
-                                        <div class="controls">
-                                            <select class="form-control" id="select-causer" name="causer_id">
-                                                <option value="">全部</option>
-                                                @foreach ($admin_options as $admin)
-                                                    @if (request()->get('causer_id') == $admin->id)
-                                                        <option value="{{ $admin->id }}" selected>{{ $admin->nickname }}</option>
-                                                    @else
-                                                        <option value="{{ $admin->id }}">{{ $admin->nickname }}</option>
-                                                    @endif
-                                                @endforeach
-                                            </select>
-                                        </div>
-                                    </div>
-                                    <div class="form-group mr-1">
-                                        <div class="controls">
-                                            <input type="text" class="form-control" name="id" placeholder="查询ID" value="{{ request()->get('id') }}">
-                                        </div>
-                                    </div>
-                                    <div class="form-group">
-                                        <button type="submit" class="btn btn-primary">搜索</button>
+        <div class="card">
+            <div class="card-header">
+                <div class="float-left">
+                    <h4 class="card-title">@yield('title')</h4>
+                </div>
+                <div class="float-right d-flex flex-wrap">
+                    <form id="search-form" class="form form-horizontal" method="get" action="{{ url()->current() }}" novalidate>
+                        <div class="form-body">
+                            <div class="d-flex align-items-center">
+                                <div class="form-group mr-1">
+                                    <div class="controls">
+                                        <select class="form-control" id="select-causer" name="causer_id">
+                                            <option value="">全部</option>
+                                            @foreach ($admin_options as $admin)
+                                                @if (request()->get('causer_id') == $admin->id)
+                                                    <option value="{{ $admin->id }}" selected>{{ $admin->nickname }}</option>
+                                                @else
+                                                    <option value="{{ $admin->id }}">{{ $admin->nickname }}</option>
+                                                @endif
+                                            @endforeach
+                                        </select>
                                     </div>
                                 </div>
+                                <div class="form-group mr-1">
+                                    <div class="controls">
+                                        <input type="text" class="form-control" name="id" placeholder="查询ID" value="{{ request()->get('id') }}">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <button type="submit" class="btn btn-primary">搜索</button>
+                                </div>
                             </div>
-                        </form>
-                    </div>
+                        </div>
+                    </form>
                 </div>
-                <div class="card-content">
-                    <div class="card-body">
-                        <!-- Table with outer spacing -->
-                        <div class="table-responsive">
-                            <table class="table table-striped table-hover">
-                                <thead>
+            </div>
+            <div class="card-content">
+                <div class="card-body">
+                    <!-- Table with outer spacing -->
+                    <div class="table-responsive">
+                        <table class="table table-striped table-hover">
+                            <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>日志类别</th>
+                                <th>操作行为</th>
+                                <th>操作者</th>
+                                <th>日志时间</th>
+                                <th>操作</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            @foreach ($logs as $row)
                                 <tr>
-                                    <th>ID</th>
-                                    <th>日志类别</th>
-                                    <th>操作行为</th>
-                                    <th>操作者</th>
-                                    <th>日志时间</th>
-                                    <th>操作</th>
-                                </tr>
-                                </thead>
-                                <tbody>
-                                @foreach ($logs as $row)
-                                    <tr>
-                                        <td>{{ $row->id }}</td>
-                                        <td>{{ $row->log_name }}</td>
-                                        <td>
-                                            @if($row->subject)
-                                                <span class="badge badge-pill badge-light-primary">#{{ $row->subject_id }}</span>
-                                            @endif
-                                            {{ $row->description }}
-                                        </td>
-                                        <td>{{ $row->causer->nickname ?? '' }}</td>
-                                        <td>{{ $row->created_at->diffForHumans() }}</td>
-                                        <td>
-                                            @if($row->subject_id)
+                                    <td>{{ $row->id }}</td>
+                                    <td>{{ $row->log_name }}</td>
+                                    <td>
+                                        @if($row->subject)
+                                            <span class="badge badge-pill badge-light-primary">#{{ $row->subject_id }}</span>
+                                        @endif
+                                        {{ $row->description }}
+                                    </td>
+                                    <td>{{ $row->causer->nickname ?? '' }}</td>
+                                    <td>{{ $row->created_at->diffForHumans() }}</td>
+                                    <td>
+                                        @if($row->subject_id)
                                             <a class="btn btn-primary btn-sm" data-modal href="{{ route('backend.activity.diff', $row->id) }}" title="查看变更">查看变更</a>
-                                            @endif
-                                        </td>
-                                    </tr>
-                                @endforeach
-                                </tbody>
-                            </table>
-                        </div>
-                        <div class="row">
-                            <div class="col-md-6">总共 <b>{{ $logs->appends(request()->input())->total() }}</b> 条, 分为 <b>{{ $logs->lastPage() }}</b> 页</div>
-                            <div class="col-md-6">{!! $logs->links() !!}</div>
-                        </div>
+                                        @endif
+                                    </td>
+                                </tr>
+                            @endforeach
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">总共 <b>{{ $logs->appends(request()->input())->total() }}</b> 条, 分为 <b>{{ $logs->lastPage() }}</b> 页</div>
+                        <div class="col-md-6">{!! $logs->links() !!}</div>
                     </div>
                 </div>
             </div>
+        </div>
     </section>
 @endsection
 
@@ -190,23 +190,23 @@
                 }
             });
 
-            $created.on('apply.daterangepicker', function(ev, picker) {
+            $created.on('apply.daterangepicker', function (ev, picker) {
                 $(this).val(picker.startDate.format('YYYY-MM-DD HH:mm:ss') + ' - ' + picker.endDate.format('YYYY-MM-DD HH:mm:ss'));
             });
 
-            $created.on('cancel.daterangepicker', function(ev, picker) {
+            $created.on('cancel.daterangepicker', function (ev, picker) {
                 $(this).val('');
             });
 
-	        $('#search-form').submit(function(e) {
-		        e.preventDefault();
+            $('#search-form').submit(function (e) {
+                e.preventDefault();
 
-		        let url = $(this).attr('action') + '?' + $(this).serialize();
+                let url = $(this).attr('action') + '?' + $(this).serialize();
 
-		        $.reloadIFrame({
-			        reloadUrl: url
-		        });
-	        });
+                $.reloadIFrame({
+                    reloadUrl: url
+                });
+            });
         });
     </script>
 @endsection

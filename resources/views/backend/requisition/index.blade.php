@@ -1,4 +1,4 @@
-@extends('layouts.iframePage')
+@extends('layouts.contentLayout')
 
 {{-- page Title --}}
 @section('title','用戶列表')
@@ -37,7 +37,7 @@
                                 <th>昵称</th>
                                 <th>版本号</th>
                                 <th class="text-center">平台</th>
-{{--                                <th class="text-center">头像</th>--}}
+                                {{--                                <th class="text-center">头像</th>--}}
                                 <th class="text-center">性别</th>
                                 <th class="text-center">金币</th>
                                 <th>手机号</th>
@@ -63,7 +63,7 @@
                                     <td>{{ $item->username }}</td>
                                     <td>{{ $item->version }}</td>
                                     <td class="text-center">{!! $item->os !!}</td>
-{{--                                    <td class="text-center">头像</td>--}}
+                                    {{--                                    <td class="text-center">头像</td>--}}
                                     <td class="text-center">{!! $item->gender !!}</td>
                                     <td class="text-right">{{ $item->score }}</td>
                                     <td>{{ $item->phone }}</td>
@@ -83,20 +83,20 @@
                                                 @else
                                                     <a class="dropdown-item" data-confirm href="{{ route('backend.user.block', $item->id) }}" title="启用该帐号"><i class="bx bx-lock-open mr-1"></i>启用</a>
                                                 @endif
-{{--                                                @if (!$item->deleted_at)--}}
-{{--                                                    @if ($item->status == '1')--}}
-{{--                                                        <a class="dropdown-item" data-confirm href="{{ route('rbac.user.block', $item->id) }}" title="封禁该帐号"><i class="bx bx-lock mr-1"></i>封禁</a>--}}
-{{--                                                    @else--}}
-{{--                                                        <a class="dropdown-item" data-confirm href="{{ route('rbac.user.block', $item->id) }}" title="启用该帐号"><i class="bx bx-lock-open mr-1"></i>启用</a>--}}
-{{--                                                    @endif--}}
-{{--                                                    <a class="dropdown-item" data-modal data-size="full" data-height="70vh" href="{{ route('rbac.user.devices', $item->id) }}" title="用户设备列表"><i class="bx bx-mobile mr-1"></i>设备</a>--}}
-{{--                                                    <a class="dropdown-item" data-modal href="{{ route('rbac.user.edit', $item->id) }}" title="修改用户信息"><i class="bx bx-edit-alt mr-1"></i>修改</a>--}}
-{{--                                                    @if ($item->status != '3')--}}
-{{--                                                        <a class="dropdown-item" data-confirm href="{{ route('rbac.user.destroy', $item->id) }}" title="删除该用户"><i class="bx bxs-user-x mr-1"></i>删除</a>--}}
-{{--                                                    @endif--}}
-{{--                                                @else--}}
-{{--                                                    <a class="dropdown-item" data-confirm href="{{ route('rbac.user.restore', $item->id) }}" title="复权该用户"><i class="bx bxs-user-check mr-1"></i>恢复</a>--}}
-{{--                                                @endif--}}
+                                                {{--                                                @if (!$item->deleted_at)--}}
+                                                {{--                                                    @if ($item->status == '1')--}}
+                                                {{--                                                        <a class="dropdown-item" data-confirm href="{{ route('rbac.user.block', $item->id) }}" title="封禁该帐号"><i class="bx bx-lock mr-1"></i>封禁</a>--}}
+                                                {{--                                                    @else--}}
+                                                {{--                                                        <a class="dropdown-item" data-confirm href="{{ route('rbac.user.block', $item->id) }}" title="启用该帐号"><i class="bx bx-lock-open mr-1"></i>启用</a>--}}
+                                                {{--                                                    @endif--}}
+                                                {{--                                                    <a class="dropdown-item" data-modal data-size="full" data-height="70vh" href="{{ route('rbac.user.devices', $item->id) }}" title="用户设备列表"><i class="bx bx-mobile mr-1"></i>设备</a>--}}
+                                                {{--                                                    <a class="dropdown-item" data-modal href="{{ route('rbac.user.edit', $item->id) }}" title="修改用户信息"><i class="bx bx-edit-alt mr-1"></i>修改</a>--}}
+                                                {{--                                                    @if ($item->status != '3')--}}
+                                                {{--                                                        <a class="dropdown-item" data-confirm href="{{ route('rbac.user.destroy', $item->id) }}" title="删除该用户"><i class="bx bxs-user-x mr-1"></i>删除</a>--}}
+                                                {{--                                                    @endif--}}
+                                                {{--                                                @else--}}
+                                                {{--                                                    <a class="dropdown-item" data-confirm href="{{ route('rbac.user.restore', $item->id) }}" title="复权该用户"><i class="bx bxs-user-check mr-1"></i>恢复</a>--}}
+                                                {{--                                                @endif--}}
                                             </div>
                                         </div>
                                     </td>
@@ -157,13 +157,13 @@
                         <label for="select-status">状态</label>
                         <select class="form-control" name="status">
                             <option value="">全部</option>
-{{--                            @foreach ($status_options as $key => $val)--}}
-{{--                                @if (request()->get('status') == $key)--}}
-{{--                                    <option value="{{ $key }}" selected>{{ $val }}</option>--}}
-{{--                                @else--}}
-{{--                                    <option value="{{ $key }}">{{ $val }}</option>--}}
-{{--                                @endif--}}
-{{--                            @endforeach--}}
+                            {{--                            @foreach ($status_options as $key => $val)--}}
+                            {{--                                @if (request()->get('status') == $key)--}}
+                            {{--                                    <option value="{{ $key }}" selected>{{ $val }}</option>--}}
+                            {{--                                @else--}}
+                            {{--                                    <option value="{{ $key }}">{{ $val }}</option>--}}
+                            {{--                                @endif--}}
+                            {{--                            @endforeach--}}
                         </select>
                     </div>
                 </div>
@@ -207,30 +207,30 @@
     <script>
         let $datePicker = $('.date-picker');
 
-	    $datePicker.daterangepicker({
-		    autoUpdateInput: false,
-		    startDate: moment().subtract(7, 'days').calendar(),
-		    minDate: '2019-11-15',
-		    maxDate: moment().calendar()
-	    });
+        $datePicker.daterangepicker({
+            autoUpdateInput: false,
+            startDate: moment().subtract(7, 'days').calendar(),
+            minDate: '2019-11-15',
+            maxDate: moment().calendar()
+        });
 
-	    $datePicker.on('apply.daterangepicker', function(ev, picker) {
-		    $(this).val(picker.startDate.format(moment.localeData().longDateFormat('L')) + ' - ' + picker.endDate.format(moment.localeData().longDateFormat('L')));
-	    });
+        $datePicker.on('apply.daterangepicker', function (ev, picker) {
+            $(this).val(picker.startDate.format(moment.localeData().longDateFormat('L')) + ' - ' + picker.endDate.format(moment.localeData().longDateFormat('L')));
+        });
 
-	    $datePicker.on('cancel.daterangepicker', function(ev, picker) {
-		    $(this).val('');
-	    });
+        $datePicker.on('cancel.daterangepicker', function (ev, picker) {
+            $(this).val('');
+        });
 
-	    $('#search-form').submit(function(e) {
-		    e.preventDefault();
+        $('#search-form').submit(function (e) {
+            e.preventDefault();
 
-		    let url = $(this).attr('action') + '?' + $(this).serialize();
+            let url = $(this).attr('action') + '?' + $(this).serialize();
             console.log(url);
             $.reloadIFrame({
-			    reloadUrl: url
+                reloadUrl: url
             });
-	    });
+        });
     </script>
 @endsection
 

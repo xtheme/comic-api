@@ -1,4 +1,4 @@
-@extends('layouts.iframePage')
+@extends('layouts.contentLayout')
 
 {{-- page Title --}}
 @section('title','筛选器')
@@ -56,10 +56,10 @@
                                     <td>
                                         @forelse($item->params as $key => $value)
                                             @if($value)
-                                            <dl class="row">
-                                                <dt class="col-sm-4">{{ $key }}</dt>
-                                                <dd class="col-sm-8">{{ $value }}</dd>
-                                            </dl>
+                                                <dl class="row">
+                                                    <dt class="col-sm-4">{{ $key }}</dt>
+                                                    <dd class="col-sm-8">{{ $value }}</dd>
+                                                </dl>
                                             @endif
                                         @empty
                                         @endforelse
@@ -127,8 +127,8 @@
                 e.preventDefault();
 
                 let $this = $(this);
-                let ids   = $.checkedIds();
-                let url   = $this.attr('action') + '/' + $this.find('select[name="action"]').val();
+                let ids = $.checkedIds();
+                let url = $this.attr('action') + '/' + $this.find('select[name="action"]').val();
 
                 if (!ids) {
                     $.toast({

@@ -1,4 +1,4 @@
-@extends('layouts.iframePage')
+@extends('layouts.contentLayout')
 
 {{-- page Title --}}
 @section('title','广告列表')
@@ -71,7 +71,7 @@
                                     </td>
                                     <td>{{ $item->id }}</td>
                                     <td>{{ $item->space->name }}</td>
-                                    <td><span class="jeditable" data-pk="{{ $item->id }}" data-value="" > {{ $item->sort }}</td>
+                                    <td><span class="jeditable" data-pk="{{ $item->id }}" data-value=""> {{ $item->sort }}</td>
                                     <td><img src="{{ $item->banner }}" class="cursor-pointer" width="200px" data-lightbox alt="点击查看大图"></td>
                                     <td>{{ $item->url }}</td>
                                     <td>@if($item->updated_at){{ $item->updated_at->diffForHumans()  }}@endif</td>
@@ -119,7 +119,7 @@
                         <label for="input-nickname">广告位</label>
                         <div class="controls">
                             <select id="select-type" class="form-control" name="space_id">
-                                <option value="" >全部</option>
+                                <option value="">全部</option>
                                 @foreach($ad_spaces as $key => $item)
                                     <option value="{{$item->id}}" @if(request()->get('space_id') == $item->id){{'selected'}}@endif>{{$item->name}}</option>
                                 @endforeach
@@ -196,8 +196,8 @@
                 e.preventDefault();
 
                 let $this = $(this);
-                let ids   = $.checkedIds();
-                let url   = $this.attr('action') + '/' + $this.find('select[name="action"]').val();
+                let ids = $.checkedIds();
+                let url = $this.attr('action') + '/' + $this.find('select[name="action"]').val();
 
                 if (!ids) {
                     $.toast({
@@ -213,8 +213,8 @@
                         $.request({
                             url: url,
                             type: 'put',
-                            data: {'ids' : ids},
-                            debug   : true,
+                            data: {'ids': ids},
+                            debug: true,
                             callback: function (res) {
                                 $.reloadIFrame({
                                     title: '提交成功',
@@ -226,7 +226,7 @@
                 });
             });
 
-            $('#search-form').submit(function(e) {
+            $('#search-form').submit(function (e) {
                 e.preventDefault();
 
                 let url = $(this).attr('action') + '?' + $(this).serialize();

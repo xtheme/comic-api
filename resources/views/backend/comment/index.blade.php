@@ -1,4 +1,4 @@
-@extends('layouts.iframePage')
+@extends('layouts.contentLayout')
 
 {{-- page Title --}}
 @section('title','漫画评论列表')
@@ -188,7 +188,7 @@
 
             let data = '';
 
-            msg          = '是否确认删除所勾选的评论？';
+            msg = '是否确认删除所勾选的评论？';
             var $checked = $('.check-opt:checked');
 
             if ($checked.length == 0) {
@@ -238,15 +238,15 @@
             startDate: moment().subtract(7, 'days').calendar(),
         });
 
-        $datePicker.on('apply.daterangepicker', function(ev, picker) {
+        $datePicker.on('apply.daterangepicker', function (ev, picker) {
             $(this).val(picker.startDate.format('YYYY-MM-DD') + ' - ' + picker.endDate.format('YYYY-MM-DD'));
         });
 
-        $datePicker.on('cancel.daterangepicker', function(ev, picker) {
+        $datePicker.on('cancel.daterangepicker', function (ev, picker) {
             $(this).val('');
         });
 
-        $('#search-form').submit(function(e) {
+        $('#search-form').submit(function (e) {
             e.preventDefault();
 
             let url = $(this).attr('action') + '?' + $(this).serialize();

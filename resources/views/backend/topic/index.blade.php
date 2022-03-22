@@ -1,4 +1,4 @@
-@extends('layouts.iframePage')
+@extends('layouts.contentLayout')
 
 {{-- page Title --}}
 @section('title','主题区块')
@@ -81,7 +81,7 @@
                                         @endif
                                     </td>
                                     <td>{{ $item->filter->title }}</td>
-                                    <td><span class="jeditable" data-pk="{{ $item->id }}" data-value="" > {{ $item->sort }}</td>
+                                    <td><span class="jeditable" data-pk="{{ $item->id }}" data-value=""> {{ $item->sort }}</td>
                                     <td>{{ $item->style_alias }}</td>
                                     <td>{{ $item->created_at->diffForHumans()  }}</td>
                                     <td>
@@ -155,8 +155,8 @@
                 e.preventDefault();
 
                 let $this = $(this);
-                let ids   = $.checkedIds();
-                let url   = $this.attr('action') + '/' + $this.find('select[name="action"]').val();
+                let ids = $.checkedIds();
+                let url = $this.attr('action') + '/' + $this.find('select[name="action"]').val();
 
                 if (!ids) {
                     $.toast({

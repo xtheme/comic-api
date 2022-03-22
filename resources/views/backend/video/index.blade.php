@@ -1,4 +1,4 @@
-@extends('layouts.iframePage')
+@extends('layouts.contentLayout')
 
 {{-- page Title --}}
 @section('title','视频列表')
@@ -214,7 +214,7 @@
                 }
             });
             $.fn.editable.defaults.ajaxOptions = {type: 'PUT'};
-            $.fn.editableform.buttons          = '<button type="submit" class="btn btn-primary editable-submit">确认</button>';
+            $.fn.editableform.buttons = '<button type="submit" class="btn btn-primary editable-submit">确认</button>';
 
             $('.editable-click').editable({
                 inputclass: 'form-control',
@@ -232,17 +232,15 @@
             $('.tags-selector').multiselect({
                 buttonWidth: '100%',
                 buttonTextAlignment: 'left',
-                buttonText: function(options, select) {
+                buttonText: function (options, select) {
                     if (options.length === 0) {
                         return '请选择标签';
-                    }
-                    else {
+                    } else {
                         var labels = [];
-                        options.each(function() {
+                        options.each(function () {
                             if ($(this).attr('label') !== undefined) {
                                 labels.push($(this).attr('label'));
-                            }
-                            else {
+                            } else {
                                 labels.push($(this).html());
                             }
                         });
@@ -255,8 +253,8 @@
                 e.preventDefault();
 
                 let $this = $(this);
-                let ids   = $.checkedIds();
-                let url   = $this.attr('action') + '/' + $this.find('select[name="action"]').val();
+                let ids = $.checkedIds();
+                let url = $this.attr('action') + '/' + $this.find('select[name="action"]').val();
 
                 if (!ids) {
                     $.toast({

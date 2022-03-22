@@ -1,4 +1,4 @@
-@extends('layouts.iframePage')
+@extends('layouts.contentLayout')
 
 {{-- page Title --}}
 @section('title','渠道列表')
@@ -43,17 +43,17 @@
                                         <p class="text-center font-medium-1">{{ $item->id }}</p>
                                         <p class="text-center">{{ $item->description }}</p>
                                         @if($item->safe_landing)
-                                        <p class="text-center"><span class="badge badge-pill badge-light-danger">安全落地頁</span></p>
+                                            <p class="text-center"><span class="badge badge-pill badge-light-danger">安全落地頁</span></p>
                                         @endif
                                     </td>
                                     <td>
                                         <ul class="list-unstyled">
-                                        @foreach ($domains as $domain)
-                                            <li class="d-flex justify-content-start">
-                                                <div class="d-inline p-50"><a data-modal data-size="sm" data-height="26vh" href="{{ route('backend.qrcode') }}?url={{ $domain->domain }}?ch={{ $item->id }}" title="QRCode"><i class="bx bx-barcode"></i></a></div>
-                                                <div class="d-inline p-50">{{ $domain->domain }}?ch={{ $item->id }}</div>
-                                            </li>
-                                        @endforeach
+                                            @foreach ($domains as $domain)
+                                                <li class="d-flex justify-content-start">
+                                                    <div class="d-inline p-50"><a data-modal data-size="sm" data-height="26vh" href="{{ route('backend.qrcode') }}?url={{ $domain->domain }}?ch={{ $item->id }}" title="QRCode"><i class="bx bx-barcode"></i></a></div>
+                                                    <div class="d-inline p-50">{{ $domain->domain }}?ch={{ $item->id }}</div>
+                                                </li>
+                                            @endforeach
                                         </ul>
                                     </td>
                                     <td>{{ $item->register_count }}</td>

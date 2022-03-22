@@ -1,4 +1,4 @@
-@extends('layouts.iframePage')
+@extends('layouts.contentLayout')
 
 {{-- page Title --}}
 @section('title','订单列表')
@@ -61,7 +61,7 @@
                                     <td>
                                         <a class="btn btn-primary btn-sm" data-modal href="{{ route('backend.order.detail', $order->id) }}" title="查看">查看</a>
                                         @if($order->status == 0 && $order->can_manual_callback)
-                                        <a class="btn btn-warning btn-sm" data-confirm href="{{ route('backend.order.callback', $order->id) }}" title="手动上分">補單</a>
+                                            <a class="btn btn-warning btn-sm" data-confirm href="{{ route('backend.order.callback', $order->id) }}" title="手动上分">補單</a>
                                         @endif
                                     </td>
                                 </tr>
@@ -206,24 +206,24 @@
             }
         });
 
-        $created.on('apply.daterangepicker', function(ev, picker) {
+        $created.on('apply.daterangepicker', function (ev, picker) {
             $(this).val(picker.startDate.format('YYYY-MM-DD HH:mm:ss') + ' - ' + picker.endDate.format('YYYY-MM-DD HH:mm:ss'));
         });
 
-        $created.on('cancel.daterangepicker', function(ev, picker) {
+        $created.on('cancel.daterangepicker', function (ev, picker) {
             $(this).val('');
         });
 
-	    $('#search-form').submit(function(e) {
-		    e.preventDefault();
+        $('#search-form').submit(function (e) {
+            e.preventDefault();
 
-		    let url = $(this).attr('action') + '?' + $(this).serialize();
+            let url = $(this).attr('action') + '?' + $(this).serialize();
             console.log(url);
 
             $.reloadIFrame({
-			    reloadUrl: url
+                reloadUrl: url
             });
-	    });
+        });
     </script>
 @endsection
 

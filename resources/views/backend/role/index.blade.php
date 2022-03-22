@@ -1,4 +1,4 @@
-@extends('layouts.iframePage')
+@extends('layouts.contentLayout')
 
 {{-- page Title --}}
 @section('title', '角色列表')
@@ -78,8 +78,8 @@
                 e.preventDefault();
 
                 let $this = $(this);
-                let ids   = $.checkedIds();
-                let url   = $this.attr('action') + '/' + $this.find('select[name="action"]').val();
+                let ids = $.checkedIds();
+                let url = $this.attr('action') + '/' + $this.find('select[name="action"]').val();
 
                 if (!ids) {
                     parent.$.toast({
@@ -95,8 +95,8 @@
                         $.request({
                             url: url,
                             type: 'put',
-                            data: {'ids' : ids},
-                            debug   : true,
+                            data: {'ids': ids},
+                            debug: true,
                             callback: function (res) {
                                 $.reloadIFrame({
                                     title: '提交成功',
@@ -108,7 +108,7 @@
                 });
             });
 
-            $('#search-form').submit(function(e) {
+            $('#search-form').submit(function (e) {
                 e.preventDefault();
 
                 let url = $(this).attr('action') + '?' + $(this).serialize();

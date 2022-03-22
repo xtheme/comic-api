@@ -1,4 +1,4 @@
-@extends('layouts.iframePage')
+@extends('layouts.contentLayout')
 
 {{-- page Title --}}
 @section('title','渠道日报表')
@@ -111,18 +111,18 @@
 @section('page-scripts')
     <script>
         $(document).ready(function () {
-	        $('.date-picker').pickadate({
+            $('.date-picker').pickadate({
                 firstDay: 1,
-		        format: 'yyyy-mm-dd',
-		        monthsFull: [ '一月', '二月', '三月', '四月', '五月', '六月', '七月', '八月', '九月', '十月', '十一月', '十二月' ],
-		        monthsShort: [ '一', '二', '三', '四', '五', '六', '七', '八', '九', '十', '十一', '十二' ],
-		        weekdaysShort: [ '日', '一', '二', '三', '四', '五', '六' ],
-		        today: '今天',
-		        clear: '清除',
-		        close: '关闭'
-	        });
+                format: 'yyyy-mm-dd',
+                monthsFull: ['一月', '二月', '三月', '四月', '五月', '六月', '七月', '八月', '九月', '十月', '十一月', '十二月'],
+                monthsShort: ['一', '二', '三', '四', '五', '六', '七', '八', '九', '十', '十一', '十二'],
+                weekdaysShort: ['日', '一', '二', '三', '四', '五', '六'],
+                today: '今天',
+                clear: '清除',
+                close: '关闭'
+            });
 
-            $('#search-form').submit(function(e) {
+            $('#search-form').submit(function (e) {
                 e.preventDefault();
 
                 let url = $(this).attr('action') + '?' + $(this).serialize();

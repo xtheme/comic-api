@@ -1,4 +1,4 @@
-@extends('layouts.iframePage')
+@extends('layouts.contentLayout')
 
 {{-- page Title --}}
 @section('title','用戶列表')
@@ -10,11 +10,11 @@
 
 @section('content')
     <section id="config-list">
-{{--        <div class="mb-1">--}}
-{{--            <a href="#" data-batch class="btn btn-primary" role="button" aria-pressed="true">批量启用</a>--}}
-{{--            <a href="#" data-batch class="btn btn-danger" role="button" aria-pressed="true">批量封禁</a>--}}
-{{--            <a href="{{ route('backend.user.create') }}" data-modal class="btn btn-primary" title="添加用户">添加用户</a>--}}
-{{--        </div>--}}
+        {{--        <div class="mb-1">--}}
+        {{--            <a href="#" data-batch class="btn btn-primary" role="button" aria-pressed="true">批量启用</a>--}}
+        {{--            <a href="#" data-batch class="btn btn-danger" role="button" aria-pressed="true">批量封禁</a>--}}
+        {{--            <a href="{{ route('backend.user.create') }}" data-modal class="btn btn-primary" title="添加用户">添加用户</a>--}}
+        {{--        </div>--}}
         <div class="card">
             <div class="card-header">
                 <div class="float-left">
@@ -258,63 +258,63 @@
     <script>
         let $datePicker = $('.date-picker');
 
-	    $datePicker.daterangepicker({
-		    autoUpdateInput: false,
-		    startDate: moment().subtract(7, 'days').calendar(),
-		    minDate: '2019-11-15',
-		    maxDate: moment().calendar()
-	    });
+        $datePicker.daterangepicker({
+            autoUpdateInput: false,
+            startDate: moment().subtract(7, 'days').calendar(),
+            minDate: '2019-11-15',
+            maxDate: moment().calendar()
+        });
 
-	    $datePicker.on('apply.daterangepicker', function(ev, picker) {
-		    $(this).val(picker.startDate.format(moment.localeData().longDateFormat('L')) + ' - ' + picker.endDate.format(moment.localeData().longDateFormat('L')));
-	    });
+        $datePicker.on('apply.daterangepicker', function (ev, picker) {
+            $(this).val(picker.startDate.format(moment.localeData().longDateFormat('L')) + ' - ' + picker.endDate.format(moment.localeData().longDateFormat('L')));
+        });
 
-	    $datePicker.on('cancel.daterangepicker', function(ev, picker) {
-		    $(this).val('');
-	    });
+        $datePicker.on('cancel.daterangepicker', function (ev, picker) {
+            $(this).val('');
+        });
 
-	    $('#search-form').submit(function(e) {
-		    e.preventDefault();
+        $('#search-form').submit(function (e) {
+            e.preventDefault();
 
-		    let url = $(this).attr('action') + '?' + $(this).serialize();
+            let url = $(this).attr('action') + '?' + $(this).serialize();
             console.log(url);
             $.reloadIFrame({
-			    reloadUrl: url
+                reloadUrl: url
             });
-	    });
+        });
 
         $('#batch-action').submit(function (e) {
-	        e.preventDefault();
+            e.preventDefault();
 
-	        let $this = $(this);
-	        let ids   = $.checkedIds();
-	        let url   = $this.attr('action') + '/' + $this.find('select[name="action"]').val();
+            let $this = $(this);
+            let ids = $.checkedIds();
+            let url = $this.attr('action') + '/' + $this.find('select[name="action"]').val();
 
-	        if (!ids) {
-		        $.toast({
-			        type: 'error',
-			        message: '请先选择要操作的数据'
-		        });
-		        return false;
-	        }
+            if (!ids) {
+                $.toast({
+                    type: 'error',
+                    message: '请先选择要操作的数据'
+                });
+                return false;
+            }
 
-	        $.confirm({
-		        text: `请确认是否要继续批量操作?`,
-		        callback: function () {
-			        $.request({
-				        url: url,
-				        type: 'put',
-				        data: {'ids': ids},
-				        debug: true,
-				        callback: function (res) {
-					        $.reloadIFrame({
-						        title: '提交成功',
-						        message: '请稍后数据刷新'
-					        });
-				        }
-			        });
-		        }
-	        });
+            $.confirm({
+                text: `请确认是否要继续批量操作?`,
+                callback: function () {
+                    $.request({
+                        url: url,
+                        type: 'put',
+                        data: {'ids': ids},
+                        debug: true,
+                        callback: function (res) {
+                            $.reloadIFrame({
+                                title: '提交成功',
+                                message: '请稍后数据刷新'
+                            });
+                        }
+                    });
+                }
+            });
         });
     </script>
 @endsection

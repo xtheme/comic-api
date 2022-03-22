@@ -13,7 +13,7 @@ class DashboardController extends Controller
 {
     public function index()
     {
-        return view('backend.index');
+        return redirect()->route('backend.dashboard');
     }
 
     public function dashboard()

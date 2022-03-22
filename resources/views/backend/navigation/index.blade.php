@@ -1,4 +1,4 @@
-@extends('layouts.iframePage')
+@extends('layouts.contentLayout')
 
 {{-- page Title --}}
 @section('title','导航推荐')
@@ -43,9 +43,9 @@
                                     <td>{{ $item->target }}</td>
                                     <td>
                                         @if($item->getRawOriginal('target') == 1)
-                                        {{ optional($item->filter)->title ?? '未指派筛选器' }}
+                                            {{ optional($item->filter)->title ?? '未指派筛选器' }}
                                         @else
-                                        {{ $item->link }}
+                                            {{ $item->link }}
                                         @endif
                                     </td>
                                     <td>{{ $item->active }}</td>

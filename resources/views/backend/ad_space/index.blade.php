@@ -1,4 +1,4 @@
-@extends('layouts.iframePage')
+@extends('layouts.contentLayout')
 
 {{-- page Title --}}
 @section('title','广告位列表')
@@ -21,7 +21,7 @@
                                 <div class="form-group mr-1">
                                     <div class="controls">
                                         <select id="class-type" class="form-control" name="class">
-                                            <option value="" >全部</option>
+                                            <option value="">全部</option>
                                             @foreach($class_type as $key => $item)
                                                 <option value="{{$key}}" @if(request()->get('class') == $key){{'selected'}}@endif>{{$item}}</option>
                                             @endforeach
@@ -54,9 +54,9 @@
                                 <th>广告位名称</th>
                                 <th>广告位类型</th>
                                 <th>显示方式</th>
-{{--                                <th>备注</th>--}}
+                                {{--                                <th>备注</th>--}}
                                 <th>状态</th>
-{{--                                <th>接入广告SDK</th>--}}
+                                {{--                                <th>接入广告SDK</th>--}}
                                 <th>更新时间</th>
                                 <th>操作</th>
                             </tr>
@@ -80,13 +80,13 @@
                                             <span class="badge badge-pill badge-light-danger">下架</span>
                                         @endif
                                     </td>
-{{--                                    <td>--}}
-{{--                                        @if($item->sdk == 1)--}}
-{{--                                            <span class="badge badge-pill badge-light-primary">开启</span>--}}
-{{--                                        @else--}}
-{{--                                            <span class="badge badge-pill badge-light-secondary">关闭</span>--}}
-{{--                                        @endif--}}
-{{--                                    </td>--}}
+                                    {{--                                    <td>--}}
+                                    {{--                                        @if($item->sdk == 1)--}}
+                                    {{--                                            <span class="badge badge-pill badge-light-primary">开启</span>--}}
+                                    {{--                                        @else--}}
+                                    {{--                                            <span class="badge badge-pill badge-light-secondary">关闭</span>--}}
+                                    {{--                                        @endif--}}
+                                    {{--                                    </td>--}}
                                     <td>@if($item->updated_at){{ $item->updated_at->diffForHumans()  }}@endif</td>
                                     <td>
                                         <div class="@if(($loop->count - $loop->iteration) < 3){{'dropup'}}@else{{'dropdown'}}@endif">

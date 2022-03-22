@@ -1,4 +1,4 @@
-@extends('layouts.iframePage')
+@extends('layouts.contentLayout')
 
 {{-- page Title --}}
 @section('title','支付方案')
@@ -48,7 +48,8 @@
                                     <td>{{ $item->name }}</td>
                                     <td>{{ $item->label }}</td>
                                     <td>{{ $item->description }}</td>
-                                    <td>@if($item->list_price)<del>{{ $item->list_price }}</del> @endif<span class="text-primary">{{ $item->price }}</span></td>
+                                    <td>@if($item->list_price)
+                                            <del>{{ $item->list_price }}</del> @endif<span class="text-primary">{{ $item->price }}</span></td>
                                     <td>{{ $item->days }}@if($item->gift_days) + {{ $item->gift_days }}@endif</td>
                                     <td>{{ $item->coin }}@if($item->gift_coin) + {{ $item->gift_coin }}@endif</td>
                                     <td>
