@@ -11,10 +11,10 @@
 ==========================================================================================*/
 
 // Core variables and mixins
-@import "../../../bootstrap-extended/include";
 // Bootstrap includes
-@import "../../../components/include";
+@import "../../../bootstrap-extended/include";
 // Components includes
+@import "../../../components/include";
 
 // Import first main menu mixin
 @import "../../mixins/main-menu-mixin";
@@ -25,7 +25,7 @@
     // When page Scroll down
     .is-sticky {
         .header-navbar {
-            box-shadow: 0px 4px 12px 0 rgba(25, 42, 70, 0.13);
+            box-shadow: 0 4px 12px 0 rgba(25, 42, 70, 0.13);
         }
     }
 

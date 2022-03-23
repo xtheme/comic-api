@@ -48,10 +48,13 @@
 
 // Core variables and mixins
 
-@import "bootstrap-extended/include";   // Bootstrap includes
-@import "components/include";           // Components includes
+@import "bootstrap-extended/include";
+// Bootstrap includes
+@import "components/include";
+// Components includes
 
-@import "core/mixins/transitions";      // Template custom mixins
+@import "core/mixins/transitions";
+// Template custom mixins
 
 // layouts
 @import "core/layouts/content";
@@ -67,8 +70,10 @@
 @import "components/search";
 @import "components/chart";
 @import "components/bootstrap-social";
-@import "components/demo"; // Plugins demo, remove in real project
-@import "components/customizer"; // Customizer demo, remove in real project
+@import "components/demo";
+// Plugins demo, remove in real project
+@import "components/customizer";
+// Customizer demo, remove in real project
 @import "components/chips";
 @import "components/divider";
 @import "components/error";

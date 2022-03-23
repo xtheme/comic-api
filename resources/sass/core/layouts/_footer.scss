@@ -12,52 +12,54 @@
 /* ---------- */
 
 footer {
-  &.footer {
-    padding: $spacer ($spacer * 2.2);
-    a {
-      margin-left: 0.3rem;
-      color: $body-color;
+    &.footer {
+        padding: $spacer ($spacer * 2.2);
+
+        a {
+            margin-left: 0.3rem;
+            color: $body-color;
+        }
+
+        // Heart Icon Css
+        span {
+            i {
+                color: $danger;
+                position: relative;
+                top: 1px;
+            }
+        }
     }
-    // Heart Icon Css
-    span {
-      i {
-        color: $danger;
-        position: relative;
-        top: 1px;
-      }
-    }
-  }
 }
 
 /* Fixed Footer */
 .fixed-footer {
-  footer {
-    position: fixed;
-    right: 0;
-    bottom: 0;
-    left: 0;
-    z-index: 1030;
-    // Footer Light
-    &.footer-light {
-      background: $white;
-      box-shadow: 0px 8px 12px 12px rgba(25, 42, 70, 0.12);
+    footer {
+        position: fixed;
+        right: 0;
+        bottom: 0;
+        left: 0;
+        z-index: 1030;
+        // Footer Light
+        &.footer-light {
+            background: $white;
+            box-shadow: 0px 8px 12px 12px rgba(25, 42, 70, 0.12);
+        }
     }
-  }
 }
 
 /* Footer Hidden */
 .footer-hidden {
-  footer {
-    display: none;
-  }
+    footer {
+        display: none;
+    }
 }
 
 // scroll to Top Footer Button
 .scroll-top {
-  position: fixed;
-  bottom: 5%;
-  padding: 0.5rem 0.83rem !important;
-  right: 30px;
-  display: none;
-  z-index: 99;
+    position: fixed;
+    bottom: 5%;
+    padding: 0.5rem 0.83rem !important;
+    right: 30px;
+    display: none;
+    z-index: 99;
 }

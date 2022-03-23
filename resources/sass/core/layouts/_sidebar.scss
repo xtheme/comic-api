@@ -12,49 +12,50 @@
 /* ------ */
 
 .sidebar {
-  position: relative;
-  width: 100%;
+    position: relative;
+    width: 100%;
 
-  // Media Query For Large Screen
-  @include media-breakpoint-up(lg) {
-    vertical-align: top;
-  }
+    // Media Query For Large Screen
+    @include media-breakpoint-up(lg) {
+        vertical-align: top;
+    }
 }
+
 /* Sidebar Fixed */
 .sidebar-fixed {
-  position: fixed;
-  height: 100%;
-  overflow: scroll;
+    position: fixed;
+    height: 100%;
+    overflow: scroll;
 }
 
 /* Sidenav Overlay */
 .sidenav-overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 120vh;
-  background-color: rgba($black, 0.5);
-  z-index: 997;
-  display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 120vh;
+    background-color: rgba($black, 0.5);
+    z-index: 997;
+    display: none;
 }
 
 /* Drag Target */
 .drag-target {
-  height: 100%;
-  width: 30px;
-  position: fixed;
-  top: 0;
-  left: -10px;
-  z-index: 1036;
+    height: 100%;
+    width: 30px;
+    position: fixed;
+    top: 0;
+    left: -10px;
+    z-index: 1036;
 }
 
 // Media Query For Large Screen
 @include media-breakpoint-up(lg) {
-  .sidebar-left {
-    float: left;
-  }
-  .sidebar-right {
-    float: right;
-  }
+    .sidebar-left {
+        float: left;
+    }
+    .sidebar-right {
+        float: right;
+    }
 }
