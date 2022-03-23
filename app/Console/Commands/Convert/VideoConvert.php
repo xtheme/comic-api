@@ -51,6 +51,8 @@ class VideoConvert extends Command
         '10' => 'video.attribute', // 属性
     ];
 
+    private string $source_platform = 'qqc';
+
     /**
      * Create a new command instance.
      *
@@ -78,7 +80,8 @@ class VideoConvert extends Command
         $last_source_id = DB::table('source_movies')->where('status', 1)->orderByDesc('id')->first()->id;
 
         // 本地最新視頻 id
-        $last_target_id = DB::table('videos')->where('source_platform', 'nasu')->orderByDesc('source_id')->first()->source_id ?? 0;
+        $last_record = DB::table('videos')->where('source_platform', $this->source_platform)->orderByDesc('source_id')->first();
+        $last_target_id = $last_record ? $last_record->source_id : 0;
 
         if ($last_source_id > $last_target_id) {
             // 分割集合
@@ -125,7 +128,7 @@ class VideoConvert extends Command
                         'number' => strtoupper($item->number),
                         'producer' => $item->producer,
                         'release_date' => $item->publish_time,
-                        'source_platform' => 'qqc',
+                        'source_platform' => $this->source_platform,
                         'source_id' => $item->id,
                         'created_at' => now(),
                         'actor' => join(',', $tmp_actors),
@@ -140,7 +143,7 @@ class VideoConvert extends Command
 
             $this->line('本次數據已全數遷移！');
 
-            $latest_target_id = DB::table('videos')->where('source_platform', 'nasu')->orderByDesc('source_id')->first()->source_id;
+            $latest_target_id = DB::table('videos')->where('source_platform', $this->source_platform)->orderByDesc('source_id')->first()->source_id;
 
             $pending_num = DB::table('source_movies')->where('id', '>', $latest_target_id)->where('status', 1)->count();
 
@@ -185,8 +188,8 @@ class VideoConvert extends Command
 
         $videos = Video::orderBy('id')->get(['id', 'source_id']);
 
-        $videos->each(function ($item) use ($list) {
-            $source = DB::table('source_movies')->where('id', $item->source_id)->first();
+        $videos->each(function (Video $video) use ($list) {
+            $source = DB::table('source_movies')->where('id', $video->source_id)->first();
             $actor = explode(',', $source->actor);
             $tags = [];
             foreach ($actor as $actor_id) {
@@ -198,7 +201,8 @@ class VideoConvert extends Command
                     }
                 }
             }
-            $item->attachTags($tags, 'video.actor');
+            $video->attachTags($tags, 'video.actor');
+            $this->line('#' . $video->id . ' 已添加女優標籤！');
         });
 
         $this->line('已添加女優標籤！');
@@ -244,6 +248,7 @@ class VideoConvert extends Command
             foreach ($tags as $cate => $tag) {
                 $video->attachTags($tag, $cate);
             }
+            $this->line('#' . $video->id . ' 已添加視頻標籤！');
         });
 
         $this->line('已添加視頻標籤！');

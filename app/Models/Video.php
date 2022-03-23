@@ -74,8 +74,12 @@ class Video extends BaseModel
         return explode(',', $value);
     }
 
-    public function getUrlAttribute($value): string
+    public function getStoragePathAttribute($value): string
     {
+        if (!$value) {
+            return '';
+        }
+
         return getConfig('video', 'hls_domain') . $value;
     }
 

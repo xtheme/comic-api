@@ -84,35 +84,39 @@ class VideoController extends BaseController
         // 針對免費仔
         if (!$purchased) {
             $cache_key = 'free:video:' . $user->id;
+            $cache_exists = Cache::has($cache_key);
 
-            if (Cache::has($cache_key)) {
+            // 首次觀看
+            if (!$cache_exists) {
+                $purchased = true;
+                $ttl = getTtlRemainingToday();
+                Cache::put($cache_key, 1, $ttl);
+            }
+
+            // 每日免费观看次数
+            if ($cache_exists) {
                 $free_count = Cache::get($cache_key);
-                // 每日免费观看次数
                 if ($free_count < getConfig('video', 'daily_free_views', 3)) {
                     $purchased = true;
                     Cache::increment($cache_key);
                 }
-            } else {
-                $purchased = true;
-                $ttl = getTtlRemainingToday();
-                Cache::put($cache_key, 1, $ttl);
             }
         }
 
         if (!$purchased) {
             return Response::jsonError('您今天的免费次数已用尽！');
-        } else {
-            try {
-                $video = Video::select(['storage_path'])->findOrFail($video_id);
+        }
 
-                $data = [
-                    'storage_path' => $video->storage_path,
-                ];
+        try {
+            $video = Video::select(['storage_path'])->findOrFail($video_id);
 
-                return Response::jsonSuccess(__('api.success'), $data);
-            } catch (\Exception $e) {
-                throw new HttpResponseException(Response::jsonError('视频不存在或已下架！'));
-            }
+            $data = [
+                'storage_path' => $video->storage_path,
+            ];
+
+            return Response::jsonSuccess(__('api.success'), $data);
+        } catch (\Exception $e) {
+            throw new HttpResponseException(Response::jsonError('视频不存在或已下架！'));
         }
     }
 
@@ -124,7 +128,7 @@ class VideoController extends BaseController
 
         if ($id) {
             $video = Video::findOrFail($id);
-            $tags = $video->tagged_tags;
+            $tags = $video->keywords;
             shuffle($tags);
             $tags = array_chunk($tags, 3)[0];
         }

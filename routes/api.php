@@ -52,9 +52,9 @@ Route::middleware(['api'])->as('api.')->group(function () {
 
         // 视频
         Route::prefix('video')->group(function () {
+            Route::get('/recommend/{id?}', [Api\VideoController::class, 'recommend']);
             Route::get('/{id}', [Api\VideoController::class, 'detail']);
             Route::get('/play/{id}', [Api\VideoController::class, 'play']);
-            Route::get('/recommend/{id?}', [Api\VideoController::class, 'recommend']);
         });
 
         // 樓鳳履歷
@@ -161,7 +161,7 @@ Route::middleware(['api'])->as('api.')->group(function () {
 Route::fallback(function () {
     return response()->json([
         'code' => 200,
-        'msg'  => 'Route Not Found!',
+        'msg' => 'Route Not Found!',
     ], 404);
 });
 
