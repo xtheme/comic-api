@@ -17,7 +17,7 @@ return [
         //Options:bg-white(default for vertical-menu),bg-primary(default horizontal-menu), bg-success,bg-danger,bg-info,bg-warning,bg-dark.(Note:color only visible when you scroll down)
         'navbarType' => 'hidden',
         // options:fixed,static,hidden (note: Horizontal-menu template only support fixed and static)
-        'isMenuCollapsed' => false,
+        'isMenuCollapsed' => true,
         // options:true or false(default)  Warning:this option is not applicable for horizontal-menu template
         'footerType' => 'static',
         //options:fixed,static,hidden

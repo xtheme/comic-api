@@ -1,7 +1,7 @@
 <?php
 
 return [
-    "Site Title" => "后台管理",
+    "Site Title" => "AvBody",
     "Dashboard" => "控制台",
 
     "Channel" => "推广渠道",

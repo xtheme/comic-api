@@ -55,7 +55,7 @@
                                 </tr>
                             @empty
                                 <tr>
-                                    <td colspan="7" class="text-center font-medium-1">暂无数据</td>
+                                    <td colspan="8" class="text-center font-medium-1">暂无数据</td>
                                 </tr>
                             @endforelse
                             </tbody>
