@@ -107,6 +107,12 @@
             "icon": "bx bxs-book-open"
         },
         {
+            "url": "/backend/video",
+            "name": "Videos",
+            "slug": "videos",
+            "icon": "bx bxs-videos"
+        },
+        {
             "url": "/backend/resume",
             "name": "Resumes",
             "slug": "resumes",
