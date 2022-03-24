@@ -17,7 +17,7 @@ class CreateVideosTable extends Migration
             $table->bigIncrements('id');
             $table->string('title')->comment('名称');
             $table->string('cover')->default('')->comment('封面图');
-            $table->string('storage_path')->default('')->comment('影片路徑');
+            $table->string('hls')->default('')->comment('影片路徑');
             $table->string('author')->default('')->comment('作者');
             $table->text('description')->nullable()->comment('简介');
             $table->unsignedTinyInteger('ribbon')->default(0)->comment('角标: 0=无, 1=限时免费, 2=会员抢先')->index();

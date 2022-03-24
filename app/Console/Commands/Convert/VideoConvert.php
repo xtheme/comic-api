@@ -116,7 +116,7 @@ class VideoConvert extends Command
                     return [
                         'title' => $item->video_name,
                         'cover' => $item->preview_pics,
-                        'storage_path' => $item->url,
+                        'hls' => $item->url,
                         'description' => $item->description,
                         'status' => $item->status,
                         'length' => $item->movie_length,

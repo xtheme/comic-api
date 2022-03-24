@@ -74,7 +74,7 @@ class Video extends BaseModel
         return explode(',', $value);
     }
 
-    public function getStoragePathAttribute($value): string
+    public function getHlsAttribute($value): string
     {
         if (!$value) {
             return '';

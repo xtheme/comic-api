@@ -74,44 +74,46 @@ class VideoController extends BaseController
             return Response::jsonError('请先登录会员！');
         }
 
-        // 購買記錄
-        if ($user->is_vip) {
-            $purchased = true;
-        } else {
-            $purchased = $user->purchase_logs()->where('type', 'video')->where('item_id', $video_id)->exists();
-        }
-
-        // 針對免費仔
-        if (!$purchased) {
-            $cache_key = 'free:video:' . $user->id;
-            $cache_exists = Cache::has($cache_key);
-
-            // 首次觀看
-            if (!$cache_exists) {
+        if (config('app.env') === 'production') {
+            // 購買記錄
+            if ($user->is_vip) {
                 $purchased = true;
-                $ttl = getTtlRemainingToday();
-                Cache::put($cache_key, 1, $ttl);
+            } else {
+                $purchased = $user->purchase_logs()->where('type', 'video')->where('item_id', $video_id)->exists();
             }
 
-            // 每日免费观看次数
-            if ($cache_exists) {
-                $free_count = Cache::get($cache_key);
-                if ($free_count < getConfig('video', 'daily_free_views', 3)) {
+            // 針對免費仔
+            if (!$purchased) {
+                $cache_key = 'free:video:' . $user->id;
+                $cache_exists = Cache::has($cache_key);
+
+                // 首次觀看
+                if (!$cache_exists) {
                     $purchased = true;
-                    Cache::increment($cache_key);
+                    $ttl = getTtlRemainingToday();
+                    Cache::put($cache_key, 1, $ttl);
+                }
+
+                // 每日免费观看次数
+                if ($cache_exists) {
+                    $free_count = Cache::get($cache_key);
+                    if ($free_count < getConfig('video', 'daily_free_views', 3)) {
+                        $purchased = true;
+                        Cache::increment($cache_key);
+                    }
                 }
             }
-        }
 
-        if (!$purchased) {
-            return Response::jsonError('您今天的免费次数已用尽！');
+            if (!$purchased) {
+                return Response::jsonError('您今天的免费次数已用尽！');
+            }
         }
 
         try {
-            $video = Video::select(['storage_path'])->findOrFail($video_id);
+            $video = Video::select(['hls'])->findOrFail($video_id);
 
             $data = [
-                'storage_path' => $video->storage_path,
+                'hls' => $video->hls,
             ];
 
             return Response::jsonSuccess(__('api.success'), $data);
