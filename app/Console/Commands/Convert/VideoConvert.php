@@ -37,7 +37,6 @@ class VideoConvert extends Command
         '9' => '其他地区',
     ];
 
-
     // 標籤類型
     public static array $tag_countries = [
         '1' => 'video.subject', // 主题

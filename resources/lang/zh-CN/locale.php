@@ -11,7 +11,10 @@ return [
     "Channel List" => "渠道列表",
     "Channel Daily Report" => "渠道日报表",
     "Daily Report" => "每日汇总",
-    "Domains" => "推广域名",
+
+    "Domains" => "域名管理",
+    "Channel Domains" => "推广域名",
+    "Resource Domains" => "资源域名",
 
     "Customers" => "会员管理",
     "Customer List" => "会员列表",

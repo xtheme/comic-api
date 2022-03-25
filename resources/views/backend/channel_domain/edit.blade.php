@@ -12,18 +12,18 @@
         @method('put')
         <div class="form-body">
             <div class="row">
-                <div class="col-12">
-                    <div class="form-group">
-                        <label>类型</label>
-                        <div class="controls">
-                            <select class="form-control" name="type">
-                                @foreach ($type_options as $key => $val)
-                                    <option value="{{ $key }}" @if($domain->type == $key){{'selected'}}@endif>{{ $val }}</option>
-                                @endforeach
-                            </select>
-                        </div>
-                    </div>
-                </div>
+                {{--                <div class="col-12">--}}
+                {{--                    <div class="form-group">--}}
+                {{--                        <label>类型</label>--}}
+                {{--                        <div class="controls">--}}
+                {{--                            <select class="form-control" name="type">--}}
+                {{--                                @foreach ($type_options as $key => $val)--}}
+                {{--                                    <option value="{{ $key }}" @if($domain->type == $key){{'selected'}}@endif>{{ $val }}</option>--}}
+                {{--                                @endforeach--}}
+                {{--                            </select>--}}
+                {{--                        </div>--}}
+                {{--                    </div>--}}
+                {{--                </div>--}}
                 <div class="col-12">
                     <div class="form-group">
                         <label>域名</label>
@@ -78,19 +78,19 @@
 {{-- page scripts --}}
 @section('page-scripts')
     <script>
-		$(document).ready(function () {
+        $(document).ready(function () {
             $('.date-picker').pickadate({
                 firstDay: 1,
                 format: 'yyyy-mm-dd',
-                monthsFull: [ '一月', '二月', '三月', '四月', '五月', '六月', '七月', '八月', '九月', '十月', '十一月', '十二月' ],
-                monthsShort: [ '一', '二', '三', '四', '五', '六', '七', '八', '九', '十', '十一', '十二' ],
-                weekdaysShort: [ '日', '一', '二', '三', '四', '五', '六' ],
+                monthsFull: ['一月', '二月', '三月', '四月', '五月', '六月', '七月', '八月', '九月', '十月', '十一月', '十二月'],
+                monthsShort: ['一', '二', '三', '四', '五', '六', '七', '八', '九', '十', '十一', '十二'],
+                weekdaysShort: ['日', '一', '二', '三', '四', '五', '六'],
                 today: '今天',
                 clear: '清除',
                 close: '关闭'
             });
 
-            $('#search-form').submit(function(e) {
+            $('#search-form').submit(function (e) {
                 e.preventDefault();
 
                 let url = $(this).attr('action') + '?' + $(this).serialize();
@@ -100,34 +100,34 @@
                 });
             });
 
-			$('#form').submit(function (e) {
-				e.preventDefault();
+            $('#form').submit(function (e) {
+                e.preventDefault();
 
-				$.request({
-					url     : $(this).attr('action'),
-					type    : $(this).attr('method'),
-					data    : $(this).serialize(),
-					debug: true,
-					callback: function (res) {
-						if (res.code == 200) {
-							// iframe.blade.php
-							parent.$.hideModal();
+                $.request({
+                    url: $(this).attr('action'),
+                    type: $(this).attr('method'),
+                    data: $(this).serialize(),
+                    debug: true,
+                    callback: function (res) {
+                        if (res.code == 200) {
+                            // iframe.blade.php
+                            parent.$.hideModal();
 
-							// iframeLayoutMaster.blade.php
-							parent.$.reloadIFrame({
-								title  : '提交成功',
-								message: '请稍后数据刷新'
-							});
-						} else {
-							$.toast({
-								type: 'error',
-								title: '提交失败',
-								message: res.msg
-							});
-						}
-					}
-				});
-			});
-		});
+                            // iframeLayoutMaster.blade.php
+                            parent.$.reloadIFrame({
+                                title: '提交成功',
+                                message: '请稍后数据刷新'
+                            });
+                        } else {
+                            $.toast({
+                                type: 'error',
+                                title: '提交失败',
+                                message: res.msg
+                            });
+                        }
+                    }
+                });
+            });
+        });
     </script>
 @endsection

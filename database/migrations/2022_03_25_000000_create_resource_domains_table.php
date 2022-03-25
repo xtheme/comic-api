@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateChannelDomainsTable extends Migration
+class CreateResourceDomainsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,9 +13,9 @@ class CreateChannelDomainsTable extends Migration
      */
     public function up()
     {
-        Schema::create('channel_domains', function (Blueprint $table) {
+        Schema::create('resource_domains', function (Blueprint $table) {
             $table->integer('id')->autoIncrement()->comment('主键');
-            // $table->string('type', 20)->comment('域名类型：api/wap/android');
+            $table->string('type', 20)->comment('域名类型：api/wap/android');
             $table->string('domain', 100)->comment('域名');
             $table->string('desc', 255)->nullable()->comment('使用说明');
             $table->tinyInteger('status')->comment('域名状态：1、备用；2、启用；3、被拦截');
@@ -34,6 +34,6 @@ class CreateChannelDomainsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('channel_domains');
+        Schema::dropIfExists('resource_domains');
     }
 }

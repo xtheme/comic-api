@@ -1,7 +1,7 @@
 @extends('layouts.contentLayout')
 
 {{-- page Title --}}
-@section('title','推广域名')
+@section('title','资源域名')
 
 {{-- vendor style --}}
 @section('vendor-styles')
@@ -10,7 +10,7 @@
 @section('content')
     <section>
         <div class="mb-1">
-            <a href="{{ route('backend.channel_domain.create') }}" class="btn btn-primary" data-modal data-size="md" data-height="50vh" title="添加域名" role="button" aria-pressed="true">添加域名</a>
+            <a href="{{ route('backend.resource_domain.create') }}" class="btn btn-primary" data-modal data-size="md" data-height="50vh" title="添加域名" role="button" aria-pressed="true">添加域名</a>
         </div>
         <div class="card">
             <div class="card-header">
@@ -24,7 +24,7 @@
                             <thead>
                             <tr>
                                 <th>ID</th>
-                                {{--                                <th>类型</th>--}}
+                                <th>类型</th>
                                 <th>域名</th>
                                 <th>备注</th>
                                 <th>状态</th>
@@ -37,7 +37,7 @@
                             @forelse ($list as $item)
                                 <tr>
                                     <td>{{ $item->id }}</td>
-                                    {{--                                    <td>{{ $type_options[$item->type] }}</td>--}}
+                                    <td>{{ $type_options[$item->type] }}</td>
                                     <td>{{ $item->domain }}</td>
                                     <td>{{ $item->desc }}</td>
                                     <td>{{ $status_options[$item->status] }}</td>
@@ -48,7 +48,7 @@
                                             <span class="bx bx-dots-vertical-rounded font-medium-3 dropdown-toggle nav-hide-arrow cursor-pointer"
                                                   id="dropdownMenuButton{{ $item->id }}" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></span>
                                             <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuButton{{ $item->id }}">
-                                                <a class="dropdown-item" data-modal data-size="md" data-height="50vh" href="{{ route('backend.channel_domain.edit', $item->id) }}" title="修改域名"><i class="bx bx-edit-alt mr-1"></i>修改</a>
+                                                <a class="dropdown-item" data-modal data-size="md" data-height="50vh" href="{{ route('backend.resource_domain.edit', $item->id) }}" title="修改域名"><i class="bx bx-edit-alt mr-1"></i>修改</a>
                                             </div>
                                         </div>
                                     </td>

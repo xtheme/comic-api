@@ -263,14 +263,24 @@ Route::middleware(['auth', 'auth.route.role'])->prefix('backend')->as('backend.'
         Route::put('update/{id}', [Backend\ChannelController::class, 'update'])->name('update');
     });
 
-    // 域名
+    // 代理域名
     Route::prefix('channel_domain')->as('channel_domain.')->group(function () {
         Route::get('/', [Backend\ChannelDomainController::class, 'index'])->name('index');
         Route::get('create', [Backend\ChannelDomainController::class, 'create'])->name('create');
         Route::post('store', [Backend\ChannelDomainController::class, 'store'])->name('store');
-        Route::get('edit/{id}', [Backend\ChannelDomainController::class, 'edit'])->name('edit');
-        Route::put('update/{id}', [Backend\ChannelDomainController::class, 'update'])->name('update');
-        Route::delete('destroy/{id}', [Backend\ChannelDomainController::class, 'destroy'])->name('destroy');
+        Route::get('edit/{id}', [Backend\ResourceDomainControllerChannelDomainController::class, 'edit'])->name('edit');
+        Route::put('update/{id}', [Backend\ResourceDomainControllerChannelDomainController::class, 'update'])->name('update');
+        Route::delete('destroy/{id}', [Backend\ResourceDomainControllerChannelDomainController::class, 'destroy'])->name('destroy');
+    });
+
+    // 資源域名
+    Route::prefix('resource_domain')->as('resource_domain.')->group(function () {
+        Route::get('/', [Backend\ResourceDomainController::class, 'index'])->name('index');
+        Route::get('create', [Backend\ResourceDomainController::class, 'create'])->name('create');
+        Route::post('store', [Backend\ResourceDomainController::class, 'store'])->name('store');
+        Route::get('edit/{id}', [Backend\ResourceDomainController::class, 'edit'])->name('edit');
+        Route::put('update/{id}', [Backend\ResourceDomainController::class, 'update'])->name('update');
+        Route::delete('destroy/{id}', [Backend\ResourceDomainController::class, 'destroy'])->name('destroy');
     });
 
     // 操作记录

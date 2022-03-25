@@ -7,10 +7,19 @@
             "icon": "bx bxs-home"
         },
         {
-            "url": "/backend/channel_domain",
             "name": "Domains",
             "slug": "domains",
-            "icon": "bx bxs-server"
+            "icon": "bx bxs-server",
+            "submenu": [
+                {
+                    "url": "/backend/resource_domain",
+                    "name": "Resource Domains"
+                },
+                {
+                    "url": "/backend/channel_domain",
+                    "name": "Channel Domains"
+                }
+            ]
         },
         {
             "name": "Channel",

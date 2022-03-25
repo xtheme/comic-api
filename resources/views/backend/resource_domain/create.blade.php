@@ -8,21 +8,21 @@
 @endsection
 
 @section('content')
-    <form id="form" class="form" method="post" action="{{ route('backend.channel_domain.store') }}">
+    <form id="form" class="form" method="post" action="{{ route('backend.resource_domain.store') }}">
         <div class="form-body">
             <div class="row">
-                {{--                <div class="col-12">--}}
-                {{--                    <div class="form-group">--}}
-                {{--                        <label>类型</label>--}}
-                {{--                        <div class="controls">--}}
-                {{--                            <select class="form-control" name="type">--}}
-                {{--                                @foreach ($type_options as $key => $val)--}}
-                {{--                                    <option value="{{ $key }}">{{ $val }}</option>--}}
-                {{--                                @endforeach--}}
-                {{--                            </select>--}}
-                {{--                        </div>--}}
-                {{--                    </div>--}}
-                {{--                </div>--}}
+                <div class="col-12">
+                    <div class="form-group">
+                        <label>类型</label>
+                        <div class="controls">
+                            <select class="form-control" name="type">
+                                @foreach ($type_options as $key => $val)
+                                    <option value="{{ $key }}">{{ $val }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                    </div>
+                </div>
                 <div class="col-12">
                     <div class="form-group">
                         <label>域名</label>
