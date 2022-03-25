@@ -136,7 +136,7 @@ class VideoController extends BaseController
         }
 
         if ($tags) {
-            $videos = Video::withCount(['visit_logs'])->withAnyTags($tags)->where('id', '!=', $id)->active()->inRandomOrder()->limit($limit)->get();
+            $videos = Video::withCount(['visit_logs'])->active()->withAnyTagsOfAnyType($tags)->where('id', '!=', $id)->inRandomOrder()->limit($limit)->get();
         } else {
             $videos = Video::withCount(['visit_logs'])->active()->inRandomOrder()->limit($limit)->get();
         }
@@ -151,7 +151,6 @@ class VideoController extends BaseController
                 'actor' => $video->actor,
                 'keywords' => $video->keywords,
                 'view_counts' => $video->view_counts,
-                // 'status' => $video->status,
             ];
         })->toArray();
 
