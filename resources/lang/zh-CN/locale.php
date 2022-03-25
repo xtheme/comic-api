@@ -2,6 +2,9 @@
 
 return [
     "Site Title" => "AvBody",
+    "Yes" => "是",
+    "No" => "否",
+
     "Dashboard" => "控制台",
 
     "Channel" => "推广渠道",

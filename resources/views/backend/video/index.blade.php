@@ -87,8 +87,8 @@
                                         @if($video->cover )<img src="{{ $video->cover }}" alt="" class="cursor-pointer" height="60px" data-lightbox title="点击查看大图">@endif
                                     </td>
                                     <td>{{ $video->number }}</td>
-                                    <td>{{ $video->mosaic }}</td>
-                                    <td>{{ $video->style }}</td>
+                                    <td class="text-center">@if($video->mosaic== 1){{ __('locale.Yes') }}@endif</td>
+                                    <td class="text-center">{{ $video->shooting_type }}</td>
                                     <td>@if($video->ribbon)<span class="badge badge-pill badge-light-primary">{{ $ribbon_options[$video->ribbon] ?? '' }}</span>@endif</td>
                                     <td>
                                         @if($video->status == 1)
@@ -111,7 +111,7 @@
                                             <span class="bx bx-dots-vertical-rounded font-medium-3 dropdown-toggle nav-hide-arrow cursor-pointer"
                                                   id="dropdownMenuButton{{ $video->id }}" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></span>
                                             <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuButton{{ $video->id }}">
-                                                <a class="dropdown-item" data-modal href="{{ route('backend.video.edit', $video->id) }}" title="编辑视频"><i class="bx bx-edit-alt mr-1"></i>编辑视频</a>
+                                                <a class="dropdown-item" data-modal data-size="full" href="{{ route('backend.video.edit', $video->id) }}" title="编辑视频"><i class="bx bx-edit-alt mr-1"></i>编辑视频</a>
                                                 <a class="dropdown-item" data-destroy href="{{ route('backend.video.destroy', $video->id) }}" title="刪除视频"><i class="bx bx-trash mr-1"></i>刪除视频</a>
                                             </div>
                                         </div>

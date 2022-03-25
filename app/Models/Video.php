@@ -53,8 +53,12 @@ class Video extends BaseModel
 
     public function getTaggedTagsAttribute()
     {
-        // return $this->tags->where('suggest', 1)->sortByDesc('order_column')->take(3)->pluck('name')->toArray();
         return $this->tags->pluck('name')->toArray();
+    }
+
+    public function getShootingTypeAttribute(): string
+    {
+        return VideoOptions::SHOOTING[$this->style] ?? '';
     }
 
     public function setNumberAttribute($value)

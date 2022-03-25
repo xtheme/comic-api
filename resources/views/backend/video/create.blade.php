@@ -8,24 +8,12 @@
 @endsection
 
 @section('content')
-    <form id="form" class="form" method="post" action="{{ route('backend.video.store') }}" novalidate>
+    <form id="form" class="form" method="post" action="{{ route('backend.video.create') }}" novalidate>
         <div class="form-body">
             <div class="row">
                 <div class="col-12">
                     <div class="form-group">
-                        <label>标签分类</label>
-                        <div class="controls">
-                            <select id="tags-selector" class="form-control" name="tag[]" multiple="multiple">
-                                @foreach($tags as $tag)
-                                    <option value="{{ $tag }}">{{ $tag }}</option>
-                                @endforeach
-                            </select>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-12">
-                    <div class="form-group">
-                        <label><span class="danger">*</span> 作品名称</label>
+                        <label><span class="danger">*</span> 名称</label>
                         <div class="controls">
                             <input type="text" class="form-control" name="title" value="" placeholder="">
                         </div>
@@ -33,9 +21,69 @@
                 </div>
                 <div class="col-4">
                     <div class="form-group">
-                        <label>作者</label>
+                        <label>番号</label>
                         <div class="controls">
-                            <input type="text" class="form-control" name="author" value="" placeholder="">
+                            <input type="text" class="form-control" name="number" value="" placeholder="">
+                        </div>
+                    </div>
+                </div>
+                <div class="col-4">
+                    <div class="form-group">
+                        <label>片商</label>
+                        <div class="controls">
+                            <input type="text" class="form-control" name="producer" value="" placeholder="">
+                        </div>
+                    </div>
+                </div>
+                <div class="col-4">
+                    <div class="form-group">
+                        <label>女優</label>
+                        <div class="controls">
+                            <input type="text" class="form-control" name="actor" value="" placeholder="">
+                        </div>
+                    </div>
+                </div>
+                <div class="col-4">
+                    <div class="form-group">
+                        <label>影片长度</label>
+                        <div class="controls">
+                            <input type="text" class="form-control" name="length" value="" placeholder="">
+                        </div>
+                    </div>
+                </div>
+                <div class="col-4">
+                    <div class="form-group">
+                        <label>马赛克</label>
+                        <div class="controls">
+                            <select class="form-control" name="mosaic">
+                                @foreach ($mosaic_options as $key => $val)
+                                    <option value="{{ $key }}">{{ $val }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-4">
+                    <div class="form-group">
+                        <label>类型</label>
+                        <div class="controls">
+                            <select class="form-control" name="style">
+                                @foreach ($style_options as $key => $val)
+                                    <option value="{{ $key }}">{{ $val }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-4">
+                    <div class="form-group">
+                        <label>字幕</label>
+                        <div class="controls">
+                            <select class="form-control" name="subtitle">
+                                @foreach ($subtitle_options as $key => $val)
+                                    <option value="{{ $key }}">{{ $val }}</option>
+                                @endforeach
+                            </select>
                         </div>
                     </div>
                 </div>
@@ -44,7 +92,6 @@
                         <label>角标</label>
                         <div class="controls">
                             <select class="form-control" name="ribbon">
-                                <option value="0">无</option>
                                 @foreach ($ribbon_options as $key => $val)
                                     <option value="{{ $key }}">{{ $val }}</option>
                                 @endforeach
@@ -64,19 +111,19 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-12">
+                <div class="col-6">
                     <div class="form-group">
-                        <span class="float-right font-size-small text-light">(图片尺寸比例请保持 16:9)</span>
-                        <label><span class="danger">*</span> 封面图</label>
-                        <div class="input-group">
-                            <div class="input-group">
-                                <input type="text" class="form-control image-path" name="cover" autocomplete="off">
-                                <input type="file" class="hidden-file-upload" data-path="video">
-                                <div class="input-group-append" id="input-file-addon">
-                                    <button class="btn btn-primary upload-image" type="button">上传</button>
-                                </div>
-                            </div>
-                            <div class="upload-image-callback"></div>
+                        <label>封面图路徑</label>
+                        <div class="controls">
+                            <input type="text" class="form-control" name="cover" value="" placeholder="">
+                        </div>
+                    </div>
+                </div>
+                <div class="col-6">
+                    <div class="form-group">
+                        <label>串流路徑</label>
+                        <div class="controls">
+                            <input type="text" class="form-control" name="hls" value="" placeholder="">
                         </div>
                     </div>
                 </div>
@@ -86,6 +133,31 @@
                         <textarea name="description" class="form-control" rows="5" placeholder="内容简介"></textarea>
                     </div>
                 </div>
+                @foreach($categories as $title => $item)
+                    <div class="col-12">
+                        <div class="form-group">
+                            <label>{{ $title }}</label>
+                            <div class="controls">
+                                <div class="row mt-1">
+                                    @foreach($item['tags'] as $tag)
+                                        <div class="col-2">
+                                            <div class="form-group">
+                                                <div class="controls">
+                                                    <fieldset>
+                                                        <div class="checkbox">
+                                                            <input type="checkbox" name="tags[{{ $item['code'] }}][]" id="{{ $tag }}" value="{{ $tag }}">
+                                                            <label for="{{ $tag }}">{{ $tag }}</label>
+                                                        </div>
+                                                    </fieldset>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    @endforeach
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                @endforeach
                 <div class="col-12 d-flex justify-content-end">
                     <button type="submit" class="btn btn-primary">提交</button>
                 </div>
@@ -102,45 +174,23 @@
 {{-- page scripts --}}
 @section('page-scripts')
     <script>
-		$(document).ready(function () {
-            $('#tags-selector').multiselect({
-                buttonWidth: '100%',
-                buttonTextAlignment: 'left',
-                buttonText: function(options, select) {
-                    if (options.length === 0) {
-                        return '请选择标签';
-                    }
-                    else {
-                        var labels = [];
-                        options.each(function() {
-                            if ($(this).attr('label') !== undefined) {
-                                labels.push($(this).attr('label'));
-                            }
-                            else {
-                                labels.push($(this).html());
-                            }
-                        });
-                        return labels.join(', ') + '';
-                    }
-                }
-            });
-
-			$('#form').submit(function (e) {
-				e.preventDefault();
+        $(document).ready(function () {
+            $('#form').submit(function (e) {
+                e.preventDefault();
 
                 $.request({
-					url     : $(this).attr('action'),
-					type    : $(this).attr('method'),
-					data    : $(this).serialize(),
-					debug: true,
-					callback: function (res) {
+                    url: $(this).attr('action'),
+                    type: $(this).attr('method'),
+                    data: $(this).serialize(),
+                    debug: true,
+                    callback: function (res) {
                         if (res.code == 200) {
                             // iframe.blade.php
                             parent.$.hideModal();
 
                             // iframeLayoutMaster.blade.php
                             parent.$.reloadIFrame({
-                                title  : '提交成功',
+                                title: '提交成功',
                                 message: '请稍后数据刷新'
                             });
                         } else {
@@ -150,9 +200,9 @@
                                 message: res.msg
                             });
                         }
-					}
-				});
-			});
-		});
+                    }
+                });
+            });
+        });
     </script>
 @endsection

@@ -31,8 +31,6 @@ class VideoController extends Controller
         $order = $request->input('order') ?? 'created_at';
         $sort = $request->input('sort') ?? 'desc';
 
-        // return Video::with(['series', 'series.cdn'])->withCount(['series' , 'visit_histories' , 'play_histories'])->when($title, function (Builder $query, $title) {
-        // return Video::withCount(['series' , 'visit_histories' , 'play_histories'])->when($title, function (Builder $query, $title) {
         $query = Video::when($title, function (Builder $query, $title) {
             return $query->whereLike('title', $title);
         })->when($author, function (Builder $query, $author) {
@@ -82,6 +80,9 @@ class VideoController extends Controller
     public function create()
     {
         $data = [
+            'mosaic_options' => Options::MOSAIC_OPTIONS,
+            'style_options' => Options::STYLE_OPTIONS,
+            'subtitle_options' => Options::SUBTITLE_OPTIONS,
             'status_options' => Options::STATUS_OPTIONS,
             'ribbon_options' => Options::RIBBON_OPTIONS,
             'categories' => getCategoryByType('video'),
@@ -105,7 +106,7 @@ class VideoController extends Controller
 
     public function edit($id)
     {
-        $video = Video::firstOrFail($id);
+        $video = Video::findOrFail($id);
 
         $data = [
             'mosaic_options' => Options::MOSAIC_OPTIONS,
@@ -115,8 +116,6 @@ class VideoController extends Controller
             'ribbon_options' => Options::RIBBON_OPTIONS,
             'categories' => getCategoryByType('video'),
             'video' => $video,
-            // 'tagged' => $video->tagged->pluck('tag_name')->toArray(),
-            'tagged' => [],
         ];
 
         return view('backend.video.edit')->with($data);
@@ -140,6 +139,7 @@ class VideoController extends Controller
     public function destroy($id)
     {
         $video = Video::findOrFail($id);
+        $video->tags()->detach();
         $video->delete();
 
         return Response::jsonSuccess(__('response.destroy.success'));
