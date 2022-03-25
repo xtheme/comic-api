@@ -75,8 +75,8 @@
         e.preventDefault();
         let $this = $(this);
         $.openImage({
-            size: $this.data('size') || '',
-            height: $this.data('height') || '',
+            size: $this.data('size') || 'lg',
+            height: $this.data('height') || '50vh',
             title: '检视图片',
             image: $this.attr('src')
         });

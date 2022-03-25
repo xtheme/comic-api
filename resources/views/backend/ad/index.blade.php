@@ -181,17 +181,6 @@
                 }
             });
 
-            $('[data-lightbox]').on('click', function (e) {
-                e.preventDefault();
-                let $this = $(this);
-                $.openImage({
-                    size: $this.data('size') || '',
-                    height: $this.data('height') || '30vh',
-                    title: '检视图片',
-                    image: $this.attr('src')
-                });
-            });
-
             $('#batch-action').submit(function (e) {
                 e.preventDefault();
 
