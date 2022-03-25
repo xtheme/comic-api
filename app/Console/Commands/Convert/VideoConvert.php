@@ -71,10 +71,10 @@ class VideoConvert extends Command
     public function handle()
     {
         // 每次轉詞數據量
-        $batch_num = 1000;
+        $batch_num = 30000;
 
         // 每多少筆切割一次操作
-        $chunk_num = 100;
+        $chunk_num = 1000;
 
         // 動畫源最新視頻 id
         $last_source_id = DB::table('source_movies')->where('status', 1)->orderByDesc('id')->first()->id;
