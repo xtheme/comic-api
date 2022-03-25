@@ -121,7 +121,7 @@ class VideoConvert extends Command
                         'status' => $item->status,
                         'length' => $item->movie_length,
                         'country' => $item->country,
-                        'mosaic' => $item->video_type,
+                        'mosaic' => $item->video_type === 0 ? 1 : 0,
                         'style' => $item->shooting_type,
                         'subtitle' => $item->subtitle_type,
                         'view_counts' => $item->views,
@@ -130,7 +130,8 @@ class VideoConvert extends Command
                         'release_date' => $item->publish_time,
                         'source_platform' => $this->source_platform,
                         'source_id' => $item->id,
-                        'created_at' => now(),
+                        'created_at' => $item->created_at,
+                        'updated_at' => $item->updated_at,
                         'actor' => join(',', $tmp_actors),
                         'keywords' => join(',', $tmp_tags),
                     ];
