@@ -23,14 +23,4 @@ class Tag extends \Spatie\Tags\Tag
     {
         return $this->category->name ?? '';
     }
-
-    public static function findFromString(string $name, string $type = null, string $locale = null)
-    {
-        $locale = $locale ?? app()->getLocale();
-
-        return static::query()
-            ->where("name->{$locale}", $name)
-            ->where('type', $type)
-            ->first();
-    }
 }

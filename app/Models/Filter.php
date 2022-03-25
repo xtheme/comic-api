@@ -2,9 +2,7 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
 
 class Filter extends BaseModel
@@ -32,7 +30,8 @@ class Filter extends BaseModel
         // 標籤條件
         if ($this->tags) {
             foreach ($this->tags as $type => $tags) {
-                $query->withAllTags($tags, $type);
+                $query->withAnyTags($tags, $type);
+                // $query->withAllTags($tags, $type);
             }
         }
 
