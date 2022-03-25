@@ -24,7 +24,7 @@ class VideoController extends BaseController
 
         $data = Cache::remember($cache_key, 28800, function () use ($video_id) {
             try {
-                $video = Video::withCount(['visit_logs', 'favorite_logs'])->findOrFail($video_id);
+                $video = Video::withCount(['visit_logs', 'favorite_logs'])->active()->findOrFail($video_id);
 
                 return [
                     'id' => $video->id,
@@ -110,7 +110,7 @@ class VideoController extends BaseController
         }
 
         try {
-            $video = Video::select(['hls'])->findOrFail($video_id);
+            $video = Video::select(['hls'])->active()->findOrFail($video_id);
 
             $data = [
                 'hls' => $video->hls,
@@ -129,16 +129,16 @@ class VideoController extends BaseController
         $tags = [];
 
         if ($id) {
-            $video = Video::findOrFail($id);
+            $video = Video::active()->findOrFail($id);
             $tags = $video->keywords;
             shuffle($tags);
             $tags = array_chunk($tags, 3)[0];
         }
 
         if ($tags) {
-            $videos = Video::withCount(['visit_logs'])->withAnyTags($tags)->where('id', '!=', $id)->inRandomOrder()->limit($limit)->get();
+            $videos = Video::withCount(['visit_logs'])->withAnyTags($tags)->where('id', '!=', $id)->active()->inRandomOrder()->limit($limit)->get();
         } else {
-            $videos = Video::withCount(['visit_logs'])->inRandomOrder()->limit($limit)->get();
+            $videos = Video::withCount(['visit_logs'])->active()->inRandomOrder()->limit($limit)->get();
         }
 
         $data = $videos->map(function ($video) {
@@ -151,6 +151,7 @@ class VideoController extends BaseController
                 'actor' => $video->actor,
                 'keywords' => $video->keywords,
                 'view_counts' => $video->view_counts,
+                // 'status' => $video->status,
             ];
         })->toArray();
 

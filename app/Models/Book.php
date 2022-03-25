@@ -9,6 +9,9 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Spatie\Tags\HasTags;
 
+/**
+ * @method static active() get active books
+ */
 class Book extends BaseModel
 {
     use SoftDeletes, HasTags, HasRanking;

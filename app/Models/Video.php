@@ -4,10 +4,14 @@ namespace App\Models;
 
 use App\Enums\VideoOptions;
 use App\Traits\HasRanking;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Spatie\Tags\HasTags;
 
+/**
+ * @method static active() get active videos
+ */
 class Video extends BaseModel
 {
     use SoftDeletes, HasTags, HasRanking;
@@ -25,6 +29,11 @@ class Video extends BaseModel
         'source_platform',
         'source_id',
     ];
+
+    public function scopeActive(Builder $query): Builder
+    {
+        return $query->where('status', 1);
+    }
 
     /**
      * 訪問 BookObserver

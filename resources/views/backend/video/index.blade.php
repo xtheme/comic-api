@@ -75,10 +75,10 @@
                                     <td>
                                         {{ $video->title }}
 
-                                        @if(!empty($video->tagged))
-                                            <div class="d-flex align-content-center flex-wrap" style="margin-top: 5px;">
-                                                @foreach($video->tags->sortByDesc('suggest') as $tag)
-                                                    <span class="badge badge-pill @if($tag->suggest == 1){{'badge-light-primary'}}@else{{'badge-light-secondary'}}@endif" style="margin-right: 3px; margin-bottom: 3px;">{{ $tag->name }}</span>
+                                        @if(!empty($video->keywords))
+                                            <div class="d-flex align-content-center flex-wrap mt-50">
+                                                @foreach($video->keywords as $tag)
+                                                    <span class="badge badge-pill badge-light-primary mr-30">{{ $tag }}</span>
                                                 @endforeach
                                             </div>
                                         @endif

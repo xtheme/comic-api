@@ -45,7 +45,7 @@ class RankingController extends Controller
     {
         switch ($type) {
             case 'video':
-                $videos = Video::whereIn('id', $ids)->get();
+                $videos = Video::whereIn('id', $ids)->active()->get();
 
                 $data = $videos->map(function ($video) use ($raw_data) {
                     return [
@@ -267,11 +267,11 @@ class RankingController extends Controller
 
         switch ($type) {
             case 'video':
-                $result = Video::where('status', 1)->latest('created_at')->limit(self::LIMIT)->get();
+                $result = Video::active()->latest('created_at')->limit(self::LIMIT)->get();
                 break;
             case 'book':
             default:
-                $result = Book::where('status', 1)->latest('created_at')->limit(self::LIMIT)->get();
+                $result = Book::active()->latest('created_at')->limit(self::LIMIT)->get();
                 break;
         }
 
