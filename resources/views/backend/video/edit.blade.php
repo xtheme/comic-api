@@ -133,31 +133,6 @@
                         <textarea name="description" class="form-control" rows="5" placeholder="内容简介">{{ $video->description }}</textarea>
                     </div>
                 </div>
-                @foreach($categories as $title => $item)
-                    <div class="col-12">
-                        <div class="form-group">
-                            <label>{{ $title }}</label>
-                            <div class="controls">
-                                <div class="row mt-1">
-                                    @foreach($item['tags'] as $tag)
-                                        <div class="col-1">
-                                            <div class="form-group">
-                                                <div class="controls">
-                                                    <fieldset>
-                                                        <div class="checkbox">
-                                                            <input type="checkbox" name="tags[{{ $item['code'] }}][]" id="{{ $tag }}" value="{{ $tag }}" @if(in_array($tag, $video->keywords)){{'checked'}}@endif>
-                                                            <label for="{{ $tag }}">{{ $tag }}</label>
-                                                        </div>
-                                                    </fieldset>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    @endforeach
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                @endforeach
                 <div class="col-12 d-flex justify-content-end">
                     <button type="submit" class="btn btn-primary">提交</button>
                 </div>

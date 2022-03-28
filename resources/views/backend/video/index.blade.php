@@ -11,9 +11,9 @@
 
 @section('content')
     <section id="config-list">
-        <div class="mb-1">
+        {{--<div class="mb-1">
             <a href=" {{ route('backend.video.create') }}" data-modal data-size="full" title="添加视频" class="btn btn-primary glow">添加视频</a>
-        </div>
+        </div>--}}
         <div class="card">
             <div class="card-header">
                 <div class="float-left">
@@ -111,6 +111,7 @@
                                             <span class="bx bx-dots-vertical-rounded font-medium-3 dropdown-toggle nav-hide-arrow cursor-pointer"
                                                   id="dropdownMenuButton{{ $video->id }}" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></span>
                                             <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuButton{{ $video->id }}">
+                                                <a class="dropdown-item" data-modal data-size="full" href="{{ route('backend.video.edit.tags', $video->id) }}" title="编辑标签"><i class="bx bxs-tag mr-1"></i>编辑标签</a>
                                                 <a class="dropdown-item" data-modal data-size="full" href="{{ route('backend.video.edit', $video->id) }}" title="编辑视频"><i class="bx bx-edit-alt mr-1"></i>编辑视频</a>
                                                 <a class="dropdown-item" data-destroy href="{{ route('backend.video.destroy', $video->id) }}" title="刪除视频"><i class="bx bx-trash mr-1"></i>刪除视频</a>
                                             </div>

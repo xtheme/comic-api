@@ -208,6 +208,8 @@ Route::middleware(['auth', 'auth.route.role'])->prefix('backend')->as('backend.'
         Route::post('store', [Backend\VideoController::class, 'store'])->name('store');
         Route::get('edit/{id}', [Backend\VideoController::class, 'edit'])->name('edit');
         Route::post('update/{id}', [Backend\VideoController::class, 'update'])->name('update');
+        Route::get('editTags/{id}', [Backend\VideoController::class, 'editTags'])->name('edit.tags');
+        Route::post('updateTags/{id}', [Backend\VideoController::class, 'updateTags'])->name('update.tags');
         Route::delete('destroy/{id}', [Backend\VideoController::class, 'destroy'])->name('destroy');
         Route::put('batch/{action?}', [Backend\VideoController::class, 'batch'])->name('batch');
         Route::put('editable/{field}', [Backend\VideoController::class, 'editable'])->name('editable');

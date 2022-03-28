@@ -127,11 +127,36 @@ class VideoController extends Controller
         $video->fill($request->input());
         $video->save();
 
+        return Response::jsonSuccess(__('response.update.success'));
+    }
+
+    public function editTags($id)
+    {
+        $video = Video::findOrFail($id);
+
+        $data = [
+            'categories' => getCategoryByType('video'),
+            'video' => $video,
+        ];
+
+        return view('backend.video.editTags')->with($data);
+    }
+
+    public function updateTags(Request $request, $id)
+    {
+        $video = Video::findOrFail($id);
+
+        $keywords = [];
+
         if ($request->has('tags') && is_array($request->input('tags'))) {
-            foreach ($request->input('tags') as $type => $tag) {
-                $video->syncTagsWithType($tag, $type);
+            foreach ($request->input('tags') as $type => $tags) {
+                $video->syncTagsWithType($tags, $type);
+                $keywords[] = join(',', $tags);
             }
         }
+
+        $video->keywords = join(',', $keywords);
+        $video->save();
 
         return Response::jsonSuccess(__('response.update.success'));
     }
