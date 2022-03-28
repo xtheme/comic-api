@@ -41,7 +41,7 @@ class BookTagsConvert extends Command
     public function handle()
     {
         $books = Book::all();
-        
+
         $books->each(function ($book) {
             $keywords = [];
 
@@ -74,7 +74,7 @@ class BookTagsConvert extends Command
             $book->keywords = join(',', $keywords);
             $book->save();
 
-            $this->line('#' . $book->id . '标签已更新!');
+            $this->line('漫画 #' . $book->id . ' 标签已更新!');
         });
 
 
