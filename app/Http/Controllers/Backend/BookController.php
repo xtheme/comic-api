@@ -250,7 +250,9 @@ class BookController extends Controller
                 // 批量收费
                 $books = Book::whereIn('id', $ids)->get();
                 foreach ($books as $book) {
-                    $book->chapters()->where('episode', '>', getConfig('comic', 'default_charge_chapter'))->update(['price' => getConfig('comic', 'default_charge_point')]);
+                    $book->chapters()
+                        ->where('episode', '>', getConfig('comic', 'default_charge_chapter', 3))
+                        ->update(['price' => getConfig('comic', 'default_charge_point', 5)]);
                 }
                 break;
             case 'destroy':
