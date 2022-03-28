@@ -12,7 +12,7 @@
 @section('content')
     <section id="config-list">
         <div class="mb-1">
-            <a href=" {{ route('backend.video.create') }}" data-modal data-height="55vh" title="添加视频" class="btn btn-primary glow">添加视频</a>
+            <a href=" {{ route('backend.video.create') }}" data-modal data-size="full" title="添加视频" class="btn btn-primary glow">添加视频</a>
         </div>
         <div class="card">
             <div class="card-header">
@@ -51,7 +51,7 @@
                                     </div>
                                 </th>
                                 <th>ID</th>
-                                <th>作品</th>
+                                <th style="max-width: 30vw !important;">作品</th>
                                 <th>封面图</th>
                                 <th>番号</th>
                                 <th>马赛克</th>
@@ -72,13 +72,13 @@
                                         </div>
                                     </td>
                                     <td>{{ $video->id }}</td>
-                                    <td>
+                                    <td style="max-width: 30vw !important;">
                                         {{ $video->title }}
 
                                         @if(!empty($video->keywords))
                                             <div class="d-flex align-content-center flex-wrap mt-50">
                                                 @foreach($video->keywords as $tag)
-                                                    <span class="badge badge-pill badge-light-primary mr-30">{{ $tag }}</span>
+                                                    <span class="badge badge-pill badge-light-primary m-tag">{{ $tag }}</span>
                                                 @endforeach
                                             </div>
                                         @endif

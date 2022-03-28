@@ -228,14 +228,16 @@ table.table {
 .multiselect-container.dropdown-menu {
     overflow-y: scroll;
     max-height: 50vh;
+    z-index: 1052;
+    position: absolute;
 
     .dropdown-item {
         display: inline-block;
-        width: 10rem;
+        width: 33.3333333333%;
 
         label {
             font-size: 1rem;
-            margin-left: .1rem;
+            margin: .1rem;
         }
     }
 }
@@ -256,14 +258,8 @@ table.table {
     }
 }
 
-.m-30 {
-    margin: 3px !important;
-}
-
-.mr-30 {
+.m-tag {
     margin-right: 3px !important;
+    margin-bottom: 3px !important;
 }
 
-.ml-30 {
-    margin-left: 3px !important;
-}

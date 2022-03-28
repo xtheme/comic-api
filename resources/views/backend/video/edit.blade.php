@@ -140,7 +140,7 @@
                             <div class="controls">
                                 <div class="row mt-1">
                                     @foreach($item['tags'] as $tag)
-                                        <div class="col-2">
+                                        <div class="col-1">
                                             <div class="form-group">
                                                 <div class="controls">
                                                     <fieldset>
