@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Traits\HasRanking;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasOne;
@@ -10,6 +11,9 @@ use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Storage;
 use Spatie\Tags\HasTags;
 
+/**
+ * @method static active() get active records
+ */
 class Resume extends Model
 {
     use HasFactory, HasTags, HasRanking;
@@ -38,6 +42,11 @@ class Resume extends Model
         'contact' => 'array',
         'album' => 'array',
     ];
+
+    public function scopeActive(Builder $query): Builder
+    {
+        return $query->where('status', 1);
+    }
 
     public function province(): HasOne
     {

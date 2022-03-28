@@ -2,38 +2,75 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Enums\ResumeOptions;
+use App\Models\ChinaArea;
+use App\Models\ChinaCity;
+use App\Models\ChinaProvince;
 use App\Models\Resume;
-use App\Models\ResumeCity;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Response;
 
 class ResumeController extends BaseController
 {
-    public function cities(Request $request)
+    public function provinces()
     {
-        $collect = ResumeCity::with(['children', 'children.children'])->where('p_id', 0)->get();
+        $collect = ChinaProvince::get(['province_id', 'province_name']);
 
         return Response::jsonSuccess(__('api.success'), $collect);
     }
 
+    public function cities($province_id = null)
+    {
+        $collect = ChinaCity::when($province_id, function (Builder $query, $province_id) {
+            return $query->where('province_id', $province_id);
+        })->get(['city_id', 'city_name']);
+
+        return Response::jsonSuccess(__('api.success'), $collect);
+    }
+
+    public function areas($city_id = null)
+    {
+        $collect = ChinaArea::when($city_id, function (Builder $query, $city_id) {
+            return $query->where('city_id', $city_id);
+        })->get(['area_id', 'area_name']);
+
+        return Response::jsonSuccess(__('api.success'), $collect);
+    }
+
+    public function keywords()
+    {
+        $body_shape = ResumeOptions::BODY_SHAPE;
+        $service_type = ResumeOptions::SERVICE_TYPE;
+        $keywords = array_merge($body_shape, $service_type);
+
+        return Response::jsonSuccess(__('api.success'), $keywords);
+    }
+
     private function filter(Request $request): Builder
     {
+        $province_id = $request->input('province_id') ?? null;
         $city_id = $request->input('city_id') ?? null;
+        $area_id = $request->input('area_id') ?? null;
+        $keywords = $request->input('keywords');
 
         $order = $request->input('order') ?? 'updated_at';
         $sort = $request->input('sort') ?? 'desc';
         $limit = $request->input('limit') ?? 10;
 
-        return Resume::when($city_id, function (Builder $query, $city_id) {
+        return Resume::active()->when($province_id, function (Builder $query, $province_id) {
+            return $query->where('province_id', $province_id);
+        })->when($city_id, function (Builder $query, $city_id) {
             return $query->where('city_id', $city_id);
+        })->when($area_id, function (Builder $query, $area_id) {
+            return $query->where('area_id', $area_id);
         })->when($order, function (Builder $query, $order) use ($sort) {
             if ($sort == 'desc') {
                 return $query->orderByDesc($order);
             } else {
                 return $query->orderBy($order);
             }
-        })->where('status', 1)->take($limit);
+        })->withAllTags($keywords, 'resume')->take($limit);
     }
 
     // todo use api resource
@@ -41,6 +78,9 @@ class ResumeController extends BaseController
     {
         $data = [
             'id' => $resume->id,
+            'province_id' => $resume->province_id,
+            'city_id' => $resume->city_id,
+            'area_id' => $resume->area_id,
             'nickname' => $resume->nickname,
             'age' => $resume->age,
             'cup' => $resume->cup,
@@ -57,19 +97,12 @@ class ResumeController extends BaseController
         return $data;
     }
 
-    public function list(Request $request, $city = null)
+    public function list(Request $request)
     {
-        $request->merge([
-            'state' => 1,
-            'city_id' => $city,
-            'order' => 'created_at',
-            'sort' => 'desc',
-        ]);
-
         $collect = $this->filter($request)->get();
 
-        $data = $collect->map(function ($video) {
-            return $this->format($video);
+        $data = $collect->map(function ($resume) {
+            return $this->format($resume);
         })->toArray();
 
         return Response::jsonSuccess(__('api.success'), $data);
@@ -77,12 +110,12 @@ class ResumeController extends BaseController
 
     public function detail($id)
     {
-        $video = Movie::find($id);
+        $resume = Resume::find($id);
 
-        $data = $this->format($video);
+        $data = $this->format($resume);
 
         // 訪問數+1
-        $video->increment('views');
+        // $resume->increment('view_counts');
 
         return Response::jsonSuccess(__('api.success'), $data);
     }

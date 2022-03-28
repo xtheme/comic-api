@@ -340,7 +340,8 @@ Route::middleware(['auth', 'auth.route.role'])->prefix('backend')->as('backend.'
 
     // 地區 json
     Route::prefix('location')->as('location.')->group(function () {
-        Route::get('/city/{province_id?}', [Backend\LocationController::class, 'cities'])->name('cities');
-        Route::get('/area/{city_id?}', [Backend\LocationController::class, 'areas'])->name('areas');
+        Route::get('provinces', [Backend\LocationController::class, 'provinces'])->name('provinces');
+        Route::get('city/{province_id?}', [Backend\LocationController::class, 'cities'])->name('cities');
+        Route::get('area/{city_id?}', [Backend\LocationController::class, 'areas'])->name('areas');
     });
 });

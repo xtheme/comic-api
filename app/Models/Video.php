@@ -10,7 +10,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use Spatie\Tags\HasTags;
 
 /**
- * @method static active() get active videos
+ * @method static active() get active records
  */
 class Video extends BaseModel
 {
@@ -61,6 +61,9 @@ class Video extends BaseModel
         return VideoOptions::SHOOTING[$this->style] ?? '';
     }
 
+    /**
+     * 修改器: 番號一律大寫
+     */
     public function setNumberAttribute($value)
     {
         $this->attributes['number'] = strtoupper($value);
