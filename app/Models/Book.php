@@ -129,4 +129,10 @@ class Book extends BaseModel
 
         return $types[$this->end];
     }
+
+    // 标签
+    public function getKeywordsAttribute($value): array
+    {
+        return explode(',', $value);
+    }
 }

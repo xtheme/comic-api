@@ -111,14 +111,22 @@ class BookController extends Controller
     public function update(BookRequest $request, $id)
     {
         $book = Book::findOrFail($id);
-        $book->fill($request->input());
-        $book->save();
+
+        $keywords = [];
 
         if ($request->has('tags') && is_array($request->input('tags'))) {
-            foreach ($request->input('tags') as $type => $tag) {
-                $book->syncTagsWithType($tag, $type);
+            foreach ($request->input('tags') as $type => $tags) {
+                $book->syncTagsWithType($tags, $type);
+                $keywords[] = join(',', $tags);
             }
         }
+
+        $request->merge([
+            '$keywords' => join(',', $keywords),
+        ]);
+
+        $book->fill($request->input());
+        $book->save();
 
         return Response::jsonSuccess(__('response.update.success'));
     }
@@ -136,7 +144,10 @@ class BookController extends Controller
      */
     public function batch(Request $request, $action)
     {
+        // dd($request->post());
         $ids = explode(',', $request->input('ids'));
+
+        $data = [];
 
         switch ($action) {
             case 'japan':
@@ -223,12 +234,16 @@ class BookController extends Controller
                     'end' => '完结',
                 ];
                 $books = Book::whereIn('id', $ids)->get();
-                foreach ($books as $book) {
-                    $book->attachTag($tag[$action], 'book');
-                }
 
-                if ($data) {
-                    Book::whereIn('id', $ids)->update($data);
+                foreach ($books as $book) {
+                    $book->update($data);
+
+                    $book->detachTags(['日漫', '韩漫', '美漫', '写真', 'CG'], 'book');
+                    $book->attachTag($tag[$action], 'book');
+
+                    $keywords = $book->tagged_tags;
+                    $book->keywords = join(',', $keywords);
+                    $book->save();
                 }
                 break;
             case 'syncPrice':
@@ -247,7 +262,7 @@ class BookController extends Controller
         }
 
         // mass delete cache
-        foreach($ids as $id) {
+        foreach ($ids as $id) {
             $cache_key = sprintf('book:%s', $id);
             Cache::forget($cache_key);
         }
@@ -303,6 +318,10 @@ class BookController extends Controller
             foreach ($tags as $type => $tag) {
                 $book->attachTags($tag, $type);
             }
+
+            $keywords = $book->tagged_tags;
+            $book->keywords = join(',', $keywords);
+            $book->save();
         }
 
         return Response::jsonSuccess('标签已更新');
@@ -319,6 +338,10 @@ class BookController extends Controller
             foreach ($tags as $type => $tag) {
                 $book->detachTags($tag, $type);
             }
+
+            $keywords = $book->tagged_tags;
+            $book->keywords = join(',', $keywords);
+            $book->save();
         }
 
         return Response::jsonSuccess('标签已更新');

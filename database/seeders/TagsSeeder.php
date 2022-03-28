@@ -2,11 +2,9 @@
 
 namespace Database\Seeders;
 
-use App\Models\BookChapter;
 use App\Models\Category;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\App;
-use Illuminate\Support\Facades\DB;
 use Spatie\Tags\Tag;
 
 class TagsSeeder extends Seeder
@@ -19,10 +17,10 @@ class TagsSeeder extends Seeder
      */
     public function run()
     {
-        DB::statement('SET FOREIGN_KEY_CHECKS=0');
+        // DB::statement('SET FOREIGN_KEY_CHECKS=0');
         // DB::table('categories')->truncate();
-        DB::table('tags')->truncate();
-        DB::statement('SET FOREIGN_KEY_CHECKS=1');
+        // DB::table('tags')->truncate();
+        // DB::statement('SET FOREIGN_KEY_CHECKS=1');
 
         $categories = [
             'book' => '漫画',
@@ -68,7 +66,6 @@ class TagsSeeder extends Seeder
                     'name' => json_encode($name),
                     'slug' => json_encode($name),
                     'type' => $type,
-                    'suggest' => 1,
                     'order_column' => 0,
                 ];
             })->toArray();

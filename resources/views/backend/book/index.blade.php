@@ -135,8 +135,8 @@
                                             <span class="text-bold-600">{{ Str::limit($book->title, 50, '...') }}</span>
                                         </span>
                                         <div class="d-flex align-content-center flex-wrap mt-50">
-                                            @foreach($book->tags as $tag)
-                                                <span class="badge badge-pill badge-light-primary mr-25">{{ $tag->name }}</span>
+                                            @foreach($book->keywords as $tag)
+                                                <span class="badge badge-pill badge-light-primary mr-25">{{ $tag }}</span>
                                             @endforeach
                                             @if ($book->author)
                                                 <span class="badge badge-pill badge-light-warning mr-25">{{ $book->author }}</span>
@@ -377,7 +377,7 @@
 
                 let $this = $(this);
                 let ids = $.checkedIds();
-                let url = `{{ route('backend.book.price') }}`;
+                let url = $this.attr('action') + '/' + $this.find('select[name="action"]').val();
 
                 if (!ids) {
                     $.toast({
@@ -394,11 +394,10 @@
                             url: url,
                             type: 'put',
                             data: {'ids': ids},
-                            debug: true,
                             callback: function (res) {
                                 $.reloadIFrame({
                                     title: '提交成功',
-                                    message: '请稍后数据刷新'
+                                    message: res.msg
                                 });
                             }
                         });
