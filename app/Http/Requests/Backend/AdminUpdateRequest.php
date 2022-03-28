@@ -9,19 +9,17 @@ class AdminUpdateRequest extends BaseRequest
 {
     public function rules()
     {
-        $rules = [
+        return [
             'role' => 'required',
             'username' => 'alpha_num',
             'nickname' => 'required|alpha_num',
-            'password' => 'nullable|required_with:new_password',
+            'password' => 'nullable|required_with:new_password|password',
             'new_password' => [
                 'nullable',
                 'required_with:password',
                 Password::min(6),
             ],
         ];
-
-        return $rules;
     }
 
     public function attributes()

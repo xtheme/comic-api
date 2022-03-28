@@ -7,17 +7,21 @@ use App\Http\Requests\Backend\AdminUpdateRequest;
 use App\Models\Admin;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Response;
 use Spatie\Permission\Models\Role;
 
 class AdminController extends Controller
 {
+    private function getAllRoles()
+    {
+        return Role::all()->pluck('name');
+    }
+
     public function index()
     {
         $data = [
             'list' => Admin::paginate(),
-            'roles' => Role::all()->pluck('name')
+            'roles' => $this->getAllRoles(),
         ];
 
         return view('backend.admin.index')->with($data);
@@ -26,7 +30,7 @@ class AdminController extends Controller
     public function create()
     {
         $data = [
-            'roles' => Role::all()->pluck('name')
+            'roles' => $this->getAllRoles(),
         ];
 
         return view('backend.admin.create')->with($data);
@@ -49,7 +53,7 @@ class AdminController extends Controller
     {
         $data = [
             'admin' => Admin::findOrFail($id),
-            'roles' => Role::all()->pluck('name')
+            'roles' => $this->getAllRoles(),
         ];
 
         return view('backend.admin.edit')->with($data);
@@ -60,18 +64,12 @@ class AdminController extends Controller
         $admin = Admin::findOrFail($id);
         $admin->username = $request->post('username');
         $admin->nickname = $request->post('nickname');
-        // $admin->status = $request->post('status');
 
         if ($request->post('password') && $request->post('new_password')) {
-            if (!Hash::check($request->post('password'), $admin->getAuthPassword())) {
-                return Response::jsonError('原密码验证错误');
-            }
-
             $admin->password = $request->post('new_password');
         }
 
         $admin->save();
-
         $admin->syncRoles($request->post('role'));
 
         activity()->useLog('后台')->causedBy(Auth::user())->performedOn($admin)->log('编辑管理员帐号');
@@ -81,12 +79,12 @@ class AdminController extends Controller
 
     public function destroy($id)
     {
-        if ($id == 1) return Response::jsonError('无法删除超级管理员');
+        if ($id == 1) {
+            return Response::jsonError('无法删除超级管理员');
+        }
 
         $admin = Admin::findOrFail($id);
-
         $admin->roles()->detach();
-
         $admin->delete();
 
         activity()->useLog('后台')->causedBy(Auth::user())->performedOn($admin)->log('删除管理员帐号');
@@ -102,7 +100,7 @@ class AdminController extends Controller
         $ids = explode(',', $request->input('ids'));
 
         // 保護超級管理員
-        $ids = array_filter($ids, function($v, $k) {
+        $ids = array_filter($ids, function ($v, $k) {
             return $v != 1;
         }, ARRAY_FILTER_USE_BOTH);
 
