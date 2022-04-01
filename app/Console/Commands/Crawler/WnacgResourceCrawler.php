@@ -4,12 +4,21 @@ namespace App\Console\Commands\Crawler;
 
 use App\Models\ComicResource;
 use Illuminate\Console\Command;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use QL\QueryList;
+use ZipArchive;
 
+/**
+ * 各位紳士您好, 請先建立好 comic_resources 資料表
+ * 遵循以下採集步驟, 你就可以在家快樂嚕管惹
+ * 1. 採集漫畫清單 php artisan wnacg:crawler 1
+ * 2. 依據現有清單採集圖片網址 php artisan wnacg:crawler 2
+ * 3. 將圖片下載回本地並重新編號排序 php artisan wnacg:crawler 3
+ */
 class WnacgResourceCrawler extends Command
 {
-    protected $signature = 'wnacg:crawler';
+    protected $signature = 'wnacg:crawler {process}';
 
     protected $description = 'Command description';
 
@@ -17,23 +26,68 @@ class WnacgResourceCrawler extends Command
     protected string $source_domain = 'https://www.wnacg.org'; // 類別: 漢化單行本
     protected int $category = 9; // 類別: 漢化單行本
     protected string $type = 'jp'; // 日漫
-    protected int $translate = 1; // 漢化
+    protected int $translate = 1; // 中文翻译
 
     public function handle()
     {
-        // if ($this->confirm('開始爬取漫畫清單?')) {
-        //     $this->crawlComicList();
-        // }
+        $process = $this->argument('process');
+        $this->info($process);
+        switch ($process) {
+            case '1':
+                if ($this->confirm('開始採集漫畫清單?')) {
+                    $this->crawlComicList();
+                }
+                break;
+            case '2':
+                if ($this->confirm('依據現有清單採集圖片網址?')) {
+                    $this->crawlRawImages();
+                }
+                break;
+            case '3':
+                if ($this->confirm('將圖片下載回本地並重新編號排序?')) {
+                    $this->downloadImages();
+                }
+                break;
+            default:
+                $this->error('請選擇流程');
+                break;
+        }
+    }
 
-        // if ($this->confirm('開始爬取漫畫詳情?')) {
-        //     $this->crawlComicDetail();
-        // }
+    private function getLastPage()
+    {
+        $url = sprintf('%s/albums-index-cate-%s.html', $this->source_domain, $this->category);
 
-        // if ($this->confirm('開始爬取漫畫原圖路徑?')) {
-        //     $this->crawlRawImages();
-        // }
+        $ql = QueryList::get($url);
 
-        $this->test();
+        $paginator = $ql->find('.paginator>a')->texts()->toArray();
+
+        $last_page = end($paginator);
+
+        $ql->destruct();
+
+        return $last_page;
+    }
+
+    /**
+     * Process 2
+     *
+     * @param  ComicResource  $comic
+     * @return false|mixed
+     */
+    private function getComicTotalPage(ComicResource $comic)
+    {
+        $url = sprintf('%s/photos-index-aid-%s.html', $this->source_domain, $comic->source_id);
+
+        $ql = QueryList::get($url);
+
+        $paginator = $ql->find('.paginator>a')->texts()->toArray();
+
+        $last_page = end($paginator);
+
+        $ql->destruct();
+
+        return $last_page;
     }
 
     /**
@@ -62,14 +116,15 @@ class WnacgResourceCrawler extends Command
             $insert = [];
             foreach ($data as $row) {
                 $source_id = preg_replace('/\D/', '', $row['link']);
-                $cover = Str::start($row['cover'], 'http:');
+                $cover = Str::start($row['cover'], 'https:');
                 $insert[] = [
                     'source_platform' => $this->source_platform,
                     'source_id' => $source_id,
                     'type' => $this->type,
                     'translate' => $this->translate,
                     'title' => $row['text'],
-                    'cover' => $cover,
+                    'raw_cover' => $cover,
+                    'process' => 1,
                 ];
             }
 
@@ -77,7 +132,7 @@ class WnacgResourceCrawler extends Command
 
             ComicResource::upsert($insert, ['source_platform', 'source_id']);
 
-            $this->info('第 '.$i.' 頁');
+            $this->info('第 ' . $i . ' 頁');
 
             $ql->destruct();
         }
@@ -85,74 +140,15 @@ class WnacgResourceCrawler extends Command
         $this->info('採集完成');
     }
 
-    private function getLastPage()
-    {
-        $url = sprintf('%s/albums-index-cate-%s.html', $this->source_domain, $this->category);
-
-        $ql = QueryList::get($url);
-
-        $paginator = $ql->find('.paginator>a')->texts()->toArray();
-
-        $last_page = end($paginator);
-
-        $ql->destruct();
-
-        return $last_page;
-    }
-
-    private function getComicTotalPage(ComicResource $comic)
-    {
-        $url = sprintf('%s/photos-index-aid-%s.html', $this->source_domain, $comic->source_id);
-
-        $ql = QueryList::get($url);
-
-        $paginator = $ql->find('.paginator>a')->texts()->toArray();
-
-        $last_page = end($paginator);
-
-        $ql->destruct();
-
-        return $last_page;
-    }
-
-    /**
-     * 爬取基礎漫畫清單
-     * @return void
-     */
-    private function crawlComicDetail()
-    {
-        $pending_data = ComicResource::where('crawl_detail', 0)->get()->chunk(200);
-
-        $pending_data->each(function ($items) {
-            $items->each(function (ComicResource $item) {
-                $source_id = $item->source_id;
-
-                $url = sprintf('%s/photos-index-aid-%s.html', $this->source_domain, $source_id);
-
-                $ql = QueryList::get($url);
-                $range = $ql->find('#bodywrap.userwrap');
-                $description = $range->find('.uwconn>p')->text();
-                $keywords = $range->find('.uwconn>.addtags>a.tagshow')->texts()->toArray();
-
-                $item->description = Str::replaceFirst('簡介：', '', $description);
-                $item->keywords = join(',', $keywords);
-                $item->crawl_detail = 1;
-                $item->save();
-
-                $ql->destruct();
-            });
-        });
-    }
-
     private function crawlRawImages()
     {
-        $pending_data = ComicResource::where('crawl_image', 0)->take(200)->get();
+        $pending_data = ComicResource::where('process', 1)->latest()->take(1)->get();
 
         $pending_data->each(function (ComicResource $comic) {
             $pages = $this->getComicTotalPage($comic);
             $raw_images = [];
 
-            $this->info('#'.$comic->id.' crawling from '.$pages.' pages!');
+            $this->info('#' . $comic->id . ' 開始採集縮圖路徑, 共 ' . $pages . ' 頁!');
 
             $bar = $this->output->createProgressBar($pages);
 
@@ -166,7 +162,7 @@ class WnacgResourceCrawler extends Command
                 $images = $ql->find('li.gallary_item img')->attrs('src')->toArray();
 
                 foreach ($images as $image) {
-                    $raw_images[] = Str::start($image, 'http:');
+                    $raw_images[] = Str::start($image, 'https:');
                 }
 
                 $ql->destruct();
@@ -177,24 +173,125 @@ class WnacgResourceCrawler extends Command
             $bar->finish();
 
             // Update Comic
-            $comic->crawl_image = 1;
-            $comic->raw_images = $raw_images;
-            $comic->save();
+            $update = [
+                'process' => 2,
+                'images_count' => count($raw_images),
+                'raw_images' => $raw_images,
+            ];
+
+            $comic->update($update);
 
             $this->line('');
-            $this->info('#'.$comic->id.' crawling success!');
+            $this->info('#' . $comic->id . ' 採集完成!');
             $this->line('');
         });
     }
 
-    private function test()
+    private function downloadImages()
     {
-        $rules = [
-            'title' => ['div:eq(1)>a', 'text',],
-            'img' => ['a>img', 'src',],
-            'brief' => ['.brief>a', 'text',],
-        ];
-        $data = QueryList::get('https://tw.xchina.co/fictions/1.html')->rules($rules)->range('.list .fiction')->queryData();
-        print_r($data);
+        $pending_data = ComicResource::where('process', 2)->latest()->take(1)->get();
+
+        $pending_data->each(function (ComicResource $comic) {
+            $id = $comic->id;
+            $count = $comic->images_count;
+
+            $this->info('#' . $comic->id . ' 準備下載 ' . $count . ' 張圖片!');
+
+            // A.下載封面
+            $new_cover = $this->downloadCover($comic);
+
+            // B.下載圖片
+            $new_images = $this->downloadImage($comic);
+
+            // C.建立漫畫壓縮檔
+            // $this->zipFiles($id);
+
+            // 更新漫畫資訊
+            $update = [
+                'process' => 3,
+                'new_cover' => $new_cover,
+                'new_images' => $new_images,
+            ];
+
+            $comic->update($update);
+
+            $this->line('');
+            $this->info('#' . $id . ' 下載完成!');
+            $this->line('');
+        });
+    }
+
+    private function downloadCover(ComicResource $comic): string
+    {
+        $url = $comic->raw_cover;
+
+        $url = preg_replace('/^(http|https):\/\/+(t)/', '$1://img', $url);
+        $url = preg_replace('/\/t/', '', $url);
+        $pic_url = $url;
+        $this->error($pic_url);
+
+        $extension = pathinfo($pic_url, PATHINFO_EXTENSION);
+        $file_name = 'cover.' . $extension;
+        $file = file_get_contents($pic_url);
+        $path = sprintf('/download/%s/%s', $comic->id, $file_name);
+        Storage::put($path, $file);
+        return $path;
+    }
+
+    private function downloadImage(ComicResource $comic): array
+    {
+        $id = $comic->id;
+        $list = $comic->raw_images;
+        $count = $comic->images_count;
+
+        $bar = $this->output->createProgressBar($count);
+        $bar->start();
+
+        $new_images = [];
+
+        foreach ($list as $key => $url) {
+
+            $url = preg_replace('/^(http|https):\/\/+(t)/', '$1://img', $url);
+            $url = preg_replace('/\/t/', '', $url);
+            $pic_url = $url;
+
+            $extension = pathinfo($pic_url, PATHINFO_EXTENSION);
+
+            $file_name = Str::padLeft($key + 1, 3, '0');
+            $file_name .= '.' . $extension;
+
+            $path = sprintf('/download/%s/%s', $id, $file_name);
+            $file = file_get_contents($pic_url);
+            Storage::put($path, $file);
+
+            $new_images[] = $path;
+
+            $bar->advance();
+        }
+
+        $bar->finish();
+
+        return $new_images;
+    }
+
+    private function zipFiles($id)
+    {
+        $zip = new ZipArchive;
+
+        $directory = sprintf('download/%s', $id);
+        $fileName = sprintf('download/comic-%s.zip', $id);
+
+        if ($zip->open(Storage::path($fileName), ZipArchive::CREATE) === true) {
+            $files = Storage::files($directory);
+            foreach ($files as $path) {
+                $path = Storage::path($path);
+                $relativeNameInZipFile = basename($path);
+                $zip->addFile($path, $relativeNameInZipFile);
+            }
+            $zip->close();
+            $this->info('建立壓縮檔: ' . Storage::path($fileName));
+        } else {
+            $this->error('建立壓縮檔失敗!');
+        }
     }
 }
