@@ -15,7 +15,7 @@ return [
     |
     */
 
-    'domain' => env('HORIZON_DOMAIN', null),
+    'domain' => env('HORIZON_DOMAIN'),
 
     /*
     |--------------------------------------------------------------------------
@@ -84,7 +84,7 @@ return [
     */
 
     'waits' => [
-        'redis:default' => 60,
+        'redis:default' => 600,
     ],
 
     /*
@@ -151,7 +151,7 @@ return [
     |
     */
 
-    'memory_limit' => 64,
+    'memory_limit' => 256,
 
     /*
     |--------------------------------------------------------------------------
@@ -191,6 +191,16 @@ return [
         'local' => [
             'supervisor-1' => [
                 'maxProcesses' => 3,
+            ],
+            'supervisor-long-running' => [
+                'connection' => 'redis-long-running',
+                'queue' => [
+                    'long-running-queue'
+                ],
+                'balance' => 'simple',
+                'processes' => 9,
+                'tries' => 2,
+                'timeout' => 900,
             ],
         ],
     ],

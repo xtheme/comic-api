@@ -31,3 +31,5 @@ storage/debugbar/
 .user.ini
 
 public/vendor/horizon/
+
+storage/horizon.log
