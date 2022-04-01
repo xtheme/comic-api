@@ -16,4 +16,9 @@ class ComicResource extends Model
         'source_platform',
         'source_id',
     ];
+
+    protected $casts = [
+        'raw_images' => 'array',
+        'new_images' => 'array',
+    ];
 }

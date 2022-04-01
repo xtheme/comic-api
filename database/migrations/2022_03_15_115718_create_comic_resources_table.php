@@ -20,11 +20,15 @@ class CreateComicResourcesTable extends Migration
             $table->enum('type', ['jp', 'kr', 'album'])->nullable()->comment('标签');
             $table->boolean('translate')->default(0)->comment('中文化: Y/N');
             $table->string('title')->comment('名称');
-            $table->string('cover')->default('')->comment('封面图');
+            $table->string('raw_cover')->default('')->comment('原始封面图');
+            $table->string('new_cover')->default('')->comment('整新封面图');
+            $table->string('author')->comment('作者');
             $table->text('description')->nullable()->comment('简介');
             $table->string('keywords')->nullable()->comment('标签');
-            $table->boolean('crawl_detail')->default(0)->comment('採集詳情: Y/N')->index();
-            $table->boolean('crawl_image')->default(0)->comment('採集图片: Y/N')->index();
+            $table->boolean('process')->default(1)->comment('流程')->index();
+            $table->integer('images_count')->default(0)->comment('圖片數量');
+            $table->json('raw_images')->nullable()->comment('原始圖片');
+            $table->json('new_images')->nullable()->comment('整新圖片');
             $table->timestamps();
 
             $table->unique(['source_platform', 'source_id']);
