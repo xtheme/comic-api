@@ -4,7 +4,7 @@ namespace App\Console\Commands\Resource;
 
 use App\Jobs\ComicCrawlJob;
 use App\Jobs\ComicDownloadJob;
-use App\Models\ComicResource;
+use App\Models\ResourceComic;
 use Illuminate\Console\Command;
 use Illuminate\Support\Str;
 use QL\QueryList;
@@ -13,7 +13,7 @@ use QL\QueryList;
  * 各位紳士您好, 請先建立好 comic_resources 資料表
  * 遵循以下採集步驟, 你就可以在家快樂嚕管惹
  * 1. 採集漫畫清單 php artisan comic:wnacg update
- * 2. 依據現有清單採集圖片網址 php artisan comic:wnacg crawler
+ * 2. 依據現有清單採集圖片網址 php artisan comic:wnacg crawler --take=2
  * 3. 將圖片下載回本地並重新編號排序 php artisan comic:wnacg download
  */
 class WnacgCommand extends Command
@@ -37,7 +37,7 @@ class WnacgCommand extends Command
         switch ($process) {
             case 'update':
                 if ($this->confirm('開始採集漫畫清單?')) {
-                    $this->updateComicList();
+                    $this->updateListing();
                 }
                 break;
             case 'crawler':
@@ -75,7 +75,7 @@ class WnacgCommand extends Command
      * 爬取基礎漫畫清單
      * @return void
      */
-    private function updateComicList()
+    private function updateListing()
     {
         $last_page = $this->getLastPage();
 
@@ -111,7 +111,7 @@ class WnacgCommand extends Command
 
             $insert = array_reverse($insert);
 
-            ComicResource::upsert($insert, ['source_platform', 'source_id']);
+            ResourceComic::upsert($insert, ['source_platform', 'source_id']);
 
             $this->info('第 ' . $i . ' 頁');
 
@@ -130,9 +130,9 @@ class WnacgCommand extends Command
     {
         $take = $this->option('take');
 
-        $pending_data = ComicResource::where('process', 1)->latest()->take($take)->get();
+        $pending_data = ResourceComic::where('process', 1)->latest()->take($take)->get();
 
-        $pending_data->each(function (ComicResource $comic) {
+        $pending_data->each(function (ResourceComic $comic) {
             $this->info('#' . $comic->id . ' 開始採集縮圖路徑!');
             ComicCrawlJob::dispatch($comic)->onQueue('long-running-queue');
         });
@@ -147,9 +147,9 @@ class WnacgCommand extends Command
     {
         $take = $this->option('take');
 
-        $pending_data = ComicResource::where('process', 2)->latest()->take($take)->get();
+        $pending_data = ResourceComic::where('process', 2)->latest()->take($take)->get();
 
-        $pending_data->each(function (ComicResource $comic) {
+        $pending_data->each(function (ResourceComic $comic) {
             $this->info('#' . $comic->id . ' 準備下載 ' . $comic->images_count . ' 張圖片!');
             ComicDownloadJob::dispatch($comic)->onQueue('long-running-queue');
         });
