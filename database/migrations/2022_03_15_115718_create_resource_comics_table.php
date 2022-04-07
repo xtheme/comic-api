@@ -24,6 +24,7 @@ class CreateResourceComicsTable extends Migration
             $table->string('keywords')->nullable()->comment('标签');
             $table->integer('images_count')->default(0)->comment('圖片數量');
             $table->string('raw_cover')->default('')->comment('原始封面图');
+            $table->json('raw_thumbs')->nullable()->comment('原始縮圖');
             $table->json('raw_images')->nullable()->comment('原始圖片');
             $table->boolean('process')->default(1)->comment('流程')->index();
             $table->timestamps();

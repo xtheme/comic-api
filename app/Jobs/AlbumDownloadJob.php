@@ -2,7 +2,7 @@
 
 namespace App\Jobs;
 
-use App\Models\ResourceComic;
+use App\Models\ResourceAlbum;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
@@ -17,24 +17,24 @@ class AlbumDownloadJob implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
-    protected ResourceComic $comic;
+    protected ResourceAlbum $album;
 
-    public function __construct(ResourceComic $comic)
+    public function __construct(ResourceAlbum $album)
     {
-        $this->comic = $comic;
+        $this->album = $album;
     }
 
     public function handle()
     {
         try {
             // A.下載封面
-            $new_cover = $this->downloadCover($this->comic);
+            $new_cover = $this->downloadCover($this->album);
 
             // B.下載圖片
-            $new_images = $this->downloadImage($this->comic);
+            $new_images = $this->downloadImage($this->album);
 
             // C.建立漫畫壓縮檔
-            // $this->zipFiles($this->comic->id);
+            // $this->zipFiles($this->album->id);
 
             // 更新漫畫資訊
             $update = [
@@ -43,14 +43,14 @@ class AlbumDownloadJob implements ShouldQueue
                 'new_images' => $new_images,
             ];
 
-            $this->comic->update($update);
+            $this->album->update($update);
         } catch (\Exception $exception) {
             // 更新漫畫資訊
             $update = [
                 'process' => 4,
             ];
 
-            $this->comic->update($update);
+            $this->album->update($update);
         }
     }
 
@@ -69,17 +69,17 @@ class AlbumDownloadJob implements ShouldQueue
     /**
      * 下載封面圖
      *
-     * @param  ResourceComic  $comic
+     * @param  ResourceAlbum  $album
      * @return string
      */
-    private function downloadCover(ResourceComic $comic): string
+    private function downloadCover(ResourceAlbum $album): string
     {
-        $url = $comic->raw_cover;
+        $url = $album->raw_cover;
         $pic_url = $this->replaceImageUrl($url);
 
         $extension = pathinfo($pic_url, PATHINFO_EXTENSION);
         $file_name = 'cover.' . $extension;
-        $path = sprintf('/download/%s/%s', $comic->id, $file_name);
+        $path = sprintf('/download/%s/%s', $album->id, $file_name);
 
         if (!Storage::exists($path)) {
             $file = file_get_contents($pic_url);
@@ -92,13 +92,13 @@ class AlbumDownloadJob implements ShouldQueue
     /**
      * 下載整本漫畫
      *
-     * @param  ResourceComic  $comic
+     * @param  ResourceAlbum  $album
      * @return array
      */
-    private function downloadImage(ResourceComic $comic): array
+    private function downloadImage(ResourceAlbum $album): array
     {
-        $id = $comic->id;
-        $list = $comic->raw_images;
+        $id = $album->id;
+        $list = $album->raw_images;
 
         $new_images = [];
 

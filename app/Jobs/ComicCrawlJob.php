@@ -17,7 +17,6 @@ class ComicCrawlJob implements ShouldQueue
 
     protected ResourceComic $comic;
 
-
     public function __construct(ResourceComic $comic)
     {
         $this->comic = $comic;
@@ -25,33 +24,34 @@ class ComicCrawlJob implements ShouldQueue
 
     /**
      * 依據漫畫縮圖列表爬取路徑
+     * https://www.wnacg.org/photos-index-page-%s-aid-%s.html
      *
      * @return void
      */
     public function handle()
     {
         try {
-            $pages = $this->getComicTotalPage($this->comic->source_id);
+            $pages = $this->getTotalPage($this->comic->source_id);
 
-            $raw_images = [];
+            $raw_images = $raw_thumbs = [];
 
             for ($i = 1; $i <= $pages; $i++) {
                 $url = sprintf('https://www.wnacg.org/photos-index-page-%s-aid-%s.html', $i, $this->comic->source_id);
 
                 $ql = QueryList::get($url);
 
+                // 大圖
                 $links = $ql->find('li.gallary_item a')->attrs('href')->toArray();
-
                 foreach ($links as $link) {
                     $link = Str::start($link, 'https://www.wnacg.org');
                     $raw_images[] = $this->getFullImageLink($link);
                 }
 
-                /*$images = $ql->find('li.gallary_item img')->attrs('src')->toArray();
-
-                foreach ($images as $image) {
-                    $raw_images[] = Str::start($image, 'https:');
-                }*/
+                // 縮圖
+                $thumbs = $ql->find('li.gallary_item img')->attrs('src')->toArray();
+                foreach ($thumbs as $thumb) {
+                    $raw_thumbs[] = Str::start($thumb, 'https:');
+                }
 
                 $ql->destruct();
             }
@@ -60,6 +60,7 @@ class ComicCrawlJob implements ShouldQueue
             $update = [
                 'process' => 2,
                 'images_count' => count($raw_images),
+                'raw_thumbs' => $raw_thumbs,
                 'raw_images' => $raw_images,
             ];
 
@@ -76,11 +77,12 @@ class ComicCrawlJob implements ShouldQueue
 
     /**
      * 漫畫縮圖列表總頁數
+     * https://www.wnacg.org/photos-index-aid-%s.html
      *
      * @param  int  $source_id
      * @return false|mixed
      */
-    private function getComicTotalPage(int $source_id)
+    private function getTotalPage(int $source_id)
     {
         $url = sprintf('https://www.wnacg.org/photos-index-aid-%s.html', $source_id);
 
@@ -95,9 +97,15 @@ class ComicCrawlJob implements ShouldQueue
         return $last_page;
     }
 
+    /**
+     * 大圖頁
+     * https://www.wnacg.org/photos-view-id-xxx.html
+     *
+     * @param  string  $url
+     * @return string
+     */
     private function getFullImageLink(string $url): string
     {
-        // https://www.wnacg.org/photos-view-id-xxx.html
         $ql = QueryList::get($url);
 
         $link = $ql->find('#imgarea #picarea')->attr('src');

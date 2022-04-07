@@ -2,7 +2,7 @@
 
 namespace App\Jobs;
 
-use App\Models\ResourceComic;
+use App\Models\ResourceAlbum;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
@@ -15,10 +15,9 @@ class AlbumCrawlJob implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
-    protected ResourceComic $comic;
+    protected ResourceAlbum $comic;
 
-
-    public function __construct(ResourceComic $comic)
+    public function __construct(ResourceAlbum $comic)
     {
         $this->comic = $comic;
     }
@@ -31,27 +30,27 @@ class AlbumCrawlJob implements ShouldQueue
     public function handle()
     {
         try {
-            $pages = $this->getComicTotalPage($this->comic->source_id);
+            $pages = $this->getTotalPage($this->comic->source_id);
 
-            $raw_images = [];
+            $raw_images = $raw_thumbs = [];
 
             for ($i = 1; $i <= $pages; $i++) {
                 $url = sprintf('https://www.wnacg.org/photos-index-page-%s-aid-%s.html', $i, $this->comic->source_id);
 
                 $ql = QueryList::get($url);
 
+                // 大圖
                 $links = $ql->find('li.gallary_item a')->attrs('href')->toArray();
-
                 foreach ($links as $link) {
                     $link = Str::start($link, 'https://www.wnacg.org');
                     $raw_images[] = $this->getFullImageLink($link);
                 }
 
-                /*$images = $ql->find('li.gallary_item img')->attrs('src')->toArray();
-
+                // 縮圖
+                $images = $ql->find('li.gallary_item img')->attrs('src')->toArray();
                 foreach ($images as $image) {
                     $raw_images[] = Str::start($image, 'https:');
-                }*/
+                }
 
                 $ql->destruct();
             }
@@ -60,6 +59,7 @@ class AlbumCrawlJob implements ShouldQueue
             $update = [
                 'process' => 2,
                 'images_count' => count($raw_images),
+                'raw_thumbs' => $raw_thumbs,
                 'raw_images' => $raw_images,
             ];
 
@@ -80,7 +80,7 @@ class AlbumCrawlJob implements ShouldQueue
      * @param  int  $source_id
      * @return false|mixed
      */
-    private function getComicTotalPage(int $source_id)
+    private function getTotalPage(int $source_id)
     {
         $url = sprintf('https://www.wnacg.org/photos-index-aid-%s.html', $source_id);
 

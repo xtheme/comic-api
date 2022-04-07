@@ -18,6 +18,7 @@ class ResourceAlbum extends Model
     ];
 
     protected $casts = [
+        'raw_thumbs' => 'array',
         'raw_images' => 'array',
     ];
 }

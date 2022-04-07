@@ -22,6 +22,7 @@ class CreateResourceAlbumsTable extends Migration
             $table->string('category')->nullable()->comment('分類');
             $table->integer('images_count')->default(0)->comment('圖片數量');
             $table->string('raw_cover')->default('')->comment('原始封面图');
+            $table->json('raw_thumbs')->nullable()->comment('原始縮圖');
             $table->json('raw_images')->nullable()->comment('原始圖片');
             $table->boolean('process')->default(1)->comment('流程')->index();
             $table->timestamps();

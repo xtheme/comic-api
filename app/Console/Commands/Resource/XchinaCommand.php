@@ -2,9 +2,8 @@
 
 namespace App\Console\Commands\Resource;
 
-use App\Jobs\ComicCrawlJob;
-use App\Jobs\ComicDownloadJob;
-use App\Models\ResourceAlbum;
+use App\Jobs\AlbumCrawlJob;
+use App\Jobs\AlbumDownloadJob;
 use App\Models\ResourceAlbum;
 use Illuminate\Console\Command;
 use QL\QueryList;
@@ -75,8 +74,7 @@ class XchinaCommand extends Command
      */
     private function updateListing()
     {
-        // $last_page = $this->getLastPage();
-        $last_page = 1;
+        $last_page = $this->getLastPage();
 
         $rules = [
             'title' => ['div:nth-child(3) > a', 'text'],
@@ -108,13 +106,13 @@ class XchinaCommand extends Command
                     'source_id' => $source_id,
                     'title' => $row['title'],
                     'model' => $row['model'],
+                    'category' => str_replace(' ', '', trim($row['category'])),
                     'raw_cover' => $row['cover'],
-                    'keywords' => str_replace(' ', '', trim($row['category'])),
                     'process' => 1,
                 ];
             }
 
-            $this->info(json_encode($insert, JSON_UNESCAPED_UNICODE));
+            // $this->info(json_encode($insert, JSON_UNESCAPED_UNICODE));
 
             $insert = array_reverse($insert);
 
@@ -141,7 +139,7 @@ class XchinaCommand extends Command
 
         $pending_data->each(function (ResourceAlbum $comic) {
             $this->info('#' . $comic->id . ' 開始採集縮圖路徑!');
-            ComicCrawlJob::dispatch($comic)->onQueue('long-running-queue');
+            AlbumCrawlJob::dispatch($comic)->onQueue('long-running-queue');
         });
     }
 
@@ -158,7 +156,7 @@ class XchinaCommand extends Command
 
         $pending_data->each(function (ResourceAlbum $comic) {
             $this->info('#' . $comic->id . ' 準備下載 ' . $comic->images_count . ' 張圖片!');
-            ComicDownloadJob::dispatch($comic)->onQueue('long-running-queue');
+            AlbumDownloadJob::dispatch($comic)->onQueue('long-running-queue');
         });
     }
 }
