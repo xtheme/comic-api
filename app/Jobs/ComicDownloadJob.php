@@ -2,7 +2,7 @@
 
 namespace App\Jobs;
 
-use App\Models\ComicResource;
+use App\Models\ResourceComic;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
@@ -17,9 +17,9 @@ class ComicDownloadJob implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
-    protected ComicResource $comic;
+    protected ResourceComic $comic;
 
-    public function __construct(ComicResource $comic)
+    public function __construct(ResourceComic $comic)
     {
         $this->comic = $comic;
     }
@@ -69,10 +69,10 @@ class ComicDownloadJob implements ShouldQueue
     /**
      * 下載封面圖
      *
-     * @param  ComicResource  $comic
+     * @param  ResourceComic  $comic
      * @return string
      */
-    private function downloadCover(ComicResource $comic): string
+    private function downloadCover(ResourceComic $comic): string
     {
         $url = $comic->raw_cover;
         $pic_url = $this->replaceImageUrl($url);
@@ -92,10 +92,10 @@ class ComicDownloadJob implements ShouldQueue
     /**
      * 下載整本漫畫
      *
-     * @param  ComicResource  $comic
+     * @param  ResourceComic  $comic
      * @return array
      */
-    private function downloadImage(ComicResource $comic): array
+    private function downloadImage(ResourceComic $comic): array
     {
         $id = $comic->id;
         $list = $comic->raw_images;

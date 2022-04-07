@@ -2,7 +2,7 @@
 
 namespace App\Jobs;
 
-use App\Models\ComicResource;
+use App\Models\ResourceComic;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
@@ -15,10 +15,10 @@ class ComicCrawlJob implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
-    protected ComicResource $comic;
+    protected ResourceComic $comic;
 
 
-    public function __construct(ComicResource $comic)
+    public function __construct(ResourceComic $comic)
     {
         $this->comic = $comic;
     }

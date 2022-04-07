@@ -5,7 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class ComicResource extends Model
+class ResourceComic extends Model
 {
     use HasFactory;
 
@@ -19,6 +19,5 @@ class ComicResource extends Model
 
     protected $casts = [
         'raw_images' => 'array',
-        'new_images' => 'array',
     ];
 }
